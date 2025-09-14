@@ -1,0 +1,21 @@
+# Modules Node.js
+node_modules/
+
+# Fichiers d'environnement
+.env
+.env.local
+
+# Fichiers de compilation TypeScript
+dist/
+
+# Fichiers de logs et de cache
+*.log
+tmp/
+
+# Fichiers IDE et éditeurs
+.vscode/
+.idea/
+
+# Système d'exploitation
+.DS_Store
+Thumbs.db
