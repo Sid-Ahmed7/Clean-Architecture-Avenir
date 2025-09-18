@@ -4,7 +4,7 @@ export class RoleIdValue {
     public static from(id: number) {
 
         if(id < 0) {
-            return new InvalidRoleIdError(id);
+            return new InvalidRoleIdError(`Invalid role ID: ${id}`);
     }
         return new RoleIdValue(id);
 

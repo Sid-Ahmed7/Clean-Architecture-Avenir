@@ -1,10 +1,7 @@
 export class InvalidRoleIdError extends Error {
-    
-    public id: number;
-    
-    constructor(id: number, message?: string) {
-        super(message ?? `Invalid Role ID: "${id}"`);
+
+    constructor(message: string) {
+        super(message);
         this.name = 'InvalidRoleId';
-        this.id = id;
     }
 }

@@ -1,10 +1,7 @@
 export class InvalidUserIdError extends Error {
     
-    public id: string;
-    
-    constructor(id: string, message?: string) {
-        super(message ?? `Invalid User ID: "${id}"`);
+    constructor(message: string) {
+        super(message);
         this.name = 'InvalidUserId';
-        this.id = id;
     }
 }

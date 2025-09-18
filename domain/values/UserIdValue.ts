@@ -4,7 +4,7 @@ export class UserIdValue {
     public static from(id: string) {
 
         if(!id || id.trim().length === 0) {
-            return new InvalidUserIdError(id);
+            return new InvalidUserIdError(`Invalid user ID : ${id}` );
     }
         return new UserIdValue(id);
 

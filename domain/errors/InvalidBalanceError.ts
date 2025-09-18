@@ -1,6 +1,6 @@
-export class InvalidBalance extends Error {
-  constructor(amount: number) {
-    super(`Invalid balance amount: ${amount}`);
+export class InvalidBalanceError extends Error {
+  constructor(message: string) {
+    super(message);
     this.name = "InvalidBalance";
   }
 }

@@ -1,4 +1,5 @@
-import { InvalidIbanError } from "../errors/InvalidIBANError";
+import { InvalidIbanError } from "../errors/InvalidIbanError";
+
 
 export class IbanValue {
     public static from(iban: string) {
@@ -16,11 +17,11 @@ export class IbanValue {
 
 
         if(!countryCodeRegex.test(countryCode)) {
-            return new InvalidIbanError(iban, 'Invalid country code in IBAN');
+            return new InvalidIbanError('Invalid country code in IBAN');
         }
 
         if(!characterRegex.test(cleanedIban)) {
-            return new InvalidIbanError(iban, 'IBAN contains invalid characters');
+            return new InvalidIbanError('IBAN contains invalid characters');
         }
 
         return new IbanValue(cleanedIban);
