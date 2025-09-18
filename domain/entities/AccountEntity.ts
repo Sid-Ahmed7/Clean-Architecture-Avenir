@@ -6,7 +6,7 @@ import { AccountStatusEnum } from "../enums/AccountStatusEnum";
 import { IbanValue } from "../values/IbanValue";
 import { BalanceValue } from "../values/BalanceValue";
 
-export class Account {
+export class AccountEntity {
   public static from(accountNumber: number, iban: string, userId: string, accountType: AccountTypeEnum, currency: string, accountStatus: AccountStatusEnum, isActive: boolean, currentBalance: number = 0, customAccountName?: string, dailyWithdrawalLimit?: number, dailyTransferLimit?: number, overdraftLimit?: number, createdBy?: string, closedAt?: Date, createdAt?: Date) 
    {
     
@@ -22,7 +22,7 @@ export class Account {
     const validatedBalance = BalanceValue.from(currentBalance);
     if (validatedBalance instanceof Error) return validatedBalance;
 
-    return new Account(
+    return new AccountEntity(
       validatedAccountNumber.value,
       validatedIBAN.value,
       validatedUserId.value,
