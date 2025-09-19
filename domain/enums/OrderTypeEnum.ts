@@ -1,6 +1,4 @@
-export enum OrderStatusEnum {
-    PENDING = 'PENDING',
-    COMPLETED = 'COMPLETED',
-    CANCELLED = 'CANCELLED',
-    REJECTED = 'REJECTED',
+export enum OrderTypeEnum {
+    BUY = 'BUY',
+    SELL = 'SELL',
 }
