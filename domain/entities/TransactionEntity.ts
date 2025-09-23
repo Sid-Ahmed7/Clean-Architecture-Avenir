@@ -1,4 +1,4 @@
-import { OrderStatusEnum } from "../enums/OrderTypeEnum";
+import { OrderStatusEnum } from "../enums/OrderStatusEnum";
 import { TransactionTypeEnum } from "../enums/TransactionTypeEnum";
 import { AccountNumberValue } from "../values/AccountNumberValue";
 import { TransactionAmountValue } from "../values/TransactionAmountValue";

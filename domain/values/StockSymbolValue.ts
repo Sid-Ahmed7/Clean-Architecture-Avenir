@@ -1,4 +1,4 @@
-import { InvalidStockSymbolError } from "../errors/InvalidStockSymbolErro";
+import { InvalidStockSymbolError } from "../errors/InvalidStockSymbolError";
 
 export class StockSymbolValue {
 
