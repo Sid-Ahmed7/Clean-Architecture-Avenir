@@ -5,7 +5,7 @@ export class AnnualRateValue {
         if (isNaN(annualRate) || annualRate < 0 || annualRate > 100) {
             return new InvalidAnnualRateError(`Invalid annual rate: ${annualRate}. It must be between 0 and 100.`);
         }
-        
+        return new AnnualRateValue(annualRate);
     }
     private constructor(public value: number) {}
 }
