@@ -4,7 +4,7 @@ import { InvalidAccountNumberError } from "../../domain/errors/InvalidAccountNum
 
 export interface AccountRepositoryInterface {
     getOneAccountByAccountNumber(accountNumber: number): Promise<AccountEntity | AccountNotFoundError>
-    getAllAccounts(): Promise<AccountEntity[] | AccountNotFoundError>
+    getAllAccounts(): Promise<Array<AccountEntity> | AccountNotFoundError>
     createOneAccount(account: AccountEntity): Promise<AccountEntity | InvalidAccountNumberError>
     updateOneAccount(account: AccountEntity): Promise<AccountEntity | InvalidAccountNumberError>
     deleteAccount(accountNumber: number): Promise<void | AccountNotFoundError>
