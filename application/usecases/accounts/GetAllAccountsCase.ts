@@ -9,10 +9,6 @@ export class GetAccountUseCase {
 
         const accounts = await this.accountRepository.getAllAccounts();
 
-        if (accounts instanceof Error) {
-            return accounts;
-        }
-
         return accounts;
     }
 }
