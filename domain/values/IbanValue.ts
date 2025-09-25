@@ -24,6 +24,10 @@ export class IbanValue {
             return new InvalidIbanError('IBAN contains invalid characters');
         }
 
+        if(!IbanValue.isIbanValid(cleanedIban)) {
+            return new InvalidIbanError("Invalid Iban");
+        }
+
         return new IbanValue(cleanedIban);
 
     }
