@@ -4,4 +4,5 @@ export enum AccountStatusEnum {
     SUSPENDED = 'SUSPENDED',
     PENDING = 'PENDING',
     FROZEN = 'FROZEN',
+    BANNED = 'BANNED'
 }

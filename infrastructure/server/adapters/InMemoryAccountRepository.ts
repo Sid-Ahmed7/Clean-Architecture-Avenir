@@ -21,7 +21,11 @@ export class InMemoryAccountRepository implements AccountRepositoryInterface {
             "EUR",
             AccountStatusEnum.ACTIVE,
             true,
-            20250
+            20250,
+            new Date(),
+            1000,
+            2000,
+            500
         )
 
         const secondAccount = AccountEntity.from(
@@ -32,7 +36,11 @@ export class InMemoryAccountRepository implements AccountRepositoryInterface {
             "USD",
             AccountStatusEnum.ACTIVE,
             true,
-            540000
+            540000,
+            new Date(),
+            2000,
+            3000,
+            1000
         )
 
         if (firstAccount instanceof Error || secondAccount instanceof Error ) {
@@ -57,15 +65,18 @@ export class InMemoryAccountRepository implements AccountRepositoryInterface {
 
     public async createOneAccount(account: AccountEntity): Promise<AccountEntity | InvalidAccountNumberError> {
         const existingAccount = this.accounts.find((acc) =>  acc.accountNumber === account.accountNumber);
-        if(!existingAccount) {
+        if(existingAccount) {
             return new AccountNotFoundError(`Account with number ${account.accountNumber} is not found`);
         }
         this.accounts.push(account);
         return account;
     }
     public async updateOneAccount(account: AccountEntity): Promise<AccountEntity | InvalidAccountNumberError> {
-        
-        
+        const index = this.accounts.findIndex((acc) => acc.accountNumber === account.accountNumber)
+        if(index === -1) {
+            return new AccountNotFoundError(`Account with number ${account.accountNumber} is not found`);
+        }
+        this.accounts[index] = account;
         return account;
     }
 
@@ -74,8 +85,7 @@ export class InMemoryAccountRepository implements AccountRepositoryInterface {
         if(index === -1) {
             return new AccountNotFoundError(`Account with number ${accountNumber} is not found`);
         }
-        this.accounts.splice(index, 1);
-    
+        this.accounts.splice(index, 1);   
     }
 
 }

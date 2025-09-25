@@ -7,7 +7,7 @@ import { IbanValue } from "../values/IbanValue";
 import { BalanceValue } from "../values/BalanceValue";
 
 export class AccountEntity {
-  public static from(accountNumber: number, iban: string, userId: string, accountType: AccountTypeEnum, currency: string, accountStatus: AccountStatusEnum, isActive: boolean, currentBalance: number = 0, customAccountName?: string, dailyWithdrawalLimit?: number, dailyTransferLimit?: number, overdraftLimit?: number, createdBy?: string, closedAt?: Date, createdAt?: Date) 
+  public static from(accountNumber: number, iban: string, userId: string, accountType: AccountTypeEnum, currency: string, accountStatus: AccountStatusEnum, isActive: boolean, currentBalance: number = 0, createdAt: Date, dailyWithdrawalLimit: number, dailyTransferLimit: number, overdraftLimit: number, customAccountName?: string, createdBy?: string, closedAt?: Date) 
    {
     
     const validatedAccountNumber = AccountNumberValue.from(accountNumber);
@@ -29,15 +29,15 @@ export class AccountEntity {
       accountType,
       validatedBalance.value,
       currency,
-      customAccountName,
+      accountStatus,
+      isActive,
       dailyWithdrawalLimit,
       dailyTransferLimit,
       overdraftLimit,
+      createdAt ?? new Date(),
+      customAccountName,
       createdBy,
-      accountStatus,
       closedAt,
-      isActive,
-      createdAt ?? new Date()
     );
   }
 
@@ -48,14 +48,39 @@ export class AccountEntity {
     public accountType: AccountTypeEnum,
     public currentBalance: number,
     public currency: string,
+    public accountStatus: AccountStatusEnum,
+    public isActive: boolean,
+    public dailyWithdrawalLimit: number,
+    public dailyTransferLimit: number,
+    public overdraftLimit: number,
+    public createdAt: Date,
     public customAccountName?: string,
-    public dailyWithdrawalLimit?: number,
-    public dailyTransferLimit?: number,
-    public overdraftLimit?: number,
     public createdBy?: string,
-    public accountStatus?: AccountStatusEnum,
     public closedAt?: Date,
-    public isActive?: boolean,
-    public createdAt?: Date
+
   ) {}
+
+  public changeAccountStatus(status: AccountStatusEnum) {
+    this.accountStatus = status;
+  }
+
+  public updateCustomAccountName(name: string) {
+    this.customAccountName = name
+  }
+
+  public updateDailyWithdrawalLimit(limit: number) {
+    this.dailyWithdrawalLimit = limit;
+  }
+
+  public updateDailyTransfertLimit(limit: number) {
+    this.dailyTransferLimit = limit;
+  }
+
+  public updateOverdraftLimit(limit: number) {
+    this.overdraftLimit = limit;
+  }
+
+
+
+
 }
