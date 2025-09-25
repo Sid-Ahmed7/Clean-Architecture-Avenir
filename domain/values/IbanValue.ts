@@ -28,5 +28,17 @@ export class IbanValue {
 
     }
     private constructor(public value: string) {}
+
+    private static isIbanValid(iban: string) : boolean {
+        const ibanForValidation = iban.slice(4) + iban.slice(0, 4);
+        const numericIban = ibanForValidation.replace(/[A-Z]/g, char => (char.charCodeAt(0) - 55).toString());
+        let remainder = numericIban;
+        while(remainder.length > 2) {
+            const block = remainder.slice(0,9);  
+            remainder = (parseInt(block, 10) % 97).toString() + remainder.slice(block.length);
+        }
+
+        return parseInt(remainder, 10)% 97 === 1;
+    }
 }
 
