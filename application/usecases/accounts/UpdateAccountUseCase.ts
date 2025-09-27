@@ -1,10 +1,11 @@
 import { AccountEntity } from "../../../domain/entities/AccountEntity";
+import { AccountNotFoundError } from "../../../domain/errors/AccountNotFoundError";
 import { AccountRepositoryInterface } from "../../repositories/AccountRepositoryInterface";
 
 export class UpdateAccountUseCase {
     public constructor ( private accountRepository: AccountRepositoryInterface){}
 
-    public async execute(account: AccountEntity) {
+    public async execute(account: AccountEntity): Promise<AccountEntity | Error> {
 
         const existingAccount = await this.accountRepository.getOneAccountByAccountNumber(account.accountNumber)
         
@@ -12,8 +13,13 @@ export class UpdateAccountUseCase {
             return existingAccount;
         }
 
-        return this.accountRepository.updateOneAccount(account);
-    
+        const updateAccount = await this.accountRepository.updateOneAccount(account);
+        
+        if(updateAccount instanceof Error) {
+            return updateAccount;
+        }
+
+        return updateAccount;    
     }
     
 }

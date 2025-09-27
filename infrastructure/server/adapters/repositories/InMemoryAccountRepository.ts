@@ -1,9 +1,10 @@
-import { AccountRepositoryInterface } from "../../../application/repositories/AccountRepositoryInterface";
-import { AccountEntity } from "../../../domain/entities/AccountEntity";
-import { AccountStatusEnum } from "../../../domain/enums/AccountStatusEnum";
-import { AccountTypeEnum } from "../../../domain/enums/AccountTypeEnum";
-import { AccountNotFoundError } from "../../../domain/errors/AccountNotFoundError";
-import { InvalidAccountNumberError } from "../../../domain/errors/InvalidAccountNumberError";
+import { AccountRepositoryInterface } from "../../../../application/repositories/AccountRepositoryInterface";
+import { AccountEntity } from "../../../../domain/entities/AccountEntity";
+import { AccountStatusEnum } from "../../../../domain/enums/AccountStatusEnum";
+import { AccountTypeEnum } from "../../../../domain/enums/AccountTypeEnum";
+import { AccountAlreadyExistsError } from "../../../../domain/errors/AccountAlreadyExistsError";
+import { AccountNotFoundError } from "../../../../domain/errors/AccountNotFoundError";
+import { InvalidAccountError } from "../../../../domain/errors/InvalidAccountError";
 
 export class InMemoryAccountRepository implements AccountRepositoryInterface {
 
@@ -63,28 +64,43 @@ export class InMemoryAccountRepository implements AccountRepositoryInterface {
         return this.accounts;
     }
 
-    public async createOneAccount(account: AccountEntity): Promise<AccountEntity | InvalidAccountNumberError> {
+    public async createOneAccount(account: AccountEntity): Promise<AccountEntity | AccountAlreadyExistsError | InvalidAccountError> {
         const existingAccount = this.accounts.find((acc) =>  acc.accountNumber === account.accountNumber);
+
         if(existingAccount) {
-            return new AccountNotFoundError(`Account with number ${account.accountNumber} is not found`);
+            return new AccountAlreadyExistsError(`Account with number ${account.accountNumber} already exists`);
         }
+
+        if(!account) {
+            return new InvalidAccountError("Account data is invalid")
+        }
+
         this.accounts.push(account);
         return account;
     }
-    public async updateOneAccount(account: AccountEntity): Promise<AccountEntity | InvalidAccountNumberError> {
+    
+    public async updateOneAccount(account: AccountEntity): Promise<AccountEntity | AccountNotFoundError | InvalidAccountError> {
         const index = this.accounts.findIndex((acc) => acc.accountNumber === account.accountNumber)
+        
         if(index === -1) {
             return new AccountNotFoundError(`Account with number ${account.accountNumber} is not found`);
         }
+        
+        if(!account) {
+            return new InvalidAccountError("Account data is invalid")
+        }
+
         this.accounts[index] = account;
         return account;
     }
 
     public async deleteAccount(accountNumber: number): Promise<void | AccountNotFoundError> {
         const index = this.accounts.findIndex((acc) => acc.accountNumber === accountNumber)
+        
         if(index === -1) {
             return new AccountNotFoundError(`Account with number ${accountNumber} is not found`);
         }
+        
         this.accounts.splice(index, 1);   
     }
 

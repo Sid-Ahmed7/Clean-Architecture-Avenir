@@ -1,9 +1,10 @@
+import { AccountEntity } from "../../../domain/entities/AccountEntity";
 import { AccountRepositoryInterface } from "../../repositories/AccountRepositoryInterface";
 
 export class GetAccountUseCase {
     public constructor ( private accountRepository: AccountRepositoryInterface){}
 
-    public async execute(accountNumber: number){
+    public async execute(accountNumber: number) : Promise<AccountEntity | Error>{
 
         const account = await this.accountRepository.getOneAccountByAccountNumber(accountNumber);
 

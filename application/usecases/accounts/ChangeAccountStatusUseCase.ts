@@ -1,4 +1,6 @@
 import { AccountStatusEnum } from "../../../domain/enums/AccountStatusEnum";
+import { AccountAlreadyExistsError } from "../../../domain/errors/AccountAlreadyExistsError";
+import { InvalidAccountError } from "../../../domain/errors/InvalidAccountError";
 import { AccountRepositoryInterface } from "../../repositories/AccountRepositoryInterface";
 
 export class ChangeAccountStatusUseCase {
@@ -11,9 +13,16 @@ export class ChangeAccountStatusUseCase {
         if(account instanceof Error) {
             return account;
         }
+        
 
         account.changeAccountStatus(status);
+        
+        const updateAccount = this.accountRepository.updateOneAccount(account);
+        
+        if(updateAccount instanceof Error){
+            return updateAccount;
+        }
 
-        return this.accountRepository.updateOneAccount(account);
+        return updateAccount;
     }
 }

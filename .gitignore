@@ -2,7 +2,7 @@
 node_modules/
 
 # Fichiers d'environnement
-.env
+infrastructure/server/frameworks/express/.env
 .env.local
 
 # Fichiers de compilation TypeScript
