@@ -31,6 +31,29 @@ export class IbanValue {
         return new IbanValue(cleanedIban);
 
     }
+
+    public static generateIban(partialIban: string = ' '): IbanValue | InvalidIbanError {
+        const ibanLength = 23;
+
+        if(partialIban.length === ibanLength) {
+            const ibanWithCheck = 'FR00' + partialIban;
+            const checkDigits = IbanValue.calculateCheckDigits(ibanWithCheck);
+            const fullIban = 'FR' + checkDigits + partialIban;
+
+            const validatedIban = IbanValue.from(fullIban);
+            if (validatedIban instanceof InvalidIbanError) {
+                return new InvalidIbanError('Generated IBAN is invalid');
+            }
+
+            return validatedIban;
+        }
+
+        const randomDigits = Math.floor(Math.random() * 10).toString();
+        const ibanWithNextDigit = partialIban + randomDigits;
+
+        return IbanValue.generateIban(ibanWithNextDigit);
+    }
+
     private constructor(public value: string) {}
 
     private static isIbanValid(iban: string) : boolean {
@@ -44,5 +67,24 @@ export class IbanValue {
 
         return parseInt(remainder, 10)% 97 === 1;
     }
+        private static calculateCheckDigits(iban: string): string {
+        const formattedIban = iban.slice(4) + iban.slice(0, 4);
+        const numericIban = formattedIban.replace(/[A-Z]/g, char => (char.charCodeAt(0) - 55).toString());
+
+        let remainder = numericIban;
+        while (remainder.length > 2) {
+            const block = remainder.slice(0, 9);
+            remainder = (parseInt(block, 10) % 97).toString() + remainder.slice(block.length);
+        }
+
+        const mod97 = parseInt(remainder, 10) % 97;
+        const checkDigits = (98 - mod97).toString().padStart(2, '0');
+        return checkDigits;
+    }
+
+
+
+
+
 }
 

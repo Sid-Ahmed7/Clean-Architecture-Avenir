@@ -5,6 +5,9 @@ import { AccountTypeEnum } from "../../../../domain/enums/AccountTypeEnum";
 import { AccountAlreadyExistsError } from "../../../../domain/errors/AccountAlreadyExistsError";
 import { AccountNotFoundError } from "../../../../domain/errors/AccountNotFoundError";
 import { InvalidAccountError } from "../../../../domain/errors/InvalidAccountError";
+import { InvalidIbanError } from "../../../../domain/errors/InvalidIbanError";
+import { AccountNumberValue } from "../../../../domain/values/AccountNumberValue";
+import { IbanValue } from "../../../../domain/values/IbanValue";
 
 export class InMemoryAccountRepository implements AccountRepositoryInterface {
 
@@ -14,9 +17,24 @@ export class InMemoryAccountRepository implements AccountRepositoryInterface {
         const firstUserId = crypto.randomUUID();
         const secondUserId = crypto.randomUUID();
 
+        const firstAccountNumber = AccountNumberValue.generateAccountNumber()
+        const secondAccountNumber = AccountNumberValue.generateAccountNumber()
+        
+        const firstAccountIban = IbanValue.generateIban();
+        const secondAccountIban = IbanValue.generateIban();
+
+        if(firstAccountNumber instanceof InvalidAccountError || secondAccountNumber instanceof InvalidAccountError) {
+            throw new InvalidAccountError("Account data is invalid")
+        }
+
+        if(firstAccountIban instanceof InvalidIbanError || secondAccountIban instanceof InvalidIbanError) {
+            throw new InvalidIbanError("Iban is invalid")
+        }
+
+
         const firstAccount = AccountEntity.from(
-            10000001,
-            "FR7612345987650123456789014",
+            firstAccountNumber.value,
+            firstAccountIban.value,
             firstUserId,
             AccountTypeEnum.CHECKING,
             "EUR",
@@ -30,8 +48,8 @@ export class InMemoryAccountRepository implements AccountRepositoryInterface {
         )
 
         const secondAccount = AccountEntity.from(
-            10000015,
-            "FR7612255965650241436886478",
+            secondAccountNumber.value,
+            secondAccountIban.value,
             secondUserId,
             AccountTypeEnum.CREDIT,
             "USD",

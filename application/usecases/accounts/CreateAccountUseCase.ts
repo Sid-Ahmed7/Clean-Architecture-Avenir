@@ -1,18 +1,66 @@
 import { AccountEntity } from "../../../domain/entities/AccountEntity";
-import { AccountAlreadyExistsError } from "../../../domain/errors/AccountAlreadyExistsError";
 import { InvalidAccountError } from "../../../domain/errors/InvalidAccountError";
+import { InvalidIbanError } from "../../../domain/errors/InvalidIbanError";
+import { AccountNumberValue } from "../../../domain/values/AccountNumberValue";
+import { IbanValue } from "../../../domain/values/IbanValue";
 import { AccountRepositoryInterface } from "../../repositories/AccountRepositoryInterface";
 
 export class CreateAccountUseCase {
     public constructor ( private accountRepository: AccountRepositoryInterface){}
 
-    public async execute(account: AccountEntity): Promise<AccountEntity | Error>{
+    private async generateUniqueAccountNumber(partialAccountNumber: string = '') : Promise<number | InvalidAccountError > {
 
-        const existingAccount = await this.accountRepository.getOneAccountByAccountNumber(account.accountNumber)
+        const generatedAccountNumber = AccountNumberValue.generateAccountNumber(partialAccountNumber);
+
+        if(generatedAccountNumber instanceof InvalidAccountError) {
+            return generatedAccountNumber ;
+        }
+
+        const existingAccount = await this.accountRepository.getOneAccountByAccountNumber(generatedAccountNumber.value);
         
         if(existingAccount instanceof Error) {
-            return existingAccount;
+            return generatedAccountNumber.value;
         }
+
+        return this.generateUniqueAccountNumber();
+    }
+
+        private async generateUniqueIban(partialIban: string = '') : Promise<string | InvalidIbanError > {
+
+        const generatedIban = IbanValue.generateIban(partialIban);
+
+        if(generatedIban instanceof InvalidIbanError) {
+            return generatedIban ;
+        }
+
+        const allAccounts = await this.accountRepository.getAllAccounts();
+        
+
+        const existingAccountWithIban = allAccounts.some((account) => account.iban === generatedIban.value);
+        
+        if(!existingAccountWithIban) {
+            return generatedIban.value;
+        }
+
+        return this.generateUniqueIban();
+    }
+
+
+    public async execute(account: AccountEntity): Promise<AccountEntity | Error>{
+
+        const accountNumber = await this.generateUniqueAccountNumber();
+        if(accountNumber instanceof InvalidAccountError) {
+            return accountNumber;
+        }
+
+        account.accountNumber = accountNumber;
+
+        const iban = await this.generateUniqueIban();
+        if(iban instanceof InvalidIbanError) {
+            return iban;
+        }
+        
+        account.iban = iban;
 
         const createdAccount = await this.accountRepository.createOneAccount(account);
         
