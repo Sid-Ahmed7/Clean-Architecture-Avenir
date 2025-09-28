@@ -3,5 +3,8 @@
   "workspaces": [
     "application",
     "infrastructure/server"
-  ]
+  ],
+  "dependencies": {
+    "axios": "^1.12.2"
+  }
 }

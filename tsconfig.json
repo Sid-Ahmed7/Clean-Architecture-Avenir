@@ -20,6 +20,9 @@
     "declaration": true,
     "declarationMap": true,
 
+    // Module Resolution
+    "esModuleInterop": true,
+
     // Stricter Typechecking Options
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
