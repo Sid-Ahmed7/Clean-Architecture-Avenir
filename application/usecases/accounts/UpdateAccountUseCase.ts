@@ -1,5 +1,4 @@
 import { AccountEntity } from "../../../domain/entities/AccountEntity";
-import { AccountNotFoundError } from "../../../domain/errors/AccountNotFoundError";
 import { AccountRepositoryInterface } from "../../repositories/AccountRepositoryInterface";
 
 export class UpdateAccountUseCase {

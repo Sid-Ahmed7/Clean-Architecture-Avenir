@@ -9,6 +9,12 @@ import { InMemoryAccountRepository } from "../../../adapters/repositories/InMemo
 import { InvalidAccountError} from "../../../../../domain/errors/InvalidAccountError";
 import { AccountAlreadyExistsError } from "../../../../../domain/errors/AccountAlreadyExistsError";
 import { AccountNotFoundError } from "../../../../../domain/errors/AccountNotFoundError";
+import { AllowedAccountStatus } from "../../../../../domain/services/AllowedAccountStatus";
+import { InvalidAccountStatusError } from "../../../../../domain/errors/InvalidAccountStatusError";
+import { UpdateWithDrawalLimitUseCase } from "../../../../../application/usecases/accounts/UpdateWithDrawalLimitUseCase";
+import { UpdateTransferLimitUseCase } from "../../../../../application/usecases/accounts/UpdateTransferLimitUseCase";
+import { UpdateOverdraftLimitUseCase } from "../../../../../application/usecases/accounts/UpdateOverdraftLimitUseCase";
+import { CustomAccountNameUseCase } from "../../../../../application/usecases/accounts/CustomAccountNameUseCase";
 
 const accountRepository = new InMemoryAccountRepository();
 const getAllAccountsUseCase = new GetAllAccountUseCase(accountRepository);
@@ -16,8 +22,13 @@ const getAccountUseCase = new GetAccountUseCase(accountRepository);
 const createUseCase = new CreateAccountUseCase(accountRepository);
 const updateUseCase = new UpdateAccountUseCase(accountRepository);
 const deleteAccountUseCase = new DeleteAccountUseCase(accountRepository);
-const changeStatusAccountUseCase = new ChangeAccountStatusUseCase(accountRepository); 
 
+const allowedAccountStatus = new AllowedAccountStatus();
+const changeStatusAccountUseCase = new ChangeAccountStatusUseCase(accountRepository, allowedAccountStatus); 
+const updateCustomAccountName = new CustomAccountNameUseCase(accountRepository);
+const updateWithDrawalLimit = new UpdateWithDrawalLimitUseCase(accountRepository);
+const updateTransferLimit = new UpdateTransferLimitUseCase(accountRepository);
+const updateOverdraftLimit = new UpdateOverdraftLimitUseCase(accountRepository);
 
 export class AccountController {
 
@@ -109,13 +120,82 @@ export class AccountController {
             if(result instanceof AccountNotFoundError) {
                 return res.status(404).json({error: result.message})
             }
+            if(result instanceof InvalidAccountStatusError) {
+                return res.status(400).json({error: result.message});
+            }
         
             return res.status(500).json({error : result.message})
         }
         return res.status(200).json(result);
     }
 
+    
+    async updateAccountName(req: Request, res: Response) {
+        const accountNumber = Number(req.params.accountNumber);
+        const newAccountName = req.body.name;
 
+        const result = await updateCustomAccountName.execute(accountNumber, newAccountName);
+
+        if(result instanceof Error) {
+            if(result instanceof AccountNotFoundError) {
+                return res.status(404).json({error: result.message})
+            }
+            if(result instanceof InvalidAccountError) {
+                return res.status(400).json({error: result.message});
+            }
+        
+            return res.status(500).json({error : result.message})
+        }
+        return res.status(200).json(result);
+    }
+
+    async updateWithdrawalLimit(req: Request, res: Response) {
+        const accountNumber = Number(req.params.accountNumber);
+        const limit = req.body.limit;
+
+        const result = await updateWithDrawalLimit.execute(accountNumber, limit);
+
+        if(result instanceof Error) {
+            if(result instanceof AccountNotFoundError) {
+                return res.status(404).json({error: result.message})
+            }
+        
+            return res.status(500).json({error : result.message})
+        }
+        return res.status(200).json(result);
+    }
+
+    async updateTransferLimit(req: Request, res: Response) {
+        const accountNumber = Number(req.params.accountNumber);
+        const limit = req.body.limit;
+
+        const result = await updateTransferLimit.execute(accountNumber, limit);
+
+        if(result instanceof Error) {
+            if(result instanceof AccountNotFoundError) {
+                return res.status(404).json({error: result.message})
+            }
+        
+            return res.status(500).json({error : result.message})
+        }
+        return res.status(200).json(result);
+    }
+
+    async updateOverdraftLimit(req: Request, res: Response) {
+        const accountNumber = Number(req.params.accountNumber);
+        const limit = req.body.limit;
+
+        const result = await updateOverdraftLimit.execute(accountNumber, limit);
+
+        if(result instanceof Error) {
+            if(result instanceof AccountNotFoundError) {
+                return res.status(404).json({error: result.message})
+            }
+        
+            return res.status(500).json({error : result.message})
+        }
+        return res.status(200).json(result);
+    }
 
 }
 

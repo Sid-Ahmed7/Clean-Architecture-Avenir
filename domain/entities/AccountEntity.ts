@@ -5,9 +5,11 @@ import { AccountTypeEnum } from "../enums/AccountTypeEnum";
 import { AccountStatusEnum } from "../enums/AccountStatusEnum";
 import { IbanValue } from "../values/IbanValue";
 import { BalanceValue } from "../values/BalanceValue";
+import { AccountStatusValue } from "../values/AccountStatusValue";
+import { AccountNameValue } from "../values/AccountNameValue";
 
 export class AccountEntity {
-  public static from(accountNumber: number, iban: string, userId: string, accountType: AccountTypeEnum, currency: string, accountStatus: AccountStatusEnum, isActive: boolean, currentBalance: number = 0, createdAt: Date, dailyWithdrawalLimit: number, dailyTransferLimit: number, overdraftLimit: number, customAccountName?: string, createdBy?: string, closedAt?: Date) 
+  public static from(accountNumber: number, iban: string, userId: string, accountType: AccountTypeEnum, currency: string, accountStatus: AccountStatusEnum, isActive: boolean, currentBalance: number = 0, createdAt: Date, withdrawalLimit: number, transferLimit: number, overdraftLimit: number, customAccountName?: string, createdBy?: string, closedAt?: Date) 
    {
     
     const validatedAccountNumber = AccountNumberValue.from(accountNumber);
@@ -19,6 +21,12 @@ export class AccountEntity {
     const validatedUserId = UserIdValue.from(userId);
     if (validatedUserId instanceof Error) return validatedUserId;
 
+    const validatedAccountStatus = AccountStatusValue.from(accountStatus);
+    if (validatedAccountStatus instanceof Error) return validatedAccountStatus;
+
+    const validatedCustomAccountName = AccountNameValue.from(customAccountName ?? "")
+    if(validatedCustomAccountName instanceof Error) return validatedCustomAccountName;
+
     const validatedBalance = BalanceValue.from(currentBalance);
     if (validatedBalance instanceof Error) return validatedBalance;
 
@@ -29,13 +37,13 @@ export class AccountEntity {
       accountType,
       validatedBalance.value,
       currency,
-      accountStatus,
+      validatedAccountStatus.value,
       isActive,
-      dailyWithdrawalLimit,
-      dailyTransferLimit,
+      withdrawalLimit,
+      transferLimit,
       overdraftLimit,
       createdAt ?? new Date(),
-      customAccountName,
+      validatedCustomAccountName.value,
       createdBy,
       closedAt,
     );
@@ -50,8 +58,8 @@ export class AccountEntity {
     public currency: string,
     public accountStatus: AccountStatusEnum,
     public isActive: boolean,
-    public dailyWithdrawalLimit: number,
-    public dailyTransferLimit: number,
+    public withdrawalLimit: number,
+    public transferLimit: number,
     public overdraftLimit: number,
     public createdAt: Date,
     public customAccountName?: string,
@@ -68,12 +76,12 @@ export class AccountEntity {
     this.customAccountName = name
   }
 
-  public updateDailyWithdrawalLimit(limit: number) {
-    this.dailyWithdrawalLimit = limit;
+  public updateWithDrawalLimit(limit: number) {
+    this.withdrawalLimit = limit;
   }
 
-  public updateDailyTransfertLimit(limit: number) {
-    this.dailyTransferLimit = limit;
+  public updateTransferLimit(limit: number) {
+    this.transferLimit = limit;
   }
 
   public updateOverdraftLimit(limit: number) {
