@@ -14,5 +14,7 @@ router.put("/:accountNumber/name", (req,res) => accountController.updateAccountN
 router.put("/:accountNumber/withdrawal-limit", (req,res) => accountController.updateWithdrawalLimit(req,res));
 router.put("/:accountNumber/transfer-limit", (req,res) => accountController.updateTransferLimit(req,res));
 router.put("/:accountNumber/overdraft-limit", (req,res) => accountController.updateOverdraftLimit(req,res));
+router.put("/:accountNumber/active", (req,res) => accountController.toggleAccountActive(req,res));
+
 
 export default router;

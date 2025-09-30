@@ -15,6 +15,7 @@ import { UpdateWithDrawalLimitUseCase } from "../../../../../application/usecase
 import { UpdateTransferLimitUseCase } from "../../../../../application/usecases/accounts/UpdateTransferLimitUseCase";
 import { UpdateOverdraftLimitUseCase } from "../../../../../application/usecases/accounts/UpdateOverdraftLimitUseCase";
 import { CustomAccountNameUseCase } from "../../../../../application/usecases/accounts/CustomAccountNameUseCase";
+import { ToggleAccountActiveUseCase} from "../../../../../application/usecases/accounts/ToggleAccountActiveUseCase";
 
 const accountRepository = new InMemoryAccountRepository();
 const getAllAccountsUseCase = new GetAllAccountUseCase(accountRepository);
@@ -29,6 +30,8 @@ const updateCustomAccountName = new CustomAccountNameUseCase(accountRepository);
 const updateWithDrawalLimit = new UpdateWithDrawalLimitUseCase(accountRepository);
 const updateTransferLimit = new UpdateTransferLimitUseCase(accountRepository);
 const updateOverdraftLimit = new UpdateOverdraftLimitUseCase(accountRepository);
+const toggleAccountActiveUseCase = new ToggleAccountActiveUseCase(accountRepository);
+
 
 export class AccountController {
 
@@ -125,6 +128,22 @@ export class AccountController {
             }
         
             return res.status(500).json({error : result.message})
+        }
+        return res.status(200).json(result);
+    }
+
+        async toggleAccountActive(req: Request, res: Response) {
+        const accountNumber = Number(req.params.accountNumber);
+        const isActive = req.body.isActive;
+        const result = await toggleAccountActiveUseCase.execute(accountNumber, isActive);
+        if (result instanceof Error) {
+            if (result instanceof AccountNotFoundError) {
+                return res.status(404).json({ error: result.message });
+            } 
+            if (result instanceof InvalidAccountError) {
+                return res.status(400).json({ error: result.message });
+            } 
+            return res.status(500).json({ error: result.message });
         }
         return res.status(200).json(result);
     }

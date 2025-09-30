@@ -32,26 +32,18 @@ export class IbanValue {
 
     }
 
-    public static generateIban(partialIban: string = ' '): IbanValue | InvalidIbanError {
-        const ibanLength = 23;
+    public static generateIban(accountNumber: number): IbanValue | InvalidIbanError {
+        const bankCode = Math.floor(10000 + Math.random() * 89999).toString();
+        const branchCode = Math.floor(10000 + Math.random() * 89999).toString();
+        const ribKey = Math.floor(10 + Math.random() * 89).toString();
 
-        if(partialIban.length === ibanLength) {
-            const ibanWithCheck = 'FR00' + partialIban;
-            const checkDigits = IbanValue.calculateCheckDigits(ibanWithCheck);
-            const fullIban = 'FR' + checkDigits + partialIban;
+        const partialIban = bankCode + branchCode + accountNumber + ribKey; // 23 chiffres
+        const ibanWithCheck = 'FR00' + partialIban;
+        const checkDigits = IbanValue.calculateCheckDigits(ibanWithCheck);
+        const fullIban = 'FR' + checkDigits + partialIban;
 
-            const validatedIban = IbanValue.from(fullIban);
-            if (validatedIban instanceof InvalidIbanError) {
-                return new InvalidIbanError('Generated IBAN is invalid');
-            }
 
-            return validatedIban;
-        }
-
-        const randomDigits = Math.floor(Math.random() * 10).toString();
-        const ibanWithNextDigit = partialIban + randomDigits;
-
-        return IbanValue.generateIban(ibanWithNextDigit);
+        return IbanValue.from(fullIban);
     }
 
     private constructor(public value: string) {}

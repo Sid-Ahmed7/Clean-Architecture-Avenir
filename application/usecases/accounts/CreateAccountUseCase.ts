@@ -22,12 +22,12 @@ export class CreateAccountUseCase {
             return generatedAccountNumber.value;
         }
 
-        return this.generateUniqueAccountNumber();
+        return await this.generateUniqueAccountNumber();
     }
 
-        private async generateUniqueIban(partialIban: string = '') : Promise<string | InvalidIbanError > {
+        private async generateUniqueIban(accountNumber: number) : Promise<string | InvalidIbanError > {
 
-        const generatedIban = IbanValue.generateIban(partialIban);
+        const generatedIban = IbanValue.generateIban(accountNumber);
 
         if(generatedIban instanceof InvalidIbanError) {
             return generatedIban ;
@@ -42,7 +42,7 @@ export class CreateAccountUseCase {
             return generatedIban.value;
         }
 
-        return this.generateUniqueIban();
+        return await this.generateUniqueIban(accountNumber);
     }
 
 
@@ -55,7 +55,7 @@ export class CreateAccountUseCase {
 
         account.accountNumber = accountNumber;
 
-        const iban = await this.generateUniqueIban();
+        const iban = await this.generateUniqueIban(accountNumber);
         if(iban instanceof InvalidIbanError) {
             return iban;
         }

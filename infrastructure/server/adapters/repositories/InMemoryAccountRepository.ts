@@ -5,7 +5,6 @@ import { AccountTypeEnum } from "../../../../domain/enums/AccountTypeEnum";
 import { AccountAlreadyExistsError } from "../../../../domain/errors/AccountAlreadyExistsError";
 import { AccountNotFoundError } from "../../../../domain/errors/AccountNotFoundError";
 import { InvalidAccountError } from "../../../../domain/errors/InvalidAccountError";
-import { InvalidIbanError } from "../../../../domain/errors/InvalidIbanError";
 import { AccountNumberValue } from "../../../../domain/values/AccountNumberValue";
 import { IbanValue } from "../../../../domain/values/IbanValue";
 
@@ -19,11 +18,12 @@ export class InMemoryAccountRepository implements AccountRepositoryInterface {
 
         const firstAccountNumber = AccountNumberValue.generateAccountNumber()
         const secondAccountNumber = AccountNumberValue.generateAccountNumber()
-        
-        const firstAccountIban = IbanValue.generateIban();
-        const secondAccountIban = IbanValue.generateIban();
         if (firstAccountNumber instanceof Error) throw firstAccountNumber;
-        if (secondAccountNumber instanceof Error) throw secondAccountNumber;
+        if (secondAccountNumber instanceof Error) throw secondAccountNumber
+        
+        const firstAccountIban = IbanValue.generateIban(firstAccountNumber.value);
+        const secondAccountIban = IbanValue.generateIban(secondAccountNumber.value);
+;
         if (firstAccountIban instanceof Error) throw firstAccountIban;
         if (secondAccountIban instanceof Error) throw secondAccountIban;
 
@@ -41,7 +41,8 @@ export class InMemoryAccountRepository implements AccountRepositoryInterface {
             1000,
             2000,
             500,
-            "Compte principal"
+            "Compte principal",
+            "Mr.Directeur"
         )
 
         const secondAccount = AccountEntity.from(
@@ -57,7 +58,8 @@ export class InMemoryAccountRepository implements AccountRepositoryInterface {
             2000,
             3000,
             1000,
-            "Compte principal"
+            "Compte principal",
+            "Mr.Directeur"
         )
 
         if (firstAccount instanceof Error || secondAccount instanceof Error ) {
@@ -81,9 +83,9 @@ export class InMemoryAccountRepository implements AccountRepositoryInterface {
     }
 
     public async createOneAccount(account: AccountEntity): Promise<AccountEntity | AccountAlreadyExistsError | InvalidAccountError> {
-        const existingAccount = this.accounts.find((acc) =>  acc.accountNumber === account.accountNumber);
+        const actualAccount = this.accounts.find((acc) =>  acc.accountNumber === account.accountNumber);
 
-        if(existingAccount) {
+        if(actualAccount) {
             return new AccountAlreadyExistsError(`Account with number ${account.accountNumber} already exists`);
         }
 
@@ -106,7 +108,7 @@ export class InMemoryAccountRepository implements AccountRepositoryInterface {
             return new InvalidAccountError("Account data is invalid")
         }
 
-        this.accounts[index] = account;
+         this.accounts[index] = account;
         return account;
     }
 

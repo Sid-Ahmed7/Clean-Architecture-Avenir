@@ -24,12 +24,12 @@ export class ChangeAccountStatusUseCase {
 
         account.changeAccountStatus(status);
         
-        const updateAccount = this.accountRepository.updateOneAccount(account);
+        const updatedAccount = await this.accountRepository.updateOneAccount(account);
         
-        if(updateAccount instanceof Error){
-            return updateAccount;
+        if(updatedAccount instanceof Error){
+            return updatedAccount;
         }
 
-        return updateAccount;
+        return updatedAccount;
     }
 }
