@@ -14,9 +14,11 @@
     "dotenv": "^17.2.2",
     "express": "^5.1.0"
   },
-  "scripts": {
-    "dev": "ts-node src/index.ts",
-    "build": "tsc -b",
-    "start": "node dist/index.js"
-  }
+"scripts": {
+  "dev": "ts-node frameworks/express/server.ts",
+  "build": "tsc -b ../..", 
+  "start": "node ../../dist/frameworks/express/server.js"
+}
+
+
 }

@@ -22,14 +22,10 @@ export class InMemoryAccountRepository implements AccountRepositoryInterface {
         
         const firstAccountIban = IbanValue.generateIban();
         const secondAccountIban = IbanValue.generateIban();
-
-        if(firstAccountNumber instanceof InvalidAccountError || secondAccountNumber instanceof InvalidAccountError) {
-            throw new InvalidAccountError("Account data is invalid")
-        }
-
-        if(firstAccountIban instanceof InvalidIbanError || secondAccountIban instanceof InvalidIbanError) {
-            throw new InvalidIbanError("Iban is invalid")
-        }
+        if (firstAccountNumber instanceof Error) throw firstAccountNumber;
+        if (secondAccountNumber instanceof Error) throw secondAccountNumber;
+        if (firstAccountIban instanceof Error) throw firstAccountIban;
+        if (secondAccountIban instanceof Error) throw secondAccountIban;
 
 
         const firstAccount = AccountEntity.from(
@@ -44,7 +40,8 @@ export class InMemoryAccountRepository implements AccountRepositoryInterface {
             new Date(),
             1000,
             2000,
-            500
+            500,
+            "Compte principal"
         )
 
         const secondAccount = AccountEntity.from(
@@ -59,7 +56,8 @@ export class InMemoryAccountRepository implements AccountRepositoryInterface {
             new Date(),
             2000,
             3000,
-            1000
+            1000,
+            "Compte principal"
         )
 
         if (firstAccount instanceof Error || secondAccount instanceof Error ) {
