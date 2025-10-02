@@ -1,5 +1,6 @@
 import { StockRepositoryInterface } from "../../../../application/repositories/StockRepositoryInterface";
 import { StockEntity } from "../../../../domain/entities/StockEntity";
+import { InvalidAccountError } from "../../../../domain/errors/InvalidAccountError";
 import { StockAlreadyExistsError } from "../../../../domain/errors/StockAlreadyExistsError";
 import { StockNotFoundError } from "../../../../domain/errors/StockNotFoundError";
 
@@ -78,18 +79,19 @@ export class InMemoryStockRepository implements StockRepositoryInterface {
         return stock;
     }
 
-    public async updateStock(stock: StockEntity): Promise<StockEntity | StockNotFoundError> {
-        const index = this.stocks.findIndex((stk) => stk.id === stock.id);
+        public async updateStock(stock: StockEntity): Promise<StockEntity | StockNotFoundError> {
+            const actualStock = this.stocks.find((stk) => stk.id === stock.id);
 
-        if (index === -1) {
-            return new StockNotFoundError("Stock not found");
+            if (!actualStock) {
+                return new StockNotFoundError("Stock not found");
+            }
+
+            actualStock.isActionAvailable = stock.isActionAvailable;
+            actualStock.updatedAt = new Date();
+
+            return actualStock;
         }
 
-        this.stocks[index].isActionAvailable = stock.isActionAvailable;
-        this.stocks[index].updatedAt = new Date();
-
-        return this.stocks[index];
-    }
 
 
         public async deleteStock(id: number): Promise<void | StockNotFoundError> {
