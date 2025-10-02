@@ -110,7 +110,8 @@ export class AccountController {
             return res.status(500).json({error : result.message})
         }
 
-        return res.status(200).json(result);
+        return res.status(200).json({ message: "Account deleted successfully" });
+
     }
 
     async changeStatusOfAccount(req: Request, res: Response) {
