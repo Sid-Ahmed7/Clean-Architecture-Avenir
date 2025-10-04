@@ -53,8 +53,8 @@ export class StockController {
     }
 
     async getStockBySymbol(req: Request, res: Response) {
-        const symbol = req.params.symbol;
-        const result =  await getStockBySymbolUseCase.execute(symbol ?? "");
+        const symbol = (req.query.symbol as string ?? "").trim().toUpperCase();
+        const result =  await getStockBySymbolUseCase.execute(symbol);
 
         if(result instanceof Error) {
             if (result instanceof StockNotFoundError) {

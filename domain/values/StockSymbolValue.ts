@@ -21,12 +21,12 @@ export class StockSymbolValue {
         const tickerRegex= /^[A-Z]{1,4}$/; 
         const [ticker, market] = parts;
 
-         if(!tickerRegex.test(ticker)) {
+         if(!tickerRegex.test(ticker ?? "")) {
             return new InvalidStockSymbolError(`Invalid stock symbol format: ${symbol}`);
         }
 
         const marketRegex = /^[A-Z]{1,6}$/
-        if(!marketRegex.test(market)) {
+        if(!marketRegex.test(market ?? "")) {
             return new InvalidStockSymbolError(`Invalid stock symbol format: ${symbol}`);
         }
 

@@ -25,8 +25,8 @@ export class InMemoryStockRepository implements StockRepositoryInterface {
 
         const secondStock = StockEntity.from(
             2,
-            "AAPL.B:NASDAQ",
-            "Apple",
+            "TSLA:NASDAQ",
+            "Tesla INc.",
             "Vente 70%",
             68965,
             0,
@@ -54,24 +54,27 @@ export class InMemoryStockRepository implements StockRepositoryInterface {
         return stock;
     }
 
-        public async findStockBySymbol(symbol: string): Promise<StockEntity | StockNotFoundError> {
-        const stock = this.stocks.find((stock) => stock.symbol === symbol);
+public async findStockBySymbol(symbol: string): Promise<StockEntity | StockNotFoundError> {
+    const [symbolPart, marketPart] = symbol.split(":");
+    const stock = this.stocks.find(s => {
+        const [sPart, mPart] = s.symbol.split(":");
+        return sPart?.toUpperCase() === symbolPart?.toUpperCase() &&
+            mPart?.toUpperCase() === (marketPart?.toUpperCase() ?? "");
+    });
 
-        if(!stock) {
-            return new StockNotFoundError("Stock not found");
-        }
+    if (!stock) return new StockNotFoundError("Stock not found");
+    return stock;
+}
 
-        return stock;
-    }
 
     public async getAllStocks(): Promise<Array<StockEntity>> {
         return this.stocks;
     }
 
     public async createStock(stock: StockEntity): Promise<StockEntity | StockAlreadyExistsError> {
-        const actualStock = this.stocks.find((stk) => stk.symbol === stock.symbol)
+        const existingStock = await this.findStockBySymbol(stock.symbol);
         
-        if(actualStock) {
+        if(!(existingStock instanceof StockNotFoundError)) {
             return new StockAlreadyExistsError("Stock already exist");
         }
 
@@ -101,6 +104,5 @@ export class InMemoryStockRepository implements StockRepositoryInterface {
                 return new StockNotFoundError("Stock not found");
             }       
             this.stocks.splice(index, 1);  
-     
         }
 }
