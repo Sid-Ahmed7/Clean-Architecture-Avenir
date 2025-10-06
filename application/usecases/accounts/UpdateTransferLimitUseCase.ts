@@ -1,4 +1,4 @@
-import { AccountRepositoryInterface } from "../../repositories/AccountRepositoryInterface";
+import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
 
 export class UpdateTransferLimitUseCase {
 

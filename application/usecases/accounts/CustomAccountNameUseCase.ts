@@ -1,5 +1,5 @@
 import { AccountEntity } from "../../../domain/entities/AccountEntity";
-import { AccountRepositoryInterface } from "../../repositories/AccountRepositoryInterface";
+import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
 
 export class CustomAccountNameUseCase {
     public constructor(private accountRepository: AccountRepositoryInterface){}

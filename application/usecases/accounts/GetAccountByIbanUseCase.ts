@@ -1,12 +1,12 @@
 import { AccountEntity } from "../../../domain/entities/AccountEntity";
 import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
 
-export class GetAccountUseCase {
+export class GetAccountByIbanUseCase {
     public constructor ( private accountRepository: AccountRepositoryInterface){}
 
-    public async execute(accountNumber: number) : Promise<AccountEntity | Error>{
+    public async execute(iban: string) : Promise<AccountEntity | Error>{
 
-        const account = await this.accountRepository.getOneAccountByAccountNumber(accountNumber);
+        const account = await this.accountRepository.getOneAccountByIban(iban);
 
         if (account instanceof Error) {
             return account;
