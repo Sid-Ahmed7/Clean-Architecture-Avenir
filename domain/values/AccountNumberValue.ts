@@ -16,15 +16,6 @@ export class AccountNumberValue {
 
     }
 
-    public static generateAccountNumber(partialAccountNumber: string = ''): AccountNumberValue | InvalidAccountError {
-        if( partialAccountNumber.length === 11) {
-            return AccountNumberValue.from(Number(partialAccountNumber));
-        } 
-        const nextDigit = partialAccountNumber.length === 0 ? Math.floor(Math.random() * 9) +1 : Math.floor(Math.floor(Math.random() * 10)); 
-        return AccountNumberValue.generateAccountNumber(partialAccountNumber + nextDigit);
-        
-    }
-
     private constructor(public value: number) {}
 
 

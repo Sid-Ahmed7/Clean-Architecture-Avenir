@@ -1,6 +1,6 @@
 import { AccountEntity } from "../../../domain/entities/AccountEntity";
 import { AccountNotFoundError } from "../../../domain/errors/AccountNotFoundError";
-import { AccountRepositoryInterface } from "../../repositories/AccountRepositoryInterface";
+import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
 
 export class GetAllAccountUseCase {
     public constructor ( private accountRepository: AccountRepositoryInterface){}

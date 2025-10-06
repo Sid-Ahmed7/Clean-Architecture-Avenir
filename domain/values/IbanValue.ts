@@ -32,19 +32,7 @@ export class IbanValue {
 
     }
 
-    public static generateIban(accountNumber: number): IbanValue | InvalidIbanError {
-        const bankCode = Math.floor(10000 + Math.random() * 89999).toString();
-        const branchCode = Math.floor(10000 + Math.random() * 89999).toString();
-        const ribKey = Math.floor(10 + Math.random() * 89).toString();
 
-        const partialIban = bankCode + branchCode + accountNumber + ribKey; // 23 chiffres
-        const ibanWithCheck = 'FR00' + partialIban;
-        const checkDigits = IbanValue.calculateCheckDigits(ibanWithCheck);
-        const fullIban = 'FR' + checkDigits + partialIban;
-
-
-        return IbanValue.from(fullIban);
-    }
 
     private constructor(public value: string) {}
 
@@ -59,7 +47,7 @@ export class IbanValue {
 
         return parseInt(remainder, 10)% 97 === 1;
     }
-        private static calculateCheckDigits(iban: string): string {
+        public static calculateCheckDigits(iban: string): string {
         const formattedIban = iban.slice(4) + iban.slice(0, 4);
         const numericIban = formattedIban.replace(/[A-Z]/g, char => (char.charCodeAt(0) - 55).toString());
 

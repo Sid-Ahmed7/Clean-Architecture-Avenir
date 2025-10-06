@@ -2,7 +2,7 @@ import { AccountStatusEnum } from "../../../domain/enums/AccountStatusEnum";
 import { AccountAlreadyExistsError } from "../../../domain/errors/AccountAlreadyExistsError";
 import { InvalidAccountError } from "../../../domain/errors/InvalidAccountError";
 import { AllowedAccountStatus } from "../../../domain/services/AllowedAccountStatus";
-import { AccountRepositoryInterface } from "../../repositories/AccountRepositoryInterface";
+import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
 
 export class ChangeAccountStatusUseCase {
 
