@@ -1,8 +1,10 @@
 import express from 'express'
 import { StockController } from '../controller/stock.controller';
+import { InMemoryStockRepository } from '../../../../adapters/repositories/InMemoryStockRepository';
 
 const router = express.Router();
-const stockController = new StockController();
+const stockRepository = new InMemoryStockRepository();
+const stockController = new StockController(stockRepository);
 
 router.post("/create", (req, res) => stockController.createStock(req,res));
 router.get("/", (req,res) => stockController.getAllStocks(req,res));
