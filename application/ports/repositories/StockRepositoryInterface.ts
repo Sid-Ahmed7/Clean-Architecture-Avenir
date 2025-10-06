@@ -1,6 +1,6 @@
-import { StockEntity } from "../../domain/entities/StockEntity";
-import { StockAlreadyExistsError } from "../../domain/errors/StockAlreadyExistsError";
-import { StockNotFoundError } from "../../domain/errors/StockNotFoundError";
+import { StockEntity } from "../../../domain/entities/StockEntity";
+import { StockAlreadyExistsError } from "../../../domain/errors/StockAlreadyExistsError";
+import { StockNotFoundError } from "../../../domain/errors/StockNotFoundError";
 
 export interface StockRepositoryInterface {
 

@@ -1,7 +1,7 @@
 import { StockEntity } from "../../../domain/entities/StockEntity";
 import { StockAlreadyExistsError } from "../../../domain/errors/StockAlreadyExistsError";
 import { StockNotFoundError } from "../../../domain/errors/StockNotFoundError";
-import { StockRepositoryInterface } from "../../repositories/StockRepositoryInterface";
+import { StockRepositoryInterface } from "../../ports/repositories/StockRepositoryInterface";
 
 export class CreateStockUseCase {
     public constructor(private stockRepository: StockRepositoryInterface){}

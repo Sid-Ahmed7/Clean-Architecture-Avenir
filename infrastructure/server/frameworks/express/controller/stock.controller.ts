@@ -1,28 +1,20 @@
 import { Request, Response } from "express";
-import {InMemoryStockRepository} from "../../../adapters/repositories/InMemoryStockRepository";
-import { ChangeStockAvailability } from "../../../../../application/usecases/stocks/ChangeStockAvailabilityUseCase";
+import {InMemoryStockRepository} from "../../../../adapters/repositories/InMemoryStockRepository";
+import { ChangeStockAvailabilityUseCase } from "../../../../../application/usecases/stocks/ChangeStockAvailabilityUseCase";
 import { GetStockByIdUseCase } from "../../../../../application/usecases/stocks/GetStockByIdUseCase";
 import { GetStockBySymbolUseCase } from "../../../../../application/usecases/stocks/GetStockBySymbolUseCase";
 import { GetAllStockUseCase } from "../../../../../application/usecases/stocks/GetAllStockUseCase";
 import { CreateStockUseCase } from "../../../../../application/usecases/stocks/CreateStockUseCase";
 import { DeleteStockUseCase } from "../../../../../application/usecases/stocks/DeleteStockUseCase";
 import { StockAlreadyExistsError } from "../../../../../domain/errors/StockAlreadyExistsError";
-import { error } from "console";
 import { StockNotFoundError } from "../../../../../domain/errors/StockNotFoundError";
-
-const stockRepository = new InMemoryStockRepository();
-const getStockByIdUseCase = new GetStockByIdUseCase(stockRepository);
-const getStockBySymbolUseCase = new GetStockBySymbolUseCase(stockRepository);
-const getAllStockUseCase = new GetAllStockUseCase(stockRepository);
-const createStockUseCase = new CreateStockUseCase(stockRepository);
-const deleteStockUseCase = new DeleteStockUseCase(stockRepository);
-const changeStockAvailabilityUseCase = new ChangeStockAvailability(stockRepository);
-
-
-
 export class StockController {
 
+    
+    constructor(private readonly stockRepository: InMemoryStockRepository) {}
+
     async createStock(req: Request, res: Response) {
+        const createStockUseCase = new CreateStockUseCase(this.stockRepository); 
 
         const result = await createStockUseCase.execute(req.body);
         
@@ -38,6 +30,8 @@ export class StockController {
     }
 
     async getStockByIdUseCase(req: Request, res: Response) {
+        const getStockByIdUseCase = new GetStockByIdUseCase(this.stockRepository); 
+
         const id = Number(req.params.id);
         const result = await getStockByIdUseCase.execute(id);
         
@@ -53,6 +47,7 @@ export class StockController {
     }
 
     async getStockBySymbol(req: Request, res: Response) {
+        const getStockBySymbolUseCase = new GetStockBySymbolUseCase(this.stockRepository);
         const symbol = (req.query.symbol as string ?? "").trim().toUpperCase();
         const result =  await getStockBySymbolUseCase.execute(symbol);
 
@@ -67,6 +62,7 @@ export class StockController {
     }
 
     async getAllStocks(req: Request, res: Response) {
+        const getAllStockUseCase = new GetAllStockUseCase(this.stockRepository)
         const result = await getAllStockUseCase.execute();
 
         if(result instanceof Error) {
@@ -78,6 +74,7 @@ export class StockController {
 
 
     async deleteStock(req: Request, res: Response) {
+        const deleteStockUseCase = new DeleteStockUseCase(this.stockRepository);
         const id = Number(req.params.id);
         const result = await deleteStockUseCase.execute(id);
 
@@ -91,6 +88,7 @@ export class StockController {
     }
 
     async changeStockAvailability(req: Request, res: Response) {
+        const changeStockAvailabilityUseCase = new ChangeStockAvailabilityUseCase(this.stockRepository);
         const id = Number(req.params.id);
         const isAvailable = req.body.isActionAvailable;
 

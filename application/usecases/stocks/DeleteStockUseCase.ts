@@ -1,5 +1,4 @@
-import { StockEntity } from "../../../domain/entities/StockEntity";
-import { StockRepositoryInterface } from "../../repositories/StockRepositoryInterface";
+import { StockRepositoryInterface } from "../../ports/repositories/StockRepositoryInterface";
 
 export class DeleteStockUseCase {
     public constructor(private stockRepository: StockRepositoryInterface){}

@@ -1,48 +1,16 @@
-import { StockRepositoryInterface } from "../../../../application/repositories/StockRepositoryInterface";
-import { StockEntity } from "../../../../domain/entities/StockEntity";
-import { InvalidAccountError } from "../../../../domain/errors/InvalidAccountError";
-import { StockAlreadyExistsError } from "../../../../domain/errors/StockAlreadyExistsError";
-import { StockNotFoundError } from "../../../../domain/errors/StockNotFoundError";
+import { StockRepositoryInterface } from "../../../application/ports/repositories/StockRepositoryInterface";
+import { StockEntity } from "../../../domain/entities/StockEntity";
+import { InvalidAccountError } from "../../../domain/errors/InvalidAccountError";
+import { StockAlreadyExistsError } from "../../../domain/errors/StockAlreadyExistsError";
+import { StockNotFoundError } from "../../../domain/errors/StockNotFoundError";
 
 export class InMemoryStockRepository implements StockRepositoryInterface {
 
     private stocks: Array<StockEntity>;
 
     public constructor() {
-
-        const firstStock = StockEntity.from(
-            1,
-            "AAPL:NASDAQ",
-            "Apple",
-            "Vente 10%",
-            150,
-            0,
-            "USD",
-            new Date(),
-            true,
-            new Date(),
-        );
-
-        const secondStock = StockEntity.from(
-            2,
-            "TSLA:NASDAQ",
-            "Tesla INc.",
-            "Vente 70%",
-            68965,
-            0,
-            "USD",
-            new Date(),
-            true,
-            new Date(),
-        );
-
-        if(firstStock instanceof Error || secondStock instanceof Error) {
-            throw new Error("Bad initialization of stocks");
-        }
-
-        this.stocks = [firstStock, secondStock];
+        this.stocks = [];
     }
-
 
     public async findStockById(id: number): Promise<StockEntity | StockNotFoundError> {
         const stock = this.stocks.find((stock) => stock.id === id);
