@@ -2,17 +2,29 @@
   "name": "clean-architecture-avenir",
   "version": "1.0.0",
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/node": "^24.4.0",
+    "@types/bcrypt": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/cookie-parser": "^1.4.6",
     "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.9.2"
   },
   "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "bcrypt": "^5.1.1",
+    "jsonwebtoken": "^9.0.2",
+    "cookie-parser": "^1.4.6",
     "express": "^5.1.0"
   },
-    "scripts": {
-    "dev": "ts-node src/index.ts",
-    "build": "tsc -b",
-    "start": "node dist/index.js"
-  }
+"scripts": {
+  "dev": "ts-node frameworks/express/server.ts",
+  "build": "tsc -b ../..",
+  "start": "node ../../dist/frameworks/express/server.js"
+}
+
+
 }
