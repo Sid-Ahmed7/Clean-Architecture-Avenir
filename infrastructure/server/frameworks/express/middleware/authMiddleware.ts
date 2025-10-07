@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import * as jwt from "jsonwebtoken";
-import { RoleEnum } from "../../domain/enums/RoleEnum";
+import { RoleEnum } from "../../../../../domain/enums/RoleEnum";
 
 // JWT secret should be in environment variables in production
 const JWT_SECRET = "your-secret-key";

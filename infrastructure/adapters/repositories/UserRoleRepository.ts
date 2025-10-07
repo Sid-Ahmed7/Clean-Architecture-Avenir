@@ -1,7 +1,7 @@
-import { UserRoleEntity } from "../../domain/entities/UserRoleEntity";
-import { IUserRoleRepository as IRegisterUserRoleRepository } from "../../application/usecases/auth/RegisterUseCase";
-import { IUserRoleRepository as ILoginUserRoleRepository } from "../../application/usecases/auth/LoginUseCase";
-import { RoleEnum } from "../../domain/enums/RoleEnum";
+import { UserRoleEntity } from "../../../domain/entities/UserRoleEntity";
+import { IUserRoleRepository as IRegisterUserRoleRepository } from "../../../application/usecases/auth/RegisterUseCase";
+import { IUserRoleRepository as ILoginUserRoleRepository } from "../../../application/usecases/auth/LoginUseCase";
+import { RoleEnum } from "../../../domain/enums/RoleEnum";
 import { RoleRepository } from "./RoleRepository";
 
 // This is a mock in-memory repository for demonstration purposes

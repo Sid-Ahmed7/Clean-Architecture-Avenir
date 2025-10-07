@@ -1,5 +1,5 @@
-import { RoleEnum } from "../../domain/enums/RoleEnum";
-import { IRoleRepository } from "../../application/usecases/auth/RegisterUseCase";
+import { RoleEnum } from "../../../domain/enums/RoleEnum";
+import { IRoleRepository } from "../../../application/usecases/auth/RegisterUseCase";
 
 // This is a mock in-memory repository for demonstration purposes
 // In a real application, this would connect to a database

@@ -1,6 +1,6 @@
-import { RefreshTokenEntity } from "../../domain/entities/RefreshTokenEntity";
-import { ITokenRepository } from "../../application/usecases/auth/LoginUseCase";
-import { RoleEnum } from "../../domain/enums/RoleEnum";
+import { RefreshTokenEntity } from "../../../domain/entities/RefreshTokenEntity";
+import { ITokenRepository } from "../../../application/usecases/auth/LoginUseCase";
+import { RoleEnum } from "../../../domain/enums/RoleEnum";
 import * as jwt from "jsonwebtoken";
 
 // This is a mock in-memory repository for demonstration purposes

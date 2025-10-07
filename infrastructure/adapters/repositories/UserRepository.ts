@@ -1,6 +1,6 @@
-import { BankUserEntity } from "../../domain/entities/BankUserEntity";
-import { IUserRepository as RegisterUserRepository } from "../../application/usecases/auth/RegisterUseCase";
-import { IUserRepository as RefreshTokenUserRepository } from "../../application/usecases/auth/RefreshTokenUseCase";
+import { BankUserEntity } from "../../../domain/entities/BankUserEntity";
+import { IUserRepository as RegisterUserRepository } from "../../../application/usecases/auth/RegisterUseCase";
+import { IUserRepository as RefreshTokenUserRepository } from "../../../application/usecases/auth/RefreshTokenUseCase";
 import * as bcrypt from "bcrypt";
 
 // This is a mock in-memory repository for demonstration purposes

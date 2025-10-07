@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { RegisterUseCase } from "../../application/usecases/auth/RegisterUseCase";
-import { LoginUseCase } from "../../application/usecases/auth/LoginUseCase";
-import { RefreshTokenUseCase } from "../../application/usecases/auth/RefreshTokenUseCase";
-import { UserRepository } from "../repositories/UserRepository";
-import { RoleRepository } from "../repositories/RoleRepository";
-import { UserRoleRepository } from "../repositories/UserRoleRepository";
-import { TokenRepository } from "../repositories/TokenRepository";
-import { RoleEnum } from "../../domain/enums/RoleEnum";
+import { RegisterUseCase } from "../../../../../application/usecases/auth/RegisterUseCase";
+import { LoginUseCase } from "../../../../../application/usecases/auth/LoginUseCase";
+import { RefreshTokenUseCase } from "../../../../../application/usecases/auth/RefreshTokenUseCase";
+import { UserRepository } from "../../../../adapters/repositories/UserRepository";
+import { RoleRepository } from "../../../../adapters/repositories/RoleRepository";
+import { UserRoleRepository } from "../../../../adapters/repositories/UserRoleRepository";
+import { TokenRepository } from "../../../../adapters/repositories/TokenRepository";
+import { RoleEnum } from "../../../../../domain/enums/RoleEnum";
 
 export class AuthController {
   private registerUseCase: RegisterUseCase;

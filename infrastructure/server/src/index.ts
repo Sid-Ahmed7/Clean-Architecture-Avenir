@@ -1,14 +1,14 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { AuthController } from "../../controllers/AuthController";
+import { AuthController } from "../frameworks/express/controller/AuthController";
 import { 
   authenticateJWT, 
   authorizeDirector, 
   authorizeClient, 
   authorizeRoles,
   verifyRefreshTokenCookie
-} from "../../middleware/authMiddleware";
+} from "../frameworks/express/middleware/authMiddleware";
 import { RoleEnum } from "../../../domain/enums/RoleEnum";
 
 // Create Express app
