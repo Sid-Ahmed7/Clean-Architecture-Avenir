@@ -5,9 +5,11 @@ import { AccountTypeEnum } from "../enums/AccountTypeEnum";
 import { AccountStatusEnum } from "../enums/AccountStatusEnum";
 import { IbanValue } from "../values/IbanValue";
 import { BalanceValue } from "../values/BalanceValue";
+import { AccountStatusValue } from "../values/AccountStatusValue";
+import { AccountNameValue } from "../values/AccountNameValue";
 
 export class AccountEntity {
-  public static from(accountNumber: number, iban: string, userId: string, accountType: AccountTypeEnum, currency: string, accountStatus: AccountStatusEnum, isActive: boolean, currentBalance: number = 0, customAccountName?: string, dailyWithdrawalLimit?: number, dailyTransferLimit?: number, overdraftLimit?: number, createdBy?: string, closedAt?: Date, createdAt?: Date) 
+  public static from(accountNumber: number, iban: string, userId: string, accountType: AccountTypeEnum, currency: string, accountStatus: AccountStatusEnum, isActive: boolean, currentBalance: number = 0, createdAt: Date, withdrawalLimit: number, transferLimit: number, overdraftLimit: number, customAccountName: string, createdBy: string, closedAt?: Date) 
    {
     
     const validatedAccountNumber = AccountNumberValue.from(accountNumber);
@@ -19,6 +21,15 @@ export class AccountEntity {
     const validatedUserId = UserIdValue.from(userId);
     if (validatedUserId instanceof Error) return validatedUserId;
 
+    const validatedCreatedAccount = UserIdValue.from(createdBy);
+    if (validatedCreatedAccount instanceof Error) return validatedCreatedAccount;
+
+    const validatedAccountStatus = AccountStatusValue.from(accountStatus);
+    if (validatedAccountStatus instanceof Error) return validatedAccountStatus;
+
+    const validatedCustomAccountName = AccountNameValue.from(customAccountName ?? "")
+    if(validatedCustomAccountName instanceof Error) return validatedCustomAccountName;
+
     const validatedBalance = BalanceValue.from(currentBalance);
     if (validatedBalance instanceof Error) return validatedBalance;
 
@@ -29,15 +40,15 @@ export class AccountEntity {
       accountType,
       validatedBalance.value,
       currency,
-      customAccountName,
-      dailyWithdrawalLimit,
-      dailyTransferLimit,
-      overdraftLimit,
-      createdBy,
-      accountStatus,
-      closedAt,
+      validatedAccountStatus.value,
       isActive,
-      createdAt ?? new Date()
+      withdrawalLimit,
+      transferLimit,
+      overdraftLimit,
+      createdAt ?? new Date(),
+      validatedCustomAccountName.value,
+      validatedCreatedAccount.value,
+      closedAt,
     );
   }
 
@@ -48,14 +59,57 @@ export class AccountEntity {
     public accountType: AccountTypeEnum,
     public currentBalance: number,
     public currency: string,
-    public customAccountName?: string,
-    public dailyWithdrawalLimit?: number,
-    public dailyTransferLimit?: number,
-    public overdraftLimit?: number,
-    public createdBy?: string,
-    public accountStatus?: AccountStatusEnum,
+    public accountStatus: AccountStatusEnum,
+    public isActive: boolean,
+    public withdrawalLimit: number,
+    public transferLimit: number,
+    public overdraftLimit: number,
+    public createdAt: Date,
+    public customAccountName: string,
+    public createdBy: string,
     public closedAt?: Date,
-    public isActive?: boolean,
-    public createdAt?: Date
+
   ) {}
+
+  public updateBalance(balance: number) {
+    this.currentBalance = balance;
+  }
+
+  public updateCurrency(newCurrency: string) {
+    this.currency = newCurrency;
+  }
+
+  public changeAccountStatus(status: AccountStatusEnum) {
+    this.accountStatus = status;
+    this.isActive = status === AccountStatusEnum.ACTIVE || status === AccountStatusEnum.PENDING;
+  }
+ public updateIsActive(isActive: boolean) {
+        this.isActive = isActive;
+
+        if (!isActive && (this.accountStatus === AccountStatusEnum.ACTIVE || this.accountStatus === AccountStatusEnum.PENDING)) {
+            this.accountStatus = AccountStatusEnum.SUSPENDED;
+        } else if (isActive && this.accountStatus === AccountStatusEnum.SUSPENDED) {
+            this.accountStatus = AccountStatusEnum.ACTIVE;
+        }
+    }
+
+  public updateCustomAccountName(name: string) {
+    this.customAccountName = name
+  }
+
+  public updateWithDrawalLimit(limit: number) {
+    this.withdrawalLimit = limit;
+  }
+
+  public updateTransferLimit(limit: number) {
+    this.transferLimit = limit;
+  }
+
+  public updateOverdraftLimit(limit: number) {
+    this.overdraftLimit = limit;
+  }
+
+
+
+
 }
