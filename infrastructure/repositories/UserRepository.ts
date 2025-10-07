@@ -1,16 +1,17 @@
 import { BankUserEntity } from "../../domain/entities/BankUserEntity";
-import { IUserRepository } from "../../application/usecases/auth/RegisterUseCase";
+import { IUserRepository as RegisterUserRepository } from "../../application/usecases/auth/RegisterUseCase";
+import { IUserRepository as RefreshTokenUserRepository } from "../../application/usecases/auth/RefreshTokenUseCase";
 import * as bcrypt from "bcrypt";
 
 // This is a mock in-memory repository for demonstration purposes
 // In a real application, this would connect to a database
-export class UserRepository implements IUserRepository {
+export class UserRepository implements RegisterUserRepository, RefreshTokenUserRepository {
   private users: BankUserEntity[] = [];
 
   async save(user: BankUserEntity): Promise<BankUserEntity> {
     // Hash the password before saving
     const hashedPassword = await this.hashPassword(user['password']);
-    
+
     // Create a new user with the hashed password
     const userWithHashedPassword = BankUserEntity.from(
       user.email,
@@ -27,7 +28,7 @@ export class UserRepository implements IUserRepository {
       user.id,
       user.createdAt
     );
-    
+
     if (userWithHashedPassword instanceof Error) {
       throw userWithHashedPassword;
     }
@@ -50,6 +51,11 @@ export class UserRepository implements IUserRepository {
 
   async verifyPassword(plainPassword: string, hashedPassword: string): Promise<boolean> {
     return bcrypt.compare(plainPassword, hashedPassword);
+  }
+
+  async findById(userId: string): Promise<BankUserEntity | null> {
+    const user = this.users.find(u => u.id === userId);
+    return user || null;
   }
 
   private async hashPassword(password: string): Promise<string> {

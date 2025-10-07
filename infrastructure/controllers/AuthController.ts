@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { RegisterUseCase } from "../../application/usecases/auth/RegisterUseCase";
 import { LoginUseCase } from "../../application/usecases/auth/LoginUseCase";
+import { RefreshTokenUseCase } from "../../application/usecases/auth/RefreshTokenUseCase";
 import { UserRepository } from "../repositories/UserRepository";
 import { RoleRepository } from "../repositories/RoleRepository";
 import { UserRoleRepository } from "../repositories/UserRoleRepository";
@@ -10,6 +11,7 @@ import { RoleEnum } from "../../domain/enums/RoleEnum";
 export class AuthController {
   private registerUseCase: RegisterUseCase;
   private loginUseCase: LoginUseCase;
+  private refreshTokenUseCase: RefreshTokenUseCase;
 
   constructor() {
     const userRepository = new UserRepository();
@@ -27,6 +29,12 @@ export class AuthController {
       userRepository,
       userRoleRepository,
       tokenRepository
+    );
+
+    this.refreshTokenUseCase = new RefreshTokenUseCase(
+      tokenRepository,
+      userRoleRepository,
+      userRepository
     );
   }
 
@@ -119,5 +127,45 @@ export class AuthController {
     // Clear the refresh token cookie
     res.clearCookie("refreshToken");
     res.status(200).json({ message: "Logged out successfully" });
+  }
+
+  async refresh(req: Request, res: Response): Promise<void> {
+    try {
+      // Get refresh token from cookie
+      const refreshToken = req.cookies.refreshToken;
+
+      if (!refreshToken) {
+        res.status(401).json({ message: "Refresh token is required" });
+        return;
+      }
+
+      // Call the refresh token use case
+      const result = await this.refreshTokenUseCase.execute(refreshToken);
+
+      if (result instanceof Error) {
+        res.status(401).json({ message: result.message });
+        return;
+      }
+
+      // Check if user has BANK_MANAGER role for director login
+      const isDirector = result.roles.includes(RoleEnum.BANK_MANAGER);
+
+      // Return new access token and user info
+      res.status(200).json({
+        message: "Token refreshed successfully",
+        accessToken: result.accessToken,
+        user: {
+          id: result.user.id,
+          email: result.user.email,
+          firstName: result.user.firstName,
+          lastName: result.user.lastName,
+          roles: result.roles,
+          isDirector
+        }
+      });
+    } catch (error) {
+      console.error("Token refresh error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
   }
 }
