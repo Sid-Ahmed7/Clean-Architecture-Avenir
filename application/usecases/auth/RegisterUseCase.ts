@@ -1,75 +1,44 @@
 import { BankUserEntity } from "../../../domain/entities/BankUserEntity";
-import { UserStatusEnum } from "../../../domain/enums/UserStatusEnum";
 import { RoleEnum } from "../../../domain/enums/RoleEnum";
 import { UserRoleEntity } from "../../../domain/entities/UserRoleEntity";
-
-export interface IUserRepository {
-  save(user: BankUserEntity): Promise<BankUserEntity>;
-  findByEmail(email: string): Promise<BankUserEntity | null>;
-}
-
-export interface IRoleRepository {
-  findByName(name: RoleEnum): Promise<{ id: number, name: RoleEnum } | null>;
-}
-
-export interface IUserRoleRepository {
-  save(userRole: UserRoleEntity): Promise<UserRoleEntity>;
-}
+import { UserRepositoryInterface } from "../../ports/repositories/auth/UserRepositoryInterface";
+import { RoleRepositoryInterface } from "../../ports/repositories/auth/RolerepositoryInterface";
+import { UserRoleRepositoryInterface } from "../../ports/repositories/auth/UserRoleRepositoryInterface";
 
 export class RegisterUseCase {
-  constructor(
-    private userRepository: IUserRepository,
-    private roleRepository: IRoleRepository,
-    private userRoleRepository: IUserRoleRepository
+  public constructor(
+    private userRepository: UserRepositoryInterface,
+    private roleRepository: RoleRepositoryInterface,
+    private userRoleRepository: UserRoleRepositoryInterface
   ) {}
 
-  async execute(
-    email: string,
-    password: string,
-    firstName: string,
-    lastName: string,
-    phoneNumber?: string,
-    dateOfBirth?: Date,
-    address?: string
-  ): Promise<BankUserEntity | Error> {
-    // Check if user already exists
-    const existingUser = await this.userRepository.findByEmail(email);
-    if (existingUser) {
-      return new Error("User with this email already exists");
+  public async execute(user: BankUserEntity): Promise<BankUserEntity | Error> {
+
+    const existingUser = await this.userRepository.findByEmail(user.email);
+    
+    if (existingUser instanceof Error) {
+      return existingUser;
     }
 
-    // Create new user
-    const userOrError = BankUserEntity.from(
-      email,
-      password,
-      UserStatusEnum.ACTIVE,
-      firstName,
-      lastName,
-      phoneNumber,
-      dateOfBirth,
-      address,
-      true // isRegistered
-    );
+    user.isRegistered = true;
 
-    if (userOrError instanceof Error) {
-      return userOrError;
+    const savedUser = await this.userRepository.createUser(user);
+
+    if(savedUser instanceof Error) {
+      return savedUser;
     }
-
-    // Save user
-    const savedUser = await this.userRepository.save(userOrError);
-
-    // Assign CLIENT role to user
+    
     const clientRole = await this.roleRepository.findByName(RoleEnum.CLIENT);
-    if (!clientRole) {
-      return new Error("Client role not found");
+    
+    if (clientRole instanceof Error) {
+      return clientRole;
     }
 
-    const userRoleOrError = UserRoleEntity.from(savedUser.id, clientRole.id);
-    if (userRoleOrError instanceof Error) {
-      return userRoleOrError;
-    }
+    const userRole = await this.userRoleRepository.addRoleToUser(savedUser.id, clientRole.id);
 
-    await this.userRoleRepository.save(userRoleOrError);
+    if (userRole instanceof Error) {
+      return userRole;
+    }
 
     return savedUser;
   }
