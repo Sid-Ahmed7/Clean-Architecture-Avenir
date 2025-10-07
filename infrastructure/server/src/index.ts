@@ -6,7 +6,8 @@ import {
   authenticateJWT, 
   authorizeDirector, 
   authorizeClient, 
-  authorizeRoles 
+  authorizeRoles,
+  verifyRefreshTokenCookie
 } from "../../middleware/authMiddleware";
 import { RoleEnum } from "../../../domain/enums/RoleEnum";
 
@@ -29,7 +30,9 @@ const authController = new AuthController();
 app.post("/api/auth/register", (req: Request, res: Response) => authController.register(req, res));
 app.post("/api/auth/login", (req: Request, res: Response) => authController.login(req, res));
 app.post("/api/auth/logout", (req: Request, res: Response) => authController.logout(req, res));
-app.post("/api/auth/refresh", (req: Request, res: Response) => authController.refresh(req, res));
+
+// Refresh token route - requires refresh token cookie
+app.post("/api/auth/refresh", verifyRefreshTokenCookie, (req: Request, res: Response) => authController.refresh(req, res));
 
 // Health check route
 app.get("/api/health", (req: Request, res: Response) => {

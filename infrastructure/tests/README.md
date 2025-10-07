@@ -95,3 +95,8 @@ curl -X GET http://localhost:3000/api/client/profile -H "Authorization: Bearer Y
 ```bash
 curl -X POST http://localhost:3000/api/auth/logout -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
 ```
+
+### Refresh Token
+```bash
+curl -X POST http://localhost:3000/api/auth/refresh --cookie "refreshToken=YOUR_REFRESH_TOKEN"
+```

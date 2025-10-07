@@ -95,3 +95,14 @@ export const authorizeClient = (req: Request, res: Response, next: NextFunction)
 
   next();
 };
+
+// Middleware to verify refresh token cookie exists
+export const verifyRefreshTokenCookie = (req: Request, res: Response, next: NextFunction) => {
+  const refreshToken = req.cookies.refreshToken;
+  console.log(refreshToken);
+  if (!refreshToken) {
+    return res.status(401).json({ message: "Refresh token is required" });
+  }
+
+  next();
+};
