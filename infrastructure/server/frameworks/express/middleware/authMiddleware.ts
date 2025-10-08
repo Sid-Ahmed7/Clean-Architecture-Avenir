@@ -2,10 +2,10 @@ import { Request, Response, NextFunction } from "express";
 import * as jwt from "jsonwebtoken";
 import { RoleEnum } from "../../../../../domain/enums/RoleEnum";
 
-// JWT secret should be in environment variables in production
-const JWT_SECRET = "your-secret-key";
-
-// Define a custom interface for the Request object with user property
+const JWT_SECRET = process.env.JWT_SECRET!;
+const JWT_SECRET_REFRESH = process.env.JWT_SECRET_REFRESH!;
+const JWT_EXPIRATION = process.env.JWT_EXPIRATION;
+const JWT_EXPIRATION_REFRESH = process.env.JWT_EXPIRATION_REFRESH;
 declare global {
   namespace Express {
     interface Request {
@@ -17,92 +17,69 @@ declare global {
   }
 }
 
-// Middleware to verify JWT token
-export const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
-  const authHeader = req.headers.authorization;
+function isJwtPayload(obj: any): obj is { sub: string; roles: RoleEnum[] } {
+  return obj && typeof obj === "object" && typeof obj.sub === "string" && Array.isArray(obj.roles);
+}
 
-  if (!authHeader) {
-    return res.status(401).json({ message: "Authorization header missing" });
-  }
+export const verifyTokenAccess = (req: Request, res: Response, next: NextFunction) => {
+  const header = req.headers.authorization;
 
-  const token = authHeader.split(" ")[1];
+   if (!header || !header.startsWith("Bearer ")) {
+        res.status(401).json({ message: "Authorization header missing or malformed" });
+        return;  
+    }
 
-  try {
-    // First check if token is defined
+  const token = header.split(" ")[1];
     if (!token) {
       return res.status(401).json({ message: "Token is missing" });
     }
 
-    // Use a safer type assertion approach
-    const decoded = jwt.verify(token, JWT_SECRET);
+  try {
+     const decoded = jwt.verify(token, JWT_SECRET);
 
-    // Validate the decoded token has the expected structure
-    if (typeof decoded === 'object' && decoded !== null && 
-        'sub' in decoded && 'roles' in decoded) {
-      req.user = {
-        userId: decoded.sub as string,
-        roles: decoded.roles as RoleEnum[]
-      };
-    } else {
+    if(!isJwtPayload(decoded)) {
       return res.status(401).json({ message: "Invalid token format" });
     }
 
+    req.user = {
+        userId: decoded.sub ,
+        roles: decoded.roles
+      };
     next();
   } catch (error) {
-    return res.status(401).json({ message: "Invalid or expired token" });
-  }
-};
+    if(error instanceof jwt.TokenExpiredError) {
+        return res.status(401).json({ message: `Token expired after ${JWT_EXPIRATION}` });
 
-// Middleware to check if user has required roles
-export const authorizeRoles = (allowedRoles: RoleEnum[]) => {
-  return (req: Request, res: Response, next: NextFunction) => {
-    if (!req.user) {
-      return res.status(401).json({ message: "Authentication required" });
     }
-
-    const hasAllowedRole = req.user.roles.some(role => allowedRoles.includes(role));
-
-    if (!hasAllowedRole) {
-      return res.status(403).json({ message: "Access forbidden: insufficient permissions" });
-    }
-
-    next();
-  };
+    return res.status(401).json({ message: "Invalid token" });
+  }
 };
 
-// Middleware specifically for director access
-export const authorizeDirector = (req: Request, res: Response, next: NextFunction) => {
-  if (!req.user) {
-    return res.status(401).json({ message: "Authentication required" });
-  }
 
-  if (!req.user.roles.includes(RoleEnum.BANK_MANAGER)) {
-    return res.status(403).json({ message: "Access forbidden: director permissions required" });
-  }
-
-  next();
-};
-
-// Middleware specifically for client access
-export const authorizeClient = (req: Request, res: Response, next: NextFunction) => {
-  if (!req.user) {
-    return res.status(401).json({ message: "Authentication required" });
-  }
-
-  if (!req.user.roles.includes(RoleEnum.CLIENT)) {
-    return res.status(403).json({ message: "Access forbidden: client permissions required" });
-  }
-
-  next();
-};
-
-// Middleware to verify refresh token cookie exists
 export const verifyRefreshTokenCookie = (req: Request, res: Response, next: NextFunction) => {
   const refreshToken = req.cookies.refreshToken;
-  console.log(refreshToken);
+
   if (!refreshToken) {
     return res.status(401).json({ message: "Refresh token is required" });
   }
 
-  next();
+  try {
+    const decoded = jwt.verify(refreshToken, JWT_SECRET_REFRESH);
+
+    if (!isJwtPayload(decoded)) {
+      return res.status(401).json({ message: "Invalid refresh token format" });
+    }
+
+    req.user = {
+      userId: decoded.sub,
+      roles: decoded.roles
+    };
+
+    next();
+  } catch (error) {
+    if (error instanceof jwt.TokenExpiredError) {
+      return res.status(401).json({ message: `Refresh token expired after ${JWT_EXPIRATION_REFRESH}` });
+    }
+    return res.status(401).json({ message: "Invalid refresh token" });
+  }
 };

@@ -34,6 +34,10 @@ export class LoginUseCase {
     }
 
     const userRoles = await this.userRoleRepository.findRolesByUserId(user.id);
+    if(userRoles instanceof Error) {
+      return userRoles;
+    }
+    
     const roles = userRoles.map(role => role.name);
 
     const accessToken = this.tokenService.generateAccessToken(user.id, roles);
