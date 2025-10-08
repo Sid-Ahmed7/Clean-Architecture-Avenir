@@ -7,7 +7,10 @@ export class InMemoryRoleRepository implements RoleRepositoryInterface {
 
   private roles: Array<RoleEntity>;
       public constructor() {
-        this.roles = []
+        this.roles = Object.values(RoleEnum).map((roleName, index) => ({
+      id: index + 1,
+      name: roleName
+    }));
     }
 
   

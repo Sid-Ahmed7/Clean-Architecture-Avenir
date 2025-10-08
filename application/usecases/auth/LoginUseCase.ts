@@ -9,7 +9,7 @@ import { PasswordService } from "../../ports/services/auth/PasswordService";
 import { InvalidEmailOrPasswordError } from "../../../domain/errors/InvalidEmailOrPasswordError";
 
 
-export class LoginUseCase {
+ export class LoginUseCase {
   constructor(
     private userRepository: UserRepositoryInterface,
     private userRoleRepository: UserRoleRepositoryInterface,
@@ -20,8 +20,8 @@ export class LoginUseCase {
   public async execute(email: string,password: string): Promise<{ accessToken: string; refreshToken: string; user: BankUserEntity; roles: RoleEnum[] } | Error> {
 
     const user = await this.userRepository.findByEmail(email);
-    if(user instanceof Error) {
-      return user;
+    if (!user) {
+      return new InvalidEmailOrPasswordError("Invalid email or password");
     }
 
     if (user.status !== UserStatusEnum.ACTIVE) {

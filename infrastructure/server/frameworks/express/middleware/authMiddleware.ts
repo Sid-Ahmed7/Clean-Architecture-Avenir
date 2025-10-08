@@ -22,34 +22,26 @@ function isJwtPayload(obj: any): obj is { sub: string; roles: RoleEnum[] } {
 }
 
 export const verifyTokenAccess = (req: Request, res: Response, next: NextFunction) => {
-  const header = req.headers.authorization;
-
-   if (!header || !header.startsWith("Bearer ")) {
-        res.status(401).json({ message: "Authorization header missing or malformed" });
-        return;  
-    }
-
-  const token = header.split(" ")[1];
-    if (!token) {
-      return res.status(401).json({ message: "Token is missing" });
-    }
+  const token = req.cookies.accessToken; 
+  if (!token) {
+    return res.status(401).json({ message: "Access token is missing" });
+  }
 
   try {
-     const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, JWT_SECRET);
 
-    if(!isJwtPayload(decoded)) {
+    if (!isJwtPayload(decoded)) {
       return res.status(401).json({ message: "Invalid token format" });
     }
 
     req.user = {
-        userId: decoded.sub ,
-        roles: decoded.roles
-      };
+      userId: decoded.sub,
+      roles: decoded.roles
+    };
     next();
   } catch (error) {
-    if(error instanceof jwt.TokenExpiredError) {
-        return res.status(401).json({ message: `Token expired after ${JWT_EXPIRATION}` });
-
+    if (error instanceof jwt.TokenExpiredError) {
+      return res.status(401).json({ message: `Token expired after ${JWT_EXPIRATION}` });
     }
     return res.status(401).json({ message: "Invalid token" });
   }

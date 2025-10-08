@@ -5,11 +5,21 @@ import { RefreshTokenEntity } from '../../../../domain/entities/RefreshTokenEnti
 import { InvalidRefreshTokenError } from '../../../../domain/errors/InvalidRefreshTokenError';
 
 export class JwtTokenService implements TokenService {
+    private accessTokenSecret: string;
+    private refreshTokenSecret: string;
+    private accessTokenExpiry: number;
+    private refreshTokenExpiry: number;
+    
+    constructor() {
+        if (!process.env.ACCESS_TOKEN_SECRET || !process.env.REFRESH_TOKEN_SECRET) {
+            throw new Error("ACCESS_TOKEN_SECRET and REFRESH_TOKEN_SECRET must be defined in .env");
+        }
 
-    private accessTokenSecret = process.env.ACCESS_TOKEN_SECRET ?? "";
-    private refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET ?? "";
-    private accessTokenExpiry = process.env.ACCESS_TOKEN_EXPIRY  ?? ""
-    private refreshTokenExpiry = process.env.REFRESH_TOKEN_EXPIRY ?? ""
+        this.accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
+        this.refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
+        this.accessTokenExpiry = Number(process.env.ACCESS_TOKEN_EXPIRY ?? 3600);
+        this.refreshTokenExpiry = Number(process.env.REFRESH_TOKEN_EXPIRY ?? 3600);
+    }
 
     public generateAccessToken(userId: string, roles: RoleEnum[]): string {
         const payload = {userId, roles};

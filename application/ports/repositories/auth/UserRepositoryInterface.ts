@@ -4,7 +4,7 @@ import { UserAlreadyExistsError } from "../../../../domain/errors/UserAlreadyExi
 
 export interface UserRepositoryInterface {
     findById(userId: string): Promise<BankUserEntity | UserNotFoundError>;
-    findByEmail(email: string): Promise<BankUserEntity | UserNotFoundError>;
+    findByEmail(email: string): Promise<BankUserEntity | null>;
     createUser(user: BankUserEntity): Promise<BankUserEntity | UserAlreadyExistsError>
     updateUser(user: BankUserEntity): Promise<BankUserEntity | UserNotFoundError>;
 }

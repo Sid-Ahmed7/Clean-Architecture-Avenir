@@ -1,3 +1,4 @@
+import { BankUserEntity } from "../../../domain/entities/BankUserEntity";
 import { UserRepositoryInterface } from "../../ports/repositories/auth/UserRepositoryInterface";
 
 export class GetUserByIdUseCase {
@@ -5,7 +6,7 @@ export class GetUserByIdUseCase {
     public constructor(private userRepository: UserRepositoryInterface){}
 
 
-    public async execute(userId: string) {
+    public async execute(userId: string) : Promise<BankUserEntity | Error> {
 
         const user = await this.userRepository.findById(userId);
 

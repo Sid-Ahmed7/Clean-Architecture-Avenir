@@ -19,13 +19,10 @@ export class InMemoryUserRepository implements UserRepositoryInterface {
     return user;
   }
 
-    public async findByEmail(email: string): Promise<BankUserEntity | UserNotFoundError> {
+    public async findByEmail(email: string): Promise<BankUserEntity | null> {
     const user = this.users.find(u => u.email === email);
-    if(!user) {
-      return new UserNotFoundError(`User with email ${email} not found`);
-    }
     
-    return user;
+    return user ?? null;
   }
 
   public async createUser(user: BankUserEntity): Promise<BankUserEntity | UserAlreadyExistsError> {
