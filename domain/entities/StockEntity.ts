@@ -4,7 +4,7 @@ import { StockSymbolValue } from "../values/StockSymbolValue";
 
 export class StockEntity {
 
-    public static from (symbol: string, companyName: string, name: string, currentPrice: number, rateOfChange: number, currency: string, createdAt: Date, isActionAvailable: boolean, previousPrice?: number, updatedAt?: Date) {
+    public static from (id:number, symbol: string, companyName: string, name: string, currentPrice: number, rateOfChange: number, currency: string, createdAt: Date, isActionAvailable: boolean, updatedAt: Date, previousPrice?: number) {
 
         const validateSymbol = StockSymbolValue.from(symbol);
         if(validateSymbol instanceof Error) {
@@ -21,11 +21,12 @@ export class StockEntity {
             return validatedCurrency;
         }
 
-        return new StockEntity(validateSymbol.value, companyName, name, currentPrice, validateRateOfChange.value, validatedCurrency.value, createdAt, isActionAvailable, previousPrice, updatedAt);
+        return new StockEntity(id,validateSymbol.value, companyName, name, currentPrice, validateRateOfChange.value, validatedCurrency.value, createdAt, isActionAvailable, updatedAt, previousPrice);
 
     }
 
     private constructor(
+        public id: number,
         public symbol: string,
         public companyName: string,
         public name: string,
@@ -34,9 +35,20 @@ export class StockEntity {
         public currency: string,
         public createdAt: Date,
         public isActionAvailable: boolean,
+        public updatedAt: Date,
         public previousPrice?: number,
-        public updatedAt?: Date,
     ) {}
+
+    public makeActionAvailable(): void {
+        this.isActionAvailable = true;
+        this.updatedAt = new Date();
+    }
+
+    public makeActionUnavailable(): void {
+        this.isActionAvailable = false;
+        this.updatedAt = new Date();
+    }
+
 
 
 

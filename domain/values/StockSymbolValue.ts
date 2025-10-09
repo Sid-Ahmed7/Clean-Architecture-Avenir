@@ -8,17 +8,25 @@ export class StockSymbolValue {
             return new InvalidStockSymbolError("Stock symbol cannot be empty");
         }
 
-        const exchangeRegex = /^[A-Z]{1,6}$/
-        const symbolRegex= /^[A-Z]{1,4}$/;
-        
         const normalizedSymbol = symbol.trim().toUpperCase();
-        const [exchange, ticker] = symbol.split(':');
+        const parts = normalizedSymbol.split(':');
+        
+        if (parts.length !== 2) {
+            return new InvalidStockSymbolError(
+                `Invalid stock symbol format: ${normalizedSymbol}. Expected format TICKER:MARKET`
+            );
+        }
 
-        if(!exchange || !ticker) {
+   
+        const tickerRegex= /^[A-Z]{1,4}$/; 
+        const [ticker, market] = parts;
+
+         if(!tickerRegex.test(ticker ?? "")) {
             return new InvalidStockSymbolError(`Invalid stock symbol format: ${symbol}`);
         }
 
-        if(!exchangeRegex.test(exchange) || !symbolRegex.test(ticker)) {
+        const marketRegex = /^[A-Z]{1,6}$/
+        if(!marketRegex.test(market ?? "")) {
             return new InvalidStockSymbolError(`Invalid stock symbol format: ${symbol}`);
         }
 
