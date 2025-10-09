@@ -6,8 +6,8 @@ import { GetStockBySymbolUseCase } from "../../../../../application/usecases/sto
 import { GetAllStockUseCase } from "../../../../../application/usecases/stocks/GetAllStockUseCase";
 import { CreateStockUseCase } from "../../../../../application/usecases/stocks/CreateStockUseCase";
 import { DeleteStockUseCase } from "../../../../../application/usecases/stocks/DeleteStockUseCase";
-import { StockAlreadyExistsError } from "../../../../../domain/errors/StockAlreadyExistsError";
-import { StockNotFoundError } from "../../../../../domain/errors/StockNotFoundError";
+import { StockAlreadyExistsError } from "../../../../../application/errors/StockAlreadyExistsError";
+import { StockNotFoundError } from "../../../../../application/errors/StockNotFoundError";
 export class StockController {
 
     

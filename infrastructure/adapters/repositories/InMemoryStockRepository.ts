@@ -1,8 +1,8 @@
 import { StockRepositoryInterface } from "../../../application/ports/repositories/StockRepositoryInterface";
 import { StockEntity } from "../../../domain/entities/StockEntity";
 import { InvalidAccountError } from "../../../domain/errors/InvalidAccountError";
-import { StockAlreadyExistsError } from "../../../domain/errors/StockAlreadyExistsError";
-import { StockNotFoundError } from "../../../domain/errors/StockNotFoundError";
+import { StockAlreadyExistsError } from "../../../application/errors/StockAlreadyExistsError";
+import { StockNotFoundError } from "../../../application/errors/StockNotFoundError";
 
 export class InMemoryStockRepository implements StockRepositoryInterface {
 
