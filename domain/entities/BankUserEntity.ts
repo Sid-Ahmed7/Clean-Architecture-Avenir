@@ -32,7 +32,7 @@ export class BankUserEntity {
             public dateOfBirth: Date,
             public address: string,
             public isRegistered: boolean,
-            public confirmationTOken?: string,
+            public confirmationToken?: string,
             public confirmationTokenExpiresAt?: Date,
             public resetPasswordToken?: string,
             public resetTokenExpiresAt?: Date,

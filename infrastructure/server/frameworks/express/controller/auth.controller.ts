@@ -14,6 +14,8 @@ import { InvalidEmailOrPasswordError } from "../../../../../application/errors/I
 import { RoleNotFoundError } from "../../../../../application/errors/RoleNotFoundError";
 import { BankUserEntity } from "../../../../../domain/entities/BankUserEntity";
 import { UserStatusEnum } from "../../../../../domain/enums/UserStatusEnum";
+import { EmailService } from "../../../../../application/ports/services/EmailService";
+import { RegistrationTokenGeneratorService } from "../../../../../application/ports/services/auth/RegistrationTokenGeneratorService";
 
 export class AuthController {
 
@@ -22,7 +24,9 @@ export class AuthController {
         private readonly roleRepository: InMemoryRoleRepository,
         private readonly userRoleRepository: InMemoryUserRoleRepository,
         private readonly tokenService: TokenService,
-        private readonly passwordService: PasswordService
+        private readonly passwordService: PasswordService,
+        private readonly emailService: EmailService,
+        private readonly registrationTokenGeneratorService: RegistrationTokenGeneratorService
       ) {}
 
 
@@ -47,7 +51,10 @@ async register(req: Request, res: Response) {
   const registerUseCase = new RegisterUseCase(
     this.userRepository,
     this.roleRepository,
-    this.userRoleRepository
+    this.userRoleRepository,
+    this.passwordService,
+    this.emailService,
+    this.registrationTokenGeneratorService
   );
 
   const result = await registerUseCase.execute(userOrError);

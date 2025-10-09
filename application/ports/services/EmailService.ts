@@ -1,7 +1,7 @@
 export interface SendEmailOptions {
     to: string;
     subject: string;
-    body: string;
+    text: string;
 } 
 
 export interface EmailService {

@@ -31,17 +31,8 @@ export class InMemoryUserRepository implements UserRepositoryInterface {
       return new UserAlreadyExistsError(`User with email ${user.email} already exists`);
     }
 
-    
-    const hashedPassword = this.passwordService.hash(user.password);
-    
-    const isVerified = await this.passwordService.verify(user.password, await hashedPassword);
-    if(!isVerified) {
-      return new Error("Password hashing failed");
-    }
-
-    const newUser = { ...user, password: await hashedPassword };
-    this.users.push(newUser);
-    return newUser;
+    this.users.push(user);
+    return user;
   }
 
    public async updateUser(user: BankUserEntity): Promise<BankUserEntity | UserNotFoundError> {
