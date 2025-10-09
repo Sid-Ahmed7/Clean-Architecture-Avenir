@@ -1,6 +1,6 @@
 import { AccountEntity } from "../../../domain/entities/AccountEntity";
-import { AccountAlreadyExistsError } from "../../../domain/errors/AccountAlreadyExistsError";
-import { AccountNotFoundError } from "../../../domain/errors/AccountNotFoundError";
+import { AccountAlreadyExistsError } from "../../errors/AccountAlreadyExistsError";
+import { AccountNotFoundError } from "../../errors/AccountNotFoundError";
 import { InvalidAccountError } from "../../../domain/errors/InvalidAccountError";
 
 export interface AccountRepositoryInterface {

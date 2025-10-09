@@ -2,7 +2,7 @@ import { RefreshTokenValue } from "../values/RefreshTokenValue";
 import { UserIdValue } from "../values/UserIdValue";
 
 export class RefreshTokenEntity {
-    public static from(userId: string, token: string, expiresAt: Date, id?: number) {
+    public static from(userId: string, token: string, expiresAt: number, id?: number) {
         const validatedUserId = UserIdValue.from(userId);
         if(validatedUserId instanceof Error) {
             return validatedUserId;
@@ -13,10 +13,10 @@ export class RefreshTokenEntity {
         }
         return new RefreshTokenEntity(validatedUserId.value, validatedToken.value, expiresAt, id);
     } 
-    private constructor(
+    public constructor(
         public userId: string,
         public token: string,
-        public expiresAt: Date,
+        public expiresAt: number,
         public id?: number
     ) {}
 }

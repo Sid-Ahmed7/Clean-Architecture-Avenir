@@ -3,7 +3,7 @@ import { EmailValue } from "../values/EmailValue";
 import { PasswordValue } from "../values/PasswordValue";
 
 export class BankUserEntity {
-    public static from(email: string, password: string, status: UserStatusEnum, firstName?: string, lastName?: string, phoneNumber?: string, dateOfBirth?: Date, address?: string, isRegistered?: boolean, resetPasswordToken?: string, resetTokenExpiresAt?: Date, id?: string, createdAt?: Date) {
+    public static from(email: string, password: string, status: UserStatusEnum, firstName: string, lastName: string, phoneNumber: string, dateOfBirth: Date, address: string, isRegistered?: boolean, resetPasswordToken?: string, resetTokenExpiresAt?: Date, id?: string, createdAt?: Date) {
 
         const validatedEmail = EmailValue.from(email);
 
@@ -24,16 +24,16 @@ export class BankUserEntity {
         private constructor(
             public id: string,
             public email: string,
-            private password: string,
-            private status: UserStatusEnum,
-            public firstName?: string,
-            public lastName?: string,
-            public phoneNumber?: string,
-            public dateOfBirth?: Date,
-            public address?: string,
-            public isRegistered?: boolean,
-            private resetPasswordToken?: string,
-            private resetTokenExpiresAt?: Date,
+            public password: string,
+            public status: UserStatusEnum,
+            public firstName: string,
+            public lastName: string,
+            public phoneNumber: string,
+            public dateOfBirth: Date,
+            public address: string,
+            public isRegistered: boolean,
+            public resetPasswordToken?: string,
+            public resetTokenExpiresAt?: Date,
             public createdAt?: Date
             
         ){}

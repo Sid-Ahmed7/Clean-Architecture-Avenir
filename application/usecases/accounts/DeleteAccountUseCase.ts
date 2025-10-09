@@ -1,4 +1,4 @@
-import { AccountNotFoundError } from "../../../domain/errors/AccountNotFoundError";
+import { AccountNotFoundError } from "../../errors/AccountNotFoundError";
 import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
 
 export class DeleteAccountUseCase {

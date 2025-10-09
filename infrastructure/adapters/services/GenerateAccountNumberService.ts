@@ -1,6 +1,6 @@
 import { AccountRepositoryInterface } from "../../../application/ports/repositories/AccountRepositoryInterface";
 import {AccountNumberGeneratorService} from "../../../application/ports/services/AccountNumberGeneratorService";
-import { AccountNotFoundError } from "../../../domain/errors/AccountNotFoundError";
+import { AccountNotFoundError } from "../../../application/errors/AccountNotFoundError";
 import { InvalidAccountError } from "../../../domain/errors/InvalidAccountError";
 import { AccountNumberValue } from "../../../domain/values/AccountNumberValue";
 
