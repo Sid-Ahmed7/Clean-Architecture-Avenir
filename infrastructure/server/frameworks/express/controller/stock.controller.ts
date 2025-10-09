@@ -6,6 +6,7 @@ import { GetStockBySymbolUseCase } from "../../../../../application/usecases/sto
 import { GetAllStockUseCase } from "../../../../../application/usecases/stocks/GetAllStockUseCase";
 import { CreateStockUseCase } from "../../../../../application/usecases/stocks/CreateStockUseCase";
 import { DeleteStockUseCase } from "../../../../../application/usecases/stocks/DeleteStockUseCase";
+import { ListAvailableStocksUseCase} from "../../../../../application/usecases/stocks/ListAvailableStocksUseCase";
 import { StockAlreadyExistsError } from "../../../../../application/errors/StockAlreadyExistsError";
 import { StockNotFoundError } from "../../../../../application/errors/StockNotFoundError";
 export class StockController {
@@ -102,5 +103,19 @@ export class StockController {
         }
 
         return res.status(200).json(result);
+    }
+
+
+    async listAvailableStocks(req: Request, res: Response) {
+        const listAvailableStocksUseCase = new ListAvailableStocksUseCase(this.stockRepository);
+
+        const result = await listAvailableStocksUseCase.execute();
+
+        if (result instanceof Error) {
+            return res.status(500).json({error: result.message});
+        }
+        return res.status(200).json(result);
+
+
     }
 }
