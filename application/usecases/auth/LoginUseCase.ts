@@ -6,7 +6,7 @@ import { UserRepositoryInterface } from "../../ports/repositories/auth/UserRepos
 import { UserRoleRepositoryInterface } from "../../ports/repositories/auth/UserRoleRepositoryInterface";
 import { TokenService } from "../../ports/services/auth/TokenService";
 import { PasswordService } from "../../ports/services/auth/PasswordService";
-import { InvalidEmailOrPasswordError } from "../../../domain/errors/InvalidEmailOrPasswordError";
+import { InvalidEmailOrPasswordError } from "../../errors/InvalidEmailOrPasswordError";
 
 
  export class LoginUseCase {

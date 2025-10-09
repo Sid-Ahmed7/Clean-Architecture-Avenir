@@ -1,7 +1,7 @@
 import { UserRepositoryInterface } from "../../../application/ports/repositories/auth/UserRepositoryInterface";
 import { BankUserEntity } from "../../../domain/entities/BankUserEntity";
-import { UserNotFoundError } from "../../../domain/errors/UserNotFoundError";
-import { UserAlreadyExistsError } from "../../../domain/errors/UserAlreadyExistsError";
+import { UserNotFoundError } from "../../../application/errors/UserNotFoundError";
+import { UserAlreadyExistsError } from "../../../application/errors/UserAlreadyExistsError";
 import { PasswordService } from "../../../application/ports/services/auth/PasswordService";
 
 export class InMemoryUserRepository implements UserRepositoryInterface {

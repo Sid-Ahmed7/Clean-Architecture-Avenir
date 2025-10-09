@@ -1,12 +1,12 @@
 import { UserRepositoryInterface } from "../../../application/ports/repositories/auth/UserRepositoryInterface";
 import { UserRoleEntity } from "../../../domain/entities/UserRoleEntity";
-import { UserNotFoundError } from "../../../domain/errors/UserNotFoundError";
-import { UserAlreadyExistsError } from "../../../domain/errors/UserAlreadyExistsError";
+import { UserNotFoundError } from "../../../application/errors/UserNotFoundError";
+import { UserAlreadyExistsError } from "../../../application/errors/UserAlreadyExistsError";
 import { PasswordService } from "../../../application/ports/services/auth/PasswordService";
 import { UserRoleRepositoryInterface } from "../../../application/ports/repositories/auth/UserRoleRepositoryInterface";
 import { RoleRepositoryInterface } from "../../../application/ports/repositories/auth/RolerepositoryInterface";
 import { RoleEntity } from "../../../domain/entities/RoleEntity";
-import { RoleNotFoundError } from "../../../domain/errors/RoleNotFoundError";
+import { RoleNotFoundError } from "../../../application/errors/RoleNotFoundError";
 
 export class InMemoryUserRoleRepository implements UserRoleRepositoryInterface {
   private userRoles: Array<UserRoleEntity>;

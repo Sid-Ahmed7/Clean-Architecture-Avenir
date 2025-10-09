@@ -8,8 +8,8 @@ import { GetAllAccountUseCase } from "../../../../../application/usecases/accoun
 import { UpdateAccountUseCase } from "../../../../../application/usecases/accounts/UpdateAccountUseCase";
 import { InMemoryAccountRepository } from "../../../../adapters/repositories/InMemoryAccountRepository";
 import { InvalidAccountError} from "../../../../../domain/errors/InvalidAccountError";
-import { AccountAlreadyExistsError } from "../../../../../domain/errors/AccountAlreadyExistsError";
-import { AccountNotFoundError } from "../../../../../domain/errors/AccountNotFoundError";
+import { AccountAlreadyExistsError } from "../../../../../application/errors/AccountAlreadyExistsError";
+import { AccountNotFoundError } from "../../../../../application/errors/AccountNotFoundError";
 import { AllowedAccountStatus } from "../../../../../domain/services/AllowedAccountStatus";
 import { InvalidAccountStatusError } from "../../../../../domain/errors/InvalidAccountStatusError";
 import { UpdateWithDrawalLimitUseCase } from "../../../../../application/usecases/accounts/UpdateWithDrawalLimitUseCase";

@@ -2,7 +2,7 @@ import {IbanGeneratorService} from "../../../application/ports/services/IbanGene
 import { AccountRepositoryInterface } from "../../../application/ports/repositories/AccountRepositoryInterface";
 import { InvalidIbanError } from "../../../domain/errors/InvalidIbanError";
 import { IbanValue } from "../../../domain/values/IbanValue";
-import { AccountNotFoundError } from "../../../domain/errors/AccountNotFoundError";
+import { AccountNotFoundError } from "../../../application/errors/AccountNotFoundError";
 
 
 export class GenerateIbanService implements IbanGeneratorService {

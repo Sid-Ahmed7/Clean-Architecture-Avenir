@@ -1,7 +1,7 @@
 import { RoleRepositoryInterface } from "../../../application/ports/repositories/auth/RolerepositoryInterface";
 import { RoleEntity } from "../../../domain/entities/RoleEntity";
 import { RoleEnum } from "../../../domain/enums/RoleEnum";
-import { RoleNotFoundError } from "../../../domain/errors/RoleNotFoundError";
+import { RoleNotFoundError } from "../../../application/errors/RoleNotFoundError";
 
 export class InMemoryRoleRepository implements RoleRepositoryInterface {
 

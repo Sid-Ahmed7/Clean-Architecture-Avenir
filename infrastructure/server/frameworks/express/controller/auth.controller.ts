@@ -6,12 +6,12 @@ import { GetUserByIdUseCase} from "../../../../../application/usecases/auth/GetU
 import { InMemoryUserRepository} from "../../../../adapters/repositories/InMemoryUserRepository";
 import { InMemoryRoleRepository} from "../../../../adapters/repositories/InMemoryRoleRepository";
 import { InMemoryUserRoleRepository} from "../../../../adapters/repositories/InMemoryUserRoleRepository";
-import { UserAlreadyExistsError } from "../../../../../domain/errors/UserAlreadyExistsError";
+import { UserAlreadyExistsError } from "../../../../../application/errors/UserAlreadyExistsError";
 import { TokenService } from "../../../../../application/ports/services/auth/TokenService";
 import { PasswordService } from "../../../../../application/ports/services/auth/PasswordService";
-import { UserNotFoundError } from "../../../../../domain/errors/UserNotFoundError";
-import { InvalidEmailOrPasswordError } from "../../../../../domain/errors/InvalidEmailOrPasswordError";
-import { RoleNotFoundError } from "../../../../../domain/errors/RoleNotFoundError";
+import { UserNotFoundError } from "../../../../../application/errors/UserNotFoundError";
+import { InvalidEmailOrPasswordError } from "../../../../../application/errors/InvalidEmailOrPasswordError";
+import { RoleNotFoundError } from "../../../../../application/errors/RoleNotFoundError";
 import { BankUserEntity } from "../../../../../domain/entities/BankUserEntity";
 import { UserStatusEnum } from "../../../../../domain/enums/UserStatusEnum";
 
