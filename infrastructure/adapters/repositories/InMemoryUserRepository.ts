@@ -3,6 +3,8 @@ import { BankUserEntity } from "../../../domain/entities/BankUserEntity";
 import { UserNotFoundError } from "../../../application/errors/UserNotFoundError";
 import { UserAlreadyExistsError } from "../../../application/errors/UserAlreadyExistsError";
 import { PasswordService } from "../../../application/ports/services/auth/PasswordService";
+import { TokenNotFoundError } from "../../../application/errors/TokenNotFoundError";
+import { ExpiredTokenError } from "../../../application/errors/ExpiredTokenError";
 
 export class InMemoryUserRepository implements UserRepositoryInterface {
   private users: Array<BankUserEntity>;
@@ -23,6 +25,23 @@ export class InMemoryUserRepository implements UserRepositoryInterface {
     const user = this.users.find(u => u.email === email);
     
     return user ?? null;
+  }
+
+    public async findConfirmationToken(token: string): Promise<BankUserEntity | UserNotFoundError | TokenNotFoundError | ExpiredTokenError> {
+        const user = this.users.find(u => u.confirmationToken === token);
+        if(!user) {
+          return new UserNotFoundError(`User not found`);
+        }
+
+        if(!user.confirmationToken) {
+          return new TokenNotFoundError("Token not found");
+        }
+
+        if (!user.confirmationTokenExpiresAt || user.confirmationTokenExpiresAt < new Date()) {
+          return new ExpiredTokenError("The confirmation link has expired");
+        }
+
+    return user;
   }
 
   public async createUser(user: BankUserEntity): Promise<BankUserEntity | UserAlreadyExistsError> {

@@ -22,6 +22,7 @@ const authController = new AuthController(userRepository, roleRepository, userRo
 
 
 router.post("/register", (req, res) => authController.register(req,res));
+router.get("/confirm", (req, res) => authController.confirmRegistration(req, res));
 router.post("/login", (req, res) => authController.login(req,res));
 router.post("/refresh-token", (req, res) => authController.refreshToken(req,res));
 router.get("/profile", verifyTokenAccess, (req, res) => authController.getUserProfile(req,res));

@@ -3,6 +3,7 @@ import {RegisterUseCase} from "../../../../../application/usecases/auth/Register
 import {LoginUseCase} from "../../../../../application/usecases/auth/LoginUseCase";
 import {RefreshTokenUseCase} from "../../../../../application/usecases/auth/RefreshTokenUseCase";
 import { GetUserByIdUseCase} from "../../../../../application/usecases/auth/GetUserByIdUseCase";
+import {ConfirmRegistrationUseCase} from "../../../../../application/usecases/auth/ConfirmRegistrationUseCase";
 import { InMemoryUserRepository} from "../../../../adapters/repositories/InMemoryUserRepository";
 import { InMemoryRoleRepository} from "../../../../adapters/repositories/InMemoryRoleRepository";
 import { InMemoryUserRoleRepository} from "../../../../adapters/repositories/InMemoryUserRoleRepository";
@@ -16,6 +17,9 @@ import { BankUserEntity } from "../../../../../domain/entities/BankUserEntity";
 import { UserStatusEnum } from "../../../../../domain/enums/UserStatusEnum";
 import { EmailService } from "../../../../../application/ports/services/EmailService";
 import { RegistrationTokenGeneratorService } from "../../../../../application/ports/services/auth/RegistrationTokenGeneratorService";
+import { error } from "console";
+import { TokenNotFoundError } from "../../../../../application/errors/TokenNotFoundError";
+import { ExpiredTokenError } from "../../../../../application/errors/ExpiredTokenError";
 
 export class AuthController {
 
@@ -30,43 +34,71 @@ export class AuthController {
       ) {}
 
 
-async register(req: Request, res: Response) {
-  const { email, password, firstName, lastName, phoneNumber, dateOfBirth, address } = req.body;
+      async register(req: Request, res: Response) {
+        const { email, password, firstName, lastName, phoneNumber, dateOfBirth, address } = req.body;
 
-  const userOrError = BankUserEntity.from(
-    email,
-    password,
-    UserStatusEnum.PENDING, 
-    firstName,
-    lastName,
-    phoneNumber,
-    new Date(dateOfBirth),
-    address
-  );
+        const userOrError = BankUserEntity.from(
+          email,
+          password,
+          UserStatusEnum.PENDING, 
+          firstName,
+          lastName,
+          phoneNumber,
+          new Date(dateOfBirth),
+          address
+        );
 
-  if (userOrError instanceof Error) {
-    return res.status(400).json({ error: userOrError.message });
-  }
+        if (userOrError instanceof Error) {
+          return res.status(400).json({ error: userOrError.message });
+        }
 
-  const registerUseCase = new RegisterUseCase(
-    this.userRepository,
-    this.roleRepository,
-    this.userRoleRepository,
-    this.passwordService,
-    this.emailService,
-    this.registrationTokenGeneratorService
-  );
+        const registerUseCase = new RegisterUseCase(
+          this.userRepository,
+          this.roleRepository,
+          this.userRoleRepository,
+          this.passwordService,
+          this.emailService,
+          this.registrationTokenGeneratorService
+        );
 
-  const result = await registerUseCase.execute(userOrError);
-  if (result instanceof Error) {
-    if (result instanceof UserAlreadyExistsError) {
-      return res.status(409).json({ error: result.message });
-    }
-    return res.status(500).json({ error: result.message });
-  }
+        const result = await registerUseCase.execute(userOrError);
+        if (result instanceof Error) {
+          if (result instanceof UserAlreadyExistsError) {
+            return res.status(409).json({ error: result.message });
+          }
+          return res.status(500).json({ error: result.message });
+        }
 
-  return res.status(201).json(result);
-}
+        return res.status(201).json(result);
+      }
+
+      async confirmRegistration(req: Request, res: Response) {
+        const confirmationUseCase = new ConfirmRegistrationUseCase(this.userRepository, this.emailService);
+        const { token } = req.query;
+
+        if(!token || typeof token !== "string") {
+          return res.status(400).json({error: "Token is required"});
+        }
+
+        const result = confirmationUseCase.execute(token);
+
+        if(result instanceof Error) {
+          if (result instanceof TokenNotFoundError) {
+            return res.status(404).json({error: result.message});
+          }
+
+          if(result instanceof ExpiredTokenError) {
+            return res.status(400).json({error: result.message});
+          }
+
+          if(result instanceof UserNotFoundError) {
+            return res.status(404).json({error: result.message});
+          }
+          return res.status(500).json({ error: result.message });
+        }
+
+        return res.status(200).json({ message: "Account successfully confirmed"});
+      }
 
 
       async login(req: Request, res: Response) {
