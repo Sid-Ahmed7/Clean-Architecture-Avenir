@@ -3,6 +3,8 @@ import { BankUserEntity } from "../../../domain/entities/BankUserEntity";
 import { UserNotFoundError } from "../../../application/errors/UserNotFoundError";
 import { UserAlreadyExistsError } from "../../../application/errors/UserAlreadyExistsError";
 import { PasswordService } from "../../../application/ports/services/auth/PasswordService";
+import { TokenNotFoundError } from "../../../application/errors/TokenNotFoundError";
+import { ExpiredTokenError } from "../../../application/errors/ExpiredTokenError";
 
 export class InMemoryUserRepository implements UserRepositoryInterface {
   private users: Array<BankUserEntity>;
@@ -25,23 +27,31 @@ export class InMemoryUserRepository implements UserRepositoryInterface {
     return user ?? null;
   }
 
+    public async findConfirmationToken(token: string): Promise<BankUserEntity | UserNotFoundError | TokenNotFoundError | ExpiredTokenError> {
+        const user = this.users.find(u => u.confirmationToken === token);
+        if(!user) {
+          return new UserNotFoundError(`User not found`);
+        }
+
+        if(!user.confirmationToken) {
+          return new TokenNotFoundError("Token not found");
+        }
+
+        if (!user.confirmationTokenExpiresAt || user.confirmationTokenExpiresAt < new Date()) {
+          return new ExpiredTokenError("The confirmation link has expired");
+        }
+
+    return user;
+  }
+
   public async createUser(user: BankUserEntity): Promise<BankUserEntity | UserAlreadyExistsError> {
     const existingUser = this.users.find(u => u.email === user.email);
     if(existingUser) {
       return new UserAlreadyExistsError(`User with email ${user.email} already exists`);
     }
 
-    
-    const hashedPassword = this.passwordService.hash(user.password);
-    
-    const isVerified = await this.passwordService.verify(user.password, await hashedPassword);
-    if(!isVerified) {
-      return new Error("Password hashing failed");
-    }
-
-    const newUser = { ...user, password: await hashedPassword };
-    this.users.push(newUser);
-    return newUser;
+    this.users.push(user);
+    return user;
   }
 
    public async updateUser(user: BankUserEntity): Promise<BankUserEntity | UserNotFoundError> {

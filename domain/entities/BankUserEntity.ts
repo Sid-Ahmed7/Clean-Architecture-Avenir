@@ -3,7 +3,7 @@ import { EmailValue } from "../values/EmailValue";
 import { PasswordValue } from "../values/PasswordValue";
 
 export class BankUserEntity {
-    public static from(email: string, password: string, status: UserStatusEnum, firstName: string, lastName: string, phoneNumber: string, dateOfBirth: Date, address: string, isRegistered?: boolean, resetPasswordToken?: string, resetTokenExpiresAt?: Date, id?: string, createdAt?: Date) {
+    public static from(email: string, password: string, status: UserStatusEnum, firstName: string, lastName: string, phoneNumber: string, dateOfBirth: Date, address: string, isRegistered?: boolean, confirmationToken?: string, confirmationTokenExpiresAt?: Date, resetPasswordToken?: string, resetTokenExpiresAt?: Date, id?: string, createdAt?: Date) {
 
         const validatedEmail = EmailValue.from(email);
 
@@ -16,7 +16,7 @@ export class BankUserEntity {
             return validatedPassword;
         }
 
-        return new BankUserEntity(id ?? crypto.randomUUID(), validatedEmail.value, validatedPassword.value, status, firstName, lastName, phoneNumber, dateOfBirth, address, isRegistered ?? false, resetPasswordToken, resetTokenExpiresAt, createdAt ?? new Date());
+        return new BankUserEntity(id ?? crypto.randomUUID(), validatedEmail.value, validatedPassword.value, status, firstName, lastName, phoneNumber, dateOfBirth, address, isRegistered ?? false, confirmationToken, confirmationTokenExpiresAt, resetPasswordToken, resetTokenExpiresAt, createdAt ?? new Date());
         
 
     }
@@ -32,6 +32,8 @@ export class BankUserEntity {
             public dateOfBirth: Date,
             public address: string,
             public isRegistered: boolean,
+            public confirmationToken?: string,
+            public confirmationTokenExpiresAt?: Date,
             public resetPasswordToken?: string,
             public resetTokenExpiresAt?: Date,
             public createdAt?: Date

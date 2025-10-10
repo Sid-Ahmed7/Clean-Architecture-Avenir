@@ -11,24 +11,24 @@ export class JwtTokenService implements TokenService {
     private refreshTokenExpiry: number;
     
     constructor() {
-        if (!process.env.ACCESS_TOKEN_SECRET || !process.env.REFRESH_TOKEN_SECRET) {
+        if (!process.env.JWT_SECRET || !process.env.JWT_SECRET_REFRESH) {
             throw new Error("ACCESS_TOKEN_SECRET and REFRESH_TOKEN_SECRET must be defined in .env");
         }
 
-        this.accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
-        this.refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
-        this.accessTokenExpiry = Number(process.env.ACCESS_TOKEN_EXPIRY ?? 3600);
-        this.refreshTokenExpiry = Number(process.env.REFRESH_TOKEN_EXPIRY ?? 3600);
+        this.accessTokenSecret = process.env.JWT_SECRET!;
+        this.refreshTokenSecret = process.env.JWT_SECRET_REFRESH!;
+        this.accessTokenExpiry = Number(process.env.JWT_EXPIRATION ?? 3600);
+        this.refreshTokenExpiry = Number(process.env.JWT_EXPIRATION_REFRESH ?? 3600);
     }
 
     public generateAccessToken(userId: string, roles: RoleEnum[]): string {
-        const payload = {userId, roles};
+        const payload = {sub: userId, roles};
         const expiredAt = Number(this.accessTokenExpiry)
         return jwt.sign(payload, this.accessTokenSecret, {expiresIn: expiredAt});
     }
 
     public async generateRefreshToken(userId: string): Promise<RefreshTokenEntity> {
-        const payload = {userId};
+        const payload = {sub: userId};
         const expiredAt = Number(this.refreshTokenExpiry);
         const token = jwt.sign(payload, this.refreshTokenSecret, {expiresIn: expiredAt});
 
