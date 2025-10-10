@@ -9,11 +9,13 @@ export class ResendEmailService implements EmailService {
     }
 
     async sendEmail(options: SendEmailOptions): Promise<void> {
+        const textHtml = `<p>${options.text?.replace(/\n/g, "<br>")}</p>`;
+
         await this.resend.emails.send({
-            from: "Banque Avenir <no-reply@banque-avenir.com>",
+            from: "Banque Avenir <onboarding@resend.dev>",
             to: options.to,
             subject: options.subject,
-            text: options.text,
+            text: textHtml,
         });
     }
 }

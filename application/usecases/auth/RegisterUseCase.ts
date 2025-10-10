@@ -6,6 +6,7 @@ import { UserRoleRepositoryInterface } from "../../ports/repositories/auth/UserR
 import { EmailService } from "../../ports/services/EmailService";
 import { RegistrationTokenGeneratorService } from "../../ports/services/auth/RegistrationTokenGeneratorService";
 import { PasswordService } from "../../ports/services/auth/PasswordService";
+import { UserStatusEnum } from "../../../domain/enums/UserStatusEnum";
 export class RegisterUseCase {
   public constructor(
     private userRepository: UserRepositoryInterface,
@@ -26,7 +27,7 @@ export class RegisterUseCase {
 
     const hashedPassword = await this.passwordService.hash(user.password);
     user.password = hashedPassword;
-
+    user.status = UserStatusEnum.PENDING;
     user.isRegistered = false;
 
     const savedUser = await this.userRepository.createUser(user);

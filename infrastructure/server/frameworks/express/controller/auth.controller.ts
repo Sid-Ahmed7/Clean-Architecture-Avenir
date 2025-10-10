@@ -36,7 +36,7 @@ async register(req: Request, res: Response) {
   const userOrError = BankUserEntity.from(
     email,
     password,
-    UserStatusEnum.ACTIVE, 
+    UserStatusEnum.PENDING, 
     firstName,
     lastName,
     phoneNumber,
