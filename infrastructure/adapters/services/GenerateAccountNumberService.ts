@@ -9,7 +9,7 @@ export class GenerateAccountNumberService implements AccountNumberGeneratorServi
 
     constructor(private accountRepository: AccountRepositoryInterface){}
 
-    public async generateAccountNumber(): Promise<AccountNumberValue | InvalidAccountError> {
+    public async generateAccountNumber(): Promise<number | InvalidAccountError> {
         
         const randomAccountNumber = Math.floor(10000000000 + Math.random() * 90000000000);
         const accountNumberValue = AccountNumberValue.from(randomAccountNumber);
@@ -24,7 +24,7 @@ export class GenerateAccountNumberService implements AccountNumberGeneratorServi
             return this.generateAccountNumber()
         } 
 
-        return accountNumberValue;
+        return accountNumberValue.value;
 
 
     }
