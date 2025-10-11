@@ -5,5 +5,6 @@ export interface CreateAccountDTO {
     accountType: AccountTypeEnum;    
     currency: string;                
     customAccountName?: string;      
-    createdBy?: string;  
+    createdBy?: string; 
+    parentAccountId?: number;
 }

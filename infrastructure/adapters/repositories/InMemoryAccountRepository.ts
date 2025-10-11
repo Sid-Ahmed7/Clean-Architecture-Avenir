@@ -43,6 +43,11 @@ export class InMemoryAccountRepository implements AccountRepositoryInterface {
         return null;
     }
 
+    public async getSubAccountByParentAccountId(parentAccountId: number): Promise<Array<AccountEntity>> {
+        const subAccounts = this.accounts.filter(acc => acc.parentAccountId === parentAccountId);
+        return subAccounts;
+    }
+
     public async getAllAccounts(): Promise<Array<AccountEntity>> {
         return this.accounts;
     }

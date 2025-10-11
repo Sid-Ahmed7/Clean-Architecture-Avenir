@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { ChangeAccountStatusUseCase } from "../../../../../application/usecases/accounts/ChangeAccountStatusUseCase";
 import { CreateAccountUseCase } from "../../../../../application/usecases/accounts/CreateAccountUseCase";
+import { CreateSubAccountUseCase } from "../../../../../application/usecases/accounts/CreateSubAccountUseCase";
 import { DeleteAccountUseCase } from "../../../../../application/usecases/accounts/DeleteAccountUseCase";
 import { GetAccountByIbanUseCase } from "../../../../../application/usecases/accounts/GetAccountByIbanUseCase";
 import { GetAccountUseCase } from "../../../../../application/usecases/accounts/GetAccountUseCase";
@@ -20,6 +21,7 @@ import { ToggleAccountActiveUseCase} from "../../../../../application/usecases/a
 import { AccountNumberGeneratorService } from "../../../../../application/ports/services/AccountNumberGeneratorService";
 import { IbanGeneratorService } from "../../../../../application/ports/services/IbanGeneratorService";
 import { CreateAccountDTO } from "../../../../../application/usecases/accounts/dto/CreateAccountDTO";
+import { CheckingAccountAlreadyExistError } from "../../../../../application/errors/CheckingAccountAlreadyExistError";
 
 export class AccountController {
 
@@ -40,7 +42,37 @@ export class AccountController {
             accountType: req.body.accountType,
             currency: req.body.currency,
             customAccountName: req.body.customAccountName,
-            createdBy: req.body.userId, 
+        }
+
+        const result = await createAnAccount.execute(account);
+        if(result instanceof Error) {
+            if(result instanceof InvalidAccountError){
+                return res.status(400).json({ error: result.message })
+            }
+            
+            if(result instanceof AccountAlreadyExistsError) {
+                return res.status(409).json({error: result.message})
+            }
+            
+            if(result instanceof CheckingAccountAlreadyExistError) {
+                return res.status(409).json({error: result.message})
+            }
+
+            return res.status(500).json({error: result.message})
+        }
+
+        return res.status(201).json(result);
+    }
+
+    async createSubAccount(req: Request, res: Response) {
+        const createAnAccount = new CreateSubAccountUseCase(this.accountRepository, this.accountNumberGenerator, this.ibanGenerator);
+        
+        const account: CreateAccountDTO = {
+            userId: req.body.userId,
+            accountType: req.body.accountType,
+            currency: req.body.currency,
+            customAccountName: req.body.customAccountName,
+            parentAccountId: req.body.parentAccountId,
         }
 
 
@@ -53,12 +85,15 @@ export class AccountController {
                 return res.status(409).json({error: result.message})
             }
 
+            if(result instanceof CheckingAccountAlreadyExistError) {
+                return res.status(409).json({error: result.message})
+            }
+
             return res.status(500).json({error: result.message})
         }
 
         return res.status(201).json(result);
     }
-
     async updateAccount(req: Request, res: Response) {
 
         const updateAccountUseCase = new UpdateAccountUseCase(this.accountRepository);
