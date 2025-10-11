@@ -4,6 +4,8 @@ import { AccountEntity } from "../../../domain/entities/AccountEntity";
 import { AccountAlreadyExistsError } from "../../../application/errors/AccountAlreadyExistsError";
 import { AccountNotFoundError } from "../../../application/errors/AccountNotFoundError";
 import { InvalidAccountError } from "../../../domain/errors/InvalidAccountError";
+import { CheckingAccountAlreadyExistError } from "../../../application/errors/CheckingAccountAlreadyExistError";
+import { AccountTypeEnum } from "../../../domain/enums/AccountTypeEnum";
 
 
 export class InMemoryAccountRepository implements AccountRepositoryInterface {
@@ -30,6 +32,15 @@ export class InMemoryAccountRepository implements AccountRepositoryInterface {
         }
         return account;
     
+    }
+
+    public async findByUserIdAndType(userId: string, accountType: AccountTypeEnum): Promise<null | CheckingAccountAlreadyExistError> {
+        const account = this.accounts.find(acc => acc.userId === userId && acc.accountType === accountType);
+
+        if(account) {
+            return new CheckingAccountAlreadyExistError("Account with checking type already exist");
+        }
+        return null;
     }
 
     public async getAllAccounts(): Promise<Array<AccountEntity>> {

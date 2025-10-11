@@ -22,9 +22,8 @@ export function registerUserConfirmedSubscriber(
   const handler = new UserConfirmedEventHandler(createAccountUseCase);
 
   eventBus.subscribe<UserConfirmedEvent>("UserConfirmedEvent", async (eventData) => {
-    console.log("[Subscriber] UserConfirmedEvent reçu pour :", eventData.user.email);
     await handler.handler(eventData);
   });
 
-  console.log("✅ Subscribed to UserConfirmedEvent");
+  console.log("Subscribed to UserConfirmedEvent");
 }

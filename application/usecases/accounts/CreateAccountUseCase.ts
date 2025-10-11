@@ -6,6 +6,7 @@ import {AccountNumberGeneratorService} from "../../ports/services/AccountNumberG
 import {IbanGeneratorService} from "../../ports/services/IbanGeneratorService";
 import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
 import { AccountStatusEnum } from "../../../domain/enums/AccountStatusEnum";
+import { AccountTypeEnum } from "../../../domain/enums/AccountTypeEnum";
 
 export class CreateAccountUseCase {
     public constructor ( private accountRepository: AccountRepositoryInterface, private accountNumberGenerator: AccountNumberGeneratorService, private ibanGenerator: IbanGeneratorService ){}
@@ -22,6 +23,12 @@ export class CreateAccountUseCase {
         
         if(iban instanceof InvalidIbanError) {
             return iban;
+        }
+
+
+        const checkingAccount = await this.accountRepository.findByUserIdAndType(accountDTO.userId, AccountTypeEnum.CHECKING);
+        if(checkingAccount instanceof Error) {
+            return checkingAccount;
         }
         
         const account = AccountEntity.from(
