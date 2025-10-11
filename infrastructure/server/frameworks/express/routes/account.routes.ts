@@ -3,9 +3,9 @@ import { AccountController } from '../controller/account.controller'
 import { InMemoryAccountRepository } from '../../../../adapters/repositories/InMemoryAccountRepository'
 import { GenerateAccountNumberService } from '../../../../adapters/services/GenerateAccountNumberService'
 import { GenerateIbanService } from '../../../../adapters/services/GenerateIbanService'
+import { accountRepository } from './inMemoryInstance';
 
 const router = express.Router();
-const accountRepository = new InMemoryAccountRepository();
 const accountNumberGenerator = new GenerateAccountNumberService(accountRepository);
 const ibanGenerator = new GenerateIbanService(accountRepository);
 const accountController = new AccountController(accountRepository, accountNumberGenerator, ibanGenerator);

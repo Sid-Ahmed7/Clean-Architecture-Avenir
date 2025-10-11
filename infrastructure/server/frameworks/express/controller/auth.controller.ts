@@ -17,7 +17,7 @@ import { BankUserEntity } from "../../../../../domain/entities/BankUserEntity";
 import { UserStatusEnum } from "../../../../../domain/enums/UserStatusEnum";
 import { EmailService } from "../../../../../application/ports/services/EmailService";
 import { RegistrationTokenGeneratorService } from "../../../../../application/ports/services/auth/RegistrationTokenGeneratorService";
-import { error } from "console";
+import { EventBusInterface } from "../../../../../application/ports/event/EventBusInterface";
 import { TokenNotFoundError } from "../../../../../application/errors/TokenNotFoundError";
 import { ExpiredTokenError } from "../../../../../application/errors/ExpiredTokenError";
 
@@ -30,7 +30,8 @@ export class AuthController {
         private readonly tokenService: TokenService,
         private readonly passwordService: PasswordService,
         private readonly emailService: EmailService,
-        private readonly registrationTokenGeneratorService: RegistrationTokenGeneratorService
+        private readonly registrationTokenGeneratorService: RegistrationTokenGeneratorService,
+        private readonly eventBus: EventBusInterface
       ) {}
 
 
@@ -73,14 +74,14 @@ export class AuthController {
       }
 
       async confirmRegistration(req: Request, res: Response) {
-        const confirmationUseCase = new ConfirmRegistrationUseCase(this.userRepository, this.emailService);
+        const confirmationUseCase = new ConfirmRegistrationUseCase(this.userRepository, this.emailService, this.eventBus);
         const { token } = req.query;
 
         if(!token || typeof token !== "string") {
           return res.status(400).json({error: "Token is required"});
         }
 
-        const result = confirmationUseCase.execute(token);
+        const result = await confirmationUseCase.execute(token);
 
         if(result instanceof Error) {
           if (result instanceof TokenNotFoundError) {

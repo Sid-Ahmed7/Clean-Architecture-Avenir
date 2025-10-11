@@ -19,6 +19,7 @@ import { CustomAccountNameUseCase } from "../../../../../application/usecases/ac
 import { ToggleAccountActiveUseCase} from "../../../../../application/usecases/accounts/ToggleAccountActiveUseCase";
 import { AccountNumberGeneratorService } from "../../../../../application/ports/services/AccountNumberGeneratorService";
 import { IbanGeneratorService } from "../../../../../application/ports/services/IbanGeneratorService";
+import { CreateAccountDTO } from "../../../../../application/usecases/accounts/dto/CreateAccountDTO";
 
 export class AccountController {
 
@@ -34,7 +35,16 @@ export class AccountController {
     async createAnAccount(req: Request, res: Response) {
         const createAnAccount = new CreateAccountUseCase(this.accountRepository, this.accountNumberGenerator, this.ibanGenerator);
         
-        const result = await createAnAccount.execute(req.body);
+        const account: CreateAccountDTO = {
+            userId: req.body.userId,
+            accountType: req.body.accountType,
+            currency: req.body.currency,
+            customAccountName: req.body.customAccountName,
+            createdBy: req.body.userId, 
+        }
+
+
+        const result = await createAnAccount.execute(account);
         if(result instanceof Error) {
             if(result instanceof InvalidAccountError){
                 return res.status(400).json({ error: result.message })

@@ -6,9 +6,12 @@ import {RegistrationTokenService} from '../../../../adapters/services/auth/Regis
 import { InMemoryUserRepository } from '../../../../adapters/repositories/InMemoryUserRepository';
 import { InMemoryRoleRepository } from '../../../../adapters/repositories/InMemoryRoleRepository';
 import { InMemoryUserRoleRepository } from '../../../../adapters/repositories/InMemoryUserRoleRepository';
+import {InMemoryEventBus} from '../../../../adapters/repositories/InMemoryEventBus';
 import { AuthController } from '../controller/auth.controller';
+import {registerUserConfirmedSubscriber} from '../../../../subscribers/UserConfirmedSuscriber';
 import { verifyTokenAccess } from '../middleware/authMiddleware';
-
+import { InMemoryAccountRepository } from '../../../../adapters/repositories/InMemoryAccountRepository';
+import {eventBus, accountRepository} from './inMemoryInstance';
 const router = express.Router();
 
 const tokenService = new JwtTokenService();
@@ -18,7 +21,8 @@ const registrationTokenGeneratorService = new RegistrationTokenService();
 const userRepository = new InMemoryUserRepository(passwordService);
 const roleRepository = new InMemoryRoleRepository();
 const userRoleRepository = new InMemoryUserRoleRepository(roleRepository, userRepository);
-const authController = new AuthController(userRepository, roleRepository, userRoleRepository,tokenService, passwordService, emailService,registrationTokenGeneratorService);
+registerUserConfirmedSubscriber(eventBus,accountRepository );
+const authController = new AuthController(userRepository, roleRepository, userRoleRepository,tokenService, passwordService, emailService,registrationTokenGeneratorService, eventBus);
 
 
 router.post("/register", (req, res) => authController.register(req,res));
