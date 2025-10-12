@@ -8,8 +8,6 @@ export class UserConfirmedEventHandler {
   async handler(event: UserConfirmedEvent) {
     const user = event.user;
 
-    console.log("[Handler] Création de compte pour :", user.email);
-
     const accountDTO = {
       userId: user.id,
       accountType: AccountTypeEnum.CHECKING,
@@ -21,11 +19,8 @@ export class UserConfirmedEventHandler {
     const createdAccount = await this.createAccountUseCase.execute(accountDTO);
 
     if (createdAccount instanceof Error) {
-      console.error("[Handler] Erreur lors de la création du compte :", createdAccount.message);
       return createdAccount;
     }
-
-    console.log("[Handler] Compte créé avec succès :", createdAccount);
 
     return createdAccount;
   }

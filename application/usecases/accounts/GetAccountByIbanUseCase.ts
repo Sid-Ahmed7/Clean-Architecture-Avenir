@@ -1,17 +1,18 @@
-import { AccountEntity } from "../../../domain/entities/AccountEntity";
+import { Accounts } from "../../../domain/interfaces/Accounts";
 import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
 
 export class GetAccountByIbanUseCase {
     public constructor ( private accountRepository: AccountRepositoryInterface){}
 
-    public async execute(iban: string) : Promise<AccountEntity | Error>{
+    public async execute(iban: string) : Promise<Accounts | Error>{
 
-        const account = await this.accountRepository.getOneAccountByIban(iban);
+        const mainAccount = await this.accountRepository.getOneAccountByIban(iban);
 
-        if (account instanceof Error) {
-            return account;
+        if (mainAccount instanceof Error) {
+            return mainAccount;
         }
+        const subAccounts = await this.accountRepository.getSubAccountByParentAccountId(mainAccount.accountNumber);
 
-        return account;
+        return {mainAccount, subAccounts};
     }
 }

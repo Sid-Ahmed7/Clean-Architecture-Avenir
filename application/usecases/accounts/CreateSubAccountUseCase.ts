@@ -7,6 +7,7 @@ import {IbanGeneratorService} from "../../ports/services/IbanGeneratorService";
 import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
 import { AccountStatusEnum } from "../../../domain/enums/AccountStatusEnum";
 import { AccountTypeEnum } from "../../../domain/enums/AccountTypeEnum";
+import { AccountNotFoundError } from "../../errors/AccountNotFoundError";
 
 export class CreateSubAccountUseCase {
     public constructor ( private accountRepository: AccountRepositoryInterface, private accountNumberGenerator: AccountNumberGeneratorService, private ibanGenerator: IbanGeneratorService ){}
@@ -17,27 +18,32 @@ export class CreateSubAccountUseCase {
             return new Error("A sub-account must have a parent");
         }
 
-        const parentAccountNumber = await this.accountRepository.getOneAccountByAccountNumber(accountDTO.parentAccountId);
+        const parentAccountNumber = await this.accountRepository.getOneAccountById(accountDTO.parentAccountId);
 
-        if(parentAccountNumber instanceof Error) {
+        if(parentAccountNumber instanceof AccountNotFoundError) {
             return parentAccountNumber;
         }
+        if (parentAccountNumber.parentAccountId) {
+            return new Error("Cannot create a sub-account of a sub-account");
+        }
+
+        if (parentAccountNumber.userId !== accountDTO.userId) {
+            return new Error("Parent account does not belong to this user");
+        }
+
+
 
         const accountNumber = await this.accountNumberGenerator.generateAccountNumber();
-            if(accountNumber instanceof InvalidAccountError) {
-                return accountNumber;
-            }
+        
+        if(accountNumber instanceof InvalidAccountError) {
+            return accountNumber;
+        }
 
 
         const iban = await this.ibanGenerator.generateIban(accountNumber);
         
         if(iban instanceof InvalidIbanError) {
             return iban;
-        }
-
-        const checkingAccount = await this.accountRepository.findByUserIdAndType(accountDTO.userId, AccountTypeEnum.CHECKING);
-        if(checkingAccount instanceof Error) {
-            return checkingAccount;
         }
         
         const account = AccountEntity.from(

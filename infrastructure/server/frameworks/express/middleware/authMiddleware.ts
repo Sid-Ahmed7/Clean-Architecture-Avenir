@@ -23,8 +23,6 @@ function isJwtPayload(obj: any): obj is { sub: string; roles: RoleEnum[] } {
 
 export const verifyTokenAccess = (req: Request, res: Response, next: NextFunction) => {
   const token = req.cookies.accessToken; 
-  console.log("Cookies reçus:", req.cookies);
-console.log("Access token:", token);
 
   if (!token) {
     return res.status(401).json({ message: "Access token is missing" });
@@ -32,10 +30,6 @@ console.log("Access token:", token);
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    console.log("JWT_SECRET:", JWT_SECRET);
-    console.log("Token décodé:", decoded);
-
-
 
     if (!isJwtPayload(decoded)) {
       return res.status(401).json({ message: "Invalid token format" });
@@ -64,7 +58,6 @@ export const verifyRefreshTokenCookie = (req: Request, res: Response, next: Next
 
   try {
     const decoded = jwt.verify(refreshToken, JWT_SECRET_REFRESH);
-    console.log("Token decoded", decoded);
 
 
     if (!isJwtPayload(decoded)) {

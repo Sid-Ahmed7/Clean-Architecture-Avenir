@@ -13,9 +13,6 @@ export class GetAccountUseCase {
         }
         const subAccounts = await this.accountRepository.getSubAccountByParentAccountId(accountNumber);
 
-        if( subAccounts instanceof Error) {
-            return subAccounts;
-        }
         return {mainAccount, subAccounts};
     }
 }
