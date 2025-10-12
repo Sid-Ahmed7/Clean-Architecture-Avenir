@@ -8,6 +8,8 @@ import { AccountTypeEnum } from "../../../domain/enums/AccountTypeEnum";
 export interface AccountRepositoryInterface {
     getOneAccountByAccountNumber(accountNumber: number): Promise<AccountEntity | AccountNotFoundError>
     getOneAccountByIban(iban: string):  Promise<AccountEntity | AccountNotFoundError>
+    getOneAccountById(accountNumber: number): Promise<AccountEntity | AccountNotFoundError>
+    getSubAccountByParentAccountId(parentAccountId: number): Promise<Array<AccountEntity>>
     getAllAccounts(): Promise<Array<AccountEntity>>
     findByUserIdAndType(userId: string, accountType: AccountTypeEnum): Promise<null | CheckingAccountAlreadyExistError>;
     createOneAccount(account: AccountEntity): Promise<AccountEntity | AccountAlreadyExistsError | InvalidAccountError >
