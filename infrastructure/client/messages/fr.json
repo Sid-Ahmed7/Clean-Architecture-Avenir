@@ -1,0 +1,46 @@
+{
+  "titles": {
+    "register": "Créer votre compte",
+    "login": "Connectez-vous à votre compte"
+  },
+  "labels": {
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "email": "Email",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "submit": "S’inscrire",
+    "login": "Connexion"
+  },
+  "errors": {
+    "firstName": "Le prénom est requis",
+    "lastName": "Le nom est requis",
+    "email": {
+      "required": "L'email est requis",
+      "invalid": "Adresse email invalide"
+    },
+    "password": {
+      "required": "Le mot de passe est requis",
+      "minLength": "Le mot de passe doit contenir au moins 8 caractères",
+      "maxLength": "Le mot de passe est trop long",
+      "regex": "Le mot de passe doit contenir un caractère special"
+    },
+    "confirmPassword": {
+      "required": "Veuillez confirmer votre mot de passe",
+      "mismatch": "Les mots de passe ne correspondent pas"
+    }
+  },
+  "messages": {
+    "register": {
+        "success": "Inscription réussie !",
+        "userExists": "Utilisateur déjà existant",
+        "failure": "Échec de l'inscription"
+    },
+    "login": {
+          "success": "Connexion réussie !",
+          "invalid": "Email ou mot de passe incorrecte",
+          "failure": "Échec de la connexion"
+    }
+  
+  }
+}

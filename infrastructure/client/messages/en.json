@@ -1,0 +1,47 @@
+{
+  "titles": {
+    "register": "Create Your Account",
+    "login": "Sign in to your account"
+  },
+  "labels": {
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "submit": "Register",
+    "login": "Login"
+  },
+  "errors": {
+    "firstName": "First name is required",
+    "lastName": "Last name is required",
+    "email": {
+      "required": "Email is required",
+      "invalid": "Invalid email address"
+    },
+    "password": {
+      "required": "Password is required",
+      "minLength": "Password must be at least 8 characters",
+      "maxLength": "Password is too long",
+      "regex": "Password must contain at least one special character"
+
+    },
+    "confirmPassword": {
+      "required": "Please confirm your password",
+      "mismatch": "Passwords do not match"
+    }
+  },
+  "messages": {
+    "register": {
+        "success": "Registration successful!",
+        "userExists": "User already exists",
+        "failure": "Registration failed"
+    },
+    "login": {
+        "success": "Login successful",
+        "invalid": "Invalid credentials",
+        "failure": "Login failed"
+    }
+
+  }
+}
