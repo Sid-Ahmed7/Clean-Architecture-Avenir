@@ -11,6 +11,7 @@ const accountNumberGenerator = new GenerateAccountNumberService(accountRepositor
 const ibanGenerator = new GenerateIbanService(accountRepository);
 const accountController = new AccountController(accountRepository, accountNumberGenerator, ibanGenerator);
 
+router.get("/my-accounts", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req, res) => accountController.getUserAccounts(req, res));
 router.post("/create", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req, res) => accountController.createAnAccount(req,res));
 router.post("/create/sub", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req, res) => accountController.createSubAccount(req,res));
 router.put("/update", verifyTokenAccess, authorizeRoles([RoleEnum.BANK_MANAGER]), (req,res) => accountController.updateAccount(req,res));

@@ -5,6 +5,7 @@ import { CreateSubAccountUseCase } from "../../../../../application/usecases/acc
 import { DeleteAccountUseCase } from "../../../../../application/usecases/accounts/DeleteAccountUseCase";
 import { GetAccountByIbanUseCase } from "../../../../../application/usecases/accounts/GetAccountByIbanUseCase";
 import { GetAccountUseCase } from "../../../../../application/usecases/accounts/GetAccountUseCase";
+import { GetUserAccountsUseCase} from "../../../../../application/usecases/accounts/GetUserAccountsUseCase"; 
 import { GetAllAccountUseCase } from "../../../../../application/usecases/accounts/GetAllAccountsCase";
 import { UpdateAccountUseCase } from "../../../../../application/usecases/accounts/UpdateAccountUseCase";
 import { InMemoryAccountRepository } from "../../../../adapters/repositories/InMemoryAccountRepository";
@@ -23,6 +24,8 @@ import { IbanGeneratorService } from "../../../../../application/ports/services/
 import { CreateAccountDTO } from "../../../../../application/usecases/accounts/dto/CreateAccountDTO";
 import { CheckingAccountAlreadyExistError } from "../../../../../application/errors/CheckingAccountAlreadyExistError";
 import { InvalidIbanError } from "../../../../../domain/errors/InvalidIbanError";
+import { GetUserByIdUseCase } from "../../../../../application/usecases/auth/GetUserByIdUseCase";
+import { UserNotFoundError } from "../../../../../application/errors/UserNotFoundError";
 
 export class AccountController {
 
@@ -162,6 +165,32 @@ export class AccountController {
         if (result instanceof Error) {
 
             if(result instanceof AccountNotFoundError) {
+                return res.status(404).json({ error: result.message });
+            }
+
+            return res.status(500).json({error : result.message})
+
+        }
+
+        return res.status(200).json(result);
+    
+    }
+
+        async getUserAccounts(req: Request, res: Response) {
+        const getUserAccountsUseCase = new GetUserAccountsUseCase(this.accountRepository);
+
+        const userId = req.user?.userId;
+        
+        if (!userId) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+
+        const result = await getUserAccountsUseCase.execute(userId);
+
+
+        if (result instanceof Error) {
+
+            if(result instanceof UserNotFoundError) {
                 return res.status(404).json({ error: result.message });
             }
 

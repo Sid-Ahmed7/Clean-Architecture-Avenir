@@ -6,6 +6,7 @@ import { AccountNotFoundError } from "../../../application/errors/AccountNotFoun
 import { InvalidAccountError } from "../../../domain/errors/InvalidAccountError";
 import { CheckingAccountAlreadyExistError } from "../../../application/errors/CheckingAccountAlreadyExistError";
 import { AccountTypeEnum } from "../../../domain/enums/AccountTypeEnum";
+import { UserNotFoundError } from "../../../application/errors/UserNotFoundError";
 
 
 export class InMemoryAccountRepository implements AccountRepositoryInterface {
@@ -55,6 +56,15 @@ export class InMemoryAccountRepository implements AccountRepositoryInterface {
     public async getSubAccountByParentAccountId(parentAccountId: number): Promise<Array<AccountEntity>> {
         const subAccounts = this.accounts.filter(acc => acc.parentAccountId === parentAccountId);
         return subAccounts;
+    }
+
+    public async getAccountsByUserId(userId: string): Promise<Array<AccountEntity> | UserNotFoundError> {
+        const userAccounts = this.accounts.filter((acc) => acc.userId === userId);
+        
+        if(userAccounts.length === 0) {
+            return new UserNotFoundError("User not found");
+        }
+        return userAccounts;
     }
 
     public async getAllAccounts(): Promise<Array<AccountEntity>> {
