@@ -4,11 +4,13 @@ import { AccountNotFoundError } from "../../errors/AccountNotFoundError";
 import { InvalidAccountError } from "../../../domain/errors/InvalidAccountError";
 import { CheckingAccountAlreadyExistError} from "../../errors/CheckingAccountAlreadyExistError"
 import { AccountTypeEnum } from "../../../domain/enums/AccountTypeEnum";
+import { UserNotFoundError } from "../../errors/UserNotFoundError";
 
 export interface AccountRepositoryInterface {
     getOneAccountByAccountNumber(accountNumber: number): Promise<AccountEntity | AccountNotFoundError>
     getOneAccountByIban(iban: string):  Promise<AccountEntity | AccountNotFoundError>
     getOneAccountById(accountNumber: number): Promise<AccountEntity | AccountNotFoundError>
+    getAccountsByUserId(userId: string): Promise<Array<AccountEntity> | UserNotFoundError>
     getSubAccountByParentAccountId(parentAccountId: number): Promise<Array<AccountEntity>>
     getAllAccounts(): Promise<Array<AccountEntity>>
     findByUserIdAndType(userId: string, accountType: AccountTypeEnum): Promise<null | CheckingAccountAlreadyExistError>;
