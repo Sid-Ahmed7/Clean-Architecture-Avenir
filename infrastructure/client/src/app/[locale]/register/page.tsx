@@ -3,17 +3,16 @@
 import { apiClient } from "@/lib/api/apiClient";
 import { RegisterInput, registerSchema } from "@/lib/validation/auth/registerSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/router";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useLayoutEffect, useState } from "react";
 import { useForm} from "react-hook-form";
 import Button from "@/components/ui/Button";
-import { useTranslations } from "next-intl";
-
-
+import { useLocale, useTranslations } from "next-intl";
 
 
 export default function RegisterPage() {
     const router = useRouter();
+    const locale = useLocale()
     const [message, setMessage] = useState("");
     const t = useTranslations();
 
@@ -25,7 +24,7 @@ export default function RegisterPage() {
         apiClient.post("/auth/register", data).then((res) => {
             if(res.status === 201) {
                 setMessage(t("messages.register.success"));
-                router.push("/confirm");
+                  router.push(`/${locale}/confirm`);
             } else if(res.status === 409) {
                 setMessage(t("messages.register.userExists"));
             } else {

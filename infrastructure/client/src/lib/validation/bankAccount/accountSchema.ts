@@ -12,18 +12,18 @@ z.object({
     .refine(num => num.toString().length === 11, {
       message: "Le numéro de compte doit comporter exactement 11 chiffres",
     }),
-    iban: z.string().length(34),
+    iban: z.string().length(27),
     userId: z.string(),
-    accountType: z.enum(AccountTypeEnum),
+    accountType: z.enum(Object.values(AccountTypeEnum)),
     currentBalance: z.number(),
     currency: z.string().length(3),
-    accountStatus: z.enum(AccountStatusEnum),
+    accountStatus: z.enum(Object.values(AccountStatusEnum)),
     isActive: z.boolean(),
-    withdrawaLimit: z.number(),
+    withdrawalLimit: z.number(),
     transferLimit: z.number(),
     overdraftLimit: z.number(),
     createdAt: z.string(),
-    customAccountName: z.string(),
+    customAccountName: z.string().optional(),
     parentAccountId: z.number().optional(),
     closedAt: z.string().optional()
 

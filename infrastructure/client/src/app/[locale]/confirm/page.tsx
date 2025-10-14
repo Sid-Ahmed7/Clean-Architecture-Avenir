@@ -1,18 +1,29 @@
 
 "use client";
 
-import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/router";
+import { useSearchParams, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { apiClient } from "@/lib/api/apiClient";
+import { useLocale } from "next-intl";
 
 
 export default function ConfirmPage() {
     const [message, setMessage] = useState("En attente de confirmation..")
     const searchParams = useSearchParams();
     const router = useRouter();
+    const locale = useLocale();
+      const pathname = usePathname();
+
 
     useEffect(() => {
+         if (!pathname.startsWith(`/${locale}`)) {
+      router.replace(`/${locale}/confirm?${searchParams.toString()}`);
+      return;
+    }
+
+
+
         const token = searchParams.get('token');
         if(!token) {
             return
@@ -21,7 +32,7 @@ export default function ConfirmPage() {
         apiClient.get(`/auth/confirm?token=${token}`).then((res) => {
             if(res.status === 200) {
                 setMessage("Confirmation réussie ! Vous allez être redirigé vers la page de login");
-                setTimeout(() => router.push("/login"), 3000)
+                setTimeout(() => router.push(`/${locale}/login`), 3000)
             }
         });
     }, [searchParams, router]);

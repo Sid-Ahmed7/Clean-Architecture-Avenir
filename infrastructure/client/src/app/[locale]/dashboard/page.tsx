@@ -6,9 +6,12 @@ import { AuthContext } from "@/contexts/AuthProvider";
 import { useUserAccounts } from "@/lib/hooks/useUserAccounts";
 import { MainAccountCard } from "@/components/bankAccount/MainAccountCard";
 import { AccountList } from "@/components/bankAccount/AccountList";
+import SummaryCard from "@/components/bankAccount/SummaryAccountsCard";
+import { useLocale } from "next-intl";
 
 export default function Dashboard() {
     const router  = useRouter();
+    const locale = useLocale();
     const {isAuthenticated} = useContext(AuthContext);
     const {accounts, loading, error} = useUserAccounts();
 
@@ -27,7 +30,7 @@ export default function Dashboard() {
     const subAccounts = accounts.filter((a) => a.parentAccountId === mainAccount?.accountNumber);
 
 return (
-    <div className="p-6 max-w-7xl mx-auto">
+    <div className="p-6 max-w-7xl mx-auto space-y-8">
       {loading && (
         <div className="flex justify-center items-center h-40">
           <p className="text-gray-500 animate-pulse">Chargement...</p>
@@ -42,6 +45,9 @@ return (
 
       {!loading && !error && (
         <>
+        <div>
+        <SummaryCard accounts={accounts} />
+        </div>
           {mainAccount ? (
             <MainAccountCard account={mainAccount} />
           ) : (

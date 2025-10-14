@@ -1,18 +1,21 @@
+"use client";
+
 import Button from "@/components/ui/Button";
 import { AuthContext } from "@/contexts/AuthProvider";
 import { apiClient } from "@/lib/api/apiClient";
 import { LoginInput, loginSchema } from "@/lib/validation/auth/loginSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useState, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "@/i18n/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 
 
 export default function LoginPage() {
     const router = useRouter();
+    const locale = useLocale();
     const {setIsAuthenticated} = useContext(AuthContext);
     const [message, setMessage] = useState("");
     const t = useTranslations();
@@ -27,7 +30,7 @@ export default function LoginPage() {
             if(res.status === 200) {
                 setIsAuthenticated(true);
                 setMessage(t("messages.login.success"));
-                router.push("/dashboard");
+                router.push(`/${locale}/dashboard`);
             } else if (res.status === 401) {
                 setMessage(t("messages.login.invalid"));
             } else {

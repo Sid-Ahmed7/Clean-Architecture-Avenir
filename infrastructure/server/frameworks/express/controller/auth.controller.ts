@@ -20,6 +20,7 @@ import { RegistrationTokenGeneratorService } from "../../../../../application/po
 import { EventBusInterface } from "../../../../../application/ports/event/EventBusInterface";
 import { TokenNotFoundError } from "../../../../../application/errors/TokenNotFoundError";
 import { ExpiredTokenError } from "../../../../../application/errors/ExpiredTokenError";
+import { EmailTemplateService } from "../../../../adapters/services/EmailTemplateService";
 
 export class AuthController {
 
@@ -30,6 +31,7 @@ export class AuthController {
         private readonly tokenService: TokenService,
         private readonly passwordService: PasswordService,
         private readonly emailService: EmailService,
+        private readonly emailTemplateService: EmailTemplateService,
         private readonly registrationTokenGeneratorService: RegistrationTokenGeneratorService,
         private readonly eventBus: EventBusInterface
       ) {}
@@ -59,6 +61,7 @@ export class AuthController {
           this.userRoleRepository,
           this.passwordService,
           this.emailService,
+          this.emailTemplateService,
           this.registrationTokenGeneratorService
         );
 

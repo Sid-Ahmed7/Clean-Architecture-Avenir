@@ -5,6 +5,7 @@ import { RoleRepositoryInterface } from "../../ports/repositories/auth/Rolerepos
 import { UserRoleRepositoryInterface } from "../../ports/repositories/auth/UserRoleRepositoryInterface";
 import { EmailService } from "../../ports/services/EmailService";
 import { RegistrationTokenGeneratorService } from "../../ports/services/auth/RegistrationTokenGeneratorService";
+import {EmailTemplateService} from "../../../infrastructure/adapters/services/EmailTemplateService";
 import { PasswordService } from "../../ports/services/auth/PasswordService";
 import { UserStatusEnum } from "../../../domain/enums/UserStatusEnum";
 export class RegisterUseCase {
@@ -14,10 +15,11 @@ export class RegisterUseCase {
     private userRoleRepository: UserRoleRepositoryInterface,
     private passwordService: PasswordService,
     private emailService: EmailService,
+    private emailTemplateService: EmailTemplateService,
     private registrationTokenGeneratorService: RegistrationTokenGeneratorService
   ) {}
 
-  public async execute(user: BankUserEntity): Promise<BankUserEntity | Error> {
+  public async execute(user: BankUserEntity, locale?: string): Promise<BankUserEntity | Error> {
 
     const existingUser = await this.userRepository.findByEmail(user.email);
     
@@ -59,12 +61,12 @@ export class RegisterUseCase {
       return updatedUser;
     }
 
-    await this.emailService.sendEmail({
-      to: updatedUser.email,
-      subject: "Confirmez votre inscription à notre banque",
-      text: `Bonjour ${updatedUser.firstName},\n\nVeuillez confirmer votre inscription en cliquant sur ce lien : 
-      http://localhost:3000/confirm?token=${token}\n\nCe lien expirera le ${expiresAt.toISOString()}.`
-    });
+      await this.emailTemplateService.sendRegistrationConfirmation(
+    updatedUser.email,
+    updatedUser.firstName,
+    token,
+    expiresAt
+  );
 
     return updatedUser;
   }
