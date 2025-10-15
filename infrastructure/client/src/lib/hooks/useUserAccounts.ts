@@ -18,8 +18,6 @@ export const useUserAccounts = () => {
             const parsed = z.array(accountSchema(t)).safeParse(res.data);
 
             if(!parsed.success) {
-                      console.error("Zod parsing errors:", parsed.error.format());
-
                 setError("Erreur compte");
                 return;
             }
