@@ -7,6 +7,7 @@ import Cookies from "js-cookie";
 export const AuthContext = createContext<{
     isAuthenticated: boolean | undefined;
     setIsAuthenticated: (isAuthenticated: boolean | undefined) => void;
+    
 }>({
     isAuthenticated: undefined,
     setIsAuthenticated: () => {}
@@ -21,8 +22,8 @@ export default function AuthProvider({
    
     
     useEffect(() => {
-        const isAuthenticated = Cookies.get("accessToken");
-        setIsAuthenticated(Boolean(isAuthenticated) ?? false);
+        const token = Cookies.get("accessToken");
+        setIsAuthenticated(Boolean(token));
     }, []);
 
     return ( 

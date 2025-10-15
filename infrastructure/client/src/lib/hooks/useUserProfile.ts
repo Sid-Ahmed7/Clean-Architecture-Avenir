@@ -9,13 +9,12 @@ interface UserProfile {
   email: string;
 }
 
-export function useUserProfile(token: string) {
+export function useUserProfile() {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!token) return;
 
     setLoading(true);
     setError(null);
@@ -27,7 +26,7 @@ export function useUserProfile(token: string) {
         setError(err.message);
       })
       .finally(() => setLoading(false));
-  }, [token]);
+  }, []);
 
   return { user, loading, error };
 }

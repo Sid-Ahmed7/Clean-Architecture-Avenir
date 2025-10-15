@@ -12,32 +12,53 @@ interface LimitProgressBarProps {
 export function LimitProgressBar({label, value, max, currency}: LimitProgressBarProps) {
     const percentage = Math.min((value / max) * 100, 100);
 
+    const isNearLimit = percentage > 80;
+    const isMedium = percentage > 50 && percentage <= 80;
+    const isLow = percentage <= 50;
+
     return (
-    <div className="bg-white p-4 rounded-lg shadow border border-gray-100 mb-4">
-      <div className="flex justify-between mb-1">
-        <span className="text-gray-600 text-sm font-medium">{label}</span>
-        <span className="text-gray-700 text-sm font-semibold">
-          {value.toLocaleString()} {currency}
-        </span>
-      </div>
-      <div className="w-full bg-gray-200 rounded-full h-3">
-        <div
-          className={`h-3 rounded-full transition-all duration-300 ${
-            percentage > 90
-              ? "bg-red-500"
-              : percentage > 60
-              ? "bg-yellow-500"
-              : "bg-green-500"
-          }`}
-          style={{ width: `${percentage}%` }}
-        />
-      </div>
-      <div className="flex justify-between text-xs text-gray-500 mt-1">
-        <span>0</span>
-        <span>
-          {max.toLocaleString()} {currency}
-        </span>
-      </div>
-    </div>
-  );
+        <div className="space-y-2">
+            <div className="flex justify-between items-center">
+                <span className="text-sm font-medium text-gray-700">
+                    {label}
+                </span>
+                <div className="text-right">
+                    <span className={`text-sm font-bold ${
+                        isNearLimit ? 'text-red-600' : 
+                        isMedium ? 'text-orange-600' : 
+                        'text-gray-900'
+                    }`}>
+                        {value.toLocaleString()} / {max.toLocaleString()} {currency}
+                    </span>
+                </div>
+            </div>
+            <div className="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
+                <div
+                    className={`h-2.5 rounded-full transition-all duration-500 ease-out ${
+                        isNearLimit
+                            ? 'bg-gradient-to-r from-red-500 to-red-600'
+                            : isMedium
+                                ? 'bg-gradient-to-r from-orange-400 to-orange-500'
+                                : 'bg-gradient-to-r from-blue-500 to-indigo-500'
+                    }`}
+                    style={{ width: `${percentage}%` }}
+                />
+            </div>
+
+            <div className="flex justify-between items-center">
+                <span className={`text-xs font-medium ${
+                    isNearLimit ? 'text-red-600' : 
+                    isMedium ? 'text-orange-600' : 
+                    'text-gray-500'
+                }`}>
+                    {isNearLimit && '⚠️ Limite proche'}
+                    {isMedium && '⚡ Attention'}
+                    {isLow && '✓ Disponible'}
+                </span>
+                <span className="text-xs text-gray-500">
+                    {(max - value).toLocaleString()} {currency} restant
+                </span>
+            </div>
+        </div>
+    );
 }

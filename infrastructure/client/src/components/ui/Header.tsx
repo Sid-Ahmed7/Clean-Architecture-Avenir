@@ -7,11 +7,10 @@ interface HeaderProps {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   onMenuClick: () => void;
-  token: string;
 }
 
-export default function Header({ searchQuery, setSearchQuery, onMenuClick, token }: HeaderProps) {
-  const { user, loading } = useUserProfile(token);
+export default function Header({ searchQuery, setSearchQuery, onMenuClick }: HeaderProps) {
+  const { user, loading } = useUserProfile();
 
   return (
     <header className="bg-white border-b border-gray-200 px-6 py-4">

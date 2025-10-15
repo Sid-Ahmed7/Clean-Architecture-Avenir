@@ -10,6 +10,7 @@ import SummaryCard from "@/components/bankAccount/SummaryAccountsCard";
 import { useLocale } from "next-intl";
 import { Plus } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import ChartAccountManage from "@/components/ui/ChartAccountManage";
 
 export default function Dashboard() {
     const router  = useRouter();
@@ -45,38 +46,37 @@ return (
         </div>
       )}
 
-      {!loading && !error && (
-        <>
-        <div>
-        <SummaryCard accounts={accounts} />
-        </div>
-          {mainAccount ? (
-            <MainAccountCard account={mainAccount} />
-          ) : (
-            <p className="text-gray-600 text-center mt-6">
-              Aucun compte principal trouvé.
-            </p>
-          )}
+{!loading && !error && (
+  <>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <SummaryCard accounts={accounts} />
+      <ChartAccountManage accounts={accounts} />
+    </div>
 
-          
- <section>
+    {mainAccount ? (
+      <MainAccountCard account={mainAccount} />
+    ) : (
+      <p className="text-gray-600 text-center mt-6">
+        Aucun compte principal trouvé.
+      </p>
+    )}
+
+    <section>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold text-gray-900">Autres comptes</h2>
         <Link href="/add-sub-account">
           <button className="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center gap-1">
             <Plus className="w-4 h-4" />
-              Ajouter un compte
+            Ajouter un compte
           </button>
         </Link>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <AccountList accounts={subAccounts} />
-
+        <AccountList accounts={subAccounts} />
       </div>
     </section>
-     
-        </>
-      )}
+  </>
+)}
     </div>
   );
 }
