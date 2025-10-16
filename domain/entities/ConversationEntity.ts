@@ -8,12 +8,12 @@ export class ConversationEntity {
             return validatedClientId;
         }
 
-        const validatedAdvisorId = UserIdValue.from(advisorId)
-        if(validatedAdvisorId instanceof Error) {
-            return validatedAdvisorId;
-        }
+        // const validatedAdvisorId = UserIdValue.from(advisorId)
+        // if(validatedAdvisorId instanceof Error) {
+        //     return validatedAdvisorId;
+        // }
 
-        return new ConversationEntity(clientId, advisorId, createdAt)
+        return new ConversationEntity(validatedClientId.value, advisorId, createdAt)
     }
 
     private constructor(
@@ -21,4 +21,16 @@ export class ConversationEntity {
         public advisorId: string,
         public createdAt: Date
     ){}
+
+    public assignAdvisor(advisorId: string) {
+        this.advisorId = advisorId;
+    }
+
+    public transferAdvisor(newAdvisorId: string) {
+        this.advisorId = newAdvisorId;
+    }
+
+    public hasAdvisor(): boolean {
+        return !!this.advisorId;
+    }
 }
