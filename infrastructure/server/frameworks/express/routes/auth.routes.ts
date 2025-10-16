@@ -12,17 +12,20 @@ import {eventBus, accountRepository} from './inMemoryInstance';
 import { verifyTokenAccess } from '../middleware/authMiddleware';
 import { authorizeRoles } from '../middleware/roleMiddleware';
 import { RoleEnum } from '../../../../../domain/enums/RoleEnum';
+import { EmailTemplateService } from '../../../../adapters/services/EmailTemplateService';
 const router = express.Router();
 
+const baseUrl = process.env.BASE_URL!;
 const tokenService = new JwtTokenService();
 const passwordService = new PasswordEncryptionService();
 const emailService = new ResendEmailService();
 const registrationTokenGeneratorService = new RegistrationTokenService();
+const emailTemplateService = new EmailTemplateService(emailService, baseUrl)
 const userRepository = new InMemoryUserRepository(passwordService);
 const roleRepository = new InMemoryRoleRepository();
 const userRoleRepository = new InMemoryUserRoleRepository(roleRepository, userRepository);
 registerUserConfirmedSubscriber(eventBus,accountRepository );
-const authController = new AuthController(userRepository, roleRepository, userRoleRepository,tokenService, passwordService, emailService,registrationTokenGeneratorService, eventBus);
+const authController = new AuthController(userRepository, roleRepository, userRoleRepository,tokenService, passwordService, emailService, emailTemplateService,registrationTokenGeneratorService, eventBus);
 
 
 router.post("/register", (req, res) => authController.register(req,res));

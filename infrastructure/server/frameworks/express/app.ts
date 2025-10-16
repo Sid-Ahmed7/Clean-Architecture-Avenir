@@ -7,7 +7,7 @@ import routes from "./routes/index";
 config();
 const app = express();
 const corsOptions = {
-    origin: "*",
+    origin: "http://localhost:3001",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
