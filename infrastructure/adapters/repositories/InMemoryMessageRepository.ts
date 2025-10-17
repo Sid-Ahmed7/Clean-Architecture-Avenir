@@ -3,7 +3,7 @@ import { MessageRepositoryInterface } from "../../../application/ports/repositor
 import { MessageEntity } from "../../../domain/entities/MessageEntity.";
 import { InvalidMessageError } from "../../../domain/errors/InvalidMessageError";
 
-export class InMemoryConversationRepository implements MessageRepositoryInterface {
+export class InMemoryMessageRepository implements MessageRepositoryInterface {
 
     
     private messages: Array<MessageEntity>;
