@@ -1,7 +1,7 @@
 import { ConversationRepositoryInterface } from "../../ports/repositories/chat/ConversationRepositoryInterface";
 import { MessageRepositoryInterface } from "../../ports/repositories/chat/MessageRepositoryInterface";
 
-export class GetConversationMessagesUsecase {
+export class GetConversationMessagesUseCase {
 
     public constructor(
         private conversationRepository: ConversationRepositoryInterface,
