@@ -4,6 +4,7 @@ import { AuthContext } from "@/contexts/AuthProvider";
 import { apiClient } from "@/lib/api/apiClient";
 import {CreditCard,ArrowUpRight,TrendingUp,Calendar,Settings,HelpCircle,X,LogOut, LogIn} from "lucide-react";
 import { useContext } from "react";
+import { Link } from "@/i18n/navigation";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -14,12 +15,9 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   const {isAuthenticated, setIsAuthenticated} = useContext(AuthContext);
   const menuItems = [
-    { icon: CreditCard, label: "Comptes", active: true },
-    { icon: ArrowUpRight, label: "Virements" },
-    { icon: TrendingUp, label: "Investissements" },
-    { icon: Calendar, label: "Historique" },
-    { icon: Settings, label: "Paramètres" },
-    { icon: HelpCircle, label: "Aide" },
+    { icon: CreditCard, label: "Comptes", href: "/dashboard" },
+    { icon: ArrowUpRight, label: "Virements", href: "/transfers" },
+    { icon: Calendar, label: "Historique", href: "/transactions" },
   ];
 
   const handleLogout = () => {
@@ -64,17 +62,14 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           {menuItems.map((item) => {
             const ItemIcon = item.icon;
             return (
-              <button
+              <Link
                 key={item.label}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                  item.active
-                    ? "bg-blue-50 text-blue-600"
-                    : "text-gray-700 hover:bg-gray-50"
-                }`}
+                href={item.href}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-gray-700 hover:bg-gray-50"
               >
                 <ItemIcon className="w-5 h-5" />
                 <span className="font-medium">{item.label}</span>
-              </button>
+              </Link>
             );
           })}
         </nav>

@@ -3,12 +3,12 @@ import { JwtTokenService } from '../../../../adapters/services/auth/JwtTokenServ
 import { PasswordEncryptionService } from '../../../../adapters/services/auth/PasswordEncryptionService';
 import {ResendEmailService} from '../../../../adapters/services/ResendEmailService';
 import {RegistrationTokenService} from '../../../../adapters/services/auth/RegistrationTokenService';
-import { InMemoryUserRepository } from '../../../../adapters/repositories/InMemoryUserRepository';
 import { InMemoryRoleRepository } from '../../../../adapters/repositories/InMemoryRoleRepository';
 import { InMemoryUserRoleRepository } from '../../../../adapters/repositories/InMemoryUserRoleRepository';
 import { AuthController } from '../controller/auth.controller';
 import {registerUserConfirmedSubscriber} from '../../../../subscribers/UserConfirmedSuscriber';
 import {eventBus, accountRepository} from './inMemoryInstance';
+import { userRepository } from './sharedInstances';
 import { verifyTokenAccess } from '../middleware/authMiddleware';
 import { authorizeRoles } from '../middleware/roleMiddleware';
 import { RoleEnum } from '../../../../../domain/enums/RoleEnum';
@@ -21,7 +21,6 @@ const passwordService = new PasswordEncryptionService();
 const emailService = new ResendEmailService();
 const registrationTokenGeneratorService = new RegistrationTokenService();
 const emailTemplateService = new EmailTemplateService(emailService, baseUrl)
-const userRepository = new InMemoryUserRepository(passwordService);
 const roleRepository = new InMemoryRoleRepository();
 const userRoleRepository = new InMemoryUserRoleRepository(roleRepository, userRepository);
 registerUserConfirmedSubscriber(eventBus,accountRepository );

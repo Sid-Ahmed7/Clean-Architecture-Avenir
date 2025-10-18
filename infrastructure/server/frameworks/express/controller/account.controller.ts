@@ -40,7 +40,8 @@ export class AccountController {
     private readonly accountRepository: InMemoryAccountRepository,
     private readonly accountNumberGenerator: AccountNumberGeneratorService,
     private readonly ibanGenerator: IbanGeneratorService,
-    private readonly transactionRepository: InMemoryTransactionRepository
+    private readonly transactionRepository: InMemoryTransactionRepository,
+    private readonly getTransactionHistoryUseCase: GetTransactionHistoryUseCase
   ) {}
 
 
@@ -396,8 +397,7 @@ export class AccountController {
             return res.status(401).json({ error: "User not authenticated" });
         }
 
-        const useCase = new GetTransactionHistoryUseCase(this.transactionRepository, this.accountRepository);
-        const result = await useCase.execute(userId);
+        const result = await this.getTransactionHistoryUseCase.execute(userId);
 
         if (result instanceof UserNotFoundError) {
             return res.status(404).json({ error: result.message });

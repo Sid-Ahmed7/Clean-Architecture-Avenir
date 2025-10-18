@@ -7,7 +7,18 @@ import { UserIdValue } from "../values/UserIdValue";
 
 export class TransactionEntity {
 
-    public static from(debitAccount: number, creditAccount: number, amount: number, transactionReference: string, transactionType: TransactionTypeEnum, executedBy: string, status: OrderStatusEnum, createdAt: Date, description?: string,  category?: string, ) {
+    public static from(
+        debitAccount: number,
+        creditAccount: number,
+        amount: number,
+        transactionReference: string,
+        transactionType: TransactionTypeEnum,
+        executedBy: string,
+        status: OrderStatusEnum,
+        createdAt: Date,
+        description?: string,
+        category?: string
+    ) {
 
         const validatedDebitAccount = AccountNumberValue.from(debitAccount);
         if(validatedDebitAccount instanceof Error) {
@@ -34,7 +45,18 @@ export class TransactionEntity {
             return validatedReference;
         }
 
-        return new TransactionEntity(validatedDebitAccount.value, validatedCreditAccount.value, validatedAmount.value, transactionType, validatedExecutedBy.value, status, validatedReference.value, description, category, createdAt);
+        return new TransactionEntity(
+            validatedDebitAccount.value,
+            validatedCreditAccount.value,
+            validatedAmount.value,
+            transactionType,
+            validatedExecutedBy.value,
+            status,
+            validatedReference.value,
+            description,
+            category,
+            createdAt
+        );
 
     }
 
@@ -48,6 +70,10 @@ export class TransactionEntity {
         public transactionReference: string,
         public description?: string,
         public category?: string,
-        public createdAt?: Date
+        public createdAt?: Date,
+        public debitUserId?: string,
+        public creditUserId?: string,
+        public debitUserName?: string,
+        public creditUserName?: string
     ) {}
     }

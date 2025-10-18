@@ -10,26 +10,31 @@ export const useUserAccounts = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-
-    useEffect(() => {
+    const loadAccounts = () => {
         setLoading(true);
 
-        apiClient.get("/accounts/my-accounts").then((res) => {
-            const parsed = z.array(accountSchema(t)).safeParse(res.data);
+        apiClient
+            .get("/accounts/my-accounts")
+            .then((res) => {
+                const parsed = z.array(accountSchema(t)).safeParse(res.data);
 
-            if(!parsed.success) {
-                setError("Erreur compte");
-                return;
-            }
+                if (!parsed.success) {
+                    setError("Erreur compte");
+                    return;
+                }
 
+                setAccounts(parsed.data);
+                setError(null);
+            })
+            .catch((err) => {
+                setError(err?.response?.data?.message || t("errors.accountLoad"));
+            })
+            .finally(() => setLoading(false));
+    };
 
-            setAccounts(parsed.data);
-        })
-        .catch((err) => {
-            setError(err.response.data.message || t("errors.accountLoad"));
-        }) 
-        .finally(() => setLoading(false));
+    useEffect(() => {
+        loadAccounts();
     }, [t]);
 
-    return {accounts, loading, error};
+    return { accounts, loading, error, reload: loadAccounts };
 }

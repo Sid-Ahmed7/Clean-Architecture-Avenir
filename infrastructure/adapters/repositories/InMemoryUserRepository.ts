@@ -21,6 +21,10 @@ export class InMemoryUserRepository implements UserRepositoryInterface {
     return user;
   }
 
+  public async findByIds(ids: string[]): Promise<BankUserEntity[]> {
+    return this.users.filter(user => ids.includes(user.id));
+  }
+
     public async findByEmail(email: string): Promise<BankUserEntity | null> {
     const user = this.users.find(u => u.email === email);
     

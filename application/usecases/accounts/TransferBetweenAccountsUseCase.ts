@@ -92,6 +92,9 @@ export class TransferBetweenAccountsUseCase {
             return transactionOrError;
         }
 
+        transactionOrError.debitUserId = debitAccount.userId;
+        transactionOrError.creditUserId = creditAccount.userId;
+
         await this.transactionRepository.save(transactionOrError);
 
         return {

@@ -8,7 +8,7 @@ import { MainAccountCard } from "@/components/bankAccount/MainAccountCard";
 import { AccountList } from "@/components/bankAccount/AccountList";
 import SummaryCard from "@/components/bankAccount/SummaryAccountsCard";
 import { useLocale } from "next-intl";
-import { Plus } from "lucide-react";
+import { Plus, ArrowUpRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import ChartAccountManage from "@/components/ui/ChartAccountManage";
 
