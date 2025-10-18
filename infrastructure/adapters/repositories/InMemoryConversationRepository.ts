@@ -16,6 +16,9 @@ export class InMemoryConversationRepository implements ConversationRepositoryInt
         const conversation = this.conversations.find((c) => c.id === conversationId);
         return conversation ?? null;
     }
+    public async findAll(): Promise<Array<ConversationEntity>> {
+        return this.conversations;
+    }
 
     public async save(conversation: ConversationEntity): Promise<void | AdvisorAlreadyAssignedError> {
         const exists = this.conversations.find((c) => c.clientId === conversation.clientId && c.advisorId === conversation.advisorId);

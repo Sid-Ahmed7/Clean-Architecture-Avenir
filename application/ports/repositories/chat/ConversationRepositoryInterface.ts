@@ -5,6 +5,7 @@ import { ConversationNotFoundError } from "../../../errors/chat/ConversationNotF
 export interface ConversationRepositoryInterface {
 
     findByConversationId(conversationId: number): Promise<ConversationEntity | null>
+    findAll(): Promise<Array<ConversationEntity>>;
     save(conversation: ConversationEntity): Promise<void | AdvisorAlreadyAssignedError>
     update(conversation: ConversationEntity): Promise<void | ConversationNotFoundError>;
 }
