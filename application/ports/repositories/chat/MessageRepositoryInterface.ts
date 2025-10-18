@@ -3,7 +3,7 @@ import { InvalidMessageError } from "../../../../domain/errors/InvalidMessageErr
 import { MessageNotFoundError } from "../../../errors/chat/MessageNotFoundError";
 
 export interface MessageRepositoryInterface {
-    findByConversation(clientId: string): Promise<Array<MessageEntity>>;
+    findByConversation(id: number): Promise<Array<MessageEntity>>;
     save(message: MessageEntity) : Promise<MessageEntity | InvalidMessageError>;
     updateMessage(message: MessageEntity): Promise<MessageEntity | MessageNotFoundError>
 }

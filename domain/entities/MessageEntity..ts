@@ -3,7 +3,7 @@ import { MessageContentValue } from "../values/MessageContentValue";
 import { UserIdValue } from "../values/UserIdValue";
 
 export class MessageEntity {
-    public static from( conversationClientId: string, conversationAdvisorId: string, authorId: string, content: string, readStatus: ReadStatusEnum, sentAt: Date ) {
+    public static from( conversationId: number,conversationClientId: string, conversationAdvisorId: string, authorId: string, content: string, readStatus: ReadStatusEnum, sentAt: Date ) {
 
         const validatedClientId = UserIdValue.from(conversationClientId);
         if(validatedClientId instanceof Error) {
@@ -25,9 +25,10 @@ export class MessageEntity {
             return validatedContent;
         }
 
-        return new MessageEntity(validatedClientId.value, validatedAdvisorId.value,validatedAuthorId.value, validatedContent.value, readStatus, sentAt)
+        return new MessageEntity(conversationId,validatedClientId.value, validatedAdvisorId.value,validatedAuthorId.value, validatedContent.value, readStatus, sentAt)
     }
         private constructor(
+        public conversationId: number,
         public conversationClientId: string,
         public conversationAdvisorId: string,
         public authorId: string,
