@@ -12,13 +12,9 @@ export class InMemoryConversationRepository implements ConversationRepositoryInt
     public constructor() {
         this.conversations = [];
     }
-
-    public async findByClientId(clientId: string): Promise<ConversationEntity | null> {
-        const conversation = this.conversations.find((c) => c.clientId === clientId);
-        if(!conversation) {
-            return null;
-        }
-        return conversation;
+    public async findByConversationId(conversationId: number): Promise<ConversationEntity | null> {
+        const conversation = this.conversations.find((c) => c.id === conversationId);
+        return conversation ?? null;
     }
 
     public async save(conversation: ConversationEntity): Promise<void | AdvisorAlreadyAssignedError> {

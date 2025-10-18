@@ -13,10 +13,9 @@ export class InMemoryMessageRepository implements MessageRepositoryInterface {
     }
 
 
-  public async findByConversation(conversationId: number): Promise<MessageEntity[]> {
+  public async findByConversationId(conversationId: number): Promise<MessageEntity[]> {
     return this.messages.filter((message) => message.conversationId === conversationId);
 }
-
 
     public async save(message: MessageEntity): Promise<MessageEntity | InvalidMessageError> {
         if(!message.authorId) {

@@ -13,43 +13,31 @@ export class SendMessageUseCase {
          ) {}
 
 
-    public async execute(userId: string, role:string, clientId: string, content: string) {
+    public async execute(userId: string, role:string, conversationId: number, content: string) {
 
         const isAdvisor = role === "BANK_ADVISOR";
-        const isClient = role === "CLIENT";
 
-        const existingConversation = await this.conversationRepository.findByClientId(clientId);
-        if(existingConversation instanceof Error) {
+        const existingConversation = await this.conversationRepository.findByConversationId(conversationId);
+        if(!(existingConversation instanceof Error)) {
             return existingConversation;
         }
 
-        const conversation = existingConversation ?? ConversationEntity.from(clientId, "", new Date());
-        
-        if(conversation instanceof Error) {
-            return conversation;
-        }
 
-        if(!existingConversation) {
-            const createConversation = await this.conversationRepository.save(conversation);
-            
-            if (createConversation instanceof Error) {
-                return createConversation;
-            }
-        }
 
-        if(isAdvisor && !conversation.advisorId) {
-            conversation.assignAdvisor(userId);
-            const updateConversation = await this.conversationRepository.update(conversation);
+        if(isAdvisor && !existingConversation.advisorId) {
+            existingConversation.assignAdvisor(userId);
+            const updateConversation = await this.conversationRepository.update(existingConversation);
             if(updateConversation instanceof Error) {
                 return updateConversation;
             }
         }
 
-        if(isAdvisor && conversation.advisorId !== userId) {
+        if(isAdvisor && existingConversation.advisorId !== userId) {
             return new AdvisorAlreadyAssignedError();
         }
+        const generatedId = Math.floor(Math.random() * 1000000) + 1;
 
-        const message = MessageEntity.from(clientId, conversation.advisorId, userId, content, ReadStatusEnum.UNREAD, new Date())
+        const message = MessageEntity.from(generatedId,existingConversation.id, existingConversation.clientId, existingConversation.advisorId, userId,  content, ReadStatusEnum.UNREAD, new Date())
         if(message instanceof Error) {
             return message;
         }

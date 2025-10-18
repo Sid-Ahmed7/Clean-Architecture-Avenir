@@ -9,11 +9,11 @@ export class GetConversationMessagesUseCase {
          ) {}
 
 
-         public async execute (clientId: string) {
+         public async execute (conversationId: number) {
 
-            const conversation = await this.conversationRepository.findByClientId(clientId);
+            const conversation = await this.conversationRepository.findByConversationId(conversationId);
 
-            const messages = await this.messageRepository.findByConversation(conversation?.id!);
+            const messages = await this.messageRepository.findByConversationId(conversation?.id!);
 
             return {conversation, messages};
     }
