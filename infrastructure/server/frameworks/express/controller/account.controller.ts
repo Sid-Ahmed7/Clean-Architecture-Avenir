@@ -26,6 +26,9 @@ import { CheckingAccountAlreadyExistError } from "../../../../../application/err
 import { InvalidIbanError } from "../../../../../domain/errors/InvalidIbanError";
 import { GetUserByIdUseCase } from "../../../../../application/usecases/auth/GetUserByIdUseCase";
 import { UserNotFoundError } from "../../../../../application/errors/UserNotFoundError";
+import { TransferBetweenAccountsUseCase } from "../../../../../application/usecases/accounts/TransferBetweenAccountsUseCase";
+import { InsufficientFundsError } from "../../../../../application/errors/InsufficientFundsError";
+import { TransferLimitExceededError } from "../../../../../application/errors/TransferLimitExceededError";
 
 export class AccountController {
 
@@ -343,6 +346,45 @@ export class AccountController {
         return res.status(200).json(result);
     }
 
+    async transferBetweenAccounts(req: Request, res: Response) {
+        const transferUseCase = new TransferBetweenAccountsUseCase(this.accountRepository);
+        const userId = req.user?.userId;
+
+        if (!userId) {
+            return res.status(401).json({ error: "User not authenticated" });
+        }
+
+        const { fromIban, toIban, amount } = req.body;
+
+        const result = await transferUseCase.execute({
+            fromIban,
+            toIban,
+            amount,
+            userId,
+        });
+
+        if (!(result instanceof Error)) {
+            return res.status(200).json(result);
+        }
+
+        if (result instanceof AccountNotFoundError) {
+            return res.status(404).json({ error: result.message });
+        }
+
+        if (result instanceof InsufficientFundsError) {
+            return res.status(400).json({ error: result.message });
+        }
+
+        if (result instanceof TransferLimitExceededError) {
+            return res.status(400).json({ error: result.message });
+        }
+
+        if (result instanceof InvalidAccountError) {
+            return res.status(400).json({ error: result.message });
+        }
+
+        return res.status(500).json({ error: "Unable to process transfer" });
+    }
 }
 
 

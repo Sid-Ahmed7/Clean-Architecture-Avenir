@@ -25,6 +25,7 @@ router.put("/:accountNumber/withdrawal-limit",verifyTokenAccess, authorizeRoles(
 router.put("/:accountNumber/transfer-limit",verifyTokenAccess, authorizeRoles([RoleEnum.BANK_MANAGER]), (req,res) => accountController.updateTransferLimit(req,res));
 router.put("/:accountNumber/overdraft-limit",verifyTokenAccess, authorizeRoles([RoleEnum.BANK_MANAGER]), (req,res) => accountController.updateOverdraftLimit(req,res));
 router.put("/:accountNumber/active", verifyTokenAccess, authorizeRoles([RoleEnum.BANK_MANAGER]), (req,res) => accountController.toggleAccountActive(req,res));
+router.post("/transfer", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req,res) => accountController.transferBetweenAccounts(req,res));
 
 
 export default router;

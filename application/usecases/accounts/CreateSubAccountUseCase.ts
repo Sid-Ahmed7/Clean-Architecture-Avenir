@@ -54,7 +54,7 @@ export class CreateSubAccountUseCase {
             accountDTO.currency,
             AccountStatusEnum.ACTIVE,
             true,     
-            20,                               
+            0,                               
             new Date(),
             3000,
             3000,
