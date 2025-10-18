@@ -3,6 +3,11 @@ import { AccountNotFoundError } from "../../errors/AccountNotFoundError";
 import { InvalidAccountError } from "../../../domain/errors/InvalidAccountError";
 import { InsufficientFundsError } from "../../errors/InsufficientFundsError";
 import { TransferLimitExceededError } from "../../errors/TransferLimitExceededError";
+import { TransactionRepositoryInterface } from "../../ports/repositories/TransactionRepositoryInterface";
+import { TransactionEntity } from "../../../domain/entities/TransactionEntity";
+import { OrderStatusEnum } from "../../../domain/enums/OrderStatusEnum";
+import { TransactionTypeEnum } from "../../../domain/enums/TransactionTypeEnum";
+import { randomUUID } from "crypto";
 
 type TransferInput = {
     fromIban: string;
@@ -12,7 +17,10 @@ type TransferInput = {
 };
 
 export class TransferBetweenAccountsUseCase {
-    public constructor(private accountRepository: AccountRepositoryInterface) {}
+    public constructor(
+        private accountRepository: AccountRepositoryInterface,
+        private transactionRepository: TransactionRepositoryInterface
+    ) {}
 
     public async execute(input: TransferInput) {
         const { fromIban, toIban, amount, userId } = input;
@@ -35,8 +43,8 @@ export class TransferBetweenAccountsUseCase {
             return creditAccount;
         }
 
-        if (debitAccount.userId !== userId || creditAccount.userId !== userId) {
-            return new InvalidAccountError("Accounts must belong to the same user");
+        if (debitAccount.userId !== userId) {
+            return new InvalidAccountError("Source account does not belong to this user");
         }
 
         if (!debitAccount.isActive || !creditAccount.isActive) {
@@ -68,6 +76,23 @@ export class TransferBetweenAccountsUseCase {
         if (creditUpdate instanceof Error) {
             return creditUpdate;
         }
+
+        const transactionOrError = TransactionEntity.from(
+            debitAccount.accountNumber,
+            creditAccount.accountNumber,
+            amount,
+            randomUUID(),
+            TransactionTypeEnum.TRANSFER,
+            userId,
+            OrderStatusEnum.COMPLETED,
+            new Date()
+        );
+
+        if (!(transactionOrError instanceof TransactionEntity)) {
+            return transactionOrError;
+        }
+
+        await this.transactionRepository.save(transactionOrError);
 
         return {
             fromAccount: debitUpdate,
