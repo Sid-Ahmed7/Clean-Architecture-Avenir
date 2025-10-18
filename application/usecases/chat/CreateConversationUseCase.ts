@@ -5,7 +5,7 @@ import { AdvisorAlreadyAssignedError } from "../../errors/chat/AdvisorAlreadyAss
 import { ConversationRepositoryInterface } from "../../ports/repositories/chat/ConversationRepositoryInterface";
 import { MessageRepositoryInterface } from "../../ports/repositories/chat/MessageRepositoryInterface";
 
-export class SendMessageUseCase {
+export class CreateConversationUseCase {
 
     public constructor(
         private conversationRepository: ConversationRepositoryInterface,
