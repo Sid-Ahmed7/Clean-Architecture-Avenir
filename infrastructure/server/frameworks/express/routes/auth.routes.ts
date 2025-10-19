@@ -34,5 +34,6 @@ router.post("/login", (req, res) => authController.login(req,res));
 router.post("/refresh-token", (req, res) => authController.refreshToken(req,res));
 router.get("/profile", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT]), (req, res) => authController.getUserProfile(req,res));
 router.post("/logout", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req, res) => authController.logout(req,res));
+router.post("/register/advisor", (req, res) => authController.registerAdvisor(req,res));
 
 export default router;

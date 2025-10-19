@@ -4,6 +4,7 @@ import {LoginUseCase} from "../../../../../application/usecases/auth/LoginUseCas
 import {RefreshTokenUseCase} from "../../../../../application/usecases/auth/RefreshTokenUseCase";
 import { GetUserByIdUseCase} from "../../../../../application/usecases/auth/GetUserByIdUseCase";
 import {ConfirmRegistrationUseCase} from "../../../../../application/usecases/auth/ConfirmRegistrationUseCase";
+import {CreateBankAdvisorUseCase} from "../../../../../application//usecases/auth/CreateBankAdvisorUseCase";
 import { InMemoryUserRepository} from "../../../../adapters/repositories/InMemoryUserRepository";
 import { InMemoryRoleRepository} from "../../../../adapters/repositories/InMemoryRoleRepository";
 import { InMemoryUserRoleRepository} from "../../../../adapters/repositories/InMemoryUserRoleRepository";
@@ -56,6 +57,45 @@ export class AuthController {
         }
 
         const registerUseCase = new RegisterUseCase(
+          this.userRepository,
+          this.roleRepository,
+          this.userRoleRepository,
+          this.passwordService,
+          this.emailService,
+          this.emailTemplateService,
+          this.registrationTokenGeneratorService
+        );
+
+        const result = await registerUseCase.execute(userOrError);
+        if (result instanceof Error) {
+          if (result instanceof UserAlreadyExistsError) {
+            return res.status(409).json({ error: result.message });
+          }
+          return res.status(500).json({ error: result.message });
+        }
+
+        return res.status(201).json(result);
+      }
+
+           async registerAdvisor(req: Request, res: Response) {
+        const { email, password, firstName, lastName, phoneNumber, dateOfBirth, address } = req.body;
+
+        const userOrError = BankUserEntity.from(
+          email,
+          password,
+          UserStatusEnum.PENDING, 
+          firstName,
+          lastName,
+          phoneNumber,
+          new Date(dateOfBirth),
+          address
+        );
+
+        if (userOrError instanceof Error) {
+          return res.status(400).json({ error: userOrError.message });
+        }
+
+        const registerUseCase = new  CreateBankAdvisorUseCase(
           this.userRepository,
           this.roleRepository,
           this.userRoleRepository,

@@ -5,7 +5,7 @@ import {EmailService, SendEmailOptions} from "../../../application/ports/service
 export class EmailTemplateService {
   constructor(private emailService: EmailService, private baseUrl: string) {}
 
-  async sendRegistrationConfirmation(to: string, firstName: string, token: string, expiresAt: Date, locale: string = "en") {
+  async sendRegistrationConfirmation(to: string, firstName: string, token: string, expiresAt: Date, role: "CLIENT" | "BANK_ADVISOR", locale: string = "en") {
     const url = `${this.baseUrl}/${locale}/confirm?token=${token}`;
 
     const text = `Bonjour ${firstName},\n\nVeuillez confirmer votre inscription en cliquant sur ce lien : 
@@ -14,7 +14,9 @@ ${url}\n\nCe lien expirera le ${expiresAt.toISOString()}.`;
     const options: SendEmailOptions = {
       to,
       subject: "Confirmez votre inscription à notre banque",
-      text
+      text,
+      role,
+      locale
     };
 
     await this.emailService.sendEmail(options);

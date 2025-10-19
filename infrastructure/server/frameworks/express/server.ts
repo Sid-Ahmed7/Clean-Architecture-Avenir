@@ -1,7 +1,20 @@
 import { config } from "dotenv";
 config();
 import app from "./app";
+import { createServer } from "http";
+import {Server} from 'socket.io';
+import { socketSetup } from "./sockets/socket";
 
-app.listen(process.env.PORT, function() {
+const httpServer = createServer(app);
+
+const io = new Server(httpServer, {
+    cors: {
+        origin: '*',
+    },
+});
+
+socketSetup(io);
+
+httpServer.listen(process.env.PORT, function() {
     console.log("Server started on port " + process.env.PORT)
 })

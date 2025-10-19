@@ -1,15 +1,19 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import { Token } from "@/types/token";
+import { getUserFromToken } from "@/lib/utils/decodeJwt";
 
 
 export const AuthContext = createContext<{
     isAuthenticated: boolean | undefined;
+    user: Token | null;
     setIsAuthenticated: (isAuthenticated: boolean | undefined) => void;
     
 }>({
     isAuthenticated: undefined,
+    user: null,
     setIsAuthenticated: () => {}
 });
 
@@ -19,15 +23,16 @@ export default function AuthProvider({
     children: React.ReactNode
 }) {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean | undefined>(undefined);
-   
+    const [user, setUser] = useState<Token | null>(null);
     
     useEffect(() => {
-        const token = Cookies.get("accessToken");
-        setIsAuthenticated(Boolean(token));
+        const decodedToken = getUserFromToken();
+        setUser(decodedToken);
+        setIsAuthenticated(Boolean(decodedToken));
     }, []);
 
     return ( 
-        <AuthContext.Provider value={{isAuthenticated, setIsAuthenticated}}>
+        <AuthContext.Provider value={{isAuthenticated, user, setIsAuthenticated}}>
             {children}
         </AuthContext.Provider>
     );

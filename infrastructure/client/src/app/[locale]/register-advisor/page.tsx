@@ -21,7 +21,7 @@ export default function RegisterPage() {
     });
 
     const onSubmit = (data: RegisterInput) => {
-        apiClient.post("/auth/register", data).then((res) => {
+        apiClient.post("/auth/register/advisor", data).then((res) => {
             if(res.status === 201) {
                 setMessage(t("messages.register.success"));
                   router.push(`/${locale}/confirm`);

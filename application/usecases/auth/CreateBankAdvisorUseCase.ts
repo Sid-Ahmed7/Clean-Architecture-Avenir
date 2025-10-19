@@ -8,7 +8,7 @@ import { RegistrationTokenGeneratorService } from "../../ports/services/auth/Reg
 import {EmailTemplateService} from "../../../infrastructure/adapters/services/EmailTemplateService";
 import { PasswordService } from "../../ports/services/auth/PasswordService";
 import { UserStatusEnum } from "../../../domain/enums/UserStatusEnum";
-export class RegisterUseCase {
+export class CreateBankAdvisorUseCase {
   public constructor(
     private userRepository: UserRepositoryInterface,
     private roleRepository: RoleRepositoryInterface,
@@ -38,7 +38,7 @@ export class RegisterUseCase {
       return savedUser;
     }
     
-    const clientRole = await this.roleRepository.findByName(RoleEnum.CLIENT);
+    const clientRole = await this.roleRepository.findByName(RoleEnum.BANK_ADVISOR);
     
     if (clientRole instanceof Error) {
       return clientRole;
@@ -66,9 +66,12 @@ export class RegisterUseCase {
     updatedUser.firstName,
     token,
     expiresAt,
-    RoleEnum.CLIENT,
+    RoleEnum.BANK_ADVISOR,
     "en",
+
   );
+  console.log("Rôle envoyé à EmailTemplateService :", RoleEnum.BANK_ADVISOR);
+
 
     return updatedUser;
   }

@@ -2,7 +2,7 @@
 
 import { AuthContext } from "@/contexts/AuthProvider";
 import { apiClient } from "@/lib/api/apiClient";
-import {CreditCard,ArrowUpRight,TrendingUp,Calendar,Settings,HelpCircle,X,LogOut, LogIn} from "lucide-react";
+import {CreditCard,ArrowUpRight,TrendingUp,Calendar,Settings,HelpCircle,X, MessageCircle,LogOut, LogIn} from "lucide-react";
 import { useContext } from "react";
 
 interface SidebarProps {
@@ -18,6 +18,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     { icon: ArrowUpRight, label: "Virements" },
     { icon: TrendingUp, label: "Investissements" },
     { icon: Calendar, label: "Historique" },
+    {icon : MessageCircle, label: "Message"},
     { icon: Settings, label: "Paramètres" },
     { icon: HelpCircle, label: "Aide" },
   ];
