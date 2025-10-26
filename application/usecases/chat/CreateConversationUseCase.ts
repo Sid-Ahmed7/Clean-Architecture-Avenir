@@ -1,5 +1,5 @@
 import { ConversationEntity } from "../../../domain/entities/ConversationEntity";
-import { MessageEntity } from "../../../domain/entities/MessageEntity.";
+import { MessageEntity } from "../../../domain/entities/MessageEntity";
 import { ReadStatusEnum } from "../../../domain/enums/ReadStatusEnum";
 import { AdvisorAlreadyAssignedError } from "../../errors/chat/AdvisorAlreadyAssignedError";
 import { ConversationRepositoryInterface } from "../../ports/repositories/chat/ConversationRepositoryInterface";
@@ -11,12 +11,10 @@ export class CreateConversationUseCase {
         private conversationRepository: ConversationRepositoryInterface,
          ) {}
 
-
     public async execute(clientId: string) {
 
-        const generatedId = Math.floor(Math.random() * 1000000) + 1;
-
-        const conversation = ConversationEntity.from(generatedId,clientId, "",new Date());
+        const conversation = ConversationEntity.from(0, clientId, "", new Date());
+        
         if(conversation instanceof Error) {
             return conversation;
         }

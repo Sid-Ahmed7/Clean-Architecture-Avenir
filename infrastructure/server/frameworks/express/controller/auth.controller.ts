@@ -3,6 +3,7 @@ import {RegisterUseCase} from "../../../../../application/usecases/auth/Register
 import {LoginUseCase} from "../../../../../application/usecases/auth/LoginUseCase";
 import {RefreshTokenUseCase} from "../../../../../application/usecases/auth/RefreshTokenUseCase";
 import { GetUserByIdUseCase} from "../../../../../application/usecases/auth/GetUserByIdUseCase";
+import { GetUserRolesUseCase} from "../../../../../application/usecases/auth/GetUserRolesUseCase";
 import {ConfirmRegistrationUseCase} from "../../../../../application/usecases/auth/ConfirmRegistrationUseCase";
 import {CreateBankAdvisorUseCase} from "../../../../../application//usecases/auth/CreateBankAdvisorUseCase";
 import { InMemoryUserRepository} from "../../../../adapters/repositories/InMemoryUserRepository";
@@ -22,6 +23,7 @@ import { EventBusInterface } from "../../../../../application/ports/event/EventB
 import { TokenNotFoundError } from "../../../../../application/errors/TokenNotFoundError";
 import { ExpiredTokenError } from "../../../../../application/errors/ExpiredTokenError";
 import { EmailTemplateService } from "../../../../adapters/services/EmailTemplateService";
+import { GetAllAdvisorUseCase } from "../../../../../application/usecases/auth/GetAllAdvisorUseCase";
 
 export class AuthController {
 
@@ -77,7 +79,7 @@ export class AuthController {
         return res.status(201).json(result);
       }
 
-           async registerAdvisor(req: Request, res: Response) {
+      async registerAdvisor(req: Request, res: Response) {
         const { email, password, firstName, lastName, phoneNumber, dateOfBirth, address } = req.body;
 
         const userOrError = BankUserEntity.from(
@@ -214,26 +216,51 @@ export class AuthController {
       }
 
 
-      async getUserProfile(req: Request, res: Response) {
-        const getUseridUseCase = new GetUserByIdUseCase(this.userRepository);
-
+        async getUserProfile(req: Request, res: Response) {
         const userId = req.user?.userId;
-        
+
         if (!userId) {
           return res.status(401).json({ error: "Unauthorized" });
         }
 
-        const user = await getUseridUseCase.execute(userId);
+        const getUserUseCase = new GetUserByIdUseCase(this.userRepository);
+        const getUserRolesUseCase = new GetUserRolesUseCase(this.userRoleRepository);
 
-        if(user instanceof Error) {
-          if(user instanceof UserNotFoundError) {
+        const user = await getUserUseCase.execute(userId);
+        if (user instanceof Error) {
+          if (user instanceof UserNotFoundError) {
             return res.status(404).json({ error: user.message });
           }
           return res.status(500).json({ error: user.message });
         }
 
-        return res.status(200).json({ user });
+
+        const roles = await getUserRolesUseCase.execute(userId);
+        const role = Array.isArray(roles) && roles.length > 0 ? roles[0]?.name : undefined;
+
+        return res.status(200).json({
+          user: {
+            ...user,
+            role, 
+          },
+        });
       }
+        async getAdvisors(req: Request, res: Response) {
+        const getClientConversationUseCase = new GetAllAdvisorUseCase(this.roleRepository, this.userRepository, this.userRoleRepository);
+        
+        const userId = req.user?.userId;
+        if(!userId) {
+            return res.status(401).json({error: "Unauthorized access"});
+        }
+
+        const result = await getClientConversationUseCase.execute();
+        if(result instanceof Error) {
+            return res.status(500).json({ error: result.message });
+        }
+
+        return res.status(200).json(result);
+    }
+
       async logout (req: Request, res: Response) {
         res.clearCookie("accessToken");
         res.clearCookie("refreshToken");

@@ -13,7 +13,7 @@ export class GetConversationMessagesUseCase {
 
             const conversation = await this.conversationRepository.findByConversationId(conversationId);
 
-            const messages = await this.messageRepository.findByConversationId(conversation?.id!);
+            const messages = await this.messageRepository.findByConversationId(conversationId);
 
             return {conversation, messages};
     }

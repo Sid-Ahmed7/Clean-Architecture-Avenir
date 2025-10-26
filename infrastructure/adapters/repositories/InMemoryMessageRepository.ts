@@ -1,6 +1,7 @@
+import { ConversationNotFoundError } from "../../../application/errors/chat/ConversationNotFoundError";
 import { MessageNotFoundError } from "../../../application/errors/chat/MessageNotFoundError";
 import { MessageRepositoryInterface } from "../../../application/ports/repositories/chat/MessageRepositoryInterface";
-import { MessageEntity } from "../../../domain/entities/MessageEntity.";
+import { MessageEntity } from "../../../domain/entities/MessageEntity";
 import { InvalidMessageError } from "../../../domain/errors/InvalidMessageError";
 
 export class InMemoryMessageRepository implements MessageRepositoryInterface {
@@ -13,8 +14,14 @@ export class InMemoryMessageRepository implements MessageRepositoryInterface {
     }
 
 
-  public async findByConversationId(conversationId: number): Promise<MessageEntity[]> {
-    return this.messages.filter((message) => message.conversationId === conversationId);
+  public async findByConversationId(conversationId: number): Promise<MessageEntity[] | ConversationNotFoundError> {
+    const messageConversation =  this.messages.filter((message) => message.conversationId === conversationId);
+
+    if(messageConversation.length === 0) {
+        return new ConversationNotFoundError(`Conversation with id ${conversationId} not found`)
+    }
+
+    return messageConversation;
 }
 
     public async save(message: MessageEntity): Promise<MessageEntity | InvalidMessageError> {

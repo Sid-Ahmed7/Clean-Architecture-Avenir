@@ -6,6 +6,7 @@ export class ResendEmailService implements EmailService {
 
   constructor() {
     this.resend = new Resend(process.env.RESEND_API_KEY);
+    console.log(process.env.RESEND_API_KEY)
   }
 
   async sendEmail(options: SendEmailOptions): Promise<void> {
@@ -25,6 +26,7 @@ export class ResendEmailService implements EmailService {
       subject: options.subject,
       html: textHtml,
     });
+console.log("Contenu du mail :", options.text);
 
     console.log(`✉️ [SANDBOX] Email envoyé à ${toAddress}`);
   }

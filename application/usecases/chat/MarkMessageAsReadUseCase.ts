@@ -1,4 +1,4 @@
-import { MessageEntity } from "../../../domain/entities/MessageEntity.";
+import { MessageEntity } from "../../../domain/entities/MessageEntity";
 import { ReadStatusEnum } from "../../../domain/enums/ReadStatusEnum";
 import { MessageRepositoryInterface } from "../../ports/repositories/chat/MessageRepositoryInterface";
 

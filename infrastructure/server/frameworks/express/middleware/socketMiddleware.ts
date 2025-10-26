@@ -1,16 +1,30 @@
-import {Socket} from "socket.io";
-import jwt from "jsonwebtoken";
+import { Socket } from "socket.io";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import cookie from "cookie";
 
-export const socketMiddleware = (socket : Socket, next:(err?: any) => void ) => {
-    const secret = process.env.JWT_SECRET!;
+interface SocketUser {
+  userId: string;
+  roles: string[];
+}
 
-    try {
-    const token = socket.handshake.auth?.token;
-    const decoded = jwt.verify(token, secret);
-    socket.data.user = decoded;
-    next();
-    } catch(err) {
-        next(new Error("Unauthorized"));
+export const socketMiddleware = (socket: Socket, next: (err?: any) => void) => {
+  try {
+    const cookies = cookie.parse(socket.handshake.headers.cookie || "");
+    const token = cookies.accessToken || socket.handshake.auth?.token;
+
+    if (!token) {
+      return next(new Error("Unauthorized"));
     }
 
-}
+    const secret = process.env.JWT_SECRET!;
+    const decoded = jwt.verify(token, secret) as JwtPayload & { sub: string; roles: string[] };
+
+ socket.data.user = {
+      userId: decoded.sub,
+      role: decoded.roles
+    };
+    next();
+  } catch (err) {
+    next(new Error("Unauthorized"));
+  }
+};

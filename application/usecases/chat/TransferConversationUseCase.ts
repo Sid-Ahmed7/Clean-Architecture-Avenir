@@ -6,7 +6,13 @@ export class TransferConversationUseCase {
 
     public constructor(private conversationRepository: ConversationRepositoryInterface){}
 
-    public async execute(conversation: ConversationEntity, newAdvisorId: string) {
+    public async execute(conversationId: number, newAdvisorId: string) {
+        const conversation = await this.conversationRepository.findByConversationId(conversationId);
+
+        if(conversation instanceof Error) {
+            return conversation;
+        }
+
         if(conversation.advisorId === newAdvisorId) {
             return new SameAdvisorError();
         }
