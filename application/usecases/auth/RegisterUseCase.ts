@@ -65,7 +65,9 @@ export class RegisterUseCase {
     updatedUser.email,
     updatedUser.firstName,
     token,
-    expiresAt
+    expiresAt,
+    RoleEnum.CLIENT,
+    "en",
   );
 
     return updatedUser;

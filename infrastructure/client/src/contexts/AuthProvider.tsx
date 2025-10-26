@@ -1,38 +1,44 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
-import Cookies from "js-cookie";
-
+import { createContext, useEffect, useState } from "react";
+import { apiClient } from "@/lib/api/apiClient"; 
+import { Token } from "@/types/Token";
 
 export const AuthContext = createContext<{
-    isAuthenticated: boolean | undefined;
-    setIsAuthenticated: (isAuthenticated: boolean | undefined) => void;
-    
+  isAuthenticated: boolean | undefined;
+  user: Token | null;
+  setIsAuthenticated: (isAuthenticated: boolean | undefined) => void;
 }>({
-    isAuthenticated: undefined,
-    setIsAuthenticated: () => {}
+  isAuthenticated: undefined,
+  user: null,
+  setIsAuthenticated: () => {}
 });
 
-export default function AuthProvider({
-    children,
-}: {
-    children: React.ReactNode
-}) {
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean | undefined>(undefined);
-   
-    
-    useEffect(() => {
-        const token = Cookies.get("accessToken");
-        setIsAuthenticated(Boolean(token));
-    }, []);
+export default function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | undefined>(undefined);
+  const [user, setUser] = useState<Token | null>(null);
 
-    return ( 
-        <AuthContext.Provider value={{isAuthenticated, setIsAuthenticated}}>
-            {children}
-        </AuthContext.Provider>
-    );
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await apiClient.get("/auth/profile");
+        setUser({ 
+  userId: res.data.user.id, role: res.data.user.role 
+});
 
+        setIsAuthenticated(true);
+      } catch (err) {
+        setUser(null);
+        setIsAuthenticated(false);
+      }
+    };
 
+    fetchUser();
+  }, []);
 
-
+  return (
+    <AuthContext.Provider value={{ isAuthenticated, user, setIsAuthenticated }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }

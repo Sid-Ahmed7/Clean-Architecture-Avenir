@@ -1,13 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { apiClient } from "../api/apiClient";
 
 interface UserProfile {
-  name: string;
-  email: string;
+  userId: string; 
+  role: string;
+  name?: string;
+  email?: string;
 }
+
 
 export function useUserProfile() {
   const [user, setUser] = useState<UserProfile | null>(null);
@@ -19,7 +21,7 @@ export function useUserProfile() {
     setLoading(true);
     setError(null);
 
-    apiClient.get("/api/profile").then((res) => {
+    apiClient.get("/auth/profile").then((res) => {
         setUser(res.data);
       })
       .catch((err) => {

@@ -8,6 +8,8 @@ export interface UserRepositoryInterface {
     findById(userId: string): Promise<BankUserEntity | UserNotFoundError>;
     findByEmail(email: string): Promise<BankUserEntity | null>;
     findConfirmationToken(token: string): Promise<BankUserEntity | UserNotFoundError | TokenNotFoundError | ExpiredTokenError>;
+    findAll(): Promise<Array<BankUserEntity>>
     createUser(user: BankUserEntity): Promise<BankUserEntity | UserAlreadyExistsError>
     updateUser(user: BankUserEntity): Promise<BankUserEntity | UserNotFoundError>;
+    
 }
