@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { apiClient } from "../api/apiClient";
 
 interface UserProfile {
-  userId: string; // normalisé
+  userId: string; 
   role: string;
   name?: string;
   email?: string;

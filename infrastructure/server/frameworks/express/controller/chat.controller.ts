@@ -1,6 +1,4 @@
 import { Request, Response } from "express";
-import { InMemoryConversationRepository } from "../../../../adapters/repositories/InMemoryConversationRepository";
-import { InMemoryMessageRepository } from "../../../../adapters/repositories/InMemoryMessageRepository";
 import { CreateConversationUseCase } from "../../../../../application/usecases/chat/CreateConversationUseCase";
 import { SendMessageUseCase } from "../../../../../application/usecases/chat/SendMessageUseCase";
 import { GetConversationMessagesUseCase } from "../../../../../application/usecases/chat/GetConversationMessagesUseCase";
@@ -15,7 +13,7 @@ import { MessageNotFoundError } from "../../../../../application/errors/chat/Mes
 import { SameAdvisorError } from "../../../../../application/errors/chat/SameAdvisorErrror";
 import { InvalidUserIdError } from "../../../../../domain/errors/InvalidUserIdError";
 import { Server } from "socket.io";
-import { conversationRepository, messageRepository} from "../sockets/socket";
+import { conversationRepository, messageRepository, userRepository} from "../../../../adapters/config/repositories";
 import { ClientsSocket } from "../interfaces/ClientSocket";
 import { OnlineUser } from "../interfaces/OnlineUser";
 import { InvalidConversationError } from "../../../../../domain/errors/InvalidConversationError";
@@ -23,11 +21,12 @@ import { error } from "console";
 import { NoAdvisorAssignedError } from "../../../../../application/errors/chat/NoAdvisorAssignedError";
 import { ConversationNotFoundError } from "../../../../../application/errors/chat/ConversationNotFoundError";
 import { UserNotFoundError } from "../../../../../application/errors/UserNotFoundError";
+
 export class ChatController {
     constructor(
         private readonly io?: Server,
         private readonly clients?: ClientsSocket,
-        private readonly onlineUsers?: Record<string, OnlineUser>
+        private readonly onlineUsers?: Record<string, OnlineUser>,
     ){}
 
     async createConversation(req: Request, res: Response) {
@@ -112,7 +111,7 @@ export class ChatController {
     }
 
     async getAdvisorConversation(req: Request, res: Response) {
-        const getAdvisorConversationUseCase = new GetAdvisorConversationUseCase(conversationRepository);
+        const getAdvisorConversationUseCase = new GetAdvisorConversationUseCase(conversationRepository, userRepository);
         const userId = req.user?.userId;
         if(!userId) {
             return res.status(401).json({error: "Unauthorized access"});
@@ -129,7 +128,8 @@ export class ChatController {
     }
 
     async getClientConversation(req: Request, res: Response) {
-        const getClientConversationUseCase = new GetClientConversationUseCase(conversationRepository);
+        
+        const getClientConversationUseCase = new GetClientConversationUseCase(conversationRepository, userRepository);
         
         const userId = req.user?.userId;
         if(!userId) {
@@ -163,15 +163,18 @@ export class ChatController {
         }
 
         const result = await getConversationMessagesUseCase.execute(Number(conversationId));
-        if(result instanceof Error) {
+            
+            if(result instanceof MessageNotFoundError) {
+                return res.status(404).json({error: result.message});
+            }
+
             if(result instanceof ConversationNotFoundError) {
                 return res.status(404).json({error: result.message});
             }
-            if(result instanceof MessageNotFoundError) {
-            return res.status(404).json({error: result.message});
+
+            if(result instanceof Error) {
+                return res.status(500).json({ error: result.message });
             }
-            return res.status(500).json({ error: result.message });
-        }
         return res.status(200).json(result);
     }
 

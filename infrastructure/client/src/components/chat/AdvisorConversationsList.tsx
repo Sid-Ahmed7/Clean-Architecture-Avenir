@@ -4,14 +4,17 @@ import { useContext, useEffect, useState } from "react";
 import { getAllPendingConversations, getAdvisorConversation, transferConversation } from "@/lib/api/chat";
 import { connectSocket, disconnectSocket, identifyUser, onPendingConversation, onConversationAssigned, onRemovePendingConversation } from "@/services/chatService";
 import { AuthContext } from "@/contexts/AuthProvider";
-import { Conversation } from "@/types/conversation";
+import { Conversation } from "@/types/Conversation";
 import SelectAdvisorsModal from "./SelectAdvisorsModal";
 import { ArrowRight, CheckCircle, Clock, MessageSquare, MoreVertical, Search, Users, UserCheck, LayoutGrid, List, Send } from "lucide-react";
 import { getTimeAgo } from "@/lib/utils/chatUtils";
+import { useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
 
 export default function AdvisorConversationsDashboard() {
   const { user } = useContext(AuthContext);
-
+  const router = useRouter();
+  const locale = useLocale();
   const [pendingConversations, setPendingConversations] = useState<Conversation[]>([]);
   const [assignedConversations, setAssignedConversations] = useState<Conversation[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
@@ -20,6 +23,10 @@ export default function AdvisorConversationsDashboard() {
   const [viewMode, setViewMode] = useState<"cards" | "list">("cards");
   const [loading, setLoading] = useState(true);
   const [socketError, setSocketError] = useState<string | null>(null);
+
+   const handleTakeOver = (conversationId: number) => {
+    router.push(`/${locale}/chat/${conversationId}`);
+  };
 
   const openTransferModal = (conversationId: number) => {
     setSelectedConversationId(conversationId);
@@ -127,13 +134,12 @@ export default function AdvisorConversationsDashboard() {
     };
   }, [user]);
 
-  const filteredPending = pendingConversations.filter(conv =>
-    conv.clientId.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredPending = pendingConversations.filter((conv) =>
+conv.clientName ? conv.clientName.toLowerCase().includes(search.toLowerCase()) : false  );
 
   const filteredAssigned = assignedConversations.filter(conv =>
-    conv.clientId.toLowerCase().includes(search.toLowerCase())
-  );
+        conv.clientName ? conv.clientName.toLowerCase().includes(search.toLowerCase()) : false  );
+
 
   if (loading) {
     return (
@@ -177,7 +183,7 @@ export default function AdvisorConversationsDashboard() {
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
           <input
             type="text"
-            placeholder="Rechercher par ID client..."
+            placeholder="Rechercher par nom client..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -219,15 +225,15 @@ export default function AdvisorConversationsDashboard() {
                   </div>
                   <div className="flex items-center gap-4 mb-4">
                     <div className="w-14 h-14 bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
-                      {conv.clientId.slice(0,2).toUpperCase()}
+                      {conv.clientName ? conv.clientName.slice(0,2).toUpperCase() : "Aucun client"}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-slate-900">{conv.clientId}</p>
+                      <p className="font-semibold text-slate-900">{conv.clientName}</p>
                       <p className="text-xs text-slate-500 flex items-center gap-1"><Clock className="w-3 h-3" /> {getTimeAgo(conv.createdAt)}</p>
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <button className="flex-1 bg-blue-600 text-white rounded-xl py-2 hover:bg-blue-500 transition-colors">Prendre en charge</button>
+                    <button onClick={() => handleTakeOver(conv.id)} className="flex-1 bg-blue-600 text-white rounded-xl py-2 hover:bg-blue-500 transition-colors">Prendre en charge</button>
                     <button onClick={() => openTransferModal(conv.id)} className="p-2 bg-slate-100 rounded-xl hover:bg-slate-200 transition-colors">
                       <ArrowRight className="w-4 h-4" />
                     </button>
@@ -261,15 +267,15 @@ export default function AdvisorConversationsDashboard() {
                   </div>
                   <div className="flex items-center gap-4 mb-4">
                     <div className="w-14 h-14 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
-                      {conv.clientId.slice(0,2).toUpperCase()}
+                      {conv.clientName ? conv.clientName.slice(0,2).toUpperCase() : "Aucun client"}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-slate-900">{conv.clientId}</p>
+                      <p className="font-semibold text-slate-900">{conv.clientName}</p>
                       <p className="text-xs text-slate-500 flex items-center gap-1"><Clock className="w-3 h-3" /> {getTimeAgo(conv.createdAt)}</p>
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <button className="flex-1 bg-blue-600 text-white rounded-xl py-2 hover:bg-blue-500 transition-colors">Continuer</button>
+                    <button onClick={() => handleTakeOver(conv.id)} className="flex-1 bg-blue-600 text-white rounded-xl py-2 hover:bg-blue-500 transition-colors">Continuer</button>
                     <button onClick={() => openTransferModal(conv.id)} className="p-2 bg-slate-100 rounded-xl hover:bg-slate-200 transition-colors">
                       <ArrowRight className="w-4 h-4" />
                     </button>

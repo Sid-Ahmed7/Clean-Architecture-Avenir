@@ -1,8 +1,8 @@
 "use client";
 
 import { createContext, useEffect, useState } from "react";
-import { apiClient } from "@/lib/api/apiClient"; // ton axios instance
-import { Token } from "@/types/token";
+import { apiClient } from "@/lib/api/apiClient"; 
+import { Token } from "@/types/Token";
 
 export const AuthContext = createContext<{
   isAuthenticated: boolean | undefined;
@@ -23,8 +23,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       try {
         const res = await apiClient.get("/auth/profile");
         setUser({ 
-  userId: res.data.user.id, // <- map id -> userId
-  role: res.data.user.role 
+  userId: res.data.user.id, role: res.data.user.role 
 });
 
         setIsAuthenticated(true);

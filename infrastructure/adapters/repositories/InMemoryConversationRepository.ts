@@ -44,8 +44,8 @@ export class InMemoryConversationRepository implements ConversationRepositoryInt
     }
 
     public async save(conversation: ConversationEntity): Promise<void | InvalidConversationError> {
-        if (!conversation.clientId || !conversation.advisorId) {
-            return new InvalidConversationError("Conversation must have a clientId and an advisorId");
+        if (!conversation.clientId) {
+            return new InvalidConversationError("Conversation must have a clientId");
         }
 
         const exists = this.conversations.find((c) => c.clientId === conversation.clientId && c.advisorId === conversation.advisorId);

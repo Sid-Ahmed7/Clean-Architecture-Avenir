@@ -3,4 +3,6 @@ export interface Conversation {
   clientId: string;
   advisorId?: string;
   createdAt: string;
+  advisorName?: string;
+  clientName?:string;
 }

@@ -1,3 +1,5 @@
+import {Advisor} from "@/types/Advisor";
+
 export const getTimeAgo = (date: string) => {
     const now = new Date();
     const diff = now.getTime() - new Date(date).getTime();
@@ -11,3 +13,7 @@ export const getTimeAgo = (date: string) => {
     } 
     return `Il y a ${Math.floor(hours / 24)} jours`;
 }
+
+export const getNameAdvisor = (advisor: Advisor) => {
+  return `${advisor.firstName || ""} ${advisor.lastName || ""}`.trim() || advisor.email;
+};

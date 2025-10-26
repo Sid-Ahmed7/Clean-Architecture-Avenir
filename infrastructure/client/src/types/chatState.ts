@@ -1,5 +1,5 @@
-import { Conversation } from "./conversation";
-import { Message } from "./message";
+import { Conversation } from "./Conversation";
+import { Message } from "./Message";
 
 export interface ChatState {
   messages: Message[];
@@ -7,5 +7,6 @@ export interface ChatState {
   onlineUsers: Record<string, boolean>; 
   isConnected: boolean;
   assignedConversations: Conversation[];
+  typingUsers: Record<number, string[]>;
   error: string | null;
 }

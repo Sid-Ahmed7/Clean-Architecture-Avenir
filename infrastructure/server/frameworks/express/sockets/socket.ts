@@ -1,18 +1,16 @@
 import { Server } from "socket.io";
 import { SendMessageUseCase } from "../../../../../application/usecases/chat/SendMessageUseCase";
-import { InMemoryConversationRepository } from "../../../../adapters/repositories/InMemoryConversationRepository";
-import { InMemoryMessageRepository } from "../../../../adapters/repositories/InMemoryMessageRepository";
 import { socketMiddleware } from "../middleware/socketMiddleware";
-import { InMemoryRoleRepository } from "../../../../adapters/repositories/InMemoryRoleRepository";
 import { AssignAdvisorToConversationUseCase } from "../../../../../application/usecases/chat/AssignAdvisorToConversationUseCase";
+import { GetUnreadMessagesUseCase } from "../../../../../application/usecases/chat/GetUnreadMessagesUseCase";
+
 import { OnlineUser } from "../interfaces/OnlineUser";
 import { Message } from "../interfaces/Message";
 import { AdvisorAlreadyAssignedError } from "../../../../../application/errors/chat/AdvisorAlreadyAssignedError";
 import { ConversationEntity } from "../../../../../domain/entities/ConversationEntity";
-
-export const conversationRepository = new InMemoryConversationRepository();
-export const messageRepository = new InMemoryMessageRepository();
-export const roleRepository  = new InMemoryRoleRepository();
+import { conversationRepository, messageRepository, userRepository, roleRepository } from "../../../../adapters/config/repositories";
+import { MarkMessageAsReadUseCase } from "../../../../../application/usecases/chat/MarkMessageAsReadUseCase";
+import { MessageEntity } from "../../../../../domain/entities/MessageEntity";
 
 export const clients: Record<string, string[]> = {};
 export const onlineUsers: Record<string, OnlineUser> = {};
@@ -30,7 +28,7 @@ export const socketSetup = (server: Server) => {
       return socket.disconnect();
     }
 
-    console.log(`✅ Socket connecté: ${socket.id}, userId: ${user.userId}`);
+    console.log(`Socket connecté: ${socket.id}, userId: ${user.userId}`);
 
     socket.on("identification", async (_data: any, callback?: Function) => {
       const role = user.role;
@@ -39,7 +37,18 @@ export const socketSetup = (server: Server) => {
       onlineUsers[user.userId] = { isOnline: true, role };
       io.emit("userStatus", { userId: user.userId, isOnline: true, role });
 
-      console.log("✅ Identification réussie pour:", user.userId, "role:", role);
+
+      console.log("Identification réussie pour:", user.userId, "role:", role);
+
+      const getUnreadMessagesUseCase = new GetUnreadMessagesUseCase(messageRepository)
+      const unreadIds = await getUnreadMessagesUseCase.execute(user.userId);
+      if (unreadIds.length > 0) {
+        const userSockets = clients[user.userId] || [];
+        userSockets.forEach(socketId => io.to(socketId).emit("messagesRead", unreadIds));
+    
+  }
+
+
 
       if (role === "BANK_ADVISOR") {
         const allConversations = await conversationRepository.findAll();
@@ -66,12 +75,12 @@ export const socketSetup = (server: Server) => {
     socket.on("joinConversation", (conversationId: number) => {
       if (conversationId == null) return;
       socket.join(conversationId.toString());
-      console.log(`✅ Socket ${socket.id} rejoint conversation ${conversationId}`);
+      console.log(`Socket ${socket.id} rejoint conversation ${conversationId}`);
     });
 
 
     socket.on("message", async (data: Message, callback?: Function) => {
-      console.log("📨 [Socket] Message reçu:", data);
+      console.log("Message reçu:", data);
 
       if (!data?.userId || !data.conversationId || !data.content) {
         if (typeof callback === "function") callback({ error: "Incomplete message data" });
@@ -88,7 +97,7 @@ export const socketSetup = (server: Server) => {
           const result = await assignAdvisorUseCase.execute(targetConversationId,data.userId);
           if (result instanceof Error) {
             if (result instanceof AdvisorAlreadyAssignedError) {
-              console.warn(`⚠️ Conversation ${targetConversationId} déjà assignée`);
+              console.warn(`Conversation ${targetConversationId} déjà assignée`);
               if (typeof callback === "function") {
                 callback({ error: "Cette conversation est déjà prise en charge par un autre conseiller" });
               }
@@ -190,6 +199,47 @@ export const socketSetup = (server: Server) => {
         }
       }
     });
+
+    socket.on("typing", (data:{conversationId: number; userId:string}) => {
+      
+      if(data.conversationId != null) {
+      socket.to(data.conversationId.toString()).emit("userTyping", data);
+      }
+    });
+
+    socket.on("stopTyping", (data:{conversationId: number; userId:string}) => {
+      if(data.conversationId != null) {
+
+        socket.to(data.conversationId.toString()).emit("userStopTyping", data);
+      }
+
+      });
+
+ socket.on("markAsRead", async (data: { messageIds: number[]; userId: string }) => {
+  const markAsRead = new MarkMessageAsReadUseCase(messageRepository);
+  const authorsToNotify = new Map<string, number[]>(); 
+
+  for (const id of data.messageIds) {
+    const message = await messageRepository.findById(id);
+    if (message instanceof MessageEntity) {
+      if (message.authorId !== data.userId) {
+        await markAsRead.execute(message);
+        if (!authorsToNotify.has(message.authorId)) authorsToNotify.set(message.authorId, []);
+        authorsToNotify.get(message.authorId)!.push(message.id);
+      }
+    }
+  }
+
+ authorsToNotify.forEach((ids, authorId) => {
+    const sockets = clients[authorId] || [];
+    if (sockets.length > 0) {
+      sockets.forEach(socketId => io.to(socketId).emit("messagesRead", ids));
+    } 
+  });
+});
+
+
+
 
     socket.on("disconnect", () => {
       console.log(`Socket déconnecté: ${socket.id}`);

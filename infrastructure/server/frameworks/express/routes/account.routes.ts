@@ -2,13 +2,12 @@ import express from 'express'
 import { AccountController } from '../controller/account.controller'
 import { GenerateAccountNumberService } from '../../../../adapters/services/GenerateAccountNumberService'
 import { GenerateIbanService } from '../../../../adapters/services/GenerateIbanService'
-import { accountRepository } from './inMemoryInstance';
+import { accountRepository, accountNumberGenerator, ibanGenerator} from '../../../../adapters/config/repositories'
 import { verifyTokenAccess } from '../middleware/authMiddleware';
 import { authorizeRoles } from '../middleware/roleMiddleware';
 import { RoleEnum } from '../../../../../domain/enums/RoleEnum';
 const router = express.Router();
-const accountNumberGenerator = new GenerateAccountNumberService(accountRepository);
-const ibanGenerator = new GenerateIbanService(accountRepository);
+
 const accountController = new AccountController(accountRepository, accountNumberGenerator, ibanGenerator);
 
 router.get("/my-accounts", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req, res) => accountController.getUserAccounts(req, res));

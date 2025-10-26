@@ -5,24 +5,19 @@ export const createConversation = async () => {
     return data;
 }
 
-export const sendMessage = async ({
-  conversationId,
-  content
-}: {
-  conversationId: number;
-  content: string;
-}) => {
-  const { data } = await apiClient.post("/chat/send", {
-    conversationId,
-    content,
-  });
+export const sendMessage = async ({conversationId, content}: {conversationId: number; content: string;}) => {
+  const { data } = await apiClient.post("/chat/send", {conversationId,content});
   return data;
 };
 
-export const getConversationMessages = async (conversationId: number) => {
-  const { data } = await apiClient.get(`/chat/${conversationId}/messages`);
-  return Array.isArray(data) ? data : data.messages ?? [];
-}
+export const getConversationMessages = async (id: number) => {
+  const { data } = await apiClient.get(`/chat/${id}/messages`);
+  
+  if (Array.isArray(data)) return data;
+  if (Array.isArray(data.messages)) return data.messages;
+  return [];
+};
+
 
 
 export const markMessageAsRead = async (messageId: number) => {
@@ -48,8 +43,10 @@ export const getAdvisorConversation = async () => {
 
 export const getClientConversation = async () => {
     const {data} = await apiClient.get(`/chat/conversations/client`);
-      return Array.isArray(data.conversations) ? data.conversations : [];
-}
+    return Array.isArray(data) ? data : [];
+
+    
+  }
 
 
 

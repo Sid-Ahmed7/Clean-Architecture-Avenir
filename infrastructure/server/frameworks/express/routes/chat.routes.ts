@@ -6,12 +6,10 @@ import { verifyTokenAccess } from '../middleware/authMiddleware';
 import { authorizeRoles } from '../middleware/roleMiddleware';
 import { RoleEnum } from '../../../../../domain/enums/RoleEnum';
 import {io, clients, onlineUsers} from "../sockets/socket";
-
-
+import { InMemoryUserRepository } from '../../../../adapters/repositories/InMemoryUserRepository';
+import { PasswordEncryptionService } from '../../../../adapters/services/auth/PasswordEncryptionService';
 
 const router = express.Router();
-const conversationRepository = new InMemoryConversationRepository();
-const messageRepository = new InMemoryMessageRepository();
 
 const chatController = new ChatController(io,clients,onlineUsers);
 

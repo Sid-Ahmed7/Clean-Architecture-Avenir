@@ -1,12 +1,12 @@
 "use client";
 
 import { getAllAdvisors } from "@/lib/api/auth";
+import { getNameAdvisor } from "@/lib/utils/chatUtils";
+import { Advisor } from "@/types/Advisor";
 import { ArrowRight, Building2, CheckCircle2, Search, User, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
-interface Advisor {
-    id: string;
-}
+
 interface TransferModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -27,6 +27,7 @@ export default function SelectAdvisorsModal({isOpen, onClose, onTransfer, curren
         setLoading(true);
         try {
             const data = await getAllAdvisors();
+
             const filterAdvisor = data.filter((advisor: Advisor) => advisor.id !== currentAdvisorId);
             setAdvisors(filterAdvisor);
         } catch (err) {
@@ -47,10 +48,21 @@ export default function SelectAdvisorsModal({isOpen, onClose, onTransfer, curren
         return null;
     }
 
-    const filteredAdvisors = advisors.filter((advisor) => advisor.id.toLowerCase().includes(search.toLowerCase()))
-    const getInitials = (name: string) => {
-      return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
-    }
+    const filteredAdvisors = advisors.filter((advisor) =>
+      getNameAdvisor(advisor).toLowerCase().includes(search.toLowerCase())
+  );
+
+    const getInitials = (advisor: Advisor) => {
+      const name = getNameAdvisor(advisor);
+      if (!name) return advisor.email.slice(0, 2).toUpperCase(); 
+      return name
+        .split(" ")
+        .filter(Boolean)
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2);
+    };
 
     return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex justify-center items-center z-50 p-4">
@@ -123,6 +135,7 @@ export default function SelectAdvisorsModal({isOpen, onClose, onTransfer, curren
           ) : (
             <div className="space-y-3 max-h-96 overflow-y-auto pr-2">
               {filteredAdvisors.map((advisor) => (
+                
                 <div
                   key={advisor.id}
                   onClick={() => setSelectedAdvisor(advisor.id)}
@@ -139,7 +152,7 @@ export default function SelectAdvisorsModal({isOpen, onClose, onTransfer, curren
                           ? "bg-white/20 text-white"
                           : "bg-slate-100 text-slate-700 group-hover:bg-slate-200"
                       }`}>
-                        {advisor.name ? getInitials(advisor.name) : advisor.id.slice(0, 2).toUpperCase()}
+                        <div>{getInitials(advisor)}</div>
                       </div>
                       
                       <div>
@@ -148,17 +161,8 @@ export default function SelectAdvisorsModal({isOpen, onClose, onTransfer, curren
                             ? "text-white"
                             : "text-slate-800 group-hover:text-slate-900"
                         }`}>
-                          {advisor.name || advisor.id}
+                          {getNameAdvisor(advisor)}
                         </h3>
-                        {advisor.name && (
-                          <p className={`text-sm mt-0.5 transition-colors ${
-                            selectedAdvisor === advisor.id
-                              ? "text-slate-300"
-                              : "text-slate-500"
-                          }`}>
-                            ID: {advisor.id}
-                          </p>
-                        )}
                       </div>
                     </div>
 
@@ -184,7 +188,7 @@ export default function SelectAdvisorsModal({isOpen, onClose, onTransfer, curren
             Annuler
           </button>
           <button
-            onClick={() => onTransfer()}
+          onClick={() => selectedAdvisor && onTransfer(selectedAdvisor)}
             disabled={!selectedAdvisor}
             className="flex-1 px-6 py-3 bg-slate-800 text-white rounded-xl font-semibold hover:bg-slate-900 disabled:bg-slate-300 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 shadow-lg shadow-slate-900/20 disabled:shadow-none"
           >

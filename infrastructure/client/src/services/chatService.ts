@@ -1,11 +1,11 @@
 "use client";
 
 import io from "socket.io-client";
-import { Message } from "@/types/message";
-import { MessageSend } from "@/types/messageSend";
+import { Message } from "@/types/Message";
+import { MessageSend } from "@/types/MessageSend";
 import { UserStatus } from "@/types/userStatus";
-import { Conversation } from "@/types/conversation";
-import { UserChat } from "@/types/userChat";
+import { Conversation } from "@/types/Conversation";
+import { UserChat } from "@/types/UserChat";
 
 let socket: ReturnType<typeof io> | null = null;
 let isConnecting = false;
@@ -165,6 +165,39 @@ export const onUserStatusChanged = (callback: (data: UserStatus) => void) => {
   socket.off("userStatus");
   socket.on("userStatus", callback);
 };
+
+export const markMessageAsRead = (messageIds: number[], userId: string) => {
+  if(!socket?.connected) return;
+  socket.emit("markAsRead", { messageIds, userId });
+}
+
+export const onMessagesRead = (callback: (messageIds: number[]) => void) => {
+  if(!socket?.connected) return;
+  socket.off("messagesRead");
+  socket.on("messagesRead", callback);
+}
+
+export const sendTyping = (conversationId: number, userId: string) => {
+  if(!socket?.connected) return;
+  socket.emit("typing", { conversationId, userId });
+}
+
+export const sendStopTyping = (conversationId: number, userId: string) => {
+  if(!socket?.connected) return;
+  socket.emit("stopTyping", { conversationId, userId });
+}
+
+export const onUserTyping = (callback: (data: { conversationId: number; userId: string }) => void) => {
+  if(!socket?.connected) return;
+  socket.off("userTyping");
+  socket.on("userTyping", callback);
+}
+export const onUserStopTyping = (callback: (data: { conversationId: number; userId: string }) => void) => {
+  if(!socket?.connected) return;
+  socket.off("userStopTyping");
+  socket.on("userStopTyping", callback);
+}
+
 
 export const isSocketConnected = () => socket?.connected ?? false;
 export const getSocket = () => socket;

@@ -1,6 +1,6 @@
 "use client";
 
-import { Conversation } from "@/types/conversation";
+import { Conversation } from "@/types/Conversation";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getClientConversation, createConversation } from "@/lib/api/chat";
@@ -19,6 +19,7 @@ export default function ClientConversationList() {
     try {
       const clientConversations = await getClientConversation();
       setConversations(clientConversations);
+      console.log(clientConversations)
     } catch (err) {
         setError("Impossible de récupérer vos conversations");
     }
@@ -73,22 +74,14 @@ export default function ClientConversationList() {
               >
                 <div className="flex items-center gap-4">
                   <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-semibold text-lg shadow-md">
-                    {conv.clientName?.split(" ").map(n => n[0]).join("")}
+                  {conv.advisorName ? conv.advisorName.slice(0,2).toUpperCase() : "Non assigné"}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-slate-900 text-lg">{conv.clientName || conv.clientId}</h3>
-                    {conv.subject && (
-                      <p className="text-blue-600 font-medium text-sm mt-1">{conv.subject}</p>
-                    )}
-                    <p className="text-slate-600 text-sm mt-1 line-clamp-1">{conv.lastMessage}</p>
+                    <h3 className="font-semibold text-slate-900 text-lg">{conv.advisorName}</h3>
                   </div>
                 </div>
 
                 <div className="flex flex-col items-end gap-2">
-                  <div className="flex items-center gap-1 text-slate-500 text-sm">
-                    <Clock size={14} />
-                    {conv.lastMessageDate ? formatDate(conv.lastMessageDate) : ""}
-                  </div>
                   <ChevronRight className="text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" size={20} />
                 </div>
               </Link>
