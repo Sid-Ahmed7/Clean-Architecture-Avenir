@@ -7,14 +7,12 @@ import { useUserAccounts } from "@/lib/hooks/useUserAccounts";
 import { MainAccountCard } from "@/components/bankAccount/MainAccountCard";
 import { AccountList } from "@/components/bankAccount/AccountList";
 import SummaryCard from "@/components/bankAccount/SummaryAccountsCard";
-import { useLocale } from "next-intl";
 import { Plus } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import ChartAccountManage from "@/components/ui/ChartAccountManage";
 
 export default function Dashboard() {
     const router  = useRouter();
-    const locale = useLocale();
     const {isAuthenticated} = useContext(AuthContext);
     const {accounts, loading, error} = useUserAccounts();
 

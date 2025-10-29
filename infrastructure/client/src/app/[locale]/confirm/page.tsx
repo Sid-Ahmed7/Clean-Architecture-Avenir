@@ -3,17 +3,17 @@
 
 import { useSearchParams, usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { apiClient } from "@/lib/api/apiClient";
-import { useLocale } from "next-intl";
+import { LocaleContext } from "@/contexts/LocaleProvider";
 
 
 export default function ConfirmPage() {
-    const [message, setMessage] = useState("En attente de confirmation..")
+    const {locale} = useContext(LocaleContext); 
+    const [message, setMessage] = useState("En attente de confirmation..");
     const searchParams = useSearchParams();
     const router = useRouter();
-    const locale = useLocale();
-      const pathname = usePathname();
+    const pathname = usePathname();
 
 
     useEffect(() => {
