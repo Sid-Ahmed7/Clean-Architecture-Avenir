@@ -208,6 +208,13 @@ export class AuthController {
           return res.status(500).json({ error: result.message });
         }
 
+        res.cookie("accessToken", result.accessToken, {
+          httpOnly: true,
+          secure: false,
+          sameSite: "lax",
+          maxAge: 1000 * 60 * 60 * 24 * 7 
+        })
+
         return res.status(200).json({
           accessToken: result.accessToken,
           user: result.user,
