@@ -9,12 +9,12 @@ import SelectAdvisorsModal from "./SelectAdvisorsModal";
 import { ArrowRight, CheckCircle, Clock, MessageSquare, MoreVertical, Search, Users, UserCheck, LayoutGrid, List, Send } from "lucide-react";
 import { getTimeAgo } from "@/lib/utils/chatUtils";
 import { useRouter } from "next/navigation";
-import { useLocale } from "next-intl";
+import { LocaleContext } from "@/contexts/LocaleProvider";
 
 export default function AdvisorConversationsDashboard() {
   const { user } = useContext(AuthContext);
+  const {locale} = useContext(LocaleContext);
   const router = useRouter();
-  const locale = useLocale();
   const [pendingConversations, setPendingConversations] = useState<Conversation[]>([]);
   const [assignedConversations, setAssignedConversations] = useState<Conversation[]>([]);
   const [modalOpen, setModalOpen] = useState(false);

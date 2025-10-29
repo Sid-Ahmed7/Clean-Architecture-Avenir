@@ -4,15 +4,16 @@ import { apiClient } from "@/lib/api/apiClient";
 import { RegisterInput, registerSchema } from "@/lib/validation/auth/registerSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useLayoutEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { useForm} from "react-hook-form";
 import Button from "@/components/ui/Button";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
+import { LocaleContext } from "@/contexts/LocaleProvider";
 
 
 export default function RegisterPage() {
     const router = useRouter();
-    const locale = useLocale()
+    const {locale} = useContext(LocaleContext);
     const [message, setMessage] = useState("");
     const t = useTranslations();
 

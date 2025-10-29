@@ -2,15 +2,15 @@
 
 import { Conversation } from "@/types/Conversation";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { getClientConversation, createConversation } from "@/lib/api/chat";
 import { Link } from "@/i18n/navigation";
-import { useLocale } from "next-intl";
 import { ChevronRight, Clock, MessageCircle, Plus } from "lucide-react";
+import { LocaleContext } from "@/contexts/LocaleProvider";
 
 export default function ClientConversationList() {
   const router = useRouter();
-  const locale = useLocale()
+  const {locale} = useContext(LocaleContext);
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");

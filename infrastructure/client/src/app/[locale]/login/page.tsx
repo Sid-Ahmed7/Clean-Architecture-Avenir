@@ -9,13 +9,13 @@ import { useRouter } from "next/navigation";
 import { useState, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "@/i18n/navigation";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 
 
 
 export default function LoginPage() {
     const router = useRouter();
-    const locale = useLocale();
+    const locale = useContext(AuthContext);
     const {setIsAuthenticated} = useContext(AuthContext);
     const [message, setMessage] = useState("");
     const t = useTranslations();
