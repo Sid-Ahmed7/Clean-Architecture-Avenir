@@ -29,19 +29,21 @@ export class JwtTokenService implements TokenService {
 
     public async generateRefreshToken(userId: string): Promise<RefreshTokenEntity> {
         const payload = {sub: userId};
-        const expiredAt = Number(this.refreshTokenExpiry);
-        const token = jwt.sign(payload, this.refreshTokenSecret, {expiresIn: expiredAt});
+        const token = jwt.sign(payload, this.refreshTokenSecret, { expiresIn: this.refreshTokenExpiry });
+        const decoded = jwt.decode(token) as { exp: number } | null;
+        if (!decoded) throw new Error("Failed to decode refresh token");
 
+    const expiredAt = decoded.exp * 1000;
         return new RefreshTokenEntity(userId, token, expiredAt);
     }
 public async verifyRefreshToken(refreshToken: string): Promise<RefreshTokenEntity | InvalidRefreshTokenError> {
-    const decoded = jwt.decode(refreshToken) as { userId: string; exp: number } | null;
+        const decoded = jwt.verify(refreshToken, this.refreshTokenSecret) as { sub: string; exp: number };
 
     if (!decoded  || decoded.exp * 1000 < Date.now()) {
         return new InvalidRefreshTokenError('Refresh token is invalid or expired');
     }
 
-    return new RefreshTokenEntity(decoded.userId, refreshToken, decoded.exp);
+    return new RefreshTokenEntity(decoded.sub, refreshToken, decoded.exp);
 }
 
 

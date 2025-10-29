@@ -10,12 +10,13 @@ import { useState, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
+import { LocaleContext } from "@/contexts/LocaleProvider";
 
 
 
 export default function LoginPage() {
     const router = useRouter();
-    const locale = useContext(AuthContext);
+    const {locale} = useContext(LocaleContext);
     const {setIsAuthenticated} = useContext(AuthContext);
     const [message, setMessage] = useState("");
     const t = useTranslations();
