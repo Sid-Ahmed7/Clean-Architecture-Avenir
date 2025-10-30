@@ -3,7 +3,7 @@ import {Advisor} from "@/types/Advisor";
 export const getTimeAgo = (date: string) => {
     const now = new Date();
     const diff = now.getTime() - new Date(date).getTime();
-    const minutes = Math.floor(diff / 6000);
+    const minutes = Math.floor(diff / 60000);
     const hours = Math.floor(diff / 3600000);
     if (minutes < 60) {
         return `Il y a ${minutes} min`;

@@ -12,20 +12,7 @@ import { Link } from "@/i18n/navigation";
 import ChartAccountManage from "@/components/ui/ChartAccountManage";
 
 export default function Dashboard() {
-    const router  = useRouter();
-    const {isAuthenticated} = useContext(AuthContext);
     const {accounts, loading, error} = useUserAccounts();
-
-    useEffect(() => {
-        if(!isAuthenticated) {
-            router.replace("/login");
-        }
-    }, [isAuthenticated, router]);
-
-
-    if(!isAuthenticated) {
-        return null;
-    }
 
     const mainAccount = accounts.find((a) => a.accountType === "CHECKING");
     const subAccounts = accounts.filter((a) => a.parentAccountId === mainAccount?.accountNumber);

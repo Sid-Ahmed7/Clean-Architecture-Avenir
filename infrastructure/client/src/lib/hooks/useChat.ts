@@ -150,13 +150,13 @@ export function useChat(conversationId: number | null, user: Token) {
       try {
         if (conversationId != null) {
           const history = await getConversationMessages(conversationId);
+          const allMessages = [
+            ...(history.messages?.client || []),
+            ...(history.messages?.advisor || [])
+          ].sort((a,b) => new Date(a.sentAt).getTime() - new Date(b.sentAt).getTime());
+          
           if (isMountedRef.current) {
-            dispatch({ type: "SET_MESSAGES", payload: history });
-
-            const unreadIds = history.filter((m: Message) => m.authorId !== user.userId && m.readStatus !== "READ").map((m) => m.id);
-            if (unreadIds.length > 0){
-              markRead(unreadIds);
-            } 
+            dispatch({ type: "SET_MESSAGES", payload: allMessages });
 
           }
         }
@@ -172,9 +172,6 @@ export function useChat(conversationId: number | null, user: Token) {
         onMessageReceived((msg) => {
           if (!conversationId || msg.conversationId === conversationId) {
             dispatch({ type: "ADD_MESSAGE", payload: msg });
-             if (msg.authorId !== user.userId) {
-      markRead([msg.id]);
-    }
           }
 
         });

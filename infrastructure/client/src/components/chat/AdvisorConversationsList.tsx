@@ -134,11 +134,17 @@ export default function AdvisorConversationsDashboard() {
     };
   }, [user]);
 
-  const filteredPending = pendingConversations.filter((conv) =>
-conv.clientName ? conv.clientName.toLowerCase().includes(search.toLowerCase()) : false  );
+  const filteredPending = pendingConversations.filter((conv) => {
+      if (!search.trim()) return true;
+      const clientName = conv.clientName || "";
+      return clientName.toLowerCase().includes(search.toLowerCase());
+    });
 
-  const filteredAssigned = assignedConversations.filter(conv =>
-        conv.clientName ? conv.clientName.toLowerCase().includes(search.toLowerCase()) : false  );
+  const filteredAssigned = assignedConversations.filter(conv => {
+      if (!search.trim()) return true;
+      const clientName = conv.clientName || "";
+      return clientName.toLowerCase().includes(search.toLowerCase());
+    });
 
 
   if (loading) {
