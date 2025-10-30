@@ -12,10 +12,7 @@ export const sendMessage = async ({conversationId, content}: {conversationId: nu
 
 export const getConversationMessages = async (id: number) => {
   const { data } = await apiClient.get(`/chat/${id}/messages`);
-  
-  if (Array.isArray(data)) return data;
-  if (Array.isArray(data.messages)) return data.messages;
-  return [];
+  return data;
 };
 
 

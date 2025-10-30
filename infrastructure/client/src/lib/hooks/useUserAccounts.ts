@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { AccountModel, accountSchema } from "../validation/bankAccount/accountSchema";
 import { apiClient } from "../api/apiClient";
 import z from "zod";
+import { getAccounts } from "../api/account";
 
 export const useUserAccounts = () => {
     const t = useTranslations();
@@ -14,7 +15,7 @@ export const useUserAccounts = () => {
     useEffect(() => {
         setLoading(true);
 
-        apiClient.get("/accounts/my-accounts").then((res) => {
+        getAccounts().then((res) => {
             const parsed = z.array(accountSchema(t)).safeParse(res.data);
 
             if(!parsed.success) {

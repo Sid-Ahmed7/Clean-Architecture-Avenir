@@ -1,7 +1,4 @@
 import z from "zod";
-import {AccountTypeEnum} from "../../../../../../domain/enums/AccountTypeEnum";
-import {AccountStatusEnum} from "../../../../../../domain/enums/AccountStatusEnum";
-
 
 export const accountSchema = (t:(key: string) => string) =>
 
@@ -14,10 +11,10 @@ z.object({
     }),
     iban: z.string().length(27),
     userId: z.string(),
-    accountType: z.enum(Object.values(AccountTypeEnum)),
+    accountType: z.enum(["CHECKING", "SAVINGS"]),
     currentBalance: z.number(),
     currency: z.string().length(3),
-    accountStatus: z.enum(Object.values(AccountStatusEnum)),
+    accountStatus: z.enum(["ACTIVE","CLOSED", "SUSPENDED", "PENDING", "FROZEN", "BANNED"]),
     isActive: z.boolean(),
     withdrawalLimit: z.number(),
     transferLimit: z.number(),

@@ -48,11 +48,13 @@ export class InMemoryMessageRepository implements MessageRepositoryInterface {
     }
 
     public async updateMessage(message: MessageEntity): Promise<MessageEntity | MessageNotFoundError> {
-        const index = this.messages.findIndex((msg) => msg.conversationClientId === message.conversationClientId && msg.authorId === message.authorId);
-        if(index === -1) {
-            return new MessageNotFoundError("Message not found for this conversation and author");
-        }
-        this.messages[index] = message;
-        return message;
+    const index = this.messages.findIndex((msg) => msg.id === message.id); 
+    
+    if(index === -1) {
+        return new MessageNotFoundError(`Message with id ${message.id} not found`);
     }
+    
+    this.messages[index] = message;
+    return message;
+}
 }

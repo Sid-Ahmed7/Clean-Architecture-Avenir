@@ -80,8 +80,8 @@ return (
         </div>
       ) : (
         <>
-          {safeMessages.map((msg, index) => (
-            <div key={index} className={`flex ${msg.authorId === user.userId ? "justify-end" : "justify-start"}`}>
+          {safeMessages.map((msg) => (
+            <div key={msg.id} className={`flex ${msg.authorId === user.userId ? "justify-end" : "justify-start"}`}>
               <div className={`px-4 py-2 rounded-2xl max-w-[75%] ${msg.authorId === user.userId ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"}`}>
                 <p className="text-sm">{msg.content}</p>
                 <span className="block text-[10px] text-gray-500 mt-1 text-right">

@@ -21,6 +21,12 @@ export class GetConversationMessagesUseCase {
             if(messages instanceof Error) {
                 return messages;
             }
-            return {conversation, messages};
+            const clientMessages = messages.filter((msg) => msg.authorId === conversation.clientId);
+            const advisorsMessages = messages.filter((msg) => msg.authorId === conversation.advisorId);
+            return {conversation, 
+                    messages: {
+                        client: clientMessages,
+                        advisor: advisorsMessages
+                    }};
     }
 }
