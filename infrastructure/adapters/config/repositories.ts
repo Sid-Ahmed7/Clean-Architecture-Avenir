@@ -5,6 +5,7 @@ import {ResendEmailService} from "../services/ResendEmailService";
 import {EmailTemplateService} from "../services/EmailTemplateService";
 import {GenerateAccountNumberService} from "../services/GenerateAccountNumberService";
 import {GenerateIbanService} from "../services/GenerateIbanService";
+import {NotificationService} from "../services/notification/NotificationService";
 
 import { InMemoryEventBus } from '../repositories/InMemoryEventBus';
 import { InMemoryUserRepository } from '../repositories/InMemoryUserRepository';
@@ -14,6 +15,7 @@ import { InMemoryMessageRepository } from '../repositories/InMemoryMessageReposi
 import { InMemoryUserRoleRepository } from '../repositories/InMemoryUserRoleRepository';
 
 import { InMemoryAccountRepository } from '../repositories/InMemoryAccountRepository';
+import { InMemoryNotificationRepository } from '../repositories/InMemoryNotificationRepository';
 
 const baseUrl = process.env.BASE_URL!;
 export const tokenService = new JwtTokenService();
@@ -31,3 +33,6 @@ export const ibanGenerator = new GenerateIbanService(accountRepository);
 
 export const conversationRepository = new InMemoryConversationRepository();
 export const messageRepository = new InMemoryMessageRepository();
+
+export const notificationRepository = new InMemoryNotificationRepository();
+export const notificationService = new NotificationService();

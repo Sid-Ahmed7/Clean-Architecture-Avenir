@@ -1,9 +1,10 @@
+import { NotificationTypeEnum } from "../enums/NotificationTypeEnum";
 import { ReadStatusEnum } from "../enums/ReadStatusEnum";
 import { NotificationValue } from "../values/NotificationValue";
 import { UserIdValue } from "../values/UserIdValue";
 
 export class NotificationEntity {
-    public static from(userId: string, message: string, readStatus: ReadStatusEnum, createdAt: Date, readAt?: Date) {
+    public static from(id: number, userId: string, message: string, readStatus: ReadStatusEnum, type: NotificationTypeEnum, createdAt: Date, readAt?: Date) {
         
         const validatedUserId = UserIdValue.from(userId);
         if(validatedUserId instanceof Error) {
@@ -15,13 +16,15 @@ export class NotificationEntity {
             return validatedMessage;
         }
 
-        return new NotificationEntity(validatedUserId.value, validatedMessage.value, readStatus, createdAt, readAt);
+        return new NotificationEntity(id, validatedUserId.value, validatedMessage.value, readStatus, type, createdAt, readAt);
     }
 
     private constructor(
+        public id: number,
         public userId: string,
         public message: string,
         public readStatus: ReadStatusEnum,
+        public type: NotificationTypeEnum,
         public createdAt: Date,
         public readAt?: Date
     ){}
