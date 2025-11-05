@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { use, useContext, useEffect } from "react";
 import { AuthContext } from "@/contexts/AuthProvider";
-import ChatBox from "@/components/chat/ChatBox";
+import ChatBox from "@/components/chat/chatBox";
 interface ChatPageProps {
   params: Promise<{ conversationId: string }>;
 }

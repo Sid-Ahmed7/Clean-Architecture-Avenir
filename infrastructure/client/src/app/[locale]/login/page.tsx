@@ -11,6 +11,8 @@ import { useForm } from "react-hook-form";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { LocaleContext } from "@/contexts/LocaleProvider";
+import { NotificationEnum } from "@/types/Notification";
+import { useNotification } from "@/lib/hooks/useNotifications";
 
 
 
@@ -18,6 +20,7 @@ export default function LoginPage() {
     const router = useRouter();
     const {locale} = useContext(LocaleContext);
     const {setIsAuthenticated} = useContext(AuthContext);
+    const {addNotification} = useNotification();
     const [message, setMessage] = useState("");
     const t = useTranslations();
 
@@ -31,6 +34,7 @@ export default function LoginPage() {
             if(res.status === 200) {
                 setIsAuthenticated(true);
                 setMessage(t("messages.login.success"));
+                addNotification(NotificationEnum.INFO, t("messages.login.success"));
                 router.push(`/${locale}/dashboard`);
             } else if (res.status === 401) {
                 setMessage(t("messages.login.invalid"));

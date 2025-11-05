@@ -10,6 +10,10 @@ import { ArrowRight, CheckCircle, Clock, MessageSquare, MoreVertical, Search, Us
 import { getTimeAgo } from "@/lib/utils/chatUtils";
 import { useRouter } from "next/navigation";
 import { LocaleContext } from "@/contexts/LocaleProvider";
+import { sendNotificationToClient } from "@/lib/api/notification";
+import { useNotification } from "@/lib/hooks/useNotifications";
+import { NotificationEnum } from "@/types/Notification";
+import { useNotificationSSE } from "@/lib/hooks/useNotificationSSE";
 
 export default function AdvisorConversationsDashboard() {
   const { user } = useContext(AuthContext);
@@ -17,12 +21,15 @@ export default function AdvisorConversationsDashboard() {
   const router = useRouter();
   const [pendingConversations, setPendingConversations] = useState<Conversation[]>([]);
   const [assignedConversations, setAssignedConversations] = useState<Conversation[]>([]);
+  const {sendNotificationToClientFromAdvisor, setNotifications, setUnreadCount, setError}  = useNotification();
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedConversationId, setSelectedConversationId] = useState<number | null>(null);
   const [search, setSearch] = useState("");
   const [viewMode, setViewMode] = useState<"cards" | "list">("cards");
   const [loading, setLoading] = useState(true);
   const [socketError, setSocketError] = useState<string | null>(null);
+  
+  useNotificationSSE(setNotifications, setUnreadCount, setError);
 
    const handleTakeOver = (conversationId: number) => {
     router.push(`/${locale}/chat/${conversationId}`);
@@ -35,9 +42,16 @@ export default function AdvisorConversationsDashboard() {
 
   const handleTransfer = async (conversationId: number, newAdvisorId: string) => {
     if (!newAdvisorId) return;
+
     try {
       await transferConversation(conversationId, newAdvisorId);
       setAssignedConversations(prev => prev.filter(c => c.id !== conversationId));
+      
+      const conv = assignedConversations.find(c => c.id === conversationId) || pendingConversations.find(c => c.id === conversationId);
+      if(conv) {
+        await sendNotificationToClientFromAdvisor(conv?.clientId, `Votre conversation a été transférée à un autre conseiller.`, NotificationEnum.INFO);
+      }
+      
       alert("Conversation transférée avec succès !");
     } catch (err) {
       console.error(err);

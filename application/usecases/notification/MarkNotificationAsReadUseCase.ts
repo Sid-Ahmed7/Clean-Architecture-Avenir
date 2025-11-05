@@ -6,7 +6,14 @@ export class MarkNotificationAsReadUseCase {
 
     public constructor(private notificationRepository: NotificationRepositoryInterface){}
 
-    public async execute(notification: NotificationEntity): Promise<NotificationEntity | Error> {
+    public async execute(notificationId: number): Promise<NotificationEntity | Error> {
+       const notification = await this.notificationRepository.findById(notificationId);
+        
+       if(notification instanceof Error) {
+            return notification;
+        } 
+
+       
         notification.readStatus = ReadStatusEnum.READ;
         notification.readAt = new Date();
 

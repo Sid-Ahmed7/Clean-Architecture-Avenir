@@ -3,6 +3,7 @@ import { InMemoryNotificationRepository } from "../../../../adapters/repositorie
 import { NotificationPublisher, SseClient} from "../../../../../application/ports/services/notification/NotificationPublisher";
 import {CreateNotificationUseCase} from "../../../../../application/usecases/notification/CreateNotificationUseCase";
 import {GetUserNotificationUseCase} from "../../../../../application/usecases/notification/GetUserNotificationUseCase";
+import {SendNotificationToClientUseCase} from "../../../../../application/usecases/notification/SendNotificationToClientUseCase";
 import {MarkNotificationAsReadUseCase} from "../../../../../application/usecases/notification/MarkNotificationAsReadUseCase";
 import {DeleteNotificationUseCase} from "../../../../../application/usecases/notification/DeleteNotificationUseCase";
 import { InvalidNotificationError } from "../../../../../domain/errors/InvalidNotificationError";
@@ -43,6 +44,30 @@ export class NotificationController {
         this.notificationService.sendNotification(userId, result)
         return res.status(201).json(result);
     }
+        public async sendNotificationToClient (req: Request, res: Response) {
+        const senderNotificationUseCase = new SendNotificationToClientUseCase(this.notificationRepository, this.notificationService);
+        const advisorId = req.user?.userId;
+        const {clientId, message, type} = req.body;
+        if(!advisorId) {
+            return res.status(401).json({error: "Unauthorized access"});
+        }
+
+        const result = await senderNotificationUseCase.execute(advisorId, clientId, message, type);
+
+        if (result instanceof Error) {
+            if(result instanceof InvalidNotificationError) {
+                return res.status(400).json({error : result.message})
+            }
+            if(result instanceof InvalidUserIdError){
+                return res.status(401).json({error: result.message});
+            }
+
+            return res.status(500).json({error: result.message});
+        }
+
+        this.notificationService.sendNotification(advisorId, result)
+        return res.status(201).json(result);
+    }
 
     public async  getUserNotification(req: Request, res: Response) {
         const getUserNotificationUseCase = new GetUserNotificationUseCase(this.notificationRepository);
@@ -63,12 +88,12 @@ export class NotificationController {
     public async markNotificationAsRead(req: Request, res: Response) {
         const markNotificationAsReadUseCase = new MarkNotificationAsReadUseCase(this.notificationRepository);
         const userId = req.user?.userId;
-        const notification = req.body.notification;
+        const { notificationId } = req.body;
         if(!userId) {
             return res.status(401).json({error: "Unauthorized access"});
         }
 
-        const result = await markNotificationAsReadUseCase.execute(notification);
+        const result = await markNotificationAsReadUseCase.execute(notificationId);
 
         if(result instanceof Error) {
             if(result instanceof NotificationNotFoundError) {
@@ -102,7 +127,8 @@ export class NotificationController {
         }
 
         res.writeHead(200, {
-            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Origin": "http://localhost:3001",
+            "Access-Control-Allow-Credentials": "true",
             "Content-Type": "text/event-stream",
             "Connection": "keep-alive",
             "Cache-Control": "no-cache"

@@ -4,7 +4,7 @@ import { NotificationValue } from "../values/NotificationValue";
 import { UserIdValue } from "../values/UserIdValue";
 
 export class NotificationEntity {
-    public static from(id: number, userId: string, message: string, readStatus: ReadStatusEnum, type: NotificationTypeEnum, createdAt: Date, readAt?: Date) {
+    public static from(id: number, userId: string, message: string, readStatus: ReadStatusEnum, type: NotificationTypeEnum, createdAt: Date, senderId?: string, readAt?: Date) {
         
         const validatedUserId = UserIdValue.from(userId);
         if(validatedUserId instanceof Error) {
@@ -16,7 +16,7 @@ export class NotificationEntity {
             return validatedMessage;
         }
 
-        return new NotificationEntity(id, validatedUserId.value, validatedMessage.value, readStatus, type, createdAt, readAt);
+        return new NotificationEntity(id, validatedUserId.value, validatedMessage.value, readStatus, type, createdAt, senderId, readAt);
     }
 
     private constructor(
@@ -26,6 +26,7 @@ export class NotificationEntity {
         public readStatus: ReadStatusEnum,
         public type: NotificationTypeEnum,
         public createdAt: Date,
+        public senderId?: string,
         public readAt?: Date
     ){}
 }

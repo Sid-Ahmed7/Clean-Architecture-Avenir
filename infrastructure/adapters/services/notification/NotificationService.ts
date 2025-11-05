@@ -12,7 +12,7 @@ export class NotificationService implements NotificationPublisher {
         }
         const payload = JSON.stringify(notification);
         for(const client of userClients)  {
-            client.write(`data: ${payload}\n\n`);
+            client.write(`event: new_notification\ndata: ${payload}\n\n`);
         }
     }
 
