@@ -39,8 +39,12 @@ export class JwtTokenService implements TokenService {
 public async verifyRefreshToken(refreshToken: string): Promise<RefreshTokenEntity | InvalidRefreshTokenError> {
         const decoded = jwt.verify(refreshToken, this.refreshTokenSecret) as { sub: string; exp: number };
 
-    if (!decoded  || decoded.exp * 1000 < Date.now()) {
+    if (!decoded) {
         return new InvalidRefreshTokenError('Refresh token is invalid or expired');
+    }
+
+    if (decoded.exp * 1000 < Date.now()) {
+        return new InvalidRefreshTokenError('Refresh token has expired');
     }
 
     return new RefreshTokenEntity(decoded.sub, refreshToken, decoded.exp);

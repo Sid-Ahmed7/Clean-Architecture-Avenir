@@ -1,203 +1,289 @@
-"use client";
-
 import io from "socket.io-client";
-import { Message } from "@/types/Message";
-import { MessageSend } from "@/types/MessageSend";
+import { Message } from "@/types/message";
+import { MessageSend } from "@/types/messageSend";
 import { UserStatus } from "@/types/userStatus";
-import { Conversation } from "@/types/Conversation";
-import { UserChat } from "@/types/UserChat";
+import { IdentificationResponse } from "@/types/chat/identificationResponse";
+import { UserChat } from "@/types/chat/userChat";
 
-let socket: ReturnType<typeof io> | null = null;
-let isConnecting = false;
-let connectionTimeout: NodeJS.Timeout | null = null;
-let isIdentified = false;
+const baseUrl = process.env.NEXT_PUBLIC_SOCKET_URL;
+let clientSocket: ReturnType<typeof io> | null = null;
+let advisorSocket: ReturnType<typeof io> | null = null;
+let systemSocket: ReturnType<typeof io> | null = null;
+
+const isIdentified: Record<string, boolean> = {
+  CLIENT: false,
+  BANK_ADVISOR: false,
+  SYSTEM: false,
+};
+
 let authenticatedUserId: string | null = null;
 let authenticatedUserRole: string | null = null;
-let refCount = 0;
 
-export const connectSocket = (): Promise<ReturnType<typeof io>> => {
-  return new Promise((resolve, reject) => {
-    if (socket?.connected) {
-      refCount++;
-      return resolve(socket);
+
+export const getSocket = (role: string) => {
+  if (role === "BANK_ADVISOR") {
+    return advisorSocket;
+  }
+  if (role === "SYSTEM") {
+   return systemSocket;
+  }
+  return clientSocket;
+};
+
+export const isSocketConnected = (role?: string) => {
+  if (role) return getSocket(role)?.connected ?? false;
+  return clientSocket?.connected || advisorSocket?.connected || systemSocket?.connected || false;
+};
+
+export const connectSocket = (role: string) => {
+  const socket = getSocket(role);
+  if (socket?.connected) {
+    return;
+  }
+
+  const namespace = role === "BANK_ADVISOR" ? "/advisors" : role === "SYSTEM" ? "/system" : "/clients";
+
+  const newSocket = io(`${baseUrl}${namespace}`, {
+    withCredentials: true,
+    reconnection: true
+  });
+
+  if (role === "BANK_ADVISOR") {
+    advisorSocket = newSocket;
+  } else if (role === "SYSTEM"){
+    systemSocket = newSocket;
+  } else {
+    clientSocket = newSocket;
+  } 
+
+  newSocket.on("connect", async () => {
+    console.log(`Connected to ${namespace} (${newSocket.id})`);
+
+    if (authenticatedUserId && authenticatedUserRole && !isIdentified[role]) {
+      try {
+        const identificationRole = role === "SYSTEM" ? authenticatedUserRole : role;
+
+        await identifyUser(authenticatedUserId, identificationRole);
+      } catch (err) {
+        console.error("Identification failed:", err);
+      }
     }
+  });
 
-    if (isConnecting) {
-      const checkInterval = setInterval(() => {
-        if (socket?.connected) {
-          clearInterval(checkInterval);
-          refCount++;
-          resolve(socket);
-        }
-      }, 100);
-      return;
-    }
+  newSocket.on("connect_error", (err) => {
+    console.error(`Connection error (${namespace}):`, err);
+  });
 
-    isConnecting = true;
-    refCount++;
-
-    socket = io(process.env.NEXT_PUBLIC_SOCKET_URL!, {
-      transports: ["websocket", "polling"],
-      autoConnect: true,
-    });
-
-    const cleanUp = () => {
-      if (connectionTimeout) {
-        clearTimeout(connectionTimeout);
-        connectionTimeout = null;
-      }
-      isConnecting = false;
-    };
-
-    socket.on("connect", () => {
-      console.log("Connected:", socket?.id);
-      cleanUp();
-
-      if (authenticatedUserId && authenticatedUserRole && !isIdentified) {
-        identifyUser(authenticatedUserId, authenticatedUserRole)
-          .then(() => console.log("Re-identification réussie"))
-          .catch(err => console.error("Re-identification failed:", err));
-      }
-      if (socket != null) {
-        resolve(socket);
-      }
-    });
-
-    socket.on("connect_error", (err) => {
-      console.error("Connection error:", err);
-      cleanUp();
-      refCount = Math.max(0, refCount - 1);
-      reject(err);
-    });
-
-    socket.on("disconnect", (reason) => {
-      console.log("Disconnected:", reason);
-      isConnecting = false;
-      isIdentified = false;
-    });
-
-    connectionTimeout = setTimeout(() => {
-      if (isConnecting) {
-        cleanUp();
-        refCount = Math.max(0, refCount - 1);
-        reject(new Error("Socket connection timeout"));
-      }
-    }, 10000);
+  newSocket.on("disconnect", (reason) => {
+    console.log(`Disconnected from ${namespace}:`, reason);
+    isIdentified[role] = false;
   });
 };
 
 
-export const identifyUser = async (userId: string, role: string): Promise<void> => {
-  if (!socket?.connected) throw new Error("Socket not connected");
-  if (isIdentified) return;
+export const identifyUser = (userId: string, role: string) => {
+
+  const socket = getSocket(role);
+  if (!socket) {
+    console.log(`Socket not connected for ${role}, connecting...`);
+    connectSocket(role);
+    return;
+  }
+
+  if (!socket.connected) {
+    return;
+  }
+
+  if (isIdentified[role]) {
+    return;
+  }
 
   authenticatedUserId = userId;
   authenticatedUserRole = role;
 
-  await new Promise<void>((resolve, reject) => {
-    socket!.emit("identification", { userId, role }, (response: any) => {
-      if (response?.error) reject(new Error(response.error));
-      else resolve();
-    });
+  socket.emit("identification", { userId, role }, (response: IdentificationResponse) => {
+    if (response.error) {
+      console.error("Identification error:", response.error);
+    } else {
+      isIdentified[role] = true;
+    }
   });
-
-  isIdentified = true;
 };
 
-export const disconnectSocket = () => {
-  refCount = Math.max(0, refCount - 1);
-  if (refCount === 0 && socket) {
-    try {
+export const disconnectSocket = (role?: string) => {
+  const roles = role ? [role] : ["CLIENT", "BANK_ADVISOR", "SYSTEM"];
+
+  roles.forEach((role) => {
+    const socket = getSocket(role);
+    if (socket) {
+      console.log(`Disconnecting socket for role ${role}`);
       socket.disconnect();
-    } catch (err) {
-      console.error("Error during socket.disconnect:", err);
-    } finally {
-      socket = null;
-      isConnecting = false;
-      isIdentified = false;
-      authenticatedUserId = null;
-      authenticatedUserRole = null;
-      if (connectionTimeout) {
-        clearTimeout(connectionTimeout);
-        connectionTimeout = null;
-      }
     }
+    if (role === "BANK_ADVISOR"){
+      advisorSocket = null;
+    } else if (role === "SYSTEM"){
+      systemSocket = null;
+    } else{
+      clientSocket = null;
+    } 
+    
+    isIdentified[role] = false;
+  });
+
+  if (!role) {
+    authenticatedUserId = null;
+    authenticatedUserRole = null;
   }
 };
 
 
-export const joinConversation = (conversationId: number) => {
-  if (!socket?.connected) return;
+export const joinConversation = (conversationId: number, role: string) => {
+  const socket = getSocket(role);
+  if (!socket?.connected){
+    console.warn(`Cannot join conversation: socket ${role} not connected`);
+    return;
+  }
   socket.emit("joinConversation", conversationId);
 };
 
-export const sendMessage = (message: MessageSend, callback?: (res: any) => void) => {
-  if (!socket?.connected) return;
-  socket.emit("message", message, callback);
+export const sendMessage = (message: MessageSend, role: string) => {
+  const socket = getSocket(role);
+  if (!socket?.connected){
+    console.error(`Cannot send message: socket ${role} not connected`);
+    return;
+  }
+  socket.emit("message", message);
 };
 
-export const onMessageReceived = (callback: (message: Message) => void) => {
-  if (!socket) return;
-  socket.off("message");
+
+export const onMessageReceived = (role: string, callback: (msg: Message) => void) => {
+  const socket = getSocket(role);
+  if (!socket) {
+    console.warn(`Socket ${role} not available for onMessageReceived`);
+    return () => {}; 
+  }
+    
   socket.on("message", callback);
+  
+  return () => {
+    socket.off("message", callback);
+  };
 };
 
-export const onConversationAssigned =(callback: (data: UserChat) => void ) => {
-  if(!socket) return;
-  socket.off("conversationAssigned");
-  socket.on("conversationAssigned", callback);
+export const onPendingConversation = (callback: (conv: UserChat) => void) => {
+  const socket = advisorSocket;
+  if (!socket) {
+    console.warn("⚠️ Advisor socket not available for onPendingConversation");
+    return () => {};
+  }
+  
+  socket.off("pendingConversation"); 
+  socket.on("pendingConversation", callback);
+  
+  return () => socket.off("pendingConversation", callback);
 };
 
-export const onRemovePendingConversation =(callback: (data :{conversationId: number}) => void ) => {
-  if(!socket) return;
+export const onRemovePendingConversation = (callback: (data: { conversationId: number }) => void) => {
+  const socket = advisorSocket;
+  if (!socket) {
+    console.warn("Advisor socket not available for onRemovePendingConversation");
+    return () => {};
+  }
+  
   socket.off("removePendingConversation");
   socket.on("removePendingConversation", callback);
+  
+  return () => socket.off("removePendingConversation", callback);
 };
 
-export const onPendingConversation = (callback: (conversation: Conversation) => void) => {
-  if (!socket) return;
-  socket.off("pendingConversation");
-  socket.on("pendingConversation", callback);
+export const onConversationAssigned = (callback: (data: UserChat) => void) => {
+  const socket = advisorSocket;
+  if (!socket) {
+    console.warn("Advisor socket not available for onConversationAssigned");
+    return () => {};
+  }
+  
+  socket.off("conversationAssigned");
+  socket.on("conversationAssigned", callback);
+  
+  return () => socket.off("conversationAssigned", callback);
 };
 
-export const onUserStatusChanged = (callback: (data: UserStatus) => void) => {
-  if (!socket) return;
+export const onUserStatusChanged = (callback: (status: UserStatus) => void) => {
+  const socket = systemSocket;
+  if (!socket) {
+    console.warn("System socket not available for onUserStatusChanged");
+    return () => {};
+  }
+  
   socket.off("userStatus");
   socket.on("userStatus", callback);
+  
+  return () => socket.off("userStatus", callback);
 };
 
 export const markMessageAsRead = (messageIds: number[], userId: string) => {
-  if(!socket?.connected) return;
+  const socket = systemSocket;
+  if (!socket?.connected){
+    console.error("Cannot mark as read");
+    return;
+  }
   socket.emit("markAsRead", { messageIds, userId });
-}
+};
 
-export const onMessagesRead = (callback: (messageIds: number[]) => void) => {
-  if(!socket?.connected) return;
+export const onMessagesRead = (callback: (ids: number[]) => void) => {
+  const socket = systemSocket;
+  if (!socket) {
+    console.warn("System socket not available for onMessagesRead");
+    return () => {};
+  }
+  
   socket.off("messagesRead");
   socket.on("messagesRead", callback);
-}
+  
+  return () => socket.off("messagesRead", callback);
+};
 
 export const sendTyping = (conversationId: number, userId: string) => {
-  if(!socket?.connected) return;
+  const socket = systemSocket;
+  if (!socket?.connected){
+    console.warn("Cannot send typing");
+    return;
+  }
   socket.emit("typing", { conversationId, userId });
-}
+};
 
 export const sendStopTyping = (conversationId: number, userId: string) => {
-  if(!socket?.connected) return;
+  const socket = systemSocket;
+  if (!socket?.connected){
+    console.warn("Cannot send stopTyping");
+    return;
+  }
   socket.emit("stopTyping", { conversationId, userId });
-}
+};
 
 export const onUserTyping = (callback: (data: { conversationId: number; userId: string }) => void) => {
-  if(!socket?.connected) return;
+  const socket = systemSocket;
+  if (!socket) {
+    console.warn("System socket not available for onUserTyping");
+    return () => {};
+  }
+  
   socket.off("userTyping");
   socket.on("userTyping", callback);
-}
+  
+  return () => socket.off("userTyping", callback);
+};
+
 export const onUserStopTyping = (callback: (data: { conversationId: number; userId: string }) => void) => {
-  if(!socket?.connected) return;
+  const socket = systemSocket;
+  if (!socket) {
+    console.warn("System socket not available for onUserStopTyping");
+    return () => {};
+  }
+  
   socket.off("userStopTyping");
   socket.on("userStopTyping", callback);
-}
-
-
-export const isSocketConnected = () => socket?.connected ?? false;
-export const getSocket = () => socket;
+  
+  return () => socket.off("userStopTyping", callback);
+};

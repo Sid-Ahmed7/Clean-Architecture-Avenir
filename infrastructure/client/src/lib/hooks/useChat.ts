@@ -1,267 +1,217 @@
 "use client";
 
-import { useEffect, useReducer, useCallback, useRef } from "react";
-import {
-  connectSocket,
-  disconnectSocket,
-  identifyUser,
-  joinConversation,
-  onMessageReceived,
-  onPendingConversation,
-  onUserStatusChanged,
-  isSocketConnected,
-  getSocket,
-  onConversationAssigned,
-  onRemovePendingConversation,
-  markMessageAsRead,
-  onMessagesRead,
-  sendTyping,
-  sendStopTyping,
-  onUserTyping,
-  onUserStopTyping,
-} from "@/services/chatService";
-import { getConversationMessages } from "@/lib/api/chat";
-import { Conversation } from "@/types/Conversation";
+import { useReducer, useEffect, useCallback } from "react";
+import * as chatService from "@/services/chatService";
 import { UserStatus } from "@/types/userStatus";
-import { MessageSend } from "@/types/MessageSend";
-import { ChatState } from "@/types/ChatState";
-import { Message } from "@/types/Message";
-import { Token } from "@/types/Token";
+import { getConversationMessages } from "../api/chat";
+import { Message } from "@/types/message";
+import { UserChat } from "@/types/chat/userChat";
+import { Typing } from "@/types/chat/typing";
+import { MessageSend } from "@/types/messageSend";
 
-type ChatAction =
-  | { type: "ADD_MESSAGE"; payload: Message }
-  | { type: "SET_MESSAGES"; payload: Message[] }
-  | { type: "SET_CONNECTED"; payload: boolean }
-  | { type: "SET_USER_STATUS"; payload: UserStatus }
-  | { type: "ADD_PENDING_CONVERSATION"; payload: Conversation }
-  | { type: "REMOVE_PENDING_CONVERSATION"; payload: number }
-  | { type: "ADD_ASSIGNED_CONVERSATION"; payload: Conversation }
-  | { type: "MARK_MESSAGES_READ"; payload: number[] }
-  | { type: "USER_TYPING"; payload: { conversationId: number; userId: string } }
-  | { type: "USER_STOP_TYPING"; payload: { conversationId: number; userId: string } }
-  | { type: "SET_ERROR"; payload: string | null };
-
-const initialState: ChatState = {
-  messages: [],
-  isConnected: false,
-  onlineUsers: {},
-  pendingConversations: [],
-  assignedConversations: [],
-  typingUsers: {},
-  error: null,
+type State = {
+  messages: Message[];
+  conversations: UserChat[];
+  pendingConversations: UserChat[];
+  onlineUsers: Record<string, UserStatus>;
+  typingUsers: Typing[];
+  connected: boolean;
 };
 
-function chatReducer(state: ChatState, action: ChatAction): ChatState {
-  switch (action.type) {
-    case "ADD_MESSAGE":
-      if (state.messages.some((m) => m.id === action.payload.id)) return state;
-      return { ...state, messages: [...state.messages, action.payload] };
+type Action =
+  | { type: "SET_CONNECTED"; payload: boolean }
+  | { type: "SET_MESSAGES"; payload: Message[] }
+  | { type: "ADD_MESSAGE"; payload: Message }
+  | { type: "ADD_CONVERSATION"; payload: UserChat }
+  | { type: "ADD_PENDING_CONVERSATION"; payload: UserChat }
+  | { type: "REMOVE_PENDING_CONVERSATION"; payload: number }
+  | { type: "SET_USER_STATUS"; payload: UserStatus }
+  | { type: "USER_TYPING"; payload: Typing }
+  | { type: "USER_STOP_TYPING"; payload: Typing }
+  | { type: "MARK_MESSAGES_READ"; payload: number[] };
 
+const initialState: State = {
+  messages: [],
+  conversations: [],
+  pendingConversations: [],
+  onlineUsers: {},
+  typingUsers: [],
+  connected: false,
+};
+
+function reducer(state: State, action: Action): State {
+  switch (action.type) {
+    case "SET_CONNECTED":
+      return { ...state, connected: action.payload };
     case "SET_MESSAGES":
       return { ...state, messages: action.payload };
-
-    case "SET_CONNECTED":
-      return { ...state, isConnected: action.payload };
-
-    case "SET_USER_STATUS":
-      return {
-        ...state,
-        onlineUsers: { ...state.onlineUsers, [action.payload.userId]: action.payload.online },
-      };
-
+    case "ADD_MESSAGE":
+      if (state.messages.some(m => m.id === action.payload.id)) return state;
+      return { ...state, messages: [...state.messages, action.payload] };
+    case "ADD_CONVERSATION":
+      if (state.conversations.find(c => c.id === action.payload.id)) return state;
+      return { ...state, conversations: [...state.conversations, action.payload] };
     case "ADD_PENDING_CONVERSATION":
-      if (!action.payload || action.payload.advisorId) return state;
-      if (state.pendingConversations.some((c) => c.id === action.payload.id)) return state;
+      if (state.pendingConversations.find(c => c.id === action.payload.id)) return state;
       return { ...state, pendingConversations: [...state.pendingConversations, action.payload] };
-
     case "REMOVE_PENDING_CONVERSATION":
+      return { ...state, pendingConversations: state.pendingConversations.filter(c => c.id !== action.payload) };
+    case "SET_USER_STATUS":
+      return { ...state, onlineUsers: { ...state.onlineUsers, [action.payload.userId]: action.payload } };
+    case "USER_TYPING":
       return {
         ...state,
-        pendingConversations: state.pendingConversations.filter((c) => c.id !== action.payload),
+        typingUsers: [...state.typingUsers.filter(u => u.userId !== action.payload.userId), action.payload]
       };
-
-    case "ADD_ASSIGNED_CONVERSATION":
-      if (!action.payload) return state;
-      if (state.assignedConversations.some((c) => c.id === action.payload.id)) return state;
-      return {
-        ...state,
-        assignedConversations: [...state.assignedConversations, action.payload],
-      };
-
+    case "USER_STOP_TYPING":
+      return { ...state, typingUsers: state.typingUsers.filter(u => u.userId !== action.payload.userId) };
     case "MARK_MESSAGES_READ":
       return {
         ...state,
-        messages: state.messages.map((m) =>
-          action.payload.includes(m.id) ? { ...m, readStatus: "READ" } : m
-        ),
+        messages: state.messages.map(m => action.payload.includes(m.id) ? { ...m, readStatus: "READ" } : m)
       };
-
-    case "USER_TYPING": {
-      const convId = action.payload.conversationId;
-      const existing = state.typingUsers[convId] || [];
-      if (existing.includes(action.payload.userId)) return state;
-      return {
-        ...state,
-        typingUsers: { ...state.typingUsers, [convId]: [...existing, action.payload.userId] },
-      };
-    }
-
-    case "USER_STOP_TYPING": {
-      const convId = action.payload.conversationId;
-      const existing = state.typingUsers[convId] || [];
-      return {
-        ...state,
-        typingUsers: { ...state.typingUsers, [convId]: existing.filter((id) => id !== action.payload.userId) },
-      };
-    }
-
-    case "SET_ERROR":
-      return { ...state, error: action.payload };
-
     default:
       return state;
   }
 }
 
-export function useChat(conversationId: number | null, user: Token) {
-  const [state, dispatch] = useReducer(chatReducer, initialState);
-  const isMountedRef = useRef(true);
-    const markRead = useCallback((messageIds: number[]) => {
-    if (!user) return;
-    markMessageAsRead(messageIds, user.userId);
-  }, [user?.userId]);
-
-  const markReadMessage = useCallback(
-    (msg: Message) => {
-      if (!conversationId) return;
-      if (msg.conversationId !== conversationId) return;
-      if (msg.authorId === user.userId) return;
-      markRead([msg.id]);
-    },
-    [conversationId, user?.userId, markRead]
-  );
+export const useChat = (userId: string, role: string, conversationId: number) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    if (!user) return;
+    let isMounted = true;
 
-    isMountedRef.current = true;
+    chatService.connectSocket(role);
+    chatService.connectSocket("SYSTEM");
 
-    const setup = async () => {
-      try {
-        if (conversationId != null) {
-          const history = await getConversationMessages(conversationId);
-          const allMessages = [
-            ...(history.messages?.client || []),
-            ...(history.messages?.advisor || [])
-          ].sort((a,b) => new Date(a.sentAt).getTime() - new Date(b.sentAt).getTime());
-          
-          if (isMountedRef.current) {
-            dispatch({ type: "SET_MESSAGES", payload: allMessages });
+    const socket = chatService.getSocket(role);
+    const systemSocket = chatService.getSocket("SYSTEM");
 
-          }
-        }
+    if (!socket || !systemSocket) {
+      console.error("Impossible de créer les sockets");
+      return;
+    }
 
-        await connectSocket();
-        await identifyUser(user.userId, user.role);
-        dispatch({ type: "SET_CONNECTED", payload: true });
+    const handleConnect = () => {
+      if (!isMounted){ return; }
 
-        if (conversationId != null) {
-          joinConversation(conversationId);
-        }
+      chatService.identifyUser(userId, role);
 
-        onMessageReceived((msg) => {
-          if (!conversationId || msg.conversationId === conversationId) {
-            dispatch({ type: "ADD_MESSAGE", payload: msg });
-          }
+      if (conversationId) {
+       chatService.joinConversation(conversationId, role);
+      }
 
+      dispatch({ type: "SET_CONNECTED", payload: true });
+    };
+
+    const handleSystemConnect = () => {
+      if (!isMounted) return;
+
+      chatService.identifyUser(userId, "SYSTEM");
+
+      if (conversationId) {
+       chatService.joinConversation(conversationId, "SYSTEM");
+
+        cleanupMessage2 = chatService.onMessageReceived("SYSTEM", handleMessage);
+
+        getConversationMessages(conversationId).then(msgs => {
+          if (!isMounted){return;}
+          const sortedMessages = [
+            ...(msgs.messages.client || []),
+            ...(msgs.messages.advisor || [])
+          ].sort((a, b) => new Date(a.sentAt).getTime() - new Date(b.sentAt).getTime());
+          dispatch({ type: "SET_MESSAGES", payload: sortedMessages });
+          console.log(`📚 ${sortedMessages.length} messages chargés`);
         });
-
-        onPendingConversation((conv) => {
-          if (!conv || conv.advisorId) return;
-          dispatch({ type: "ADD_PENDING_CONVERSATION", payload: conv });
-        });
-
-        onRemovePendingConversation((data) => {
-          dispatch({ type: "REMOVE_PENDING_CONVERSATION", payload: data.conversationId });
-        });
-
-        onConversationAssigned((data) => {
-        });
-
-        onUserStatusChanged((status) => {
-          dispatch({ type: "SET_USER_STATUS", payload: status });
-        });
-
-        onMessagesRead((ids) => dispatch({ type: "MARK_MESSAGES_READ", payload: ids }));
-        onUserTyping((data) => dispatch({ type: "USER_TYPING", payload: data }));
-        onUserStopTyping((data) => dispatch({ type: "USER_STOP_TYPING", payload: data }));
-      } catch (err) {
-        dispatch({ type: "SET_ERROR", payload: err instanceof Error ? err.message : "Unknown error" });
       }
     };
 
-    setup();
+    const handleMessage = (msg: Message) => {
+      if (msg.conversationId === conversationId) {
+        dispatch({ type: "ADD_MESSAGE", payload: msg });
+      }
+    };
+
+    let cleanupMessage1: (() => void) | undefined;
+    let cleanupMessage2: (() => void) | undefined;
+
+    socket.on("connect", () => {
+      handleConnect();
+      cleanupMessage1 = chatService.onMessageReceived(role, handleMessage);
+    });
+
+    systemSocket.on("connect", () => {
+      handleSystemConnect();
+    });
+
+    const handleTyping = (data: Typing) => {
+      if (data.conversationId === conversationId && data.userId !== userId) {
+        dispatch({ type: "USER_TYPING", payload: data });
+      }
+    };
+
+    const handleStopTyping = (data: Typing) => {
+      if (data.conversationId === conversationId) {
+        dispatch({ type: "USER_STOP_TYPING", payload: data });
+      }
+    };
+
+    const cleanupTyping = chatService.onUserTyping(handleTyping);
+    const cleanupStopTyping = chatService.onUserStopTyping(handleStopTyping);
+
+    const handleConversationAssigned = (conv: UserChat) => dispatch({ type: "ADD_CONVERSATION", payload: conv });
+    const handlePendingConversation = (conv: UserChat) => dispatch({ type: "ADD_PENDING_CONVERSATION", payload: conv });
+    const handleRemovePending = ({ conversationId: convId }: { conversationId: number }) => dispatch({ type: "REMOVE_PENDING_CONVERSATION", payload: convId });
+    const handleUserStatus = (status: UserStatus) => dispatch({ type: "SET_USER_STATUS", payload: status });
+    const handleMessagesRead = (ids: number[]) => dispatch({ type: "MARK_MESSAGES_READ", payload: ids });
+
+    const cleanupConvAssigned = chatService.onConversationAssigned(handleConversationAssigned);
+    const cleanupPending = chatService.onPendingConversation(handlePendingConversation);
+    const cleanupRemovePending = chatService.onRemovePendingConversation(handleRemovePending);
+    const cleanupUserStatus = chatService.onUserStatusChanged(handleUserStatus);
+    const cleanupMessagesRead = chatService.onMessagesRead(handleMessagesRead);
+
 
     return () => {
-      isMountedRef.current = false;
-      const socket = getSocket();
-      if (socket) {
-        socket.off("message");
-        socket.off("pendingConversation");
-        socket.off("conversationAssigned");
-        socket.off("removePendingConversation");
-        socket.off("userStatusChanged");
-        socket.off("messagesRead");
-        socket.off("userTyping");
-        socket.off("userStopTyping");
-      }
-      disconnectSocket();
+      isMounted = false;
+
+      cleanupMessage1?.();
+      cleanupMessage2?.();
+      cleanupTyping?.();
+      cleanupStopTyping?.();
+      cleanupConvAssigned?.();
+      cleanupPending?.();
+      cleanupRemovePending?.();
+      cleanupUserStatus?.();
+      cleanupMessagesRead?.();
+
+      chatService.disconnectSocket(role);
+      chatService.disconnectSocket("SYSTEM");
       dispatch({ type: "SET_CONNECTED", payload: false });
     };
-  }, [user?.userId, conversationId]);
+  }, [userId, role, conversationId]);
 
-  const send = useCallback(
-    async (message: MessageSend) => {
-      if (!user || !isSocketConnected()) return;
 
-      const socket = getSocket();
-      if (!socket) return;
+  const send = useCallback((content: string, convId: number) => {
+    const msg: MessageSend = { userId, role, conversationId: convId, content };
+    chatService.sendMessage(msg, role);
+  }, [userId, role]);
 
-      const socketMessage: any = {
-        userId: message.userId,
-        conversationId: message.conversationId,
-        content: message.content,
-        role: message.role,
-      };
-      if (message.role === "CLIENT") socketMessage.conversationClientId = message.userId;
-      if (message.role === "BANK_ADVISOR") socketMessage.conversationAdvisorId = message.userId;
+  const join = useCallback((convId: number) => {
+    chatService.joinConversation(convId, role);
+    chatService.joinConversation(convId, "SYSTEM");
+  }, [role]);
 
-      socket.emit("message", socketMessage, (res: any) => {
-        if (res?.error) {
-          dispatch({ type: "SET_ERROR", payload: res.error });
-        } else if (res?.success && res?.message) {
-          dispatch({ type: "ADD_MESSAGE", payload: res.message });
-        }
-      });
-    },
-    [user?.userId]
-  );
-
-  const typing = useCallback((conversationId: number) => {
-    if (!user) return;
-    sendTyping(conversationId, user.userId);
-  }, [user?.userId]);
-
-  const stopTyping = useCallback((conversationId: number) => {
-    if (!user) return;
-    sendStopTyping(conversationId, user.userId);
-  }, [user?.userId]);
+  const startTyping = useCallback((convId: number) => chatService.sendTyping(convId, userId), [userId]);
+  const stopTyping = useCallback((convId: number) => chatService.sendStopTyping(convId, userId), [userId]);
+  const markRead = useCallback((messageIds: number[]) => chatService.markMessageAsRead(messageIds, userId), [userId]);
 
   return {
     ...state,
     send,
-    markRead,
-    typing,
+    join,
+    startTyping,
     stopTyping,
+    markRead,
   };
-}
+};

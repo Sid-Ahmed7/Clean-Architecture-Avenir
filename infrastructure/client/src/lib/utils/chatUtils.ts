@@ -1,4 +1,4 @@
-import {Advisor} from "@/types/Advisor";
+import {Advisor} from "@/types/advisor";
 
 export const getTimeAgo = (date: string) => {
     const now = new Date();
