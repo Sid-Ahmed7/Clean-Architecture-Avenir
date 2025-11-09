@@ -49,6 +49,6 @@ export class SendMessageUseCase {
             return addMessage;
         }
 
-return {...addMessage, conversationId: existingConversation.id, conversationAdvisorId: existingConversation.advisorId, conversationClientId: existingConversation.clientId};
+return addMessage;
     }
 }
