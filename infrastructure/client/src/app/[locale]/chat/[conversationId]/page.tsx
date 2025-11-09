@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { use, useContext, useEffect } from "react";
 import { AuthContext } from "@/contexts/AuthProvider";
-import ChatBox from "@/components/chat/chatBox";
+import Chat from "@/components/chat/Chat";
 interface ChatPageProps {
   params: Promise<{ conversationId: string }>;
 }
@@ -31,7 +31,7 @@ export default function ChatPage({ params }: ChatPageProps) {
         ) : !user ? (
           <p className="text-gray-700">Chargement de l’utilisateur...</p>
         ) : (
-          <ChatBox conversationId={conversationId} user={user} />
+          <Chat conversationId={conversationId} user={user} />
         )}
       </div>
     );

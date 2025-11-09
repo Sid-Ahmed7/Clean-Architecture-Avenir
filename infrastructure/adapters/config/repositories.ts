@@ -17,7 +17,7 @@ import { InMemoryUserRoleRepository } from '../repositories/InMemoryUserRoleRepo
 import { InMemoryAccountRepository } from '../repositories/InMemoryAccountRepository';
 import { InMemoryNotificationRepository } from '../repositories/InMemoryNotificationRepository';
 
-const baseUrl = process.env.BASE_URL!;
+const baseUrl = process.env.CLIENT_BASE_URL!;
 export const tokenService = new JwtTokenService();
 export const passwordService = new PasswordEncryptionService();
 export const emailService = new ResendEmailService();

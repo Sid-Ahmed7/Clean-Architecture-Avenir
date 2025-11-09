@@ -21,7 +21,7 @@ export const socketMiddleware = (socket: Socket, next: (err?: any) => void) => {
 
  socket.data.user = {
       userId: decoded.sub,
-      role: decoded.roles
+      role: decoded.roles[0]
     };
     next();
   } catch (err) {

@@ -6,10 +6,16 @@ import {Server} from 'socket.io';
 import { socketSetup } from "./sockets/socket";
 
 const httpServer = createServer(app);
-
+const clientBaseUrl = process.env.CLIENT_BASE_URL;
 const io = new Server(httpServer, {
+    cookie: {
+        name: "io",
+        path: "/",
+        httpOnly: true,
+        sameSite: "lax",
+    },
     cors: {
-        origin: "http://localhost:3001",
+        origin: clientBaseUrl,
         credentials: true,
     },
 });

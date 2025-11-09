@@ -2,7 +2,7 @@
 
 import { getAllAdvisors } from "@/lib/api/auth";
 import { getNameAdvisor } from "@/lib/utils/chatUtils";
-import { Advisor } from "@/types/Advisor";
+import { Advisor } from "@/types/advisor";
 import { ArrowRight, Building2, CheckCircle2, Search, User, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -130,7 +130,7 @@ export default function SelectAdvisorsModal({isOpen, onClose, onTransfer, curren
                 <User className="w-8 h-8 text-slate-400" />
               </div>
               <p className="text-slate-600 font-medium">Aucun conseiller trouvé</p>
-              <p className="text-slate-400 text-sm mt-1">Essayez avec d'autres critères</p>
+              <p className="text-slate-400 text-sm mt-1">Essayez avec d&apos;autres critères</p>
             </div>
           ) : (
             <div className="space-y-3 max-h-96 overflow-y-auto pr-2">

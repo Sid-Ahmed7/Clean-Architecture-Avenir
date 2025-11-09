@@ -1,16 +1,17 @@
 import { Server } from "socket.io";
 import { SendMessageUseCase } from "../../../../../application/usecases/chat/SendMessageUseCase";
-import { socketMiddleware } from "../middleware/socketMiddleware";
 import { AssignAdvisorToConversationUseCase } from "../../../../../application/usecases/chat/AssignAdvisorToConversationUseCase";
 import { GetUnreadMessagesUseCase } from "../../../../../application/usecases/chat/GetUnreadMessagesUseCase";
-
+import { MarkMessageAsReadUseCase } from "../../../../../application/usecases/chat/MarkMessageAsReadUseCase";
+import { socketMiddleware } from "../middleware/socketMiddleware";
 import { OnlineUser } from "../interfaces/OnlineUser";
 import { Message } from "../interfaces/Message";
-import { AdvisorAlreadyAssignedError } from "../../../../../application/errors/chat/AdvisorAlreadyAssignedError";
-import { ConversationEntity } from "../../../../../domain/entities/ConversationEntity";
-import { conversationRepository, messageRepository, userRepository, roleRepository } from "../../../../adapters/config/repositories";
-import { MarkMessageAsReadUseCase } from "../../../../../application/usecases/chat/MarkMessageAsReadUseCase";
 import { MessageEntity } from "../../../../../domain/entities/MessageEntity";
+import { ConversationEntity } from "../../../../../domain/entities/ConversationEntity";
+import { conversationRepository, messageRepository } from "../../../../adapters/config/repositories";
+import { Identification } from "../interfaces/Identification";
+import { Data } from "../interfaces/Data";
+
 
 export const clients: Record<string, string[]> = {};
 export const onlineUsers: Record<string, OnlineUser> = {};
@@ -18,240 +19,303 @@ export let io: Server;
 
 export const socketSetup = (server: Server) => {
   io = server;
-  io.use(socketMiddleware);
 
-  io.on("connection", (socket) => {
+  const clientIo = io.of("/clients");
+  const advisorIo = io.of("/advisors");
+  const systemIo = io.of("/system");
+
+  clientIo.use(socketMiddleware);
+  advisorIo.use(socketMiddleware);
+  systemIo.use(socketMiddleware);
+
+  const broadCastToAll = (userId: string, isOnline: boolean, role?: string) => {
+    const statusData = { userId, isOnline, role };
+    clientIo.emit("userStatus", statusData);
+    advisorIo.emit("userStatus", statusData);
+    systemIo.emit("userStatus", statusData);
+  };
+
+  const broadcastMessage = (message: MessageEntity, conversationId: number) => {
+    const roomName = `conversation_${conversationId}`;
+    clientIo.to(roomName).emit("message", message);
+    advisorIo.to(roomName).emit("message", message);
+    systemIo.to(roomName).emit("message", message);
+  };
+
+  const broadcastTyping = (currentSocketId: string,conversationId: number,userId: string,isTyping: boolean) => {
+    const roomName = `conversation_${conversationId}`;
+    const event = isTyping ? "userTyping" : "userStopTyping";
+    const data = { conversationId, userId };
+    [clientIo, advisorIo, systemIo].forEach(namespace => {
+      namespace.to(roomName).emit(event, data);
+    });
+  };
+
+  // ---------------- CLIENT NAMESPACE ----------------
+  clientIo.on("connection", (socket) => {
     const user = socket.data.user;
-
     if (!user?.userId) {
-      console.warn("Socket non authentifié, déconnexion :", socket.id);
       return socket.disconnect();
     }
 
-    console.log(`Socket connecté: ${socket.id}, userId: ${user.userId}`);
+    console.log(`✅ Serveur: Client connecté - ${user.userId} (${socket.id})`);
 
-    socket.on("identification", async (_data: any, callback?: Function) => {
-      const role = user.role;
+    socket.on("identification", async (data: Identification, callback?: (res: { success?: boolean; error?: string }) => void) => {
+      try {
+        const role = data.role;
+        clients[data.userId] = [...(clients[data.userId] ?? []), socket.id];
+        onlineUsers[data.userId] = { isOnline: true, role };
+        broadCastToAll(data.userId, true, role);
 
-      clients[user.userId] = [...(clients[user.userId] ?? []), socket.id];
-      onlineUsers[user.userId] = { isOnline: true, role };
-      io.emit("userStatus", { userId: user.userId, isOnline: true, role });
-
-
-      console.log("Identification réussie pour:", user.userId, "role:", role);
-
-      const getUnreadMessagesUseCase = new GetUnreadMessagesUseCase(messageRepository)
-      const unreadIds = await getUnreadMessagesUseCase.execute(user.userId);
-      if (unreadIds.length > 0) {
-        const userSockets = clients[user.userId] || [];
-        userSockets.forEach(socketId => io.to(socketId).emit("messagesRead", unreadIds));
-    
-  }
-
-
-
-      if (role === "BANK_ADVISOR") {
-        const allConversations = await conversationRepository.findAll();
-        const pendingConversations = allConversations.filter(
-          (c) => !c.advisorId || c.advisorId === ""
-        );
-
-        pendingConversations.forEach((c) => {
-          io.to(socket.id).emit("pendingConversation", {
-            id: c.id,
-            clientId: c.clientId,
-            advisorId: c.advisorId,
-            createdAt: c.createdAt,
+        console.log(`Identification réussie pour client - ${data.userId}, role: ${role}`);
+        
+        const clientConversation = await conversationRepository.findByClientId(data.userId);
+        if (Array.isArray(clientConversation)) {
+          clientConversation.forEach((conv) => {
+            const roomName = `conversation_${conv.id}`;
+            socket.join(roomName);
+            console.log(`Client ${data.userId} rejoint ${roomName}`);
+            socket.emit("conversationAssigned", conv);
+            
+            if (conv.advisorId && clients[conv.advisorId]) {
+              clients[conv.advisorId]?.forEach((advisorSocketId) =>
+                advisorIo.to(advisorSocketId).emit("conversationAssigned", conv)
+              );
+            }
           });
-          console.log(`Pending conversation envoyée au conseiller: ${c.id}`);
-        });
-      }
+        }
 
-      if (typeof callback === "function") {
-        callback({ success: true });
+        const unreadUseCase = new GetUnreadMessagesUseCase(messageRepository);
+        const unreadIds = await unreadUseCase.execute(data.userId);
+        if (unreadIds.length > 0) {
+          socket.emit("messagesRead", unreadIds);
+        }
+        callback?.({ success: true });
+      } catch (err) {
+        console.error("Serveur: Erreur identification client -", err);
+        callback?.({ error: err instanceof Error ? err.message : "Unknown error" });
       }
     });
 
     socket.on("joinConversation", (conversationId: number) => {
-      if (conversationId == null) return;
-      socket.join(conversationId.toString());
-      console.log(`Socket ${socket.id} rejoint conversation ${conversationId}`);
+      if (conversationId != null) {
+        const roomName = `conversation_${conversationId}`;
+        socket.join(roomName);
+        console.log(`Client ${user.userId} rejoint ${roomName}`);
+      }
     });
 
-
-    socket.on("message", async (data: Message, callback?: Function) => {
-      console.log("Message reçu:", data);
-
-      if (!data?.userId || !data.conversationId || !data.content) {
-        if (typeof callback === "function") callback({ error: "Incomplete message data" });
-        return;
-      }
-
+    socket.on("message", async (data: Message) => {
       try {
-
-        const targetConversationId = data.conversationId;
-        let isAssigned = false;
-        
-        if(data.role === "BANK_ADVISOR") {
-          const assignAdvisorUseCase = new AssignAdvisorToConversationUseCase(conversationRepository);
-          const result = await assignAdvisorUseCase.execute(targetConversationId,data.userId);
-          if (result instanceof Error) {
-            if (result instanceof AdvisorAlreadyAssignedError) {
-              console.warn(`Conversation ${targetConversationId} déjà assignée`);
-              if (typeof callback === "function") {
-                callback({ error: "Cette conversation est déjà prise en charge par un autre conseiller" });
-              }
-              return;
-            }
-            
-            if (typeof callback === "function") {
-              callback({ error: result.message });
-            }
-            return;
-          }
-          isAssigned = true;
-          console.log(`Conversation ${targetConversationId} assignée au conseiller ${data.userId}`);
-        }
         const sendMessageUseCase = new SendMessageUseCase(conversationRepository, messageRepository);
-      
-        const message = await sendMessageUseCase.execute(
-          data.userId,
-          data.role,
-          data.conversationId,
-          data.content
-        );
-
-        if (message instanceof Error) {
-          console.error("Échec création message:", message.message);
-          if (typeof callback === "function") callback({ error: message.message });
+        const message = await sendMessageUseCase.execute(data.userId, data.role, data.conversationId, data.content);
+        
+        if (!(message instanceof MessageEntity)) {
+          console.error("Serveur: Message non créé");
           return;
         }
 
-        if (isAssigned) {
-          const assignedSockets = clients[data.userId] || [];
-          assignedSockets.forEach(socketId => {
-            io.to(socketId).emit("conversationAssigned", {
-              conversationId: targetConversationId,
-              advisorId: data.userId,
-            });
-          });
+        broadcastMessage(message, data.conversationId);
 
-          Object.keys(clients).forEach(userId => {
-            if (userId !== data.userId && onlineUsers[userId]?.role === "BANK_ADVISOR") {
-              const sockets = clients[userId] || [];
-              sockets.forEach(socketId => {
-                io.to(socketId).emit("removePendingConversation", {
-                  conversationId: targetConversationId
-                });
-              });
-            }
-          });
+      } catch (err) {
+        console.error("Erreur envoi message client -", err);
+      }
+    });
 
-          console.log(`Notifications envoyées pour conversation ${targetConversationId}`);
+    socket.on("typing", (data: Data) => {
+      broadcastTyping(socket.id, data.conversationId, data.userId, true);
+    });
+
+    socket.on("stopTyping", (data: Data) => {
+      broadcastTyping(socket.id, data.conversationId, data.userId, false);
+    });
+
+    socket.on("disconnect", () => {
+      clients[user.userId] = (clients[user.userId] ?? []).filter((id) => id !== socket.id);
+      if (!clients[user.userId]?.length) {
+        const userData = onlineUsers[user.userId];
+        if (userData){
+          userData.isOnline = false;
+        } 
+        broadCastToAll(user.userId, false);
+        console.log(`Client déconnecté - ${user.userId}`);
+      }
+    });
+  });
+
+  // ---------------- ADVISOR NAMESPACE ----------------
+  advisorIo.on("connection", (socket) => {
+    const user = socket.data.user;
+    if (!user?.userId) return socket.disconnect();
+
+
+    socket.on("identification", async (data: Identification, callback?: (res: { success?: boolean; error?: string }) => void) => {
+      try {
+        const role = data.role;
+        clients[data.userId] = [...(clients[data.userId] ?? []), socket.id];
+        onlineUsers[data.userId] = { isOnline: true, role };
+        broadCastToAll(data.userId, true, role);
+        console.log(`Identification réussie pour conseiller - ${data.userId}, role: ${role}`);
+
+        const allConversations = await conversationRepository.findAll();
+        const pending = allConversations.filter((c) => !c.advisorId);
+        pending.forEach((c) => socket.emit("pendingConversation", c));
+
+        const assignedConversations = allConversations.filter((conversation) => conversation.advisorId === data.userId)
+        assignedConversations.forEach((conversation) => {
+          const roomName = `conversation_${conversation.id}`;
+          socket.join(roomName);
+          console.log(`Conseiller ${data.userId} rejoint ${roomName}`);
+          socket.emit("conversationAssigned", conversation);
+        });
+        callback?.({ success: true });
+      } catch (err) {
+        console.error("Erreur identification conseiller -", err);
+        callback?.({ error: err instanceof Error ? err.message : "Unknown error" });
+      }
+    });
+
+    socket.on("message", async (data: Message) => {
+      try {
+        const conversation = await conversationRepository.findByConversationId(data.conversationId);
+        if(conversation instanceof Error){
+          console.error("Erreur récupération conversation:", conversation);
+          return;
         }
-        if (data.role === "CLIENT" && !message.conversationAdvisorId) {
-          const conversation = await conversationRepository.findByConversationId(targetConversationId);
-          
-          if (conversation instanceof ConversationEntity) {
-            const pendingData = {
-              id: conversation.id,
-              clientId: conversation.clientId,
-              advisorId: conversation.advisorId,
-              createdAt: conversation.createdAt,
-            };
 
-            Object.keys(clients).forEach((userId) => {
-              if (onlineUsers[userId]?.role === "BANK_ADVISOR") {
-                const sockets = clients[userId] || [];
-                sockets.forEach((socketId) => {
-                  io.to(socketId).emit("pendingConversation", pendingData);
-                });
-              }
-            });
-            
-            console.log(`Pending conversation ${targetConversationId} broadcast aux conseillers`);
+        if (conversation && !conversation.advisorId) {
+
+          const assignUseCase = new AssignAdvisorToConversationUseCase(conversationRepository);
+          const mess = await assignUseCase.execute(data.conversationId, data.userId);
+
+          const roomName = `conversation_${data.conversationId}`;
+          socket.join(roomName);
+          console.log(`Conseiller ${data.userId} auto-assigné et rejoint ${roomName}`);
+          
+          advisorIo.emit("removePendingConversation", { conversationId: data.conversationId });
+
+          const updatedConversation = await conversationRepository.findByConversationId(data.conversationId);
+
+          if (updatedConversation instanceof ConversationEntity) {
+            socket.emit("conversationAssigned", updatedConversation);
+
+            if(updatedConversation.clientId && clients[updatedConversation.clientId]){
+              clients[updatedConversation.clientId]?.forEach((clientSocketId) =>
+                clientIo.to(clientSocketId).emit("conversationAssigned", updatedConversation)
+  
+            );
+            }
           }
         }
 
-        const advisorSockets = message.conversationAdvisorId
-          ? clients[message.conversationAdvisorId] || []
-          : [];
-        const clientSockets = message.conversationClientId
-          ? clients[message.conversationClientId] || []
-          : [];
+        const sendMessageUseCase = new SendMessageUseCase(conversationRepository, messageRepository);
 
-        const allSockets = [...advisorSockets, ...clientSockets].filter(id => id !== socket.id);
+        const message = await sendMessageUseCase.execute(data.userId, data.role, data.conversationId, data.content);
 
-        allSockets.forEach((socketId) => {
-          io.to(socketId).emit("message", message);
-        });
-
-        console.log(`Message broadcast à ${allSockets.length} sockets`);
-
-        if (typeof callback === "function") {
-          callback({ success: true, message });
+        if (!(message instanceof MessageEntity)) {
+          console.error("Message non créé par SendMessageUseCase");
+          return;
         }
 
+        broadcastMessage(message, data.conversationId);
+        
       } catch (err) {
-        console.error("[Socket] Erreur:", err);
-        if (typeof callback === "function") {
-          callback({ error: err instanceof Error ? err.message : "Unknown error" });
-        }
+        console.error("Erreur envoi message conseiller -", err);
       }
     });
 
-    socket.on("typing", (data:{conversationId: number; userId:string}) => {
-      
-      if(data.conversationId != null) {
-      socket.to(data.conversationId.toString()).emit("userTyping", data);
-      }
+    socket.on("typing", (data: Data) => {
+      broadcastTyping(socket.id, data.conversationId, data.userId, true);
     });
 
-    socket.on("stopTyping", (data:{conversationId: number; userId:string}) => {
-      if(data.conversationId != null) {
-
-        socket.to(data.conversationId.toString()).emit("userStopTyping", data);
-      }
-
-      });
-
- socket.on("markAsRead", async (data: { messageIds: number[]; userId: string }) => {
-  const markAsRead = new MarkMessageAsReadUseCase(messageRepository);
-  const authorsToNotify = new Map<string, number[]>(); 
-
-  for (const id of data.messageIds) {
-    const message = await messageRepository.findById(id);
-    if (message instanceof MessageEntity) {
-      if (message.authorId !== data.userId) {
-        await markAsRead.execute(message);
-        if (!authorsToNotify.has(message.authorId)) authorsToNotify.set(message.authorId, []);
-        authorsToNotify.get(message.authorId)!.push(message.id);
-      }
-    }
-  }
-
- authorsToNotify.forEach((ids, authorId) => {
-    const sockets = clients[authorId] || [];
-    if (sockets.length > 0) {
-      sockets.forEach(socketId => io.to(socketId).emit("messagesRead", ids));
-    } 
-  });
-});
-
-
-
+    socket.on("stopTyping", (data: { conversationId: number; userId: string }) => {
+      broadcastTyping(socket.id, data.conversationId, data.userId, false);
+    });
 
     socket.on("disconnect", () => {
-      console.log(`Socket déconnecté: ${socket.id}`);
-      const userId = user.userId;
-      if (!userId) return;
-
-      clients[userId] = (clients[userId] ?? []).filter((id) => id !== socket.id);
-      const currentUser = onlineUsers[userId];
-      if (!clients[userId]?.length && currentUser) {
-        currentUser.isOnline = false;
-        io.emit("userStatus", { userId, isOnline: false });
+      clients[user.userId] = (clients[user.userId] ?? []).filter((id) => id !== socket.id);
+      if (!clients[user.userId]?.length) {
+        const userData = onlineUsers[user.userId];
+        if (userData) userData.isOnline = false;
+        broadCastToAll(user.userId, false);
+        console.log(`Conseiller déconnecté - ${user.userId}`);
       }
     });
   });
+
+  // ---------------- SYSTEM NAMESPACE ----------------
+  systemIo.on("connection", (socket) => {
+    const user = socket.data.user;
+    if (!user?.userId){
+      return socket.disconnect();
+    } 
+    
+    
+    socket.on("identification", async (data: Identification, callback?: (res: { success?: boolean; error?: string }) => void) => {
+      try {
+        clients[`${data.userId}_system`] = [...(clients[`${data.userId}_system`] ?? []), socket.id];
+        
+        console.log(`Socket system identifié - ${data.userId}`);
+        callback?.({ success: true });
+      } catch (err) {
+        console.error("Erreur identification system -", err);
+        callback?.({ error: err instanceof Error ? err.message : "Unknown error" });
+      }
+    });
+
+    socket.on("joinConversation", (conversationId: number) => {
+      if (conversationId != null) {
+        const roomName = `conversation_${conversationId}`;
+        socket.join(roomName);
+        console.log(`System socket rejoint ${roomName}`);
+      }
+    });
+
+    socket.on("typing", (data: { conversationId: number; userId: string }) => {
+      broadcastTyping(socket.id, data.conversationId, data.userId, true);
+    });
+
+    socket.on("stopTyping", (data: { conversationId: number; userId: string }) => {
+      broadcastTyping(socket.id, data.conversationId, data.userId, false);
+    });
+
+    socket.on("markAsRead", async (data: { messageIds: number[]; userId: string }) => {
+      const markAsRead = new MarkMessageAsReadUseCase(messageRepository);
+      const authorsToNotify = new Map<string, number[]>();
+
+      for (const id of data.messageIds) {
+        const message = await messageRepository.findById(id);
+        if (message instanceof MessageEntity && message.authorId !== data.userId) {
+          await markAsRead.execute(message);
+          if (!authorsToNotify.has(message.authorId)) authorsToNotify.set(message.authorId, []);
+          authorsToNotify.get(message.authorId)!.push(message.id);
+        }
+      }
+
+      authorsToNotify.forEach((ids, authorId) => {
+        const sockets = clients[authorId] || [];
+        sockets.forEach((socketId) => {
+          const userRole = onlineUsers[authorId]?.role;
+          if (userRole === "BANK_ADVISOR") {
+            advisorIo.to(socketId).emit("messagesRead", ids);
+          } else {
+            clientIo.to(socketId).emit("messagesRead", ids);
+          }
+        });
+
+        const systemSockets = clients[`${authorId}_system`] || [];
+        systemSockets.forEach((socketId) => {
+          systemIo.to(socketId).emit("messagesRead", ids);
+        });
+      });
+
+    });
+
+    socket.on("disconnect", () => {
+      clients[`${user.userId}_system`] = (clients[`${user.userId}_system`] ?? []).filter((id) => id !== socket.id);
+      console.log(`Socket system déconnecté - ${user.userId}`);
+    });
+    
+  });
+  
 };

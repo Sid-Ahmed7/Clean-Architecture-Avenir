@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import { getClientConversation, createConversation } from "@/lib/api/chat";
 import { Link } from "@/i18n/navigation";
-import { ChevronRight, Clock, MessageCircle, Plus } from "lucide-react";
+import { ChevronRight, MessageCircle, Plus } from "lucide-react";
 import { LocaleContext } from "@/contexts/LocaleProvider";
 
 export default function ClientConversationList() {
@@ -62,7 +62,7 @@ export default function ClientConversationList() {
         {conversations.length === 0 ? (
           <div className="bg-white rounded-2xl p-12 text-center shadow-sm">
             <MessageCircle className="mx-auto text-slate-300 mb-4" size={64} />
-            <p className="text-slate-600 text-lg">Vous n'avez pas encore de conversation.</p>
+            <p className="text-slate-600 text-lg">Vous n&apos;avez pas encore de conversation.</p>
           </div>
         ) : (
           <div className="space-y-4">
