@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { ResponseSubAccountModel, responseSubAccountSchema } from "../validation/bankAccount/responseSubAccountSchema";
 import z from "zod";

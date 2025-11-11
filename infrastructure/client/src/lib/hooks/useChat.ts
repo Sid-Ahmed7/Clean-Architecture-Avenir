@@ -1,4 +1,3 @@
-"use client";
 
 import { useReducer, useEffect, useCallback } from "react";
 import * as chatService from "@/services/chatService";
