@@ -15,4 +15,5 @@ export interface Notification {
     readStatus: "UNREAD" | "READ";
     createAt: string;
     readAt?: string;
+    senderId?: string;
 }

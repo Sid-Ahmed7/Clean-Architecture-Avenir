@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { getUserNotifications, markNotificationAsRead, deleteNotification, createNotification } from "../api/notification";
+import { getUserNotifications, markNotificationAsRead, deleteNotification, createNotification, sendNotificationToClient } from "../api/notification";
 import { NotificationModel, notificationSchema } from "../validation/notification/notificationSchema";
 import { useTranslations } from "next-intl";
 import { NotificationEnum } from "@/types/Notification";
@@ -55,10 +55,10 @@ export function useNotification() {
         }
 
 
-    const sendNotificationToClientFromAdvisor = async (targetUserId: string, message: string, type:NotificationEnum) => {
+    const sendNotificationToClientToAdvisor = async (targetUserId: string, message: string, type:NotificationEnum) => {
         try {
             
-            const data = await sendNotificationToClientFromAdvisor(targetUserId, message,type);
+            const data = await sendNotificationToClient(targetUserId, message,type);
                const parsed =  notificationSchema(t).safeParse(data);
             if(!parsed.success) {
                 setError("Erreur de validation des données reçus");
@@ -115,6 +115,6 @@ export function useNotification() {
         fetchNotifications();
     }, [fetchNotifications])
 
-    return {notifications,unreadCount, loading, error, fetchNotifications, addNotification, markReadNotification, deleteOneNotification,sendNotificationToClientFromAdvisor, setNotifications, setUnreadCount, setError};
+    return {notifications,unreadCount, loading, error, fetchNotifications, addNotification, markReadNotification, deleteOneNotification,sendNotificationToClientToAdvisor, setNotifications, setUnreadCount, setError};
 
 }

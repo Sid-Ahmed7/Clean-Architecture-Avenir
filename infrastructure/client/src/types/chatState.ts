@@ -1,5 +1,6 @@
-import { Conversation } from "./Conversation";
-import { Message } from "./Message";
+import { Conversation } from "./conversation";
+import { Message } from "./message";
+
 
 export interface ChatState {
   messages: Message[];

@@ -8,5 +8,5 @@ export interface SseClient {
 export interface NotificationPublisher {
     sendNotification(userId: string, notification: NotificationEntity): void;
     subscribe(userId: string, client: SseClient): void;
-    unsubscribe(userId: string): void;
+    unsubscribe(userId: string, client: SseClient): void;
 }

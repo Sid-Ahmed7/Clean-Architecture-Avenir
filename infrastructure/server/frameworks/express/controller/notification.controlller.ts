@@ -19,7 +19,6 @@ export class NotificationController {
 
     ){}
 
-
     public async createNotification(req: Request, res: Response) {
         const createNotificationUseCase = new CreateNotificationUseCase(this.notificationRepository);
         const userId = req.user?.userId;
@@ -52,6 +51,7 @@ export class NotificationController {
             return res.status(401).json({error: "Unauthorized access"});
         }
 
+
         const result = await senderNotificationUseCase.execute(advisorId, clientId, message, type);
 
         if (result instanceof Error) {
@@ -64,8 +64,7 @@ export class NotificationController {
 
             return res.status(500).json({error: result.message});
         }
-
-        this.notificationService.sendNotification(advisorId, result)
+        
         return res.status(201).json(result);
     }
 
@@ -127,7 +126,7 @@ export class NotificationController {
         }
 
         res.writeHead(200, {
-            "Access-Control-Allow-Origin": "http://localhost:3001",
+            "Access-Control-Allow-Origin": `${process.env.CLIENT_BASE_URL}`,
             "Access-Control-Allow-Credentials": "true",
             "Content-Type": "text/event-stream",
             "Connection": "keep-alive",
@@ -142,7 +141,7 @@ export class NotificationController {
         this.notificationService.subscribe(userId, client);
 
         req.on("close", () => {
-            this.notificationService.unsubscribe(userId);
+            this.notificationService.unsubscribe(userId, client);
         });
     }
 

@@ -7,8 +7,20 @@ export const createNotification = async (message: string, type: NotificationEnum
 }
 
 
-export const sendNotificationToClient = async (targetUserId: string, message: string, type:NotificationEnum): Promise<Notification> => {
-    const {data} = await apiClient.post<Notification>("/notification/send-to-client", {targetUserId, message, type});
+export const sendNotificationToClient = async (
+    clientId: string, 
+    message: string, 
+    type: NotificationEnum, 
+    senderId?: string
+): Promise<Notification> => {
+    
+    const {data} = await apiClient.post<Notification>("/notification/send-notification", {
+        clientId, 
+        message, 
+        type, 
+        senderId
+    });
+    
     return data;
 }
 
