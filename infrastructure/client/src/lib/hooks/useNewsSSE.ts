@@ -6,7 +6,7 @@ export const useNewsSSE = (initialNews: News[]) => {
     const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
     useEffect(() => {
-        const eventSource = new EventSource(`${baseURL}/feed/stream`);
+        const eventSource = new EventSource(`${baseURL}/feed/stream`, { withCredentials: true });
 
         eventSource.addEventListener("new_feed", (event: MessageEvent) => {
             const newNews: News = JSON.parse(event.data);

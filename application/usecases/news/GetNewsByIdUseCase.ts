@@ -1,6 +1,6 @@
 import { NewsEntity } from "../../../domain/entities/NewsEntity";
 import { NewsFilters } from "../../../domain/interfaces/NewsFilters";
-import { NewsRepositoryInterface } from "../../ports/repositories/NewsRepositoryInterface";
+import { NewsRepositoryInterface } from "../../ports/repositories/news/NewsRepositoryInterface";
 
 export class GetNewsByIdUseCase {
     public constructor(private newsRepository: NewsRepositoryInterface){}

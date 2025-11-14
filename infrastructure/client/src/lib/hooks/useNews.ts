@@ -1,6 +1,6 @@
 import { News } from "@/types/news";
 import { useCallback, useState } from "react";
-import * as newsApi from "@/lib/api/news";
+import * as newsApi from "@/lib/api/news/client/news"
 import { NewsFilters } from "@/types/filtersNews";
 import z from "zod";
 import { newsSchema } from "../validation/news/newsSchema";

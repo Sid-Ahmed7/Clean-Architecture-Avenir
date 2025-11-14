@@ -20,5 +20,7 @@ export interface News {
     tags: string[];
     views: number;
     createdAt: string;
+    images?: string[];
+    videos?: string[];
     updatedAt?: string;
 }

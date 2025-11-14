@@ -1,5 +1,5 @@
 import { NewsFilters } from "../../../domain/interfaces/NewsFilters";
-import { NewsRepositoryInterface } from "../../ports/repositories/NewsRepositoryInterface";
+import { NewsRepositoryInterface } from "../../ports/repositories/news/NewsRepositoryInterface";
 
 export class GetAllNewsUseCase {
     public constructor(private newsRepository: NewsRepositoryInterface){}

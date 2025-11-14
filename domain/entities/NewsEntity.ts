@@ -6,7 +6,7 @@ import { NewsTagValue } from "../values/NewsTagValue";
 import { NewsTitleValue } from "../values/NewsTitleValue";
 
 export class NewsEntity {
-    public static from(id: number, title: string, content: string, category: NewsCategoryEnum, priority: NewsPriorityEnum = NewsPriorityEnum.LOW, tags: string[], views: number = 0, createdAt: Date, updatedAt?: Date) {
+    public static from(id: number, title: string, content: string, category: NewsCategoryEnum, priority: NewsPriorityEnum = NewsPriorityEnum.LOW, tags: string[], views: number = 0, createdAt: Date, media: number[], updatedAt?: Date) {
 
         const validatedId = NewsIdValue.from(id);
         if(validatedId instanceof Error) {
@@ -33,7 +33,7 @@ export class NewsEntity {
         }
 
 
-        return new NewsEntity(validatedId.value, validatedTitle.value, validatedContent.value, category, priority, validatedTags, views, createdAt, updatedAt);
+        return new NewsEntity(validatedId.value, validatedTitle.value, validatedContent.value, category, priority, validatedTags, views, createdAt, media,updatedAt);
     }
     private constructor(
         public id: number,
@@ -44,6 +44,7 @@ export class NewsEntity {
         public tags: string[],
         public views: number,
         public createdAt: Date,
+        public media: number[],
         public updatedAt?: Date
     ){}
 

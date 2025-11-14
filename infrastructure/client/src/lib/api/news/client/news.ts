@@ -1,6 +1,6 @@
 import { NewsFilters } from "@/types/filtersNews";
 import { News } from "@/types/news";
-import { apiClient } from "./apiClient";
+import { apiClient } from "../../apiClient";
 
 export const getAllNews = async (filters: NewsFilters): Promise<Array<News>> => {
     const queryParams = new URLSearchParams();

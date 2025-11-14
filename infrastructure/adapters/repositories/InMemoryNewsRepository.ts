@@ -1,5 +1,5 @@
 import { NewsNotFoundError } from "../../../application/errors/NewsNotFoundError";
-import { NewsRepositoryInterface } from "../../../application/ports/repositories/NewsRepositoryInterface";
+import { NewsRepositoryInterface } from "../../../application/ports/repositories/news/NewsRepositoryInterface";
 import { NewsEntity } from "../../../domain/entities/NewsEntity";
 import { NewsFilters } from "../../../domain/interfaces/NewsFilters";
 

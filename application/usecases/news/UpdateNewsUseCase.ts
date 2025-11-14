@@ -1,5 +1,5 @@
 import { NewsEntity } from "../../../domain/entities/NewsEntity";
-import { NewsRepositoryInterface } from "../../ports/repositories/NewsRepositoryInterface";
+import { NewsRepositoryInterface } from "../../ports/repositories/news/NewsRepositoryInterface";
 import { NewsPublisher } from "../../ports/services/news/NewsPublisher";
 
 

@@ -11,6 +11,8 @@ export const newsSchema = (t:(key: string) => string) =>
        tags: z.array(z.string()),
        views: z.number(),
        createdAt: z.string(),
+       images: z.array(z.string()).optional(),
+       videos: z.array(z.string()).optional(),
        updatedAt: z.string().optional(),
     })
 export type NewsModel = z.infer<ReturnType<typeof newsSchema>>;

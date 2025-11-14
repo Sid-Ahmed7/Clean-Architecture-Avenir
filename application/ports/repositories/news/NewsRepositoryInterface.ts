@@ -1,7 +1,7 @@
-import { NewsEntity } from "../../../domain/entities/NewsEntity";
-import { InvalidNewsError } from "../../../domain/errors/InvalidNewsError";
-import { NewsFilters } from "../../../domain/interfaces/NewsFilters";
-import { NewsNotFoundError } from "../../errors/NewsNotFoundError";
+import { NewsEntity } from "../../../../domain/entities/NewsEntity";
+import { InvalidNewsError } from "../../../../domain/errors/InvalidNewsError";
+import { NewsFilters } from "../../../../domain/interfaces/NewsFilters";
+import { NewsNotFoundError } from "../../../errors/NewsNotFoundError";
 
 export interface NewsRepositoryInterface {
 
