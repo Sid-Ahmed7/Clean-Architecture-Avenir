@@ -1,6 +1,8 @@
+import { getMediaUrl } from "@/lib/utils/media";
 import { Media } from "@/types/media";
 import { News } from "@/types/news";
 import { ImageIcon, Video } from "lucide-react";
+import { useEffect } from "react";
 
 interface FeedCardProps {
     news: News;
@@ -24,9 +26,9 @@ export function FeedCard({ news, media }: FeedCardProps) {
                     {media.length === 1 ? (
                         <div className="relative w-full h-64 rounded-lg overflow-hidden bg-gray-100">
                             {media[0].type === "IMAGE" ? (
-                                <img src={media[0].url} alt={media[0].altIndex || news.title} className="object-cover" />
+                                <img src={getMediaUrl(media[0].url)} alt={media[0].altIndex || news.title} className="object-cover" />
                             ) : (
-                                <video src={media[0].url} controls className="w-full h-full object-cover"/>
+                                <video src={getMediaUrl(media[0].url)} controls className="w-full h-full object-cover"/>
                             )}
                         </div>
                     ) : (
@@ -37,12 +39,12 @@ export function FeedCard({ news, media }: FeedCardProps) {
                                     className="relative aspect-square rounded-lg overflow-hidden bg-gray-100"
                                 >
                                     {item.type === "IMAGE" ? (
-                                        <img src={item.url} alt={item.altIndex || news.title} className="object-cover"/>
+                                        <img src={getMediaUrl(item.url)} alt={item.altIndex || news.title} className="object-cover"/>
                                     ) : (
                                         <div className="relative w-full h-full">
                                             <video 
-                                                src={item.url} 
-                                                className="w-full h-full object-cover"
+                                                src={getMediaUrl(item.url)} 
+                                    className="w-full h-full object-cover"
                                             />
                                             <div className="absolute inset-0 flex items-center justify-center bg-black/30 pointer-events-none">
                                                 <Video className="text-white" size={32} />

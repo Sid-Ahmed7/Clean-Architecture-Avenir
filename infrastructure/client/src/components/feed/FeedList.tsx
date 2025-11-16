@@ -39,6 +39,7 @@ export function FeedList({initialNews} : FeedListProps) {
 
             mediaResults.forEach(({ newsId, media }) => {
                 mediaMap.set(newsId, media);
+                console.log("All media", media)
             });
 
             setNewsWithMedia(mediaMap);
@@ -47,6 +48,7 @@ export function FeedList({initialNews} : FeedListProps) {
         if (newsList.length > 0) {
             loadMediaForNews();
         }
+
     }, [newsList, fetchMediaByNewsId]);
 
 
@@ -80,7 +82,7 @@ export function FeedList({initialNews} : FeedListProps) {
 
       <div className="grid gap-4">
         {newsList.length > 0 ? (
-          newsList.map((n) => <FeedCard key={n.id} news={n} />)
+          newsList.map((n) => <FeedCard key={n.id} news={n} media={newsWithMedia.get(n.id)} />)
         ) : (
           <p className="text-gray-500 text-center">Aucun article trouvé.</p>
         )}

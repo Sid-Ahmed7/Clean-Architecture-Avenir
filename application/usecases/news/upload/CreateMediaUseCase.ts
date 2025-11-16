@@ -10,7 +10,7 @@ export class CreateMediaUseCase {
         private newsRepository: NewsRepositoryInterface
     ) {}
 
-    async execute(media: MediaEntity): Promise<MediaEntity | Error> {
+    async execute(media: Omit<MediaEntity ,"id">): Promise<MediaEntity | Error> {
         
         const news = await this.newsRepository.findById(media.newsId);
         if (news instanceof Error) {
