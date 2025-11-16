@@ -16,6 +16,8 @@ import { InMemoryUserRoleRepository } from '../repositories/InMemoryUserRoleRepo
 import { InMemoryAccountRepository } from '../repositories/InMemoryAccountRepository';
 import { InMemoryNewsRepository } from '../repositories/InMemoryNewsRepository';
 import { NewsService } from "../services/news/NewsService";
+import { InMemoryMediaRepository } from "../repositories/InMemoryMediaRepository";
+import { LocalFileStorageService } from "../services/news/LocalFileStorageService";
 
 const baseUrl = process.env.CLIENT_BASE_URL!;
 export const tokenService = new JwtTokenService();
@@ -37,3 +39,6 @@ export const messageRepository = new InMemoryMessageRepository();
 
 export const newsRepository = new InMemoryNewsRepository();
 export const newsService = new NewsService(); 
+
+export const mediaRepository = new InMemoryMediaRepository();
+export const fileStorageService = new LocalFileStorageService();

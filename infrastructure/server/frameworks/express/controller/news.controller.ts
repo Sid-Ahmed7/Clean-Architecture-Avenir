@@ -1,7 +1,10 @@
 import { Request, Response } from "express";
 
 import { InMemoryNewsRepository } from "../../../../adapters/repositories/InMemoryNewsRepository";
+import { InMemoryMediaRepository } from "../../../../adapters/repositories/InMemoryMediaRepository";
+
 import { NewsService} from "../../../../adapters/services/news/NewsService";
+import { LocalFileStorageService} from "../../../../adapters/services/news/LocalFileStorageService";
 import { CreateNewsUseCase } from "../../../../../application/usecases/news/CreateNewsUseCase";
 import { GetAllNewsUseCase } from "../../../../../application/usecases/news/GetAllNewsUseCase";
 import { GetNewsByIdUseCase } from "../../../../../application/usecases/news/GetNewsByIdUseCase";
@@ -10,7 +13,6 @@ import {DeleteNewsUseCase} from "../../../../../application/usecases/news/Delete
 import {IncrementNewsViewsUseCase} from "../../../../../application/usecases/news/IncrementNewsViewsUseCase";
 import { InvalidNewsError } from "../../../../../domain/errors/InvalidNewsError";
 import { NewsNotFoundError } from "../../../../../application/errors/NewsNotFoundError";
-import { error } from "console";
 import { SseClient } from "../../../../../application/ports/services/news/NewsPublisher";
 import { NewsFilters } from "../interfaces/NewsFilters";
 
@@ -19,8 +21,8 @@ export class NewsController {
 
 
     public constructor(
-        private newsRepository: InMemoryNewsRepository,
-        private newPublisher: NewsService
+        private newsRepository: InMemoryNewsRepository, 
+        private newPublisher: NewsService,
     ){}
 
 

@@ -2,26 +2,38 @@
 
 import { FeedForm } from "@/components/feed/FeedForm";
 import { LocaleContext } from "@/contexts/LocaleProvider";
-import { useNews } from "@/lib/hooks/useNews";
-import { News } from "@/types/news";
+import { useNewsWithMedia } from "@/lib/hooks/useNewsWithMedia";
+import { CreateNews, NewsCategoryEnum, NewsPriorityEnum } from "@/types/createNews";
 import { useRouter } from "next/navigation";
 import {  useContext } from "react";
 
 
 export default function CreateFeedPage() {
-    const {createNews} = useNews();
+      const { createNewsWithMedia} = useNewsWithMedia();
+
     const router = useRouter();
     const locale = useContext(LocaleContext);
 
-     const handleCreate = async (data: Partial<News>) => {
-    await createNews(data);
-    router.push(`${locale}/feed/manage`); 
+     const handleCreate = async (data: CreateNews, files: File[]) => {
+     const created = await createNewsWithMedia(data, files);
+      if(created) {
+         router.push(`/${locale}/feed/manage`); 
+      }
   };
 
   return (
     <main className="p-6">
       <h1 className="text-2xl font-bold mb-4">Créer un nouveau feed</h1>
-      <FeedForm initialValues={{}} onSubmit={handleCreate} />
+      <FeedForm
+        initialValues={{
+          title: "",
+          content: "",
+          category: NewsCategoryEnum.INVESTMENT,
+          priority: NewsPriorityEnum.LOW,
+          tags: []
+        }}
+        onSubmit={handleCreate}
+      />
     </main>
   );
 }

@@ -1,15 +1,28 @@
+
 import { News } from "@/types/news";
 import { Card } from "../ui/Card";
 import Button from "../ui/Button";
 import { Pencil, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useContext } from "react";
+import { LocaleContext } from "@/contexts/LocaleProvider";
+
 
 interface FeedManageListProps {
     news: News[]
-    onUpdate: (news: News) => Promise<News | void>
     onDelete: (id: number) => Promise<void>
 }
 
-export function FeedManageList({news, onUpdate, onDelete} : FeedManageListProps) {
+export function FeedManageList({news, onDelete} : FeedManageListProps) {
+
+  const router = useRouter();
+  const {locale} = useContext(LocaleContext);
+
+  const handleEdit = (id: number) => {
+    router.push(`/${locale}/feed/edit/${id}`);
+  }
+
+
   return (
     <section className="space-y-4">
       {news.length === 0 ? (
@@ -31,7 +44,7 @@ export function FeedManageList({news, onUpdate, onDelete} : FeedManageListProps)
               <div className="flex justify-end gap-2 mt-4">
                 <Button
                   variant="secondary"
-                  onClick={() => onUpdate(n)}
+                  onClick={() => handleEdit(n.id)}
                 >
                   <Pencil size={14} />
                   Modifier

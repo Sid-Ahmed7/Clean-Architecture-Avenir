@@ -5,6 +5,7 @@ import { NewsFilters } from "@/types/filtersNews";
 import z from "zod";
 import { newsSchema } from "../validation/news/newsSchema";
 import { useTranslations } from "next-intl";
+import { CreateNews } from "@/types/createNews";
 
 export const useNews = (initialNews : News[] = []) => {
     const [newsList, setNewsList] = useState<News[]>(initialNews);
@@ -42,7 +43,28 @@ export const useNews = (initialNews : News[] = []) => {
       });
   }, []);
 
-  const createNews = (news: Partial<News>) => {
+  const getNews = (id: number) => {
+  setLoading(true);
+  setError(null);
+
+  return newsApi.getNewsById(id)
+    .then((item) => {
+      if (item) {
+        return item;
+      } else {
+        setError("Feed introuvable");
+        return null;
+      }
+    })
+    .catch((err) => {
+      setError(err.response?.data?.error || err.message || "Erreur inconnue");
+      return null;
+    })
+    .finally(() => setLoading(false));
+};
+
+
+  const createNews = (news: CreateNews) => {
    setLoading(true);
     setError(null);
 
@@ -108,5 +130,5 @@ export const useNews = (initialNews : News[] = []) => {
       });
   };
 
-  return {newsList, fetchNews, createNews, updateNews, deleteNews, incrementViews, page, hasMore, loading, error, setPage};
+  return {newsList, fetchNews, createNews, getNews,updateNews, deleteNews, incrementViews, page, hasMore, loading, error, setPage};
 };

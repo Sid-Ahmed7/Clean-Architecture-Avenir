@@ -1,7 +1,5 @@
-"use client";
-
 import { NewsFilters } from "@/types/filtersNews";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Select } from "../ui/Select";
 import { NewsCategoryEnum, NewsPriorityEnum } from "@/types/news";
 
@@ -13,17 +11,21 @@ interface FeedFiltersProps {
 export function FeedFilters({initialFilters, onChange} : FeedFiltersProps) {
     const [category, setCategory] = useState(initialFilters?.category || "");
     const [priority, setPriority] = useState(initialFilters?.priority ||"");
-    const [tags, setTags] = useState(initialFilters?.tags?.join(""));
+    const [tags, setTags] = useState(initialFilters?.tags?.join(",") || "");
 
 
     const handleFiltersChange = () => {
-        const filter : NewsFilters = {
+        onChange({
             category: category || undefined,
             priority: priority || undefined,
             tags: tags ? tags.split(",").map(t => t.trim()) : undefined,
-        };
-        onChange(filter);
+        });
     }
+
+    useEffect(() => {
+      handleFiltersChange();
+    }, [category, priority, tags]);
+
 
  return (
     <div className="flex flex-wrap gap-4 items-end mb-4">

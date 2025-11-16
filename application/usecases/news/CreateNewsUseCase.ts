@@ -5,11 +5,10 @@ import { MediaRepositoryInterface } from "../../ports/repositories/news/MediaRep
 
 export class CreateNewsUseCase {
     public constructor( private newsRepository: NewsRepositoryInterface, 
-                        private mediaRepository: MediaRepositoryInterface,
                         private publisher: NewsPublisher){}
 
     public async execute(news: NewsEntity): Promise<NewsEntity | Error> {
-        const newNews = NewsEntity.from(0, news.title, news.content, news.category, news.priority, news.tags, news.views, new Date(), []);
+        const newNews = NewsEntity.from(0, news.title, news.content, news.category, news.priority, news.tags, 0, new Date(), []);
         if(newNews instanceof Error) {
             return newNews;
         }

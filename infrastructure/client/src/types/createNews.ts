@@ -11,14 +11,10 @@ export enum NewsPriorityEnum {
     HIGH = 'HIGH'
 }
 
-export interface News {
-    id: number;
+export interface CreateNews {
     title: string;
     content: string;
     category: NewsCategoryEnum;
     priority: NewsPriorityEnum;
     tags: string[];
-    views: number;
-    createdAt: string;
-    updatedAt?: string;
 }

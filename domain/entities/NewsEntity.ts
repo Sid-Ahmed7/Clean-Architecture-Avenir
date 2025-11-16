@@ -33,7 +33,7 @@ export class NewsEntity {
         }
 
 
-        return new NewsEntity(validatedId.value, validatedTitle.value, validatedContent.value, category, priority, validatedTags, views, createdAt, media,updatedAt);
+        return new NewsEntity(validatedId.value, validatedTitle.value, validatedContent.value, category, priority, validatedTags, views, createdAt,updatedAt);
     }
     private constructor(
         public id: number,
@@ -44,7 +44,6 @@ export class NewsEntity {
         public tags: string[],
         public views: number,
         public createdAt: Date,
-        public media: number[],
         public updatedAt?: Date
     ){}
 

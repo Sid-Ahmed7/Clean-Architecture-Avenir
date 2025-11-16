@@ -62,7 +62,7 @@ export class LocalFileStorageService implements FileStorageService {
 
         if (writeResult instanceof Error) return writeResult;
 
-        const publicUrl = `/${this.uploadDir}/${folder}/${uniqueName}`;
+        const publicUrl = `/uploads/${folder}/${uniqueName}`;
 
         return {
             url: publicUrl,
@@ -92,6 +92,6 @@ export class LocalFileStorageService implements FileStorageService {
 
     private getExtension(filename: string): string {
         const parts = filename.split('.');
-        return parts.length > 1 ? parts[parts.length - 1] : 'bin';
+        return parts.length > 1 ? (parts[parts.length - 1] ?? 'bin') : 'bin';
     }
 }

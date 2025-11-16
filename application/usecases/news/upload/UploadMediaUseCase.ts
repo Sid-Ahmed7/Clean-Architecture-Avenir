@@ -8,13 +8,12 @@ export class UploadMediaUseCase {
    
     constructor(private fileStorageService: FileStorageService) {}
 
-    async execute(file: File): Promise<UploadedFile | Error> {
+    async execute(file: Buffer, fileName: string, mimeType: string): Promise<UploadedFile | Error> {
 
-        if (!file || file.size === 0) {
+        if (!file || file.length === 0) {
             return new EmptyFileError("No file provided or file is empty");
         }
 
-        const mimeType = file.type;
         const isImage = mimeType.startsWith('image/');
         const isVideo = mimeType.startsWith('video/');
 
@@ -28,7 +27,7 @@ export class UploadMediaUseCase {
             allowedTypes: isImage ? MediaValidation.ALLOWED_IMAGE_TYPES : MediaValidation.ALLOWED_VIDEO_TYPES
         };
 
-        return await this.fileStorageService.upload(file, file.name, options);
+        return await this.fileStorageService.upload(file, fileName, options);
     }
 
 }

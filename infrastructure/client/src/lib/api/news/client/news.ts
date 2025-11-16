@@ -1,6 +1,7 @@
 import { NewsFilters } from "@/types/filtersNews";
 import { News } from "@/types/news";
 import { apiClient } from "../../apiClient";
+import { CreateNews } from "@/types/createNews";
 
 export const getAllNews = async (filters: NewsFilters): Promise<Array<News>> => {
     const queryParams = new URLSearchParams();
@@ -28,7 +29,12 @@ export const getAllNews = async (filters: NewsFilters): Promise<Array<News>> => 
     return Array.isArray(response.data) ? response.data : [];
 };
 
-export const createNews = async (news: Partial<News>) : Promise<News> => {
+export const getNewsById = async (id: number) : Promise<News> => {
+    const {data} = await apiClient.get(`/feed/${id}`);
+    return data;
+}
+
+export const createNews = async (news: CreateNews) : Promise<News> => {
     const {data} = await apiClient.post('/feed/create', news);
     return data;
 };

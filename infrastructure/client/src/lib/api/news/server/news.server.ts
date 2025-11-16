@@ -5,7 +5,6 @@ import { cookies } from "next/headers";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-// ✅ Récupère tous les cookies et les passe en header Cookie
 const getServerCookies = async () => {
   const cookieStore = await cookies();
   const cookieHeader: string[] = [];
@@ -46,7 +45,7 @@ export const getAllNews = async (filters: NewsFilters): Promise<Array<News>> => 
     const response = await axios.get(`${API_URL}/feed?${queryParams.toString()}`, {
       headers: {
         "Content-Type": "application/json",
-        Cookie: cookieHeader, // ✅ Passe les cookies à Express
+        Cookie: cookieHeader, 
       },
     });
 

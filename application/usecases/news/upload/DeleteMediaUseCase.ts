@@ -26,14 +26,5 @@ export class DeleteMediaUseCase {
             return deleteResult;
         }
 
-        news.media = news.media.filter(id => id !== mediaId);
-
-        const updatedNewsMedia = await this.newsRepository.update(news);
-
-        if(updatedNewsMedia instanceof Error) {
-            return updatedNewsMedia;
-        }
-
- 
     }
 }
