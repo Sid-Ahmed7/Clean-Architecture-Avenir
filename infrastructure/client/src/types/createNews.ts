@@ -13,7 +13,6 @@ export enum NewsPriorityEnum {
 
 export interface CreateNews {
     title: string;
-    content: string;
     category: NewsCategoryEnum;
     priority: NewsPriorityEnum;
     tags: string[];

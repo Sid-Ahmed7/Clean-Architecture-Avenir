@@ -14,7 +14,6 @@ export enum NewsPriorityEnum {
 export interface News {
     id: number;
     title: string;
-    content: string;
     category: NewsCategoryEnum;
     priority: NewsPriorityEnum;
     tags: string[];

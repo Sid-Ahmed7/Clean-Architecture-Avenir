@@ -5,7 +5,6 @@ export const newsSchema = (t:(key: string) => string) =>
     z.object({
         id: z.number(),
        title: z.string(),
-       content: z.string(),
        category: z.enum(NewsCategoryEnum),
        priority: z.enum(NewsPriorityEnum),
        tags: z.array(z.string()),

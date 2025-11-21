@@ -4,7 +4,6 @@ import z from "zod"
 export const createNewsSchema = (t:(key: string) => string) => 
     z.object({
        title: z.string(),
-       content: z.string(),
        category: z.enum(NewsCategoryEnum),
        priority: z.enum(NewsPriorityEnum),
        tags: z.array(z.string()),

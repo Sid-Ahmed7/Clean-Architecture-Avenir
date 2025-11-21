@@ -1,99 +1,48 @@
 "use client";
-
-import { useNews } from "@/lib/hooks/useNews";
-import { useNewsSSE } from "@/lib/hooks/useNewsSSE";
+import { useNewsInfinite } from "@/hooks/useNews";
+import { useNewsSSE } from "@/hooks/useNewsSSE";
 import { NewsFilters } from "@/types/filtersNews";
-import { News } from "@/types/news";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FeedFilters } from "./FeedFilters";
-import { FeedCard } from "./FeedCard";
-import { Pagination } from "../ui/Pagination";
-import { Media } from "@/types/media";
-import { useMedia } from "@/lib/hooks/useMedia";
+import { Loader2 } from "lucide-react";
+import { FeedGrid } from "./FeedGrid";
+import { LoadMoreButton } from "./LoadMoreButton";
+import { News } from "@/types/news";
 
 interface FeedListProps {
-    initialNews: News[];
+    initialNews: News[]
 }
-
 export function FeedList({initialNews} : FeedListProps) {
-   const { newsList, fetchNews, page, hasMore, loading, error, setPage } = useNews(initialNews);
-   const { news, setNews } = useNewsSSE(initialNews);
-   const [newsWithMedia, setNewsWithMedia] = useState<Map<number, Media[]>>(new Map());
-   const { fetchMediaByNewsId, loading: loadingMedia, error: mediaError } = useMedia();
+  const [filters, setFilters] = useState<NewsFilters>({})
 
-    useEffect(() => {
-        const loadMediaForNews = async () => {
-            const mediaMap = new Map<number, Media[]>();
+  const {data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error} = useNewsInfinite(filters, 10);
 
-            const mediaResults = await Promise.all(
-                newsList.map(async (newsItem) => {
-                    try {
-                        const media = await fetchMediaByNewsId(newsItem.id);
-                        return { newsId: newsItem.id, media };
-                    } catch (error) {
-                        console.error(`Erreur chargement médias pour news ${newsItem.id}:`, error);
-                        return { newsId: newsItem.id, media: [] };
-                    }
-                })
-            );
+  useNewsSSE();
 
-            mediaResults.forEach(({ newsId, media }) => {
-                mediaMap.set(newsId, media);
-                console.log("All media", media)
-            });
+const allNews = data?.pages.flatMap((page) => page.data ?? []) ?? initialNews;
+return (
+        <section className="space-y-6">
+            <FeedFilters onChange={setFilters} />
 
-            setNewsWithMedia(mediaMap);
-        };
-
-        if (newsList.length > 0) {
-            loadMediaForNews();
-        }
-
-    }, [newsList, fetchMediaByNewsId]);
-
-
-
-   useEffect(() => {
-      if(news.length !== newsList.length) {
-          setNews(newsList);
-      }
-    }, [newsList, news, setNews]);
-
-  const handleFilterChange = (filters: NewsFilters) => {
-    fetchNews(filters, 1);
-  }
-
-  return (
-    <section className="space-y-6">
-      <FeedFilters onChange={handleFilterChange} />
-
-      {error && <p className="text-red-500">{error}</p>}
-      {mediaError && (
-                <div className="bg-orange-50 border border-orange-200 text-orange-700 px-4 py-3 rounded-lg">
-                    Erreur lors du chargement des médias: {mediaError}
+            {isLoading && allNews?.length === 0 ? (
+                <div className="text-center py-8">
+                    <Loader2 className="inline-block h-8 w-8 animate-spin text-blue-600" />
+                    <p className="text-gray-500 mt-2">Chargement...</p>
                 </div>
+            ) : error ? (
+                <p className="text-red-500">Erreur : {error.message}</p>
+            ) : (
+                <>
+                    <FeedGrid allNews={allNews} />
+                    {hasNextPage && (
+                        <LoadMoreButton
+                            hasNextPage={hasNextPage}
+                            isFetchingNextPage={isFetchingNextPage}
+                            fetchNextPage={fetchNextPage}
+                        />
+                    )}
+                </>
             )}
-      {(loading || loadingMedia) && (
-        <div className="text-center py-8">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-            <p className="text-gray-500 mt-2">Chargement...</p>
-          </div>
-      )}
-
-      <div className="grid gap-4">
-        {newsList.length > 0 ? (
-          newsList.map((n) => <FeedCard key={n.id} news={n} media={newsWithMedia.get(n.id)} />)
-        ) : (
-          <p className="text-gray-500 text-center">Aucun article trouvé.</p>
-        )}
-      </div>
-
-      <Pagination
-        currentPage={page}
-        hasMore={hasMore}
-        onNext={() => fetchNews({}, page + 1)}
-        onPrev={() => fetchNews({}, page - 1)}
-      />
-    </section>
-  );
+        </section>
+    );
 }

@@ -55,3 +55,21 @@ export const getAllNews = async (filters: NewsFilters): Promise<Array<News>> => 
     return [];
   }
 };
+
+export const getNewsById = async (id: number): Promise<News | null> => {
+  try {
+    const cookieHeader = await getServerCookies();
+
+    const response = await axios.get(`${API_URL}/feed/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: cookieHeader,
+      },
+    });
+
+    return response.data ?? null;
+  } catch (err) {
+    console.error("Error fetching news by id:", err);
+    return null;
+  }
+};

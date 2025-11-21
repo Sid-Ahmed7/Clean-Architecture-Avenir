@@ -1,3 +1,4 @@
+"use client";
 import { NewsFilters } from "@/types/filtersNews";
 import { useEffect, useState } from "react";
 import { Select } from "../ui/Select";

@@ -5,7 +5,7 @@ import { getAllNews } from "@/lib/api/news/server/news.server";
 
 
 export default async function FeedPage() {
-  const initialNews: News[] = await getAllNews({ page: 1, limit: 10 });
+  const initialNews = await getAllNews({ page: 1, limit: 10 });
 
   return (
     <main className="p-6">

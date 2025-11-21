@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { apiClient } from "../api/apiClient";
+import { apiClient } from "../lib/api/apiClient";
 
 interface UserProfile {
   userId: string; 

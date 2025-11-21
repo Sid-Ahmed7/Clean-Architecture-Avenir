@@ -1,4 +1,5 @@
 import { ImageIcon, Video, X } from "lucide-react";
+import Image from "next/image";
 
 
 interface FilePreviewProps {
@@ -30,7 +31,7 @@ export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlr
         <div className="relative group">
         <div className={`aspect-square rounded-lg overflow-hidden bg-gray-100 border-2 ${isUploadAlready ? 'border-green-200' : 'border-gray-200'}`}>
             {type === "IMAGE" ? (
-            <img src={preview} alt={fileName} className="w-full h-full object-cover" />
+            <Image src={preview} alt={fileName} fill className="w-full h-full object-cover" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" loading="lazy" unoptimized />
             ) : (
             <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-purple-100 to-blue-100">
                 <Video className="text-purple-600 mb-2" size={32} />

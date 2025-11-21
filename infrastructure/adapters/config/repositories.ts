@@ -18,6 +18,7 @@ import { InMemoryNewsRepository } from '../repositories/InMemoryNewsRepository';
 import { NewsService } from "../services/news/NewsService";
 import { InMemoryMediaRepository } from "../repositories/InMemoryMediaRepository";
 import { LocalFileStorageService } from "../services/news/LocalFileStorageService";
+import { InMemoryContentRepository } from "../repositories/InMemoryContentRepository";
 
 const baseUrl = process.env.CLIENT_BASE_URL!;
 export const tokenService = new JwtTokenService();
@@ -42,3 +43,5 @@ export const newsService = new NewsService();
 
 export const mediaRepository = new InMemoryMediaRepository();
 export const fileStorageService = new LocalFileStorageService();
+
+export const contentRepository = new InMemoryContentRepository();

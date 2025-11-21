@@ -3,6 +3,7 @@ export interface CreateMedia {
     url: string;
     type: string;
     altText?: string;
+    order?: number;
     size: number;
     mimeType: string;
 }

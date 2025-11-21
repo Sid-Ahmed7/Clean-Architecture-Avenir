@@ -10,18 +10,20 @@ export class CreateMediaUseCase {
         private newsRepository: NewsRepositoryInterface
     ) {}
 
-    async execute(media: Omit<MediaEntity ,"id">): Promise<MediaEntity | Error> {
+    async execute(media: Omit<MediaEntity ,"id" | "order">): Promise<MediaEntity | Error> {
         
         const news = await this.newsRepository.findById(media.newsId);
         if (news instanceof Error) {
             return news;
         }
+        const order = this.mediaRepository.getNextOrder(media.newsId);
 
         const mediaEntity = MediaEntity.from(
             0,
             news.id,
             media.url,
             media.type,
+            order,
             media.altText,
             media.size,
             media.mimeType

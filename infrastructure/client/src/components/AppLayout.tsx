@@ -5,7 +5,7 @@ import Sidebar from "./ui/Sidebar";
 import Header from "./ui/Header";
 import { usePathname } from "next/navigation";
 import { LocaleContext } from "@/contexts/LocaleProvider";
-import { useAuthRedirect } from "@/lib/hooks/useAuthRedirect";
+import { useAuthRedirect } from "@/hooks/useAuthRedirect";
 
 interface AppLayoutProps {
   children: ReactNode;

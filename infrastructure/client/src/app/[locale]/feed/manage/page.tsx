@@ -1,78 +1,65 @@
 "use client";
 
-import { useNews } from "@/lib/hooks/useNews";
+import { useAllNews, useNewsMutation } from "@/hooks/useNews";
 import { FeedManageList } from "@/components/feed/FeedManageList";
 import { FeedStats } from "@/components/feed/FeedStats";
 import { NewsFilters } from "@/types/filtersNews";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FeedFilters } from "@/components/feed/FeedFilters";
+import { Loader2 } from "lucide-react";
 
 export default function FeedManagePage() {
-  const { newsList, fetchNews, deleteNews, updateNews, loading, error, page, hasMore, setPage } = useNews();
   const [filters, setFilters] = useState<NewsFilters>({});
+  const { data: newsList = [], isLoading, error } = useAllNews(filters);
+  const { deleteNews } = useNewsMutation();
 
-  useEffect(() => {
-    fetchNews(filters, page, 10);
-    
-  }, [fetchNews, filters, page])
 
   const handleFilterChange = (newFilters: NewsFilters) => {
     setFilters(newFilters);
-    setPage(1);
   }
 
-  const handleNextPage = () => {
-    if(hasMore) {
-      setPage(page + 1);
-    }
+  const handleDelete = async (id: number) => {
+    await deleteNews.mutateAsync(id);
   }
 
-    const handlePrevPage = () => {
-    if(page > 1) {
-      setPage(page - 1);
-    }
-  }
 return (
-    <main className="p-6 space-y-8">
+     <main className="container mx-auto p-6 space-y-8">
       <header>
-        <h1 className="text-2xl font-bold mb-2">Gestion & Statistiques des Feeds</h1>
+        <h1 className="text-3xl font-bold mb-2">Gestion & Statistiques des Actualités</h1>
+        <p className="text-gray-600">Gérez vos actualités et consultez les statistiques</p>
       </header>
 
-      <section>
-        <h2 className="text-xl font-semibold mb-3">Filtres</h2>
+      <section className="bg-white rounded-lg shadow p-6">
+        <h2 className="text-xl font-semibold mb-4">Filtres</h2>
         <FeedFilters onChange={handleFilterChange} initialFilters={filters} />
       </section>
 
-      {loading && <p className="text-gray-500">Chargement en cours...</p>}
-      {error && <p className="text-red-500">{error}</p>}
+      {isLoading && (
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+          <span className="ml-3 text-gray-600">Chargement...</span>
+        </div>
+      )}
 
-      <section>
-        <h2 className="text-xl font-semibold mb-3">Statistiques générales</h2>
-        <FeedStats topFeeds={newsList} />
-      </section>
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <p className="text-red-700">Erreur: {error.message}</p>
+        </div>
+      )}
 
-      <section>
-        <h2 className="text-xl font-semibold mb-3">Gérer les Feeds</h2>
-        <FeedManageList news={newsList} onDelete={deleteNews} />
-      </section>
+      {!isLoading && !error && (
+        <>
+          <section className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-xl font-semibold mb-4">Statistiques générales</h2>
+            <FeedStats topFeeds={newsList} />
+          </section>
 
-      <section className="flex justify-between mt-6">
-        <button
-          onClick={handlePrevPage}
-          disabled={page === 1 || loading}
-          className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
-        >
-          Page précédente
-        </button>
-        <span>Page {page}</span>
-        <button
-          onClick={handleNextPage}
-          disabled={!hasMore || loading}
-          className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
-        >
-          Page suivante
-        </button>
-      </section>
+          <section className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-xl font-semibold mb-4">Gérer les actualités</h2>
+            <FeedManageList news={newsList} onDelete={handleDelete} />
+          </section>
+        </>
+      )}
     </main>
   );
 }

@@ -1,7 +1,7 @@
 import { LocaleContext } from "@/contexts/LocaleProvider";
 import { useRouter } from "next/navigation"
 import { useContext, useEffect } from "react";
-import { apiClient } from "../api/apiClient";
+import { apiClient } from "../lib/api/apiClient";
 
 export const useAuthRedirect = () => {
     const router = useRouter();

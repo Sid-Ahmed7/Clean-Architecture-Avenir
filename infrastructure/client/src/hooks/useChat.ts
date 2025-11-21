@@ -2,7 +2,7 @@
 import { useReducer, useEffect, useCallback } from "react";
 import * as chatService from "@/services/chatService";
 import { UserStatus } from "@/types/userStatus";
-import { getConversationMessages } from "../api/chat";
+import { getConversationMessages } from "../lib/api/chat";
 import { Message } from "@/types/message";
 import { UserChat } from "@/types/chat/userChat";
 import { Typing } from "@/types/chat/typing";

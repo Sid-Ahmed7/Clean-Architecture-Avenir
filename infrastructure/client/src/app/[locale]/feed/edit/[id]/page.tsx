@@ -1,71 +1,94 @@
 "use client";
 
-import { FeedForm } from "@/components/feed/FeedForm";
-import { useParams, useRouter } from "next/navigation";
-import { useContext, useEffect, useState } from "react";
-import { News } from "@/types/news";
-import { LocaleContext } from "@/contexts/LocaleProvider";
-import { CreateNews } from "@/types/createNews";
-import { useNews } from "@/lib/hooks/useNews";
-import { useMedia } from "@/lib/hooks/useMedia";
-import { UploadedFile } from "@/types/uploadedFile";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { CreateNewsModel } from "@/lib/validation/news/createNewsSchema";
+import { Block, TypeBlock } from "@/types/contentBlock";
+import { Loader2 } from "lucide-react";
+import { useNewsById } from "@/hooks/useNews";
+import { useContentsByNewsId } from "@/hooks/useContent";
+import { FeedForm } from "@/components/feed/form/FeedForm";
+import { useMediaByNewsId } from "@/hooks/useMedia";
 
 export default function EditFeedPage() {
   const { id } = useParams();
-  const router = useRouter();
-  const {getNews, updateNews} = useNews();
-  const {fetchMediaByNewsId, uploadMedia, mediaList} = useMedia();
-  const locale = useContext(LocaleContext);
-  const [feed, setFeed] = useState<News | null>(null);
-  const [loading, setLoading] = useState(true);
-   
-  const fetchNews = async () => {
-    if (id) {
-      const news = await getNews(Number(id));
-      setFeed(news);
-      await fetchMediaByNewsId(Number(id));
-      setLoading(false)
-    } else {
-      return;
-    }
+  const newsId = Number(id);
 
-  }
+  const { data: news, isLoading: newsLoading } = useNewsById(newsId);
+  const { data: contents, isLoading: contentsLoading } = useContentsByNewsId(newsId);
+  const { data: medias, isLoading: mediaLoading} = useMediaByNewsId(newsId);
+
+  const [initialValues, setInitialValues] = useState<CreateNewsModel>();
+  const [initialBlocks, setInitialBlocks] = useState<Block[]>([]);
+  
   useEffect(() => {
-    fetchNews();    
-  }, [id]);
-
-  const existingMedia: UploadedFile[] = mediaList.map((m) => ({
-    url: m.url,
-    filename: m.url.split("/").pop() ?? "",
-    size: m.size ?? 0,
-    mimeType: m.mimeType,
-    type: m.type ?? "IMAGE", 
-  }));
-
- const handleUpdate = async (data: CreateNews, files: File[]) => {
-  if (!id) return;
-
-  const updated: News = {
-    ...data,
-    id: Number(id),
-    views: feed?.views ?? 0,
-    createdAt: feed?.createdAt ?? new Date().toISOString(),
-  };
-
-  await updateNews(updated);
-  if(files.length > 0) {
-    for(const file of files) {
-      await uploadMedia(file, Number(id));
+    if (news) {
+      setInitialValues({
+        title: news.title,
+        category: news.category,
+        priority: news.priority,
+        tags: news.tags || [],
+      });
     }
+  }, [news]);
+
+useEffect(() => {
+  if ((contents && contents.length > 0) || (medias && medias.length > 0)) {
+    const textBlocks: Block[] = (contents || []).map((content) => ({
+      id: content.id,
+      type: TypeBlock.TEXT,
+      order: content.order,
+      content: content.content,
+    }));
+
+    const mediaBlocks: Block[] = (medias || []).map((media) => ({
+      id: media.id,
+      type: TypeBlock.MEDIA,
+      order: media.order ?? 0,
+      files: [],
+      existingMedias: [media] 
+    }));
+
+    const allBlocks = [...textBlocks, ...mediaBlocks].sort((a, b) => a.order - b.order);
+
+    setInitialBlocks(allBlocks);
   }
-  router.push(`/${locale}/feed/manage`);
-};
+}, [contents, medias]);
 
+return (
+  <>
+    {(newsLoading || contentsLoading || mediaLoading) && (
+      <main className="container mx-auto p-6">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+          <span className="ml-3 text-gray-600">Chargement...</span>
+        </div>
+      </main>
+    )}
 
-  return (
-    <main className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Modifier le feed</h1>
-      <FeedForm initialValues={feed ?? undefined} existingMedia={existingMedia} onSubmit={handleUpdate} />
-    </main>
-  );
+    {!news && !newsLoading && (
+      <main className="container mx-auto p-6">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <p className="text-red-700">Actualité introuvable</p>
+        </div>
+      </main>
+    )}
+
+    {news && !newsLoading && !contentsLoading && !mediaLoading && (
+      <main className="container mx-auto p-6">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Modifier l&apos;actualité</h1>
+          <p className="text-gray-600 mt-2">Modifiez les informations et le contenu de votre actualité</p>
+        </div>
+
+        <FeedForm
+          newsId={newsId}
+          initialValues={initialValues}
+          initialBlocks={initialBlocks}
+        />
+      </main>
+    )}
+  </>
+);
+
 }
