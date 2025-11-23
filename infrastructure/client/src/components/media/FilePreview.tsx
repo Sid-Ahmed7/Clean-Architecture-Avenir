@@ -1,3 +1,4 @@
+import { getMediaUrl } from "@/lib/utils/media";
 import { ImageIcon, Video, X } from "lucide-react";
 import Image from "next/image";
 

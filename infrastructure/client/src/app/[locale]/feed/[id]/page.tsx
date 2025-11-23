@@ -11,7 +11,7 @@ interface FeedPageProps {
 }
 
 export default async function FeedDetailPage({ params }: FeedPageProps) {
-  const { id } = params;
+  const { id } = await params;
   const newsId = Number(id);
 
  const [news, contents, media] = await Promise.all([

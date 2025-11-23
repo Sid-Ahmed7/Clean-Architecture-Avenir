@@ -1,10 +1,8 @@
-// components/feed/form/FeedFormFields.tsx
 import { Control, Controller, FieldErrors, UseFormRegister } from "react-hook-form";
 import { CreateNewsModel } from "@/lib/validation/news/createNewsSchema";
 import { NewsCategoryEnum, NewsPriorityEnum } from "@/types/news";
 import { UploadedFile } from "@/types/uploadedFile";
 import { Select } from "@/components/ui/Select";
-import { MediaUploader } from "@/components/media/MediaUploader";
 import Button from "@/components/ui/Button";
 import { AlertCircle, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -124,12 +122,11 @@ export function FeedFormFields({register,control,errors,existingMedia,disabled,i
           type="button"
           variant="secondary"
           onClick={() => router.back()}
-          disabled={isSubmitting}
         >
           Annuler
         </Button>
 
-        <Button type="submit" variant="primary" disabled={isSubmitting}>
+        <Button type="submit" variant="primary" >
           {isSubmitting ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />

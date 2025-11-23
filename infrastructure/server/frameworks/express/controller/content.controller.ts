@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { InMemoryContentRepository } from "../../../../adapters/repositories/InMemoryContentRepository";
-
+import {ManageOrderService} from "../../../../adapters/services/news/ManageOrderService";
 import {CreateContentUseCase} from  "../../../../../application/usecases/news/content/CreateContentUseCase";
 import {GetContentByIdUseCase} from "../../../../../application/usecases/news/content/GetContentByIdUseCase";
 import {GetContentsByNewsIdUseCase} from "../../../../../application/usecases/news/content/GetContentsByNewsIdUseCase";
@@ -11,10 +11,10 @@ import { InvalidContentError } from "../../../../../domain/errors/InvalidContent
 import { ContentNotFoundError } from "../../../../../application/errors/ContentNotFoundError";
 
 export class ContentController {
-    public constructor(private contentRepository: InMemoryContentRepository){}
+    public constructor(private contentRepository: InMemoryContentRepository, private orderService : ManageOrderService){}
 
     async create(req: Request, res: Response) {
-        const createContentUseCase = new CreateContentUseCase(this.contentRepository);
+        const createContentUseCase = new CreateContentUseCase(this.contentRepository, this.orderService);
         const {newsId, content} = req.body;
 
         const result = await createContentUseCase.execute({ newsId: Number(newsId), content });
@@ -51,7 +51,7 @@ export class ContentController {
 
     async update(req: Request, res: Response) {
         const updateContentUseCase = new UpdateContentUseCase(this.contentRepository);
-        const content = req.body.content;
+        const content = req.body;
 
         const result = await updateContentUseCase.execute(content);
         if (result instanceof Error) {

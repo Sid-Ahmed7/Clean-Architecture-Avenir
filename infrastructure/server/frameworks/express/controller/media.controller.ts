@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 import { InMemoryMediaRepository } from "../../../../adapters/repositories/InMemoryMediaRepository";
 import { InMemoryNewsRepository } from "../../../../adapters/repositories/InMemoryNewsRepository";
+import {ManageOrderService} from "../../../../adapters/services/news/ManageOrderService";
 import { LocalFileStorageService } from "../../../../adapters/services/news/LocalFileStorageService";
 import { UploadMediaUseCase } from "../../../../../application/usecases/news/upload/UploadMediaUseCase";
 import { CreateMediaUseCase } from "../../../../../application/usecases/news/upload/CreateMediaUseCase";
@@ -15,7 +16,8 @@ export class MediaController {
     public constructor(
         private mediaRepository: InMemoryMediaRepository,
         private newsRepository: InMemoryNewsRepository,
-        private fileStorageService: LocalFileStorageService
+        private fileStorageService: LocalFileStorageService,
+        private orderService: ManageOrderService
     ){}
 
     async uploadMedia(req: Request, res: Response) {
@@ -39,7 +41,7 @@ export class MediaController {
             mimeType: uploadFile.mimeType,
         };
 
-        const createMediaUseCase = new CreateMediaUseCase(this.mediaRepository, this.newsRepository);
+        const createMediaUseCase = new CreateMediaUseCase(this.mediaRepository, this.newsRepository, this.orderService);
         const createdMedia = await createMediaUseCase.execute(mediaEntity)
             if (createdMedia instanceof Error) {
             return res.status(500).json({ error: createdMedia.message });

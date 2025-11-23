@@ -2,12 +2,13 @@ import { MediaEntity } from "../../../../domain/entities/MediaEntity";
 import { MediaTypeEnum } from "../../../../domain/enums/MediaTypeEnum";
 import { MediaRepositoryInterface } from "../../../ports/repositories/news/MediaRepositoryInterface";
 import { NewsRepositoryInterface } from "../../../ports/repositories/news/NewsRepositoryInterface";
-
+import {OrderService} from "../../../ports/services/news/OrderService"
 export class CreateMediaUseCase {
     
     constructor(
         private mediaRepository: MediaRepositoryInterface,
-        private newsRepository: NewsRepositoryInterface
+        private newsRepository: NewsRepositoryInterface,
+        private mediaService: OrderService
     ) {}
 
     async execute(media: Omit<MediaEntity ,"id" | "order">): Promise<MediaEntity | Error> {
@@ -16,7 +17,7 @@ export class CreateMediaUseCase {
         if (news instanceof Error) {
             return news;
         }
-        const order = this.mediaRepository.getNextOrder(media.newsId);
+        const order = await this.mediaService.getNextOrder(news.id);
 
         const mediaEntity = MediaEntity.from(
             0,

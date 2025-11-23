@@ -55,14 +55,4 @@ export class InMemoryMediaRepository implements MediaRepositoryInterface {
         
         this.mediaList.splice(index, 1);
     }
-
-    public getNextOrder(newsId: number): number {
-        const items = this.mediaList.filter(m => m.newsId === newsId);
-        if(items.length === 0) {
-            return 1;
-        }
-        return Math.max(...items.map(m => m.order)) + 1;
-
-    }
-
 }

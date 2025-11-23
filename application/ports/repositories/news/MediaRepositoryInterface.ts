@@ -9,5 +9,4 @@ export interface MediaRepositoryInterface {
     findByNewsId(newsId: number): Promise<Array<MediaEntity>>
     findByIds(ids: number[]): Promise<MediaEntity[] | MediaNotFoundError>;
     delete(id: number): Promise<void | MediaNotFoundError>;
-    getNextOrder(newsId: number) : number
 }

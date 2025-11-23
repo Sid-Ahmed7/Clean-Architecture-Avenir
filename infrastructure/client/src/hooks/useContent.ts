@@ -60,7 +60,7 @@ export const useContentMutations = () => {
     },
   });
 
-  const updateContent = useMutation<{ data: Content[] | null; error: string | null },Error,UpdateContent>({
+  const updateContent = useMutation<{ data: Content | null; error: string | null },Error,UpdateContent>({
     mutationFn: async (content) => {
       try {
         const updatedContents = await contentApi.updateContent(content);
@@ -74,8 +74,11 @@ export const useContentMutations = () => {
     },
     onSuccess: (result, variables) => {
       if (result.data) {
-        queryClient.setQueryData([CONTENT_QUERY_KEY, variables.id], result.data.find(c => c.id === variables.id));
-        queryClient.setQueryData([CONTENT_QUERY_KEY, "news", variables.newsId], result.data);
+        queryClient.setQueryData([CONTENT_QUERY_KEY, variables.id], result.data);
+              queryClient.setQueryData<Content[]>([CONTENT_QUERY_KEY, "news", variables.newsId], (old) => {
+        if (!old) return old;
+        return old.map(c => c.id === variables.id ? result.data! : c);
+      });
       }
     },
   });

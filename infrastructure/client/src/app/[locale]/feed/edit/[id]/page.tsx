@@ -22,6 +22,15 @@ export default function EditFeedPage() {
   const [initialBlocks, setInitialBlocks] = useState<Block[]>([]);
   
   useEffect(() => {
+    if (newsLoading || contentsLoading || mediaLoading) {
+      return;
+    }
+
+    console.log("News", news)
+    console.log("Contents", contents)
+    console.log("medias", medias)
+
+
     if (news) {
       setInitialValues({
         title: news.title,
@@ -29,31 +38,38 @@ export default function EditFeedPage() {
         priority: news.priority,
         tags: news.tags || [],
       });
+            console.log("Initial Values définies:", {
+        title: news.title,
+        category: news.category,
+        priority: news.priority,
+        tags: news.tags || [],
+      });
+      
     }
-  }, [news]);
 
-useEffect(() => {
-  if ((contents && contents.length > 0) || (medias && medias.length > 0)) {
-    const textBlocks: Block[] = (contents || []).map((content) => ({
-      id: content.id,
-      type: TypeBlock.TEXT,
-      order: content.order,
-      content: content.content,
-    }));
+  const textBlocks: Block[] = (Array.isArray(contents) ? contents : []).map((content) => ({
+    id: content.id,
+    type: TypeBlock.TEXT,
+    order: content.order,
+    content: content.content,
+  }));
+      console.log("Text block créé:", textBlocks);
 
-    const mediaBlocks: Block[] = (medias || []).map((media) => ({
-      id: media.id,
-      type: TypeBlock.MEDIA,
-      order: media.order ?? 0,
-      files: [],
-      existingMedias: [media] 
-    }));
+   const mediaBlocks: Block[] = (Array.isArray(medias) ? medias : []).map((media) => ({
+    id: media.id,
+    type: TypeBlock.MEDIA,
+    order: media.order ?? 0,
+    files: [],
+    existingMedias: [media] 
+  }));
+          console.log("Text block créé:", mediaBlocks);
 
-    const allBlocks = [...textBlocks, ...mediaBlocks].sort((a, b) => a.order - b.order);
 
+    const allBlocks = [...textBlocks, ...mediaBlocks].sort((a, b) => a.order - b.order);;
+    console.log("Blocs combinés et triés:", allBlocks);
     setInitialBlocks(allBlocks);
-  }
-}, [contents, medias]);
+  
+}, [news, contents, medias, newsLoading, contentsLoading,mediaLoading]);
 
 return (
   <>

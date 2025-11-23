@@ -6,6 +6,7 @@ import { AlertCircle } from "lucide-react";
 import { BlockContent } from "./BlockContent";
 import Image from "next/image";
 import { getMediaUrl } from "@/lib/utils/media";
+import { getBlockKey, getNextBlockOrder } from "@/lib/utils/blocksUtils";
 
 interface BlockEditorProps {
     onChange: (blocks: Block[]) => void;
@@ -15,16 +16,19 @@ interface BlockEditorProps {
 }
 
 export function BlockEditor({onChange, initialBlocks, disabled, error}: BlockEditorProps) {
-    const blockId = useRef(1);
+    const blockId = useRef(-1);
     const [blocks, setBlocks] = useState<Block[]>([]);
+    const hasInitialized = useRef(false);
 
     useEffect(() => {
-        if(initialBlocks && initialBlocks?.length > 0) {
-            setBlocks(initialBlocks);
-        } else {
+    if(initialBlocks && initialBlocks.length > 0 && !hasInitialized.current) {
+        const ordered = initialBlocks.sort((a,b) => a.order - b.order)
+        setBlocks(ordered);
+        hasInitialized.current = true;
+    } else {
             setBlocks([
                 {
-                id: blockId.current++,
+                id: blockId.current--,
                 type: TypeBlock.TEXT,
                 order: 0,
                 content: ""
@@ -37,25 +41,30 @@ export function BlockEditor({onChange, initialBlocks, disabled, error}: BlockEdi
         onChange(blocks);
     }, [blocks,  onChange])
 
-    const onAddBlock = (type: TypeBlock) => {
-        const newBlock: Block = {
-            id: blockId.current++,
-            type,
-            order: blocks.length,
-            ...(type === TypeBlock.TEXT ? {content: ""} : {files: []})
-        } as Block
+ const onAddBlock = (type: TypeBlock) => {
+    console.log("➕ Ajout d'un block");
+    console.log("   Blocks actuels:", blocks.length);
+    console.log("   Nouvel order:", blocks.length);
 
-        setBlocks([...blocks, newBlock]);
-    }
+    const newBlock: Block = {
+        id: blockId.current--,
+        type,
+        order: blocks.length > 0 ? Math.max(...blocks.map(b => b.order ?? 0)) + 1 : 0,
+        ...(type === TypeBlock.TEXT ? {content: ""} : {files: [], existingMedias: []})
+    } as Block
+
+    console.log("   Nouveau block créé:", newBlock);
+    
+    setBlocks([...blocks, newBlock]);
+}
 
     const updateBlock =(id: string, updateBlock: Block) => {
-        setBlocks(blocks.map((block) => (block.id.toString() === id ? updateBlock : block)))
+        setBlocks(blocks.map((block) => (getBlockKey(block) === id ? updateBlock : block)))
     }
 
     const removeBlock = (id: string) =>{
-        const filtered = blocks.filter((block) => block.id.toString() !== id)
-        const reordered = filtered.map((block, index) => ({...block, order: index}));
-        setBlocks(reordered);
+        const filteredBlocks = blocks.filter((block) => getBlockKey(block) !== id)
+        setBlocks(filteredBlocks);
     }
 
     const handleDragEnd = (result: DropResult) => {
@@ -93,8 +102,8 @@ return (
           >
             {blocks.map((block, index) => (
               <Draggable
-                key={block.id}
-                draggableId={block.id.toString()}
+                key={getBlockKey(block)}
+                draggableId={getBlockKey(block)}
                 index={index}
                 isDragDisabled={disabled}
               >
@@ -105,8 +114,8 @@ return (
                   >
                     <BlockContent
                       block={block}
-                      onUpdate={(updated) => updateBlock(block.id.toString(), updated)}
-                      onRemove={() => removeBlock(block.id.toString())}
+                      onUpdate={(updated) => updateBlock(getBlockKey(block), updated)}
+                      onRemove={() => removeBlock(getBlockKey(block))}
                       disabled={disabled}
                       dragAndDropHandle={provided.dragHandleProps}
                     />
@@ -118,6 +127,10 @@ return (
                             src={getMediaUrl(media.url)}
                             alt={media.altIndex || ""}
                             className="w-24 h-24 object-cover rounded"
+                            width={800} 
+                            height={288}
+                            loading="lazy"
+                            unoptimized
                           />
                         ))}
                       </div>
@@ -132,14 +145,12 @@ return (
       </Droppable>
     </DragDropContext>
 
-    {/* Message quand il n’y a aucun bloc */}
     {blocks.length === 0 && (
       <div className="text-center py-8 text-gray-500">
         Aucun bloc. Ajoutez-en un pour commencer !
       </div>
     )}
 
-    {/* Compteur et instructions */}
     <div className="text-xs text-gray-500 text-center">
       {blocks.length} bloc{blocks.length > 1 ? 's' : ''} • Glissez-déposez pour réorganiser
     </div>

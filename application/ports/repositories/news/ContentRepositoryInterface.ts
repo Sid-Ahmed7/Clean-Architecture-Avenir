@@ -12,8 +12,4 @@ export interface ContentRepositoryInterface {
     findByNewsId(newsId: number): Promise<Array<ContentEntity>>
     update(content: ContentEntity): Promise<ContentEntity | ContentNotFoundError>;
     delete(id: number): Promise<void | ContentNotFoundError>;
-    getNextOrder(newsId: number) : number
-
-
-
 }

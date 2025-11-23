@@ -5,6 +5,7 @@ import {ResendEmailService} from "../services/ResendEmailService";
 import {EmailTemplateService} from "../services/EmailTemplateService";
 import {GenerateAccountNumberService} from "../services/GenerateAccountNumberService";
 import {GenerateIbanService} from "../services/GenerateIbanService";
+import {ManageOrderService} from "../services/news/ManageOrderService";
 
 import { InMemoryEventBus } from '../repositories/InMemoryEventBus';
 import { InMemoryUserRepository } from '../repositories/InMemoryUserRepository';
@@ -45,3 +46,5 @@ export const mediaRepository = new InMemoryMediaRepository();
 export const fileStorageService = new LocalFileStorageService();
 
 export const contentRepository = new InMemoryContentRepository();
+
+export const orderService = new ManageOrderService(contentRepository, mediaRepository);

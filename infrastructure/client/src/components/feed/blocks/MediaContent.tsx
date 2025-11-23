@@ -1,19 +1,31 @@
 import { MediaUploader } from "@/components/media/MediaUploader";
+import { Media } from "@/types/media";
+import { UploadedFile } from "@/types/uploadedFile";
+import { url } from "inspector";
 import { AlertCircle } from "lucide-react";
 
 interface MediaContentProps {
     files: File[];
+    existingMedias?: Media[]
     onChange: (files: File[]) => void;
     disabled?: boolean;
     error?: string;
 }
 
-export function MediaContent({files, onChange, disabled, error} : MediaContentProps) {
+export function MediaContent({files, existingMedias = [], onChange, disabled, error} : MediaContentProps) {
+    const getExistingMedias : UploadedFile[]= existingMedias?.map(media => ({
+        url: media.url,
+        filename: media.altIndex ?? "",
+        size: media.size,
+        type: media.type === 'IMAGE' ? 'IMAGE' : "VIDEO",
+        mimeType: media.mimeType
+    })) ?? [] 
+  
     return (
             <div className="flex-1">
                 <MediaUploader
                     onFilesSelected={onChange}
-                    existingFiles={[]} 
+                    existingFiles={getExistingMedias} 
                     maxSize={50}
                     disabled={disabled}
                 />

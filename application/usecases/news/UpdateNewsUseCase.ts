@@ -14,7 +14,7 @@ export class UpdateNewsUseCase {
             return existingNews;
         }
 
-        const updateNews = await this.newsRepository.update(existingNews);
+        const updateNews = await this.newsRepository.update(news);
         
         if(updateNews instanceof Error) {
             return updateNews;

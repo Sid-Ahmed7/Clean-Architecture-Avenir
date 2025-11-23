@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { FeedHeader } from "./structure/FeedHeader";
 import { FeedContent } from "./structure/FeedContent";
 import { FeedMedia } from "./structure/FeedMedia";
+import { sortBlock } from "@/lib/utils/blocksUtils";
 
 interface FeedDetailProps {
     news: News;
@@ -35,7 +36,9 @@ export  function FeedDetail({news, contents, medias} : FeedDetailProps) {
         })),
     ];
 
-    const orderedContent = blocks.sort((a,b) => a.order - b.order);
+    console.log(blocks)
+
+    const orderedContent = sortBlock(blocks);
 
  return (
      <main className="min-h-screen bg-white py-16">

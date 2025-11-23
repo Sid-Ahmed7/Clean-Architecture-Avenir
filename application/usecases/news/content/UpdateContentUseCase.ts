@@ -12,7 +12,7 @@ export class UpdateContentUseCase {
             return existingContent;
         }
 
-        const updateContent = await this.contentRepository.update(existingContent);
+        const updateContent = await this.contentRepository.update(content);
         
         if(updateContent instanceof Error) {
             return updateContent;

@@ -53,13 +53,4 @@ export class InMemoryContentRepository implements ContentRepositoryInterface {
         }
         this.contents.splice(index, 1);
     }
-       public getNextOrder(newsId: number): number {
-        const items = this.contents.filter(c => c.newsId === newsId);
-        if(items.length === 0) {
-            return 1;
-        }
-        return Math.max(...items.map(m => m.order)) + 1;
-
-    }
-
 }

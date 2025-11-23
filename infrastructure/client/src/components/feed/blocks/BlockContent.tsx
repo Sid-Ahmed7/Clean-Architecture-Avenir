@@ -36,6 +36,7 @@ export function BlockContent({block, onUpdate, onRemove, disabled, dragAndDropHa
       {block.type === TypeBlock.MEDIA && (
         <MediaContent
           files={block.files}
+          existingMedias={block.existingMedias}
           onChange={(files) => onUpdate({ ...block, files })}
           disabled={disabled}
         />
