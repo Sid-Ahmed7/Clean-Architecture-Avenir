@@ -1,9 +1,9 @@
 import { useTranslations } from "next-intl"
 import { useEffect, useState } from "react";
-import { AccountModel, accountSchema } from "../validation/bankAccount/accountSchema";
-import { apiClient } from "../api/apiClient";
+import { AccountModel, accountSchema } from "../lib/validation/bankAccount/accountSchema";
+import { apiClient } from "../lib/api/apiClient";
 import z from "zod";
-import { getAccounts } from "../api/account";
+import { getAccounts } from "../lib/api/account";
 
 export const useUserAccounts = () => {
     const t = useTranslations();

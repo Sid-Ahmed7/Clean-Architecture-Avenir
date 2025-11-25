@@ -1,7 +1,7 @@
 "use client";
 
 import { Bell, User, Menu, Search } from "lucide-react";
-import { useUserProfile } from "@/lib/hooks/useUserProfile";
+import { useUserProfile } from "@/hooks/useUserProfile";
 
 interface HeaderProps {
   searchQuery: string;

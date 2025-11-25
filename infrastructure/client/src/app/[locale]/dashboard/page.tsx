@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "@/contexts/AuthProvider";
-import { useUserAccounts } from "@/lib/hooks/useUserAccounts";
+import { useUserAccounts } from "@/hooks/useUserAccounts";
 import { MainAccountCard } from "@/components/bankAccount/MainAccountCard";
 import { AccountList } from "@/components/bankAccount/AccountList";
 import SummaryCard from "@/components/bankAccount/SummaryAccountsCard";

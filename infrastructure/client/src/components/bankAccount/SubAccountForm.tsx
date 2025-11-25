@@ -1,6 +1,6 @@
 "use client";
 
-import { useCreateSubAccount } from "@/lib/hooks/useCreateSubAccount";
+import { useCreateSubAccount } from "@/hooks/useCreateSubAccount";
 import { CreateSubAccountModel, createSubAccountSchema } from "@/lib/validation/bankAccount/createSubAccountSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PiggyBank } from "lucide-react";

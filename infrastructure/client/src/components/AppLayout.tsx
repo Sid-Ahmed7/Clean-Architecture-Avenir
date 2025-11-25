@@ -5,6 +5,7 @@ import Sidebar from "./ui/Sidebar";
 import Header from "./ui/Header";
 import { usePathname } from "next/navigation";
 import { LocaleContext } from "@/contexts/LocaleProvider";
+import { useAuthRedirect } from "@/hooks/useAuthRedirect";
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -15,6 +16,8 @@ export default function AppLayout({ children }: AppLayoutProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const pathname = usePathname();
   const {locale} = useContext(LocaleContext);
+
+  useAuthRedirect();
 
   const hideLayout = pathname === `/${locale}/login` || pathname === `/${locale}/register`;
 

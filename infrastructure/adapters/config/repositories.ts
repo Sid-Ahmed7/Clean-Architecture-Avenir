@@ -5,6 +5,7 @@ import {ResendEmailService} from "../services/ResendEmailService";
 import {EmailTemplateService} from "../services/EmailTemplateService";
 import {GenerateAccountNumberService} from "../services/GenerateAccountNumberService";
 import {GenerateIbanService} from "../services/GenerateIbanService";
+import {ManageOrderService} from "../services/news/ManageOrderService";
 
 import { InMemoryEventBus } from '../repositories/InMemoryEventBus';
 import { InMemoryUserRepository } from '../repositories/InMemoryUserRepository';
@@ -14,6 +15,12 @@ import { InMemoryMessageRepository } from '../repositories/InMemoryMessageReposi
 import { InMemoryUserRoleRepository } from '../repositories/InMemoryUserRoleRepository';
 
 import { InMemoryAccountRepository } from '../repositories/InMemoryAccountRepository';
+import { InMemoryNewsRepository } from '../repositories/InMemoryNewsRepository';
+import { NewsService } from "../services/news/NewsService";
+import { InMemoryMediaRepository } from "../repositories/InMemoryMediaRepository";
+import { LocalFileStorageService } from "../services/news/LocalFileStorageService";
+import { InMemoryContentRepository } from "../repositories/InMemoryContentRepository";
+import { GenerateAltTextService } from "../services/news/GenerateAltTextService";
 
 const baseUrl = process.env.CLIENT_BASE_URL!;
 export const tokenService = new JwtTokenService();
@@ -31,3 +38,14 @@ export const ibanGenerator = new GenerateIbanService(accountRepository);
 
 export const conversationRepository = new InMemoryConversationRepository();
 export const messageRepository = new InMemoryMessageRepository();
+
+export const newsRepository = new InMemoryNewsRepository();
+export const newsService = new NewsService(); 
+
+export const mediaRepository = new InMemoryMediaRepository();
+export const fileStorageService = new LocalFileStorageService();
+
+export const contentRepository = new InMemoryContentRepository();
+
+export const orderService = new ManageOrderService(contentRepository, mediaRepository);
+export const altService = new GenerateAltTextService();

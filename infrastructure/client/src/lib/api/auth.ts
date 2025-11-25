@@ -6,8 +6,15 @@ export const getAllAdvisors = async () => {
 }
 
 export const refreshToken = async () => {
-  const {data} = await apiClient.post('/auth/refresh-token');
-  return data;
-}
+  try {
+    const { data } = await apiClient.post('/auth/refresh-token');
+    return { success: true, data };
+  } catch (error) {
+    return { 
+      success: false, 
+      error: error instanceof Error ? error.message : 'Refresh failed' 
+    };
+  }
+};
 
 

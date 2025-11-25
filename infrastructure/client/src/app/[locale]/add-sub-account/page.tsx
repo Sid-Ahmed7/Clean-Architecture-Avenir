@@ -1,7 +1,7 @@
 "use client";
 
 import SubAccountForm from "@/components/bankAccount/SubAccountForm";
-import { useUserAccounts } from "@/lib/hooks/useUserAccounts";
+import { useUserAccounts } from "@/hooks/useUserAccounts";
 
 export default function AddSubAccountPage() {
   const { accounts, loading, error } = useUserAccounts();
