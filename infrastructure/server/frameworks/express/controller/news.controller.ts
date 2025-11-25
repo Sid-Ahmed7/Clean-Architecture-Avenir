@@ -2,15 +2,12 @@ import { Request, Response } from "express";
 
 import { InMemoryNewsRepository } from "../../../../adapters/repositories/InMemoryNewsRepository";
 import { InMemoryMediaRepository } from "../../../../adapters/repositories/InMemoryMediaRepository";
-
 import { NewsService} from "../../../../adapters/services/news/NewsService";
-import { LocalFileStorageService} from "../../../../adapters/services/news/LocalFileStorageService";
 import { CreateNewsUseCase } from "../../../../../application/usecases/news/CreateNewsUseCase";
 import { GetAllNewsUseCase } from "../../../../../application/usecases/news/GetAllNewsUseCase";
 import { GetNewsByIdUseCase } from "../../../../../application/usecases/news/GetNewsByIdUseCase";
 import {UpdateNewsUseCase} from "../../../../../application/usecases/news/UpdateNewsUseCase";
 import {DeleteNewsUseCase} from "../../../../../application/usecases/news/DeleteNewsUseCase";
-import {IncrementNewsViewsUseCase} from "../../../../../application/usecases/news/IncrementNewsViewsUseCase";
 import { InvalidNewsError } from "../../../../../domain/errors/InvalidNewsError";
 import { NewsNotFoundError } from "../../../../../application/errors/NewsNotFoundError";
 import { SseClient } from "../../../../../application/ports/services/news/NewsPublisher";
@@ -106,20 +103,6 @@ export class NewsController {
             return res.status(500).json({error: result.message});
         }
         return res.status(204).send();
-    }
-
-    async incrementNewsViews(req: Request, res: Response) {
-        const incrementNewsViewsUseCase = new IncrementNewsViewsUseCase(this.newsRepository);
-        const id = Number(req.params.id);
-        const result = await incrementNewsViewsUseCase.execute(id);
-
-        if(result instanceof Error) {
-            if(result instanceof NewsNotFoundError) {
-                return res.status(404).json({error: result.message});
-            }
-            return res.status(500).json({error: result.message});
-        }
-        return res.status(200).json(result);
     }
 
     public subscribe(req: Request, res: Response) {

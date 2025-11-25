@@ -1,6 +1,8 @@
-import { getMediaUrl } from "@/lib/utils/media";
-import { ImageIcon, Video, X } from "lucide-react";
+import { Edit2, ImageIcon, Save, Video, X } from "lucide-react";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import Button from "../ui/Button";
+import { getMediaUrl } from "@/lib/utils/media";
 
 
 interface FilePreviewProps {
@@ -10,10 +12,21 @@ interface FilePreviewProps {
     type: "IMAGE" | "VIDEO";
     onRemove?: () => void;
     isUploadAlready?: boolean;
+    caption?: string;
+    onCaptionChange?: (mediaId: number, caption: string) => void;
+    mediaId?: number
 }
 
-export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlready}: FilePreviewProps) {
+export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlready, caption, onCaptionChange, mediaId}: FilePreviewProps) {
     
+    const [isEditingCaption, setIsEditingCaption] = useState(false);
+    const [captionValue, setCaptionValue] = useState(caption || "");
+
+    useEffect(() => {
+            setCaptionValue(caption || "");  
+            console.log("catopn", caption)
+        }, [caption])
+
     const formatFileSize = (fileSize : number) : string => {
         
         if (fileSize === 0) {
@@ -28,6 +41,14 @@ export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlr
         return formatType;
     }
 
+    const handleAddCaption = () => {
+        if(onCaptionChange && mediaId) {
+              onCaptionChange(mediaId,captionValue);
+
+        }
+        setIsEditingCaption(false);
+    }
+
      return (
         <div className="relative group">
         <div className={`aspect-square rounded-lg overflow-hidden bg-gray-100 border-2 ${isUploadAlready ? 'border-green-200' : 'border-gray-200'}`}>
@@ -35,8 +56,13 @@ export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlr
             <Image src={preview} alt={fileName} fill className="w-full h-full object-cover" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" loading="lazy" unoptimized />
             ) : (
             <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-purple-100 to-blue-100">
-                <Video className="text-purple-600 mb-2" size={32} />
-                <span className="text-xs text-purple-700 font-medium">Vidéo</span>
+            <video 
+            src={getMediaUrl(preview)} 
+            className="w-full h-full object-cover"
+            controls
+            preload="metadata"
+            />                
+            <span className="text-xs text-purple-700 font-medium">Vidéo</span>
             </div>
             )}
         </div>
@@ -64,6 +90,7 @@ export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlr
             </span>
         </div>
 
+
         <div className="mt-2 space-y-0.5">
             <p className="text-xs text-gray-700 font-medium truncate" title={fileName}>
             {fileName}
@@ -71,6 +98,60 @@ export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlr
             <p className="text-xs text-gray-500">
             {formatFileSize(size)}
             </p>
+            
+            {isUploadAlready && onCaptionChange && (
+                <div className="mt-60 ml-50">
+                    {!isEditingCaption ? (
+                        <div className="flex items-center gap-16">
+                            <p className="text-xs text-gray-600 truncate flex-1" title={caption || "Aucune légende"}>
+                                {caption || "Aucune légende"}
+                            </p>
+                            <Button
+                                type="button"
+                                onClick={() => setIsEditingCaption(true)}
+                                variant="primary"                        >
+                                <Edit2 size={12} /> Modifier la legende
+                            </Button>
+                        </div>
+                    ) : (
+                        <div className="flex flex-col gap-1">
+                            <div>
+                            <input
+                                type="text"
+                                value={captionValue}
+                                onChange={(e) => {
+                                    console.log("Input caption value:", e.target.value);
+                                    setCaptionValue(e.target.value);
+                                }}
+                                placeholder="Ajouter une légende..."
+                                className="text-xs border rounded px-2 py-1 w-full"
+                            />
+                            </div>
+                            <div className="flex gap-1">
+                                <button
+                                    type="button"
+                                    onClick={handleAddCaption}
+                                    className="text-green-600 hover:text-green-700 p-1 bg-green-50 rounded w-8 h-8"
+                                    title="Enregistrer"
+                                >
+                                    <Save size={12} />
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setCaptionValue(caption || "");
+                                        setIsEditingCaption(false);
+                                    }}
+                                    className="text-gray-600 hover:text-gray-700 p-1 bg-gray-50 rounded"
+                                    title="Annuler"
+                                >
+                                    <X size={12} />
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            )}
         </div>
         </div>
   );

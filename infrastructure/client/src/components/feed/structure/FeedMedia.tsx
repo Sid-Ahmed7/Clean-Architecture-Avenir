@@ -16,18 +16,17 @@ export function FeedMedia({ media }: FeedMediaProps) {
           <div className="relative aspect-video">
             <Image
               src={getMediaUrl(media.url)}
-              alt={media.altIndex || "Image"}
+              alt={media.altText}
               fill
               className="object-cover"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 66vw, 800px"
-              priority={media.order === 0}
               unoptimized 
               loading="lazy"
             />
           </div>
         ) : media.type === "VIDEO" ? (
           <video
-            src={media.url}
+            src={getMediaUrl(media.url)}
             controls
             className="w-full"
             preload="metadata"
@@ -35,6 +34,8 @@ export function FeedMedia({ media }: FeedMediaProps) {
             Votre navigateur ne supporte pas la lecture de vidéos.
           </video>
         ) : null}
+
+        <p>{media.caption}</p>
       </div>
     </div>
   );

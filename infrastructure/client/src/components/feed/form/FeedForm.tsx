@@ -32,7 +32,7 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { createNews, updateNews } = useNewsMutation();
-  const { uploadMedia } = useMediaMutations();
+  const { uploadMedia, updateMedia } = useMediaMutations();
   const { createContent, updateContent } = useContentMutations();
 
   const isEditMode = !!newsId;
@@ -84,13 +84,11 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
           category: data.category,
           priority: data.priority,
           tags: data.tags || [],
-          views: 0,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         });
         
         if (newsResult.error || !newsResult.data) {
-          console.error("❌ Erreur update news:", newsResult.error);
           setError("root.serverError", {
             type: "manual",
             message: newsResult.error || "Erreur lors de la mise à jour",
@@ -119,12 +117,11 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
 
         targetNewsId = newsResult.data.id;
       }
-
+      if( isEditMode && newsId) {
+      
       for (const block of blocks) {
-        if (block.type === TypeBlock.TEXT) {
-          
-          if (block.id > 0 && isEditMode) {
-            
+        if (block.type === TypeBlock.TEXT && block.id > 0) {
+                      
             const updatedContent = await updateContent.mutateAsync({
               id: block.id,
               newsId: targetNewsId,
@@ -133,55 +130,74 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
             });
             
             if (updatedContent.error) {
+              console.error(`Erreur update content ${block.id}:`, updatedContent.error);
+
             } else {
+                console.log(`Content ${block.id} mis à jour`);
             }
-          } else {
-            console.log(`   Données:`, {
-              newsId: targetNewsId,
-              content: block.content.substring(0, 50) + "...",
-              order: block.order
-            });
-            
-            const contentResult = await createContent.mutateAsync({
-              newsId: targetNewsId,
-              content: block.content,
-              order: block.order
-            });
-            
-            if (contentResult.error) {
-              setError("root.serverError", {
-                type: "manual",
-                message: `Erreur bloc texte ${block.order + 1}: ${contentResult.error}`,
+          } 
+
+          if(block.type === TypeBlock.MEDIA && block.existingMedias && block.existingMedias.length > 0 ) {
+            for(const media of block.existingMedias) {
+              const updatedMedia = await updateMedia.mutateAsync({
+                media: {
+                  ...media,
+                  order: block.order 
+                },
+                newsId: targetNewsId
               });
-              return;
-            } 
+               if (updatedMedia.error) {
+                console.error(`Erreur update media ${media.id}:`, updatedMedia.error);
+              } else {
+                console.log(`Media ${media.id} mis à jour`);
+              }
+           
+            }
+          }
+
+        }
+      }
+            for (const block of blocks) {
+        if (block.type === TypeBlock.TEXT && block.id < 0) {
+          console.log(`Données:`, {
+            newsId: targetNewsId,
+            content: block.content.substring(0, 50) + "...",
+            order: block.order
+          });
+          
+          const contentResult = await createContent.mutateAsync({
+            newsId: targetNewsId,
+            content: block.content,
+            order: block.order
+          });
+          
+          if (contentResult.error) {
+            setError("root.serverError", {
+              type: "manual",
+              message: `Erreur bloc texte ${block.order + 1}: ${contentResult.error}`,
+            });
+            return;
+          } else {
+            console.log(`Content créé avec order ${block.order}`);
           }
         }
 
-        if (block.type === TypeBlock.MEDIA) {
-          
-          if (block.files && block.files.length > 0) {
-            const mode = isEditMode ? "nouveaux" : "tous les";
-            
-            for (const file of block.files) {
-              console.log(`   📤 Upload: ${file.name}`);
-              
-              const mediaResult = await uploadMedia.mutateAsync({
-                file,
-                newsId: targetNewsId,
-                altText: `${data.title} - Media`,
-              });
+        if (block.type === TypeBlock.MEDIA && block.files && block.files.length > 0) {
+          for (const file of block.files) {           
+            const mediaResult = await uploadMedia.mutateAsync({
+              file,
+              newsId: targetNewsId
+            });
 
-              if (mediaResult.error) {
-              } 
+            if (mediaResult.error) {
+              console.error(`Erreur upload:`, mediaResult.error);
+            } else {
+              console.log(`Média uploadé`);
             }
-          }
-
-          if (isEditMode && block.existingMedias && block.existingMedias.length > 0) {
-            console.log(`   ℹ️ ${block.existingMedias.length} médias existants conservés`);
           }
         }
       }
+
       
       await queryClient.invalidateQueries({ queryKey: ["news", targetNewsId] });
       await queryClient.invalidateQueries({ queryKey: ["content", "news", targetNewsId] });
@@ -266,6 +282,7 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
         <BlockEditor 
           onChange={setBlocks} 
           initialBlocks={initialBlocks}
+          newsId={newsId}
           disabled={isSubmitting} 
         />
       </div>

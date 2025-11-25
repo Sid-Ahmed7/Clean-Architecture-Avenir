@@ -33,11 +33,9 @@ export function FeedManageList({news, onDelete} : FeedManageListProps) {
             <Card key={n.id} className="flex flex-col justify-between">
               <div>
                 <h3 className="text-lg font-semibold mb-1">{n.title}</h3>
-                <p className="text-sm text-gray-600 line-clamp-3 mb-2">{n.content}</p>
                 <div className="text-xs text-gray-400">
                   <span>Catégorie : {n.category}</span> •{" "}
                   <span>Priorité : {n.priority}</span> •{" "}
-                  <span>Vues : {n.views}</span>
                 </div>
               </div>
 

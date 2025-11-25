@@ -6,16 +6,17 @@ import { AlertCircle } from "lucide-react";
 import { BlockContent } from "./BlockContent";
 import Image from "next/image";
 import { getMediaUrl } from "@/lib/utils/media";
-import { getBlockKey, getNextBlockOrder } from "@/lib/utils/blocksUtils";
+import { getBlockKey } from "@/lib/utils/blocksUtils";
 
 interface BlockEditorProps {
     onChange: (blocks: Block[]) => void;
     initialBlocks?: Block[];
+    newsId?: number;
     disabled?: boolean;
     error?: string;
 }
 
-export function BlockEditor({onChange, initialBlocks, disabled, error}: BlockEditorProps) {
+export function BlockEditor({newsId, onChange, initialBlocks, disabled, error}: BlockEditorProps) {
     const blockId = useRef(-1);
     const [blocks, setBlocks] = useState<Block[]>([]);
     const hasInitialized = useRef(false);
@@ -42,9 +43,9 @@ export function BlockEditor({onChange, initialBlocks, disabled, error}: BlockEdi
     }, [blocks,  onChange])
 
  const onAddBlock = (type: TypeBlock) => {
-    console.log("➕ Ajout d'un block");
-    console.log("   Blocks actuels:", blocks.length);
-    console.log("   Nouvel order:", blocks.length);
+    console.log("Ajout d'un block");
+    console.log("Blocks actuels:", blocks.length);
+    console.log("Nouvel order:", blocks.length);
 
     const newBlock: Block = {
         id: blockId.current--,
@@ -53,7 +54,7 @@ export function BlockEditor({onChange, initialBlocks, disabled, error}: BlockEdi
         ...(type === TypeBlock.TEXT ? {content: ""} : {files: [], existingMedias: []})
     } as Block
 
-    console.log("   Nouveau block créé:", newBlock);
+    console.log(" Nouveau block créé:", newBlock);
     
     setBlocks([...blocks, newBlock]);
 }
@@ -114,6 +115,7 @@ return (
                   >
                     <BlockContent
                       block={block}
+                      newsId={newsId!}
                       onUpdate={(updated) => updateBlock(getBlockKey(block), updated)}
                       onRemove={() => removeBlock(getBlockKey(block))}
                       disabled={disabled}
@@ -125,7 +127,7 @@ return (
                           <Image
                             key={media.id}
                             src={getMediaUrl(media.url)}
-                            alt={media.altIndex || ""}
+                            alt={media.altText}
                             className="w-24 h-24 object-cover rounded"
                             width={800} 
                             height={288}

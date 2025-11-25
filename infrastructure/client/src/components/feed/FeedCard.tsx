@@ -35,7 +35,7 @@ export function FeedCard({ news, media }: FeedCardProps) {
                             {sortedMedia[0].type === "IMAGE" ? (
                                 <Image 
                                     src={getMediaUrl(sortedMedia[0].url)} 
-                                    alt={sortedMedia[0].altIndex || news.title} 
+                                    alt={sortedMedia[0].altText} 
                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
                                     width={800} 
                                     height={288} 
@@ -68,7 +68,7 @@ export function FeedCard({ news, media }: FeedCardProps) {
                                     {item.type === "IMAGE" ? (
                                         <Image 
                                             src={getMediaUrl(item.url)} 
-                                            alt={item.altIndex || news.title} 
+                                            alt={item.altText} 
                                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
                                             width={400} 
                                             height={400} 
@@ -123,12 +123,6 @@ export function FeedCard({ news, media }: FeedCardProps) {
                 </h2>
 
                 <div className="flex items-center justify-between text-sm text-gray-500 mb-4 pb-4 border-b border-gray-100">
-                    <div className="flex items-center gap-4">
-                        <span className="flex items-center gap-1.5 font-medium">
-                            <Eye size={16} />
-                            {news.views} vue{news.views > 1 ? 's' : ''}
-                        </span>
-                    </div>
                     <span className="flex items-center gap-1.5 font-medium">
                         <Calendar size={16} />
                         {new Date(news.createdAt).toLocaleDateString('fr-FR')}

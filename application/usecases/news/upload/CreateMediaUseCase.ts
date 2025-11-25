@@ -2,13 +2,16 @@ import { MediaEntity } from "../../../../domain/entities/MediaEntity";
 import { MediaTypeEnum } from "../../../../domain/enums/MediaTypeEnum";
 import { MediaRepositoryInterface } from "../../../ports/repositories/news/MediaRepositoryInterface";
 import { NewsRepositoryInterface } from "../../../ports/repositories/news/NewsRepositoryInterface";
-import {OrderService} from "../../../ports/services/news/OrderService"
+import {OrderService} from "../../../ports/services/news/OrderService";
+import {AltTextService} from "../../../ports/services/news/AltTextService";
+
 export class CreateMediaUseCase {
     
     constructor(
         private mediaRepository: MediaRepositoryInterface,
         private newsRepository: NewsRepositoryInterface,
-        private mediaService: OrderService
+        private mediaService: OrderService,
+        private altTextService: AltTextService
     ) {}
 
     async execute(media: Omit<MediaEntity ,"id" | "order">): Promise<MediaEntity | Error> {
@@ -18,6 +21,7 @@ export class CreateMediaUseCase {
             return news;
         }
         const order = await this.mediaService.getNextOrder(news.id);
+        const altText =  this.altTextService.generateAltText(media.url);
 
         const mediaEntity = MediaEntity.from(
             0,
@@ -25,7 +29,8 @@ export class CreateMediaUseCase {
             media.url,
             media.type,
             order,
-            media.altText,
+            altText,
+            media.caption ?? "",
             media.size,
             media.mimeType
         );

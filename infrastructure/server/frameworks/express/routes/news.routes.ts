@@ -13,7 +13,6 @@ router.post("/create", verifyTokenAccess,  authorizeRoles([RoleEnum.BANK_ADVISOR
 router.get("/", verifyTokenAccess, (req, res) => newsController.getAllNews(req, res));
 router.get("/:id", verifyTokenAccess, (req, res) => newsController.getNewsById(req, res));
 router.put("/update", verifyTokenAccess, authorizeRoles([RoleEnum.BANK_ADVISOR]), (req,res) => newsController.updateNews(req, res));
-router.put("/increment-views/:id", verifyTokenAccess, (req, res) => newsController.incrementNewsViews(req, res));
 router.delete("/delete/:id", verifyTokenAccess, authorizeRoles([RoleEnum.BANK_ADVISOR]), (req, res) => newsController.deleteNews(req, res));
 
 export default router;

@@ -2,7 +2,6 @@
 
 import { useAllNews, useNewsMutation } from "@/hooks/useNews";
 import { FeedManageList } from "@/components/feed/FeedManageList";
-import { FeedStats } from "@/components/feed/FeedStats";
 import { NewsFilters } from "@/types/filtersNews";
 import { useState } from "react";
 import { FeedFilters } from "@/components/feed/FeedFilters";
@@ -49,11 +48,6 @@ return (
 
       {!isLoading && !error && (
         <>
-          <section className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-semibold mb-4">Statistiques générales</h2>
-            <FeedStats topFeeds={newsList} />
-          </section>
-
           <section className="bg-white rounded-lg shadow p-6">
             <h2 className="text-xl font-semibold mb-4">Gérer les actualités</h2>
             <FeedManageList news={newsList} onDelete={handleDelete} />

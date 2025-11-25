@@ -17,7 +17,6 @@ export interface News {
     category: NewsCategoryEnum;
     priority: NewsPriorityEnum;
     tags: string[];
-    views: number;
     createdAt: string;
     updatedAt?: string;
 }

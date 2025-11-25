@@ -7,13 +7,14 @@ import { DraggableProvidedDragHandleProps } from "@hello-pangea/dnd";
 
 interface BlockContentProps {
     block: Block;
+    newsId: number;
     onUpdate: (block: Block) => void;
     onRemove: () => void;
     disabled?: boolean;
     dragAndDropHandle: DraggableProvidedDragHandleProps  | null
 }
 
-export function BlockContent({block, onUpdate, onRemove, disabled, dragAndDropHandle}: BlockContentProps) {
+export function BlockContent({block, newsId, onUpdate, onRemove, disabled, dragAndDropHandle}: BlockContentProps) {
     return (
     <div className="bg-white border border-gray-200 rounded-lg p-4 flex gap-3 hover:shadow-md transition-shadow">
       <div
@@ -37,6 +38,7 @@ export function BlockContent({block, onUpdate, onRemove, disabled, dragAndDropHa
         <MediaContent
           files={block.files}
           existingMedias={block.existingMedias}
+          newsId={newsId}
           onChange={(files) => onUpdate({ ...block, files })}
           disabled={disabled}
         />

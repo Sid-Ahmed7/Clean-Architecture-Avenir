@@ -1,15 +1,25 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import * as mediaApi from "@/lib/api/news/client/media";
 import { Media } from "@/types/media";
+import { mediaSchema } from "@/lib/validation/media/mediaSchema";
+import z from "zod";
+import { useTranslations } from "next-intl";
 
 export const MEDIA_QUERY_KEY = "media";
 
 export const useMediaByNewsId = (newsId: number) => {
+    const t = useTranslations();
+  
   return useQuery<Media[]>({
     queryKey: [MEDIA_QUERY_KEY, "news", newsId],
     queryFn: async () => {
       try {
-        return await mediaApi.getMediaByNewsId(newsId);
+        const medias =  await mediaApi.getMediaByNewsId(newsId);
+        const parsed = z.array(mediaSchema(t)).safeParse(medias);
+        if(!parsed.success) {
+          return [];
+        }
+        return parsed.data;        
       } catch (err: any) {
         console.error("Erreur lors du chargement des médias:", err);
         return [];
@@ -21,13 +31,23 @@ export const useMediaByNewsId = (newsId: number) => {
 };
 
 export const useMediaMutations = () => {
+    const t = useTranslations();
+
   const queryClient = useQueryClient();
 
-  const uploadMedia = useMutation<{ data: Media | null; error: string | null },Error,{ file: File; newsId: number; altText?: string }>({
-    mutationFn: async ({ file, newsId, altText }) => {
+  const uploadMedia = useMutation<{ data: Media | null; error: string | null },Error,{ file: File; newsId: number;}>({
+    mutationFn: async ({ file, newsId}) => {
       try {
-        const uploaded = await mediaApi.uploadMedia(file, newsId, altText);
-        return { data: uploaded, error: null };
+        const uploaded = await mediaApi.uploadMedia(file, newsId);
+        const parsed = mediaSchema(t).safeParse(uploaded);
+
+        if (!parsed.success) {
+          return {
+            data: null,
+            error: "Validation Zod échouée",
+         };
+        }
+        return {data: parsed.data, error: null};
       } catch (err: any) {
         return {
           data: null,
@@ -39,6 +59,31 @@ export const useMediaMutations = () => {
       if (result.data) {
         queryClient.setQueryData<Media[]>([MEDIA_QUERY_KEY, "news", newsId], (old) =>
           old ? [...old, result.data!] : [result.data!]
+        );
+      }
+    },
+  });
+  const updateMedia = useMutation<{ data: Media | null; error: string | null }, Error, { media: Media; newsId: number }>({
+    mutationFn: async ({ media }) => {
+      try {
+        const updated = await mediaApi.updateMedia(media);
+        const parsed = mediaSchema(t).safeParse(updated);
+        if (!parsed.success) {
+          return { data: null, error: "Erreur de validation lors de la modification" };
+        }
+        return { data: parsed.data, error: null };
+      } catch (err: any) {
+        return {
+          data: null,
+          error: err.response?.data?.error || err.message || "Erreur lors de la modification",
+        };
+      }
+    },
+    onSuccess: (result, { media, newsId }) => {
+      if (result.data) {
+        queryClient.setQueryData<Media[]>(
+          [MEDIA_QUERY_KEY, "news", newsId],
+          (old) => (old ? old.map((m) => (m.id === media.id ? result.data! : m)) : [result.data!])
         );
       }
     },
@@ -65,9 +110,9 @@ export const useMediaMutations = () => {
       }
     },
   });
-
   return {
     uploadMedia,
+    updateMedia,
     deleteMedia,
   };
-}
+  };

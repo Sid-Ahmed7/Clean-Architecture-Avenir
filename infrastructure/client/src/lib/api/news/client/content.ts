@@ -18,7 +18,7 @@ export const createContent = async (content: CreateContent): Promise<Content[]> 
     return data;  
 }
 
-export const updateContent = async (content: UpdateContent): Promise<Content[]> => {
+export const updateContent = async (content: UpdateContent): Promise<Content> => {
     const {data} = await apiClient.put(`/content/update`, content);
     return data;  
 }

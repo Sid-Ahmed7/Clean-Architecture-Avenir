@@ -47,8 +47,3 @@ export const updateNews = async (news: News) : Promise<News> => {
 export const deleteNews = async (id: number) : Promise<void> => {
     await apiClient.delete(`/feed/delete/${id}`);
 }
-
-export const incrementNewsViews = async (id: number) : Promise<News> => {
-    const {data} = await apiClient.put(`/feed/increment-views/${id}`);
-    return data;
-}

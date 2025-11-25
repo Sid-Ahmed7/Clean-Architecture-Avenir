@@ -3,13 +3,16 @@ import { Request, Response } from "express";
 import { InMemoryMediaRepository } from "../../../../adapters/repositories/InMemoryMediaRepository";
 import { InMemoryNewsRepository } from "../../../../adapters/repositories/InMemoryNewsRepository";
 import {ManageOrderService} from "../../../../adapters/services/news/ManageOrderService";
+import {GenerateAltTextService} from "../../../../adapters/services/news/GenerateAltTextService";
 import { LocalFileStorageService } from "../../../../adapters/services/news/LocalFileStorageService";
 import { UploadMediaUseCase } from "../../../../../application/usecases/news/upload/UploadMediaUseCase";
+import { UpdateMediaUseCase } from "../../../../../application/usecases/news/upload/UpdateMediaUseCase";
 import { CreateMediaUseCase } from "../../../../../application/usecases/news/upload/CreateMediaUseCase";
 import { GetMediaByNewsIdUseCase } from "../../../../../application/usecases/news/upload/GetMediaByNewsIdUseCase";
 import { DeleteMediaUseCase } from "../../../../../application/usecases/news/upload/DeleteMediaUseCase";
 import { MediaTypeEnum } from "../../../../../domain/enums/MediaTypeEnum";
 import { MediaEntity } from "../../../../../domain/entities/MediaEntity";
+import { MediaNotFoundError } from "../../../../../application/errors/MediaNotFoundError";
 
 export class MediaController {
     
@@ -17,7 +20,8 @@ export class MediaController {
         private mediaRepository: InMemoryMediaRepository,
         private newsRepository: InMemoryNewsRepository,
         private fileStorageService: LocalFileStorageService,
-        private orderService: ManageOrderService
+        private orderService: ManageOrderService,
+        private altService: GenerateAltTextService
     ){}
 
     async uploadMedia(req: Request, res: Response) {
@@ -37,11 +41,12 @@ export class MediaController {
             url: uploadFile.url,
             type: mediaType,
             altText: req.body.altText || "",
+            caption: req.body.caption || "",
             size: uploadFile.size,
             mimeType: uploadFile.mimeType,
         };
 
-        const createMediaUseCase = new CreateMediaUseCase(this.mediaRepository, this.newsRepository, this.orderService);
+        const createMediaUseCase = new CreateMediaUseCase(this.mediaRepository, this.newsRepository, this.orderService, this.altService);
         const createdMedia = await createMediaUseCase.execute(mediaEntity)
             if (createdMedia instanceof Error) {
             return res.status(500).json({ error: createdMedia.message });
@@ -58,6 +63,19 @@ export class MediaController {
         const mediaList = await getMediaUseCase.execute(newsId);
         return res.status(200).json(mediaList);
     }
+        async updateMedia(req: Request, res: Response) {
+            const updateMediaUseCase = new UpdateMediaUseCase(this.mediaRepository);
+            const result = await updateMediaUseCase.execute(req.body);
+            if(result instanceof Error) {
+                if(result instanceof MediaNotFoundError) {
+                    return res.status(404).json({error: result.message});
+                }
+                return res.status(500).json({error: result.message});
+            }
+    
+            return res.status(200).json(result);
+        }
+    
      async deleteMedia(req: Request, res: Response) {
         const mediaId = Number(req.params.mediaId);
         if (isNaN(mediaId)) {

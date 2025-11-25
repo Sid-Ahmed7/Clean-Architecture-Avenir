@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CreateNewsModel } from "@/lib/validation/news/createNewsSchema";
 import { Block, TypeBlock } from "@/types/contentBlock";
 import { Loader2 } from "lucide-react";
@@ -20,9 +20,13 @@ export default function EditFeedPage() {
 
   const [initialValues, setInitialValues] = useState<CreateNewsModel>();
   const [initialBlocks, setInitialBlocks] = useState<Block[]>([]);
+  const hasInitialized = useRef(false);
   
   useEffect(() => {
     if (newsLoading || contentsLoading || mediaLoading) {
+      return;
+    }
+     if (hasInitialized.current) {
       return;
     }
 
@@ -68,7 +72,7 @@ export default function EditFeedPage() {
     const allBlocks = [...textBlocks, ...mediaBlocks].sort((a, b) => a.order - b.order);;
     console.log("Blocs combinés et triés:", allBlocks);
     setInitialBlocks(allBlocks);
-  
+    hasInitialized.current = true;
 }, [news, contents, medias, newsLoading, contentsLoading,mediaLoading]);
 
 return (

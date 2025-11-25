@@ -8,7 +8,6 @@ export const newsSchema = (t:(key: string) => string) =>
        category: z.enum(NewsCategoryEnum),
        priority: z.enum(NewsPriorityEnum),
        tags: z.array(z.string()),
-       views: z.number(),
        createdAt: z.string(),
        updatedAt: z.string().optional(),
     })

@@ -3,8 +3,9 @@ export interface Media {
     newsId: number;
     url: string;
     type: "IMAGE" | "VIDEO";
-    altIndex?: string;
-    order?: number;
+    altText: string;
+    order: number;
+    caption: string;
     size: number;
     mimeType: string;
 }

@@ -37,13 +37,21 @@ export class InMemoryMediaRepository implements MediaRepositoryInterface {
     public async create(media: MediaEntity): Promise<MediaEntity | InvalidUrlMediaError> {
         
         if(!media) {
-            return new InvalidUrlMediaError("Erro creation media")
+            return new InvalidUrlMediaError("Error creation media")
         }
 
         this.incrId++;
         media.id = this.incrId;
         this.mediaList.push(media);
 
+        return media;
+    }
+    public async update(media: MediaEntity): Promise<MediaEntity | MediaNotFoundError> {
+        const index = this.mediaList.findIndex((m) => m.id === media.id);
+        if (index === -1) {
+            return new MediaNotFoundError(`Media with id ${media.id} not found`);
+        }
+        this.mediaList[index] = media;
         return media;
     }
 

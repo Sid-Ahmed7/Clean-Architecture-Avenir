@@ -1,20 +1,17 @@
 import { FilePreview } from "./FilePreview";
 import Button from "../ui/Button";
+import { Files } from "@/types/files";
 
 interface FileGridProps {
   title: string;
-  files: Array<{
-    preview: string;
-    filename: string;
-    size: number;
-    type: "IMAGE" | "VIDEO";
-  }>;
+  files: Array<Files>
   onRemove?: (index: number) => void;
   onClearAll?: () => void;
   isUploadAlready?: boolean;
+  onCaptionChange?: (mediaId: number, caption: string) => void;
 }
 
-export function FileGrid({title,files,onRemove,onClearAll,isUploadAlready = false}: FileGridProps) {
+export function FileGrid({title,files,onRemove,onClearAll,isUploadAlready = false, onCaptionChange}: FileGridProps) {
   if (files.length === 0) {
     return null;
   }
@@ -44,8 +41,18 @@ export function FileGrid({title,files,onRemove,onClearAll,isUploadAlready = fals
             fileName={file.filename}
             size={file.size}
             type={file.type}
+            caption={file.caption}
             onRemove={onRemove ? () => onRemove(index) : undefined}
             isUploadAlready={isUploadAlready}
+            onCaptionChange={onCaptionChange && file.mediaId
+              ? (mediaId, caption) => {
+                  onCaptionChange(mediaId, caption);
+                }
+              : undefined
+            }
+
+
+            mediaId={file.mediaId}
           />
         ))}
       </div>

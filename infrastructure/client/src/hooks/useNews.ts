@@ -170,61 +170,10 @@ export const useNewsMutation = () => {
     },
   });
 
-  const incrementViews = useMutation<{ data: News | null; error: string | null },Error,number,{ previousNews: News | undefined }>({
-    mutationFn: async (id) => {
-      try {
-        const updated = await newsApi.incrementNewsViews(id);
-        const parsed = newsSchema(t).safeParse(updated);
-        
-        if (!parsed.success) {
-          return {
-            data: null,
-            error: "Erreur de validation lors de l'incrémentation des vues"
-          };
-        }
-        
-        return {
-          data: parsed.data,
-          error: null
-        };
-      } catch (err: any) {
-        return {
-          data: null,
-          error: err.response?.data?.error || err.message || "Erreur inconnue"
-        };
-      }
-    },
-    onMutate: async (newsId) => {
-      await queryClient.cancelQueries({ queryKey: [NEWS_QUERY_KEY, newsId] });
-      
-      const previousNews = queryClient.getQueryData<News>([NEWS_QUERY_KEY, newsId]);
-      
-      if (previousNews) {
-        queryClient.setQueryData<News>([NEWS_QUERY_KEY, newsId], {
-          ...previousNews,
-          views: previousNews.views + 1,
-        });
-      }
-      
-      return { previousNews };
-    },
-    onError: (err, newsId, context) => {
-      if (context?.previousNews) {
-        queryClient.setQueryData([NEWS_QUERY_KEY, newsId], context.previousNews);
-      }
-    },
-    onSuccess: (result) => {
-      if (result.data) {
-        queryClient.setQueryData([NEWS_QUERY_KEY, result.data.id], result.data);
-      }
-    },
-  });
-
-  return {
+   return {
     createNews,
     updateNews,
-    deleteNews,
-    incrementViews,
-  };
+    deleteNews
+   };
   
 }

@@ -10,9 +10,10 @@ interface MediaUploaderProps {
     existingFiles?: UploadedFile[];
     maxSize?: number;
     disabled?: boolean;
+    onCaptionUpdate?: (mediaId: number, caption: string) => void;
 }
 
-export function MediaUploader({onFilesSelected, existingFiles = [],maxSize = 10, disabled =false} : MediaUploaderProps){
+export function MediaUploader({onFilesSelected, existingFiles = [],maxSize = 10, disabled =false, onCaptionUpdate} : MediaUploaderProps){
     const [selectedFiles, setSelectedFiles] = useState<MediaFile[]>([]);
     const [isDragging, setDragging] =  useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -126,6 +127,13 @@ export function MediaUploader({onFilesSelected, existingFiles = [],maxSize = 10,
         onFilesSelected([]);
         setError(null);
     };
+    
+    const handleCaptionChange = (mediaId: number, caption: string) => {
+        if (onCaptionUpdate) {
+            onCaptionUpdate(mediaId, caption);
+        }
+    };
+
 
     const newFilesForGrid = selectedFiles.map(mediaFile => ({
         preview: mediaFile.preview,
@@ -138,7 +146,9 @@ export function MediaUploader({onFilesSelected, existingFiles = [],maxSize = 10,
         preview: uploadFile.url,
         filename: uploadFile.filename,
         size: uploadFile.size,
-        type: uploadFile.type
+        type: uploadFile.type,
+    caption: typeof uploadFile.caption === "string" ? uploadFile.caption : "",
+        mediaId: uploadFile.id
     }))
    
     const totalFilesCount = existingFiles.length + selectedFiles.length;
@@ -173,6 +183,8 @@ export function MediaUploader({onFilesSelected, existingFiles = [],maxSize = 10,
       <FileGrid
         title="Fichiers existants"
         files={existingFilesForGrid}
+        isUploadAlready={true}
+        onCaptionChange={handleCaptionChange}
       />
 
       <FileGrid
