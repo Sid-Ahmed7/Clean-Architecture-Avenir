@@ -1,4 +1,4 @@
-import { StockRepositoryInterface } from "../../../application/ports/repositories/StockRepositoryInterface";
+import { StockRepositoryInterface } from "../../../application/ports/repositories/stocks/StockRepositoryInterface";
 import { StockEntity } from "../../../domain/entities/StockEntity";
 import { InvalidAccountError } from "../../../domain/errors/InvalidAccountError";
 import { StockAlreadyExistsError } from "../../../application/errors/StockAlreadyExistsError";

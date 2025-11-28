@@ -52,6 +52,14 @@ export class InMemoryAccountRepository implements AccountRepositoryInterface {
         }
         return null;
     }
+    
+    public async findByUserId(userId: string): Promise<AccountEntity | AccountNotFoundError> {
+        const account = this.accounts.find(acc => acc.userId === userId);
+        if (!account) {
+            return new AccountNotFoundError(`Account for user ${userId} not found`);
+        }
+        return account;
+    }
 
     public async getSubAccountByParentAccountId(parentAccountId: number): Promise<Array<AccountEntity>> {
         const subAccounts = this.accounts.filter(acc => acc.parentAccountId === parentAccountId);

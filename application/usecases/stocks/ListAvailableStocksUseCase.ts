@@ -1,5 +1,5 @@
 import { StockEntity } from "../../../domain/entities/StockEntity";
-import {StockRepositoryInterface} from "../../ports/repositories/StockRepositoryInterface";
+import {StockRepositoryInterface} from "../../ports/repositories/stocks/StockRepositoryInterface";
 export class ListAvailableStocksUseCase {
 
     public constructor(private stockRepository: StockRepositoryInterface) {}

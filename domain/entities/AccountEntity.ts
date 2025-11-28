@@ -7,6 +7,9 @@ import { IbanValue } from "../values/IbanValue";
 import { BalanceValue } from "../values/BalanceValue";
 import { AccountStatusValue } from "../values/AccountStatusValue";
 import { AccountNameValue } from "../values/AccountNameValue";
+import {InsufficientFundsError} from "../errors/InsufficientFundsError";
+import { InvalidAccountStatusError } from "../errors/InvalidAccountStatusError";
+import { InvalidCreditError } from "../errors/InvalidCreditError";
 
 export class AccountEntity {
   public static from(accountNumber: number, iban: string, userId: string, accountType: AccountTypeEnum, currency: string, accountStatus: AccountStatusEnum, isActive: boolean, currentBalance: number = 20, createdAt: Date, withdrawalLimit: number = 3000 , transferLimit: number = 3000, overdraftLimit: number = 1000, customAccountName: string, parentAccountId?: number, closedAt?: Date) 
@@ -105,7 +108,48 @@ export class AccountEntity {
   public updateOverdraftLimit(limit: number) {
     this.overdraftLimit = limit;
   }
+ public getAvailableBalance(overdraftLimit: number = 0): number {
+    return this.currentBalance + overdraftLimit;
+  }
 
+  public hasEnoughFunds(amount: number, overdraftLimit: number = 0): boolean {
+    return this.getAvailableBalance(overdraftLimit) >= amount;
+  }
+
+  public canTrade(): boolean {
+    return this.isActive && this.accountStatus === AccountStatusEnum.ACTIVE && this.currentBalance > 0;
+  }
+
+  public debit(amount: number, overdraftLimit: number = 0): void | InsufficientFundsError {
+    if (amount <= 0){
+      return new InsufficientFundsError("Debit amount must be positive");
+    }
+    if (!this.isActive || this.accountStatus !== AccountStatusEnum.ACTIVE){
+      return new InsufficientFundsError("Account not active");
+    }
+    if (!this.hasEnoughFunds(amount, overdraftLimit)) {
+      return new InsufficientFundsError(`Insufficient funds. Available: ${this.getAvailableBalance(overdraftLimit)}, required: ${amount}`);
+    }
+    this.currentBalance -= amount;
+  }
+
+  public credit(amount: number): void | InvalidCreditError | InvalidAccountStatusError {
+    if (amount <= 0){
+      return new InvalidCreditError("Credit amount must be positive");
+    }
+    if (!this.isActive){
+      return new InvalidAccountStatusError("Account not active");
+    }
+    this.currentBalance += amount;
+  }
+
+  public getBalance(): number {
+    return this.currentBalance;
+  }
+
+  public isMainAccount(): boolean {
+    return this.parentAccountId === undefined;
+  }
 
 
 

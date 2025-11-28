@@ -1,7 +1,8 @@
 import { CurrencyValue } from "../values/CurrencyValue";
 import { RateOfChangeValue } from "../values/RateOfChangeValue";
 import { StockSymbolValue } from "../values/StockSymbolValue";
-
+import {PriceValue} from "../values/PriceValue";
+import { InvalidPriceError } from "../errors/InvalidPriceError";
 export class StockEntity {
 
     public static from (id:number, symbol: string, companyName: string, name: string, currentPrice: number, rateOfChange: number, currency: string, createdAt: Date, isActionAvailable: boolean, updatedAt: Date, previousPrice?: number) {
@@ -21,7 +22,12 @@ export class StockEntity {
             return validatedCurrency;
         }
 
-        return new StockEntity(id,validateSymbol.value, companyName, name, currentPrice, validateRateOfChange.value, validatedCurrency.value, createdAt, isActionAvailable, updatedAt, previousPrice);
+        const validatedPrice = PriceValue.from(currentPrice);
+        if(validatedPrice instanceof Error) {
+            return validatedPrice;
+        }
+
+        return new StockEntity(id,validateSymbol.value, companyName, name, validatedPrice.value, validateRateOfChange.value, validatedCurrency.value, createdAt, isActionAvailable, updatedAt, previousPrice);
 
     }
 
@@ -49,7 +55,22 @@ export class StockEntity {
         this.updatedAt = new Date();
     }
 
+    public updatePrice(newPrice: number) : InvalidPriceError | void {
+        if(newPrice < 0) {
+            return new InvalidPriceError("Price cannot be negative")
+        }
 
+        this.previousPrice = this.currentPrice;
+        this.currentPrice = newPrice;
 
+        if (this.previousPrice && this.previousPrice > 0) {
+            this.rateOfChange = ((newPrice - this.previousPrice) / this.previousPrice) * 100;
+        }
 
+        this.updatedAt = new Date();
+    }
+
+    public canBeTraded(): boolean {
+        return this.isActionAvailable && this.currentPrice > 0
+    }
 }

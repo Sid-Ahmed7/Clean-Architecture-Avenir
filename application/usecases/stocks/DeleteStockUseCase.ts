@@ -1,4 +1,4 @@
-import { StockRepositoryInterface } from "../../ports/repositories/StockRepositoryInterface";
+import { StockRepositoryInterface } from "../../ports/repositories/stocks/StockRepositoryInterface";
 
 export class DeleteStockUseCase {
     public constructor(private stockRepository: StockRepositoryInterface){}
