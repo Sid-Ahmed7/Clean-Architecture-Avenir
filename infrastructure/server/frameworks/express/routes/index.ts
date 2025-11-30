@@ -6,12 +6,18 @@ import chatRoutes from "./chat.routes";
 import newsRoutes from "./news.routes";
 import mediaRoutes from "./media.routes";
 import contentRoutes from "./content.routes";
+import stockOrder from "./stockOrder.routes";
+import stockPosition from "./account.routes";
+import stockTransaction from "./stockTransactions.routes";
 
 const router = express.Router();
 
 router.use("/auth", authRoutes);
 router.use("/accounts", accountRoutes);
 router.use("/stock", stockRoutes);
+router.use("/stock/order", stockOrder);
+router.use("/stock/position", stockPosition);
+router.use("/stock/transaction", stockTransaction);
 router.use("/chat", chatRoutes);
 router.use("/feed", newsRoutes);
 router.use("/media", mediaRoutes);

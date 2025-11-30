@@ -9,15 +9,15 @@ export class OrderBookEngineService implements OrderBookService {
             return null;
         }
 
-        const activeBuyOrders = buyOrders.filter((order) => order.isActive()).sort((a,b) => a.orderPrice - b.orderPrice);
-        const activeSellOrders = buyOrders.filter((order) => order.isActive()).sort((a,b) => a.orderPrice - b.orderPrice);
+        const activeBuyOrders = buyOrders.filter((order) => order.isActive()).sort((a,b) => b.orderPrice - a.orderPrice);
+        const activeSellOrders = sellOrders.filter((order) => order.isActive()).sort((a,b) => a.orderPrice - b.orderPrice);
 
         if(activeBuyOrders.length === 0 || activeSellOrders.length === 0) {
             return null;
         }
 
-        const bestPrice = activeBuyOrders[0].orderPrice;
-        const bestAsk = activeSellOrders[0].orderPrice;
+        const bestPrice = activeBuyOrders[0]!.orderPrice;
+        const bestAsk = activeSellOrders[0]!.orderPrice;
 
         if(bestPrice < bestAsk) {
             return null;
