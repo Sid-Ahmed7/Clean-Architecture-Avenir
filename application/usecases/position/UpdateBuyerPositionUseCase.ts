@@ -29,6 +29,8 @@ public async execute({userId,stockSymbol,quantity,pricePerShare}: UpdateBuyer): 
             if(updatePosition instanceof Error) {
                 return updatePosition;
             }
+
+            return existingPosition;
         }
         const totalInvested = quantity * pricePerShare;
         const newPosition = StockHoldingEntity.from(0, userId, stockSymbol,quantity,pricePerShare, totalInvested, new Date(), new Date());

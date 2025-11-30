@@ -12,7 +12,9 @@ export class FindMatchableOrdersUseCase {
 
         public async execute(stockSymbol: string): Promise<Array<{ buyOrderId: number; sellOrderId: number }> | Error> {
             const orders = await this.stockOrderRepository.findPendingOrdersBySymbol(stockSymbol);
-
+            if(orders instanceof Error) {
+                return orders;
+            }
             const buyOrders = orders.filter(o => o.orderType === OrderTypeEnum.BUY);
             const sellOrders = orders.filter(o => o.orderType === OrderTypeEnum.SELL);
 

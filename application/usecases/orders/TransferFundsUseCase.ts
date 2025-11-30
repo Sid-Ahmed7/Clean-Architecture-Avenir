@@ -14,7 +14,7 @@ export class TransferFundsUseCase {
             return debitResult;
         }
 
-        const totalAmountCrediter = totalAmount - transferFunds.buyerFee;
+        const totalAmountCrediter = totalAmount - transferFunds.sellerFee;
         const creditResult = await this.accountService.creditAccount(transferFunds.sellerUserId,totalAmountCrediter);
     
         if(creditResult instanceof Error) {

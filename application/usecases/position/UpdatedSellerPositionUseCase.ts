@@ -26,6 +26,7 @@ public async execute({userId,stockSymbol,quantity}: UpdateSeller): Promise<Stock
         if(deletePosition instanceof Error) {
             return deletePosition;
         }
+        return position;
        }
        
 
