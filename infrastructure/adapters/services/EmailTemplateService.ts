@@ -8,7 +8,7 @@ export class EmailTemplateService {
     firstName: string,
     token: string,
     expiresAt: Date,
-    role: "CLIENT" | "BANK_ADVISOR",
+    role: "CLIENT" | "BANK_ADVISOR" | "BANK_MANAGER",
     locale: string = "en"
   ) {
     const url = `${this.baseUrl}/${locale}/confirm?token=${token}`;

@@ -9,7 +9,7 @@ import { EmailTemplateService } from "../../../infrastructure/adapters/services/
 import { PasswordService } from "../../ports/services/auth/PasswordService";
 import { UserStatusEnum } from "../../../domain/enums/UserStatusEnum";
 
-export class CreateBankAdvisorUseCase {
+export class CreateBankManagerUseCase {
   public constructor(
     private userRepository: UserRepositoryInterface,
     private roleRepository: RoleRepositoryInterface,
@@ -38,13 +38,13 @@ export class CreateBankAdvisorUseCase {
       return savedUser;
     }
 
-    const bankAdvisorRole = await this.roleRepository.findByName(RoleEnum.BANK_ADVISOR);
+    const bankManagerRole = await this.roleRepository.findByName(RoleEnum.BANK_MANAGER);
 
-    if (bankAdvisorRole instanceof Error) {
-      return bankAdvisorRole;
+    if (bankManagerRole instanceof Error) {
+      return bankManagerRole;
     }
 
-    const userRole = await this.userRoleRepository.addRoleToUser(savedUser.id, bankAdvisorRole.id);
+    const userRole = await this.userRoleRepository.addRoleToUser(savedUser.id, bankManagerRole.id);
 
     if (userRole instanceof Error) {
       return userRole;
@@ -66,8 +66,8 @@ export class CreateBankAdvisorUseCase {
       updatedUser.firstName,
       token,
       expiresAt,
-      RoleEnum.BANK_ADVISOR,
-      "en",
+      RoleEnum.BANK_MANAGER,
+      locale || "en",
     );
 
     return updatedUser;
