@@ -8,7 +8,7 @@ export class CreateNewsUseCase {
                         private publisher: NewsPublisher){}
 
     public async execute(news: NewsEntity): Promise<NewsEntity | Error> {
-        const newNews = NewsEntity.from(0, news.title, news.category, news.priority, news.tags, 0, new Date(), []);
+        const newNews = NewsEntity.from(0, news.title, news.category, news.priority, news.tags, new Date());
         if(newNews instanceof Error) {
             return newNews;
         }
