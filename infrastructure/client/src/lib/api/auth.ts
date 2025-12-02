@@ -18,3 +18,12 @@ export const refreshToken = async () => {
 };
 
 
+
+export const createAdmin = async (data: any) => {
+    const { adminPassword, ...userData } = data;
+    return await apiClient.post("/auth/create-admin", userData, {
+        headers: {
+            "x-admin-password": adminPassword
+        }
+    });
+}
