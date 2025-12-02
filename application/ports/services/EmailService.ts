@@ -2,7 +2,7 @@ export interface SendEmailOptions {
     to: string;
     subject: string;
     text: string;
-    role?: "CLIENT" | "BANK_ADVISOR";
+    role?: "CLIENT" | "BANK_ADVISOR" | "BANK_MANAGER";
     locale?: string;
 } 
 
