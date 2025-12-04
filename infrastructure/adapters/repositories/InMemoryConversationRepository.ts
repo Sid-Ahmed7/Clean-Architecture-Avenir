@@ -10,13 +10,11 @@ export class InMemoryConversationRepository implements ConversationRepositoryInt
 
     
     private conversations: Array<ConversationEntity>;
-    private incrId;
 
     public constructor() {
         this.conversations = [];
-        this.incrId = 0;
     }
-    public async findByConversationId(conversationId: number): Promise<ConversationEntity | ConversationNotFoundError> {
+    public async findByConversationId(conversationId: string): Promise<ConversationEntity | ConversationNotFoundError> {
         const conversation = this.conversations.find((c) => c.id === conversationId);
 
         if(!conversation) {
@@ -52,10 +50,6 @@ export class InMemoryConversationRepository implements ConversationRepositoryInt
         if (exists) {
             return new InvalidConversationError("This advisor is already assigned to this conversation");
         }
-
-        this.incrId++;
-        conversation.id = this.incrId;
-
         this.conversations.push(conversation);
     }
 

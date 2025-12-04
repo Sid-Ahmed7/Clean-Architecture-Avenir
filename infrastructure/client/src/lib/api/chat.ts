@@ -5,24 +5,24 @@ export const createConversation = async () => {
     return data;
 }
 
-export const sendMessage = async ({conversationId, content}: {conversationId: number; content: string;}) => {
+export const sendMessage = async ({conversationId, content}: {conversationId: string; content: string;}) => {
   const { data } = await apiClient.post("/chat/send", {conversationId,content});
   return data;
 };
 
-export const getConversationMessages = async (id: number) => {
+export const getConversationMessages = async (id: string) => {
   const { data } = await apiClient.get(`/chat/${id}/messages`);
   return data;
 };
 
 
 
-export const markMessageAsRead = async (messageId: number) => {
+export const markMessageAsRead = async (messageId: string) => {
     const {data} = await apiClient.post("/chat/mark-read", {message: messageId});
     return data
 }
 
-export const transferConversation = async (conversationId: number, newAdvisorId: string) => {
+export const transferConversation = async (conversationId: string, newAdvisorId: string) => {
   const { data } = await apiClient.post("/chat/transfer", { conversationId: conversationId, newAdvisorId });
 return data
 }

@@ -1,4 +1,4 @@
 export interface Typing {
-  conversationId: number;
+  conversationId: string;
   userId: string;
 }

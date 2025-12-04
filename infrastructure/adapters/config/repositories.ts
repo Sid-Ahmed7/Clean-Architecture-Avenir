@@ -6,6 +6,7 @@ import {EmailTemplateService} from "../services/EmailTemplateService";
 import {GenerateAccountNumberService} from "../services/GenerateAccountNumberService";
 import {GenerateIbanService} from "../services/GenerateIbanService";
 import {ManageOrderService} from "../services/news/ManageOrderService";
+import {CryptoUuidGenerator} from "../services/CryptoUuidGenerator";
 
 import { InMemoryEventBus } from '../repositories/InMemoryEventBus';
 import { InMemoryUserRepository } from '../repositories/InMemoryUserRepository';
@@ -38,6 +39,7 @@ export const ibanGenerator = new GenerateIbanService(accountRepository);
 
 export const conversationRepository = new InMemoryConversationRepository();
 export const messageRepository = new InMemoryMessageRepository();
+export const uuidService = new CryptoUuidGenerator()
 
 export const newsRepository = new InMemoryNewsRepository();
 export const newsService = new NewsService(); 

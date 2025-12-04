@@ -1,4 +1,4 @@
 export interface MarkAsRead {
-  messageIds: number[];
+  messageIds: string[];
   userId: string;
 }

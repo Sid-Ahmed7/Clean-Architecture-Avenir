@@ -319,7 +319,7 @@ export class AuthController {
         const adminPassword = req.headers['x-admin-password'] || req.body.adminPassword;
 
         if (adminPassword !== process.env.ADMIN_CREATION_PASSWORD) {
-            return res.status(403).json({ error: "Forbidden: Invalid admin creation password" });
+            return res.status(403).json({ error: "Forbidden" });
         }
 
         const { email, password, firstName, lastName, phoneNumber, dateOfBirth, address } = req.body;

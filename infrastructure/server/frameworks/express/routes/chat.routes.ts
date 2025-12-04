@@ -1,17 +1,13 @@
 import express from 'express'
 import { ChatController } from '../controller/chat.controller';
-import { InMemoryConversationRepository } from '../../../../adapters/repositories/InMemoryConversationRepository';
-import { InMemoryMessageRepository } from '../../../../adapters/repositories/InMemoryMessageRepository';
 import { verifyTokenAccess } from '../middleware/authMiddleware';
 import { authorizeRoles } from '../middleware/roleMiddleware';
 import { RoleEnum } from '../../../../../domain/enums/RoleEnum';
-import {io, clients, onlineUsers} from "../sockets/socket";
-import { InMemoryUserRepository } from '../../../../adapters/repositories/InMemoryUserRepository';
-import { PasswordEncryptionService } from '../../../../adapters/services/auth/PasswordEncryptionService';
-
+import {io, clients, onlineUsers } from "../sockets/socket";
+import {conversationRepository, messageRepository,userRepository, uuidService} from "../../../../adapters/config/repositories";
 const router = express.Router();
 
-const chatController = new ChatController(io,clients,onlineUsers);
+const chatController = new ChatController(conversationRepository, messageRepository, userRepository,uuidService,io,clients,onlineUsers);
 
 router.get("/conversations", verifyTokenAccess,authorizeRoles([RoleEnum.BANK_ADVISOR]), (req, res) => chatController.getPendingConversation(req,res));
 router.post("/conversation/create", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT]), (req, res) => chatController.createConversation(req,res));

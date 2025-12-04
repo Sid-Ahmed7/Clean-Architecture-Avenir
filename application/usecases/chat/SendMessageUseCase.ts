@@ -7,16 +7,18 @@ import { AdvisorAlreadyAssignedError } from "../../errors/chat/AdvisorAlreadyAss
 import { NoAdvisorAssignedError } from "../../errors/chat/NoAdvisorAssignedError";
 import { ConversationRepositoryInterface } from "../../ports/repositories/chat/ConversationRepositoryInterface";
 import { MessageRepositoryInterface } from "../../ports/repositories/chat/MessageRepositoryInterface";
+import {UuidGeneratorInterface} from "../../ports/services/UuidGeneratorService"
 
 export class SendMessageUseCase {
 
     public constructor(
         private conversationRepository: ConversationRepositoryInterface,
-        private messageRepository: MessageRepositoryInterface
+        private messageRepository: MessageRepositoryInterface,
+        private uuidService: UuidGeneratorInterface
          ) {}
 
 
-    public async execute(userId: string, role:string, conversationId: number, content: string) {
+    public async execute(userId: string, role:string, conversationId: string, content: string) {
 
         const isAdvisor = role === "BANK_ADVISOR";
 
@@ -37,8 +39,9 @@ export class SendMessageUseCase {
             }
 
         }   
-    
-        const message = MessageEntity.from(0 ,existingConversation.id, existingConversation.clientId, existingConversation.advisorId || "", userId,  content, ReadStatusEnum.UNREAD, new Date())
+                const id = this.uuidService.generate();
+
+        const message = MessageEntity.from(id ,existingConversation.id, existingConversation.clientId, existingConversation.advisorId || "", userId,  content, ReadStatusEnum.UNREAD, new Date())
         
         if(message instanceof InvalidMessageError || message instanceof InvalidUserIdError) {
             return message;
