@@ -34,11 +34,11 @@ export async function GET(request: NextRequest, {params} : {params: {symbol: str
 
 
     try{
-       const response = await fetch(`${baseUrl}/quote?symbol=${symbol.toUpperCase()}&apikey=${apiKey}`,
+    const response = await fetch(`${baseUrl}/quote?symbol=${symbol.toUpperCase()}&apikey=${apiKey}`,
             {next: {revalidate: 60}}
         )
         if(!response.ok) {
-             return NextResponse.json({
+            return NextResponse.json({
                 error: `API returned status ${response.status}`,
                 stocks: [],
                 total: 0,

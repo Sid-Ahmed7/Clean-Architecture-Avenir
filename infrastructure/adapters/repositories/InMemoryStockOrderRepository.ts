@@ -3,7 +3,6 @@ import { StockOrderRepositoryInterface } from "../../../application/ports/reposi
 import { StockOrderEntity } from "../../../domain/entities/StockOrderEntity";
 import { OrderStatusEnum } from "../../../domain/enums/OrderStatusEnum";
 import { InvalidOrderError } from "../../../domain/errors/InvalidOrderError";
-import { InvalidUserIdError } from "../../../domain/errors/InvalidUserIdError";
 
 export class InMemoryStockOrderRepository implements StockOrderRepositoryInterface {
 
