@@ -8,6 +8,8 @@ import { messagesMap } from "../../../messages";
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import AppLayout from "@/components/AppLayout";
+import LocaleProvider from "@/contexts/LocaleProvider";
+import ReactQueryProvider from "@/contexts/ReactQueryProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -30,15 +32,17 @@ export default async function LocaleLayout({children, params}: Props) {
 
   return (
     <html lang="en">
-      <body
-        className={""}
-      >
+      <body>
       <NextIntlClientProvider locale={locale} messages={messagesMap[locale]}>
+        <LocaleProvider>
         <AuthProvider>
+          <ReactQueryProvider>
           <AppLayout>
         {children}
         </AppLayout>
+        </ReactQueryProvider>
         </AuthProvider>
+        </LocaleProvider>
       </NextIntlClientProvider>
 
       </body>

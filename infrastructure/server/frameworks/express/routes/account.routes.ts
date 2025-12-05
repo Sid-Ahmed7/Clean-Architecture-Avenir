@@ -2,17 +2,13 @@ import express from 'express'
 import { AccountController } from '../controller/account.controller'
 import { GenerateAccountNumberService } from '../../../../adapters/services/GenerateAccountNumberService'
 import { GenerateIbanService } from '../../../../adapters/services/GenerateIbanService'
-import { accountRepository, transactionRepository } from './inMemoryInstance';
-import { userRepository } from './sharedInstances';
-import { GetTransactionHistoryUseCase } from "../../../../../application/usecases/accounts/GetTransactionHistoryUseCase";
+import { accountRepository, accountNumberGenerator, ibanGenerator} from '../../../../adapters/config/repositories'
 import { verifyTokenAccess } from '../middleware/authMiddleware';
 import { authorizeRoles } from '../middleware/roleMiddleware';
 import { RoleEnum } from '../../../../../domain/enums/RoleEnum';
 const router = express.Router();
-const accountNumberGenerator = new GenerateAccountNumberService(accountRepository);
-const ibanGenerator = new GenerateIbanService(accountRepository);
-const transactionHistoryUseCase = new GetTransactionHistoryUseCase(transactionRepository, accountRepository, userRepository);
-const accountController = new AccountController(accountRepository, accountNumberGenerator, ibanGenerator, transactionRepository, transactionHistoryUseCase);
+
+const accountController = new AccountController(accountRepository, accountNumberGenerator, ibanGenerator);
 
 router.get("/my-accounts", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req, res) => accountController.getUserAccounts(req, res));
 router.post("/create", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req, res) => accountController.createAnAccount(req,res));

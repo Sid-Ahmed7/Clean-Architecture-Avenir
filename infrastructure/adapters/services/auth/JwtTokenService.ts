@@ -12,7 +12,7 @@ export class JwtTokenService implements TokenService {
     
     constructor() {
         if (!process.env.JWT_SECRET || !process.env.JWT_SECRET_REFRESH) {
-            throw new Error("ACCESS_TOKEN_SECRET and REFRESH_TOKEN_SECRET must be defined in .env");
+            throw new Error("JWT_SECRET and JWT_SECRET_REFRESH must be defined in .env");
         }
 
         this.accessTokenSecret = process.env.JWT_SECRET!;
@@ -29,19 +29,25 @@ export class JwtTokenService implements TokenService {
 
     public async generateRefreshToken(userId: string): Promise<RefreshTokenEntity> {
         const payload = {sub: userId};
-        const expiredAt = Number(this.refreshTokenExpiry);
-        const token = jwt.sign(payload, this.refreshTokenSecret, {expiresIn: expiredAt});
+        const token = jwt.sign(payload, this.refreshTokenSecret, { expiresIn: this.refreshTokenExpiry });
+        const decoded = jwt.decode(token) as { exp: number } | null;
+        if (!decoded) throw new Error("Failed to decode refresh token");
 
+    const expiredAt = decoded.exp * 1000;
         return new RefreshTokenEntity(userId, token, expiredAt);
     }
 public async verifyRefreshToken(refreshToken: string): Promise<RefreshTokenEntity | InvalidRefreshTokenError> {
-    const decoded = jwt.decode(refreshToken) as { userId: string; exp: number } | null;
+        const decoded = jwt.verify(refreshToken, this.refreshTokenSecret) as { sub: string; exp: number };
 
-    if (!decoded  || decoded.exp * 1000 < Date.now()) {
+    if (!decoded) {
         return new InvalidRefreshTokenError('Refresh token is invalid or expired');
     }
 
-    return new RefreshTokenEntity(decoded.userId, refreshToken, decoded.exp);
+    if (decoded.exp * 1000 < Date.now()) {
+        return new InvalidRefreshTokenError('Refresh token has expired');
+    }
+
+    return new RefreshTokenEntity(decoded.sub, refreshToken, decoded.exp);
 }
 
 

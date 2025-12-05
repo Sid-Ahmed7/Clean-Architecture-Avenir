@@ -31,6 +31,10 @@ export class InMemoryUserRepository implements UserRepositoryInterface {
     return user ?? null;
   }
 
+  public async findAll(): Promise<Array<BankUserEntity>> {
+      return this.users;
+  }
+
     public async findConfirmationToken(token: string): Promise<BankUserEntity | UserNotFoundError | TokenNotFoundError | ExpiredTokenError> {
         const user = this.users.find(u => u.confirmationToken === token);
         if(!user) {

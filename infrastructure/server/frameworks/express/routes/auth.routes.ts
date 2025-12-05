@@ -7,22 +7,14 @@ import { InMemoryRoleRepository } from '../../../../adapters/repositories/InMemo
 import { InMemoryUserRoleRepository } from '../../../../adapters/repositories/InMemoryUserRoleRepository';
 import { AuthController } from '../controller/auth.controller';
 import {registerUserConfirmedSubscriber} from '../../../../subscribers/UserConfirmedSuscriber';
-import {eventBus, accountRepository} from './inMemoryInstance';
-import { userRepository } from './sharedInstances';
+import {accountRepository, userRepository, roleRepository, userRoleRepository,tokenService, passwordService, emailService, emailTemplateService,registrationTokenGeneratorService, eventBus } from '../../../../adapters/config/repositories';
 import { verifyTokenAccess } from '../middleware/authMiddleware';
 import { authorizeRoles } from '../middleware/roleMiddleware';
 import { RoleEnum } from '../../../../../domain/enums/RoleEnum';
 import { EmailTemplateService } from '../../../../adapters/services/EmailTemplateService';
 const router = express.Router();
 
-const baseUrl = process.env.BASE_URL!;
-const tokenService = new JwtTokenService();
-const passwordService = new PasswordEncryptionService();
-const emailService = new ResendEmailService();
-const registrationTokenGeneratorService = new RegistrationTokenService();
-const emailTemplateService = new EmailTemplateService(emailService, baseUrl)
-const roleRepository = new InMemoryRoleRepository();
-const userRoleRepository = new InMemoryUserRoleRepository(roleRepository, userRepository);
+
 registerUserConfirmedSubscriber(eventBus,accountRepository );
 const authController = new AuthController(userRepository, roleRepository, userRoleRepository,tokenService, passwordService, emailService, emailTemplateService,registrationTokenGeneratorService, eventBus);
 
@@ -31,7 +23,11 @@ router.post("/register", (req, res) => authController.register(req,res));
 router.get("/confirm", (req, res) => authController.confirmRegistration(req, res));
 router.post("/login", (req, res) => authController.login(req,res));
 router.post("/refresh-token", (req, res) => authController.refreshToken(req,res));
-router.get("/profile", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT]), (req, res) => authController.getUserProfile(req,res));
-router.post("/logout", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req, res) => authController.logout(req,res));
-
+router.get("/profile", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_ADVISOR, RoleEnum.ADMIN, RoleEnum.BANK_MANAGER]), (req, res) => authController.getUserProfile(req,res));
+router.post("/logout", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER, RoleEnum.ADMIN, RoleEnum.BANK_ADVISOR]), (req, res) => authController.logout(req,res));
+router.post("/register/advisor", (req, res) => authController.registerAdvisor(req,res));
+router.get("/getAdvisors", verifyTokenAccess, authorizeRoles([RoleEnum.BANK_ADVISOR]), (req, res) => authController.getAdvisors(req, res))
+router.post("/create-advisor", verifyTokenAccess, authorizeRoles([RoleEnum.BANK_MANAGER]), (req, res) => authController.registerAdvisor(req, res))
+router.post("/create-manager", verifyTokenAccess, authorizeRoles([RoleEnum.ADMIN]), (req, res) => authController.registerManager(req, res))
+router.post("/create-admin", (req, res) => authController.createAdmin(req, res));
 export default router;

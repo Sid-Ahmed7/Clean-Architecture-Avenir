@@ -27,11 +27,12 @@ export class ConfirmRegistrationUseCase {
             return updatedUser;
         }
 
+        
+
         await this.emailService.sendEmail({
             to: updatedUser.email,
             subject: "Inscription confirmée ! 🎉",
             text: `Bonjour ${updatedUser.firstName},\n\nVotre compte a été activé avec succès ! Vous pouvez maintenant vous connecter et acceder à vos comptes bancaires.`
-
         })
 
         await this.eventBus.publish(new UserConfirmedEvent(updatedUser));

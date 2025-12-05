@@ -1,0 +1,75 @@
+import { BankUserEntity } from "../../../domain/entities/BankUserEntity";
+import { RoleEnum } from "../../../domain/enums/RoleEnum";
+import { UserRepositoryInterface } from "../../ports/repositories/auth/UserRepositoryInterface";
+import { RoleRepositoryInterface } from "../../ports/repositories/auth/RolerepositoryInterface";
+import { UserRoleRepositoryInterface } from "../../ports/repositories/auth/UserRoleRepositoryInterface";
+import { EmailService } from "../../ports/services/EmailService";
+import { RegistrationTokenGeneratorService } from "../../ports/services/auth/RegistrationTokenGeneratorService";
+import { EmailTemplateService } from "../../../infrastructure/adapters/services/EmailTemplateService";
+import { PasswordService } from "../../ports/services/auth/PasswordService";
+import { UserStatusEnum } from "../../../domain/enums/UserStatusEnum";
+
+export class CreateBankManagerUseCase {
+  public constructor(
+    private userRepository: UserRepositoryInterface,
+    private roleRepository: RoleRepositoryInterface,
+    private userRoleRepository: UserRoleRepositoryInterface,
+    private passwordService: PasswordService,
+    private emailService: EmailService,
+    private emailTemplateService: EmailTemplateService,
+    private registrationTokenGeneratorService: RegistrationTokenGeneratorService
+  ) {}
+
+  public async execute(user: BankUserEntity, locale?: string): Promise<BankUserEntity | Error> {
+    const existingUser = await this.userRepository.findByEmail(user.email);
+
+    if (existingUser instanceof Error) {
+      return existingUser;
+    }
+
+    const hashedPassword = await this.passwordService.hash(user.password);
+    user.password = hashedPassword;
+    user.status = UserStatusEnum.PENDING;
+    user.isRegistered = false;
+
+    const savedUser = await this.userRepository.createUser(user);
+
+    if(savedUser instanceof Error) {
+      return savedUser;
+    }
+
+    const bankManagerRole = await this.roleRepository.findByName(RoleEnum.BANK_MANAGER);
+
+    if (bankManagerRole instanceof Error) {
+      return bankManagerRole;
+    }
+
+    const userRole = await this.userRoleRepository.addRoleToUser(savedUser.id, bankManagerRole.id);
+
+    if (userRole instanceof Error) {
+      return userRole;
+    }
+
+    const { token, expiresAt } = this.registrationTokenGeneratorService.generateToken(24);
+
+    savedUser.confirmationToken = token;
+    savedUser.confirmationTokenExpiresAt = expiresAt;
+
+    const updatedUser = await this.userRepository.updateUser(savedUser);
+
+    if(updatedUser instanceof Error) {
+      return updatedUser;
+    }
+
+    await this.emailTemplateService.sendRegistrationConfirmation(
+      updatedUser.email,
+      updatedUser.firstName,
+      token,
+      expiresAt,
+      RoleEnum.BANK_MANAGER,
+      locale || "en",
+    );
+
+    return updatedUser;
+  }
+}
