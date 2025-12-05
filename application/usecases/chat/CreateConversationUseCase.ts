@@ -1,11 +1,11 @@
 import { ConversationEntity } from "../../../domain/entities/ConversationEntity";
 import { ConversationRepositoryInterface } from "../../ports/repositories/chat/ConversationRepositoryInterface";
-import {UuidGeneratorInterface} from "../../ports/services/UuidGeneratorService"
+import {UuidGeneratorService} from "../../ports/services/UuidGeneratorService"
 export class CreateConversationUseCase {
 
     public constructor(
         private conversationRepository: ConversationRepositoryInterface,
-        private uuidService: UuidGeneratorInterface
+        private uuidService: UuidGeneratorService
          ) {}
 
     public async execute(clientId: string) {

@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 
 export const MEDIA_QUERY_KEY = "media";
 
-export const useMediaByNewsId = (newsId: number) => {
+export const useMediaByNewsId = (newsId: string) => {
     const t = useTranslations();
   
   return useQuery<Media[]>({
@@ -35,7 +35,7 @@ export const useMediaMutations = () => {
 
   const queryClient = useQueryClient();
 
-  const uploadMedia = useMutation<{ data: Media | null; error: string | null },Error,{ file: File; newsId: number;}>({
+  const uploadMedia = useMutation<{ data: Media | null; error: string | null },Error,{ file: File; newsId: string;}>({
     mutationFn: async ({ file, newsId}) => {
       try {
         const uploaded = await mediaApi.uploadMedia(file, newsId);
@@ -63,7 +63,7 @@ export const useMediaMutations = () => {
       }
     },
   });
-  const updateMedia = useMutation<{ data: Media | null; error: string | null }, Error, { media: Media; newsId: number }>({
+  const updateMedia = useMutation<{ data: Media | null; error: string | null }, Error, { media: Media; newsId: string }>({
     mutationFn: async ({ media }) => {
       try {
         const updated = await mediaApi.updateMedia(media);
@@ -90,7 +90,7 @@ export const useMediaMutations = () => {
   });
 
 
-  const deleteMedia = useMutation<{ success: boolean; error: string | null },Error,{ mediaId: number; newsId: number }>({
+  const deleteMedia = useMutation<{ success: boolean; error: string | null },Error,{ mediaId: string; newsId: string }>({
     mutationFn: async ({ mediaId }) => {
       try {
         await mediaApi.deleteMedia(mediaId);

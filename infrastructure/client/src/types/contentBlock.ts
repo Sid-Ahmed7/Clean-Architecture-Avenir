@@ -7,7 +7,7 @@ export enum TypeBlock {
 
 
 export interface BaseBlock {
-    id: number;
+    id: string;
     type: TypeBlock;
     order: number;
 }

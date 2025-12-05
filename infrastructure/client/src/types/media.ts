@@ -1,6 +1,6 @@
 export interface Media {
-    id: number;
-    newsId: number;
+    id: string;
+    newsId: string;
     url: string;
     type: "IMAGE" | "VIDEO";
     altText: string;

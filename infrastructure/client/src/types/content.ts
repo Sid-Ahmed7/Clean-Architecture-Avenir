@@ -1,6 +1,6 @@
 export interface Content {
-    id: number;
-    newsId: number;
+    id: string;
+    newsId: string;
     order: number;
     content: string;
 };

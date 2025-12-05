@@ -13,6 +13,8 @@ import { DeleteMediaUseCase } from "../../../../../application/usecases/news/upl
 import { MediaTypeEnum } from "../../../../../domain/enums/MediaTypeEnum";
 import { MediaEntity } from "../../../../../domain/entities/MediaEntity";
 import { MediaNotFoundError } from "../../../../../application/errors/MediaNotFoundError";
+import {CryptoUuidGenerator} from "../../../../adapters/services/CryptoUuidGenerator";
+
 
 export class MediaController {
     
@@ -21,20 +23,22 @@ export class MediaController {
         private newsRepository: InMemoryNewsRepository,
         private fileStorageService: LocalFileStorageService,
         private orderService: ManageOrderService,
-        private altService: GenerateAltTextService
+        private altService: GenerateAltTextService,
+        private uuidService:CryptoUuidGenerator 
     ){}
 
     async uploadMedia(req: Request, res: Response) {
         if (!req.file){
             return res.status(400).json({ error: "No file provided" });
-        } 
+        }
 
         const uploadMediaUseCase = new UploadMediaUseCase(this.fileStorageService);
         const uploadFile = await uploadMediaUseCase.execute(req.file.buffer, req.file.originalname, req.file.mimetype);
         if (uploadFile instanceof Error) {
             return res.status(500).json({error: uploadFile.message})
         }
-        const newsId = Number(req.body.newsId);
+        const newsId = req.body.newsId;
+
         const mediaType = req.file.mimetype.startsWith("image/") ? MediaTypeEnum.IMAGE : MediaTypeEnum.VIDEO;
         const mediaEntity = {
             newsId,
@@ -46,7 +50,8 @@ export class MediaController {
             mimeType: uploadFile.mimeType,
         };
 
-        const createMediaUseCase = new CreateMediaUseCase(this.mediaRepository, this.newsRepository, this.orderService, this.altService);
+
+        const createMediaUseCase = new CreateMediaUseCase(this.mediaRepository, this.newsRepository, this.orderService, this.altService, this.uuidService);
         const createdMedia = await createMediaUseCase.execute(mediaEntity)
             if (createdMedia instanceof Error) {
             return res.status(500).json({ error: createdMedia.message });
@@ -56,8 +61,10 @@ export class MediaController {
     }
 
     async getMediaByNewsId(req: Request, res: Response) {
-        const newsId = Number(req.params.newsId);
-
+        const newsId = req.params.newsId;
+        if (!newsId) {
+            return res.status(400).json({ error: "News ID is required" });
+        }
 
         const getMediaUseCase = new GetMediaByNewsIdUseCase(this.mediaRepository);
         const mediaList = await getMediaUseCase.execute(newsId);
@@ -77,8 +84,8 @@ export class MediaController {
         }
     
      async deleteMedia(req: Request, res: Response) {
-        const mediaId = Number(req.params.mediaId);
-        if (isNaN(mediaId)) {
+        const mediaId = req.params.mediaId;
+        if (!mediaId) {
             return res.status(400).json({ error: "Invalid mediaId" });
         }
 

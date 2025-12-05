@@ -7,14 +7,14 @@ import { AdvisorAlreadyAssignedError } from "../../errors/chat/AdvisorAlreadyAss
 import { NoAdvisorAssignedError } from "../../errors/chat/NoAdvisorAssignedError";
 import { ConversationRepositoryInterface } from "../../ports/repositories/chat/ConversationRepositoryInterface";
 import { MessageRepositoryInterface } from "../../ports/repositories/chat/MessageRepositoryInterface";
-import {UuidGeneratorInterface} from "../../ports/services/UuidGeneratorService"
+import {UuidGeneratorService} from "../../ports/services/UuidGeneratorService"
 
 export class SendMessageUseCase {
 
     public constructor(
         private conversationRepository: ConversationRepositoryInterface,
         private messageRepository: MessageRepositoryInterface,
-        private uuidService: UuidGeneratorInterface
+        private uuidService: UuidGeneratorService
          ) {}
 
 

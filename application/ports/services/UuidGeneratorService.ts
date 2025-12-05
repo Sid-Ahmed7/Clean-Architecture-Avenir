@@ -1,3 +1,3 @@
-export interface UuidGeneratorInterface {
+export interface UuidGeneratorService {
     generate(): string;
 }

@@ -3,7 +3,7 @@ import z from "zod"
 
 export const newsSchema = (t:(key: string) => string) => 
     z.object({
-        id: z.number(),
+        id: z.string(),
        title: z.string(),
        category: z.enum(NewsCategoryEnum),
        priority: z.enum(NewsPriorityEnum),

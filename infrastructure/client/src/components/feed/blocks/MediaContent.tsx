@@ -8,7 +8,7 @@ import { AlertCircle } from "lucide-react";
 interface MediaContentProps {
     files: File[];
     existingMedias?: Media[];
-    newsId: number;
+    newsId: string;
     onChange: (files: File[]) => void;
     disabled?: boolean;
     error?: string;
@@ -25,9 +25,10 @@ export function MediaContent({files, existingMedias = [], newsId, onChange, disa
         filename: media.altText,
         size: media.size,
         type: media.type === 'IMAGE' ? 'IMAGE' : "VIDEO",
-        mimeType: media.mimeType
+        mimeType: media.mimeType,
+        caption: media.caption
     })) ?? [] 
-      const handleCaptionUpdate = (mediaId: number, caption: string) => {
+      const handleCaptionUpdate = (mediaId: string, caption: string) => {
         const mediaToUpdate = existingMedias.find(m => m.id === mediaId);
         if (mediaToUpdate) {
             updateMedia.mutate({

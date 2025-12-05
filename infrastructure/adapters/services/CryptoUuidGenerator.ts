@@ -1,6 +1,6 @@
-import { UuidGeneratorInterface } from "../../../application/ports/services/UuidGeneratorService";
+import { UuidGeneratorService } from "../../../application/ports/services/UuidGeneratorService";
 
-export class CryptoUuidGenerator implements UuidGeneratorInterface {
+export class CryptoUuidGenerator implements UuidGeneratorService {
     public generate(): string {
         return crypto.randomUUID();
     }

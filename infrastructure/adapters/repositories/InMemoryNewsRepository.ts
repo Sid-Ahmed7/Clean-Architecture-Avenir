@@ -6,17 +6,15 @@ import { NewsFilters } from "../../../domain/interfaces/NewsFilters";
 export class InMemoryNewsRepository implements NewsRepositoryInterface {
 
     private newsList: Array<NewsEntity>;
-    private incrId: number;
 
     public constructor() {
         this.newsList = [];
-        this.incrId = 0;
     }
 
-    public async findById(id: number): Promise<NewsEntity | NewsNotFoundError> {
-        const news = this.newsList.find((n) => n.id === id);
+    public async findById(newsId: string): Promise<NewsEntity | NewsNotFoundError> {
+        const news = this.newsList.find((n) => n.id === newsId);
         if(!news) {
-            return new NewsNotFoundError(`News with ${id} not found`);
+            return new NewsNotFoundError(`News with ${newsId} not found`);
         }
         return news;
     }
@@ -47,9 +45,6 @@ export class InMemoryNewsRepository implements NewsRepositoryInterface {
     }
 
     public async create(news: NewsEntity): Promise<NewsEntity> {
-        this.incrId++;
-        news.id = this.incrId;
-
         this.newsList.push(news);
         return news;
     }
@@ -63,10 +58,10 @@ export class InMemoryNewsRepository implements NewsRepositoryInterface {
         return news
     }
 
-    public async delete(id: number): Promise<void | NewsNotFoundError> {
-        const index = this.newsList.findIndex((n) => n.id === id);
+    public async delete(newsId: string): Promise<void | NewsNotFoundError> {
+        const index = this.newsList.findIndex((n) => n.id === newsId);
         if(index === -1) {
-            return new NewsNotFoundError(`News with id ${id} not found`);
+            return new NewsNotFoundError(`News with id ${newsId} not found`);
         }
         this.newsList.splice(index, 1);
     }

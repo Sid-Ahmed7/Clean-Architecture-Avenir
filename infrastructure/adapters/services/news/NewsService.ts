@@ -20,7 +20,7 @@ export class NewsService implements NewsPublisher {
         this.publishForAction('update_feed', news);
     }
 
-    public publishDelete(newsId: number): void {
+    public publishDelete(newsId: string): void {
         const payload = JSON.stringify({id: newsId});
 
         for(const client of this.clients) {

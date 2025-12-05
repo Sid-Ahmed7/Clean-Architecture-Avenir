@@ -2,7 +2,7 @@ import { Block } from "@/types/contentBlock";
 import { DisplayBlock } from "@/types/displayBlock";
 
 export const getBlockKey = (block: Block): string => {
-return `${block.type}-${block.id}`;
+return `${block.id}`;
 };
 
 export const getNextBlockOrder  = (blocks: Block[]): number => {
@@ -16,3 +16,5 @@ export const getNextBlockOrder  = (blocks: Block[]): number => {
 export const sortBlock = (blocks: DisplayBlock[]): DisplayBlock[] => {
   return [...blocks].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 }
+export const idBlock = () => `temp-${crypto.randomUUID()}`;
+

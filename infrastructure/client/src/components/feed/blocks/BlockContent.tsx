@@ -7,7 +7,7 @@ import { DraggableProvidedDragHandleProps } from "@hello-pangea/dnd";
 
 interface BlockContentProps {
     block: Block;
-    newsId: number;
+    newsId: string;
     onUpdate: (block: Block) => void;
     onRemove: () => void;
     disabled?: boolean;
@@ -29,7 +29,9 @@ export function BlockContent({block, newsId, onUpdate, onRemove, disabled, dragA
       {block.type === TypeBlock.TEXT && (
         <TextContent
           content={block.content}
-          onChange={(content) => onUpdate({ ...block, content })}
+          onChange={(content) => {
+            onUpdate({ ...block, content });
+          }}
           disabled={disabled}
         />
       )}
@@ -39,14 +41,18 @@ export function BlockContent({block, newsId, onUpdate, onRemove, disabled, dragA
           files={block.files}
           existingMedias={block.existingMedias}
           newsId={newsId}
-          onChange={(files) => onUpdate({ ...block, files })}
+          onChange={(files) => {
+            onUpdate({ ...block, files });
+          }}
           disabled={disabled}
         />
       )}
 
       <button
         type="button"
-        onClick={onRemove}
+        onClick={() => {
+          onRemove();
+        }}
         disabled={disabled}
         className="text-red-500 hover:text-red-700 hover:bg-red-50 rounded p-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
         title="Supprimer ce bloc"

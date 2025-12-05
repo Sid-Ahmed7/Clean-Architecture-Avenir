@@ -6,28 +6,25 @@ import { InvalidUrlMediaError } from "../../../domain/errors/InvalidUrlMediaErro
 export class InMemoryMediaRepository implements MediaRepositoryInterface {
 
     private mediaList: Array<MediaEntity>;
-    private incrId: number;
-
 
     public constructor() {
         this.mediaList = [];
-        this.incrId = 0;
     }
 
-    public async findById(id: number): Promise<MediaEntity | MediaNotFoundError> {
-        const media = this.mediaList.find((m) => m.id === id);
+    public async findById(mediaId: string): Promise<MediaEntity | MediaNotFoundError> {
+        const media = this.mediaList.find((m) => m.id === mediaId);
         if(!media) {
-            return new MediaNotFoundError(`Media with id ${id} not found`);
+            return new MediaNotFoundError(`Media with id ${mediaId} not found`);
         }
         return media;
     }
 
-    public async findByNewsId(newsId: number): Promise<Array<MediaEntity>> {
+    public async findByNewsId(newsId: string): Promise<Array<MediaEntity>> {
         return this.mediaList.filter((m) => m.newsId === newsId); 
     }
 
-    public async findByIds(ids: number[]): Promise<MediaEntity[] | MediaNotFoundError> {
-        const found = this.mediaList.filter(m => ids.includes(m.id));
+    public async findByIds(mediaIds: string[]): Promise<MediaEntity[] | MediaNotFoundError> {
+        const found = this.mediaList.filter(m => mediaIds.includes(m.id));
         if (found.length === 0) {
             return new MediaNotFoundError(`No media found for given IDs`);
         }
@@ -40,8 +37,6 @@ export class InMemoryMediaRepository implements MediaRepositoryInterface {
             return new InvalidUrlMediaError("Error creation media")
         }
 
-        this.incrId++;
-        media.id = this.incrId;
         this.mediaList.push(media);
 
         return media;
@@ -55,10 +50,10 @@ export class InMemoryMediaRepository implements MediaRepositoryInterface {
         return media;
     }
 
-    public async delete(id: number): Promise<void | MediaNotFoundError> {
-        const index = this.mediaList.findIndex((m) => m.id === id);
+    public async delete(mediaId: string): Promise<void | MediaNotFoundError> {
+        const index = this.mediaList.findIndex((m) => m.id === mediaId);
         if (index === -1) {
-            return new MediaNotFoundError(`Media with id ${id} not found`);
+            return new MediaNotFoundError(`Media with id ${mediaId} not found`);
         }
         
         this.mediaList.splice(index, 1);
