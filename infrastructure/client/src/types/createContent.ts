@@ -1,5 +1,5 @@
 export interface CreateContent {
-    newsId: number;
+    newsId: string;
     content: string;
     order?: number;
 };

@@ -1,9 +1,9 @@
 export interface UploadedFile {
-    id?: number;
+    id?: string;
     url: string;
     filename: string;
     size: number;
     mimeType: string;
     type: "IMAGE" | "VIDEO";
-    caption?: number;
+    caption?: string;
 }

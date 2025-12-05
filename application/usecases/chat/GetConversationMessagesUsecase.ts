@@ -9,7 +9,7 @@ export class GetConversationMessagesUseCase {
          ) {}
 
 
-         public async execute (conversationId: number) {
+         public async execute (conversationId: string) {
 
             const conversation = await this.conversationRepository.findByConversationId(conversationId);
             if( conversation instanceof Error) {

@@ -6,7 +6,7 @@ import { useChat } from "@/hooks/useChat";
 import { Token } from "@/types/Token";
 
 interface ChatBoxProps {
-  conversationId: number | null;
+  conversationId: string | null;
   user: Token;
 }
 

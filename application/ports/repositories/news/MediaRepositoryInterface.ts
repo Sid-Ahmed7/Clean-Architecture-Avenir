@@ -5,9 +5,9 @@ import { MediaNotFoundError } from "../../../errors/MediaNotFoundError";
 export interface MediaRepositoryInterface {
 
     create(media: MediaEntity): Promise<MediaEntity | InvalidUrlMediaError>
-    findById(id: number): Promise<MediaEntity | MediaNotFoundError>
-    findByNewsId(newsId: number): Promise<Array<MediaEntity>>
-    findByIds(ids: number[]): Promise<MediaEntity[] | MediaNotFoundError>;
+    findById(mediaId: string): Promise<MediaEntity | MediaNotFoundError>
+    findByNewsId(newsId: string): Promise<Array<MediaEntity>>
+    findByIds(mediaIds: string[]): Promise<MediaEntity[] | MediaNotFoundError>;
     update(media: MediaEntity) :Promise<MediaEntity | MediaNotFoundError>;
-    delete(id: number): Promise<void | MediaNotFoundError>;
+    delete(mediaId: string): Promise<void | MediaNotFoundError>;
 }

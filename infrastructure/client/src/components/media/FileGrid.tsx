@@ -1,6 +1,7 @@
 import { FilePreview } from "./FilePreview";
 import Button from "../ui/Button";
 import { Files } from "@/types/files";
+import { getMediaUrl } from "@/lib/utils/media";
 
 interface FileGridProps {
   title: string;
@@ -8,7 +9,7 @@ interface FileGridProps {
   onRemove?: (index: number) => void;
   onClearAll?: () => void;
   isUploadAlready?: boolean;
-  onCaptionChange?: (mediaId: number, caption: string) => void;
+  onCaptionChange?: (mediaId: string, caption: string) => void;
 }
 
 export function FileGrid({title,files,onRemove,onClearAll,isUploadAlready = false, onCaptionChange}: FileGridProps) {
@@ -37,7 +38,7 @@ export function FileGrid({title,files,onRemove,onClearAll,isUploadAlready = fals
         {files.map((file, index) => (
           <FilePreview
             key={index}
-            preview={file.preview}
+            preview={getMediaUrl(file.preview)}
             fileName={file.filename}
             size={file.size}
             type={file.type}

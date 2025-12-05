@@ -9,7 +9,7 @@ export class DeleteMediaUseCase {
         private fileStorageService: FileStorageService
     ) {}
 
-    public async execute(mediaId: number): Promise<void | Error> {
+    public async execute(mediaId: string): Promise<void | Error> {
 
         const media = await this.mediaRepository.findById(mediaId);
         if (media instanceof Error) {

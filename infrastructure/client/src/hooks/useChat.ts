@@ -23,11 +23,11 @@ type Action =
   | { type: "ADD_MESSAGE"; payload: Message }
   | { type: "ADD_CONVERSATION"; payload: UserChat }
   | { type: "ADD_PENDING_CONVERSATION"; payload: UserChat }
-  | { type: "REMOVE_PENDING_CONVERSATION"; payload: number }
+  | { type: "REMOVE_PENDING_CONVERSATION"; payload: string }
   | { type: "SET_USER_STATUS"; payload: UserStatus }
   | { type: "USER_TYPING"; payload: Typing }
   | { type: "USER_STOP_TYPING"; payload: Typing }
-  | { type: "MARK_MESSAGES_READ"; payload: number[] };
+  | { type: "MARK_MESSAGES_READ"; payload: string[] };
 
 const initialState: State = {
   messages: [],
@@ -74,7 +74,7 @@ function reducer(state: State, action: Action): State {
   }
 }
 
-export const useChat = (userId: string, role: string, conversationId: number) => {
+export const useChat = (userId: string, role: string, conversationId: string) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -160,9 +160,9 @@ export const useChat = (userId: string, role: string, conversationId: number) =>
 
     const handleConversationAssigned = (conv: UserChat) => dispatch({ type: "ADD_CONVERSATION", payload: conv });
     const handlePendingConversation = (conv: UserChat) => dispatch({ type: "ADD_PENDING_CONVERSATION", payload: conv });
-    const handleRemovePending = ({ conversationId: convId }: { conversationId: number }) => dispatch({ type: "REMOVE_PENDING_CONVERSATION", payload: convId });
+    const handleRemovePending = ({ conversationId: convId }: { conversationId: string }) => dispatch({ type: "REMOVE_PENDING_CONVERSATION", payload: convId });
     const handleUserStatus = (status: UserStatus) => dispatch({ type: "SET_USER_STATUS", payload: status });
-    const handleMessagesRead = (ids: number[]) => dispatch({ type: "MARK_MESSAGES_READ", payload: ids });
+    const handleMessagesRead = (ids: string[]) => dispatch({ type: "MARK_MESSAGES_READ", payload: ids });
 
     const cleanupConvAssigned = chatService.onConversationAssigned(handleConversationAssigned);
     const cleanupPending = chatService.onPendingConversation(handlePendingConversation);
@@ -191,19 +191,19 @@ export const useChat = (userId: string, role: string, conversationId: number) =>
   }, [userId, role, conversationId]);
 
 
-  const send = useCallback((content: string, convId: number) => {
+  const send = useCallback((content: string, convId: string) => {
     const msg: MessageSend = { userId, role, conversationId: convId, content };
     chatService.sendMessage(msg, role);
   }, [userId, role]);
 
-  const join = useCallback((convId: number) => {
+  const join = useCallback((convId: string) => {
     chatService.joinConversation(convId, role);
     chatService.joinConversation(convId, "SYSTEM");
   }, [role]);
 
-  const startTyping = useCallback((convId: number) => chatService.sendTyping(convId, userId), [userId]);
-  const stopTyping = useCallback((convId: number) => chatService.sendStopTyping(convId, userId), [userId]);
-  const markRead = useCallback((messageIds: number[]) => chatService.markMessageAsRead(messageIds, userId), [userId]);
+  const startTyping = useCallback((convId: string) => chatService.sendTyping(convId, userId), [userId]);
+  const stopTyping = useCallback((convId: string) => chatService.sendStopTyping(convId, userId), [userId]);
+  const markRead = useCallback((messageIds: string[]) => chatService.markMessageAsRead(messageIds, userId), [userId]);
 
   return {
     ...state,

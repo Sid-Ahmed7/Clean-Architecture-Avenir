@@ -5,8 +5,8 @@ import { NewsRepositoryInterface } from "../../ports/repositories/news/NewsRepos
 export class GetNewsByIdUseCase {
     public constructor(private newsRepository: NewsRepositoryInterface){}
 
-    public async execute(id: number): Promise<NewsEntity | Error> {
-        const news = await this.newsRepository.findById(id);
+    public async execute(newsId: string): Promise<NewsEntity | Error> {
+        const news = await this.newsRepository.findById(newsId);
         if(news instanceof Error) {
             return news;
         }

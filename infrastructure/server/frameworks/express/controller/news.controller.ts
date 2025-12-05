@@ -12,19 +12,18 @@ import { InvalidNewsError } from "../../../../../domain/errors/InvalidNewsError"
 import { NewsNotFoundError } from "../../../../../application/errors/NewsNotFoundError";
 import { SseClient } from "../../../../../application/ports/services/news/NewsPublisher";
 import { NewsFilters } from "../interfaces/NewsFilters";
-
+import {CryptoUuidGenerator} from "../../../../adapters/services/CryptoUuidGenerator";
 export class NewsController {
-
-
 
     public constructor(
         private newsRepository: InMemoryNewsRepository, 
         private newPublisher: NewsService,
+        private uuidService: CryptoUuidGenerator
     ){}
 
 
     async createNews(req: Request, res: Response) {
-        const createNewsUseCase = new CreateNewsUseCase(this.newsRepository, this.newPublisher);
+        const createNewsUseCase = new CreateNewsUseCase(this.newsRepository, this.newPublisher, this.uuidService);
         const result = await createNewsUseCase.execute(req.body);
 
         if(result instanceof Error) {
@@ -62,8 +61,11 @@ export class NewsController {
 
     async getNewsById(req: Request, res: Response) {
         const getNewsByIdUseCase = new GetNewsByIdUseCase(this.newsRepository);
-        const id = Number(req.params.id);
-        const result = await getNewsByIdUseCase.execute(id);
+        const newsId = req.params.id;
+        if (!newsId) {
+            return res.status(400).json({ error: "News ID is required" });
+        }
+        const result = await getNewsByIdUseCase.execute(newsId);
 
         if(result instanceof Error) {
             if(result instanceof NewsNotFoundError) {
@@ -93,8 +95,11 @@ export class NewsController {
 
     async deleteNews(req: Request, res: Response) {
         const deleteNewsUseCase = new DeleteNewsUseCase(this.newsRepository, this.newPublisher);
-        const id = Number(req.params.id);
-        const result = await deleteNewsUseCase.execute(id);
+        const newsId = req.params.id;
+        if (!newsId) {
+            return res.status(400).json({ error: "News ID is required" });
+        }
+        const result = await deleteNewsUseCase.execute(newsId);
 
         if(result instanceof Error) {
             if(result instanceof NewsNotFoundError) {

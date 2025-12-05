@@ -1,5 +1,5 @@
 import { NewsFilters } from "@/types/filtersNews";
-import { useInfiniteQuery, useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import * as newsApi from "@/lib/api/news/client/news";
 import z from "zod";
@@ -57,13 +57,13 @@ export const useAllNews = (filters: NewsFilters) => {
   })
 }
 
-export const useNewsById =(id:number) => {
+export const useNewsById =(newsId: string) => {
   const t = useTranslations();
 
   return useQuery<News | null>({
-    queryKey: [NEWS_QUERY_KEY, id],
+    queryKey: [NEWS_QUERY_KEY, newsId],
     queryFn: async () => {
-      const getNews = await newsApi.getNewsById(id);
+      const getNews = await newsApi.getNewsById(newsId);
 
       if(!getNews) {
         return null;
@@ -74,7 +74,7 @@ export const useNewsById =(id:number) => {
         return null;
       }
       return parsed.data;
-    }, enabled: !!id,
+    }, enabled: !!newsId,
     staleTime: 5 * 60 * 1000
   });
 };
@@ -147,10 +147,10 @@ export const useNewsMutation = () => {
   })
 
 
-  const deleteNews = useMutation<{ success: boolean; error: string | null },Error,number>({
-    mutationFn: async (id) => {
+  const deleteNews = useMutation<{ success: boolean; error: string | null },Error,string>({
+    mutationFn: async (newsId) => {
       try {
-        await newsApi.deleteNews(id);
+        await newsApi.deleteNews(newsId);
         return { success: true, error: null };
       } catch (err: any) {
         return {

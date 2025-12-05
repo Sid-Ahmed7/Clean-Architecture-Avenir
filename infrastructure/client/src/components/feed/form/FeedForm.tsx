@@ -18,7 +18,7 @@ import { LocaleContext } from "@/contexts/LocaleProvider";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface FeedFormProps {
-  newsId?: number;
+  newsId?: string;
   initialValues?: CreateNewsModel;
   initialBlocks?: Block[];
 }
@@ -63,6 +63,7 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
     const hasEmptyText = textBlocks.some((b) => !b.content || !b.content.trim());
     
     if (hasEmptyText) {
+
       setError("root.blocksError", {
         type: "manual",
         message: "Tous les blocs de texte doivent contenir du contenu",
@@ -74,7 +75,7 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
 
     try {
       let newsResult;
-      let targetNewsId: number;
+      let targetNewsId: string;
 
       if (isEditMode && newsId) {
         
@@ -100,6 +101,7 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
         
       } else {
         
+        
         newsResult = await createNews.mutateAsync({
           title: data.title,
           category: data.category,
@@ -117,82 +119,84 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
 
         targetNewsId = newsResult.data.id;
       }
-      if( isEditMode && newsId) {
-      
+
       for (const block of blocks) {
-        if (block.type === TypeBlock.TEXT && block.id > 0) {
-                      
+        if (block.type === TypeBlock.TEXT) {
+          if (block.id.startsWith("temp-")) {
+            console.log(`Création content:`, {
+              newsId: targetNewsId,
+              content: block.content.substring(0, 50) + "...",
+              order: block.order
+            });
+
+            const contentResult = await createContent.mutateAsync({
+              newsId: targetNewsId,
+              content: block.content,
+              order: block.order
+            });
+
+            if (contentResult.error) {
+              setError("root.serverError", {
+                type: "manual",
+                message: `Erreur bloc texte ${block.order + 1}: ${contentResult.error}`,
+              });
+              return;
+            } else {
+              console.log(`Content créé avec order ${block.order}`);
+            }
+          } else {
             const updatedContent = await updateContent.mutateAsync({
               id: block.id,
               newsId: targetNewsId,
               content: block.content,
               order: block.order
             });
-            
+
             if (updatedContent.error) {
               console.error(`Erreur update content ${block.id}:`, updatedContent.error);
-
             } else {
-                console.log(`Content ${block.id} mis à jour`);
+              console.log(`Content ${block.id} mis à jour`);
             }
-          } 
+          }
+        }
 
-          if(block.type === TypeBlock.MEDIA && block.existingMedias && block.existingMedias.length > 0 ) {
-            for(const media of block.existingMedias) {
+        if (block.type === TypeBlock.MEDIA) {
+          if (block.files && block.files.length > 0) {
+            console.log(`Upload de ${block.files.length} fichier(s) pour le bloc ${block.id}`);
+
+            for (const file of block.files) {
+              const mediaResult = await uploadMedia.mutateAsync({
+                file,
+                newsId: targetNewsId
+              });
+
+              if (mediaResult.error) {
+                console.error(`Erreur upload:`, mediaResult.error);
+                setError("root.serverError", {
+                  type: "manual",
+                  message: `Erreur upload média: ${mediaResult.error}`,
+                });
+              } else {
+                console.log(`Média uploadé:`, mediaResult.data);
+              }
+            }
+          }
+
+          if (block.existingMedias && block.existingMedias.length > 0) {
+            for (const media of block.existingMedias) {
               const updatedMedia = await updateMedia.mutateAsync({
                 media: {
                   ...media,
-                  order: block.order 
+                  order: block.order
                 },
                 newsId: targetNewsId
               });
-               if (updatedMedia.error) {
-                console.error(`Erreur update media ${media.id}:`, updatedMedia.error);
+
+              if (updatedMedia.error) {
+                console.error(`❌ Erreur update media ${media.id}:`, updatedMedia.error);
               } else {
-                console.log(`Media ${media.id} mis à jour`);
+                console.log(`✅ Media ${media.id} ordre mis à jour`);
               }
-           
-            }
-          }
-
-        }
-      }
-            for (const block of blocks) {
-        if (block.type === TypeBlock.TEXT && block.id < 0) {
-          console.log(`Données:`, {
-            newsId: targetNewsId,
-            content: block.content.substring(0, 50) + "...",
-            order: block.order
-          });
-          
-          const contentResult = await createContent.mutateAsync({
-            newsId: targetNewsId,
-            content: block.content,
-            order: block.order
-          });
-          
-          if (contentResult.error) {
-            setError("root.serverError", {
-              type: "manual",
-              message: `Erreur bloc texte ${block.order + 1}: ${contentResult.error}`,
-            });
-            return;
-          } else {
-            console.log(`Content créé avec order ${block.order}`);
-          }
-        }
-
-        if (block.type === TypeBlock.MEDIA && block.files && block.files.length > 0) {
-          for (const file of block.files) {           
-            const mediaResult = await uploadMedia.mutateAsync({
-              file,
-              newsId: targetNewsId
-            });
-
-            if (mediaResult.error) {
-              console.error(`Erreur upload:`, mediaResult.error);
-            } else {
-              console.log(`Média uploadé`);
             }
           }
         }

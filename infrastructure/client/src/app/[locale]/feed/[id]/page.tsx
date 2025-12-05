@@ -12,20 +12,19 @@ interface FeedPageProps {
 
 export default async function FeedDetailPage({ params }: FeedPageProps) {
   const { id } = await params;
-  const newsId = Number(id);
+  const newsId = id;
 
- const [news, contents, media] = await Promise.all([
+  const [news, contents, media] = await Promise.all([
     getNewsById(newsId),
     getContentsByNewsId(newsId),
     getMediaByNewsId(newsId),
   ]);
 
-  if (!news) return notFound();
-
-  
+  if (!news) {
+    return notFound();
+  }
 
   return (
     <FeedDetail news={news} contents={contents} medias={media} />
-
   );
 }

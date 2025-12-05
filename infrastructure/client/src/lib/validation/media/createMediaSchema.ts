@@ -2,7 +2,7 @@ import z from "zod";
 
 export const createMediaSchema = (t:(key: string) => string) => 
     z.object({
-  newsId: z.number(),
+  newsId: z.string(),
   url: z.string(),
   type: z.enum(["IMAGE", "VIDEO"]),
   altText: z.string(),

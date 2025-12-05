@@ -8,22 +8,20 @@ export class InMemoryContentRepository implements ContentRepositoryInterface {
 
     
     private contents: Array<ContentEntity>;
-    private incrId;
 
     public constructor() {
         this.contents = [];
-        this.incrId = 0;
     }
 
-    public async findById(id: number): Promise<ContentEntity | ContentNotFoundError> {
-        const content = this.contents.find((c) => c.id === id);
+    public async findById(contentId: string): Promise<ContentEntity | ContentNotFoundError> {
+        const content = this.contents.find((c) => c.id === contentId);
         if(!content) {
-            return new ContentNotFoundError(`Content with ${id} not found`);
+            return new ContentNotFoundError(`Content with ${contentId} not found`);
         }
         return content;
     }
 
-    public async findByNewsId(newsId: number): Promise<Array<ContentEntity>> {
+    public async findByNewsId(newsId: string): Promise<Array<ContentEntity>> {
         return this.contents.filter(c => c.newsId === newsId).sort((a, b) => a.order - b.order);
     }
 
@@ -31,8 +29,6 @@ export class InMemoryContentRepository implements ContentRepositoryInterface {
         if(!content) {
             return new InvalidContentError("Error creation content");
         }
-        this.incrId++;
-        content.id = this.incrId;
         this.contents.push(content);
         return content;
     }
@@ -46,10 +42,10 @@ export class InMemoryContentRepository implements ContentRepositoryInterface {
         return content;
     }
 
-    public async delete(id: number): Promise<void | ContentNotFoundError> {
-        const index = this.contents.findIndex(c => c.id === id);
+    public async delete(contentId: string): Promise<void | ContentNotFoundError> {
+        const index = this.contents.findIndex(c => c.id === contentId);
         if(index === -1) {
-            return new ContentNotFoundError(`Content with id ${id} not found`);
+            return new ContentNotFoundError(`Content with id ${contentId} not found`);
         }
         this.contents.splice(index, 1);
     }

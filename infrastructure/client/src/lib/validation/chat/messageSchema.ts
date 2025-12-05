@@ -3,7 +3,7 @@ import z from "zod"
 
 export const messageSchema = (t:(key: string) => string) => 
     z.object({
-        conversationId: z.number(),
+        conversationId: z.string(),
         conversationClientId: z.string(),
         conversationAdvisorId: z.string(),
         authorId: z.string(),

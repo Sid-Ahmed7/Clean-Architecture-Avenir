@@ -13,8 +13,8 @@ interface FilePreviewProps {
     onRemove?: () => void;
     isUploadAlready?: boolean;
     caption?: string;
-    onCaptionChange?: (mediaId: number, caption: string) => void;
-    mediaId?: number
+    onCaptionChange?: (mediaId: string, caption: string) => void;
+    mediaId?: string
 }
 
 export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlready, caption, onCaptionChange, mediaId}: FilePreviewProps) {

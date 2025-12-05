@@ -10,7 +10,7 @@ interface MediaUploaderProps {
     existingFiles?: UploadedFile[];
     maxSize?: number;
     disabled?: boolean;
-    onCaptionUpdate?: (mediaId: number, caption: string) => void;
+    onCaptionUpdate?: (mediaId: string, caption: string) => void;
 }
 
 export function MediaUploader({onFilesSelected, existingFiles = [],maxSize = 10, disabled =false, onCaptionUpdate} : MediaUploaderProps){
@@ -128,7 +128,7 @@ export function MediaUploader({onFilesSelected, existingFiles = [],maxSize = 10,
         setError(null);
     };
     
-    const handleCaptionChange = (mediaId: number, caption: string) => {
+    const handleCaptionChange = (mediaId: string, caption: string) => {
         if (onCaptionUpdate) {
             onCaptionUpdate(mediaId, caption);
         }

@@ -1,13 +1,20 @@
 import { NewsContentValue } from "../values/NewsContentValue";
 import { NewsIdValue } from "../values/NewsIdValue";
+import { ContentIdValue } from "../values/ContentIdValue";
 
 export class ContentEntity {
-    public static from(id: number,newsId: number,order: number, content: string) {
+    public static from(id: string, newsId: string,order: number, content: string) {
 
-        const validatedId = NewsIdValue.from(id);
+        const validatedId = ContentIdValue.from(id);
         if(validatedId instanceof Error) {
             return validatedId;
         }
+        
+        const validatedNewsId = NewsIdValue.from(newsId);
+        if(validatedNewsId instanceof Error) {
+            return validatedNewsId;
+        }
+
 
         const validatedContent = NewsContentValue.from(content);
         if(validatedContent instanceof Error) {
@@ -15,11 +22,11 @@ export class ContentEntity {
         }
 
 
-        return new ContentEntity(validatedId.value,newsId, order, validatedContent.value);
+        return new ContentEntity(validatedId.value,validatedNewsId.value, order, validatedContent.value);
     }
     private constructor(
-        public id: number,
-        public newsId: number,
+        public id: string,
+        public newsId: string,
         public order: number,
         public content: string,
     ){}

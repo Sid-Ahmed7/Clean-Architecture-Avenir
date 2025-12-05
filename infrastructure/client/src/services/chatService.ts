@@ -137,7 +137,7 @@ export const disconnectSocket = (role?: string) => {
 };
 
 
-export const joinConversation = (conversationId: number, role: string) => {
+export const joinConversation = (conversationId: string, role: string) => {
   const socket = getSocket(role);
   if (!socket?.connected){
     console.warn(`Cannot join conversation: socket ${role} not connected`);
@@ -183,7 +183,7 @@ export const onPendingConversation = (callback: (conv: UserChat) => void) => {
   return () => socket.off("pendingConversation", callback);
 };
 
-export const onRemovePendingConversation = (callback: (data: { conversationId: number }) => void) => {
+export const onRemovePendingConversation = (callback: (data: { conversationId: string }) => void) => {
   const socket = advisorSocket;
   if (!socket) {
     console.warn("Advisor socket not available for onRemovePendingConversation");
@@ -222,7 +222,7 @@ export const onUserStatusChanged = (callback: (status: UserStatus) => void) => {
   return () => socket.off("userStatus", callback);
 };
 
-export const markMessageAsRead = (messageIds: number[], userId: string) => {
+export const markMessageAsRead = (messageIds: string[], userId: string) => {
   const socket = systemSocket;
   if (!socket?.connected){
     console.error("Cannot mark as read");
@@ -231,7 +231,7 @@ export const markMessageAsRead = (messageIds: number[], userId: string) => {
   socket.emit("markAsRead", { messageIds, userId });
 };
 
-export const onMessagesRead = (callback: (ids: number[]) => void) => {
+export const onMessagesRead = (callback: (ids: string[]) => void) => {
   const socket = systemSocket;
   if (!socket) {
     console.warn("System socket not available for onMessagesRead");
@@ -244,7 +244,7 @@ export const onMessagesRead = (callback: (ids: number[]) => void) => {
   return () => socket.off("messagesRead", callback);
 };
 
-export const sendTyping = (conversationId: number, userId: string) => {
+export const sendTyping = (conversationId: string, userId: string) => {
   const socket = systemSocket;
   if (!socket?.connected){
     console.warn("Cannot send typing");
@@ -253,7 +253,7 @@ export const sendTyping = (conversationId: number, userId: string) => {
   socket.emit("typing", { conversationId, userId });
 };
 
-export const sendStopTyping = (conversationId: number, userId: string) => {
+export const sendStopTyping = (conversationId: string, userId: string) => {
   const socket = systemSocket;
   if (!socket?.connected){
     console.warn("Cannot send stopTyping");
@@ -262,7 +262,7 @@ export const sendStopTyping = (conversationId: number, userId: string) => {
   socket.emit("stopTyping", { conversationId, userId });
 };
 
-export const onUserTyping = (callback: (data: { conversationId: number; userId: string }) => void) => {
+export const onUserTyping = (callback: (data: { conversationId: string; userId: string }) => void) => {
   const socket = systemSocket;
   if (!socket) {
     console.warn("System socket not available for onUserTyping");
@@ -275,7 +275,7 @@ export const onUserTyping = (callback: (data: { conversationId: number; userId: 
   return () => socket.off("userTyping", callback);
 };
 
-export const onUserStopTyping = (callback: (data: { conversationId: number; userId: string }) => void) => {
+export const onUserStopTyping = (callback: (data: { conversationId: string; userId: string }) => void) => {
   const socket = systemSocket;
   if (!socket) {
     console.warn("System socket not available for onUserStopTyping");

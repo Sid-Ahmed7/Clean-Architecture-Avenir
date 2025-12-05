@@ -1,7 +1,7 @@
 import { UserIdValue } from "../values/UserIdValue";
 
 export class ConversationEntity {
-    public static from(id: number, clientId: string, advisorId: string, createdAt: Date) {
+    public static from(id: string, clientId: string, advisorId: string, createdAt: Date) {
         
         const validatedClientId = UserIdValue.from(clientId);
         if(validatedClientId instanceof Error) {
@@ -17,7 +17,7 @@ export class ConversationEntity {
     }
 
     private constructor(
-        public id: number,
+        public id: string,
         public clientId: string,
         public advisorId: string,
         public createdAt: Date

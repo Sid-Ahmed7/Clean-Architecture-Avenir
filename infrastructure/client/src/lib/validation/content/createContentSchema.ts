@@ -2,7 +2,7 @@ import z from "zod";
 
 export const createContentSchema = (t:(key: string) => string) => 
     z.object({
-  newsId: z.number(),
+  newsId: z.string(),
   content: z.string(),
   order: z.number().optional(),
 });

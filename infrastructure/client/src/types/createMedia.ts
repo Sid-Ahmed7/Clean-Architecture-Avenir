@@ -1,5 +1,5 @@
 export interface CreateMedia {
-    newsId: number;
+    newsId: string;
     url: string;
     type: string;
     altText: string;

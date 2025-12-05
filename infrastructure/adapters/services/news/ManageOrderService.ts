@@ -6,7 +6,7 @@ export class ManageOrderService implements OrderService {
 
     constructor(private contentRepository: ContentRepositoryInterface, private mediaRepository: MediaRepositoryInterface) {}
 
-async getNextOrder(newsId: number): Promise<number> {
+async getNextOrder(newsId: string): Promise<number> {
     const contents = await this.contentRepository.findByNewsId(newsId);
     const medias = await this.mediaRepository.findByNewsId(newsId)
 

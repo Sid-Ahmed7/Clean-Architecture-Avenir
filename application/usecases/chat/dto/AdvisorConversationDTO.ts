@@ -1,5 +1,5 @@
 export interface AdvisorConversationDTO {
-    id: number;
+    id: string;
     clientId: string;
     advisorId: string | null;
     createdAt: Date;

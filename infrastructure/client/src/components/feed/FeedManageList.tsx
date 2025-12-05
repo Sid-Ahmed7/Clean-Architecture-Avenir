@@ -10,7 +10,7 @@ import { LocaleContext } from "@/contexts/LocaleProvider";
 
 interface FeedManageListProps {
     news: News[]
-    onDelete: (id: number) => Promise<void>
+    onDelete: (id: string) => Promise<void>
 }
 
 export function FeedManageList({news, onDelete} : FeedManageListProps) {
@@ -18,7 +18,7 @@ export function FeedManageList({news, onDelete} : FeedManageListProps) {
   const router = useRouter();
   const {locale} = useContext(LocaleContext);
 
-  const handleEdit = (id: number) => {
+  const handleEdit = (id: string) => {
     router.push(`/${locale}/feed/edit/${id}`);
   }
 

@@ -1,6 +1,6 @@
 export interface UpdateContent {
-    id: number;
-    newsId: number;
+    id: string;
+    newsId: string;
     content: string;
     order?: number;
 };

@@ -1,5 +1,5 @@
 export interface Conversation {
-  id: number;
+  id: string;
   clientId: string;
   advisorId?: string;
   createdAt: string;

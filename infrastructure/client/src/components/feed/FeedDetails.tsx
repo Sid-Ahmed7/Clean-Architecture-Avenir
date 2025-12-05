@@ -14,7 +14,8 @@ interface FeedDetailProps {
     medias: Media[];
 }                             
 
-export  function FeedDetail({news, contents, medias} : FeedDetailProps) {
+export function FeedDetail({news, contents, medias} : FeedDetailProps) {
+
 
     const blocks: DisplayBlock[] = [
         ...contents.map((content) => ({
@@ -29,12 +30,13 @@ export  function FeedDetail({news, contents, medias} : FeedDetailProps) {
         })),
     ];
 
-    console.log(blocks)
+    console.log("Blocks créés:", blocks);
 
     const orderedContent = sortBlock(blocks);
 
- return (
-     <main className="min-h-screen bg-white py-16">
+
+    return (
+        <main className="min-h-screen bg-white py-16">
             <article className="container mx-auto px-4 max-w-3xl">
                 <FeedHeader news={news} />
 
@@ -63,5 +65,5 @@ export  function FeedDetail({news, contents, medias} : FeedDetailProps) {
                 )}
             </article>
         </main>
-  );
+    );
 }

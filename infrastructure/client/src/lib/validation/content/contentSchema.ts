@@ -2,8 +2,8 @@ import z from "zod";
 
 export const contentSchema = (t:(key: string) => string) => 
      z.object({
-  id: z.number(),
-  newsId: z.number(),
+  id: z.string(),
+  newsId: z.string(),
   order: z.number(),
   content: z.string(),
 });

@@ -4,7 +4,7 @@ import { ContentRepositoryInterface } from "../../../ports/repositories/news/Con
 export class ReorderContentsUseCase {
     public constructor(private contentRepository: ContentRepositoryInterface) {}
 
-    public async execute(newsId: number, newOrder: number[]): Promise<ContentEntity[] | Error> {
+    public async execute(newsId: string, newOrder: string[]): Promise<ContentEntity[] | Error> {
         const contents = await this.contentRepository.findByNewsId(newsId);
 
         if (contents.length !== newOrder.length) {

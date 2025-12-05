@@ -5,7 +5,7 @@ export class GetContentsByNewsIdUseCase {
 
     public constructor(private contentRepository: ContentRepositoryInterface){}
 
-    public async execute(newsId : number) {
+    public async execute(newsId : string) {
         return await this.contentRepository.findByNewsId(newsId);
     }   
 }

@@ -1,19 +1,17 @@
 import { ConversationEntity } from "../../../domain/entities/ConversationEntity";
-import { MessageEntity } from "../../../domain/entities/MessageEntity";
-import { ReadStatusEnum } from "../../../domain/enums/ReadStatusEnum";
-import { AdvisorAlreadyAssignedError } from "../../errors/chat/AdvisorAlreadyAssignedError";
 import { ConversationRepositoryInterface } from "../../ports/repositories/chat/ConversationRepositoryInterface";
-import { MessageRepositoryInterface } from "../../ports/repositories/chat/MessageRepositoryInterface";
-
+import {UuidGeneratorService} from "../../ports/services/UuidGeneratorService"
 export class CreateConversationUseCase {
 
     public constructor(
         private conversationRepository: ConversationRepositoryInterface,
+        private uuidService: UuidGeneratorService
          ) {}
 
     public async execute(clientId: string) {
 
-        const conversation = ConversationEntity.from(0, clientId, "", new Date());
+        const id = this.uuidService.generate();
+        const conversation = ConversationEntity.from(id, clientId, "", new Date());
         
         if(conversation instanceof Error) {
             return conversation;

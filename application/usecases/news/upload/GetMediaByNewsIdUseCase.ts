@@ -4,7 +4,7 @@ import { MediaRepositoryInterface } from "../../../ports/repositories/news/Media
 export class GetMediaByNewsIdUseCase {
     public constructor(private mediaRepository: MediaRepositoryInterface) {}
 
-    public async execute(newsId: number) {
+    public async execute(newsId: string) {
         return await this.mediaRepository.findByNewsId(newsId);
     }
 }

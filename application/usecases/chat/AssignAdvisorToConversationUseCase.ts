@@ -8,7 +8,7 @@ export class AssignAdvisorToConversationUseCase {
     ){}
 
 
-    public async execute(conversationId: number, advisorId: string) {
+    public async execute(conversationId: string, advisorId: string) {
         const conversation = await this.conversationRepository.findByConversationId(conversationId);
 
         if(conversation instanceof Error) {
