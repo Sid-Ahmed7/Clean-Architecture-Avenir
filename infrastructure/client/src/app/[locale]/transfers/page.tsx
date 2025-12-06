@@ -1,7 +1,7 @@
 "use client";
 
 import TransferForm from "@/components/bankAccount/TransferForm";
-import { useUserAccounts } from "@/lib/hooks/useUserAccounts";
+import { useUserAccounts } from "@/hooks/useUserAccounts";
 
 export default function TransfersPage() {
     const { accounts, loading, error, reload } = useUserAccounts();

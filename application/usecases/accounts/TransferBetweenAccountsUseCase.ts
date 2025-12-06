@@ -1,37 +1,26 @@
 import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
 import { AccountNotFoundError } from "../../errors/AccountNotFoundError";
-import { InvalidAccountError } from "../../../domain/errors/InvalidAccountError";
-import { InsufficientFundsError } from "../../errors/InsufficientFundsError";
-import { TransferLimitExceededError } from "../../errors/TransferLimitExceededError";
 import { TransactionRepositoryInterface } from "../../ports/repositories/TransactionRepositoryInterface";
 import { TransactionEntity } from "../../../domain/entities/TransactionEntity";
 import { OrderStatusEnum } from "../../../domain/enums/OrderStatusEnum";
 import { TransactionTypeEnum } from "../../../domain/enums/TransactionTypeEnum";
-import { randomUUID } from "crypto";
+import { TransferInput } from "../../requests/TransferInput"
+import { UuidGeneratorService } from "../../ports/services/UuidGeneratorService";
+import { TransferLimitService } from "../../ports/services/TransferLimitService";
+import { TransferValidationService } from "../../ports/services/TransferValidationService";
 
-type TransferInput = {
-    fromIban: string;
-    toIban: string;
-    amount: number;
-    userId: string;
-};
 
 export class TransferBetweenAccountsUseCase {
     public constructor(
         private accountRepository: AccountRepositoryInterface,
-        private transactionRepository: TransactionRepositoryInterface
+        private transactionRepository: TransactionRepositoryInterface,
+        private uuidService: UuidGeneratorService,
+        private transferLimitService: TransferLimitService,
+        private transferValidationService: TransferValidationService
     ) {}
 
     public async execute(input: TransferInput) {
         const { fromIban, toIban, amount, userId } = input;
-
-        if (fromIban === toIban) {
-            return new InvalidAccountError("Cannot transfer to the same account");
-        }
-
-        if (isNaN(amount) || amount <= 0) {
-            return new InvalidAccountError("Amount must be greater than zero");
-        }
 
         const debitAccount = await this.accountRepository.getOneAccountByIban(fromIban);
         if (debitAccount instanceof AccountNotFoundError) {
@@ -43,29 +32,21 @@ export class TransferBetweenAccountsUseCase {
             return creditAccount;
         }
 
-        if (debitAccount.userId !== userId) {
-            return new InvalidAccountError("Source account does not belong to this user");
-        }
+        const validationError = this.transferValidationService.validateTransfer(
+            debitAccount,
+            creditAccount,
+            amount,
+            userId
+        );
 
-        if (!debitAccount.isActive || !creditAccount.isActive) {
-            return new InvalidAccountError("Both accounts must be active");
-        }
-
-        if (debitAccount.currency !== creditAccount.currency) {
-            return new InvalidAccountError("Accounts must use the same currency");
-        }
-
-        if (amount > debitAccount.transferLimit) {
-            return new TransferLimitExceededError("Amount exceeds transfer limit");
-        }
-
-        const available = debitAccount.currentBalance + debitAccount.overdraftLimit;
-        if (amount > available) {
-            return new InsufficientFundsError("Insufficient funds");
+        if (validationError) {
+            return validationError;
         }
 
         debitAccount.updateBalance(debitAccount.currentBalance - amount);
         creditAccount.updateBalance(creditAccount.currentBalance + amount);
+
+        this.transferLimitService.recordTransfer(debitAccount, amount);
 
         const debitUpdate = await this.accountRepository.updateOneAccount(debitAccount);
         if (debitUpdate instanceof Error) {
@@ -77,11 +58,13 @@ export class TransferBetweenAccountsUseCase {
             return creditUpdate;
         }
 
+        const reference = this.uuidService.generate();
+
         const transactionOrError = TransactionEntity.from(
+            reference,
             debitAccount.accountNumber,
             creditAccount.accountNumber,
             amount,
-            randomUUID(),
             TransactionTypeEnum.TRANSFER,
             userId,
             OrderStatusEnum.COMPLETED,

@@ -47,19 +47,21 @@ export class CreateSubAccountUseCase {
         }
         
         const account = AccountEntity.from(
-            accountNumber,                  
-            iban,                                 
+            accountNumber,
+            iban,
             accountDTO.userId,
             accountDTO.accountType,
             accountDTO.currency,
             AccountStatusEnum.ACTIVE,
-            true,     
-            0,                               
+            true,
+            0,
             new Date(),
             3000,
             3000,
             1000,
             accountDTO.customAccountName ?? `${accountNumber}`,
+            0,
+            new Date(),
             accountDTO.parentAccountId
         );
 

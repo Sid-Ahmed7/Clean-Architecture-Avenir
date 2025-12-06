@@ -8,10 +8,10 @@ import { UserIdValue } from "../values/UserIdValue";
 export class TransactionEntity {
 
     public static from(
+        transactionReference: string,
         debitAccount: number,
         creditAccount: number,
         amount: number,
-        transactionReference: string,
         transactionType: TransactionTypeEnum,
         executedBy: string,
         status: OrderStatusEnum,
@@ -46,13 +46,13 @@ export class TransactionEntity {
         }
 
         return new TransactionEntity(
+            validatedReference.value,
             validatedDebitAccount.value,
             validatedCreditAccount.value,
             validatedAmount.value,
             transactionType,
             validatedExecutedBy.value,
             status,
-            validatedReference.value,
             description,
             category,
             createdAt
@@ -61,13 +61,13 @@ export class TransactionEntity {
     }
 
     private constructor(
+        public transactionReference: string,
         public debitAccount: number,
         public creditAccount: number,
         public amount: number,
         public transactionType: TransactionTypeEnum,
         public executedBy: string,
         public status: OrderStatusEnum,
-        public transactionReference: string,
         public description?: string,
         public category?: string,
         public createdAt?: Date,

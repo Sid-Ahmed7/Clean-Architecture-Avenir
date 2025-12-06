@@ -3,39 +3,32 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { useTranslations } from "next-intl";
 import { AccountModel } from "@/lib/validation/bankAccount/accountSchema";
-import { useTransferBetweenAccounts } from "@/lib/hooks/useTransferBetweenAccounts";
+import {TransferModel, transferSchema} from '@/lib/validation/bankAccount/transferSchema';
+import { useTransferBetweenAccounts } from "@/hooks/useTransferBetweenAccounts";
 
 type TransferFormProps = {
     accounts: AccountModel[];
     onSuccess?: () => void;
 };
 
-const transferSchema = z.object({
-    fromIban: z.string().min(10, "IBAN émetteur invalide"),
-    toIban: z.string().min(10, "IBAN destinataire invalide"),
-    amount: z
-        .number({ invalid_type_error: "Montant invalide" })
-        .positive("Montant invalide"),
-});
 
-type TransferModel = z.infer<typeof transferSchema>;
 
 export default function TransferForm({ accounts, onSuccess }: TransferFormProps) {
+    const t = useTranslations();
     const { transfer, loading, error, success, resetState } = useTransferBetweenAccounts();
     const [showConfirm, setShowConfirm] = useState(false);
     const [pendingTransfer, setPendingTransfer] = useState<TransferModel | null>(null);
 
-    const {
-        register,
+    const {register,
         handleSubmit,
         reset,
         formState: { errors },
         setValue,
         watch,
     } = useForm<TransferModel>({
-        resolver: zodResolver(transferSchema),
+        resolver: zodResolver(transferSchema(t)),
         defaultValues: {
             fromIban: accounts.length > 0 ? accounts[0].iban : "",
             toIban: "",

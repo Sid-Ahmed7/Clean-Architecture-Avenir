@@ -3,10 +3,7 @@ import z from "zod";
 export const accountSchema = (t:(key: string) => string) =>
 
 z.object({
-      accountNumber: z
-    .number()
-    .int()
-    .refine(num => num.toString().length === 11, {
+      accountNumber: z.number().int().refine(num => num.toString().length === 11, {
       message: "Le numéro de compte doit comporter exactement 11 chiffres",
     }),
     iban: z.string().length(27),
@@ -21,6 +18,8 @@ z.object({
     overdraftLimit: z.number(),
     createdAt: z.string(),
     customAccountName: z.string().optional(),
+    totalTransfered: z.number().min(0).default(0),
+    lastTransferResetDate: z.string().optional(),
     parentAccountId: z.number().optional(),
     closedAt: z.string().optional()
 

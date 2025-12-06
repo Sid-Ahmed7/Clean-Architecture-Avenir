@@ -31,17 +31,22 @@ import { UserNotFoundError } from "../../../../../application/errors/UserNotFoun
 import { TransferBetweenAccountsUseCase } from "../../../../../application/usecases/accounts/TransferBetweenAccountsUseCase";
 import { InsufficientFundsError } from "../../../../../application/errors/InsufficientFundsError";
 import { TransferLimitExceededError } from "../../../../../application/errors/TransferLimitExceededError";
+import { CryptoUuidGenerator } from "../../../../adapters/services/CryptoUuidGenerator";
+import { userRepository } from "../../../../adapters/config/repositories";
+import { ManageTransferLimitService } from "../../../../adapters/services/ManageTransferLimitService";
+import { ValidateTransferService } from "../../../../adapters/services/ValidateTransferService";
+
 
 export class AccountController {
 
-
-
-  constructor(
+    constructor(
     private readonly accountRepository: InMemoryAccountRepository,
     private readonly accountNumberGenerator: AccountNumberGeneratorService,
     private readonly ibanGenerator: IbanGeneratorService,
     private readonly transactionRepository: InMemoryTransactionRepository,
-    private readonly getTransactionHistoryUseCase: GetTransactionHistoryUseCase
+    private readonly uuidService: CryptoUuidGenerator,
+    private readonly transferLimitService: ManageTransferLimitService,
+    private readonly validateTransferService: ValidateTransferService
   ) {}
 
 
@@ -351,7 +356,13 @@ export class AccountController {
     }
 
     async transferBetweenAccounts(req: Request, res: Response) {
-        const transferUseCase = new TransferBetweenAccountsUseCase(this.accountRepository, this.transactionRepository);
+        const transferUseCase = new TransferBetweenAccountsUseCase(
+            this.accountRepository,
+            this.transactionRepository,
+            this.uuidService,
+            this.transferLimitService,
+            this.validateTransferService
+        );
         const userId = req.user?.userId;
 
         if (!userId) {
@@ -391,13 +402,16 @@ export class AccountController {
     }
 
     async getTransactionHistory(req: Request, res: Response) {
+        const getTransactionHistoryUseCase = new GetTransactionHistoryUseCase(this.transactionRepository, this.accountRepository, userRepository);
+        
         const userId = req.user?.userId;
+
 
         if (!userId) {
             return res.status(401).json({ error: "User not authenticated" });
         }
 
-        const result = await this.getTransactionHistoryUseCase.execute(userId);
+        const result = await getTransactionHistoryUseCase.execute(userId);
 
         if (result instanceof UserNotFoundError) {
             return res.status(404).json({ error: result.message });

@@ -2,14 +2,13 @@ import express from 'express'
 import { AccountController } from '../controller/account.controller'
 import { GenerateAccountNumberService } from '../../../../adapters/services/GenerateAccountNumberService'
 import { GenerateIbanService } from '../../../../adapters/services/GenerateIbanService'
-import { accountRepository, accountNumberGenerator, ibanGenerator} from '../../../../adapters/config/repositories'
+import { accountRepository, accountNumberGenerator, ibanGenerator, transactionRepository, uuidService, transferLimitService, transferValidationService } from '../../../../adapters/config/repositories'
 import { verifyTokenAccess } from '../middleware/authMiddleware';
 import { authorizeRoles } from '../middleware/roleMiddleware';
 import { RoleEnum } from '../../../../../domain/enums/RoleEnum';
 const router = express.Router();
 
-const accountController = new AccountController(accountRepository, accountNumberGenerator, ibanGenerator);
-
+const accountController = new AccountController(accountRepository, accountNumberGenerator, ibanGenerator, transactionRepository, uuidService, transferLimitService, transferValidationService);
 router.get("/my-accounts", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req, res) => accountController.getUserAccounts(req, res));
 router.post("/create", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req, res) => accountController.createAnAccount(req,res));
 router.post("/create/sub", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req, res) => accountController.createSubAccount(req,res));

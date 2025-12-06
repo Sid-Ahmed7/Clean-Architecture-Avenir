@@ -17,14 +17,13 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
 
   const menuItems = [
-    { icon: CreditCard, label: "Comptes", active: true },
-    { icon: ArrowUpRight, label: "Virements" },
-    { icon: TrendingUp, label: "Investissements" },
-    { icon: Calendar, label: "Historique" },
-    { icon: Calendar, label: "Historique", href: "/transactions" },
-
-    { icon: Settings, label: "Paramètres" },
-    { icon: HelpCircle, label: "Aide" },
+    { icon: CreditCard, label: "Comptes", href: "/accounts" },
+    { icon: ArrowUpRight, label: "Virements", href: "/transfers" },
+    { icon: TrendingUp, label: "Investissements", href: "/investments" },
+    { icon: Calendar, label: "Historique", href: "/history" },
+    { icon: MessageCircle, label: "Message", href: "/conversations" },
+    { icon: Settings, label: "Paramètres", href: "/settings" },
+    { icon: HelpCircle, label: "Aide", href: "/help" },
   ];
 
   const handleLogout = () => {

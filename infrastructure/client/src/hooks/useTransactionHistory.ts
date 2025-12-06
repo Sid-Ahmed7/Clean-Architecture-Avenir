@@ -1,7 +1,7 @@
 "use client";
 
+import { apiClient } from "@/lib/api/apiClient";
 import { useEffect, useState } from "react";
-import { apiClient } from "../api/apiClient";
 
 export type TransactionModel = {
     debitAccount: number;

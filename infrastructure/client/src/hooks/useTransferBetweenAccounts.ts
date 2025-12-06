@@ -1,7 +1,7 @@
 "use client";
 
+import { apiClient } from "@/lib/api/apiClient";
 import { useCallback, useState } from "react";
-import { apiClient } from "../api/apiClient";
 
 type TransferPayload = {
     fromIban: string;

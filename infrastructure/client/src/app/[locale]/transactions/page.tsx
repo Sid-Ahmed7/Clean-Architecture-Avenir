@@ -1,7 +1,7 @@
 "use client";
 
 import TransactionHistoryTable from "@/components/bankAccount/TransactionHistoryTable";
-import { useTransactionHistory } from "@/lib/hooks/useTransactionHistory";
+import { useTransactionHistory } from "@/hooks/useTransactionHistory";
 
 export default function TransactionsPage() {
     const { transactions, loading, error } = useTransactionHistory();
