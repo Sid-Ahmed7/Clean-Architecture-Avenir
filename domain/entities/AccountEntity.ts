@@ -9,7 +9,7 @@ import { AccountStatusValue } from "../values/AccountStatusValue";
 import { AccountNameValue } from "../values/AccountNameValue";
 
 export class AccountEntity {
-  public static from(accountNumber: number, iban: string, userId: string, accountType: AccountTypeEnum, currency: string, accountStatus: AccountStatusEnum, isActive: boolean, currentBalance: number = 20, createdAt: Date, withdrawalLimit: number = 3000 , transferLimit: number = 3000, overdraftLimit: number = 1000, customAccountName: string, parentAccountId?: number, closedAt?: Date) 
+  public static from(accountNumber: number, iban: string, userId: string, accountType: AccountTypeEnum, currency: string, accountStatus: AccountStatusEnum, isActive: boolean, currentBalance: number = 20, createdAt: Date, withdrawalLimit: number = 3000 , transferLimit: number = 3000, overdraftLimit: number = 1000, customAccountName: string, totalTransfered: number = 0, lastTransferResetDate: Date = new Date(), parentAccountId?: number, closedAt?: Date) 
    {
     
     const validatedAccountNumber = AccountNumberValue.from(accountNumber);
@@ -44,6 +44,8 @@ export class AccountEntity {
       overdraftLimit,
       createdAt ?? new Date(),
       validatedCustomAccountName.value,
+      totalTransfered,
+      lastTransferResetDate,
       parentAccountId,
       closedAt,
     );
@@ -63,6 +65,8 @@ export class AccountEntity {
     public overdraftLimit: number,
     public createdAt: Date,
     public customAccountName: string,
+    public totalTransfered: number,
+    public lastTransferResetDate: Date,
     public parentAccountId?: number,
     public closedAt?: Date,
 

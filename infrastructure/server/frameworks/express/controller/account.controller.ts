@@ -21,20 +21,32 @@ import { CustomAccountNameUseCase } from "../../../../../application/usecases/ac
 import { ToggleAccountActiveUseCase} from "../../../../../application/usecases/accounts/ToggleAccountActiveUseCase";
 import { AccountNumberGeneratorService } from "../../../../../application/ports/services/AccountNumberGeneratorService";
 import { IbanGeneratorService } from "../../../../../application/ports/services/IbanGeneratorService";
+import { InMemoryTransactionRepository } from "../../../../adapters/repositories/InMemoryTransactionRepository";
+import { GetTransactionHistoryUseCase } from "../../../../../application/usecases/accounts/GetTransactionHistoryUseCase";
 import { CreateAccountDTO } from "../../../../../application/usecases/accounts/dto/CreateAccountDTO";
 import { CheckingAccountAlreadyExistError } from "../../../../../application/errors/CheckingAccountAlreadyExistError";
 import { InvalidIbanError } from "../../../../../domain/errors/InvalidIbanError";
 import { GetUserByIdUseCase } from "../../../../../application/usecases/auth/GetUserByIdUseCase";
 import { UserNotFoundError } from "../../../../../application/errors/UserNotFoundError";
+import { TransferBetweenAccountsUseCase } from "../../../../../application/usecases/accounts/TransferBetweenAccountsUseCase";
+import { InsufficientFundsError } from "../../../../../application/errors/InsufficientFundsError";
+import { TransferLimitExceededError } from "../../../../../application/errors/TransferLimitExceededError";
+import { CryptoUuidGenerator } from "../../../../adapters/services/CryptoUuidGenerator";
+import { userRepository } from "../../../../adapters/config/repositories";
+import { ManageTransferLimitService } from "../../../../adapters/services/ManageTransferLimitService";
+import { ValidateTransferService } from "../../../../adapters/services/ValidateTransferService";
+
 
 export class AccountController {
 
-
-
-  constructor(
+    constructor(
     private readonly accountRepository: InMemoryAccountRepository,
     private readonly accountNumberGenerator: AccountNumberGeneratorService,
-    private readonly ibanGenerator: IbanGeneratorService
+    private readonly ibanGenerator: IbanGeneratorService,
+    private readonly transactionRepository: InMemoryTransactionRepository,
+    private readonly uuidService: CryptoUuidGenerator,
+    private readonly transferLimitService: ManageTransferLimitService,
+    private readonly validateTransferService: ValidateTransferService
   ) {}
 
 
@@ -343,6 +355,70 @@ export class AccountController {
         return res.status(200).json(result);
     }
 
+    async transferBetweenAccounts(req: Request, res: Response) {
+        const transferUseCase = new TransferBetweenAccountsUseCase(
+            this.accountRepository,
+            this.transactionRepository,
+            this.uuidService,
+            this.transferLimitService,
+            this.validateTransferService
+        );
+        const userId = req.user?.userId;
+
+        if (!userId) {
+            return res.status(401).json({ error: "User not authenticated" });
+        }
+
+        const { fromIban, toIban, amount } = req.body;
+
+        const result = await transferUseCase.execute({
+            fromIban,
+            toIban,
+            amount,
+            userId,
+        });
+
+        if (!(result instanceof Error)) {
+            return res.status(200).json(result);
+        }
+
+        if (result instanceof AccountNotFoundError) {
+            return res.status(404).json({ error: result.message });
+        }
+
+        if (result instanceof InsufficientFundsError) {
+            return res.status(400).json({ error: result.message });
+        }
+
+        if (result instanceof TransferLimitExceededError) {
+            return res.status(400).json({ error: result.message });
+        }
+
+        if (result instanceof InvalidAccountError) {
+            return res.status(400).json({ error: result.message });
+        }
+
+        return res.status(500).json({ error: "Unable to process transfer" });
+    }
+
+    async getTransactionHistory(req: Request, res: Response) {
+        const getTransactionHistoryUseCase = new GetTransactionHistoryUseCase(this.transactionRepository, this.accountRepository, userRepository);
+        
+        const userId = req.user?.userId;
+
+
+        if (!userId) {
+            return res.status(401).json({ error: "User not authenticated" });
+        }
+
+        const result = await getTransactionHistoryUseCase.execute(userId);
+
+        if (result instanceof UserNotFoundError) {
+            return res.status(404).json({ error: result.message });
+        }
+
+        return res.status(200).json(result);
+    }
 }
 
 

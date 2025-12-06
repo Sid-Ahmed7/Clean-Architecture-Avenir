@@ -32,19 +32,21 @@ export class CreateAccountUseCase {
         }
         
         const account = AccountEntity.from(
-            accountNumber,                  
-            iban,                                 
+            accountNumber,
+            iban,
             accountDTO.userId,
             accountDTO.accountType,
             accountDTO.currency,
             AccountStatusEnum.ACTIVE,
-            true,     
-            20,                               
+            true,
+            20,
             new Date(),
             3000,
             3000,
             1000,
             accountDTO.customAccountName ?? `${accountNumber}`,
+            0,
+            new Date()
         );
 
         if(account instanceof Error) {

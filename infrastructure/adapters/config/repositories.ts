@@ -7,6 +7,8 @@ import {GenerateAccountNumberService} from "../services/GenerateAccountNumberSer
 import {GenerateIbanService} from "../services/GenerateIbanService";
 import {ManageOrderService} from "../services/news/ManageOrderService";
 import {CryptoUuidGenerator} from "../services/CryptoUuidGenerator";
+import {ManageTransferLimitService} from "../services/ManageTransferLimitService";
+import {ValidateTransferService} from "../services/ValidateTransferService";
 
 import { InMemoryEventBus } from '../repositories/InMemoryEventBus';
 import { InMemoryUserRepository } from '../repositories/InMemoryUserRepository';
@@ -22,6 +24,7 @@ import { InMemoryMediaRepository } from "../repositories/InMemoryMediaRepository
 import { LocalFileStorageService } from "../services/news/LocalFileStorageService";
 import { InMemoryContentRepository } from "../repositories/InMemoryContentRepository";
 import { GenerateAltTextService } from "../services/news/GenerateAltTextService";
+import { InMemoryTransactionRepository } from "../repositories/InMemoryTransactionRepository";
 
 const baseUrl = process.env.CLIENT_BASE_URL!;
 export const tokenService = new JwtTokenService();
@@ -36,6 +39,7 @@ export const eventBus = new InMemoryEventBus();
 export const accountRepository = new InMemoryAccountRepository();
 export const accountNumberGenerator = new GenerateAccountNumberService(accountRepository);
 export const ibanGenerator = new GenerateIbanService(accountRepository);
+export const transactionRepository = new InMemoryTransactionRepository();
 
 export const conversationRepository = new InMemoryConversationRepository();
 export const messageRepository = new InMemoryMessageRepository();
@@ -51,3 +55,6 @@ export const contentRepository = new InMemoryContentRepository();
 
 export const orderService = new ManageOrderService(contentRepository, mediaRepository);
 export const altService = new GenerateAltTextService();
+
+export const transferLimitService = new ManageTransferLimitService();
+export const transferValidationService = new ValidateTransferService();

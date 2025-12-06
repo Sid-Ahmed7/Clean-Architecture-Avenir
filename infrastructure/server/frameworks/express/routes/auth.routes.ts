@@ -3,7 +3,6 @@ import { JwtTokenService } from '../../../../adapters/services/auth/JwtTokenServ
 import { PasswordEncryptionService } from '../../../../adapters/services/auth/PasswordEncryptionService';
 import {ResendEmailService} from '../../../../adapters/services/ResendEmailService';
 import {RegistrationTokenService} from '../../../../adapters/services/auth/RegistrationTokenService';
-import { InMemoryUserRepository } from '../../../../adapters/repositories/InMemoryUserRepository';
 import { InMemoryRoleRepository } from '../../../../adapters/repositories/InMemoryRoleRepository';
 import { InMemoryUserRoleRepository } from '../../../../adapters/repositories/InMemoryUserRoleRepository';
 import { AuthController } from '../controller/auth.controller';

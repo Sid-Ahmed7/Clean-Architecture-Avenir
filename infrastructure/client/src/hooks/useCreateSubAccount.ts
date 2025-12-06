@@ -1,18 +1,19 @@
 import { useState } from "react";
-import { ResponseSubAccountModel, responseSubAccountSchema } from "../lib/validation/bankAccount/responseSubAccountSchema";
+import { CreateSubAccountModel } from "../lib/validation/bankAccount/createSubAccountSchema";
+import { responseSubAccountSchema } from "../lib/validation/bankAccount/responseSubAccountSchema";
 import z from "zod";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { addSubAccount } from "../lib/api/account";
 
 export function useCreateSubAccount() {
-  const t = useTranslations();  
+  const t = useTranslations();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  const createSubAccount = (data: ResponseSubAccountModel) => {
+  const createSubAccount = (data: CreateSubAccountModel) => {
     setLoading(true);
     setError(null);
     setSuccess(false);
