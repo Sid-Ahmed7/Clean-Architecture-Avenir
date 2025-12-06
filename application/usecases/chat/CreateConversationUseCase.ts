@@ -4,8 +4,8 @@ import {UuidGeneratorService} from "../../ports/services/UuidGeneratorService"
 export class CreateConversationUseCase {
 
     public constructor(
-        private conversationRepository: ConversationRepositoryInterface,
-        private uuidService: UuidGeneratorService
+        private readonly conversationRepository: ConversationRepositoryInterface,
+        private readonly uuidService: UuidGeneratorService
          ) {}
 
     public async execute(clientId: string) {

@@ -101,7 +101,41 @@ export default function CreateAdminPage() {
                 />
                 {errors.confirmPassword && <p className="text-red-500 mb-2">{errors.confirmPassword.message}</p>}
 
-                <label className="block mb-1 font-medium text-gray-900" htmlFor="adminPassword">
+
+                
+                        <label className="block mb-1 font-medium text-gray-900" htmlFor="phoneNumber">
+                            Numéro de téléphone
+                        </label>
+                        <input
+                            id="phoneNumber"
+                            {...register("phoneNumber")}
+                            type="tel"
+                            className="w-full p-3 mb-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900"
+                        />
+                        {errors.phoneNumber && <p className="text-red-500 mb-2">{errors.phoneNumber.message}</p>}
+
+                        <label className="block mb-1 font-medium text-gray-900" htmlFor="dateOfBirth">
+                            Date de naissance
+                        </label>
+                        <input
+                            id="dateOfBirth"
+                            {...register("dateOfBirth")}
+                            type="date"
+                            className="w-full p-3 mb-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900"
+                        />
+                        {errors.dateOfBirth && <p className="text-red-500 mb-2">{errors.dateOfBirth.message}</p>}
+
+                        <label className="block mb-1 font-medium text-gray-900" htmlFor="address">
+                            Adresse
+                        </label>
+                        <textarea
+                            id="address"
+                            {...register("address")}
+                            rows={3}
+                            className="w-full p-3 mb-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900"
+                        />
+                        {errors.address && <p className="text-red-500 mb-2">{errors.address.message}</p>}
+                                        <label className="block mb-1 font-medium text-gray-900" htmlFor="adminPassword">
                     Admin Creation Password
                 </label>
                 <input

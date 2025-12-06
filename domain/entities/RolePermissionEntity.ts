@@ -20,8 +20,8 @@ export class RolePermissionEntity {
 
     }
     private constructor(
-        public roleId: number,
-        public permissionId: number,
+        public readonly roleId: number,
+        public readonly permissionId: number,
     ) {}
 
 }

@@ -6,9 +6,9 @@ import { UserRepositoryInterface } from "../../ports/repositories/auth/UserRepos
 
 export class GetTransactionHistoryUseCase {
     public constructor(
-        private transactionRepository: TransactionRepositoryInterface,
-        private accountRepository: AccountRepositoryInterface,
-        private userRepository: UserRepositoryInterface
+        private readonly transactionRepository: TransactionRepositoryInterface,
+        private readonly accountRepository: AccountRepositoryInterface,
+        private readonly userRepository: UserRepositoryInterface
     ) {}
 
     public async execute(userId: string): Promise<TransactionEntity[] | UserNotFoundError> {

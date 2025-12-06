@@ -25,6 +25,7 @@ import { LocalFileStorageService } from "../services/news/LocalFileStorageServic
 import { InMemoryContentRepository } from "../repositories/InMemoryContentRepository";
 import { GenerateAltTextService } from "../services/news/GenerateAltTextService";
 import { InMemoryTransactionRepository } from "../repositories/InMemoryTransactionRepository";
+import { LocaleValidationService } from "../services/LocaleValidationService";
 
 const baseUrl = process.env.CLIENT_BASE_URL!;
 export const tokenService = new JwtTokenService();
@@ -57,4 +58,5 @@ export const orderService = new ManageOrderService(contentRepository, mediaRepos
 export const altService = new GenerateAltTextService();
 
 export const transferLimitService = new ManageTransferLimitService();
-export const transferValidationService = new ValidateTransferService();
+export const transferValidationService = new ValidateTransferService(transferLimitService);
+export const localService = new LocaleValidationService()

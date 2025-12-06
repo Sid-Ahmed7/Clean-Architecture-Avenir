@@ -2,7 +2,7 @@ import { NewsRepositoryInterface } from "../../ports/repositories/news/NewsRepos
 import { NewsPublisher } from "../../ports/services/news/NewsPublisher";
 
 export class DeleteNewsUseCase {
-    public constructor(private newsRepository: NewsRepositoryInterface, private publisher: NewsPublisher ){}
+    public constructor(private readonly newsRepository: NewsRepositoryInterface, private readonly publisher: NewsPublisher ){}
 
     public async execute(newsId: string): Promise<void | Error> {
         const news = await this.newsRepository.findById(newsId);

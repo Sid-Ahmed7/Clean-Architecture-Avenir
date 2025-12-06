@@ -1,7 +1,5 @@
 import express from 'express'
 import { AccountController } from '../controller/account.controller'
-import { GenerateAccountNumberService } from '../../../../adapters/services/GenerateAccountNumberService'
-import { GenerateIbanService } from '../../../../adapters/services/GenerateIbanService'
 import { accountRepository, accountNumberGenerator, ibanGenerator, transactionRepository, uuidService, transferLimitService, transferValidationService } from '../../../../adapters/config/repositories'
 import { verifyTokenAccess } from '../middleware/authMiddleware';
 import { authorizeRoles } from '../middleware/roleMiddleware';

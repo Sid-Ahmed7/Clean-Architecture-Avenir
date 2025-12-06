@@ -3,7 +3,7 @@ import { CreateAccountUseCase } from "../../application/usecases/accounts/Create
 import { UserConfirmedEventHandler } from "../../application/handlers/UserConfirmedEventHandler";
 import { GenerateAccountNumberService } from "../adapters/services/GenerateAccountNumberService";
 import { GenerateIbanService } from "../adapters/services/GenerateIbanService";
-import { UserConfirmedEvent } from "../../domain/events/UserConfirmedEvent";
+import { UserConfirmedEvent } from "../../application/ports/event/UserConfirmedEvent";
 import { AccountRepositoryInterface } from "../../application/ports/repositories/AccountRepositoryInterface";
 
 export function registerUserConfirmedSubscriber(

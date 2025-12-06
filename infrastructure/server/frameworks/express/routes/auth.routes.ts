@@ -1,22 +1,15 @@
 import express from 'express'
-import { JwtTokenService } from '../../../../adapters/services/auth/JwtTokenService';
-import { PasswordEncryptionService } from '../../../../adapters/services/auth/PasswordEncryptionService';
-import {ResendEmailService} from '../../../../adapters/services/ResendEmailService';
-import {RegistrationTokenService} from '../../../../adapters/services/auth/RegistrationTokenService';
-import { InMemoryRoleRepository } from '../../../../adapters/repositories/InMemoryRoleRepository';
-import { InMemoryUserRoleRepository } from '../../../../adapters/repositories/InMemoryUserRoleRepository';
 import { AuthController } from '../controller/auth.controller';
 import {registerUserConfirmedSubscriber} from '../../../../subscribers/UserConfirmedSuscriber';
-import {accountRepository, userRepository, roleRepository, userRoleRepository,tokenService, passwordService, emailService, emailTemplateService,registrationTokenGeneratorService, eventBus } from '../../../../adapters/config/repositories';
+import {accountRepository, userRepository, roleRepository, userRoleRepository,tokenService, passwordService,emailService, emailTemplateService,registrationTokenGeneratorService, localService, uuidService,eventBus } from '../../../../adapters/config/repositories';
 import { verifyTokenAccess } from '../middleware/authMiddleware';
 import { authorizeRoles } from '../middleware/roleMiddleware';
 import { RoleEnum } from '../../../../../domain/enums/RoleEnum';
-import { EmailTemplateService } from '../../../../adapters/services/EmailTemplateService';
 const router = express.Router();
 
 
 registerUserConfirmedSubscriber(eventBus,accountRepository );
-const authController = new AuthController(userRepository, roleRepository, userRoleRepository,tokenService, passwordService, emailService, emailTemplateService,registrationTokenGeneratorService, eventBus);
+const authController = new AuthController(userRepository, roleRepository, userRoleRepository,tokenService, passwordService, emailService,emailTemplateService,registrationTokenGeneratorService, localService, uuidService, eventBus);
 
 
 router.post("/register", (req, res) => authController.register(req,res));

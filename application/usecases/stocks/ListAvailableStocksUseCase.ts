@@ -2,7 +2,7 @@ import { StockEntity } from "../../../domain/entities/StockEntity";
 import {StockRepositoryInterface} from "../../ports/repositories/StockRepositoryInterface";
 export class ListAvailableStocksUseCase {
 
-    public constructor(private stockRepository: StockRepositoryInterface) {}
+    public constructor(private readonly stockRepository: StockRepositoryInterface) {}
 
     public async execute(): Promise<Array<StockEntity> | Error> {
 

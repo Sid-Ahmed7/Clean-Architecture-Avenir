@@ -17,8 +17,8 @@ export class UserRoleEntity {
 
     }
     private constructor(
-        public userId: string,
-        public roleId: number,
+        public readonly userId: string,
+        public readonly roleId: number,
     ) {}
 
 }

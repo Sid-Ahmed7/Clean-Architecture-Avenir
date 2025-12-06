@@ -1,5 +1,5 @@
 import { RegistrationTokenGeneratorService } from "../../../../application/ports/services/auth/RegistrationTokenGeneratorService";
-import { Token } from "../../../../domain/interfaces/Token";
+import { Token } from "../../../../application/requests/Token";
 
 export class RegistrationTokenService implements RegistrationTokenGeneratorService {
     generateToken(expirationHours: number): Token {

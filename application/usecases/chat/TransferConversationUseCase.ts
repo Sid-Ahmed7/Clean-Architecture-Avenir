@@ -4,7 +4,7 @@ import { ConversationRepositoryInterface } from "../../ports/repositories/chat/C
 
 export class TransferConversationUseCase {
 
-    public constructor(private conversationRepository: ConversationRepositoryInterface){}
+    public constructor(private readonly conversationRepository: ConversationRepositoryInterface){}
 
     public async execute(conversationId: string, newAdvisorId: string) {
         const conversation = await this.conversationRepository.findByConversationId(conversationId);

@@ -1,5 +1,5 @@
 import { AccountTypeEnum } from "../../domain/enums/AccountTypeEnum";
-import { UserConfirmedEvent } from "../../domain/events/UserConfirmedEvent";
+import { UserConfirmedEvent } from "../ports/event/UserConfirmedEvent";
 import { CreateAccountUseCase } from "../usecases/accounts/CreateAccountUseCase";
 
 export class UserConfirmedEventHandler {

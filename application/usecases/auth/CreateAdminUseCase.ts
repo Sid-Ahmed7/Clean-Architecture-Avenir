@@ -5,28 +5,49 @@ import { UserRepositoryInterface } from "../../ports/repositories/auth/UserRepos
 import { RoleRepositoryInterface } from "../../ports/repositories/auth/RolerepositoryInterface";
 import { UserRoleRepositoryInterface } from "../../ports/repositories/auth/UserRoleRepositoryInterface";
 import { PasswordService } from "../../ports/services/auth/PasswordService";
+import { RegistrationTokenGeneratorService } from "../../ports/services/auth/RegistrationTokenGeneratorService";
+import { UuidGeneratorService } from "../../ports/services/UuidGeneratorService";
+import { RegisterAdmin} from "../../requests/RegisterAdmin";
 
 export class CreateAdminUseCase {
     public constructor(
-        private userRepository: UserRepositoryInterface,
-        private roleRepository: RoleRepositoryInterface,
-        private userRoleRepository: UserRoleRepositoryInterface,
-        private passwordService: PasswordService
+        private readonly userRepository: UserRepositoryInterface,
+        private readonly roleRepository: RoleRepositoryInterface,
+        private readonly userRoleRepository: UserRoleRepositoryInterface,
+        private readonly passwordService: PasswordService,
+        private readonly uuidService: UuidGeneratorService
     ) {}
 
-    public async execute(user: BankUserEntity): Promise<BankUserEntity | Error> {
+    public async execute(user: RegisterAdmin): Promise<BankUserEntity | Error> {
         const existingUser = await this.userRepository.findByEmail(user.email);
 
         if (existingUser && !(existingUser instanceof Error)) {
             return new Error(`User with email ${user.email} already exists`);
         }
+        
+        const id = this.uuidService.generate();
+        const userEntity = BankUserEntity.from(
+            id,
+            user.email,
+            user.password,
+            UserStatusEnum.PENDING,
+            user.firstName,
+            user.lastName,
+            user.phoneNumber,
+            user.dateOfBirth,
+            user.address
+        );
 
-        const hashedPassword = await this.passwordService.hash(user.password);
-        user.password = hashedPassword;
-        user.status = UserStatusEnum.ACTIVE;
-        user.isRegistered = true;
+        if (userEntity instanceof Error) {
+            return userEntity;
+        }
 
-        const savedUser = await this.userRepository.createUser(user);
+        const hashedPassword = await this.passwordService.hash(userEntity.password);
+        userEntity.password = hashedPassword;
+        userEntity.status = UserStatusEnum.ACTIVE;
+        userEntity.isRegistered = true;
+
+        const savedUser = await this.userRepository.createUser(userEntity);
 
         if (savedUser instanceof Error) {
             return savedUser;

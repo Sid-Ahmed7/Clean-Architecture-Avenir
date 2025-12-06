@@ -1,10 +1,10 @@
-import { AccountTypeEnum } from "../../../../domain/enums/AccountTypeEnum";
+import {AccountTypeEnum} from "../../domain/enums/AccountTypeEnum"; 
 
-export interface CreateAccountDTO {
+export interface CreateSubAccount {
     userId: string;                  
     accountType: AccountTypeEnum;    
     currency: string;                
     customAccountName?: string;      
     createdBy?: string; 
-    parentAccountId?: number;
+    parentAccountId: number;
 }

@@ -1,12 +1,12 @@
 import { EmptyFileError } from "../../../../domain/errors/upload/EmptyFileError";
-import { UnsupportedMediaTypeError } from "../../../../domain/errors/upload/UnsupportedMediaTypeError";
-import { UploadedFile } from "../../../../domain/interfaces/UploadedFile";
-import { MediaValidation } from "../../../../domain/services/MediaValidation";
+import { InvalidMediaTypeError } from "../../../../domain/errors/InvalidMediaTypeError";
+import { UploadedFile } from "../../../responses/UploadedFile";
+import { MediaTypeValue } from "../../../../domain/values/MediaTypeValue";
 import { FileStorageService } from "../../../ports/services/news/FileStorageService";
 
 export class UploadMediaUseCase {
    
-    constructor(private fileStorageService: FileStorageService) {}
+    constructor(private readonly fileStorageService: FileStorageService) {}
 
     async execute(file: Buffer, fileName: string, mimeType: string): Promise<UploadedFile | Error> {
 
@@ -14,17 +14,18 @@ export class UploadMediaUseCase {
             return new EmptyFileError("No file provided or file is empty");
         }
 
-        const isImage = mimeType.startsWith('image/');
-        const isVideo = mimeType.startsWith('video/');
+        const fileSize = file.length;
+        const mediaType = MediaTypeValue.from(mimeType, fileSize);
 
-        if (!isImage && !isVideo) {
-            return new UnsupportedMediaTypeError("Unsupported file type");
+        if (mediaType instanceof InvalidMediaTypeError) {
+            return mediaType;
         }
 
+        const isImage = mediaType.isImage();
         const options = {
             folder: isImage ? 'images' : 'videos',
-            maxSize: isImage ? MediaValidation.IMAGE_MAX_SIZE : MediaValidation.VIDEO_MAX_SIZE,
-            allowedTypes: isImage ? MediaValidation.ALLOWED_IMAGE_TYPES : MediaValidation.ALLOWED_VIDEO_TYPES
+            maxSize: isImage ? MediaTypeValue.IMAGE_MAX_SIZE : MediaTypeValue.VIDEO_MAX_SIZE,
+            allowedTypes: isImage ? MediaTypeValue.ALLOWED_IMAGE_TYPES : MediaTypeValue.ALLOWED_VIDEO_TYPES
         };
 
         return await this.fileStorageService.upload(file, fileName, options);

@@ -3,7 +3,7 @@ import { ContentRepositoryInterface } from "../../../ports/repositories/news/Con
 
 export class GetContentsByNewsIdUseCase {
 
-    public constructor(private contentRepository: ContentRepositoryInterface){}
+    public constructor(private readonly contentRepository: ContentRepositoryInterface){}
 
     public async execute(newsId : string) {
         return await this.contentRepository.findByNewsId(newsId);

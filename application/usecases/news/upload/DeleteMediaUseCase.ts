@@ -4,9 +4,9 @@ import { FileStorageService } from "../../../ports/services/news/FileStorageServ
 
 export class DeleteMediaUseCase {
     public constructor(
-        private mediaRepository: MediaRepositoryInterface,
-        private newsRepository: NewsRepositoryInterface,
-        private fileStorageService: FileStorageService
+        private readonly mediaRepository: MediaRepositoryInterface,
+        private readonly newsRepository: NewsRepositoryInterface,
+        private readonly fileStorageService: FileStorageService
     ) {}
 
     public async execute(mediaId: string): Promise<void | Error> {

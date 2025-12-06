@@ -98,6 +98,38 @@ export default function RegisterPage() {
         />
         {errors.confirmPassword && <p className="text-red-500 mb-2">{errors.confirmPassword.message}</p>}
 
+        <label className="block mb-1 font-medium text-gray-900" htmlFor="phoneNumber">
+          {t("labels.phoneNumber")}
+        </label>
+        <input
+          id="phoneNumber"
+          {...register("phoneNumber")}
+          className="w-full p-3 mb-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900"
+        />
+        {errors.phoneNumber && <p className="text-red-500 mb-2">{errors.phoneNumber.message}</p>}
+
+        <label className="block mb-1 font-medium text-gray-900" htmlFor="dateOfBirth">
+          {t("labels.dateOfBirth")}
+        </label>
+        <input
+          id="dateOfBirth"
+          {...register("dateOfBirth")}
+          type="date"
+          className="w-full p-3 mb-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900"
+        />
+        {errors.dateOfBirth && <p className="text-red-500 mb-2">{errors.dateOfBirth.message}</p>}
+
+        <label className="block mb-1 font-medium text-gray-900" htmlFor="address">
+          {t("labels.address")}
+        </label>
+        <input
+          id="address"
+          {...register("address")}
+          className="w-full p-3 mb-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900"
+        />
+        {errors.address && <p className="text-red-500 mb-2">{errors.address.message}</p>}
+
+
         <Button type="submit" variant="primary" fullWidth>
           {t("labels.submit")}
         </Button>

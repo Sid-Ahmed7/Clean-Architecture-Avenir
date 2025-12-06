@@ -61,19 +61,19 @@ export class TransactionEntity {
     }
 
     private constructor(
-        public transactionReference: string,
-        public debitAccount: number,
-        public creditAccount: number,
-        public amount: number,
-        public transactionType: TransactionTypeEnum,
-        public executedBy: string,
+        public readonly transactionReference: string,
+        public readonly debitAccount: number,
+        public readonly creditAccount: number,
+        public readonly amount: number,
+        public readonly transactionType: TransactionTypeEnum,
+        public readonly executedBy: string,
         public status: OrderStatusEnum,
-        public description?: string,
-        public category?: string,
-        public createdAt?: Date,
-        public debitUserId?: string,
-        public creditUserId?: string,
-        public debitUserName?: string,
-        public creditUserName?: string
+        public readonly description?: string,
+        public readonly category?: string,
+        public readonly createdAt?: Date,
+        public  debitUserId?: string,
+        public  creditUserId?: string,
+        public  debitUserName?: string,
+        public  creditUserName?: string
     ) {}
     }

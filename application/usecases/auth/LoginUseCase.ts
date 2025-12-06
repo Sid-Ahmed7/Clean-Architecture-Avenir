@@ -7,17 +7,19 @@ import { UserRoleRepositoryInterface } from "../../ports/repositories/auth/UserR
 import { TokenService } from "../../ports/services/auth/TokenService";
 import { PasswordService } from "../../ports/services/auth/PasswordService";
 import { InvalidEmailOrPasswordError } from "../../errors/InvalidEmailOrPasswordError";
+import { InvalidAccountError } from "../../../domain/errors/InvalidAccountError";
+import { LoginResponse } from "../../responses/LoginResponse";
 
 
  export class LoginUseCase {
   constructor(
-    private userRepository: UserRepositoryInterface,
-    private userRoleRepository: UserRoleRepositoryInterface,
-    private tokenService: TokenService,
-    private passwordService: PasswordService
+    private readonly userRepository: UserRepositoryInterface,
+    private readonly userRoleRepository: UserRoleRepositoryInterface,
+    private readonly tokenService: TokenService,
+    private readonly passwordService: PasswordService
   ) {}
 
-  public async execute(email: string,password: string): Promise<{ accessToken: string; refreshToken: string; user: BankUserEntity; roles: RoleEnum[] } | Error> {
+  public async execute(email: string,password: string): Promise<LoginResponse | Error> {
 
     const user = await this.userRepository.findByEmail(email);
     if (!user) {
@@ -25,7 +27,7 @@ import { InvalidEmailOrPasswordError } from "../../errors/InvalidEmailOrPassword
     }
 
     if (user.status !== UserStatusEnum.ACTIVE) {
-      return new Error("User account is not active");
+      return new InvalidAccountError("User account is not active");
     }
 
     const isPasswordValid = await this.passwordService.verify(password, user.password);

@@ -1,4 +1,4 @@
-import { AccountEntity } from "../entities/AccountEntity";
+import { AccountEntity } from "../../domain/entities/AccountEntity";
 
 export interface Accounts {
     mainAccount: AccountEntity;

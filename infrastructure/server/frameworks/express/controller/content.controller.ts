@@ -10,18 +10,24 @@ import {ReorderContentsUseCase} from "../../../../../application/usecases/news/c
 import { InvalidContentError } from "../../../../../domain/errors/InvalidContentError";
 import { ContentNotFoundError } from "../../../../../application/errors/ContentNotFoundError";
 import {CryptoUuidGenerator} from "../../../../adapters/services/CryptoUuidGenerator";
+import { createContentSchema } from "../schemas/content/createContentSchema";
+import { reorderContentSchema } from "../schemas/content/reorderContentSchema";
 
 export class ContentController {
-    public constructor(private contentRepository: InMemoryContentRepository, 
-                       private orderService : ManageOrderService,
-                       private uuidService:CryptoUuidGenerator 
+    public constructor(private readonly contentRepository: InMemoryContentRepository, 
+                       private readonly orderService : ManageOrderService,
+                       private readonly uuidService:CryptoUuidGenerator 
                        ){}
 
     async create(req: Request, res: Response) {
         const createContentUseCase = new CreateContentUseCase(this.contentRepository, this.orderService, this.uuidService);
-        const {newsId, content} = req.body;
+        const parseResult = createContentSchema.safeParse(req.body);
+        if (!parseResult.success) {
+          return res.status(400).json({ errors: parseResult.error.message });
+        }
+        const {newsId, content} = parseResult.data;
 
-        const result = await createContentUseCase.execute({ newsId: newsId, content });
+        const result = await createContentUseCase.execute({ newsId: newsId, content  });
         if(result instanceof Error) {
             if(result instanceof InvalidContentError) {
                 return res.status(400).json({error: result.message});
@@ -94,12 +100,15 @@ export class ContentController {
         const reorderContentsUseCase = new ReorderContentsUseCase(this.contentRepository);
 
         const newsId = req.params.newsId;
-        const newOrder: string[] = req.body.newOrder;
+        const parseResult = reorderContentSchema.safeParse(req.body);
+        if (!parseResult.success) {
+          return res.status(400).json({ errors: parseResult.error.message });
+        }
         if (!newsId) {
         return res.status(400).json({ error: "NewsId ID is required" });
     }
 
-        const result = await reorderContentsUseCase.execute(newsId, newOrder);
+        const result = await reorderContentsUseCase.execute(newsId, parseResult.data.newOrder);
 
         if (result instanceof Error) {
             if(result instanceof ContentNotFoundError) {

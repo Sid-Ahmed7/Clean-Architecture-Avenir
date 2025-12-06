@@ -1,7 +1,7 @@
 import { FileDeleteError } from "../../../../domain/errors/upload/FileDeleteError";
 import { FileUploadError } from "../../../../domain/errors/upload/FileUploadError";
-import { UploadedFile } from "../../../../domain/interfaces/UploadedFile";
-import { UploadOptions } from "../../../../domain/interfaces/UploadOptions";
+import { UploadedFile } from "../../../responses/UploadedFile";
+import { UploadOptions } from "../../../requests/UploadOptions";
 
 export interface FileStorageService {
     upload(file: File | Buffer, originalName?: string, options?: UploadOptions): Promise<UploadedFile | FileUploadError>;
