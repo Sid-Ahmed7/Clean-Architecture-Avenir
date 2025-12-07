@@ -1,6 +1,6 @@
 import { NewsEntity } from "../../../../domain/entities/NewsEntity";
 import { InvalidNewsError } from "../../../../domain/errors/InvalidNewsError";
-import { NewsFilters } from "../../../../domain/interfaces/NewsFilters";
+import { NewsFilters } from "../../../requests/NewsFilters";
 import { NewsNotFoundError } from "../../../errors/NewsNotFoundError";
 
 export interface NewsRepositoryInterface {

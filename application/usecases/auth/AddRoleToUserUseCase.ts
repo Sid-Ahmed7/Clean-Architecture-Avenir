@@ -2,7 +2,7 @@ import { UserRoleRepositoryInterface } from "../../ports/repositories/auth/UserR
 
 export class AddRoleToUserUseCase {
 
-    public constructor(private userRoleRepository: UserRoleRepositoryInterface){}
+    public constructor(private readonly userRoleRepository: UserRoleRepositoryInterface){}
 
 
     public async execute(userId: string, roleId: number) {

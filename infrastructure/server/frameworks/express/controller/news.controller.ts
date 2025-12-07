@@ -13,6 +13,7 @@ import { NewsNotFoundError } from "../../../../../application/errors/NewsNotFoun
 import { SseClient } from "../../../../../application/ports/services/news/NewsPublisher";
 import { NewsFilters } from "../interfaces/NewsFilters";
 import {CryptoUuidGenerator} from "../../../../adapters/services/CryptoUuidGenerator";
+import { createNewsSchema } from "../schemas/news/createNewsSchema";
 export class NewsController {
 
     public constructor(
@@ -24,7 +25,12 @@ export class NewsController {
 
     async createNews(req: Request, res: Response) {
         const createNewsUseCase = new CreateNewsUseCase(this.newsRepository, this.newPublisher, this.uuidService);
-        const result = await createNewsUseCase.execute(req.body);
+        const parseResult = createNewsSchema.safeParse(req.body);
+        if (!parseResult.success) {
+            return res.status(400).json({ errors: parseResult.error.format() });
+        }
+
+        const result = await createNewsUseCase.execute(parseResult.data);
 
         if(result instanceof Error) {
             if(result instanceof InvalidNewsError) {

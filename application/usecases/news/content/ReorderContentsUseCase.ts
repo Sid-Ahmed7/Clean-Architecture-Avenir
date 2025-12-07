@@ -1,14 +1,15 @@
 import { ContentEntity } from "../../../../domain/entities/ContentEntity";
+import { InvalidContentError } from "../../../../domain/errors/InvalidContentError";
 import { ContentRepositoryInterface } from "../../../ports/repositories/news/ContentRepositoryInterface";
 
 export class ReorderContentsUseCase {
-    public constructor(private contentRepository: ContentRepositoryInterface) {}
+    public constructor(private readonly contentRepository: ContentRepositoryInterface) {}
 
     public async execute(newsId: string, newOrder: string[]): Promise<ContentEntity[] | Error> {
         const contents = await this.contentRepository.findByNewsId(newsId);
 
         if (contents.length !== newOrder.length) {
-            return new Error("Order array length mismatch");
+            return new InvalidContentError("Order array length mismatch");
         }
 
         const contentMap = new Map(contents.map(c => [c.id, c]));
@@ -19,7 +20,7 @@ export class ReorderContentsUseCase {
         for (const contentId of newOrder) {
             const content = contentMap.get(contentId);
             if (!content) {
-                return new Error(`Content ID ${contentId} not found`);
+                return new InvalidContentError(`Content ID ${contentId} not found`);
             }
 
             content.setOrder(position++);

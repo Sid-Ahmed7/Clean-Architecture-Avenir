@@ -3,33 +3,40 @@ import { TransferLimitService } from "../../../application/ports/services/Transf
 
 export class ManageTransferLimitService implements TransferLimitService {
 
-    checkAndResetIfNeeded(account: AccountEntity): void {
-        const now = new Date();
-        const lastReset = new Date(account.lastTransferResetDate);
+    private static readonly RESET_PERIOD_HOURS = 24;
+    private static readonly MS_PER_HOUR = 1000 * 60 * 60;
 
-        const isSameDay =
-            now.getFullYear() === lastReset.getFullYear() &&
-            now.getMonth() === lastReset.getMonth() &&
-            now.getDate() === lastReset.getDate();
+    public checkAndResetIfNeeded(account: AccountEntity): void {
+        const hoursSinceReset = this.calculateHoursSinceReset(account.lastTransferResetDate);
 
-        if (!isSameDay) {
-            account.totalTransfered = 0;
-            account.lastTransferResetDate = now;
+        if (hoursSinceReset >= ManageTransferLimitService.RESET_PERIOD_HOURS) {
+            this.resetTransferLimit(account);
         }
     }
 
-    canTransfer(account: AccountEntity, amount: number): boolean {
+    public canTransfer(account: AccountEntity, amount: number): boolean {
         this.checkAndResetIfNeeded(account);
         const remainingLimit = account.transferLimit - account.totalTransfered;
         return remainingLimit >= amount;
     }
 
-    getRemainingLimit(account: AccountEntity): number {
+    public getRemainingLimit(account: AccountEntity): number {
         this.checkAndResetIfNeeded(account);
         return account.transferLimit - account.totalTransfered;
     }
 
-    recordTransfer(account: AccountEntity, amount: number): void {
+    public recordTransfer(account: AccountEntity, amount: number): void {
         account.totalTransfered += amount;
+    }
+
+    private calculateHoursSinceReset(lastResetDate: Date): number {
+        const now = new Date();
+        const timeDiff = now.getTime() - new Date(lastResetDate).getTime();
+        return timeDiff / ManageTransferLimitService.MS_PER_HOUR;
+    }
+
+    private resetTransferLimit(account: AccountEntity): void {
+        account.totalTransfered = 0;
+        account.lastTransferResetDate = new Date();
     }
 }

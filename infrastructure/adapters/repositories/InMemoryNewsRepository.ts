@@ -1,7 +1,7 @@
 import { NewsNotFoundError } from "../../../application/errors/NewsNotFoundError";
 import { NewsRepositoryInterface } from "../../../application/ports/repositories/news/NewsRepositoryInterface";
 import { NewsEntity } from "../../../domain/entities/NewsEntity";
-import { NewsFilters } from "../../../domain/interfaces/NewsFilters";
+import { NewsFilters } from "../../../application/requests/NewsFilters";
 
 export class InMemoryNewsRepository implements NewsRepositoryInterface {
 

@@ -5,7 +5,7 @@ import { MessageRepositoryInterface } from "../../ports/repositories/chat/Messag
 export class GetPendingConversationUseCase {
 
     public constructor(
-        private conversationRepository: ConversationRepositoryInterface,
+        private readonly conversationRepository: ConversationRepositoryInterface,
          ) {}
 
 

@@ -1,4 +1,4 @@
-import { BankUserEntity } from "../entities/BankUserEntity";
+import { BankUserEntity } from "../../../domain/entities/BankUserEntity";
 
 export class UserConfirmedEvent {
   public readonly eventName = "UserConfirmedEvent";

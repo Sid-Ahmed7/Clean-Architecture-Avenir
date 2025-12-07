@@ -2,7 +2,7 @@ import { ContentEntity } from "../../../../domain/entities/ContentEntity";
 import { ContentRepositoryInterface } from "../../../ports/repositories/news/ContentRepositoryInterface";
 
 export class UpdateContentUseCase {
-    public constructor ( private contentRepository: ContentRepositoryInterface){}
+    public constructor ( private readonly contentRepository: ContentRepositoryInterface){}
 
     public async execute(content: ContentEntity): Promise<ContentEntity | Error>{
 

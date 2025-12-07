@@ -3,7 +3,7 @@ import { StockRepositoryInterface } from "../../ports/repositories/StockReposito
 
 export class GetStockBySymbolUseCase {
 
-    public constructor(private stockRepository: StockRepositoryInterface) {}
+    public constructor(private readonly stockRepository: StockRepositoryInterface) {}
 
     public async execute(symbol: string) : Promise<StockEntity | Error> {
 

@@ -1,4 +1,4 @@
-import { MediaTypeEnum } from "../enums/MediaTypeEnum";
+import { MediaTypeEnum } from "../../domain/enums/MediaTypeEnum";
 
 export interface UploadedFile {
     url: string;

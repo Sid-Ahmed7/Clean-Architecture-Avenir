@@ -52,10 +52,10 @@ export class AccountEntity {
   }
 
   private constructor(
-    public accountNumber: number,
-    public iban: string,
-    public userId: string,
-    public accountType: AccountTypeEnum,
+    public readonly accountNumber: number,
+    public readonly iban: string,
+    public readonly userId: string,
+    public readonly accountType: AccountTypeEnum,
     public currentBalance: number,
     public currency: string,
     public accountStatus: AccountStatusEnum,
@@ -63,11 +63,11 @@ export class AccountEntity {
     public withdrawalLimit: number,
     public transferLimit: number,
     public overdraftLimit: number,
-    public createdAt: Date,
+    public readonly createdAt: Date,
     public customAccountName: string,
     public totalTransfered: number,
     public lastTransferResetDate: Date,
-    public parentAccountId?: number,
+    public readonly parentAccountId?: number,
     public closedAt?: Date,
 
   ) {}

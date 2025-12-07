@@ -2,23 +2,23 @@ import { InvalidStockSymbolError } from "../errors/InvalidStockSymbolError";
 
 export class StockSymbolValue {
 
-    public static from(symbol: string) {
+    public static from(symbol: string): StockSymbolValue | InvalidStockSymbolError {
 
         if(!symbol || symbol.trim().length === 0) {
-            return new InvalidStockSymbolError("Stock symbol cannot be empty");
+            return new InvalidStockSymbolError(`Stock symbol cannot be empty: ${symbol}`);
         }
 
         const normalizedSymbol = symbol.trim().toUpperCase();
         const parts = normalizedSymbol.split(':');
-        
+
         if (parts.length !== 2) {
             return new InvalidStockSymbolError(
                 `Invalid stock symbol format: ${normalizedSymbol}. Expected format TICKER:MARKET`
             );
         }
 
-   
-        const tickerRegex= /^[A-Z]{1,4}$/; 
+
+        const tickerRegex= /^[A-Z]{1,4}$/;
         const [ticker, market] = parts;
 
          if(!tickerRegex.test(ticker ?? "")) {
@@ -32,7 +32,7 @@ export class StockSymbolValue {
 
         return new StockSymbolValue(normalizedSymbol);
     }
-    private constructor(public value: string) {
+    private constructor(public readonly value: string) {
 
 }
 }

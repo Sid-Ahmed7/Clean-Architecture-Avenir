@@ -12,11 +12,11 @@ import { TransferValidationService } from "../../ports/services/TransferValidati
 
 export class TransferBetweenAccountsUseCase {
     public constructor(
-        private accountRepository: AccountRepositoryInterface,
-        private transactionRepository: TransactionRepositoryInterface,
-        private uuidService: UuidGeneratorService,
-        private transferLimitService: TransferLimitService,
-        private transferValidationService: TransferValidationService
+        private readonly accountRepository: AccountRepositoryInterface,
+        private readonly transactionRepository: TransactionRepositoryInterface,
+        private readonly uuidService: UuidGeneratorService,
+        private readonly transferLimitService: TransferLimitService,
+        private readonly transferValidationService: TransferValidationService
     ) {}
 
     public async execute(input: TransferInput) {

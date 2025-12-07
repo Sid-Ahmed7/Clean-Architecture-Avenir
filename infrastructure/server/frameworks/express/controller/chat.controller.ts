@@ -24,12 +24,14 @@ import { InMemoryUserRepository } from "../../../../adapters/repositories/InMemo
 import { InMemoryConversationRepository } from "../../../../adapters/repositories/InMemoryConversationRepository";
 import { InMemoryMessageRepository } from "../../../../adapters/repositories/InMemoryMessageRepository";
 import {CryptoUuidGenerator} from "../../../../adapters/services/CryptoUuidGenerator";
+import { sendMessageSchema } from "../schemas/chat/sendMessageSchema";
+import { transferConversationSchema } from "../schemas/chat/transferConversationSchema";
 export class ChatController {
     constructor(
-        private conversationRepository: InMemoryConversationRepository,
-        private messageRepository: InMemoryMessageRepository,
-        private userRepository: InMemoryUserRepository,
-        private uuidService: CryptoUuidGenerator,
+        private readonly conversationRepository: InMemoryConversationRepository,
+        private readonly messageRepository: InMemoryMessageRepository,
+        private readonly userRepository: InMemoryUserRepository,
+        private readonly uuidService: CryptoUuidGenerator,
         private readonly io?: Server,
         private readonly clients?: ClientsSocket,
         private readonly onlineUsers?: Record<string, OnlineUser>,
@@ -74,7 +76,6 @@ export class ChatController {
     async sendMessage(req: Request, res: Response) {
         const sendMessageUseCase = new SendMessageUseCase(this.conversationRepository, this.messageRepository, this.uuidService);
 
-        const {conversationId, content} = req.body;
         const userId = req.user?.userId;
         const role = req.user?.roles?.[0];
 
@@ -82,7 +83,12 @@ export class ChatController {
             return res.status(401).json({error: "Unauthorized access"});
         }
 
-        const result = await sendMessageUseCase.execute(userId, role, conversationId, content)
+        const parseResult = sendMessageSchema.safeParse(req.body);
+        if (!parseResult.success) {
+          return res.status(400).json({ errors: parseResult.error.message });
+        }
+
+        const result = await sendMessageUseCase.execute(userId, role, parseResult.data.conversationId, parseResult.data.content)
 
         if(result instanceof Error) {
             if(result instanceof InvalidMessageError) {
@@ -213,16 +219,19 @@ export class ChatController {
     async transferConversation(req: Request, res: Response) {
 
     const transferUseCase = new TransferConversationUseCase(this.conversationRepository);
-    
-    const {conversationId, newAdvisorId} = req.body;
     const userId = req.user?.userId;
     const role = req.user?.roles?.[0];
+
+    const parseResult = transferConversationSchema.safeParse(req.body);
+    if (!parseResult.success) {
+        return res.status(400).json({ errors: parseResult.error.message });
+    }
 
     if(!userId || !role) {
         return res.status(401).json({error: "Unauthorized access"});
     }
 
-    const result = await transferUseCase.execute(conversationId,newAdvisorId);
+    const result = await transferUseCase.execute(parseResult.data.conversationId, parseResult.data.newAdvisorId);
 
     if (result instanceof Error) {
         if(result instanceof SameAdvisorError) {

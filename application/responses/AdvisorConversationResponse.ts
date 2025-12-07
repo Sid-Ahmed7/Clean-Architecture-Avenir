@@ -1,7 +1,7 @@
-export interface ClientConversationDTO {
+export interface AdvisorConversationResponse {
     id: string;
     clientId: string;
     advisorId: string | null;
     createdAt: Date;
-    advisorName?: string;
+    clientName?: string;
 }

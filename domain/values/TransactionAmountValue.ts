@@ -1,7 +1,7 @@
 import { InvalidTransactionAmountError } from "../errors/InvalidTransactionAmountError";
 
 export class TransactionAmountValue {
-  public static from(amount: number) {
+  public static from(amount: number): TransactionAmountValue | InvalidTransactionAmountError {
     if (typeof amount !== "number") {
       return new InvalidTransactionAmountError(`Invalid transaction amount type: expected number, received ${typeof amount}`);
     }
@@ -17,5 +17,5 @@ export class TransactionAmountValue {
     return new TransactionAmountValue(amount);
   }
 
-  private constructor(public value: number) {}
+  private constructor(public readonly value: number) {}
 }

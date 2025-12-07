@@ -3,10 +3,10 @@ import { UserStatusEnum } from "../../../domain/enums/UserStatusEnum";
 import { UserRepositoryInterface } from "../../ports/repositories/auth/UserRepositoryInterface";
 import { EmailService } from "../../ports/services/EmailService";
 import {EventBusInterface} from "../../ports/event/EventBusInterface";
-import {UserConfirmedEvent} from "../../../domain/events/UserConfirmedEvent";
+import {UserConfirmedEvent} from "../../ports/event/UserConfirmedEvent";
 export class ConfirmRegistrationUseCase {
 
-    public constructor(private userRepository: UserRepositoryInterface, private emailService: EmailService, private eventBus: EventBusInterface){}
+    public constructor(private readonly userRepository: UserRepositoryInterface, private readonly emailService: EmailService, private readonly eventBus: EventBusInterface){}
 
     public async execute(token: string): Promise<BankUserEntity | Error> {
 

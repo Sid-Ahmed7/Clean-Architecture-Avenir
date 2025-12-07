@@ -4,7 +4,7 @@ import { NewsPublisher } from "../../ports/services/news/NewsPublisher";
 
 
 export class UpdateNewsUseCase {
-    public constructor ( private newsRepository: NewsRepositoryInterface, private publisher: NewsPublisher){}
+    public constructor ( private readonly newsRepository: NewsRepositoryInterface, private readonly publisher: NewsPublisher){}
 
     public async execute(news: NewsEntity): Promise<NewsEntity | Error>{
 

@@ -19,8 +19,24 @@ z.object({
     .max(128, { message: t("errors.password.maxLength") })
     .regex(/[!@#$%^&*(),.?":{}|<>]/, { message: t("errors.password.regex") }),
     confirmPassword: z.string().min(8, { message: t("errors.password.minLength") }),
-    adminPassword: z.string().min(1, "Admin password is required")
-    }).refine((data) => data.password === data.confirmPassword, {
+    adminPassword: z.string().min(1, "Admin password is required"),
+    phoneNumber: z
+      .string()
+      .min(1, "Phone number is required"),
+    dateOfBirth: z
+      .string()
+      .min(1, "Date of birth is required"),
+    address: z
+      .string()
+      .min(1, "Address is required")  
+  
+  
+  
+  })
+    
+    
+    
+    .refine((data) => data.password === data.confirmPassword, {
     message: t("errors.confirmPassword.mismatch"),
     path: ["confirmPassword"],
 });

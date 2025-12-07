@@ -2,14 +2,14 @@ import { ContentEntity } from "../../../../domain/entities/ContentEntity";
 import { ContentRepositoryInterface } from "../../../ports/repositories/news/ContentRepositoryInterface";
 import { OrderService } from "../../../ports/services/news/OrderService";
 import { UuidGeneratorService } from "../../../ports/services/UuidGeneratorService";
-
+import { CreateContent } from "../../../requests/CreateContent";
 export class CreateContentUseCase {
 
-    public constructor(private contentRepository: ContentRepositoryInterface, 
-                       private contentService: OrderService,
-                       private uuidService: UuidGeneratorService ){}
+    public constructor(private readonly contentRepository: ContentRepositoryInterface,
+                       private readonly contentService: OrderService,
+                       private readonly uuidService: UuidGeneratorService ){}
 
-public async execute(content: { newsId: string; content: string }){
+public async execute(content: CreateContent){
 
         const id = this.uuidService.generate()
 

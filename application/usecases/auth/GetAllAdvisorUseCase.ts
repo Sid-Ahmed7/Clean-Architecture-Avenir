@@ -6,7 +6,7 @@ import { UserRoleRepositoryInterface } from "../../ports/repositories/auth/UserR
 
 
 export class GetAllAdvisorUseCase {
-    public constructor(private roleRepository: RoleRepositoryInterface, private userRepository: UserRepositoryInterface, private useRoleRepository: UserRoleRepositoryInterface ) {}
+    public constructor(private readonly roleRepository: RoleRepositoryInterface, private readonly userRepository: UserRepositoryInterface, private readonly useRoleRepository: UserRoleRepositoryInterface ) {}
 
 
     public async execute() {

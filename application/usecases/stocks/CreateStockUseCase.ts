@@ -4,7 +4,7 @@ import { StockNotFoundError } from "../../errors/StockNotFoundError";
 import { StockRepositoryInterface } from "../../ports/repositories/StockRepositoryInterface";
 
 export class CreateStockUseCase {
-    public constructor(private stockRepository: StockRepositoryInterface){}
+    public constructor(private readonly stockRepository: StockRepositoryInterface){}
 
     public async execute(stock: StockEntity): Promise<StockEntity | Error> {
 

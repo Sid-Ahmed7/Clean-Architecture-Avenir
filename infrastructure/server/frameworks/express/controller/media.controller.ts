@@ -14,17 +14,19 @@ import { MediaTypeEnum } from "../../../../../domain/enums/MediaTypeEnum";
 import { MediaEntity } from "../../../../../domain/entities/MediaEntity";
 import { MediaNotFoundError } from "../../../../../application/errors/MediaNotFoundError";
 import {CryptoUuidGenerator} from "../../../../adapters/services/CryptoUuidGenerator";
+import { createMediaSchema } from "../schemas/media/createMediaSchema";
+import { CreateMedia } from "../../../../../application/requests/CreateMedia";
 
 
 export class MediaController {
     
     public constructor(
-        private mediaRepository: InMemoryMediaRepository,
-        private newsRepository: InMemoryNewsRepository,
-        private fileStorageService: LocalFileStorageService,
-        private orderService: ManageOrderService,
-        private altService: GenerateAltTextService,
-        private uuidService:CryptoUuidGenerator 
+        private readonly mediaRepository: InMemoryMediaRepository,
+        private readonly newsRepository: InMemoryNewsRepository,
+        private readonly fileStorageService: LocalFileStorageService,
+        private readonly orderService: ManageOrderService,
+        private readonly altService: GenerateAltTextService,
+        private readonly uuidService:CryptoUuidGenerator 
     ){}
 
     async uploadMedia(req: Request, res: Response) {
@@ -37,22 +39,27 @@ export class MediaController {
         if (uploadFile instanceof Error) {
             return res.status(500).json({error: uploadFile.message})
         }
-        const newsId = req.body.newsId;
 
         const mediaType = req.file.mimetype.startsWith("image/") ? MediaTypeEnum.IMAGE : MediaTypeEnum.VIDEO;
         const mediaEntity = {
-            newsId,
+            newsId: req.body.newsId,
             url: uploadFile.url,
             type: mediaType,
             altText: req.body.altText || "",
-            caption: req.body.caption || "",
             size: uploadFile.size,
             mimeType: uploadFile.mimeType,
+            caption: req.body.caption ?? "", 
         };
+        
+        const parseResult = createMediaSchema.safeParse(mediaEntity);
+        if (!parseResult.success) {
+            return res.status(400).json({ errors: parseResult.error.message });
+        }
+            const validatedMedia = parseResult.data;
 
 
         const createMediaUseCase = new CreateMediaUseCase(this.mediaRepository, this.newsRepository, this.orderService, this.altService, this.uuidService);
-        const createdMedia = await createMediaUseCase.execute(mediaEntity)
+        const createdMedia = await createMediaUseCase.execute(validatedMedia)
             if (createdMedia instanceof Error) {
             return res.status(500).json({ error: createdMedia.message });
         }

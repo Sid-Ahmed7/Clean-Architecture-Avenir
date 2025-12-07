@@ -3,7 +3,7 @@ import { ContentRepositoryInterface } from "../../../ports/repositories/news/Con
 
 export class GetContentByIdUseCase {
 
-    public constructor(private contentRepository: ContentRepositoryInterface){}
+    public constructor(private readonly contentRepository: ContentRepositoryInterface){}
 
     public async execute(contentId : string): Promise<ContentEntity | Error> {
         

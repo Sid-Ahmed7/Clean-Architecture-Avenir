@@ -3,7 +3,7 @@ import { MediaEntity } from "../../../../domain/entities/MediaEntity";
 import { MediaRepositoryInterface } from "../../../ports/repositories/news/MediaRepositoryInterface";
 export class UpdateMediaUseCase {
     
-    constructor(private mediaRepository: MediaRepositoryInterface) {}
+    constructor(private readonly mediaRepository: MediaRepositoryInterface) {}
 
     async execute(media:MediaEntity): Promise<MediaEntity | Error> {
         

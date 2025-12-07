@@ -3,14 +3,14 @@ import { NewsRepositoryInterface } from "../../ports/repositories/news/NewsRepos
 import { NewsPublisher } from "../../ports/services/news/NewsPublisher";
 import { MediaRepositoryInterface } from "../../ports/repositories/news/MediaRepositoryInterface";
 import { UuidGeneratorService } from "../../ports/services/UuidGeneratorService";
-
+import {CreateNews} from "../../requests/CreateNews";
 export class CreateNewsUseCase {
-    public constructor( private newsRepository: NewsRepositoryInterface, 
-                        private publisher: NewsPublisher,
-                        private uuidService: UuidGeneratorService
+    public constructor( private readonly newsRepository: NewsRepositoryInterface,
+                        private readonly publisher: NewsPublisher,
+                        private readonly uuidService: UuidGeneratorService
                     ){}
 
-    public async execute(news: NewsEntity): Promise<NewsEntity | Error> {
+    public async execute(news: CreateNews): Promise<NewsEntity | Error> {
 
         const id = this.uuidService.generate();
         const newNews = NewsEntity.from(id, news.title, news.category, news.priority, news.tags, new Date());

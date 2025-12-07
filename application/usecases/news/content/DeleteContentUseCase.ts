@@ -3,7 +3,7 @@ import { ContentRepositoryInterface } from "../../../ports/repositories/news/Con
 
 export class DeleteContentUseCase {
 
-    public constructor(private contentRepository: ContentRepositoryInterface){}
+    public constructor(private readonly contentRepository: ContentRepositoryInterface){}
 
     public async execute(contentId: string): Promise<void | Error> {
         const content = await this.contentRepository.findById(contentId);

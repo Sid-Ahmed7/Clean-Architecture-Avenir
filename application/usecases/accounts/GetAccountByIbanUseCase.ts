@@ -1,8 +1,8 @@
-import { Accounts } from "../../../domain/interfaces/Accounts";
+import { Accounts } from "../../responses/Accounts";
 import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
 
 export class GetAccountByIbanUseCase {
-    public constructor ( private accountRepository: AccountRepositoryInterface){}
+    public constructor ( private readonly accountRepository: AccountRepositoryInterface){}
 
     public async execute(iban: string) : Promise<Accounts | Error>{
 

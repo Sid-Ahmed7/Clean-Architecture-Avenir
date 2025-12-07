@@ -5,34 +5,59 @@ import { RoleRepositoryInterface } from "../../ports/repositories/auth/Rolerepos
 import { UserRoleRepositoryInterface } from "../../ports/repositories/auth/UserRoleRepositoryInterface";
 import { EmailService } from "../../ports/services/EmailService";
 import { RegistrationTokenGeneratorService } from "../../ports/services/auth/RegistrationTokenGeneratorService";
-import { EmailTemplateService } from "../../../infrastructure/adapters/services/EmailTemplateService";
+import { EmailComposerService } from "../../ports/services/EmailComposerService";
 import { PasswordService } from "../../ports/services/auth/PasswordService";
 import { UserStatusEnum } from "../../../domain/enums/UserStatusEnum";
+import { LocaleService } from "../../ports/services/LocaleService";
+import { UuidGeneratorService } from "../../ports/services/UuidGeneratorService";
+import { RegisterBankAdvisor} from "../../requests/RegisterBankAdvisor";
 
 export class CreateBankAdvisorUseCase {
   public constructor(
-    private userRepository: UserRepositoryInterface,
-    private roleRepository: RoleRepositoryInterface,
-    private userRoleRepository: UserRoleRepositoryInterface,
-    private passwordService: PasswordService,
-    private emailService: EmailService,
-    private emailTemplateService: EmailTemplateService,
-    private registrationTokenGeneratorService: RegistrationTokenGeneratorService
+    private readonly userRepository: UserRepositoryInterface,
+    private readonly roleRepository: RoleRepositoryInterface,
+    private readonly userRoleRepository: UserRoleRepositoryInterface,
+    private readonly passwordService: PasswordService,
+    private readonly emailComposerService: EmailComposerService,
+    private readonly registrationTokenGeneratorService: RegistrationTokenGeneratorService,
+    private readonly localeService: LocaleService,
+    private readonly uuidService: UuidGeneratorService
   ) {}
 
-  public async execute(user: BankUserEntity, locale?: string): Promise<BankUserEntity | Error> {
+  public async execute(user: RegisterBankAdvisor, locale?: string): Promise<BankUserEntity | Error> {
     const existingUser = await this.userRepository.findByEmail(user.email);
 
     if (existingUser instanceof Error) {
       return existingUser;
     }
+       
+    const validatedLocale = this.localeService.validate(locale);
+    if (validatedLocale instanceof Error) {
+        return validatedLocale;
+    }
 
-    const hashedPassword = await this.passwordService.hash(user.password);
-    user.password = hashedPassword;
-    user.status = UserStatusEnum.PENDING;
-    user.isRegistered = false;
 
-    const savedUser = await this.userRepository.createUser(user);
+    const id = this.uuidService.generate();
+    const userEntity = BankUserEntity.from(
+        id,
+        user.email,
+        user.password,
+        UserStatusEnum.PENDING,
+        user.firstName,
+        user.lastName,
+        user.phoneNumber,
+        user.dateOfBirth,
+        user.address
+    );
+     if (userEntity instanceof Error) {
+        return userEntity;
+    }
+    const hashedPassword = await this.passwordService.hash(userEntity.password);
+    userEntity.password = hashedPassword;
+    userEntity.status = UserStatusEnum.PENDING;
+    userEntity.isRegistered = false;
+
+    const savedUser = await this.userRepository.createUser(userEntity);
 
     if(savedUser instanceof Error) {
       return savedUser;
@@ -61,13 +86,13 @@ export class CreateBankAdvisorUseCase {
       return updatedUser;
     }
 
-    await this.emailTemplateService.sendRegistrationConfirmation(
+    await this.emailComposerService.sendRegistrationConfirmation(
       updatedUser.email,
       updatedUser.firstName,
       token,
       expiresAt,
       RoleEnum.BANK_ADVISOR,
-      "en",
+      validatedLocale,
     );
 
     return updatedUser;
