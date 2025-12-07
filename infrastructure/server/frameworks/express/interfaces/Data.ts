@@ -1,4 +1,4 @@
 export interface Data {
-    conversationId: number;
+    conversationId: string;
     userId: string 
 }

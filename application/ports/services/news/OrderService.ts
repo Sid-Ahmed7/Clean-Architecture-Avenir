@@ -1,3 +1,3 @@
 export interface OrderService {
-    getNextOrder(newsId: number): Promise<number>;
+    getNextOrder(newsId: string): Promise<number>;
 }

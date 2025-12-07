@@ -29,8 +29,8 @@ export const getAllNews = async (filters: NewsFilters): Promise<Array<News>> => 
     return Array.isArray(response.data) ? response.data : [];
 };
 
-export const getNewsById = async (id: number) : Promise<News> => {
-    const {data} = await apiClient.get(`/feed/${id}`);
+export const getNewsById = async (newsId: string) : Promise<News> => {
+    const {data} = await apiClient.get(`/feed/${newsId}`);
     return data;
 }
 
@@ -44,6 +44,6 @@ export const updateNews = async (news: News) : Promise<News> => {
     return data;
 };
 
-export const deleteNews = async (id: number) : Promise<void> => {
-    await apiClient.delete(`/feed/delete/${id}`);
+export const deleteNews = async (newsId: string) : Promise<void> => {
+    await apiClient.delete(`/feed/delete/${newsId}`);
 }

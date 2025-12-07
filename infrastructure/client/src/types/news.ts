@@ -12,7 +12,7 @@ export enum NewsPriorityEnum {
 }
 
 export interface News {
-    id: number;
+    id: string;
     title: string;
     category: NewsCategoryEnum;
     priority: NewsPriorityEnum;

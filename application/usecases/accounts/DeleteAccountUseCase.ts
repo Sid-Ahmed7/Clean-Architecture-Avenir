@@ -2,7 +2,7 @@ import { AccountNotFoundError } from "../../errors/AccountNotFoundError";
 import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
 
 export class DeleteAccountUseCase {
-    public constructor ( private accountRepository: AccountRepositoryInterface){}
+    public constructor ( private readonly accountRepository: AccountRepositoryInterface){}
     
     public async execute(accountNumber: number): Promise<void | Error> {
         const existingAccount = await this.accountRepository.getOneAccountByAccountNumber(accountNumber)

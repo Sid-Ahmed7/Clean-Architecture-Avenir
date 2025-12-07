@@ -1,12 +1,12 @@
 import express from 'express'
 import { NewsController } from '../controller/news.controller';
-import { newsRepository, newsService } from '../../../../adapters/config/repositories';
+import { newsRepository, newsService, uuidService } from '../../../../adapters/config/repositories';
 import { verifyTokenAccess } from '../middleware/authMiddleware';
 import { authorizeRoles } from '../middleware/roleMiddleware';
 import { RoleEnum } from '../../../../../domain/enums/RoleEnum';
 
 const router = express.Router();
-const newsController = new NewsController(newsRepository, newsService);
+const newsController = new NewsController(newsRepository, newsService, uuidService);
 
 router.get("/stream", verifyTokenAccess, (req, res) => newsController.subscribe(req, res));
 router.post("/create", verifyTokenAccess,  authorizeRoles([RoleEnum.BANK_ADVISOR]), (req, res) => newsController.createNews(req, res));

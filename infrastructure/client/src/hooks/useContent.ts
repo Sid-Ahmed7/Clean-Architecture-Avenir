@@ -9,7 +9,7 @@ import { contentSchema } from "@/lib/validation/content/contentSchema";
 
 export const CONTENT_QUERY_KEY = "content";
 
-export const useContentsByNewsId = (newsId: number) => {
+export const useContentsByNewsId = (newsId: string) => {
   const t = useTranslations();
 
   return useQuery<Content[]>({
@@ -33,14 +33,14 @@ export const useContentsByNewsId = (newsId: number) => {
   });
 };
 
-export const useContentById = (id: number) => {
+export const useContentById = (contentId: string) => {
   const t = useTranslations();
 
   return useQuery<Content | null>({
-    queryKey: [CONTENT_QUERY_KEY, id],
+    queryKey: [CONTENT_QUERY_KEY, contentId],
     queryFn: async () => {
       try {
-        const fetchContents = await contentApi.getContentsId(id);
+        const fetchContents = await contentApi.getContentsId(contentId);
         const parsed = contentSchema(t).safeParse(fetchContents);
         if (!parsed.success) {
           console.error("Erreur de validation du contenu:", parsed.error);
@@ -52,7 +52,7 @@ export const useContentById = (id: number) => {
         return null;
       }
     },
-    enabled: !!id,
+    enabled: !!contentId,
     staleTime: 5 * 60 * 1000,
   });
 };
@@ -118,10 +118,10 @@ export const useContentMutations = () => {
     },
   });
 
-  const deleteContent = useMutation<{ success: boolean; error: string | null },Error,{ id: number; newsId: number }>({
-    mutationFn: async ({ id }) => {
+  const deleteContent = useMutation<{ success: boolean; error: string | null },Error,{ contentId: string; newsId: string }>({
+    mutationFn: async ({ contentId }) => {
       try {
-        await contentApi.deleteContent(id);
+        await contentApi.deleteContent(contentId);
         return { success: true, error: null };
       } catch (err: any) {
         return {
@@ -130,17 +130,17 @@ export const useContentMutations = () => {
         };
       }
     },
-    onSuccess: (result, { id, newsId }) => {
+    onSuccess: (result, { contentId, newsId }) => {
       if (result.success) {
-        queryClient.removeQueries({ queryKey: [CONTENT_QUERY_KEY, id] });
+        queryClient.removeQueries({ queryKey: [CONTENT_QUERY_KEY, contentId] });
         queryClient.setQueryData<Content[]>([CONTENT_QUERY_KEY, "news", newsId], (old) =>
-          old ? old.filter((c) => c.id !== id) : []
+          old ? old.filter((c) => c.id !== contentId) : []
         );
       }
     },
   });
 
-  const reorderContents = useMutation<{ data: Content[] | null; error: string | null },Error,{ newsId: number; newOrder: number[] }>({
+  const reorderContents = useMutation<{ data: Content[] | null; error: string | null },Error,{ newsId: string; newOrder: string[] }>({
     mutationFn: async ({ newsId, newOrder }) => {
       try {
         const reorderedContents = await contentApi.reorderContents(newsId, newOrder);

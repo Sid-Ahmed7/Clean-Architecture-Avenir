@@ -1,5 +1,4 @@
 import { Content } from "@/types/content";
-import axios from "axios";
 import { cookies } from "next/headers";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -15,40 +14,28 @@ const getServerCookies = async () => {
   return cookieHeader.join("; ");
 };
 
-export const getContentsByNewsId = async (newsId: number): Promise<Content[]> => {
- 
+export const getContentsByNewsId = async (newsId: string): Promise<Content[]> => {
 
   try {
     const cookieHeader = await getServerCookies();
 
-    const response = await axios.get(`${API_URL}/content/news/${newsId}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Cookie: cookieHeader, 
-      },
-    });
-
-    return Array.isArray(response.data) ? response.data : [];
-  } catch (error) {
-    console.error("Error fetching news:", error);
-    return [];
-  }
-};
-
-export const getContentById = async (id: number): Promise<Content | null> => {
-  try {
-    const cookieHeader = await getServerCookies();
-
-    const response = await axios.get(`${API_URL}/content/${id}`, {
+    const response = await fetch(`${API_URL}/content/news/${newsId}`, {
       headers: {
         "Content-Type": "application/json",
         Cookie: cookieHeader,
       },
+      cache: 'no-store'
     });
 
-    return response.data ?? null;
-  } catch (err) {
-    console.error("Error fetching news by id:", err);
-    return null;
+
+    if (!response.ok) {
+      return [];
+    }
+
+    const data = await response.json();
+
+    return Array.isArray(data) ? data : [];
+  } catch (error) {
+    return [];
   }
 };

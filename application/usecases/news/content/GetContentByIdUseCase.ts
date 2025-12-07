@@ -3,11 +3,11 @@ import { ContentRepositoryInterface } from "../../../ports/repositories/news/Con
 
 export class GetContentByIdUseCase {
 
-    public constructor(private contentRepository: ContentRepositoryInterface){}
+    public constructor(private readonly contentRepository: ContentRepositoryInterface){}
 
-    public async execute(id : number): Promise<ContentEntity | Error> {
+    public async execute(contentId : string): Promise<ContentEntity | Error> {
         
-        const content = await this.contentRepository.findById(id);
+        const content = await this.contentRepository.findById(contentId);
 
         if (content instanceof Error) {
             return content;

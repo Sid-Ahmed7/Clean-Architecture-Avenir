@@ -13,8 +13,8 @@ interface FilePreviewProps {
     onRemove?: () => void;
     isUploadAlready?: boolean;
     caption?: string;
-    onCaptionChange?: (mediaId: number, caption: string) => void;
-    mediaId?: number
+    onCaptionChange?: (mediaId: string, caption: string) => void;
+    mediaId?: string
 }
 
 export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlready, caption, onCaptionChange, mediaId}: FilePreviewProps) {
@@ -53,8 +53,19 @@ export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlr
         <div className="relative group">
         <div className={`aspect-square rounded-lg overflow-hidden bg-gray-100 border-2 ${isUploadAlready ? 'border-green-200' : 'border-gray-200'}`}>
             {type === "IMAGE" ? (
-            <Image src={preview} alt={fileName} fill className="w-full h-full object-cover" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" loading="lazy" unoptimized />
-            ) : (
+                
+  <>
+    {console.log("FilePreview src:", getMediaUrl(preview))}
+    <Image
+      src={getMediaUrl(preview)}
+      alt={fileName}
+      fill
+      className="w-full h-full object-cover"
+      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+      loading="lazy"
+      unoptimized
+    />
+  </>            ) : (
             <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-purple-100 to-blue-100">
             <video 
             src={getMediaUrl(preview)} 

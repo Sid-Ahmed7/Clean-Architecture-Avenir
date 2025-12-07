@@ -4,6 +4,8 @@ import { apiClient } from "../lib/api/apiClient";
 interface UserProfile {
   userId: string; 
   role: string;
+  firstName?: string;
+  lastName?: string;
   name?: string;
   email?: string;
 }

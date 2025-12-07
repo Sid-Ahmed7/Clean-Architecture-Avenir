@@ -1,17 +1,16 @@
 import { AccountStatusEnum } from "../enums/AccountStatusEnum";
 import { InvalidAccountStatusError } from "../errors/InvalidAccountStatusError";
-import { AllowedAccountStatus } from "../services/AllowedAccountStatus";
 
 export class AccountStatusValue {
 
-        public static from(status: AccountStatusEnum) {
+        public static from(status: AccountStatusEnum): AccountStatusValue | InvalidAccountStatusError {
 
             if(!Object.values(AccountStatusEnum).includes(status)) {
-                return new InvalidAccountStatusError("Invalid Status");
+                return new InvalidAccountStatusError(`Invalid Status: ${status}`);
             }
 
             return new AccountStatusValue(status);
         }
-        private constructor(public value: AccountStatusEnum) {}
+        private constructor(public readonly value: AccountStatusEnum) {}
 
 }

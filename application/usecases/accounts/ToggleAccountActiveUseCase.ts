@@ -2,7 +2,7 @@ import { AccountEntity } from "../../../domain/entities/AccountEntity";
 import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
 
 export class ToggleAccountActiveUseCase {
-    public constructor ( private accountRepository: AccountRepositoryInterface){}
+    public constructor ( private readonly accountRepository: AccountRepositoryInterface){}
 
     public async execute(accountNumber: number, isActive: boolean): Promise<AccountEntity | Error> {
 

@@ -6,6 +6,7 @@ import { ExpiredTokenError } from "../../../errors/ExpiredTokenError";
 
 export interface UserRepositoryInterface {
     findById(userId: string): Promise<BankUserEntity | UserNotFoundError>;
+    findByIds(ids: string[]): Promise<BankUserEntity[]>;
     findByEmail(email: string): Promise<BankUserEntity | null>;
     findConfirmationToken(token: string): Promise<BankUserEntity | UserNotFoundError | TokenNotFoundError | ExpiredTokenError>;
     findAll(): Promise<Array<BankUserEntity>>

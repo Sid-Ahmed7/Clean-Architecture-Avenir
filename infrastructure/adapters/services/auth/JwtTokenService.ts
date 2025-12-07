@@ -12,7 +12,7 @@ export class JwtTokenService implements TokenService {
     
     constructor() {
         if (!process.env.JWT_SECRET || !process.env.JWT_SECRET_REFRESH) {
-            throw new Error("ACCESS_TOKEN_SECRET and REFRESH_TOKEN_SECRET must be defined in .env");
+            throw new Error("JWT_SECRET and JWT_SECRET_REFRESH must be defined in .env");
         }
 
         this.accessTokenSecret = process.env.JWT_SECRET!;

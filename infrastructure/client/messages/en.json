@@ -9,6 +9,9 @@
     "email": "Email",
     "password": "Password",
     "confirmPassword": "Confirm Password",
+    "phoneNumber": "Phone Number",
+    "dateOfBirth": "Date of Birth",
+    "address": "Address",
     "submit": "Register",
     "login": "Login"
   },

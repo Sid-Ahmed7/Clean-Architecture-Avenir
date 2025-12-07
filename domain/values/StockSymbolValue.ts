@@ -2,10 +2,10 @@ import { InvalidStockSymbolError } from "../errors/InvalidStockSymbolError";
 
 export class StockSymbolValue {
 
-    public static from(symbol: string) {
+    public static from(symbol: string): StockSymbolValue | InvalidStockSymbolError {
 
         if(!symbol || symbol.trim().length === 0) {
-            return new InvalidStockSymbolError("Stock symbol cannot be empty");
+            return new InvalidStockSymbolError(`Stock symbol cannot be empty: ${symbol}`);
         }
 
         const normalizedSymbol = symbol.trim().toUpperCase();
@@ -23,7 +23,7 @@ export class StockSymbolValue {
 
         return new StockSymbolValue(normalizedSymbol);
     }
-    private constructor(public value: string) {
+    private constructor(public readonly value: string) {
 
 }
 }

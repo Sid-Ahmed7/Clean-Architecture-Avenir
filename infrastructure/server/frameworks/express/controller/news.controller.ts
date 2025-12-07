@@ -12,20 +12,25 @@ import { InvalidNewsError } from "../../../../../domain/errors/InvalidNewsError"
 import { NewsNotFoundError } from "../../../../../application/errors/NewsNotFoundError";
 import { SseClient } from "../../../../../application/ports/services/news/NewsPublisher";
 import { NewsFilters } from "../interfaces/NewsFilters";
-
+import {CryptoUuidGenerator} from "../../../../adapters/services/CryptoUuidGenerator";
+import { createNewsSchema } from "../schemas/news/createNewsSchema";
 export class NewsController {
-
-
 
     public constructor(
         private newsRepository: InMemoryNewsRepository, 
         private newPublisher: NewsService,
+        private uuidService: CryptoUuidGenerator
     ){}
 
 
     async createNews(req: Request, res: Response) {
-        const createNewsUseCase = new CreateNewsUseCase(this.newsRepository, this.newPublisher);
-        const result = await createNewsUseCase.execute(req.body);
+        const createNewsUseCase = new CreateNewsUseCase(this.newsRepository, this.newPublisher, this.uuidService);
+        const parseResult = createNewsSchema.safeParse(req.body);
+        if (!parseResult.success) {
+            return res.status(400).json({ errors: parseResult.error.format() });
+        }
+
+        const result = await createNewsUseCase.execute(parseResult.data);
 
         if(result instanceof Error) {
             if(result instanceof InvalidNewsError) {
@@ -62,8 +67,11 @@ export class NewsController {
 
     async getNewsById(req: Request, res: Response) {
         const getNewsByIdUseCase = new GetNewsByIdUseCase(this.newsRepository);
-        const id = Number(req.params.id);
-        const result = await getNewsByIdUseCase.execute(id);
+        const newsId = req.params.id;
+        if (!newsId) {
+            return res.status(400).json({ error: "News ID is required" });
+        }
+        const result = await getNewsByIdUseCase.execute(newsId);
 
         if(result instanceof Error) {
             if(result instanceof NewsNotFoundError) {
@@ -93,8 +101,11 @@ export class NewsController {
 
     async deleteNews(req: Request, res: Response) {
         const deleteNewsUseCase = new DeleteNewsUseCase(this.newsRepository, this.newPublisher);
-        const id = Number(req.params.id);
-        const result = await deleteNewsUseCase.execute(id);
+        const newsId = req.params.id;
+        if (!newsId) {
+            return res.status(400).json({ error: "News ID is required" });
+        }
+        const result = await deleteNewsUseCase.execute(newsId);
 
         if(result instanceof Error) {
             if(result instanceof NewsNotFoundError) {

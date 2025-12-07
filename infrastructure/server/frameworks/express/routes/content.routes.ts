@@ -1,12 +1,12 @@
 import express from "express";
 import { ContentController } from "../controller/content.controller";
-import { contentRepository, orderService } from "../../../../adapters/config/repositories";
+import { contentRepository, orderService, uuidService } from "../../../../adapters/config/repositories";
 import { verifyTokenAccess } from "../middleware/authMiddleware";
 import { authorizeRoles } from "../middleware/roleMiddleware";
 import { RoleEnum } from "../../../../../domain/enums/RoleEnum";
 
 const router = express.Router();
-const contentController = new ContentController(contentRepository, orderService);
+const contentController = new ContentController(contentRepository, orderService, uuidService);
 
 router.post("/create",verifyTokenAccess,authorizeRoles([RoleEnum.BANK_ADVISOR]), (req, res) => contentController.create(req, res));
 router.get("/:id", verifyTokenAccess, (req, res) => contentController.getById(req, res));

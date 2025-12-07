@@ -80,22 +80,22 @@ export function MainAccountCard(props : MainAccountCardProps) {
                             <div className="w-1 h-4 bg-gradient-to-b from-blue-500 to-indigo-500 rounded-full"></div>
                             <h4 className="text-sm font-bold text-gray-900">Limites</h4>
                         </div>
-                        
+
                         <LimitProgressBar
                             label="withdrawalLimit"
-                            value={0} 
+                            value={0}
                             max={account.withdrawalLimit}
                             currency={account.currency}
                         />
                         <LimitProgressBar
                             label="transferLimit"
-                            value={0}
+                            value={account.totalTransfered}
                             max={account.transferLimit}
                             currency={account.currency}
                         />
                         <LimitProgressBar
                             label="overdraftLimit"
-                            value={0}
+                            value={Math.abs(Math.min(0, account.currentBalance))}
                             max={account.overdraftLimit}
                             currency={account.currency}
                         />

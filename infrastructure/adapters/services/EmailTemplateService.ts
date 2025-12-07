@@ -1,6 +1,7 @@
 import { EmailService, SendEmailOptions } from "../../../application/ports/services/EmailService";
+import { EmailComposerService } from "../../../application/ports/services/EmailComposerService";
 
-export class EmailTemplateService {
+export class EmailTemplateService implements EmailComposerService {
   constructor(private emailService: EmailService, private baseUrl: string) {}
 
   async sendRegistrationConfirmation(
@@ -8,7 +9,7 @@ export class EmailTemplateService {
     firstName: string,
     token: string,
     expiresAt: Date,
-    role: "CLIENT" | "BANK_ADVISOR",
+    role: "CLIENT" | "BANK_ADVISOR" | "BANK_MANAGER",
     locale: string = "en"
   ) {
     const url = `${this.baseUrl}/${locale}/confirm?token=${token}`;

@@ -1,5 +1,5 @@
 import { AccountEntity } from "../../../domain/entities/AccountEntity";
-import {CreateAccountDTO} from "./dto/CreateAccountDTO";
+import { CreateAccount} from "../../requests/CreateAccount";
 import { InvalidAccountError } from "../../../domain/errors/InvalidAccountError";
 import { InvalidIbanError } from "../../../domain/errors/InvalidIbanError";
 import {AccountNumberGeneratorService} from "../../ports/services/AccountNumberGeneratorService";
@@ -9,15 +9,14 @@ import { AccountStatusEnum } from "../../../domain/enums/AccountStatusEnum";
 import { AccountTypeEnum } from "../../../domain/enums/AccountTypeEnum";
 
 export class CreateAccountUseCase {
-    public constructor ( private accountRepository: AccountRepositoryInterface, private accountNumberGenerator: AccountNumberGeneratorService, private ibanGenerator: IbanGeneratorService ){}
+    public constructor ( private readonly accountRepository: AccountRepositoryInterface, private readonly accountNumberGenerator: AccountNumberGeneratorService, private readonly ibanGenerator: IbanGeneratorService ){}
 
-    public async execute(accountDTO: CreateAccountDTO): Promise<AccountEntity | Error>{
+    public async execute(accountData: CreateAccount): Promise<AccountEntity | Error>{
 
         const accountNumber = await this.accountNumberGenerator.generateAccountNumber();
         if(accountNumber instanceof InvalidAccountError) {
             return accountNumber;
         }
-
 
         const iban = await this.ibanGenerator.generateIban(accountNumber);
         
@@ -25,26 +24,27 @@ export class CreateAccountUseCase {
             return iban;
         }
 
-
-        const checkingAccount = await this.accountRepository.findByUserIdAndType(accountDTO.userId, AccountTypeEnum.CHECKING);
+        const checkingAccount = await this.accountRepository.findByUserIdAndType(accountData.userId, AccountTypeEnum.CHECKING);
         if(checkingAccount instanceof Error) {
             return checkingAccount;
         }
         
         const account = AccountEntity.from(
-            accountNumber,                  
-            iban,                                 
-            accountDTO.userId,
-            accountDTO.accountType,
-            accountDTO.currency,
+            accountNumber,
+            iban,
+            accountData.userId,
+            accountData.accountType,
+            accountData.currency,
             AccountStatusEnum.ACTIVE,
-            true,     
-            20,                               
+            true,
+            20,
             new Date(),
             3000,
             3000,
             1000,
-            accountDTO.customAccountName ?? `${accountNumber}`,
+            accountData.customAccountName ?? `${accountNumber}`,
+            0,
+            new Date()
         );
 
         if(account instanceof Error) {

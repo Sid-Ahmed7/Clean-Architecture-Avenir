@@ -1,4 +1,4 @@
-import { Token } from "../../../../domain/interfaces/Token";
+import { Token } from "../../../requests/Token";
 
 
 export interface RegistrationTokenGeneratorService {

@@ -3,16 +3,16 @@ import { ContentRepositoryInterface } from "../../../ports/repositories/news/Con
 
 export class DeleteContentUseCase {
 
-    public constructor(private contentRepository: ContentRepositoryInterface){}
+    public constructor(private readonly contentRepository: ContentRepositoryInterface){}
 
-    public async execute(id: number): Promise<void | Error> {
-        const content = await this.contentRepository.findById(id);
+    public async execute(contentId: string): Promise<void | Error> {
+        const content = await this.contentRepository.findById(contentId);
         
         if(content instanceof Error) {
             return content;
         }
 
-        const deletedContent = await this.contentRepository.delete(id);
+        const deletedContent = await this.contentRepository.delete(contentId);
 
         if(deletedContent instanceof Error) {
             return deletedContent;

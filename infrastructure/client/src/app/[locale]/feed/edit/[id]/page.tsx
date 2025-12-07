@@ -12,7 +12,7 @@ import { useMediaByNewsId } from "@/hooks/useMedia";
 
 export default function EditFeedPage() {
   const { id } = useParams();
-  const newsId = Number(id);
+  const newsId = id as string;
 
   const { data: news, isLoading: newsLoading } = useNewsById(newsId);
   const { data: contents, isLoading: contentsLoading } = useContentsByNewsId(newsId);
@@ -20,13 +20,10 @@ export default function EditFeedPage() {
 
   const [initialValues, setInitialValues] = useState<CreateNewsModel>();
   const [initialBlocks, setInitialBlocks] = useState<Block[]>([]);
-  const hasInitialized = useRef(false);
-  
+  const previousContentsRef = useRef<string>('');
+
   useEffect(() => {
     if (newsLoading || contentsLoading || mediaLoading) {
-      return;
-    }
-     if (hasInitialized.current) {
       return;
     }
 
@@ -34,6 +31,16 @@ export default function EditFeedPage() {
     console.log("Contents", contents)
     console.log("medias", medias)
 
+    const contentsKey = JSON.stringify({
+      contents: Array.isArray(contents) ? contents.map(c => c.id).sort() : [],
+      medias: Array.isArray(medias) ? medias.map(m => m.id).sort() : []
+    });
+
+    if (previousContentsRef.current === contentsKey) {
+      return;
+    }
+
+    previousContentsRef.current = contentsKey;
 
     if (news) {
       setInitialValues({
@@ -42,38 +49,29 @@ export default function EditFeedPage() {
         priority: news.priority,
         tags: news.tags || [],
       });
-            console.log("Initial Values définies:", {
-        title: news.title,
-        category: news.category,
-        priority: news.priority,
-        tags: news.tags || [],
-      });
-      
     }
 
-  const textBlocks: Block[] = (Array.isArray(contents) ? contents : []).map((content) => ({
-    id: content.id,
-    type: TypeBlock.TEXT,
-    order: content.order,
-    content: content.content,
-  }));
-      console.log("Text block créé:", textBlocks);
+    const textBlocks: Block[] = (Array.isArray(contents) ? contents : []).map((content) => ({
+      id: content.id,
+      type: TypeBlock.TEXT,
+      order: content.order,
+      content: content.content,
+    }));
+    console.log("Text block créé:", textBlocks);
 
-   const mediaBlocks: Block[] = (Array.isArray(medias) ? medias : []).map((media) => ({
-    id: media.id,
-    type: TypeBlock.MEDIA,
-    order: media.order ?? 0,
-    files: [],
-    existingMedias: [media] 
-  }));
-          console.log("Text block créé:", mediaBlocks);
+    const mediaBlocks: Block[] = (Array.isArray(medias) ? medias : []).map((media) => ({
+      id: media.id,
+      type: TypeBlock.MEDIA,
+      order: media.order ?? 0,
+      files: [],
+      existingMedias: [media]
+    }));
+    console.log("Media block créé:", mediaBlocks);
 
-
-    const allBlocks = [...textBlocks, ...mediaBlocks].sort((a, b) => a.order - b.order);;
+    const allBlocks = [...textBlocks, ...mediaBlocks].sort((a, b) => a.order - b.order);
     console.log("Blocs combinés et triés:", allBlocks);
     setInitialBlocks(allBlocks);
-    hasInitialized.current = true;
-}, [news, contents, medias, newsLoading, contentsLoading,mediaLoading]);
+}, [news, contents, medias, newsLoading, contentsLoading, mediaLoading]);
 
 return (
   <>

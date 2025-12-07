@@ -6,35 +6,42 @@ import { AlertCircle } from "lucide-react";
 import { BlockContent } from "./BlockContent";
 import Image from "next/image";
 import { getMediaUrl } from "@/lib/utils/media";
-import { getBlockKey } from "@/lib/utils/blocksUtils";
+import { idBlock } from "@/lib/utils/blocksUtils";
 
 interface BlockEditorProps {
     onChange: (blocks: Block[]) => void;
     initialBlocks?: Block[];
-    newsId?: number;
+    newsId?: string;
     disabled?: boolean;
     error?: string;
 }
 
 export function BlockEditor({newsId, onChange, initialBlocks, disabled, error}: BlockEditorProps) {
-    const blockId = useRef(-1);
     const [blocks, setBlocks] = useState<Block[]>([]);
-    const hasInitialized = useRef(false);
+    const previousBlocksRef = useRef<string>('');
 
     useEffect(() => {
-    if(initialBlocks && initialBlocks.length > 0 && !hasInitialized.current) {
-        const ordered = initialBlocks.sort((a,b) => a.order - b.order)
-        setBlocks(ordered);
-        hasInitialized.current = true;
-    } else {
+          const blocksKey = JSON.stringify(initialBlocks?.map(b => b.id).sort() || []);
+
+          if (previousBlocksRef.current === blocksKey && previousBlocksRef.current !== '') {
+            return;
+          }
+
+          previousBlocksRef.current = blocksKey;
+
+          if (initialBlocks && initialBlocks.length > 0) {
+            const ordered = [...initialBlocks].sort((a, b) => a.order - b.order);
+            console.log("BlockEditor: Mise à jour des blocs", ordered);
+            setBlocks(ordered);
+          } else if (previousBlocksRef.current === '') {
             setBlocks([
                 {
-                id: blockId.current--,
-                type: TypeBlock.TEXT,
-                order: 0,
-                content: ""
+                    id: idBlock(),
+                    type: TypeBlock.TEXT,
+                    order: 0,
+                    content: ""
                 }
-            ])
+            ]);
         }
     }, [initialBlocks]);
 
@@ -43,12 +50,8 @@ export function BlockEditor({newsId, onChange, initialBlocks, disabled, error}: 
     }, [blocks,  onChange])
 
  const onAddBlock = (type: TypeBlock) => {
-    console.log("Ajout d'un block");
-    console.log("Blocks actuels:", blocks.length);
-    console.log("Nouvel order:", blocks.length);
-
     const newBlock: Block = {
-        id: blockId.current--,
+        id: idBlock(),
         type,
         order: blocks.length > 0 ? Math.max(...blocks.map(b => b.order ?? 0)) + 1 : 0,
         ...(type === TypeBlock.TEXT ? {content: ""} : {files: [], existingMedias: []})
@@ -60,11 +63,11 @@ export function BlockEditor({newsId, onChange, initialBlocks, disabled, error}: 
 }
 
     const updateBlock =(id: string, updateBlock: Block) => {
-        setBlocks(blocks.map((block) => (getBlockKey(block) === id ? updateBlock : block)))
+        setBlocks(blocks.map((block) => (block.id === id ? updateBlock : block)))
     }
 
     const removeBlock = (id: string) =>{
-        const filteredBlocks = blocks.filter((block) => getBlockKey(block) !== id)
+        const filteredBlocks = blocks.filter((block) => block.id !== id).map((b, i) => ({ ...b, order: i }));
         setBlocks(filteredBlocks);
     }
 
@@ -103,8 +106,8 @@ return (
           >
             {blocks.map((block, index) => (
               <Draggable
-                key={getBlockKey(block)}
-                draggableId={getBlockKey(block)}
+                key={block.id}
+                draggableId={block.id}
                 index={index}
                 isDragDisabled={disabled}
               >
@@ -116,8 +119,8 @@ return (
                     <BlockContent
                       block={block}
                       newsId={newsId!}
-                      onUpdate={(updated) => updateBlock(getBlockKey(block), updated)}
-                      onRemove={() => removeBlock(getBlockKey(block))}
+                      onUpdate={(updated) => updateBlock(block.id, updated)}
+                      onRemove={() => removeBlock(block.id)}
                       disabled={disabled}
                       dragAndDropHandle={provided.dragHandleProps}
                     />

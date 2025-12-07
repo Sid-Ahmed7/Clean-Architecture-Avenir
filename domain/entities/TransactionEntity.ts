@@ -7,7 +7,18 @@ import { UserIdValue } from "../values/UserIdValue";
 
 export class TransactionEntity {
 
-    public static from(debitAccount: number, creditAccount: number, amount: number, transactionReference: string, transactionType: TransactionTypeEnum, executedBy: string, status: OrderStatusEnum, createdAt: Date, description?: string,  category?: string, ) {
+    public static from(
+        transactionReference: string,
+        debitAccount: number,
+        creditAccount: number,
+        amount: number,
+        transactionType: TransactionTypeEnum,
+        executedBy: string,
+        status: OrderStatusEnum,
+        createdAt: Date,
+        description?: string,
+        category?: string
+    ) {
 
         const validatedDebitAccount = AccountNumberValue.from(debitAccount);
         if(validatedDebitAccount instanceof Error) {
@@ -34,20 +45,35 @@ export class TransactionEntity {
             return validatedReference;
         }
 
-        return new TransactionEntity(validatedDebitAccount.value, validatedCreditAccount.value, validatedAmount.value, transactionType, validatedExecutedBy.value, status, validatedReference.value, description, category, createdAt);
+        return new TransactionEntity(
+            validatedReference.value,
+            validatedDebitAccount.value,
+            validatedCreditAccount.value,
+            validatedAmount.value,
+            transactionType,
+            validatedExecutedBy.value,
+            status,
+            description,
+            category,
+            createdAt
+        );
 
     }
 
     private constructor(
-        public debitAccount: number,
-        public creditAccount: number,
-        public amount: number,
-        public transactionType: TransactionTypeEnum,
-        public executedBy: string,
+        public readonly transactionReference: string,
+        public readonly debitAccount: number,
+        public readonly creditAccount: number,
+        public readonly amount: number,
+        public readonly transactionType: TransactionTypeEnum,
+        public readonly executedBy: string,
         public status: OrderStatusEnum,
-        public transactionReference: string,
-        public description?: string,
-        public category?: string,
-        public createdAt?: Date
+        public readonly description?: string,
+        public readonly category?: string,
+        public readonly createdAt?: Date,
+        public  debitUserId?: string,
+        public  creditUserId?: string,
+        public  debitUserName?: string,
+        public  creditUserName?: string
     ) {}
     }

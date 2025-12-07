@@ -1,8 +1,8 @@
-import { NewsFilters } from "../../../domain/interfaces/NewsFilters";
+import { NewsFilters } from "../../requests/NewsFilters";
 import { NewsRepositoryInterface } from "../../ports/repositories/news/NewsRepositoryInterface";
 
 export class GetAllNewsUseCase {
-    public constructor(private newsRepository: NewsRepositoryInterface){}
+    public constructor(private readonly newsRepository: NewsRepositoryInterface){}
 
     public async execute(filters?: NewsFilters, page = 1, limit = 10) {
         const newsList = await this.newsRepository.findAll(filters, page, limit);

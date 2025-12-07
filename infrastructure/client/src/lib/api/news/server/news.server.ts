@@ -56,11 +56,11 @@ export const getAllNews = async (filters: NewsFilters): Promise<Array<News>> => 
   }
 };
 
-export const getNewsById = async (id: number): Promise<News | null> => {
+export const getNewsById = async (newsId: string): Promise<News | null> => {
   try {
     const cookieHeader = await getServerCookies();
 
-    const response = await axios.get(`${API_URL}/feed/${id}`, {
+    const response = await axios.get(`${API_URL}/feed/${newsId}`, {
       headers: {
         "Content-Type": "application/json",
         Cookie: cookieHeader,

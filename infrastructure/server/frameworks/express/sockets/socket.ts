@@ -8,7 +8,7 @@ import { OnlineUser } from "../interfaces/OnlineUser";
 import { Message } from "../interfaces/Message";
 import { MessageEntity } from "../../../../../domain/entities/MessageEntity";
 import { ConversationEntity } from "../../../../../domain/entities/ConversationEntity";
-import { conversationRepository, messageRepository } from "../../../../adapters/config/repositories";
+import { conversationRepository, messageRepository, uuidService } from "../../../../adapters/config/repositories";
 import { Identification } from "../interfaces/Identification";
 import { Data } from "../interfaces/Data";
 
@@ -35,14 +35,14 @@ export const socketSetup = (server: Server) => {
     systemIo.emit("userStatus", statusData);
   };
 
-  const broadcastMessage = (message: MessageEntity, conversationId: number) => {
+  const broadcastMessage = (message: MessageEntity, conversationId: string) => {
     const roomName = `conversation_${conversationId}`;
     clientIo.to(roomName).emit("message", message);
     advisorIo.to(roomName).emit("message", message);
     systemIo.to(roomName).emit("message", message);
   };
 
-  const broadcastTyping = (currentSocketId: string,conversationId: number,userId: string,isTyping: boolean) => {
+  const broadcastTyping = (currentSocketId: string,conversationId: string,userId: string,isTyping: boolean) => {
     const roomName = `conversation_${conversationId}`;
     const event = isTyping ? "userTyping" : "userStopTyping";
     const data = { conversationId, userId };
@@ -97,7 +97,7 @@ export const socketSetup = (server: Server) => {
       }
     });
 
-    socket.on("joinConversation", (conversationId: number) => {
+    socket.on("joinConversation", (conversationId: string) => {
       if (conversationId != null) {
         const roomName = `conversation_${conversationId}`;
         socket.join(roomName);
@@ -107,7 +107,7 @@ export const socketSetup = (server: Server) => {
 
     socket.on("message", async (data: Message) => {
       try {
-        const sendMessageUseCase = new SendMessageUseCase(conversationRepository, messageRepository);
+        const sendMessageUseCase = new SendMessageUseCase(conversationRepository, messageRepository, uuidService);
         const message = await sendMessageUseCase.execute(data.userId, data.role, data.conversationId, data.content);
         
         if (!(message instanceof MessageEntity)) {
@@ -208,7 +208,7 @@ export const socketSetup = (server: Server) => {
           }
         }
 
-        const sendMessageUseCase = new SendMessageUseCase(conversationRepository, messageRepository);
+        const sendMessageUseCase = new SendMessageUseCase(conversationRepository, messageRepository, uuidService);
 
         const message = await sendMessageUseCase.execute(data.userId, data.role, data.conversationId, data.content);
 
@@ -228,7 +228,7 @@ export const socketSetup = (server: Server) => {
       broadcastTyping(socket.id, data.conversationId, data.userId, true);
     });
 
-    socket.on("stopTyping", (data: { conversationId: number; userId: string }) => {
+    socket.on("stopTyping", (data: Data) => {
       broadcastTyping(socket.id, data.conversationId, data.userId, false);
     });
 
@@ -263,7 +263,7 @@ export const socketSetup = (server: Server) => {
       }
     });
 
-    socket.on("joinConversation", (conversationId: number) => {
+    socket.on("joinConversation", (conversationId: string) => {
       if (conversationId != null) {
         const roomName = `conversation_${conversationId}`;
         socket.join(roomName);
@@ -271,17 +271,17 @@ export const socketSetup = (server: Server) => {
       }
     });
 
-    socket.on("typing", (data: { conversationId: number; userId: string }) => {
+    socket.on("typing", (data: Data) => {
       broadcastTyping(socket.id, data.conversationId, data.userId, true);
     });
 
-    socket.on("stopTyping", (data: { conversationId: number; userId: string }) => {
+    socket.on("stopTyping", (data: Data) => {
       broadcastTyping(socket.id, data.conversationId, data.userId, false);
     });
 
-    socket.on("markAsRead", async (data: { messageIds: number[]; userId: string }) => {
+    socket.on("markAsRead", async (data: { messageIds: string[]; userId: string }) => {
       const markAsRead = new MarkMessageAsReadUseCase(messageRepository);
-      const authorsToNotify = new Map<string, number[]>();
+      const authorsToNotify = new Map<string, string[]>();
 
       for (const id of data.messageIds) {
         const message = await messageRepository.findById(id);

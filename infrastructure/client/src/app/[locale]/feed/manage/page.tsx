@@ -17,7 +17,7 @@ export default function FeedManagePage() {
     setFilters(newFilters);
   }
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     await deleteNews.mutateAsync(id);
   }
 

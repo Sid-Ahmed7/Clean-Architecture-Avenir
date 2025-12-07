@@ -11,6 +11,9 @@ import {BankAccountService} from "../services/BankAccountService";
 import {OrderValidationEngineService} from "../services/order/OrderValidationEngineService";
 import {OrderMatchingEngineService} from "../services/order/OrderMatchingEngineService";
 import {StockHoldingManager} from "../services/stocks/StockHoldingManager";
+import {CryptoUuidGenerator} from "../services/CryptoUuidGenerator";
+import {ManageTransferLimitService} from "../services/ManageTransferLimitService";
+import {ValidateTransferService} from "../services/ValidateTransferService";
 
 import { InMemoryEventBus } from '../repositories/InMemoryEventBus';
 import { InMemoryUserRepository } from '../repositories/InMemoryUserRepository';
@@ -30,6 +33,8 @@ import { InMemoryStockRepository } from "../repositories/InMemoryStockRepository
 import { InMemoryStockOrderRepository } from "../repositories/InMemoryStockOrderRepository";
 import { InMemoryStockHoldingRepository } from "../repositories/InMemoryStockHoldingRepository";
 import { InMemoryStockTransactionRepository } from "../repositories/InMemoryStockTransactionRepository";
+import { InMemoryTransactionRepository } from "../repositories/InMemoryTransactionRepository";
+import { LocaleValidationService } from "../services/LocaleValidationService";
 
 const baseUrl = process.env.CLIENT_BASE_URL!;
 export const tokenService = new JwtTokenService();
@@ -44,9 +49,11 @@ export const eventBus = new InMemoryEventBus();
 export const accountRepository = new InMemoryAccountRepository();
 export const accountNumberGenerator = new GenerateAccountNumberService(accountRepository);
 export const ibanGenerator = new GenerateIbanService(accountRepository);
+export const transactionRepository = new InMemoryTransactionRepository();
 
 export const conversationRepository = new InMemoryConversationRepository();
 export const messageRepository = new InMemoryMessageRepository();
+export const uuidService = new CryptoUuidGenerator()
 
 export const newsRepository = new InMemoryNewsRepository();
 export const newsService = new NewsService(); 

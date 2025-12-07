@@ -2,10 +2,10 @@ import { NewsRepositoryInterface } from "../../ports/repositories/news/NewsRepos
 import { NewsPublisher } from "../../ports/services/news/NewsPublisher";
 
 export class DeleteNewsUseCase {
-    public constructor(private newsRepository: NewsRepositoryInterface, private publisher: NewsPublisher ){}
+    public constructor(private readonly newsRepository: NewsRepositoryInterface, private readonly publisher: NewsPublisher ){}
 
-    public async execute(id: number): Promise<void | Error> {
-        const news = await this.newsRepository.findById(id);
+    public async execute(newsId: string): Promise<void | Error> {
+        const news = await this.newsRepository.findById(newsId);
         
         if(news instanceof Error) {
             return news;
@@ -16,6 +16,6 @@ export class DeleteNewsUseCase {
             return deletedNews;
         }
 
-        this.publisher.publishDelete(id);
+        this.publisher.publishDelete(newsId);
     }
 }

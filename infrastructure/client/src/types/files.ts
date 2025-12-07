@@ -4,7 +4,7 @@ export interface Files {
     size: number;
     type: "IMAGE" | "VIDEO";
     caption?: string
-    mediaId?: number;
+    mediaId?: string;
 }
 
 

@@ -8,8 +8,8 @@ import { MediaNotFoundError } from "../../../errors/MediaNotFoundError";
 export interface ContentRepositoryInterface {
 
     create(content: ContentEntity): Promise<ContentEntity | InvalidContentError>
-    findById(id: number): Promise<ContentEntity | ContentNotFoundError>
-    findByNewsId(newsId: number): Promise<Array<ContentEntity>>
+    findById(contentId: string): Promise<ContentEntity | ContentNotFoundError>
+    findByNewsId(newsId: string): Promise<Array<ContentEntity>>
     update(content: ContentEntity): Promise<ContentEntity | ContentNotFoundError>;
-    delete(id: number): Promise<void | ContentNotFoundError>;
+    delete(contentId: string): Promise<void | ContentNotFoundError>;
 }

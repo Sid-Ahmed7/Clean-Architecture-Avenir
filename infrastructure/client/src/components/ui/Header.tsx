@@ -11,12 +11,11 @@ interface HeaderProps {
 
 export default function Header({ searchQuery, setSearchQuery, onMenuClick }: HeaderProps) {
   const { user, loading } = useUserProfile();
-
   return (
     <header className="bg-white border-b border-gray-200 px-6 py-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <button 
+          <button
             onClick={onMenuClick}
             className="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
             aria-label="Ouvrir le menu"
@@ -31,13 +30,23 @@ export default function Header({ searchQuery, setSearchQuery, onMenuClick }: Hea
               placeholder="Rechercher une transaction..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64"
+              className="pl-10 pr-4 text-gray-900 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64"
             />
           </div>
+
+          {!loading && user?.user && (
+            <div className="flex items-center gap-2 ml-6 text-xl">
+              <p className="font-medium text-gray-900">
+                <span className="font-bold text-blue-600">Bienvenue</span> {user.user.firstName} {user.user.lastName}
+              </p>
+
+              <p className="text-blue-600"> - {user.user.role}</p>
+            </div>
+          )}
         </div>
 
         <div className="flex items-center gap-3">
-          <button 
+          <button
             className="p-2 hover:bg-gray-100 rounded-lg relative"
             aria-label="Notifications"
           >
@@ -48,10 +57,6 @@ export default function Header({ searchQuery, setSearchQuery, onMenuClick }: Hea
           <button className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg">
             <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
               <User className="w-5 h-5 text-white" />
-            </div>
-            <div className="hidden md:block text-left">
-              <p className="text-sm font-medium text-gray-900">{loading ? "Chargement..." : user?.name}</p>
-              <p className="text-xs text-gray-500">{loading ? "" : user?.email}</p>
             </div>
           </button>
         </div>
