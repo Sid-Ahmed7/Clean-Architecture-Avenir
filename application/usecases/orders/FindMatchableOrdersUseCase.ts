@@ -1,4 +1,5 @@
 import { OrderTypeEnum } from "../../../domain/enums/OrderTypeEnum";
+import { OrdersMatchResponse } from "../../responses/OrdersMatchResponse";
 import { StockOrderRepositoryInterface } from "../../ports/repositories/stocks/StockOrderRepositoryInterface";
 import { OrderBookService } from "../../ports/services/order/OrderBookService";
 
@@ -10,7 +11,7 @@ export class FindMatchableOrdersUseCase {
         private stockOrderService: OrderBookService
     ) {}
 
-        public async execute(stockSymbol: string): Promise<Array<{ buyOrderId: number; sellOrderId: number }> | Error> {
+        public async execute(stockSymbol: string): Promise<Array<OrdersMatchResponse> | Error> {
             const orders = await this.stockOrderRepository.findPendingOrdersBySymbol(stockSymbol);
             if(orders instanceof Error) {
                 return orders;

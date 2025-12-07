@@ -4,11 +4,11 @@ import { StockNotFoundError } from "../../../errors/StockNotFoundError";
 
 export interface StockRepositoryInterface {
 
-    findStockById(id: number): Promise<StockEntity | StockNotFoundError>
+    findStockById(id: string): Promise<StockEntity | StockNotFoundError>
     findStockBySymbol(symbol: string): Promise<StockEntity | StockNotFoundError>
     getAllStocks(): Promise<Array<StockEntity>>;
     getAvailableStocks(): Promise<Array<StockEntity>>
     createStock(stock: StockEntity): Promise<StockEntity | StockAlreadyExistsError>
     updateStock(stock: StockEntity): Promise<StockEntity | StockNotFoundError>
-    deleteStock(id: number) : Promise<void | StockNotFoundError>;
+    deleteStock(id: string) : Promise<void | StockNotFoundError>;
 }

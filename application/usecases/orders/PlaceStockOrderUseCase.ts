@@ -1,10 +1,11 @@
 import { StockOrderEntity } from "../../../domain/entities/StockOrderEntity";
-import { OrderValidation } from "../../interfaces/OrderValidation";
+import { OrderValidation } from "../../requests/OrderValidation";
 import { StockOrderRepositoryInterface } from "../../ports/repositories/stocks/StockOrderRepositoryInterface";
 import { StockRepositoryInterface } from "../../ports/repositories/stocks/StockRepositoryInterface";
 import { OrderValidationService } from "../../ports/services/order/OrderValidationService";
 import { StockNotAvailableError } from "../../errors/StockNotAvailableError";
 import { OrderStatusEnum } from "../../../domain/enums/OrderStatusEnum";
+import { UuidGeneratorService } from "../../ports/services/UuidGeneratorService";
 export class PlaceStockOrderUseCase {
 
     private readonly TRANSACTION_FEE = 1;
@@ -12,10 +13,12 @@ export class PlaceStockOrderUseCase {
     public constructor(
         private stockOrderRepository: StockOrderRepositoryInterface,
         private stockRepository: StockRepositoryInterface,
-        private orderValidationService: OrderValidationService
+        private orderValidationService: OrderValidationService,
+        private uuidService: UuidGeneratorService
+        
     ) {}
 
-    public async execute(orderValidation: OrderValidation): Promise<StockOrderEntity | Error> {
+    public async execute(userId: string , orderValidation: OrderValidation): Promise<StockOrderEntity | Error> {
         const stock = await this.stockRepository.findStockBySymbol(orderValidation.stockSymbol);
         
         if(stock instanceof Error) {
@@ -28,7 +31,10 @@ export class PlaceStockOrderUseCase {
 
         this.orderValidationService.validateOrder(orderValidation);
 
-        const order = StockOrderEntity.from(0, orderValidation.userId, orderValidation.stockSymbol, orderValidation.quantity, orderValidation.orderPrice, this.TRANSACTION_FEE, orderValidation.orderType, OrderStatusEnum.PENDING, new Date(), new Date());
+        const id = this.uuidService.generate();
+
+
+        const order = StockOrderEntity.from(id, userId, orderValidation.stockSymbol, orderValidation.quantity, orderValidation.orderPrice, this.TRANSACTION_FEE, orderValidation.orderType, OrderStatusEnum.PENDING, new Date(), new Date());
 
         if(order instanceof Error) {
             return order;

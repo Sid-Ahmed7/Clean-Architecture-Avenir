@@ -4,6 +4,7 @@ import { OrderTypeEnum } from "@/types/createOrder";
 import { OrderFields } from "@/types/orderFields";
 import { useState } from "react";
 import { PlaceOrderForm } from "./PlaceOrderForm";
+import { usePlaceOrder } from "@/hooks/useStocksOrder";
 
 interface PlaceOrderModalProps {
   isOpen: boolean;
@@ -15,7 +16,7 @@ interface PlaceOrderModalProps {
 }
 
 export function PlaceOrderModal({isOpen,onClose,stockSymbol,stockName,currentPrice,orderType}: PlaceOrderModalProps) {
-//   const placeOrderMutation = usePlaceOrder();
+  const placeOrderMutation = usePlaceOrder();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (data: OrderFields) => {

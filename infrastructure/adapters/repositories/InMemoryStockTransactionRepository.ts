@@ -9,15 +9,13 @@ import { StockTransactionEntity } from "../../../domain/entities/StockTransactio
 export class InMemoryStockTransactionRepository implements StockTransactionRepositoryInterface {
 
     private transactions: Array<StockTransactionEntity>;
-    private incrId: number;
 
     public constructor() {
         this.transactions = [];
-        this.incrId = 0;
     }
 
 
-    public async findTransactionById(id: number): Promise<StockTransactionEntity | TransactionNotFoundError> {
+    public async findTransactionById(id: string): Promise<StockTransactionEntity | TransactionNotFoundError> {
         const transaction = this.transactions.find(t => t.id === id);
 
         if(!transaction) {
@@ -43,11 +41,11 @@ export class InMemoryStockTransactionRepository implements StockTransactionRepos
         return this.transactions.filter(t => t.sellerUserId === userId);
     }
 
-    public async findTransactionsByBuyOrderId(buyOrderId: number): Promise<Array<StockTransactionEntity>> {
+    public async findTransactionsByBuyOrderId(buyOrderId: string): Promise<Array<StockTransactionEntity>> {
         return this.transactions.filter(t => t.buyOrderId === buyOrderId);
     }
 
-    public async findTransactionsBySellOrderId(sellOrderId: number): Promise<Array<StockTransactionEntity>> {
+    public async findTransactionsBySellOrderId(sellOrderId: string): Promise<Array<StockTransactionEntity>> {
         return this.transactions.filter(t => t.sellOrderId === sellOrderId);
     }
 
@@ -67,8 +65,6 @@ export class InMemoryStockTransactionRepository implements StockTransactionRepos
     }
 
     public async createTransaction(transaction: StockTransactionEntity): Promise<StockTransactionEntity> {
-        this.incrId++;
-        transaction.id = this.incrId;
         return transaction;
     }
 }

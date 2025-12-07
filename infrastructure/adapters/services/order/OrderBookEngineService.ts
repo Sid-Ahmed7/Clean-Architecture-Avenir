@@ -1,4 +1,4 @@
-import { OrderMatch } from "../../../../application/interfaces/OrderMatch";
+import { OrderMatch } from "../../../../application/requests/OrderMatch";
 import { OrderBookService } from "../../../../application/ports/services/order/OrderBookService";
 import { StockOrderEntity } from "../../../../domain/entities/StockOrderEntity";
 

@@ -3,7 +3,7 @@ import { StockRepositoryInterface } from "../../ports/repositories/stocks/StockR
 export class DeleteStockUseCase {
     public constructor(private readonly stockRepository: StockRepositoryInterface){}
 
-    public async execute(id: number): Promise<void | Error> {
+    public async execute(id: string): Promise<void | Error> {
 
         const existingStock = await this.stockRepository.findStockById(id);
         

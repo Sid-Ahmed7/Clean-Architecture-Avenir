@@ -5,8 +5,8 @@ import { OrderNotFoundError } from "../../../errors/OrderNotFoundError";
 export interface StockOrderRepositoryInterface {
     createOrder(order: StockOrderEntity): Promise<StockOrderEntity | InvalidOrderError>
     updateOrder(order: StockOrderEntity): Promise<StockOrderEntity | OrderNotFoundError>
-    deleteOrder(id: number): Promise<void | OrderNotFoundError>;
-    findOrderById(id: number): Promise<StockOrderEntity | OrderNotFoundError>;
+    deleteOrder(id: string): Promise<void | OrderNotFoundError>;
+    findOrderById(id: string): Promise<StockOrderEntity | OrderNotFoundError>;
     findOrdersByUserId(userId: string): Promise<Array<StockOrderEntity>>;
     findPendingOrdersBySymbol(symbol: string): Promise<Array<StockOrderEntity>>;
     findActiveOrders(): Promise<Array<StockOrderEntity>>;

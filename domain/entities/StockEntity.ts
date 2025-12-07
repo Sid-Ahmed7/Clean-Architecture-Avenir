@@ -5,7 +5,7 @@ import {PriceValue} from "../values/PriceValue";
 import { InvalidPriceError } from "../errors/InvalidPriceError";
 export class StockEntity {
 
-    public static from (id:number, symbol: string, companyName: string, name: string, currentPrice: number, rateOfChange: number, currency: string, createdAt: Date, isActionAvailable: boolean, updatedAt: Date, previousPrice?: number) {
+    public static from (id:string, symbol: string, companyName: string, name: string, currentPrice: number, rateOfChange: number, currency: string, createdAt: Date, isActionAvailable: boolean, updatedAt: Date, previousPrice?: number) {
 
         const validateSymbol = StockSymbolValue.from(symbol);
         if(validateSymbol instanceof Error) {
@@ -32,7 +32,7 @@ export class StockEntity {
     }
 
     private constructor(
-        public id: number,
+        public id: string,
         public symbol: string,
         public companyName: string,
         public name: string,

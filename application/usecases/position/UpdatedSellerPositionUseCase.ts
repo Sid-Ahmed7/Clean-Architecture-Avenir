@@ -1,6 +1,6 @@
 import { StockHoldingEntity } from "../../../domain/entities/StockHoldingEntity";
 import { PositionNotFoundError } from "../../errors/PositionNotFoundError";
-import { UpdateSeller } from "../../interfaces/UpdateSeller";
+import { UpdateSeller } from "../../requests/UpdateSeller";
 import { StockHoldingRepositoryInterface } from "../../ports/repositories/stocks/StockHoldingRepositoryInterface";
 
 export class UpdatedSellerPositionUseCase {
@@ -8,15 +8,15 @@ export class UpdatedSellerPositionUseCase {
         private holdingStockRepository: StockHoldingRepositoryInterface,
     ){}
 
-public async execute({userId,stockSymbol,quantity}: UpdateSeller): Promise<StockHoldingEntity | Error> {
+public async execute(seller: UpdateSeller): Promise<StockHoldingEntity | Error> {
                 
-        const position = await this.holdingStockRepository.findPositionByUserIdAndSymbol(userId, stockSymbol);
+        const position = await this.holdingStockRepository.findPositionByUserIdAndSymbol(seller.userId,seller.stockSymbol);
         
         if(position instanceof Error) {
             return position;
         }
 
-        const removeResult = position.removeShares(quantity);
+        const removeResult = position.removeShares(seller.quantity);
         if( removeResult instanceof Error) {
             return removeResult;
         }

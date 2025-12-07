@@ -6,8 +6,8 @@ export interface StockHoldingRepositoryInterface {
 
     createPosition(position: StockHoldingEntity): Promise<StockHoldingEntity | PositionAlreadyExistsError>;
     updatePosition(position: StockHoldingEntity): Promise<StockHoldingEntity | PositionNotFoundError>;
-    deletePosition(id: number): Promise<void | PositionNotFoundError>;
-    findPositionById(id: number): Promise<StockHoldingEntity | PositionNotFoundError>;
+    deletePosition(id: string): Promise<void | PositionNotFoundError>;
+    findPositionById(id: string): Promise<StockHoldingEntity | PositionNotFoundError>;
     findPositionsByUserId(userId: string): Promise<Array<StockHoldingEntity>>;
     findPositionByUserIdAndSymbol(userId: string, symbol: string): Promise<StockHoldingEntity | PositionNotFoundError>;
     findNonEmptyPositions(userId: string):Promise<Array<StockHoldingEntity>>;

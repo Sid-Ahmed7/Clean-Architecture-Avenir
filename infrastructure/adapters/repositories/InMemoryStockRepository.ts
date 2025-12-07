@@ -7,17 +7,15 @@ import { StockNotFoundError } from "../../../application/errors/StockNotFoundErr
 export class InMemoryStockRepository implements StockRepositoryInterface {
 
     private stocks: Array<StockEntity>;
-    private incrId: number;
 
 
 
     public constructor() {
         this.stocks = [];
-        this.incrId = 0;
 
     }
 
-    public async findStockById(id: number): Promise<StockEntity | StockNotFoundError> {
+    public async findStockById(id: string): Promise<StockEntity | StockNotFoundError> {
         const stock = this.stocks.find((stock) => stock.id === id);
 
         if(!stock) {
@@ -51,12 +49,9 @@ public async findStockBySymbol(symbol: string): Promise<StockEntity | StockNotFo
     public async createStock(stock: StockEntity): Promise<StockEntity | StockAlreadyExistsError> {
         const existingStock = await this.findStockBySymbol(stock.symbol);
         
-        if(!(existingStock instanceof StockNotFoundError)) {
+        if(!(existingStock instanceof StockAlreadyExistsError)) {
             return new StockAlreadyExistsError("Stock already exist");
         }
-        this.incrId++;
-        stock.id = this.incrId;
-
         this.stocks.push(stock);
         return stock;
     }
@@ -76,7 +71,7 @@ public async findStockBySymbol(symbol: string): Promise<StockEntity | StockNotFo
 
 
 
-        public async deleteStock(id: number): Promise<void | StockNotFoundError> {
+        public async deleteStock(id: string): Promise<void | StockNotFoundError> {
             const index = this.stocks.findIndex((stk) => stk.id === id);
 
             if (index === -1) {

@@ -1,19 +1,20 @@
 import { StockHoldingRepositoryInterface } from "../../ports/repositories/stocks/StockHoldingRepositoryInterface";
 import { StockOrderRepositoryInterface } from "../../ports/repositories/stocks/StockOrderRepositoryInterface";
 import {StockTransactionRepositoryInterface} from "../../ports/repositories/stocks/StockTransactionRepositoryInterface";
-import {AccountRepositoryInterface} from "../../ports/repositories/AccountRepositoryInterface";
 import { OrderMatchingService } from "../../ports/services/order/OrderMatchingService";
 import { StockTransactionEntity } from "../../../domain/entities/StockTransactionEntity";
+import { UuidGeneratorService } from "../../ports/services/UuidGeneratorService";
 export class ExecuteOrderMatchUseCase {
 
     public constructor(
-        private stockOrderRepository: StockOrderRepositoryInterface,
-        private transactionRepository: StockTransactionRepositoryInterface,
-        private matchingService: OrderMatchingService 
+        private readonly stockOrderRepository: StockOrderRepositoryInterface,
+        private readonly transactionRepository: StockTransactionRepositoryInterface,
+        private readonly matchingService: OrderMatchingService, 
+        private readonly uuidService: UuidGeneratorService
     ){}
 
 
-    public async execute(buyOrderId: number, sellOrderId: number): Promise<StockTransactionEntity | Error> {
+    public async execute(buyOrderId: string, sellOrderId: string): Promise<StockTransactionEntity | Error> {
         const buyOrder = await this.stockOrderRepository.findOrderById(buyOrderId);
         if (buyOrder instanceof Error) {
             return buyOrder;
@@ -31,7 +32,9 @@ export class ExecuteOrderMatchUseCase {
 
         const {quantity, executionPrice} = matchDetails;
 
-        const transaction = StockTransactionEntity.from(0, buyOrder.id, sellOrder.id, buyOrder.stockSymbol, quantity, executionPrice, buyOrder.userId, sellOrder.userId, buyOrder.fee, sellOrder.fee, new Date());
+        const id = this.uuidService.generate();
+
+        const transaction = StockTransactionEntity.from(id, buyOrder.id, sellOrder.id, buyOrder.stockSymbol, quantity, executionPrice, buyOrder.userId, sellOrder.userId, buyOrder.fee, sellOrder.fee, new Date());
         if(transaction instanceof Error) {
             return transaction;
         }

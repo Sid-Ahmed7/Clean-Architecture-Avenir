@@ -13,18 +13,26 @@ import { StockAlreadyExistsError } from "../../../../../application/errors/Stock
 import { StockNotFoundError } from "../../../../../application/errors/StockNotFoundError";
 import {OrderBookEngineService} from "../../../../adapters/services/order/OrderBookEngineService";
 import { InMemoryStockOrderRepository } from "../../../../adapters/repositories/InMemoryStockOrderRepository";
+import { CryptoUuidGenerator } from "../../../../adapters/services/CryptoUuidGenerator";
+import { createStockSchema } from "../schemas/stocks/createStockSchema";
+import { changeStockSchema } from "../schemas/stocks/changeStockSchema";
 export class StockController {
 
     
     constructor(
-        private  stockRepository: InMemoryStockRepository,
-        private stockOrderRepository: InMemoryStockOrderRepository,
-        private orderBookService: OrderBookEngineService ) {}
+        private readonly stockRepository: InMemoryStockRepository,
+        private readonly stockOrderRepository: InMemoryStockOrderRepository,
+        private readonly orderBookService: OrderBookEngineService,
+        private readonly uuidGenerator: CryptoUuidGenerator
+    ) {}
 
     async createStock(req: Request, res: Response) {
-        const createStockUseCase = new CreateStockUseCase(this.stockRepository); 
-
-        const result = await createStockUseCase.execute(req.body);
+        const createStockUseCase = new CreateStockUseCase(this.stockRepository, this.uuidGenerator); 
+        const parseResult = createStockSchema.safeParse(req.body);
+        if (!parseResult.success) {
+            return res.status(400).json({ errors: parseResult.error.message });
+        }
+        const result = await createStockUseCase.execute(parseResult.data);
         
         if(result instanceof Error) {
             if(result instanceof StockAlreadyExistsError) {
@@ -56,7 +64,10 @@ export class StockController {
     async getStockById(req: Request, res: Response) {
         const getStockByIdUseCase = new GetStockByIdUseCase(this.stockRepository); 
 
-        const id = Number(req.params.id);
+        const id = req.params.id;
+        if (!id) {
+            return res.status(400).json({ error: "Stock ID is required" });
+        }
         const result = await getStockByIdUseCase.execute(id);
         
         if(result instanceof Error) {
@@ -103,7 +114,10 @@ export class StockController {
 
     async deleteStock(req: Request, res: Response) {
         const deleteStockUseCase = new DeleteStockUseCase(this.stockRepository);
-        const id = Number(req.params.id);
+        const id = req.params.id;
+        if (!id) {
+            return res.status(400).json({ error: "Stock ID is required" });
+        }
         const result = await deleteStockUseCase.execute(id);
 
         if(result instanceof Error) {
@@ -117,13 +131,16 @@ export class StockController {
 
     async changeStockAvailability(req: Request, res: Response) {
         const changeStockAvailabilityUseCase = new ChangeStockAvailabilityUseCase(this.stockRepository);
-        const id = Number(req.params.id);
-        const isAvailable = req.body.isActionAvailable;
-        if (isNaN(id)) {
-                res.status(400).json({ error: 'Invalid stock ID' });
-                return;
+        const id = req.params.id;
+        if (!id) {
+            return res.status(400).json({ error: "Stock ID is required" });
         }
-        const result = await changeStockAvailabilityUseCase.execute(id, isAvailable);
+        const parseResult = changeStockSchema.safeParse(req.body);
+        if (!parseResult.success) {
+            return res.status(400).json({ errors: parseResult.error.message });
+        }
+
+        const result = await changeStockAvailabilityUseCase.execute(id, parseResult.data.isActionAvailable);
 
         if(result instanceof Error) {
             if(result instanceof StockNotFoundError) {

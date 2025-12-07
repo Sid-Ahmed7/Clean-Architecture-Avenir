@@ -1,4 +1,4 @@
-import { PositionDetails } from "../../interfaces/PositionDetails";
+import { PositionDetails } from "../../requests/PositionDetails";
 import { StockHoldingRepositoryInterface } from "../../ports/repositories/stocks/StockHoldingRepositoryInterface";
 import { StockRepositoryInterface } from "../../ports/repositories/stocks/StockRepositoryInterface";
 

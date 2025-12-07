@@ -1,3 +1,4 @@
+import { ChangeStockAvailabilityPayload } from "@/types/changeStockAvailability";
 import { ChangeStockAvailability } from "../validation/stocks/changeAvailabilitySchema";
 import { CreateStock } from "../validation/stocks/createStockSchema";
 import { Stock } from "../validation/stocks/stockSchema";
@@ -18,7 +19,7 @@ export const getStockBySymbol = async (symbol: string) => {
   return data;
 };
 
-export const getStockById = async (id: number) => {
+export const getStockById = async (id: string) => {
   const { data } = await apiClient.get<Stock>(`/stock/${id}`);
   return data;
 };
@@ -33,11 +34,11 @@ export const updateStock = async (payload: Stock) => {
   return data;
 };
 
-export const changeStockAvailability = async (payload: Stock) => {
-  const { data } = await apiClient.put<Stock>(`/stock/${payload.id}/availability`,{ isActionAvailable: payload.isActionAvailable});
+export const changeStockAvailability = async (userId: string, payload: ChangeStockAvailabilityPayload) => {
+const { data } = await apiClient.put<Stock>(`/stock/${payload.id}/availability`,{ userId, isActionAvailable: payload.isActionAvailable }
+);
   return data;
 }
-
 export const updateStockPrice = async (symbol: string) => {
   await apiClient.post(`/stock/${symbol}/update-price`);
 };

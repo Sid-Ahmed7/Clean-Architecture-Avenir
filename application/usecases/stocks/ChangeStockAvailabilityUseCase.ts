@@ -5,7 +5,7 @@ export class ChangeStockAvailabilityUseCase {
     public constructor(private readonly stockRepository: StockRepositoryInterface){}
 
 
-    public async execute(id: number, isAvailable: boolean): Promise<StockEntity | Error> {
+    public async execute(id: string, isAvailable: boolean): Promise<StockEntity | Error> {
         const stock = await this.stockRepository.findStockById(id);
 
         if (stock instanceof Error) {

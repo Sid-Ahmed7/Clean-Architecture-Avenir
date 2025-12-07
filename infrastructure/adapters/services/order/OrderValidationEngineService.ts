@@ -1,4 +1,4 @@
-import { OrderValidation } from "../../../../application/interfaces/OrderValidation";
+import { OrderValidation } from "../../../../application/requests/OrderValidation";
 import { AccountService } from "../../../../application/ports/services/AccountService";
 import { OrderValidationService } from "../../../../application/ports/services/order/OrderValidationService";
 import { StockHoldingService } from "../../../../application/ports/services/stocks/StockHoldingService";

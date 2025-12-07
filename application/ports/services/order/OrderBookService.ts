@@ -1,5 +1,5 @@
 import { StockOrderEntity } from "../../../../domain/entities/StockOrderEntity";
-import { OrderMatch } from "../../../interfaces/OrderMatch";
+import { OrderMatch } from "../../../requests/OrderMatch";
 
 export interface OrderBookService {
     calculateEquilibriumPrice(buyOrders: StockOrderEntity[], sellOrders: StockOrderEntity[]): number | null;

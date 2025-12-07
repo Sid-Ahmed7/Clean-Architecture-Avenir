@@ -10,7 +10,7 @@ import { InvalidQuantityError } from "../errors/InvalidQuantityError";
 import { InvalidCancelledOrder } from "../errors/InvalidCancelledOrder";
 
 export class StockOrderEntity {
-    public static from(id: number,userId: string, stockSymbol: string, quantity: number, orderPrice: number, fee: number, orderType: OrderTypeEnum, orderStatus: OrderStatusEnum, createdAt: Date, updatedAt: Date, executedAt?: Date, remainingQuantity?: number) {
+    public static from(id: string,userId: string, stockSymbol: string, quantity: number, orderPrice: number, fee: number, orderType: OrderTypeEnum, orderStatus: OrderStatusEnum, createdAt: Date, updatedAt: Date, executedAt?: Date, remainingQuantity?: number) {
 
         const validatedSymbol = StockSymbolValue.from(stockSymbol);
         if(validatedSymbol instanceof Error) {
@@ -42,7 +42,7 @@ export class StockOrderEntity {
     }
 
     private constructor(
-        public id: number,
+        public id: string,
         public userId: string,
         public stockSymbol: string,
         public quantity: number,

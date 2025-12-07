@@ -6,14 +6,12 @@ import { StockHoldingEntity } from "../../../domain/entities/StockHoldingEntity"
 export class InMemoryStockHoldingRepository implements StockHoldingRepositoryInterface {
 
     private positions: Array<StockHoldingEntity>;
-    private incrId: number;
 
     public constructor() {
         this.positions = [];
-        this.incrId = 0;
     }
 
-    public async findPositionById(id: number): Promise<StockHoldingEntity | PositionNotFoundError> {
+    public async findPositionById(id: string): Promise<StockHoldingEntity | PositionNotFoundError> {
         const position = this.positions.find((p) => p.id === id);
         if(!position) {
             return new PositionNotFoundError(`Position with ID ${id} not found`);
@@ -49,9 +47,6 @@ export class InMemoryStockHoldingRepository implements StockHoldingRepositoryInt
         if(existingPosition) {
            return new PositionAlreadyExistsError(`Position already exist`);
         }
-
-        this.incrId++,
-        position.id = this.incrId;
         this.positions.push(position);
 
         return position;
@@ -67,7 +62,7 @@ export class InMemoryStockHoldingRepository implements StockHoldingRepositoryInt
         return position;
     }
 
-    public async deletePosition(id: number): Promise<void | PositionNotFoundError> {
+    public async deletePosition(id: string): Promise<void | PositionNotFoundError> {
         const index = this.positions.findIndex(o => o.id === id);
         if (index === -1){
             return new PositionNotFoundError(`Position with ID ${id} not found`);

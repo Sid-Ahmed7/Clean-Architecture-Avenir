@@ -6,7 +6,7 @@ import { UserIdValue } from "../values/UserIdValue";
 
 export class StockHoldingEntity {
 
-    public static from(id: number, userId: string, stockSymbol: string, quantity: number, averagePurchasePrice: number, totalInvested: number, createdAt: Date, updatedAt: Date) {
+    public static from(id: string, userId: string, stockSymbol: string, quantity: number, averagePurchasePrice: number, totalInvested: number, createdAt: Date, updatedAt: Date) {
       
         const validatedSymbol = StockSymbolValue.from(stockSymbol);
         if(validatedSymbol instanceof Error) {
@@ -28,7 +28,7 @@ export class StockHoldingEntity {
     }
 
     private constructor (
-        public id: number,
+        public id: string,
         public userId: string,
         public stockSymbol: string,
         public quantity: number,

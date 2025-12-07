@@ -1,4 +1,4 @@
-import { MatchDetails } from "../../../../application/interfaces/MatchDetails";
+import { MatchDetails } from "../../../../application/responses/MatchDetails";
 import { OrderMatchingService } from "../../../../application/ports/services/order/OrderMatchingService";
 import { StockOrderEntity } from "../../../../domain/entities/StockOrderEntity";
 import { OrderMatchingError } from "../../../../domain/errors/OrderMatchingError";

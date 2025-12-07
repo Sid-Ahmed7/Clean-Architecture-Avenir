@@ -1,12 +1,15 @@
 import { StockHoldingEntity } from "../../../domain/entities/StockHoldingEntity";
 import { PositionNotFoundError } from "../../errors/PositionNotFoundError";
-import { UpdateBuyer } from "../../interfaces/UpdateBuyer";
+import { UpdateBuyer } from "../../requests/UpdateBuyer";
 import { StockHoldingRepositoryInterface } from "../../ports/repositories/stocks/StockHoldingRepositoryInterface";
 import { StockHoldingService } from "../../ports/services/stocks/StockHoldingService";
+import { UuidGeneratorService } from "../../ports/services/UuidGeneratorService";
 
 export class UpdateBuyerPositionUseCase {
     public constructor(
         private holdingStockRepository: StockHoldingRepositoryInterface,
+        private uuidService: UuidGeneratorService
+
     ){}
 
 public async execute({userId,stockSymbol,quantity,pricePerShare}: UpdateBuyer): Promise<StockHoldingEntity | Error> {
@@ -33,7 +36,9 @@ public async execute({userId,stockSymbol,quantity,pricePerShare}: UpdateBuyer): 
             return existingPosition;
         }
         const totalInvested = quantity * pricePerShare;
-        const newPosition = StockHoldingEntity.from(0, userId, stockSymbol,quantity,pricePerShare, totalInvested, new Date(), new Date());
+        const id = this.uuidService.generate();
+
+        const newPosition = StockHoldingEntity.from(id, userId, stockSymbol,quantity,pricePerShare, totalInvested, new Date(), new Date());
 
         if(newPosition instanceof Error) {
             return newPosition;

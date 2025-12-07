@@ -7,14 +7,12 @@ import { InvalidOrderError } from "../../../domain/errors/InvalidOrderError";
 export class InMemoryStockOrderRepository implements StockOrderRepositoryInterface {
 
     private orders: Array<StockOrderEntity>;
-    private incrId: number;
 
     public constructor() {
         this.orders = [];
-        this.incrId = 0;
     }
 
-    public async findOrderById(id: number): Promise<StockOrderEntity | OrderNotFoundError> {
+    public async findOrderById(id: string): Promise<StockOrderEntity | OrderNotFoundError> {
         const order = this.orders.find((o) => o.id === id);
         if(!order) {
             return new OrderNotFoundError(`Order with ID ${id} not found`);
@@ -54,8 +52,6 @@ export class InMemoryStockOrderRepository implements StockOrderRepositoryInterfa
             return new InvalidOrderError("Invalid order");
         }
 
-        this.incrId++,
-        order.id = this.incrId;
         this.orders.push(order);
 
         return order;
@@ -70,7 +66,7 @@ export class InMemoryStockOrderRepository implements StockOrderRepositoryInterfa
         this.orders[index] = order;
         return order;
     }
-    public async deleteOrder(id: number): Promise<void | OrderNotFoundError> {
+    public async deleteOrder(id: string): Promise<void | OrderNotFoundError> {
         const index = this.orders.findIndex(o => o.id === id);
         if (index === -1){
             return new OrderNotFoundError(`Order with ID ${id} not found`);

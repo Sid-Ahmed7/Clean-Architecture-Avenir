@@ -1,4 +1,4 @@
-import { TransferFunds } from "../../interfaces/TransferFunds";
+import { TransferFunds } from "../../requests/TransferFunds";
 import { AccountService } from "../../ports/services/AccountService";
 
 export class TransferFundsUseCase {

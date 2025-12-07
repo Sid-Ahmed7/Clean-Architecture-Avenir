@@ -24,48 +24,39 @@ import { PositionNotFoundError } from '../../../../../application/errors/Positio
 import { InMemoryStockTransactionRepository } from '../../../../adapters/repositories/InMemoryStockTransactionRepository';
 import { InMemoryStockRepository } from '../../../../adapters/repositories/InMemoryStockRepository';
 import { InMemoryStockHoldingRepository } from '../../../../adapters/repositories/InMemoryStockHoldingRepository';
+import { CryptoUuidGenerator } from '../../../../adapters/services/CryptoUuidGenerator';
+import { placeOrderSchema } from '../schemas/order/placeOrderSchema';
 
 
 export class StockOrderController {
 
     public constructor(
-        private stockOrderRepository: InMemoryStockOrderRepository,
-        private transactionRepository: InMemoryStockTransactionRepository,
-        private stockRepository: InMemoryStockRepository,
-        private holdingRepository: InMemoryStockHoldingRepository,
-        private matchingService: OrderMatchingEngineService,
-        private stockOrderService: OrderBookEngineService,
-        private orderValidationService: OrderValidationEngineService,
-        private accountService: BankAccountService,
+        private readonly stockOrderRepository: InMemoryStockOrderRepository,
+        private readonly transactionRepository: InMemoryStockTransactionRepository,
+        private readonly stockRepository: InMemoryStockRepository,
+        private readonly holdingRepository: InMemoryStockHoldingRepository,
+        private readonly matchingService: OrderMatchingEngineService,
+        private readonly stockOrderService: OrderBookEngineService,
+        private readonly orderValidationService: OrderValidationEngineService,
+        private readonly accountService: BankAccountService,
+        private readonly uuidGenerator: CryptoUuidGenerator
     ){}
 
 
     async placeOrder(req: Request, res: Response) {
+        const placeStockOrderUseCase = new PlaceStockOrderUseCase(this.stockOrderRepository, this.stockRepository, this.orderValidationService, this.uuidGenerator);
         const userId = req.user?.userId;
-        const { stockSymbol, quantity, orderPrice, orderType } = req.body;
-        const placeStockOrderUseCase = new PlaceStockOrderUseCase(this.stockOrderRepository, this.stockRepository, this.orderValidationService);
+                
         if(!userId) {
             return res.status(401).json({error: "Unauthorized access"});
         }
+
+        const parseResult = placeOrderSchema.safeParse(req.body);
+        if (!parseResult.success) {
+            return res.status(400).json({ errors: parseResult.error.message });
+        }
         
-        if (!stockSymbol || !quantity || !orderPrice || !orderType) {
-            res.status(400).json({ error: 'Missing required fields' });
-            return;
-        }
-
-        if (!Object.values(OrderTypeEnum).includes(orderType)) {
-            res.status(400).json({ error: 'Invalid order type' });
-            return;
-        }
-
-
-        const result = await placeStockOrderUseCase.execute({
-            userId,
-            stockSymbol: stockSymbol,
-            quantity: Number(quantity),
-            orderPrice: Number(orderPrice),
-            orderType: orderType as OrderTypeEnum
-        })
+        const result = await placeStockOrderUseCase.execute(userId, parseResult.data)
 
         if(result instanceof Error) {
             if(result instanceof StockNotFoundError){
@@ -95,9 +86,9 @@ export class StockOrderController {
     public async matchOrders(req: Request, res: Response) {
         const symbol = req.params.symbol;
         const findMatchableOrdersUseCase = new FindMatchableOrdersUseCase(this.stockOrderRepository, this.stockOrderService);
-        const executeOrderMatchUseCase = new ExecuteOrderMatchUseCase(this.stockOrderRepository,this.transactionRepository,this.matchingService);        
+        const executeOrderMatchUseCase = new ExecuteOrderMatchUseCase(this.stockOrderRepository,this.transactionRepository,this.matchingService, this.uuidGenerator);        
         const transferFundsUseCase = new TransferFundsUseCase(this.accountService);      
-        const updateBuyerPositionUseCase = new UpdateBuyerPositionUseCase(this.holdingRepository);
+        const updateBuyerPositionUseCase = new UpdateBuyerPositionUseCase(this.holdingRepository, this.uuidGenerator);
         const updateSellerPositionUseCase = new UpdatedSellerPositionUseCase(this.holdingRepository);
 
         if (!symbol){
