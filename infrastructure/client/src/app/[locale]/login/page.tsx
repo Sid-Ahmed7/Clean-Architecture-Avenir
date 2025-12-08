@@ -1,6 +1,7 @@
 "use client";
 
 import Button from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
 import { AuthContext } from "@/contexts/AuthProvider";
 import { apiClient } from "@/lib/api/apiClient";
 import { LoginInput, loginSchema } from "@/lib/validation/auth/loginSchema";
@@ -11,8 +12,7 @@ import { useForm } from "react-hook-form";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { LocaleContext } from "@/contexts/LocaleProvider";
-
-
+import { Mail, Lock } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -21,11 +21,9 @@ export default function LoginPage() {
   const [message, setMessage] = useState("");
   const t = useTranslations();
 
-
   const { register, handleSubmit, formState: { errors } } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema(t)),
   });
-
 
   const onSubmit = async (data: LoginInput) => {
     try {
@@ -68,61 +66,54 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-blue-50 px-4">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white p-8 sm:p-10 rounded-xl shadow-lg w-full max-w-md border border-gray-200"
+        className="bg-white p-8 sm:p-10 rounded-2xl shadow-2xl w-full max-w-md border border-gray-100"
       >
-        <h2 className="text-2xl sm:text-3xl font-semibold mb-6 text-gray-800 text-center">
+        <h2 className="text-3xl font-bold mb-8 text-gray-900 text-center">
           {t("titles.login")}
         </h2>
 
-        <div className="mb-4">
-          <label className="block mb-1 font-medium text-gray-900" htmlFor="email">
-            {t("labels.email")}
-          </label>
-          <input
+        <div className="space-y-6">
+          <Input
+            label={t("labels.email")}
             type="email"
+            icon={Mail}
+            variant="gradient"
+            placeholder="exemple@email.com"
+            error={errors.email?.message}
             {...register("email")}
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900"
           />
-          {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-          )}
-        </div>
-        <div className="mb-6">
-          <label className="block mb-1 font-medium text-gray-900" htmlFor="password">
-            {t("labels.password")}
-          </label>
-          <input
+
+          <Input
+            label={t("labels.password")}
             type="password"
+            icon={Lock}
+            variant="gradient"
+            placeholder="••••••••"
+            error={errors.password?.message}
             {...register("password")}
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900"
           />
-          {errors.password && (
-            <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
-          )}
         </div>
-
-
 
         {message && (
           <p className="mt-4 text-center text-sm text-gray-600 break-words">{message}</p>
         )}
 
-        <Button type="submit" variant="primary" fullWidth>
-          {t("labels.login")}
-        </Button>
+        <div className="mt-8">
+          <Button type="submit" variant="primary" fullWidth>
+            {t("labels.login")}
+          </Button>
+        </div>
 
         <p className="mt-6 text-center text-sm text-gray-600">
           Don't have an account?
-          <Link href="/register" className="text-blue-700 hover:underline">
+          <Link href="/register" className="text-blue-700 hover:underline ml-1 font-semibold">
             Create one
           </Link>
         </p>
       </form>
     </div>
   );
-
-
 }

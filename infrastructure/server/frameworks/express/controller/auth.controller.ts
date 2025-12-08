@@ -164,7 +164,9 @@ export class AuthController {
 
         return res.status(200).json({
           user: result.user,
+          roles: result.roles
         });
+
       }
 
       async refreshToken(req: Request, res: Response) {

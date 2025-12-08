@@ -7,9 +7,12 @@ import { useRouter } from "next/navigation";
 import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import Button from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { TextArea } from "@/components/ui/TextArea";
 import { useTranslations } from "next-intl";
 import { LocaleContext } from "@/contexts/LocaleProvider";
 import { BankManagerOnly } from "@/components/auth/RoleBasedAccess";
+import { User, Mail, Lock, Phone, Calendar, UserCheck } from "lucide-react";
 
 export default function CreateAdvisorPage() {
     const router = useRouter();
@@ -42,91 +45,107 @@ export default function CreateAdvisorPage() {
 
     return (
         <BankManagerOnly>
-            <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-                className="bg-white p-8 sm:p-10 rounded-xl shadow-lg w-full max-w-md border border-gray-200"
+            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-green-50 px-4 py-8">
+                {success ? (
+                    <div className="bg-white p-8 sm:p-10 rounded-2xl shadow-2xl w-full max-w-md border border-gray-100">
+                        <div className="bg-green-50 border-2 border-green-400 text-green-800 px-6 py-4 rounded-xl mb-6">
+                            <p className="font-semibold">{message}</p>
+                        </div>
+                        <Button
+                            onClick={() => router.push(`/${locale}/dashboard`)}
+                            variant="primary"
+                            fullWidth
+                        >
+                            Retour au tableau de bord
+                        </Button>
+                    </div>
+                ) : (
+                    <form
+                        onSubmit={handleSubmit(onSubmit)}
+                        className="bg-white p-8 sm:p-10 rounded-2xl shadow-2xl w-full max-w-md border border-gray-100"
                     >
-                <h2 className="text-2xl sm:text-3xl font-semibold mb-6 text-gray-800 text-center">
-                    Créer un conseiller bancaire
-                </h2>
+                        <div className="text-center mb-8">
+                            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full mb-4">
+                                <UserCheck className="w-8 h-8 text-white" />
+                            </div>
+                            <h2 className="text-3xl font-bold text-gray-900">
+                                Créer un conseiller bancaire
+                            </h2>
+                        </div>
 
-                <label className="block mb-1 font-medium text-gray-900" htmlFor="firstName">
-                    Prénom
-                </label>
-                <input
-                    id="firstName"
-                    {...register("firstName")}
-                    className="w-full p-3 mb-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900"
-                />
-                {errors.firstName && <p className="text-red-500 mb-2">{errors.firstName.message}</p>}
+                        <div className="space-y-5">
+                            <Input
+                                label="Prénom"
+                                icon={User}
+                                variant="gradient"
+                                placeholder="Marie"
+                                error={errors.firstName?.message}
+                                {...register("firstName")}
+                            />
 
-                <label className="block mb-1 font-medium text-gray-900" htmlFor="lastName">
-                    Nom
-                </label>
-                <input
-                    id="lastName"
-                    {...register("lastName")}
-                    className="w-full p-3 mb-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900"
-                />
-                {errors.lastName && <p className="text-red-500 mb-2">{errors.lastName.message}</p>}
+                            <Input
+                                label="Nom"
+                                icon={User}
+                                variant="gradient"
+                                placeholder="Martin"
+                                error={errors.lastName?.message}
+                                {...register("lastName")}
+                            />
 
-                <label className="block mb-1 font-medium text-gray-900" htmlFor="email">
-                    Email
-                </label>
-                <input
-                    id="email"
-                    {...register("email")}
-                    type="email"
-                    className="w-full p-3 mb-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900"
-                />
-                {errors.email && <p className="text-red-500 mb-2">{errors.email.message}</p>}
+                            <Input
+                                label="Email"
+                                type="email"
+                                icon={Mail}
+                                variant="gradient"
+                                placeholder="marie.martin@banque.fr"
+                                error={errors.email?.message}
+                                {...register("email")}
+                            />
 
-                <label className="block mb-1 font-medium text-gray-900" htmlFor="password">
-                    Mot de passe
-                </label>
-                <input
-                    id="password"
-                    {...register("password")}
-                    type="password"
-                    className="w-full p-3 mb-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900"
-                />
-                {errors.password && <p className="text-red-500 mb-2">{errors.password.message}</p>}
+                            <Input
+                                label="Mot de passe"
+                                type="password"
+                                icon={Lock}
+                                variant="gradient"
+                                placeholder="••••••••"
+                                error={errors.password?.message}
+                                {...register("password")}
+                            />
 
-                <label className="block mb-1 font-medium text-gray-900" htmlFor="phoneNumber">
-                    Numéro de téléphone
-                </label>
-                <input
-                    id="phoneNumber"
-                    {...register("phoneNumber")}
-                    type="tel"
-                    className="w-full p-3 mb-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900"
-                />
-                {errors.phoneNumber && <p className="text-red-500 mb-2">{errors.phoneNumber.message}</p>}
+                            <Input
+                                label="Numéro de téléphone"
+                                type="tel"
+                                icon={Phone}
+                                variant="gradient"
+                                placeholder="+33 6 12 34 56 78"
+                                error={errors.phoneNumber?.message}
+                                {...register("phoneNumber")}
+                            />
 
-                <label className="block mb-1 font-medium text-gray-900" htmlFor="dateOfBirth">
-                    Date de naissance
-                </label>
-                <input
-                    id="dateOfBirth"
-                    {...register("dateOfBirth")}
-                    type="date"
-                    className="w-full p-3 mb-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900"
-                />
-                {errors.dateOfBirth && <p className="text-red-500 mb-2">{errors.dateOfBirth.message}</p>}
+                            <Input
+                                label="Date de naissance"
+                                type="date"
+                                icon={Calendar}
+                                variant="gradient"
+                                error={errors.dateOfBirth?.message}
+                                {...register("dateOfBirth")}
+                            />
 
-                <label className="block mb-1 font-medium text-gray-900" htmlFor="address">
-                    Adresse
-                </label>
-                <textarea
-                    id="address"
-                    {...register("address")}
-                    rows={3}
-                    className="w-full p-3 mb-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900"
-                />
-                {errors.address && <p className="text-red-500 mb-2">{errors.address.message}</p>}
+                            <TextArea
+                                label="Adresse"
+                                rows={3}
+                                variant="gradient"
+                                placeholder="123 Rue de la Banque, 75001 Paris"
+                                error={errors.address?.message}
+                                {...register("address")}
+                            />
+                        </div>
 
-                <Button type="submit" variant="primary" fullWidth>
-                    Créer le conseiller
-                </Button>
+                        <div className="mt-8">
+                            <Button type="submit" variant="primary" fullWidth>
+                                Créer le conseiller
+                            </Button>
+                        </div>
 
                 {message && !success && <p className="mt-4 text-center text-sm text-red-600 break-words">{message}</p>}
             </form>

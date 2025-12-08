@@ -15,18 +15,19 @@ export default function AppLayout({ children }: AppLayoutProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const pathname = usePathname();
-  const {locale} = useContext(LocaleContext);
+  const { locale } = useContext(LocaleContext);
 
   useAuthRedirect();
 
-  const hideLayout = pathname === `/${locale}/login` || pathname === `/${locale}/register`;
+  const hideLayout = pathname === `/${locale}/login` || pathname === `/${locale}/register` || pathname === `/${locale}/create-admin`;
 
- 
+
+
 
   const handleMenuClick = () => setIsSidebarOpen(true);
   const handleSidebarClose = () => setIsSidebarOpen(false);
 
-  if(hideLayout) {
+  if (hideLayout) {
     return <>{children}</>
   }
   return (
@@ -39,7 +40,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
           onMenuClick={handleMenuClick}
 
         />
-        <main className="flex-1 overflow-auto p-6">{children}</main>
+        <main className="flex-1 overflow-auto">{children}</main>
       </div>
     </div>
   );

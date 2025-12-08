@@ -1,39 +1,51 @@
 import { useTranslations } from "next-intl"
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AccountModel, accountSchema } from "../lib/validation/bankAccount/accountSchema";
 import { apiClient } from "../lib/api/apiClient";
 import z from "zod";
 import { getAccounts } from "../lib/api/account";
+import { AuthContext } from "../contexts/AuthProvider";
+import { RoleEnum } from "../types/RoleEnum";
 
 export const useUserAccounts = () => {
     const t = useTranslations();
+    const { hasAnyRole, isAuthenticated } = useContext(AuthContext);
     const [accounts, setAccounts] = useState<AccountModel[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    const loadAccounts = () => {
+
+    useEffect(() => {
+        // Wait for authentication to be determined
+        if (isAuthenticated === undefined) {
+            return;
+        }
+
+        // Skip loading accounts for admins (they don't have bank accounts)
+        if (hasAnyRole([RoleEnum.ADMIN])) {
+            setLoading(false);
+            setAccounts([]);
+            return;
+        }
+
         setLoading(true);
 
         getAccounts().then((res) => {
             const parsed = z.array(accountSchema(t)).safeParse(res.data);
 
-                if (!parsed.success) {
-                    setError("Erreur compte");
-                    return;
-                }
+            if(!parsed.success) {
+                setError("Erreur compte");
+                return;
+            }
 
-                setAccounts(parsed.data);
-                setError(null);
-            })
-            .catch((err) => {
-                setError(err?.response?.data?.message || t("errors.accountLoad"));
-            })
-            .finally(() => setLoading(false));
-    };
 
-    useEffect(() => {
-        loadAccounts();
-    }, [t]);
+            setAccounts(parsed.data);
+        })
+        .catch((err) => {
+            setError(err.response?.data?.message || t("errors.accountLoad"));
+        }) 
+        .finally(() => setLoading(false));
+    }, [t, hasAnyRole, isAuthenticated]);
 
     return { accounts, loading, error, reload: loadAccounts };
 }
