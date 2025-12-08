@@ -15,7 +15,7 @@ export default function ClientDashboard() {
     const subAccounts = accounts.filter((a) => a.parentAccountId === mainAccount?.accountNumber);
 
     return (
-        <div className="min-h-screen bg-white p-6 max-w-7xl mx-auto space-y-8">
+        <div className="min-h-screen bg-white p-6 space-y-8">
             {loading && (
                 <div className="flex justify-center items-center h-40">
                     <p className="text-gray-500 animate-pulse">Chargement...</p>

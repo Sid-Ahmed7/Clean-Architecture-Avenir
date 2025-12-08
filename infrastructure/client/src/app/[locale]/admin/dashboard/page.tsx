@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/Button";
 
 export default function AdminDashboard() {
     return (
-        <div className="min-h-screen bg-white p-6 max-w-7xl mx-auto space-y-8">
+        <div className="min-h-screen bg-white p-6 mx-auto space-y-8">
             {/* Welcome message */}
             <div className="mb-6">
                 <h1 className="text-2xl font-bold text-gray-900">Tableau de bord administrateur</h1>
