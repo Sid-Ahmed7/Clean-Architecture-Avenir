@@ -26,18 +26,36 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema(t)),
   });
 
-  const onSubmit = (data: LoginInput) => {
-    apiClient.post("/auth/login", data).then((res) => {
+
+  const onSubmit = async (data: LoginInput) => {
+    try {
+      const res = await apiClient.post("/auth/login", data);
       if (res.status === 200) {
         setIsAuthenticated(true);
         setMessage(t("messages.login.success"));
-        router.push(`/${locale}/dashboard`);
+
+        // Fetch user profile to get role
+        const profileRes = await apiClient.get("/auth/profile");
+        const userRole = profileRes.data.user.role;
+
+        // Map role to URL prefix
+        const rolePrefixMap: Record<string, string> = {
+          'CLIENT': 'client',
+          'BANK_ADVISOR': 'advisor',
+          'BANK_MANAGER': 'manager',
+          'ADMIN': 'admin'
+        };
+
+        const rolePrefix = rolePrefixMap[userRole] || 'client';
+
+        // Redirect to role-specific dashboard
+        router.push(`/${locale}/${rolePrefix}/dashboard`);
       } else if (res.status === 401) {
         setMessage(t("messages.login.invalid"));
       } else {
         setMessage(t("messages.login.failure"));
       }
-    }).catch((error) => {
+    } catch (error: any) {
       console.error("Login error:", error);
       if (error.response?.status === 401) {
         setMessage("Email ou mot de passe incorrect");
@@ -46,7 +64,7 @@ export default function LoginPage() {
       } else {
         setMessage(error.response?.data?.error || "Erreur de connexion");
       }
-    })
+    }
   }
 
   return (

@@ -6,6 +6,7 @@ import { CreditCard, ArrowUpRight, TrendingUp, Calendar, Settings, HelpCircle, X
 import { useContext } from "react";
 import { Link } from "@/i18n/navigation";
 import { usePathname } from "next/navigation";
+import { getRolePrefix } from "@/lib/utils/getRolePrefix";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -13,17 +14,20 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
-  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated, setIsAuthenticated, user } = useContext(AuthContext);
   const pathname = usePathname();
 
+  // Get role-based URL prefix
+  const rolePrefix = getRolePrefix(user?.role);
+
   const menuItems = [
-    { icon: CreditCard, label: "Comptes", href: "/accounts" },
-    { icon: ArrowUpRight, label: "Virements", href: "/transfers" },
-    { icon: TrendingUp, label: "Investissements", href: "/investments" },
-    { icon: Calendar, label: "Historique", href: "/history" },
-    { icon: MessageCircle, label: "Message", href: "/conversations" },
-    { icon: Settings, label: "Paramètres", href: "/settings" },
-    { icon: HelpCircle, label: "Aide", href: "/help" },
+    { icon: CreditCard, label: "Comptes", href: `/${rolePrefix}/accounts` },
+    { icon: ArrowUpRight, label: "Virements", href: `/${rolePrefix}/transfers` },
+    { icon: TrendingUp, label: "Investissements", href: `/${rolePrefix}/investments` },
+    { icon: Calendar, label: "Historique", href: `/${rolePrefix}/history` },
+    { icon: MessageCircle, label: "Message", href: `/${rolePrefix}/conversations` },
+    { icon: Settings, label: "Paramètres", href: `/${rolePrefix}/settings` },
+    { icon: HelpCircle, label: "Aide", href: `/${rolePrefix}/help` },
   ];
 
   const handleLogout = () => {
@@ -77,8 +81,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 href={item.href}
                 onClick={onClose}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${active
-                    ? "bg-blue-50 text-blue-600"
-                    : "text-gray-700 hover:bg-gray-50"
+                  ? "bg-blue-50 text-blue-600"
+                  : "text-gray-700 hover:bg-gray-50"
                   }`}
               >
                 <ItemIcon className="w-5 h-5" />
