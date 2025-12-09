@@ -19,6 +19,11 @@ export interface SavingsAccountRepositoryInterface {
     getSavingsAccountsWithActiveInterest(): Promise<Array<SavingsAccountsEntity>>;
     
     /**
+     * Get all savings accounts for a specific user
+     */
+    getSavingsAccountsByUserId(userId: string): Promise<SavingsAccountsEntity[] | Error>;
+    
+    /**
      * Update a savings account
      */
     updateSavingsAccount(savingsAccount: SavingsAccountsEntity): Promise<SavingsAccountsEntity | AccountNotFoundError | InvalidAccountError>;

@@ -19,13 +19,6 @@ export const useUserAccounts = () => {
             return;
         }
 
-        // Skip loading accounts for admins (they don't have bank accounts)
-        if (hasAnyRole([RoleEnum.ADMIN])) {
-            setLoading(false);
-            setAccounts([]);
-            return;
-        }
-
         setLoading(true);
 
         getAccounts()

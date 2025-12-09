@@ -40,6 +40,11 @@ export class InMemorySavingsAccountRepository implements SavingsAccountRepositor
         return this.savingsAccounts.filter(acc => acc.isActive);
     }
 
+    public async getSavingsAccountsByUserId(userId: string): Promise<SavingsAccountsEntity[] | Error> {
+        const userSavingsAccounts = this.savingsAccounts.filter(acc => acc.userId === userId);
+        return userSavingsAccounts;
+    }
+
     public async updateSavingsAccount(savingsAccount: SavingsAccountsEntity): Promise<SavingsAccountsEntity | AccountNotFoundError | InvalidAccountError> {
         const index = this.savingsAccounts.findIndex(acc => acc.accountNumber === savingsAccount.accountNumber);
         

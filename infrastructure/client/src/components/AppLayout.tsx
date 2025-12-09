@@ -19,7 +19,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
 
   useAuthRedirect();
 
-  const hideLayout = pathname === `/${locale}/login` || pathname === `/${locale}/register` || pathname === `/${locale}/create-admin`;
+  const hideLayout = pathname === `/${locale}/login` || pathname === `/${locale}/register` || pathname === `/${locale}/create-manager` || pathname === `/${locale}/confirm`;
 
 
 

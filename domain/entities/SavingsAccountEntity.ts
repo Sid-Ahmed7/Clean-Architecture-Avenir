@@ -5,11 +5,15 @@ import { MaxDepositAmountValue } from "../values/MaxDepositAmountValue";
 export class SavingsAccountsEntity {
 
     public static from(
-        accountNumber: number, 
+        accountNumber: number,
+        productId: string,
+        userId: string,
         interestRate: number, 
         maxDepositAmount?: number | null,
         totalInterestEarned: number = 0,
         isActive: boolean = true,
+        balance: number = 0,
+        lastBalanceUpdate?: Date,
         lastInterestApplied?: Date, 
         maturity?: Date
     ) {
@@ -30,11 +34,15 @@ export class SavingsAccountsEntity {
         }
 
         return new SavingsAccountsEntity(
-            validatedAccountNumber.value, 
+            validatedAccountNumber.value,
+            productId,
+            userId,
             validatedRate.value, 
             validatedMaxDeposit.value,
             totalInterestEarned,
             isActive,
+            balance,
+            lastBalanceUpdate || new Date(),
             lastInterestApplied, 
             maturity
         );
@@ -42,10 +50,14 @@ export class SavingsAccountsEntity {
 
     private constructor(
         public accountNumber: number,
+        public productId: string,
+        public userId: string,
         public interestRate: number,
         public maxDepositAmount: number | null,
         public totalInterestEarned: number,
         public isActive: boolean,
+        public balance: number,
+        public lastBalanceUpdate: Date,
         public lastInterestApplied?: Date,
         public maturity?: Date
     ) {}

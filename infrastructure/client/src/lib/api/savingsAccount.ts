@@ -2,6 +2,11 @@ import { apiClient } from "./apiClient";
 import { CreateSavingsAccountInput } from "../validation/savingsAccount/createSavingsAccountSchema";
 import { UpdateSavingsAccountInput } from "../validation/savingsAccount/updateSavingsAccountSchema";
 
+export const getAllSavingsAccounts = async () => {
+    const { data } = await apiClient.get("/savings-accounts");
+    return data;
+};
+
 export const createSavingsAccount = async (data: CreateSavingsAccountInput) => {
     const response = await apiClient.post("/savings-accounts", data);
     return response.data;
@@ -34,5 +39,15 @@ export const getInterestSummary = async (accountNumber: number) => {
 
 export const triggerInterestCalculation = async () => {
     const response = await apiClient.post("/savings-accounts/calculate-interest");
+    return response.data;
+};
+
+export const depositToSavingsAccount = async (accountNumber: number, amount: number) => {
+    const response = await apiClient.post(`/savings-accounts/${accountNumber}/deposit`, { amount });
+    return response.data;
+};
+
+export const withdrawFromSavingsAccount = async (accountNumber: number, amount: number) => {
+    const response = await apiClient.post(`/savings-accounts/${accountNumber}/withdraw`, { amount });
     return response.data;
 };

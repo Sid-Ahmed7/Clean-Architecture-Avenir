@@ -3,7 +3,7 @@
 import Button from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { AuthContext } from "@/contexts/AuthProvider";
-import { apiClient } from "@/lib/api/apiClient";
+import { login } from "@/lib/api/auth";
 import { LoginInput, loginSchema } from "@/lib/validation/auth/loginSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -13,11 +13,12 @@ import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { LocaleContext } from "@/contexts/LocaleProvider";
 import { Mail, Lock } from "lucide-react";
+import { decodeJwt } from "@/lib/utils/decodeJwt";
 
 export default function LoginPage() {
   const router = useRouter();
   const { locale } = useContext(LocaleContext);
-  const { setIsAuthenticated } = useContext(AuthContext);
+  const { setIsAuthenticated, setUser } = useContext(AuthContext);
   const [message, setMessage] = useState("");
   const t = useTranslations();
 
@@ -27,24 +28,26 @@ export default function LoginPage() {
 
   const onSubmit = async (data: LoginInput) => {
     try {
-      const res = await apiClient.post("/auth/login", data);
+      const res = await login(data);
+
       if (res.status === 200) {
+        const decodedToken = decodeJwt(res.data.token);
+        const userRole = decodedToken?.role;
+
+        // Set authentication state AND user data immediately
         setIsAuthenticated(true);
-        setMessage(t("messages.login.success"));
+        setUser({
+          userId: decodedToken?.userId || '',
+          role: userRole || 'CLIENT'
+        });
 
-        // Fetch user profile to get role
-        const profileRes = await apiClient.get("/auth/profile");
-        const userRole = profileRes.data.user.role;
-
-        // Map role to URL prefix
         const rolePrefixMap: Record<string, string> = {
           'CLIENT': 'client',
           'BANK_ADVISOR': 'advisor',
-          'BANK_MANAGER': 'manager',
-          'ADMIN': 'admin'
+          'BANK_MANAGER': 'manager'
         };
 
-        const rolePrefix = rolePrefixMap[userRole] || 'client';
+        const rolePrefix = rolePrefixMap[userRole || 'CLIENT'] || 'client';
 
         // Redirect to role-specific dashboard
         router.push(`/${locale}/${rolePrefix}/dashboard`);

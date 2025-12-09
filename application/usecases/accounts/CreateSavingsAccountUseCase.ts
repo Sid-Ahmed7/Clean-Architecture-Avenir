@@ -12,6 +12,8 @@ export class CreateSavingsAccountUseCase {
         // Create the savings account entity
         const savingsAccount = SavingsAccountsEntity.from(
             dto.accountNumber,
+            dto.productId,
+            dto.userId,
             dto.interestRate,
             dto.maxDepositAmount,
             0, // totalInterestEarned starts at 0

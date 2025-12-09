@@ -9,8 +9,7 @@ export function getRolePrefix(role: string | undefined): string {
   const rolePrefixMap: Record<string, string> = {
     [RoleEnum.CLIENT]: 'client',
     [RoleEnum.BANK_ADVISOR]: 'advisor',
-    [RoleEnum.BANK_MANAGER]: 'manager',
-    [RoleEnum.ADMIN]: 'admin'
+    [RoleEnum.BANK_MANAGER]: 'manager'
   };
   
   return rolePrefixMap[role || RoleEnum.CLIENT] || 'client';
