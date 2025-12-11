@@ -63,22 +63,29 @@ const symbols = SYMBOLS.join(',');
         }
 
         const data = await response.json();
+        console.log('📥 Raw Twelve Data response:', JSON.stringify(data, null, 2));
         const stocks: Stock[] = [];
 
         for(const symbol of SYMBOLS) {
             const quoteData: TwelveDataQuoteResponse = data[symbol];
+            console.log(`🔍 Processing ${symbol}:`, quoteData ? 'DATA FOUND' : 'NO DATA');
 
             if(quoteData) {
             try {
+                console.log(`📊 Raw quote data for ${symbol}:`, JSON.stringify(quoteData, null, 2));
                 const stock = transformQuoteToStock(quoteData);
+                console.log(`✅ Transformed stock for ${symbol}:`, stock);
                 stocks.push(stock);
             } catch(err) {
-                console.warn(`⚠️ Failed to transform stock ${symbol}:`, err);
+                console.error(`❌ Failed to transform stock ${symbol}:`, err);
+                console.error('Raw data that failed:', JSON.stringify(quoteData, null, 2));
             }
             } else {
-                console.warn(`⚠️ No data for ${symbol}`);
+                console.warn(`⚠️ No data for ${symbol} in response`);
             }
         }
+
+        console.log(`📦 Total stocks transformed: ${stocks.length}/${SYMBOLS.length}`);
 
         cachedStocks = stocks;
         cacheTime = now;

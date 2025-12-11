@@ -67,7 +67,7 @@ export class TransferBetweenAccountsUseCase {
             amount,
             TransactionTypeEnum.TRANSFER,
             userId,
-            OrderStatusEnum.COMPLETED,
+            OrderStatusEnum.PENDING,
             new Date()
         );
 

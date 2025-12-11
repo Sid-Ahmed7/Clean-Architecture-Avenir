@@ -2,13 +2,13 @@ import z from "zod";
 
 export const stockPositionSchema = (t:(key:string) => string) =>
  z.object({
-  id: z.number(),
+  id: z.string(),
   userId: z.string(),
   stockSymbol: z.string(),
   quantity: z.number(),
-  averagePrice: z.number(),
+  averagePurchasePrice: z.number(),
   totalInvested: z.number(),
   createdAt: z.string(),
   updatedAt: z.string(),
 });
-export type StockPosition = z.infer<typeof stockPositionSchema>;
+export type StockPosition = z.infer<ReturnType<typeof stockPositionSchema>>;

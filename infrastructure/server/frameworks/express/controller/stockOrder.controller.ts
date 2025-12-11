@@ -7,6 +7,7 @@ import {BankAccountService} from "../../../../adapters/services/BankAccountServi
 import {ExecuteOrderMatchUseCase} from "../../../../../application/usecases/orders/ExecuteOrderMatchUseCase";
 import {FindMatchableOrdersUseCase} from "../../../../../application/usecases/orders/FindMatchableOrdersUseCase";
 import {GetUserOrdersUseCase} from "../../../../../application/usecases/orders/GetUserOrdersUseCase";
+import {CancelOrderUseCase} from "../../../../../application/usecases/orders/CancelOrderUseCase";
 import {PlaceStockOrderUseCase} from "../../../../../application/usecases/orders/PlaceStockOrderUseCase";
 import {TransferFundsUseCase} from "../../../../../application/usecases/orders/TransferFundsUseCase";
 import {UpdateBuyerPositionUseCase} from "../../../../../application/usecases/position/UpdateBuyerPositionUseCase";
@@ -44,7 +45,7 @@ export class StockOrderController {
 
 
     async placeOrder(req: Request, res: Response) {
-        const placeStockOrderUseCase = new PlaceStockOrderUseCase(this.stockOrderRepository, this.stockRepository, this.orderValidationService, this.uuidGenerator);
+        const placeStockOrderUseCase = new PlaceStockOrderUseCase(this.stockOrderRepository, this.stockRepository, this.orderValidationService, this.uuidGenerator, this.accountService, this.holdingRepository);
         const userId = req.user?.userId;
                 
         if(!userId) {
@@ -60,7 +61,7 @@ export class StockOrderController {
 
         if(result instanceof Error) {
             if(result instanceof StockNotFoundError){
-                res.status(400).json({ error: result.message });
+                return res.status(400).json({ error: result.message });
             }
             return res.status(500).json({error: result.message});
         }
@@ -162,18 +163,41 @@ export class StockOrderController {
                 quantity: transaction.quantity,
             });
             if (updateSeller instanceof Error) {
-                if(updateSeller instanceof PositionAlreadyExistsError) {
+                if (updateSeller instanceof PositionAlreadyExistsError) {
                     return res.status(404).json({error: updateSeller.message});
                 }
-                if(updateBuyer instanceof InvalidQuantityError) {
+                if(updateSeller instanceof InvalidQuantityError) {
                     return res.status(400).json({error: updateSeller.message});
                 }
                 return res.status(500).json({ error: updateSeller.message });
             }
-            
+
+            updateSeller.unblockShares(transaction.quantity);
+            await this.holdingRepository.updatePosition(updateSeller);
+
             executedTransactions.push(transaction);
         }
 
          res.status(200).json({message: `Matched ${executedTransactions.length} orders`,transactions: executedTransactions});
+    }
+
+    async cancelOrder(req: Request, res: Response) {
+        const { orderId } = req.params;
+        const userId = req.user?.userId;
+        const cancelOrderUseCase = new CancelOrderUseCase(this.stockOrderRepository, this.accountService, this.holdingRepository);
+        if(!userId) {
+            return res.status(401).json({error: "Unauthorized access"});
+        }
+        if(!orderId) {
+            return res.status(400).json({error: "Order ID is required"});
+        }
+        const result = await cancelOrderUseCase.execute(orderId, userId);
+        if(result instanceof Error) {
+            if(result instanceof OrderNotFoundError) {
+                return res.status(404).json({error: result.message});
+            }
+            return res.status(500).json({error: result.message});
+        }
+        return res.status(200).json({message: "Order cancelled successfully"});
     }
 }

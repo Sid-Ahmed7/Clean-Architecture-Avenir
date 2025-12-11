@@ -65,6 +65,7 @@ export class InMemoryStockTransactionRepository implements StockTransactionRepos
     }
 
     public async createTransaction(transaction: StockTransactionEntity): Promise<StockTransactionEntity> {
+        this.transactions.push(transaction);
         return transaction;
     }
 }

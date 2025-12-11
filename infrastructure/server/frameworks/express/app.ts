@@ -9,7 +9,7 @@ config();
 const app = express();
 const corsOptions = {
     origin: "http://localhost:3001",
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "x-admin-password"],
     credentials: true
 };

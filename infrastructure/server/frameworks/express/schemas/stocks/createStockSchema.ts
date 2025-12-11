@@ -8,7 +8,7 @@ export const createStockSchema = z.object({
   rateOfChange: z.number(),
   currency: z.string(),
   isActionAvailable: z.boolean(),
-  previousPrice: z.number(),
+  previousPrice: z.number().nullable().optional(),
 });
 
 

@@ -1,5 +1,5 @@
 import { InsufficientFundsError } from "../../../../domain/errors/InsufficientFundsError";
-import { InsufficientSharesError } from "../../../../domain/errors/InsufficientSharesError ";
+import { InsufficientSharesError } from "../../../../domain/errors/InsufficientSharesError";
 import { OrderValidation } from "../../../requests/OrderValidation";
 
 export interface OrderValidationService {

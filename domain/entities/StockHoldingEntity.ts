@@ -1,12 +1,13 @@
 import { InvalidPriceError } from "../errors/InvalidPriceError";
 import { InvalidQuantityError } from "../errors/InvalidQuantityError";
+import { BlockedQuantityValue } from "../values/BlockedQuantityValue";
 import { QuantityValue } from "../values/QuantityValue";
 import { StockSymbolValue } from "../values/StockSymbolValue";
 import { UserIdValue } from "../values/UserIdValue";
 
 export class StockHoldingEntity {
 
-    public static from(id: string, userId: string, stockSymbol: string, quantity: number, averagePurchasePrice: number, totalInvested: number, createdAt: Date, updatedAt: Date) {
+    public static from(id: string, userId: string, stockSymbol: string, quantity: number, averagePurchasePrice: number, totalInvested: number, createdAt: Date, updatedAt: Date, blockQuantity?: number)  {
       
         const validatedSymbol = StockSymbolValue.from(stockSymbol);
         if(validatedSymbol instanceof Error) {
@@ -22,8 +23,12 @@ export class StockHoldingEntity {
         if(validatedQuantity instanceof Error) {
             return validatedQuantity;
         }
+        const validatedBlockQuantity = BlockedQuantityValue.from(blockQuantity ?? 0);
+        if(validatedBlockQuantity instanceof Error) {
+            return validatedBlockQuantity;
+        }
 
-        return new StockHoldingEntity(id, validatedUserId.value, validatedSymbol.value, validatedQuantity.value, averagePurchasePrice, totalInvested, createdAt, updatedAt);
+        return new StockHoldingEntity(id, validatedUserId.value, validatedSymbol.value, validatedQuantity.value, averagePurchasePrice, totalInvested, createdAt, updatedAt, validatedBlockQuantity.value);
         
     }
 
@@ -36,6 +41,7 @@ export class StockHoldingEntity {
         public totalInvested: number,
         public createdAt: Date,
         public updatedAt: Date,
+        public blockQuantity?: number
     ){}
 
     public addShares(quantity: number, pricePerShare: number) : InvalidQuantityError | InvalidPriceError |void {
@@ -98,6 +104,26 @@ export class StockHoldingEntity {
     public hasEnoughShares(quantity: number): boolean {
         return this.quantity >= quantity;
     }
+    public blockShares(quantity: number): void {
+    if (!this.blockQuantity) {
+        this.blockQuantity = 0;
+    }
+    this.blockQuantity += quantity;
+    this.updatedAt = new Date();
+}
+    public unblockShares(quantity: number): void {
+    if (!this.blockQuantity) {
+        this.blockQuantity = 0;
+    }
+    this.blockQuantity -= quantity;
+    this.updatedAt = new Date();
+}
+public getAvailableQuantity(): number {
+    if(!this.blockQuantity) {
+        return this.quantity;
+    }
+    return this.quantity - this.blockQuantity;
+}
 
     public belongsToUser(userId: string): boolean {
         return this.userId === userId;

@@ -9,18 +9,22 @@ import { PlaceOrder, placeOrderSchema } from "@/lib/validation/order/placeOrderS
 import { matchOrdersSchema } from "@/lib/validation/order/matchOrdersSchema";
 
 export const ORDER_KEY = "orders";
+export const USER_ORDERS_KEY = "userOrders";
 
 export const useOrderBook = () => {
     const t = useTranslations();
-    
+
   return useQuery({
-    queryKey: [ORDER_KEY, "orderBook"],
+    queryKey: [ORDER_KEY],
     queryFn: async () => {
       const data = await orderApi.getUserOrders();
       const parsed = z.array(stockOrderSchema(t)).safeParse(data);
       if (!parsed.success) {
+        console.error("Orders data validation failed:", parsed.error);
         return [];
-      }    },
+      }
+      return parsed.data;
+    },
     enabled: true,
     staleTime: 10 * 1000,
   });
@@ -50,16 +54,31 @@ export const useMatchOrders = () => {
 
   return useMutation({
     mutationFn: async (symbol: string) => {
-        const parsed = matchOrdersSchema(t).safeParse(symbol);
+        const parsed = matchOrdersSchema(t).safeParse({ symbol });
         if (!parsed.success) {
           throw new Error("Invalid symbol payload");
         }
-      return orderApi.matchOrders(symbol);
+      return orderApi.matchOrders(parsed.data.symbol);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [ORDER_KEY] });
       queryClient.invalidateQueries({ queryKey: ["positions"] });
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
     }
+  });
+
+};
+export const useCancelOrder = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (orderId: string) => orderApi.cancelOrder(orderId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [ORDER_KEY] });
+      queryClient.invalidateQueries({ queryKey: [USER_ORDERS_KEY] });
+    },
+    onError: (error) => {
+      console.error('[useCancelOrder] Error:', error);
+    },
   });
 };

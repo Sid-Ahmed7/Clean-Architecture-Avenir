@@ -38,7 +38,6 @@ export function OrderFormFields({form,currentPrice }: OrderFormFieldsProps) {
         )}
       </div>
 
-      {/* Prix */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Prix par action (€)

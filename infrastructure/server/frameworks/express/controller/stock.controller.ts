@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import {InMemoryStockRepository} from "../../../../adapters/repositories/InMemoryStockRepository";
+import { StockEntity } from "../../../../../domain/entities/StockEntity";
 import { ChangeStockAvailabilityUseCase } from "../../../../../application/usecases/stocks/ChangeStockAvailabilityUseCase";
 import { GetStockByIdUseCase } from "../../../../../application/usecases/stocks/GetStockByIdUseCase";
 import { GetStockBySymbolUseCase } from "../../../../../application/usecases/stocks/GetStockBySymbolUseCase";
@@ -16,6 +17,7 @@ import { InMemoryStockOrderRepository } from "../../../../adapters/repositories/
 import { CryptoUuidGenerator } from "../../../../adapters/services/CryptoUuidGenerator";
 import { createStockSchema } from "../schemas/stocks/createStockSchema";
 import { changeStockSchema } from "../schemas/stocks/changeStockSchema";
+import { updateStockSchema } from "../schemas/stocks/updateStockSchema";
 export class StockController {
 
     
@@ -32,7 +34,10 @@ export class StockController {
         if (!parseResult.success) {
             return res.status(400).json({ errors: parseResult.error.message });
         }
-        const result = await createStockUseCase.execute(parseResult.data);
+        const result = await createStockUseCase.execute({
+            ...parseResult.data,
+            previousPrice: typeof parseResult.data.previousPrice === "number" ? parseResult.data.previousPrice : 0
+        });
         
         if(result instanceof Error) {
             if(result instanceof StockAlreadyExistsError) {
@@ -46,19 +51,55 @@ export class StockController {
     }
 
     async updateStock(req: Request, res: Response) {
-        const updateStockUseCase = new UpdateStockUseCase(this.stockRepository); 
+        const parseResult = updateStockSchema.safeParse(req.body);
+        if (!parseResult.success) {
+            return res.status(400).json({ errors: parseResult.error.message });
+        }
 
-        const result = await updateStockUseCase.execute(req.body);
-        
+        const { id, companyName, name, currency, isActionAvailable } = parseResult.data;
+
+        const existingStock = await this.stockRepository.findStockById(id);
+        if (existingStock instanceof StockNotFoundError) {
+            return res.status(404).json({ error: existingStock.message });
+        }
+        if (existingStock instanceof Error) {
+            return res.status(500).json({ error: existingStock.message });
+        }
+
+        const currentPrice = existingStock.currentPrice;
+        const previousPrice = existingStock.previousPrice ?? existingStock.currentPrice;
+        const rateOfChange = existingStock.rateOfChange ?? 0;
+
+        const stockEntityOrError = StockEntity.from(
+            existingStock.id,
+            existingStock.symbol,
+            companyName,
+            name,
+            currentPrice,
+            rateOfChange,
+            currency,
+            existingStock.createdAt,
+            isActionAvailable,
+            new Date(),
+            previousPrice
+        );
+
+        if (stockEntityOrError instanceof Error) {
+            return res.status(400).json({ error: stockEntityOrError.message });
+        }
+
+        const updateStockUseCase = new UpdateStockUseCase(this.stockRepository);
+        const result = await updateStockUseCase.execute(stockEntityOrError);
+
         if(result instanceof Error) {
             if(result instanceof StockNotFoundError) {
-                return res.status(409).json({error: result.message});
+                return res.status(404).json({error: result.message});
             }
 
             return res.status(500).json({error: result.message});
         }
 
-    return res.status(200).json(result);
+        return res.status(200).json(result);
     }
 
     async getStockById(req: Request, res: Response) {

@@ -1,5 +1,6 @@
 import { AccountNumberValue } from "../values/AccountNumberValue";
 import { UserIdValue } from "../values/UserIdValue";
+import { BlockedBalanceValue } from "../values/BlockedBalanceValue";
 
 import { AccountTypeEnum } from "../enums/AccountTypeEnum";
 import { AccountStatusEnum } from "../enums/AccountStatusEnum";
@@ -12,7 +13,7 @@ import { InvalidAccountStatusError } from "../errors/InvalidAccountStatusError";
 import { InvalidCreditError } from "../errors/InvalidCreditError";
 
 export class AccountEntity {
-  public static from(accountNumber: number, iban: string, userId: string, accountType: AccountTypeEnum, currency: string, accountStatus: AccountStatusEnum, isActive: boolean, currentBalance: number = 20, createdAt: Date, withdrawalLimit: number = 3000 , transferLimit: number = 3000, overdraftLimit: number = 1000, customAccountName: string, totalTransfered: number = 0, lastTransferResetDate: Date = new Date(), parentAccountId?: number, closedAt?: Date) 
+  public static from(accountNumber: number, iban: string, userId: string, accountType: AccountTypeEnum, currency: string, accountStatus: AccountStatusEnum, isActive: boolean, currentBalance: number = 20, createdAt: Date, withdrawalLimit: number = 3000 , transferLimit: number = 3000, overdraftLimit: number = 1000, customAccountName: string, totalTransfered: number = 0, lastTransferResetDate: Date = new Date(), parentAccountId?: number, closedAt?: Date, blockedBalanced?: number) 
    {
     
     const validatedAccountNumber = AccountNumberValue.from(accountNumber);
@@ -33,6 +34,9 @@ export class AccountEntity {
     const validatedBalance = BalanceValue.from(currentBalance);
     if (validatedBalance instanceof Error) return validatedBalance;
 
+    const validatedBlockedBalance = BlockedBalanceValue.from(blockedBalanced ?? 0);
+    if (validatedBlockedBalance instanceof Error) return validatedBlockedBalance;
+
     return new AccountEntity(
       validatedAccountNumber.value,
       validatedIBAN.value,
@@ -51,6 +55,7 @@ export class AccountEntity {
       lastTransferResetDate,
       parentAccountId,
       closedAt,
+      validatedBlockedBalance.value
     );
   }
 
@@ -72,6 +77,7 @@ export class AccountEntity {
     public lastTransferResetDate: Date,
     public readonly parentAccountId?: number,
     public closedAt?: Date,
+    public blockedBalanced?: number,
 
   ) {}
 
@@ -113,9 +119,41 @@ export class AccountEntity {
     this.overdraftLimit = limit;
   }
  public getAvailableBalance(overdraftLimit: number = 0): number {
-    return this.currentBalance + overdraftLimit;
+return this.currentBalance - ((this.blockedBalanced ?? 0) + overdraftLimit);
   }
 
+public blockFunds(amount: number): void | InsufficientFundsError {
+    if (amount <= 0) {
+        return new InsufficientFundsError("Block amount must be positive");
+    }
+    if (!this.isActive || this.accountStatus !== AccountStatusEnum.ACTIVE) {
+        return new InsufficientFundsError("Account not active");
+    }
+    if (this.currentBalance - (this.blockedBalanced ?? 0) < amount) {
+        return new InsufficientFundsError(`Insufficient funds to block. Available: ${this.currentBalance - (this.blockedBalanced ?? 0)}, required: ${amount}`);
+    }
+    if (!this.blockedBalanced) {
+        this.blockedBalanced = 0;
+    }
+    this.blockedBalanced += amount;
+}
+
+  public unblockFunds(amount: number): void | InsufficientFundsError {
+    if (amount <= 0) {
+        return new InsufficientFundsError("Unblock amount must be positive");
+    }
+    if (!this.blockedBalanced) {
+        this.blockedBalanced = 0;
+    }
+    if (this.blockedBalanced < amount) {
+        return new InsufficientFundsError(`Insufficient blocked funds to unblock. Blocked: ${this.blockedBalanced}, requested: ${amount}`);
+    }
+    this.blockedBalanced -= amount;
+}
+
+public getBlockedBalance(): number {
+    return this.blockedBalanced ?? 0;
+}
   public hasEnoughFunds(amount: number, overdraftLimit: number = 0): boolean {
     return this.getAvailableBalance(overdraftLimit) >= amount;
   }

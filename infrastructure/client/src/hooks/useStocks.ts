@@ -8,6 +8,7 @@ import { CreateStock } from "@/types/createStock";
 import { ChangeStockAvailability, changeStockAvailabilitySchema } from "@/lib/validation/stocks/changeAvailabilitySchema";
 import { Stock } from "@/types/stock";
 import { ChangeStockAvailabilityPayload } from "@/types/changeStockAvailability";
+import { UpdateStock, updateStockSchema } from "@/lib/validation/stocks/updateStockSchema";
 export const STOCKS_KEY = "stocks";
 
 export const useStocks = () => {
@@ -61,20 +62,40 @@ export const useCreateStock = () => {
     },
   });
 };
+export const useUpdateStock = () => {
+  const t = useTranslations();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: UpdateStock) => {
+      const parsed = updateStockSchema(t).safeParse(data);
+      if (!parsed.success) {
+        console.error("Validation errors:", parsed.error);
+        throw new Error("Invalid update payload");
+      }
+
+      return stocksApi.updateStock(parsed.data);
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [STOCKS_KEY] });
+    },
+  });
+};
 export const useToggleStockAvailability = () => {
   const t = useTranslations();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ symbol, data }: { symbol: string; data: ChangeStockAvailabilityPayload }) => {
+    mutationFn: async ({ id, data }: { id: string; data: ChangeStockAvailabilityPayload }) => {
       const parsed = changeStockAvailabilitySchema(t).safeParse(data);
       if (!parsed.success) throw new Error("Invalid availability payload");
 
-      return stocksApi.changeStockAvailability(symbol, { isActionAvailable: parsed.data.isActionAvailable });
+      return stocksApi.changeStockAvailability(id, { isActionAvailable: parsed.data.isActionAvailable });
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: [STOCKS_KEY] });
-      queryClient.invalidateQueries({ queryKey: [STOCKS_KEY, variables.symbol] });
+      queryClient.invalidateQueries({ queryKey: [STOCKS_KEY, variables.id] });
     },
   });
 };
@@ -92,6 +113,18 @@ export const useUpdateStockPrice = () => {
   });
 };
 
+export const useDeleteStock = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      return stocksApi.deleteStock(id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [STOCKS_KEY] });
+    },
+  });
+};
 
 
 

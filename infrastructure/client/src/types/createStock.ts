@@ -6,5 +6,5 @@ export interface CreateStock {
     rateOfChange: number;
     currency: string;
     isActionAvailable: boolean;
-    previousPrice?: number;
+    previousPrice?: number | null;
 }

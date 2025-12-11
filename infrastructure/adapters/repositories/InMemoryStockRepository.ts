@@ -26,12 +26,8 @@ export class InMemoryStockRepository implements StockRepositoryInterface {
     }
 
 public async findStockBySymbol(symbol: string): Promise<StockEntity | StockNotFoundError> {
-    const [symbolPart, marketPart] = symbol.split(":");
-    const stock = this.stocks.find(s => {
-        const [sPart, mPart] = s.symbol.split(":");
-        return sPart?.toUpperCase() === symbolPart?.toUpperCase() &&
-            mPart?.toUpperCase() === (marketPart?.toUpperCase() ?? "");
-    });
+    const normalizedSymbol = symbol.toUpperCase();
+    const stock = this.stocks.find(s => s.symbol.toUpperCase() === normalizedSymbol);
 
     if (!stock) return new StockNotFoundError("Stock not found");
     return stock;
@@ -48,8 +44,8 @@ public async findStockBySymbol(symbol: string): Promise<StockEntity | StockNotFo
 
     public async createStock(stock: StockEntity): Promise<StockEntity | StockAlreadyExistsError> {
         const existingStock = await this.findStockBySymbol(stock.symbol);
-        
-        if(!(existingStock instanceof StockAlreadyExistsError)) {
+
+        if(!(existingStock instanceof StockNotFoundError)) {
             return new StockAlreadyExistsError("Stock already exist");
         }
         this.stocks.push(stock);
@@ -57,16 +53,17 @@ public async findStockBySymbol(symbol: string): Promise<StockEntity | StockNotFo
     }
 
         public async updateStock(stock: StockEntity): Promise<StockEntity | StockNotFoundError> {
-            const actualStock = this.stocks.find((stk) => stk.id === stock.id);
+            const index = this.stocks.findIndex((stk) => stk.id === stock.id);
 
-            if (!actualStock) {
+            if (index === -1) {
                 return new StockNotFoundError("Stock not found");
             }
 
-            actualStock.isActionAvailable = stock.isActionAvailable;
-            actualStock.updatedAt = new Date();
+            stock.updatedAt = new Date();
 
-            return actualStock;
+            this.stocks[index] = stock;
+
+            return this.stocks[index];
         }
 
 

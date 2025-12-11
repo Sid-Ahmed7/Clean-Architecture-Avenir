@@ -1,6 +1,17 @@
 import { Stock, TwelveDataQuoteResponse } from "@/types/stock";
 
 export function transformQuoteToStock(quote: TwelveDataQuoteResponse) : Stock {
+    if (!quote) {
+        throw new Error('Quote data is null or undefined');
+    }
+
+    const requiredFields = ['symbol', 'name', 'close', 'open', 'high', 'low', 'previous_close'];
+    const missingFields = requiredFields.filter(field => !quote[field as keyof TwelveDataQuoteResponse]);
+
+    if (missingFields.length > 0) {
+        throw new Error(`Missing required fields: ${missingFields.join(', ')}`);
+    }
+
     const stock: Stock = {
         symbol: quote.symbol,
         name: quote.name,

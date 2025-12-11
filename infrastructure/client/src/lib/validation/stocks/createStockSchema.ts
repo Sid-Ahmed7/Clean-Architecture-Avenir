@@ -2,11 +2,13 @@ import { z } from "zod";
 
 export const createStockRequestSchema = (t: (key: string) => string) =>
   z.object({
-    symbol: z.string().min(1, { message: t("stock.symbol.required") }).max(10, { message: t("stock.symbol.max") }).transform(s => s.toUpperCase()),
-    companyName: z.string().min(1, { message: t("stock.companyName.required") }),
-    currentPrice: z.number().positive({ message: t("stock.currentPrice.positive") }),
-    previousPrice: z.number().positive({ message: t("stock.previousPrice.positive") }),
+    symbol: z.string(),
+    companyName: z.string(),
+    name: z.string(),
+    currentPrice: z.number(),
+    previousPrice: z.number().optional(),
     rateOfChange: z.number(),
+    currency: z.string(),
     isActionAvailable: z.boolean(),
   });
 

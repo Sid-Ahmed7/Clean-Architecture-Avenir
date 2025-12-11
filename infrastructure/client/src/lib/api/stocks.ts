@@ -5,13 +5,17 @@ import { Stock } from "../validation/stocks/stockSchema";
 import { apiClient } from "./apiClient"
 
 export const getAllStocks = async () => {
-    const {data} = await apiClient.get<Stock[]>("/stocks");
-    return data;
+  const { data } = await apiClient.get("/stock");
+  if (Array.isArray(data)) return data as Stock[];
+  if (data && Array.isArray(data.stocks)) return data.stocks as Stock[];
+  return [] as Stock[];
 }
 
 export const getAvailableStocks = async () => {
-    const {data} = await apiClient.get<Stock[]>("/stocks/available");
-    return data;
+  const { data } = await apiClient.get("/stock/available");
+  if (Array.isArray(data)) return data as Stock[];
+  if (data && Array.isArray(data.stocks)) return data.stocks as Stock[];
+  return [] as Stock[];
 }
 
 export const getStockBySymbol = async (symbol: string) => {
@@ -29,18 +33,21 @@ export const createStock = async (payload: CreateStock) => {
   return data;
 };
 
-export const updateStock = async (payload: Stock) => {
+export const updateStock = async (payload: { id: string; companyName: string; name: string; currency: string; isActionAvailable: boolean }) => {
   const { data } = await apiClient.put<Stock>("/stock/update", payload);
   return data;
 };
 
-export const changeStockAvailability = async (userId: string, payload: ChangeStockAvailabilityPayload) => {
-const { data } = await apiClient.put<Stock>(`/stock/${payload.id}/availability`,{ userId, isActionAvailable: payload.isActionAvailable }
-);
+export const changeStockAvailability = async (id: string, payload: ChangeStockAvailabilityPayload) => {
+  const { data } = await apiClient.patch<Stock>(`/stock/${id}/availability`, { isActionAvailable: payload.isActionAvailable });
   return data;
-}
+};
 export const updateStockPrice = async (symbol: string) => {
   await apiClient.post(`/stock/${symbol}/update-price`);
+};
+export const deleteStock = async (id: string) => {
+  const { data } = await apiClient.delete(`/stock/${id}`);
+  return data;
 };
 
 

@@ -18,7 +18,7 @@ export class CreateStockUseCase {
 
         }
         const id = this.uuidService.generate();
-        const stockEntity = StockEntity.from(id, stock.symbol, stock.companyName, stock.name, 0, 0, "EUR", new Date(), false, new Date());
+        const stockEntity = StockEntity.from(id, stock.symbol, stock.companyName, stock.name, stock.currentPrice, stock.previousPrice ?? stock.currentPrice, stock.currency, new Date(), stock.isActionAvailable, new Date());
         if(stockEntity instanceof Error) {
             return stockEntity;
         }

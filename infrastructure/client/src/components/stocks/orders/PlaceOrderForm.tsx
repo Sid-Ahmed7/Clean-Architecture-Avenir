@@ -13,7 +13,6 @@ interface PlaceOrderFormProps {
   onCancel: () => void;
   isSubmitting: boolean;
 }
-achat fractionner
 export function PlaceOrderForm({stockSymbol, stockName, currentPrice, orderType, onSubmit, onCancel, isSubmitting}: PlaceOrderFormProps) {
     const form = useForm<OrderFields>({
         defaultValues: {

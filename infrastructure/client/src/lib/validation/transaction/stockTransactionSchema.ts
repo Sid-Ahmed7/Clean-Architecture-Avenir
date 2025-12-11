@@ -1,10 +1,11 @@
+import { TransactionType } from "@/types/transaction";
 import z from "zod";
 
-export const stockTransactionSchema = (t:(key:string) => string) => 
+export const stockTransactionSchema = (t:(key:string) => string) =>
 z.object({
-  id: z.number(),
-  buyOrderId: z.number(),
-  sellOrderId: z.number(),
+  id: z.string(),
+  buyOrderId: z.string(),
+  sellOrderId: z.string(),
   stockSymbol: z.string(),
   quantity: z.number(),
   executionPrice: z.number(),
@@ -13,5 +14,8 @@ z.object({
   buyerFee: z.number(),
   sellerFee: z.number(),
   executedAt: z.string(),
+  type: z.nativeEnum(TransactionType).optional(),
+  totalAmount: z.number().optional(),
+  fee: z.number().optional(),
 });
-export type StockTransaction = z.infer<typeof stockTransactionSchema>;
+export type StockTransaction = z.infer<ReturnType<typeof stockTransactionSchema>>;
