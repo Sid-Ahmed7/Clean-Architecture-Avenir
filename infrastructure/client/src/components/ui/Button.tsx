@@ -9,6 +9,7 @@ type ButtonProps = {
   variant?: "primary" | "secondary" | "danger";
   fullWidth?: boolean;
   disabled?: boolean;
+  className?: string;
 };
 
 export default function Button({
@@ -18,6 +19,7 @@ export default function Button({
   variant = "primary",
   fullWidth = false,
   disabled = false,
+  className = "",
 }: ButtonProps) {
   const baseClasses =
     "py-3 px-6 rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2";
@@ -35,7 +37,7 @@ export default function Button({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`${baseClasses} ${variants[variant]} ${widthClass} ${
+      className={`${baseClasses} ${variants[variant]} ${widthClass} ${className} ${
         disabled ? "opacity-50 cursor-not-allowed" : ""
       }`}
     >

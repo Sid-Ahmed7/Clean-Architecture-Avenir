@@ -2,10 +2,22 @@
 
 import { AuthContext } from "@/contexts/AuthProvider";
 import { apiClient } from "@/lib/api/apiClient";
-import { CreditCard, ArrowUpRight, TrendingUp, Calendar, Settings, HelpCircle, X, MessageCircle, LogOut } from "lucide-react";
+import {
+  CreditCard,
+  ArrowUpRight,
+  TrendingUp,
+  Calendar,
+  Settings,
+  HelpCircle,
+  X,
+  MessageCircle,
+  LogOut,
+  FileText,
+} from "lucide-react";
 import { useContext } from "react";
 import { Link } from "@/i18n/navigation";
 import { usePathname } from "next/navigation";
+import { RoleEnum } from "@/types/RoleEnum";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -13,7 +25,7 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
-  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated, setIsAuthenticated, hasAnyRole } = useContext(AuthContext);
   const pathname = usePathname();
 
   const menuItems = [
@@ -21,6 +33,10 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     { icon: ArrowUpRight, label: "Virements", href: "/transfers" },
     { icon: TrendingUp, label: "Investissements", href: "/investments" },
     { icon: Calendar, label: "Historique", href: "/history" },
+    { icon: FileText, label: "Demande de crédit", href: "/loan/request", roles: [RoleEnum.CLIENT] },
+    { icon: FileText, label: "Mes demandes de crédit", href: "/loan/requests", roles: [RoleEnum.CLIENT] },
+    { icon: FileText, label: "Demandes crédit (conseiller)", href: "/advisor/loan-requests", roles: [RoleEnum.BANK_ADVISOR] },
+    { icon: FileText, label: "Demandes crédit (directeur)", href: "/director/loan-requests", roles: [RoleEnum.BANK_MANAGER] },
     { icon: MessageCircle, label: "Message", href: "/conversations" },
     { icon: Settings, label: "Paramètres", href: "/settings" },
     { icon: HelpCircle, label: "Aide", href: "/help" },
@@ -68,7 +84,9 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         </div>
 
         <nav className="p-4 space-y-1">
-          {menuItems.map((item) => {
+          {menuItems
+            .filter((item) => !item.roles || hasAnyRole(item.roles))
+            .map((item) => {
             const ItemIcon = item.icon;
             const active = isActive(item.href);
             return (

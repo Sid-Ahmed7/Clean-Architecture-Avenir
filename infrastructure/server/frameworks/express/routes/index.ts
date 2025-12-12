@@ -6,6 +6,7 @@ import chatRoutes from "./chat.routes";
 import newsRoutes from "./news.routes";
 import mediaRoutes from "./media.routes";
 import contentRoutes from "./content.routes";
+import loanRoutes from "./loan.routes";
 
 const router = express.Router();
 
@@ -16,5 +17,6 @@ router.use("/chat", chatRoutes);
 router.use("/feed", newsRoutes);
 router.use("/media", mediaRoutes);
 router.use("/content", contentRoutes);
+router.use("/loan", loanRoutes);
 
 export default router;
