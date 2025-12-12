@@ -9,10 +9,11 @@ import { Link } from "@/i18n/navigation";
 import ChartAccountManage from "@/components/ui/ChartAccountManage";
 import { useEffect, useState } from "react";
 import { getAllSavingsAccounts } from "@/lib/api/savingsAccount";
+import { SavingsAccount } from "@/types/savingsAccount";
 
 export default function ClientDashboard() {
     const { accounts, loading, error } = useUserAccounts();
-    const [savingsAccounts, setSavingsAccounts] = useState<any[]>([]);
+    const [savingsAccounts, setSavingsAccounts] = useState<SavingsAccount[]>([]);
     const [loadingSavings, setLoadingSavings] = useState(true);
 
     const mainAccount = accounts.find((a) => a.accountType === "CHECKING");
@@ -126,8 +127,8 @@ export default function ClientDashboard() {
                                                 </div>
                                             </div>
                                             <span className={`px-2 py-1 rounded-full text-xs font-medium ${account.isActive
-                                                    ? 'bg-green-100 text-green-700'
-                                                    : 'bg-gray-100 text-gray-700'
+                                                ? 'bg-green-100 text-green-700'
+                                                : 'bg-gray-100 text-gray-700'
                                                 }`}>
                                                 {account.isActive ? 'Actif' : 'Inactif'}
                                             </span>
