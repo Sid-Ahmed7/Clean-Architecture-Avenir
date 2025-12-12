@@ -1,17 +1,7 @@
 import { SavingsAccountRepositoryInterface } from "../../ports/repositories/SavingsAccountRepositoryInterface";
 import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
 import { AccountNotFoundError } from "../../errors/AccountNotFoundError";
-
-export interface InterestSummary {
-    accountNumber: number;
-    currentBalance: number;
-    interestRate: number;
-    maxDepositAmount: number | null;
-    totalInterestEarned: number;
-    lastInterestApplied?: Date;
-    projectedAnnualInterest: number;
-    isActive: boolean;
-}
+import { InterestSummary } from "../../responses/InterestSummary";
 
 export class GetAccountInterestHistoryUseCase {
     constructor(

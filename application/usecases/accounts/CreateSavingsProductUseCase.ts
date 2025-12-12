@@ -1,6 +1,6 @@
 import { SavingsProductEntity } from "../../../domain/entities/SavingsProductEntity";
 import { SavingsProductRepositoryInterface } from "../../ports/repositories/SavingsProductRepositoryInterface";
-import { CreateSavingsProductDTO } from "./dto/CreateSavingsProductDTO";
+import { CreateSavingsProduct } from "../../responses/CreateSavingsProduct";
 import { UuidGeneratorService } from "../../ports/services/UuidGeneratorService";
 
 export class CreateSavingsProductUseCase {
@@ -9,7 +9,7 @@ export class CreateSavingsProductUseCase {
         private uuidService: UuidGeneratorService
     ) {}
 
-    public async execute(dto: CreateSavingsProductDTO): Promise<SavingsProductEntity | Error> {
+    public async execute(dto: CreateSavingsProduct): Promise<SavingsProductEntity | Error> {
         const productId = this.uuidService.generate();
 
         const product = SavingsProductEntity.create(

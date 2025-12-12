@@ -2,12 +2,7 @@ import { SavingsAccountsEntity } from "../../../domain/entities/SavingsAccountEn
 import { SavingsAccountRepositoryInterface } from "../../ports/repositories/SavingsAccountRepositoryInterface";
 import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
 import { TransactionRepositoryInterface } from "../../ports/repositories/TransactionRepositoryInterface";
-
-export interface WithdrawFromSavingsAccountDTO {
-    userId: string;
-    savingsAccountNumber: number;
-    amount: number;
-}
+import { WithdrawFromSavingsAccount } from "../../responses/WithdrawFromSavingsAccount";
 
 export class WithdrawFromSavingsAccountUseCase {
     constructor(
@@ -16,7 +11,7 @@ export class WithdrawFromSavingsAccountUseCase {
         private transactionRepository: TransactionRepositoryInterface
     ) {}
 
-    public async execute(dto: WithdrawFromSavingsAccountDTO): Promise<SavingsAccountsEntity | Error> {
+    public async execute(dto: WithdrawFromSavingsAccount): Promise<SavingsAccountsEntity | Error> {
         // 1. Get savings account
         const savingsAccount = await this.savingsAccountRepository.getSavingsAccountByNumber(dto.savingsAccountNumber);
         if (savingsAccount instanceof Error) {

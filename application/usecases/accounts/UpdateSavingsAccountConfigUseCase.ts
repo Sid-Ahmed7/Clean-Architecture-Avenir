@@ -1,6 +1,6 @@
 import { SavingsAccountsEntity } from "../../../domain/entities/SavingsAccountEntity";
 import { SavingsAccountRepositoryInterface } from "../../ports/repositories/SavingsAccountRepositoryInterface";
-import { UpdateSavingsAccountConfigDTO } from "./dto/UpdateSavingsAccountConfigDTO";
+import { UpdateSavingsAccountConfig } from "../../responses/UpdateSavingsAccountConfig";
 import { AccountNotFoundError } from "../../errors/AccountNotFoundError";
 import { InvalidAccountError } from "../../../domain/errors/InvalidAccountError";
 
@@ -9,7 +9,7 @@ export class UpdateSavingsAccountConfigUseCase {
         private savingsAccountRepository: SavingsAccountRepositoryInterface
     ) {}
 
-    public async execute(dto: UpdateSavingsAccountConfigDTO): Promise<SavingsAccountsEntity | AccountNotFoundError | InvalidAccountError | Error> {
+    public async execute(dto: UpdateSavingsAccountConfig): Promise<SavingsAccountsEntity | AccountNotFoundError | InvalidAccountError | Error> {
         // Get the existing savings account
         const existingAccount = await this.savingsAccountRepository.getSavingsAccountByNumber(dto.accountNumber);
         

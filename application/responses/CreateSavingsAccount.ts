@@ -1,4 +1,4 @@
-export interface CreateSavingsAccountDTO {
+export interface CreateSavingsAccount {
     accountNumber: number;
     productId: string;
     userId: string;

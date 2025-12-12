@@ -1,4 +1,4 @@
-export interface UpdateSavingsProductDTO {
+export interface UpdateSavingsProduct {
     productId: string;
     interestRate?: number;
     maxDepositAmount?: number | null;

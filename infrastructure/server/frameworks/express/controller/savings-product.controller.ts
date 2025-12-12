@@ -6,8 +6,8 @@ import { SubscribeToSavingsProductUseCase } from "../../../../../application/use
 import { InMemorySavingsProductRepository } from "../../../../adapters/repositories/InMemorySavingsProductRepository";
 import { InMemorySavingsAccountRepository } from "../../../../adapters/repositories/InMemorySavingsAccountRepository";
 import { InMemoryAccountRepository } from "../../../../adapters/repositories/InMemoryAccountRepository";
-import { CreateSavingsProductDTO } from "../../../../../application/usecases/accounts/dto/CreateSavingsProductDTO";
-import { UpdateSavingsProductDTO } from "../../../../../application/usecases/accounts/dto/UpdateSavingsProductDTO";
+import { CreateSavingsProduct } from "../../../../../application/responses/CreateSavingsProduct";
+import { UpdateSavingsProduct } from "../../../../../application/responses/UpdateSavingsProduct";
 import { uuidService } from "../../../../adapters/config/repositories";
 
 export class SavingsProductController {
@@ -23,7 +23,7 @@ export class SavingsProductController {
             uuidService
         );
 
-        const dto: CreateSavingsProductDTO = {
+        const dto: CreateSavingsProduct = {
             name: req.body.name,
             description: req.body.description,
             interestRate: Number(req.body.interestRate),
@@ -54,7 +54,7 @@ export class SavingsProductController {
             this.savingsAccountRepository
         );
 
-        const dto: UpdateSavingsProductDTO = {
+        const dto: UpdateSavingsProduct = {
             productId: req.params.productId as string,
             ...(req.body.interestRate !== undefined && { interestRate: Number(req.body.interestRate) }),
             ...(req.body.maxDepositAmount !== undefined && { maxDepositAmount: req.body.maxDepositAmount === null ? null : Number(req.body.maxDepositAmount) }),

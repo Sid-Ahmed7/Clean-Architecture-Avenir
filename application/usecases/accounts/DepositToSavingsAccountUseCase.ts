@@ -3,12 +3,7 @@ import { SavingsAccountRepositoryInterface } from "../../ports/repositories/Savi
 import { SavingsProductRepositoryInterface } from "../../ports/repositories/SavingsProductRepositoryInterface";
 import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
 import { TransactionRepositoryInterface } from "../../ports/repositories/TransactionRepositoryInterface";
-
-export interface DepositToSavingsAccountDTO {
-    userId: string;
-    savingsAccountNumber: number;
-    amount: number;
-}
+import { DepositToSavingsAccount } from "../../responses/DepositToSavingsAccount";
 
 export class DepositToSavingsAccountUseCase {
     constructor(
@@ -18,7 +13,7 @@ export class DepositToSavingsAccountUseCase {
         private transactionRepository: TransactionRepositoryInterface
     ) {}
 
-    public async execute(dto: DepositToSavingsAccountDTO): Promise<SavingsAccountsEntity | Error> {
+    public async execute(dto: DepositToSavingsAccount): Promise<SavingsAccountsEntity | Error> {
         // 1. Get savings account
         const savingsAccount = await this.savingsAccountRepository.getSavingsAccountByNumber(dto.savingsAccountNumber);
         if (savingsAccount instanceof Error) {

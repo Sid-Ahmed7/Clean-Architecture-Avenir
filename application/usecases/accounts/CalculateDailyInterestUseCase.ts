@@ -2,13 +2,7 @@ import { SavingsAccountRepositoryInterface } from "../../ports/repositories/Savi
 import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
 import { AccountNotFoundError } from "../../errors/AccountNotFoundError";
 import { InvalidAccountError } from "../../../domain/errors/InvalidAccountError";
-
-export interface InterestCalculationResult {
-    accountNumber: number;
-    interestCredited: number;
-    newBalance: number;
-    totalInterestEarned: number;
-}
+import { InterestCalculationResult } from "../../responses/InterestCalculationResult";
 
 export class CalculateDailyInterestUseCase {
     constructor(

@@ -2,12 +2,7 @@ import { SavingsAccountsEntity } from "../../../domain/entities/SavingsAccountEn
 import { SavingsAccountRepositoryInterface } from "../../ports/repositories/SavingsAccountRepositoryInterface";
 import { SavingsProductRepositoryInterface } from "../../ports/repositories/SavingsProductRepositoryInterface";
 import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
-
-export interface SubscribeToSavingsProductDTO {
-    userId: string;
-    productId: string;
-    initialDeposit?: number;
-}
+import { SubscribeToSavingsProduct } from "../../responses/SubscribeToSavingsProduct";
 
 export class SubscribeToSavingsProductUseCase {
     constructor(
@@ -16,7 +11,7 @@ export class SubscribeToSavingsProductUseCase {
         private accountRepository: AccountRepositoryInterface
     ) {}
 
-    public async execute(dto: SubscribeToSavingsProductDTO): Promise<SavingsAccountsEntity | Error> {
+    public async execute(dto: SubscribeToSavingsProduct): Promise<SavingsAccountsEntity | Error> {
         // Get the product
         const product = await this.savingsProductRepository.getProductById(dto.productId);
         if (product instanceof Error) {

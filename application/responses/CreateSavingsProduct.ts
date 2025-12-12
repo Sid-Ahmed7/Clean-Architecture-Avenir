@@ -1,4 +1,4 @@
-export interface CreateSavingsProductDTO {
+export interface CreateSavingsProduct {
     name: string;
     description: string;
     interestRate: number;

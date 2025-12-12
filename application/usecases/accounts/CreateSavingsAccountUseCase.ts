@@ -1,6 +1,6 @@
 import { SavingsAccountsEntity } from "../../../domain/entities/SavingsAccountEntity";
 import { SavingsAccountRepositoryInterface } from "../../ports/repositories/SavingsAccountRepositoryInterface";
-import { CreateSavingsAccountDTO } from "./dto/CreateSavingsAccountDTO";
+import { CreateSavingsAccount } from "../../responses/CreateSavingsAccount";
 import { InvalidAccountError } from "../../../domain/errors/InvalidAccountError";
 
 export class CreateSavingsAccountUseCase {
@@ -8,7 +8,7 @@ export class CreateSavingsAccountUseCase {
         private savingsAccountRepository: SavingsAccountRepositoryInterface
     ) {}
 
-    public async execute(dto: CreateSavingsAccountDTO): Promise<SavingsAccountsEntity | InvalidAccountError | Error> {
+    public async execute(dto: CreateSavingsAccount): Promise<SavingsAccountsEntity | InvalidAccountError | Error> {
         // Create the savings account entity
         const savingsAccount = SavingsAccountsEntity.from(
             dto.accountNumber,

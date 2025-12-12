@@ -1,17 +1,13 @@
 import { SavingsAccountsEntity } from "../../../domain/entities/SavingsAccountEntity";
 import { SavingsAccountRepositoryInterface } from "../../ports/repositories/SavingsAccountRepositoryInterface";
-
-export interface GetSavingsAccountWithInterestDTO {
-    accountNumber: number;
-    userId?: string; // Optional for ownership verification
-}
+import { SavingsAccountWithInterest } from "../../responses/SavingsAccountWithInterest";
 
 export class GetSavingsAccountWithInterestUseCase {
     constructor(
         private savingsAccountRepository: SavingsAccountRepositoryInterface
     ) {}
 
-    public async execute(dto: GetSavingsAccountWithInterestDTO): Promise<SavingsAccountsEntity | Error> {
+    public async execute(dto: SavingsAccountWithInterest): Promise<SavingsAccountsEntity | Error> {
         // 1. Get savings account
         const savingsAccount = await this.savingsAccountRepository.getSavingsAccountByNumber(dto.accountNumber);
         if (savingsAccount instanceof Error) {

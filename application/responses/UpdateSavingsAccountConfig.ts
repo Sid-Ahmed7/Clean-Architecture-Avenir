@@ -1,4 +1,4 @@
-export interface UpdateSavingsAccountConfigDTO {
+export interface UpdateSavingsAccountConfig {
     accountNumber: number;
     interestRate?: number;
     maxDepositAmount?: number | null;

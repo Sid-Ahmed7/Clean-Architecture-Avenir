@@ -8,8 +8,8 @@ import { InMemorySavingsAccountRepository } from "../../../../adapters/repositor
 import { InMemoryAccountRepository } from "../../../../adapters/repositories/InMemoryAccountRepository";
 import { AccountNotFoundError } from "../../../../../application/errors/AccountNotFoundError";
 import { InvalidAccountError } from "../../../../../domain/errors/InvalidAccountError";
-import { CreateSavingsAccountDTO } from "../../../../../application/usecases/accounts/dto/CreateSavingsAccountDTO";
-import { UpdateSavingsAccountConfigDTO } from "../../../../../application/usecases/accounts/dto/UpdateSavingsAccountConfigDTO";
+import { CreateSavingsAccount } from "../../../../../application/responses/CreateSavingsAccount";
+import { UpdateSavingsAccountConfig } from "../../../../../application/responses/UpdateSavingsAccountConfig";
 
 export class SavingsAccountController {
 
@@ -21,7 +21,7 @@ export class SavingsAccountController {
     async createSavingsAccount(req: Request, res: Response) {
         const createSavingsAccountUseCase = new CreateSavingsAccountUseCase(this.savingsAccountRepository);
 
-        const dto: CreateSavingsAccountDTO = {
+        const dto: CreateSavingsAccount = {
             accountNumber: Number(req.body.accountNumber),
             productId: req.body.productId,
             userId: req.body.userId,
@@ -58,7 +58,7 @@ export class SavingsAccountController {
     async updateSavingsAccountConfig(req: Request, res: Response) {
         const updateSavingsAccountConfigUseCase = new UpdateSavingsAccountConfigUseCase(this.savingsAccountRepository);
 
-        const dto: UpdateSavingsAccountConfigDTO = {
+        const dto: UpdateSavingsAccountConfig = {
             accountNumber: Number(req.params.accountNumber),
             ...(req.body.interestRate !== undefined && { interestRate: Number(req.body.interestRate) }),
             ...(req.body.maxDepositAmount !== undefined && { maxDepositAmount: req.body.maxDepositAmount === null ? null : Number(req.body.maxDepositAmount) }),
@@ -83,7 +83,7 @@ export class SavingsAccountController {
     async updateInterestRate(req: Request, res: Response) {
         const updateSavingsAccountConfigUseCase = new UpdateSavingsAccountConfigUseCase(this.savingsAccountRepository);
 
-        const dto: UpdateSavingsAccountConfigDTO = {
+        const dto: UpdateSavingsAccountConfig = {
             accountNumber: Number(req.params.accountNumber),
             interestRate: Number(req.body.interestRate)
         };
@@ -106,7 +106,7 @@ export class SavingsAccountController {
     async updateMaxDeposit(req: Request, res: Response) {
         const updateSavingsAccountConfigUseCase = new UpdateSavingsAccountConfigUseCase(this.savingsAccountRepository);
 
-        const dto: UpdateSavingsAccountConfigDTO = {
+        const dto: UpdateSavingsAccountConfig = {
             accountNumber: Number(req.params.accountNumber),
             maxDepositAmount: req.body.maxDepositAmount === null ? null : Number(req.body.maxDepositAmount)
         };

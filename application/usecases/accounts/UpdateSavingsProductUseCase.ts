@@ -1,7 +1,7 @@
 import { SavingsProductEntity } from "../../../domain/entities/SavingsProductEntity";
 import { SavingsProductRepositoryInterface } from "../../ports/repositories/SavingsProductRepositoryInterface";
 import { SavingsAccountRepositoryInterface } from "../../ports/repositories/SavingsAccountRepositoryInterface";
-import { UpdateSavingsProductDTO } from "./dto/UpdateSavingsProductDTO";
+import { UpdateSavingsProduct } from "../../responses/UpdateSavingsProduct";
 
 export class UpdateSavingsProductUseCase {
     constructor(
@@ -9,7 +9,7 @@ export class UpdateSavingsProductUseCase {
         private savingsAccountRepository: SavingsAccountRepositoryInterface
     ) {}
 
-    public async execute(dto: UpdateSavingsProductDTO): Promise<SavingsProductEntity | Error> {
+    public async execute(dto: UpdateSavingsProduct): Promise<SavingsProductEntity | Error> {
         // Get the product
         const product = await this.savingsProductRepository.getProductById(dto.productId);
         if (product instanceof Error) {
