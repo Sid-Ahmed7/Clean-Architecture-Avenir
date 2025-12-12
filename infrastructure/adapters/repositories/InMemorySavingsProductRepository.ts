@@ -7,35 +7,47 @@ export class InMemorySavingsProductRepository implements SavingsProductRepositor
 
     public constructor() {
         // Initialize with some default products for testing
-        this.products = [
-            SavingsProductEntity.create(
-                "livret-a-001",
-                "Livret A",
-                "Livret d'épargne réglementé avec taux garanti par l'État",
-                3.0,
-                22950,
-                10,
-                true
-            ),
-            SavingsProductEntity.create(
-                "ldds-001",
-                "LDDS",
-                "Livret de développement durable et solidaire",
-                3.0,
-                12000,
-                15,
-                true
-            ),
-            SavingsProductEntity.create(
-                "pel-001",
-                "PEL",
-                "Plan épargne logement pour financer votre projet immobilier",
-                2.25,
-                61200,
-                225,
-                true
-            )
-        ];
+        const livretA = SavingsProductEntity.create(
+            "livret-a-001",
+            "Livret A",
+            "Livret d'épargne réglementé avec taux garanti par l'État",
+            3.0,
+            22950,
+            10,
+            true
+        );
+
+        const ldds = SavingsProductEntity.create(
+            "ldds-001",
+            "LDDS",
+            "Livret de développement durable et solidaire",
+            3.0,
+            12000,
+            15,
+            true
+        );
+
+        const pel = SavingsProductEntity.create(
+            "pel-001",
+            "PEL",
+            "Plan épargne logement pour financer votre projet immobilier",
+            2.25,
+            61200,
+            225,
+            true
+        );
+
+        this.products = [];
+        
+        if (!(livretA instanceof Error)) {
+            this.products.push(livretA);
+        }
+        if (!(ldds instanceof Error)) {
+            this.products.push(ldds);
+        }
+        if (!(pel instanceof Error)) {
+            this.products.push(pel);
+        }
     }
 
     public async createProduct(product: SavingsProductEntity): Promise<SavingsProductEntity | Error> {

@@ -20,7 +20,11 @@ export class UpdateSavingsProductUseCase {
         let updatedProduct = product;
 
         if (dto.interestRate !== undefined) {
-            updatedProduct = updatedProduct.updateInterestRate(dto.interestRate);
+            const updateResult = updatedProduct.updateInterestRate(dto.interestRate);
+            if (updateResult instanceof Error) {
+                return updateResult;
+            }
+            updatedProduct = updateResult;
             
             // Update all linked savings accounts with new rate
             const allAccounts = await this.savingsAccountRepository.getAllSavingsAccounts();
@@ -33,10 +37,14 @@ export class UpdateSavingsProductUseCase {
         }
 
         if (dto.maxDepositAmount !== undefined || dto.minDepositAmount !== undefined) {
-            updatedProduct = updatedProduct.updateLimits(
+            const updateResult = updatedProduct.updateLimits(
                 dto.maxDepositAmount !== undefined ? dto.maxDepositAmount : product.maxDepositAmount,
                 dto.minDepositAmount !== undefined ? dto.minDepositAmount : product.minDepositAmount
             );
+            if (updateResult instanceof Error) {
+                return updateResult;
+            }
+            updatedProduct = updateResult;
             
             // Update all linked savings accounts with new limits
             if (dto.maxDepositAmount !== undefined) {
@@ -56,6 +64,11 @@ export class UpdateSavingsProductUseCase {
 
         // Save updated product
         const result = await this.savingsProductRepository.updateProduct(updatedProduct);
+        
+        if (result instanceof Error) {
+            return result;
+        }
+        
         return result;
     }
 }

@@ -22,7 +22,16 @@ export class CreateSavingsProductUseCase {
             true // isActive by default
         );
 
+        if (product instanceof Error) {
+            return product;
+        }
+
         const result = await this.savingsProductRepository.createProduct(product);
+        
+        if (result instanceof Error) {
+            return result;
+        }
+        
         return result;
     }
 }

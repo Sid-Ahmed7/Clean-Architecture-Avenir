@@ -29,6 +29,10 @@ export class CreateSavingsAccountUseCase {
         // Save to repository
         const result = await this.savingsAccountRepository.createSavingsAccount(savingsAccount);
         
+        if (result instanceof Error) {
+            return result;
+        }
+        
         return result;
     }
 }

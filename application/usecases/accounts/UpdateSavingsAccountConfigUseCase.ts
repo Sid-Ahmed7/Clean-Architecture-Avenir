@@ -45,6 +45,10 @@ export class UpdateSavingsAccountConfigUseCase {
         // Save the updated account
         const result = await this.savingsAccountRepository.updateSavingsAccount(existingAccount);
         
+        if (result instanceof Error) {
+            return result;
+        }
+        
         return result;
     }
 }

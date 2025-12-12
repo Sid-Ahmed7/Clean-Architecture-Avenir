@@ -1,7 +1,72 @@
-import { InvalidAccountError } from "../errors/InvalidAccountError";
+import { ProductIdValue } from "../values/ProductIdValue";
+import { ProductNameValue } from "../values/ProductNameValue";
+import { ProductDescriptionValue } from "../values/ProductDescriptionValue";
+import { InterestRateValue } from "../values/InterestRateValue";
+import { MaxDepositAmountValue } from "../values/MaxDepositAmountValue";
+import { MinDepositAmountValue } from "../values/MinDepositAmountValue";
 
 export class SavingsProductEntity {
-    constructor(
+    public static create(
+        id: string,
+        name: string,
+        description: string,
+        interestRate: number,
+        maxDepositAmount: number | null = null,
+        minDepositAmount: number | null = null,
+        isActive: boolean = true
+    ): SavingsProductEntity | Error {
+        // Validate all fields using Value Objects
+        const validatedId = ProductIdValue.from(id);
+        if (validatedId instanceof Error) {
+            return validatedId;
+        }
+
+        const validatedName = ProductNameValue.from(name);
+        if (validatedName instanceof Error) {
+            return validatedName;
+        }
+
+        const validatedDescription = ProductDescriptionValue.from(description);
+        if (validatedDescription instanceof Error) {
+            return validatedDescription;
+        }
+
+        const validatedInterestRate = InterestRateValue.from(interestRate);
+        if (validatedInterestRate instanceof Error) {
+            return validatedInterestRate;
+        }
+
+        const validatedMaxDeposit = MaxDepositAmountValue.from(maxDepositAmount);
+        if (validatedMaxDeposit instanceof Error) {
+            return validatedMaxDeposit;
+        }
+
+        const validatedMinDeposit = MinDepositAmountValue.from(minDepositAmount);
+        if (validatedMinDeposit instanceof Error) {
+            return validatedMinDeposit;
+        }
+
+        // Validate that min is not greater than max
+        if (validatedMinDeposit.value !== null && 
+            validatedMaxDeposit.value !== null && 
+            validatedMinDeposit.value > validatedMaxDeposit.value) {
+            return new Error('Min deposit cannot be greater than max deposit');
+        }
+
+        return new SavingsProductEntity(
+            validatedId.value,
+            validatedName.value,
+            validatedDescription.value,
+            validatedInterestRate.value,
+            validatedMaxDeposit.value,
+            validatedMinDeposit.value,
+            isActive,
+            new Date(),
+            new Date()
+        );
+    }
+
+    private constructor(
         public readonly id: string,
         public readonly name: string,
         public readonly description: string,
@@ -11,65 +76,19 @@ export class SavingsProductEntity {
         public readonly isActive: boolean,
         public readonly createdAt: Date,
         public readonly updatedAt: Date
-    ) {
-        this.validate();
-    }
+    ) {}
 
-    private validate(): void {
-        if (!this.id || this.id.trim() === '') {
-            throw new InvalidAccountError('Product ID is required');
+    public updateInterestRate(newRate: number): SavingsProductEntity | Error {
+        const validatedRate = InterestRateValue.from(newRate);
+        if (validatedRate instanceof Error) {
+            return validatedRate;
         }
 
-        if (!this.name || this.name.trim() === '') {
-            throw new InvalidAccountError('Product name is required');
-        }
-
-        if (this.interestRate < 0 || this.interestRate > 100) {
-            throw new InvalidAccountError('Interest rate must be between 0 and 100');
-        }
-
-        if (this.maxDepositAmount !== null && this.maxDepositAmount <= 0) {
-            throw new InvalidAccountError('Max deposit amount must be positive');
-        }
-
-        if (this.minDepositAmount !== null && this.minDepositAmount <= 0) {
-            throw new InvalidAccountError('Min deposit amount must be positive');
-        }
-
-        if (this.minDepositAmount !== null && this.maxDepositAmount !== null && 
-            this.minDepositAmount > this.maxDepositAmount) {
-            throw new InvalidAccountError('Min deposit cannot be greater than max deposit');
-        }
-    }
-
-    public static create(
-        id: string,
-        name: string,
-        description: string,
-        interestRate: number,
-        maxDepositAmount: number | null = null,
-        minDepositAmount: number | null = null,
-        isActive: boolean = true
-    ): SavingsProductEntity {
-        return new SavingsProductEntity(
-            id,
-            name,
-            description,
-            interestRate,
-            maxDepositAmount,
-            minDepositAmount,
-            isActive,
-            new Date(),
-            new Date()
-        );
-    }
-
-    public updateInterestRate(newRate: number): SavingsProductEntity {
         return new SavingsProductEntity(
             this.id,
             this.name,
             this.description,
-            newRate,
+            validatedRate.value,
             this.maxDepositAmount,
             this.minDepositAmount,
             this.isActive,
@@ -95,14 +114,31 @@ export class SavingsProductEntity {
     public updateLimits(
         maxDepositAmount: number | null,
         minDepositAmount: number | null
-    ): SavingsProductEntity {
+    ): SavingsProductEntity | Error {
+        const validatedMaxDeposit = MaxDepositAmountValue.from(maxDepositAmount);
+        if (validatedMaxDeposit instanceof Error) {
+            return validatedMaxDeposit;
+        }
+
+        const validatedMinDeposit = MinDepositAmountValue.from(minDepositAmount);
+        if (validatedMinDeposit instanceof Error) {
+            return validatedMinDeposit;
+        }
+
+        // Validate that min is not greater than max
+        if (validatedMinDeposit.value !== null && 
+            validatedMaxDeposit.value !== null && 
+            validatedMinDeposit.value > validatedMaxDeposit.value) {
+            return new Error('Min deposit cannot be greater than max deposit');
+        }
+
         return new SavingsProductEntity(
             this.id,
             this.name,
             this.description,
             this.interestRate,
-            maxDepositAmount,
-            minDepositAmount,
+            validatedMaxDeposit.value,
+            validatedMinDeposit.value,
             this.isActive,
             this.createdAt,
             new Date()

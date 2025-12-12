@@ -72,6 +72,10 @@ export class SubscribeToSavingsProductUseCase {
         // Save to repository
         const result = await this.savingsAccountRepository.createSavingsAccount(savingsAccount);
         
+        if (result instanceof Error) {
+            return result;
+        }
+        
         // TODO: If initialDeposit is provided, transfer money from main account to savings
         
         return result;
