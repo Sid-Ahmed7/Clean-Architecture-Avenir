@@ -193,7 +193,7 @@ export class SavingsAccountController {
     async depositToSavingsAccount(req: Request, res: Response) {
         const { DepositToSavingsAccountUseCase } = require("../../../../../application/usecases/accounts/DepositToSavingsAccountUseCase");
         const { transactionRepository } = require("../../../../adapters/config/repositories");
-        const { savingsProductRepository } = require("../../../../adapters/repositories/singletons");
+        const { savingsProductRepository } = require("../../../../adapters/config/repositories");
         
         const depositUseCase = new DepositToSavingsAccountUseCase(
             this.savingsAccountRepository,

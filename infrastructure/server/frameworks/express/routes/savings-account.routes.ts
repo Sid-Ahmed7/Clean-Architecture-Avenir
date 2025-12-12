@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { SavingsAccountController } from "../controller/savings-account.controller";
-import { savingsAccountRepository, accountRepository } from "../../../../adapters/repositories/singletons";
+import { savingsAccountRepository, accountRepository } from "../../../../adapters/config/repositories";
 import { verifyTokenAccess } from "../middleware/authMiddleware";
 import { authorizeRoles } from '../middleware/roleMiddleware';
 import { RoleEnum } from "../../../../../domain/enums/RoleEnum";
