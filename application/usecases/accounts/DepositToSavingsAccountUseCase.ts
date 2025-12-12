@@ -7,10 +7,10 @@ import { DepositToSavingsAccount } from "../../responses/DepositToSavingsAccount
 
 export class DepositToSavingsAccountUseCase {
     constructor(
-        private savingsAccountRepository: SavingsAccountRepositoryInterface,
-        private savingsProductRepository: SavingsProductRepositoryInterface,
-        private accountRepository: AccountRepositoryInterface,
-        private transactionRepository: TransactionRepositoryInterface
+        private readonly savingsAccountRepository: SavingsAccountRepositoryInterface,
+        private readonly savingsProductRepository: SavingsProductRepositoryInterface,
+        private readonly accountRepository: AccountRepositoryInterface,
+        private readonly transactionRepository: TransactionRepositoryInterface
     ) {}
 
     public async execute(dto: DepositToSavingsAccount): Promise<SavingsAccountsEntity | Error> {

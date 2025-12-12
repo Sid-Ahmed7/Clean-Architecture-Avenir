@@ -5,8 +5,8 @@ import { InterestSummary } from "../../responses/InterestSummary";
 
 export class GetAccountInterestHistoryUseCase {
     constructor(
-        private savingsAccountRepository: SavingsAccountRepositoryInterface,
-        private accountRepository: AccountRepositoryInterface
+        private readonly savingsAccountRepository: SavingsAccountRepositoryInterface,
+        private readonly accountRepository: AccountRepositoryInterface
     ) {}
 
     public async execute(accountNumber: number): Promise<InterestSummary | AccountNotFoundError | Error> {

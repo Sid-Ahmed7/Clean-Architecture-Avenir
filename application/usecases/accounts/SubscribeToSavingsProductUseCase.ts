@@ -6,9 +6,9 @@ import { SubscribeToSavingsProduct } from "../../responses/SubscribeToSavingsPro
 
 export class SubscribeToSavingsProductUseCase {
     constructor(
-        private savingsAccountRepository: SavingsAccountRepositoryInterface,
-        private savingsProductRepository: SavingsProductRepositoryInterface,
-        private accountRepository: AccountRepositoryInterface
+        private readonly savingsAccountRepository: SavingsAccountRepositoryInterface,
+        private readonly savingsProductRepository: SavingsProductRepositoryInterface,
+        private readonly accountRepository: AccountRepositoryInterface
     ) {}
 
     public async execute(dto: SubscribeToSavingsProduct): Promise<SavingsAccountsEntity | Error> {

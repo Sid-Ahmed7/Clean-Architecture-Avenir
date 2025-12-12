@@ -5,8 +5,8 @@ import { UuidGeneratorService } from "../../ports/services/UuidGeneratorService"
 
 export class CreateSavingsProductUseCase {
     constructor(
-        private savingsProductRepository: SavingsProductRepositoryInterface,
-        private uuidService: UuidGeneratorService
+        private readonly savingsProductRepository: SavingsProductRepositoryInterface,
+        private readonly uuidService: UuidGeneratorService
     ) {}
 
     public async execute(dto: CreateSavingsProduct): Promise<SavingsProductEntity | Error> {

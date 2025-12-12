@@ -4,7 +4,7 @@ import { AccountNotFoundError } from "../../errors/AccountNotFoundError";
 
 export class GetSavingsAccountUseCase {
     constructor(
-        private savingsAccountRepository: SavingsAccountRepositoryInterface
+        private readonly savingsAccountRepository: SavingsAccountRepositoryInterface
     ) {}
 
     public async execute(accountNumber: number): Promise<SavingsAccountsEntity | AccountNotFoundError> {

@@ -6,7 +6,7 @@ import { InvalidAccountError } from "../../../domain/errors/InvalidAccountError"
 
 export class UpdateSavingsAccountConfigUseCase {
     constructor(
-        private savingsAccountRepository: SavingsAccountRepositoryInterface
+        private readonly savingsAccountRepository: SavingsAccountRepositoryInterface
     ) {}
 
     public async execute(dto: UpdateSavingsAccountConfig): Promise<SavingsAccountsEntity | AccountNotFoundError | InvalidAccountError | Error> {

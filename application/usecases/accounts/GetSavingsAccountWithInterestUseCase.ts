@@ -4,7 +4,7 @@ import { SavingsAccountWithInterest } from "../../responses/SavingsAccountWithIn
 
 export class GetSavingsAccountWithInterestUseCase {
     constructor(
-        private savingsAccountRepository: SavingsAccountRepositoryInterface
+        private readonly savingsAccountRepository: SavingsAccountRepositoryInterface
     ) {}
 
     public async execute(dto: SavingsAccountWithInterest): Promise<SavingsAccountsEntity | Error> {

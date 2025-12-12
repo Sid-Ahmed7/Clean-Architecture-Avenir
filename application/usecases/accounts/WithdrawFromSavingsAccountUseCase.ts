@@ -6,9 +6,9 @@ import { WithdrawFromSavingsAccount } from "../../responses/WithdrawFromSavingsA
 
 export class WithdrawFromSavingsAccountUseCase {
     constructor(
-        private savingsAccountRepository: SavingsAccountRepositoryInterface,
-        private accountRepository: AccountRepositoryInterface,
-        private transactionRepository: TransactionRepositoryInterface
+        private readonly savingsAccountRepository: SavingsAccountRepositoryInterface,
+        private readonly accountRepository: AccountRepositoryInterface,
+        private readonly transactionRepository: TransactionRepositoryInterface
     ) {}
 
     public async execute(dto: WithdrawFromSavingsAccount): Promise<SavingsAccountsEntity | Error> {

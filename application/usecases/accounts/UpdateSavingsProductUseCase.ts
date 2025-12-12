@@ -5,8 +5,8 @@ import { UpdateSavingsProduct } from "../../responses/UpdateSavingsProduct";
 
 export class UpdateSavingsProductUseCase {
     constructor(
-        private savingsProductRepository: SavingsProductRepositoryInterface,
-        private savingsAccountRepository: SavingsAccountRepositoryInterface
+        private readonly savingsProductRepository: SavingsProductRepositoryInterface,
+        private readonly savingsAccountRepository: SavingsAccountRepositoryInterface
     ) {}
 
     public async execute(dto: UpdateSavingsProduct): Promise<SavingsProductEntity | Error> {

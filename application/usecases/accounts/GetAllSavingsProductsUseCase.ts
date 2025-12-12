@@ -3,7 +3,7 @@ import { SavingsProductRepositoryInterface } from "../../ports/repositories/Savi
 
 export class GetAllSavingsProductsUseCase {
     constructor(
-        private savingsProductRepository: SavingsProductRepositoryInterface
+        private readonly savingsProductRepository: SavingsProductRepositoryInterface
     ) {}
 
     public async execute(activeOnly: boolean = true): Promise<SavingsProductEntity[]> {

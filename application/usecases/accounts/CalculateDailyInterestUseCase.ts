@@ -6,8 +6,8 @@ import { InterestCalculationResult } from "../../responses/InterestCalculationRe
 
 export class CalculateDailyInterestUseCase {
     constructor(
-        private savingsAccountRepository: SavingsAccountRepositoryInterface,
-        private accountRepository: AccountRepositoryInterface
+        private readonly savingsAccountRepository: SavingsAccountRepositoryInterface,
+        private readonly accountRepository: AccountRepositoryInterface
     ) {}
 
     public async execute(): Promise<Array<InterestCalculationResult> | Error> {
