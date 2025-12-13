@@ -253,5 +253,23 @@ export class LoanController {
     const schedules = await useCase.execute(clientId);
     return res.status(200).json(schedules);
   }
+
+  async getClientInfo(req: Request, res: Response) {
+    const clientId = req.params.id;
+    if (!clientId) {
+      return res.status(400).json({ error: "Client id is required" });
+    }
+
+    const user = await this.userRepository.findById(clientId);
+    if (user instanceof UserNotFoundError) {
+      return res.status(404).json({ error: user.message });
+    }
+
+    const accounts = await this.accountRepository.getAccountsByUserId(clientId);
+    return res.status(200).json({
+      user,
+      accounts,
+    });
+  }
 }
 

@@ -30,6 +30,12 @@ export class CreateLoanRequestUseCase {
     }
     const advisorName = [advisor.firstName, advisor.lastName].filter(Boolean).join(" ").trim() || advisor.email || advisor.id;
 
+    const client = await this.userRepository.findById(clientId);
+    const clientName =
+      client instanceof Error
+        ? undefined
+        : [client.firstName, client.lastName].filter(Boolean).join(" ").trim() || client.email || client.id;
+
     const advisorRoles = await this.userRoleRepository.findRolesByUserId(input.advisorId);
     if (advisorRoles instanceof Error || !advisorRoles.find((r) => r.name === RoleEnum.BANK_ADVISOR)) {
       return new Error("Advisor not found");
@@ -46,6 +52,8 @@ export class CreateLoanRequestUseCase {
       input.purpose,
       input.durationMonths ?? 12,
       advisorName,
+      undefined,
+      clientName,
     );
 
     if (request instanceof Error) {

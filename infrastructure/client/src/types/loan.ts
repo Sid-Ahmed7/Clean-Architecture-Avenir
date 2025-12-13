@@ -12,6 +12,7 @@ export interface LoanRequest {
   monthlyPayment?: number;
   advisorName?: string;
   directorName?: string;
+  clientName?: string;
 }
 
 export type LoanDecision = "approve" | "reject";

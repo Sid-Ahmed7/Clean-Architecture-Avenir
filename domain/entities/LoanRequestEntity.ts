@@ -11,6 +11,7 @@ export class LoanRequestEntity {
     durationMonths: number = 12,
     advisorName?: string,
     directorName?: string,
+    clientName?: string,
   ) {
     const validatedClient = UserIdValue.from(clientId);
     if (validatedClient instanceof Error) {
@@ -45,6 +46,7 @@ export class LoanRequestEntity {
       undefined,
       advisorName,
       directorName,
+      clientName,
     );
   }
 
@@ -63,6 +65,7 @@ export class LoanRequestEntity {
     public monthlyPayment?: number,
     public advisorName?: string,
     public directorName?: string,
+    public clientName?: string,
   ) {}
 
   public updateStatus(status: LoanStatusEnum) {

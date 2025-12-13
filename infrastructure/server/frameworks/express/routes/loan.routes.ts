@@ -101,5 +101,12 @@ router.get(
   (req, res) => loanController.listClientRepayments(req, res),
 );
 
+router.get(
+  "/client/:id/info",
+  verifyTokenAccess,
+  authorizeRoles([RoleEnum.BANK_ADVISOR, RoleEnum.BANK_MANAGER]),
+  (req, res) => loanController.getClientInfo(req, res),
+);
+
 export default router;
 
