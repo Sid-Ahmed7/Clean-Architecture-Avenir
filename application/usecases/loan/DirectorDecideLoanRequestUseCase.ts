@@ -5,12 +5,16 @@ import { LoanConfigRepositoryInterface } from "../../ports/repositories/LoanConf
 import { AccountTypeEnum } from "../../../domain/enums/AccountTypeEnum";
 import { UserNotFoundError } from "../../errors/UserNotFoundError";
 import { AccountNotFoundError } from "../../errors/AccountNotFoundError";
+import { LoanRepaymentScheduleRepositoryInterface } from "../../ports/repositories/LoanRepaymentScheduleRepositoryInterface";
+import { CreateRepaymentScheduleUseCase } from "./CreateRepaymentScheduleUseCase";
 
 export class DirectorDecideLoanRequestUseCase {
   public constructor(
     private readonly loanRequestRepository: LoanRequestRepositoryInterface,
     private readonly accountRepository: AccountRepositoryInterface,
     private readonly loanConfigRepository: LoanConfigRepositoryInterface,
+    private readonly repaymentScheduleRepository: LoanRepaymentScheduleRepositoryInterface,
+    private readonly createRepaymentScheduleUseCase: CreateRepaymentScheduleUseCase,
   ) {}
 
   public async execute(requestId: string, decision: "approve" | "reject", directorName?: string) {
@@ -61,7 +65,17 @@ export class DirectorDecideLoanRequestUseCase {
     }
 
     request.updateStatus(LoanStatusEnum.DISBURSED);
-    return this.loanRequestRepository.save(request);
+    await this.loanRequestRepository.save(request);
+
+    await this.createRepaymentScheduleUseCase.execute(
+      request.id,
+      request.clientId,
+      request.monthlyPayment ?? 0,
+      request.amount,
+      request.durationMonths,
+    );
+
+    return request;
   }
 }
 

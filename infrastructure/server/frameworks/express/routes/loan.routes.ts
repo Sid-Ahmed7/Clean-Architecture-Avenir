@@ -10,6 +10,7 @@ import {
   uuidService,
   accountRepository,
   loanConfigRepository,
+  loanRepaymentScheduleRepository,
 } from "../../../../adapters/config/repositories";
 
 const router = express.Router();
@@ -21,6 +22,7 @@ const loanController = new LoanController(
   uuidService,
   accountRepository,
   loanConfigRepository,
+  loanRepaymentScheduleRepository,
 );
 
 router.post(
@@ -90,6 +92,13 @@ router.get(
   "/rate",
   verifyTokenAccess,
   (req, res) => loanController.getIndicativeRate(req, res),
+);
+
+router.get(
+  "/client/repayments",
+  verifyTokenAccess,
+  authorizeRoles([RoleEnum.CLIENT]),
+  (req, res) => loanController.listClientRepayments(req, res),
 );
 
 export default router;

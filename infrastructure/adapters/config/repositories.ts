@@ -28,6 +28,7 @@ import { InMemoryTransactionRepository } from "../repositories/InMemoryTransacti
 import { LocaleValidationService } from "../services/LocaleValidationService";
 import { InMemoryLoanRequestRepository } from "../repositories/InMemoryLoanRequestRepository";
 import { InMemoryLoanConfigRepository } from "../repositories/InMemoryLoanConfigRepository";
+import { InMemoryLoanRepaymentScheduleRepository } from "../repositories/InMemoryLoanRepaymentScheduleRepository";
 
 const baseUrl = process.env.CLIENT_BASE_URL!;
 export const tokenService = new JwtTokenService();
@@ -64,3 +65,4 @@ export const transferValidationService = new ValidateTransferService(transferLim
 export const localService = new LocaleValidationService()
 export const loanRequestRepository = new InMemoryLoanRequestRepository();
 export const loanConfigRepository = new InMemoryLoanConfigRepository();
+export const loanRepaymentScheduleRepository = new InMemoryLoanRepaymentScheduleRepository();

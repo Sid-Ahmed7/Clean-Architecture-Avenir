@@ -51,3 +51,8 @@ export const getIndicativeRate = async () => {
   return data.rate ?? null;
 };
 
+export const getClientRepayments = async () => {
+  const { data } = await apiClient.get("/loan/client/repayments");
+  return data ?? [];
+};
+

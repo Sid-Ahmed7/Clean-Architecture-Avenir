@@ -1,19 +1,23 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { clientRespondProposal, getClientLoanRequests } from "@/lib/api/loan";
-import { LoanRequest } from "@/types/loan";
+import { clientRespondProposal, getClientLoanRequests, getClientRepayments } from "@/lib/api/loan";
+import { LoanRepaymentSchedule, LoanRequest } from "@/types/loan";
 import { withClientProtection } from "@/components/auth/withRoleProtection";
 
 function ClientLoanRequestsPage() {
   const [requests, setRequests] = useState<LoanRequest[]>([]);
+  const [repayments, setRepayments] = useState<LoanRepaymentSchedule[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState<string | null>(null);
 
   useEffect(() => {
-    getClientLoanRequests()
-      .then((data) => setRequests(data))
+    Promise.all([getClientLoanRequests(), getClientRepayments()])
+      .then(([loans, schedules]) => {
+        setRequests(loans);
+        setRepayments(schedules);
+      })
       .catch((err) => {
         console.error("Failed to load loan requests:", err);
         setError(err.response?.data?.error || "Impossible de charger vos demandes");
@@ -54,6 +58,8 @@ function ClientLoanRequestsPage() {
     return "--";
   };
 
+  const scheduleFor = (loanId: string) => repayments.find((s) => s.loanRequestId === loanId);
+
   return (
     <div className="p-6 max-w-5xl mx-auto">
       <h1 className="text-2xl font-bold text-gray-900 mb-4">Mes demandes de crédit</h1>
@@ -90,6 +96,12 @@ function ClientLoanRequestsPage() {
                   Mensualité
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Reste à payer
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Prochaine échéance
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Créée le
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -121,6 +133,21 @@ function ClientLoanRequestsPage() {
                         : "-"}
                   </td>
                   <td className="px-4 py-3 text-sm text-gray-900">{formatMonthly(req)}</td>
+                  <td className="px-4 py-3 text-sm text-gray-900">
+                    {(() => {
+                      const sched = scheduleFor(req.id);
+                      if (!sched) return "-";
+                      const remaining = `${sched.remainingPrincipal.toFixed(2)} €`;
+                      const remainingTerms = sched.durationMonths - sched.paymentsMade;
+                      return `${remaining} (reste ${remainingTerms} échéance${remainingTerms > 1 ? "s" : ""})`;
+                    })()}
+                  </td>
+                  <td className="px-4 py-3 text-sm text-gray-900">
+                    {(() => {
+                      const sched = scheduleFor(req.id);
+                      return sched ? new Date(sched.nextDueDate).toLocaleDateString("fr-FR") : "-";
+                    })()}
+                  </td>
                   <td className="px-4 py-3 text-sm text-gray-500">
                     {new Date(req.createdAt).toLocaleDateString("fr-FR")}
                   </td>

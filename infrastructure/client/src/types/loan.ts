@@ -16,3 +16,16 @@ export interface LoanRequest {
 
 export type LoanDecision = "approve" | "reject";
 
+export interface LoanRepaymentSchedule {
+  id: string;
+  loanRequestId: string;
+  clientId: string;
+  monthlyAmount: number;
+  remainingPrincipal: number;
+  nextDueDate: string;
+  durationMonths: number;
+  paymentsMade: number;
+  status: string;
+  lastFailureReason?: string;
+}
+
