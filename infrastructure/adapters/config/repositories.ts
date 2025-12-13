@@ -60,3 +60,10 @@ export const altService = new GenerateAltTextService();
 export const transferLimitService = new ManageTransferLimitService();
 export const transferValidationService = new ValidateTransferService(transferLimitService);
 export const localService = new LocaleValidationService()
+
+// Savings repositories
+import { InMemorySavingsProductRepository } from '../repositories/InMemorySavingsProductRepository';
+import { InMemorySavingsAccountRepository } from '../repositories/InMemorySavingsAccountRepository';
+
+export const savingsProductRepository = new InMemorySavingsProductRepository();
+export const savingsAccountRepository = new InMemorySavingsAccountRepository();

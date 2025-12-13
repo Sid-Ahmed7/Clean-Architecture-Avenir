@@ -1,21 +1,29 @@
 import { useTranslations } from "next-intl"
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AccountModel, accountSchema } from "../lib/validation/bankAccount/accountSchema";
-import { apiClient } from "../lib/api/apiClient";
 import z from "zod";
 import { getAccounts } from "../lib/api/account";
+import { AuthContext } from "../contexts/AuthProvider";
+import { RoleEnum } from "../types/RoleEnum";
 
 export const useUserAccounts = () => {
     const t = useTranslations();
+    const { hasAnyRole, isAuthenticated } = useContext(AuthContext);
     const [accounts, setAccounts] = useState<AccountModel[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    const loadAccounts = () => {
+    useEffect(() => {
+        // Wait for authentication to be determined
+        if (isAuthenticated === undefined) {
+            return;
+        }
+
         setLoading(true);
 
-        getAccounts().then((res) => {
-            const parsed = z.array(accountSchema(t)).safeParse(res.data);
+        getAccounts()
+            .then((res) => {
+                const parsed = z.array(accountSchema(t)).safeParse(res.data);
 
                 if (!parsed.success) {
                     setError("Erreur compte");
@@ -26,14 +34,10 @@ export const useUserAccounts = () => {
                 setError(null);
             })
             .catch((err) => {
-                setError(err?.response?.data?.message || t("errors.accountLoad"));
+                setError(err.response?.data?.message || t("errors.accountLoad"));
             })
             .finally(() => setLoading(false));
-    };
+    }, [t, hasAnyRole, isAuthenticated]);
 
-    useEffect(() => {
-        loadAccounts();
-    }, [t]);
-
-    return { accounts, loading, error, reload: loadAccounts };
+    return { accounts, loading, error };
 }

@@ -52,6 +52,5 @@ export const createRoleBasedComponent = (role: RoleEnum | string) => {
 
 // Pre-defined components for common roles
 export const ClientOnly = createRoleBasedComponent(RoleEnum.CLIENT);
-export const BankAdvisorOnly = createRoleBasedComponent(RoleEnum.BANK_ADVISOR);
-export const BankManagerOnly = createRoleBasedComponent(RoleEnum.BANK_MANAGER);
-export const AdminOnly = createRoleBasedComponent(RoleEnum.ADMIN);
+export const AdvisorOnly = createRoleBasedComponent(RoleEnum.BANK_ADVISOR);
+export const ManagerOnly = createRoleBasedComponent(RoleEnum.BANK_MANAGER);

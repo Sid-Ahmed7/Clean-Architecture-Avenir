@@ -35,12 +35,13 @@ export default function Header({ searchQuery, setSearchQuery, onMenuClick }: Hea
           </div>
 
           {!loading && user?.user && (
-            <div className="flex items-center gap-2 ml-6 text-xl">
-              <p className="font-medium text-gray-900">
-                <span className="font-bold text-blue-600">Bienvenue</span> {user.user.firstName} {user.user.lastName}
+            <div className="flex items-center gap-3 ml-6">
+              <p className="text-base font-semibold text-gray-900">
+                {user.user.firstName} {user.user.lastName}
               </p>
-
-              <p className="text-blue-600"> - {user.user.role}</p>
+              <span className="inline-flex items-center px-3 py-1 rounded-lg text-sm font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md">
+                {user.user.role}
+              </span>
             </div>
           )}
         </div>
