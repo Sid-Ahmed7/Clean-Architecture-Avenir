@@ -6,8 +6,8 @@ import { SubscribeToSavingsProductUseCase } from "../../../../../application/use
 import { InMemorySavingsProductRepository } from "../../../../adapters/repositories/InMemorySavingsProductRepository";
 import { InMemorySavingsAccountRepository } from "../../../../adapters/repositories/InMemorySavingsAccountRepository";
 import { InMemoryAccountRepository } from "../../../../adapters/repositories/InMemoryAccountRepository";
-import { CreateSavingsProduct } from "../../../../../application/responses/CreateSavingsProduct";
-import { UpdateSavingsProduct } from "../../../../../application/responses/UpdateSavingsProduct";
+import { CreateSavingsProduct } from "../../../../../application/requests/CreateSavingsProduct";
+import { UpdateSavingsProduct } from "../../../../../application/requests/UpdateSavingsProduct";
 import { uuidService } from "../../../../adapters/config/repositories";
 
 export class SavingsProductController {

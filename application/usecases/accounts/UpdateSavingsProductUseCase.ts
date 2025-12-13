@@ -1,7 +1,7 @@
 import { SavingsProductEntity } from "../../../domain/entities/SavingsProductEntity";
 import { SavingsProductRepositoryInterface } from "../../ports/repositories/SavingsProductRepositoryInterface";
 import { SavingsAccountRepositoryInterface } from "../../ports/repositories/SavingsAccountRepositoryInterface";
-import { UpdateSavingsProduct } from "../../responses/UpdateSavingsProduct";
+import { UpdateSavingsProduct } from "../../requests/UpdateSavingsProduct";
 
 export class UpdateSavingsProductUseCase {
     constructor(

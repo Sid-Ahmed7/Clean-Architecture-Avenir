@@ -1,6 +1,6 @@
 import { SavingsAccountsEntity } from "../../../domain/entities/SavingsAccountEntity";
 import { SavingsAccountRepositoryInterface } from "../../ports/repositories/SavingsAccountRepositoryInterface";
-import { SavingsAccountWithInterest } from "../../responses/SavingsAccountWithInterest";
+import { SavingsAccountWithInterest } from "../../requests/SavingsAccountWithInterest";
 
 export class GetSavingsAccountWithInterestUseCase {
     constructor(

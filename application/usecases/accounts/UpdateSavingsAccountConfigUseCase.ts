@@ -1,6 +1,6 @@
 import { SavingsAccountsEntity } from "../../../domain/entities/SavingsAccountEntity";
 import { SavingsAccountRepositoryInterface } from "../../ports/repositories/SavingsAccountRepositoryInterface";
-import { UpdateSavingsAccountConfig } from "../../responses/UpdateSavingsAccountConfig";
+import { UpdateSavingsAccountConfig } from "../../requests/UpdateSavingsAccountConfig";
 import { AccountNotFoundError } from "../../errors/AccountNotFoundError";
 import { InvalidAccountError } from "../../../domain/errors/InvalidAccountError";
 

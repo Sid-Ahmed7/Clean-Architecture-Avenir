@@ -2,7 +2,7 @@ import { SavingsAccountsEntity } from "../../../domain/entities/SavingsAccountEn
 import { SavingsAccountRepositoryInterface } from "../../ports/repositories/SavingsAccountRepositoryInterface";
 import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
 import { TransactionRepositoryInterface } from "../../ports/repositories/TransactionRepositoryInterface";
-import { WithdrawFromSavingsAccount } from "../../responses/WithdrawFromSavingsAccount";
+import { WithdrawFromSavingsAccount } from "../../requests/WithdrawFromSavingsAccount";
 
 export class WithdrawFromSavingsAccountUseCase {
     constructor(

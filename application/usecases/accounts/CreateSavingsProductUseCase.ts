@@ -1,6 +1,6 @@
 import { SavingsProductEntity } from "../../../domain/entities/SavingsProductEntity";
 import { SavingsProductRepositoryInterface } from "../../ports/repositories/SavingsProductRepositoryInterface";
-import { CreateSavingsProduct } from "../../responses/CreateSavingsProduct";
+import { CreateSavingsProduct } from "../../requests/CreateSavingsProduct";
 import { UuidGeneratorService } from "../../ports/services/UuidGeneratorService";
 
 export class CreateSavingsProductUseCase {

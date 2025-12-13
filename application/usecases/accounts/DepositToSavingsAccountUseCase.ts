@@ -3,7 +3,7 @@ import { SavingsAccountRepositoryInterface } from "../../ports/repositories/Savi
 import { SavingsProductRepositoryInterface } from "../../ports/repositories/SavingsProductRepositoryInterface";
 import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
 import { TransactionRepositoryInterface } from "../../ports/repositories/TransactionRepositoryInterface";
-import { DepositToSavingsAccount } from "../../responses/DepositToSavingsAccount";
+import { DepositToSavingsAccount } from "../../requests/DepositToSavingsAccount";
 
 export class DepositToSavingsAccountUseCase {
     constructor(

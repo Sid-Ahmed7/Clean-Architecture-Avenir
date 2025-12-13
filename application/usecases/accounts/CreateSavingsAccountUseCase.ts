@@ -1,6 +1,6 @@
 import { SavingsAccountsEntity } from "../../../domain/entities/SavingsAccountEntity";
 import { SavingsAccountRepositoryInterface } from "../../ports/repositories/SavingsAccountRepositoryInterface";
-import { CreateSavingsAccount } from "../../responses/CreateSavingsAccount";
+import { CreateSavingsAccount } from "../../requests/CreateSavingsAccount";
 import { InvalidAccountError } from "../../../domain/errors/InvalidAccountError";
 
 export class CreateSavingsAccountUseCase {

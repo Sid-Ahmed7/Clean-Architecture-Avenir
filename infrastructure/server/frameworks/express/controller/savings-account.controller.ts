@@ -8,8 +8,8 @@ import { InMemorySavingsAccountRepository } from "../../../../adapters/repositor
 import { InMemoryAccountRepository } from "../../../../adapters/repositories/InMemoryAccountRepository";
 import { AccountNotFoundError } from "../../../../../application/errors/AccountNotFoundError";
 import { InvalidAccountError } from "../../../../../domain/errors/InvalidAccountError";
-import { CreateSavingsAccount } from "../../../../../application/responses/CreateSavingsAccount";
-import { UpdateSavingsAccountConfig } from "../../../../../application/responses/UpdateSavingsAccountConfig";
+import { CreateSavingsAccount } from "../../../../../application/requests/CreateSavingsAccount";
+import { UpdateSavingsAccountConfig } from "../../../../../application/requests/UpdateSavingsAccountConfig";
 
 export class SavingsAccountController {
 

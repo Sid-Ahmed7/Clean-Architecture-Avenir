@@ -2,7 +2,7 @@ import { SavingsAccountsEntity } from "../../../domain/entities/SavingsAccountEn
 import { SavingsAccountRepositoryInterface } from "../../ports/repositories/SavingsAccountRepositoryInterface";
 import { SavingsProductRepositoryInterface } from "../../ports/repositories/SavingsProductRepositoryInterface";
 import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
-import { SubscribeToSavingsProduct } from "../../responses/SubscribeToSavingsProduct";
+import { SubscribeToSavingsProduct } from "../../requests/SubscribeToSavingsProduct";
 
 export class SubscribeToSavingsProductUseCase {
     constructor(
