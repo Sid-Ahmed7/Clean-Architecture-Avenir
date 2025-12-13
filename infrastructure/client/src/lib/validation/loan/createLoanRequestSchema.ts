@@ -4,6 +4,7 @@ export type CreateLoanRequestInput = {
   advisorId: string;
   amount: number;
   purpose: string;
+  durationMonths: number;
 };
 
 export const createLoanRequestSchema = (t?: (key: string) => string) =>
@@ -15,5 +16,9 @@ export const createLoanRequestSchema = (t?: (key: string) => string) =>
     purpose: z
       .string()
       .min(3, t ? t("errors.purposeRequired") : "Purpose is required"),
+    durationMonths: z
+      .number({ message: "Durée invalide" })
+      .int({ message: "Durée invalide" })
+      .positive({ message: "Durée invalide" }),
   });
 

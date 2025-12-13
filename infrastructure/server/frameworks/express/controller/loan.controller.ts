@@ -7,6 +7,7 @@ import { DirectorDecideLoanRequestUseCase } from "../../../../../application/use
 import { ListAdvisorApprovedRequestsUseCase } from "../../../../../application/usecases/loan/ListAdvisorApprovedRequestsUseCase";
 import { DirectorProposeRateUseCase } from "../../../../../application/usecases/loan/DirectorProposeRateUseCase";
 import { ClientRespondLoanProposalUseCase } from "../../../../../application/usecases/loan/ClientRespondLoanProposalUseCase";
+import { LoanConfigRepositoryInterface } from "../../../../../application/ports/repositories/LoanConfigRepositoryInterface";
 import { LoanRequestRepositoryInterface } from "../../../../../application/ports/repositories/LoanRequestRepositoryInterface";
 import { UserRepositoryInterface } from "../../../../../application/ports/repositories/auth/UserRepositoryInterface";
 import { UserRoleRepositoryInterface } from "../../../../../application/ports/repositories/auth/UserRoleRepositoryInterface";
@@ -15,6 +16,7 @@ import { AccountRepositoryInterface } from "../../../../../application/ports/rep
 import { createLoanRequestSchema } from "../schemas/loan/createLoanRequestSchema";
 import { decideLoanRequestSchema } from "../schemas/loan/decideLoanRequestSchema";
 import { proposeRateSchema } from "../schemas/loan/proposeRateSchema";
+import { setRateSchema } from "../schemas/loan/setRateSchema";
 import { UserNotFoundError } from "../../../../../application/errors/UserNotFoundError";
 
 export class LoanController {
@@ -24,6 +26,7 @@ export class LoanController {
     private readonly userRoleRepository: UserRoleRepositoryInterface,
     private readonly uuidService: UuidGeneratorService,
     private readonly accountRepository: AccountRepositoryInterface,
+    private readonly loanConfigRepository: LoanConfigRepositoryInterface,
   ) {}
 
   async createLoanRequest(req: Request, res: Response) {
@@ -42,6 +45,7 @@ export class LoanController {
       this.userRepository,
       this.userRoleRepository,
       this.uuidService,
+      this.loanConfigRepository,
     );
 
     const result = await createUseCase.execute(clientId, parseResult.data);
@@ -117,8 +121,20 @@ export class LoanController {
       return res.status(400).json({ errors: parseResult.error.message });
     }
 
-    const useCase = new DirectorDecideLoanRequestUseCase(this.loanRequestRepository);
-    const result = await useCase.execute(requestId, parseResult.data.decision);
+    const director = await this.userRepository.findById(directorId);
+    const directorName =
+      director instanceof Error
+        ? undefined
+        : [director.firstName, director.lastName].filter(Boolean).join(" ").trim() ||
+          director.email ||
+          director.id;
+
+    const useCase = new DirectorDecideLoanRequestUseCase(
+      this.loanRequestRepository,
+      this.accountRepository,
+      this.loanConfigRepository,
+    );
+    const result = await useCase.execute(requestId, parseResult.data.decision, directorName);
 
     if (result instanceof Error) {
       return res.status(400).json({ error: result.message });
@@ -153,8 +169,16 @@ export class LoanController {
       return res.status(400).json({ errors: parseResult.error.message });
     }
 
+    const director = await this.userRepository.findById(directorId);
+    const directorName =
+      director instanceof Error
+        ? undefined
+        : [director.firstName, director.lastName].filter(Boolean).join(" ").trim() ||
+          director.email ||
+          director.id;
+
     const useCase = new DirectorProposeRateUseCase(this.loanRequestRepository);
-    const result = await useCase.execute(requestId, parseResult.data.rate);
+    const result = await useCase.execute(requestId, parseResult.data.rate, directorName);
 
     if (result instanceof Error) {
       return res.status(400).json({ error: result.message });
@@ -187,6 +211,26 @@ export class LoanController {
     }
 
     return res.status(200).json(result);
+  }
+
+  async setIndicativeRate(req: Request, res: Response) {
+    const directorId = req.user?.userId;
+    if (!directorId) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    const parseResult = setRateSchema.safeParse(req.body);
+    if (!parseResult.success) {
+      return res.status(400).json({ errors: parseResult.error.message });
+    }
+
+    await this.loanConfigRepository.setIndicativeRate(parseResult.data.rate);
+    return res.status(200).json({ rate: parseResult.data.rate });
+  }
+
+  async getIndicativeRate(req: Request, res: Response) {
+    const rate = await this.loanConfigRepository.getIndicativeRate();
+    return res.status(200).json({ rate });
   }
 }
 

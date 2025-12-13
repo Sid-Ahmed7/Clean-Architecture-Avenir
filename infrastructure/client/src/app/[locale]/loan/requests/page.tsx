@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { clientRespondProposal, getClientLoanRequests } from "@/lib/api/loan";
 import { LoanRequest } from "@/types/loan";
 import { withClientProtection } from "@/components/auth/withRoleProtection";
@@ -44,6 +44,16 @@ function ClientLoanRequestsPage() {
     return <div className="p-6 text-red-600">{error}</div>;
   }
 
+  const formatMonthly = (req: LoanRequest) => {
+    if (req.monthlyPayment !== undefined) return `${req.monthlyPayment.toFixed(2)} €/mois`;
+    if (req.proposedRate !== undefined && req.durationMonths && req.durationMonths > 0) {
+      const total = req.amount * (1 + req.proposedRate * (req.durationMonths / 12));
+      const monthly = total / req.durationMonths;
+      return `${monthly.toFixed(2)} €/mois (proposé)`;
+    }
+    return "--";
+  };
+
   return (
     <div className="p-6 max-w-5xl mx-auto">
       <h1 className="text-2xl font-bold text-gray-900 mb-4">Mes demandes de crédit</h1>
@@ -71,7 +81,13 @@ function ClientLoanRequestsPage() {
                   Statut
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Taux proposé
+                  Durée
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Taux
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Mensualité
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Créée le
@@ -84,7 +100,9 @@ function ClientLoanRequestsPage() {
             <tbody className="bg-white divide-y divide-gray-200">
               {requests.map((req) => (
                 <tr key={req.id}>
-                  <td className="px-4 py-3 text-sm text-gray-900">{req.advisorId}</td>
+                  <td className="px-4 py-3 text-sm text-gray-900">
+                    {req.advisorName ?? req.advisorId}
+                  </td>
                   <td className="px-4 py-3 text-sm text-gray-900">{req.amount.toLocaleString("fr-FR")} €</td>
                   <td className="px-4 py-3 text-sm text-gray-700">{req.purpose}</td>
                   <td className="px-4 py-3 text-sm">
@@ -93,8 +111,16 @@ function ClientLoanRequestsPage() {
                     </span>
                   </td>
                   <td className="px-4 py-3 text-sm text-gray-900">
-                    {req.proposedRate ? `${req.proposedRate}%` : "-"}
+                    {req.durationMonths ? `${req.durationMonths} mois` : "-"}
                   </td>
+                  <td className="px-4 py-3 text-sm text-gray-900">
+                    {req.appliedRate !== undefined
+                      ? `${(req.appliedRate * 100).toFixed(2)}% (appliqué${req.directorName ? ` par ${req.directorName}` : ""})`
+                      : req.proposedRate !== undefined
+                        ? `${(req.proposedRate * 100).toFixed(2)}% (proposé${req.directorName ? ` par ${req.directorName}` : ""})`
+                        : "-"}
+                  </td>
+                  <td className="px-4 py-3 text-sm text-gray-900">{formatMonthly(req)}</td>
                   <td className="px-4 py-3 text-sm text-gray-500">
                     {new Date(req.createdAt).toLocaleDateString("fr-FR")}
                   </td>

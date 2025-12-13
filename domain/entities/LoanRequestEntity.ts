@@ -8,6 +8,9 @@ export class LoanRequestEntity {
     advisorId: string,
     amount: number,
     purpose: string,
+    durationMonths: number = 12,
+    advisorName?: string,
+    directorName?: string,
   ) {
     const validatedClient = UserIdValue.from(clientId);
     if (validatedClient instanceof Error) {
@@ -37,6 +40,11 @@ export class LoanRequestEntity {
       new Date(),
       undefined,
       undefined,
+      durationMonths,
+      undefined,
+      undefined,
+      advisorName,
+      directorName,
     );
   }
 
@@ -50,6 +58,11 @@ export class LoanRequestEntity {
     public readonly createdAt: Date,
     public proposedRate?: number,
     public clientDecision?: "ACCEPTED" | "REJECTED",
+    public durationMonths: number = 12,
+    public appliedRate?: number,
+    public monthlyPayment?: number,
+    public advisorName?: string,
+    public directorName?: string,
   ) {}
 
   public updateStatus(status: LoanStatusEnum) {
@@ -64,6 +77,16 @@ export class LoanRequestEntity {
   public applyClientDecision(accept: boolean) {
     this.clientDecision = accept ? "ACCEPTED" : "REJECTED";
     this.status = accept ? LoanStatusEnum.DIRECTOR_APPROVED : LoanStatusEnum.CLIENT_REJECTED;
+  }
+
+  public applyRate(rate: number) {
+    this.appliedRate = rate;
+    const total = this.amount * (1 + rate * (this.durationMonths / 12));
+    this.monthlyPayment = Number((total / this.durationMonths).toFixed(2));
+  }
+
+  public setDirectorName(name: string) {
+    this.directorName = name;
   }
 }
 

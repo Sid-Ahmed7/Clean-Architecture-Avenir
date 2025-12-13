@@ -7,6 +7,11 @@ export interface LoanRequest {
   status: string;
   createdAt: string;
   proposedRate?: number;
+  durationMonths?: number;
+  appliedRate?: number;
+  monthlyPayment?: number;
+  advisorName?: string;
+  directorName?: string;
 }
 
 export type LoanDecision = "approve" | "reject";

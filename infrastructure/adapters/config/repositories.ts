@@ -27,6 +27,7 @@ import { GenerateAltTextService } from "../services/news/GenerateAltTextService"
 import { InMemoryTransactionRepository } from "../repositories/InMemoryTransactionRepository";
 import { LocaleValidationService } from "../services/LocaleValidationService";
 import { InMemoryLoanRequestRepository } from "../repositories/InMemoryLoanRequestRepository";
+import { InMemoryLoanConfigRepository } from "../repositories/InMemoryLoanConfigRepository";
 
 const baseUrl = process.env.CLIENT_BASE_URL!;
 export const tokenService = new JwtTokenService();
@@ -62,3 +63,4 @@ export const transferLimitService = new ManageTransferLimitService();
 export const transferValidationService = new ValidateTransferService(transferLimitService);
 export const localService = new LocaleValidationService()
 export const loanRequestRepository = new InMemoryLoanRequestRepository();
+export const loanConfigRepository = new InMemoryLoanConfigRepository();

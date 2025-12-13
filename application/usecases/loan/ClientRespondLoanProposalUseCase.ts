@@ -42,6 +42,12 @@ export class ClientRespondLoanProposalUseCase {
       return new AccountNotFoundError("No checking account for client");
     }
 
+    
+    if (!request.proposedRate) {
+      return new Error("No proposed rate found");
+    }
+    request.applyRate(request.proposedRate);
+
     checking.updateBalance(checking.currentBalance + request.amount);
     const savedAccount = await this.accountRepository.updateOneAccount(checking);
     if (savedAccount instanceof Error) {

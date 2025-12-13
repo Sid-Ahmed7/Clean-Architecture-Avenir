@@ -42,3 +42,12 @@ export const clientRespondProposal = async (id: string, decision: LoanDecision) 
   return apiClient.post(`/loan/client/requests/${id}/respond`, { decision });
 };
 
+export const setIndicativeRate = async (rate: number) => {
+  return apiClient.post(`/loan/director/rate`, { rate });
+};
+
+export const getIndicativeRate = async () => {
+  const { data } = await apiClient.get<{ rate: number | null }>("/loan/rate");
+  return data.rate ?? null;
+};
+

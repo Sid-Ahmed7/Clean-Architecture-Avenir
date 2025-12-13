@@ -1,12 +1,12 @@
 "use client";
 
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { LocaleContext } from "@/contexts/LocaleProvider";
 import Button from "@/components/ui/Button";
-import { createLoanRequest } from "@/lib/api/loan";
+import { createLoanRequest, getIndicativeRate } from "@/lib/api/loan";
 import {
   CreateLoanRequestInput,
   createLoanRequestSchema,
@@ -15,6 +15,8 @@ import { withClientProtection } from "@/components/auth/withRoleProtection";
 import { getAllAdvisors } from "@/lib/api/auth";
 
 type AdvisorOption = { id: string; fullName: string };
+const DURATIONS = [6, 12, 18];
+const RATE_THRESHOLD = 5000;
 
 function LoanRequestPage() {
   const t = useTranslations();
@@ -23,6 +25,8 @@ function LoanRequestPage() {
   const [advisors, setAdvisors] = useState<AdvisorOption[]>([]);
   const [loadingAdvisors, setLoadingAdvisors] = useState(true);
   const [advisorError, setAdvisorError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [indicativeRate, setIndicativeRate] = useState<number | null>(null);
 
   useEffect(() => {
     getAllAdvisors()
@@ -41,6 +45,12 @@ function LoanRequestPage() {
         setAdvisorError(err.response?.data?.error || "Impossible de charger les conseillers");
       })
       .finally(() => setLoadingAdvisors(false));
+
+    getIndicativeRate()
+      .then((rate) => setIndicativeRate(rate))
+      .catch((err) => {
+        console.error("Failed to load indicative rate", err);
+      });
   }, []);
 
   const {
@@ -49,16 +59,30 @@ function LoanRequestPage() {
     formState: { errors },
     reset,
     setValue,
+    watch,
   } = useForm<CreateLoanRequestInput>({
     resolver: zodResolver(createLoanRequestSchema(t)),
     defaultValues: {
       advisorId: "",
       amount: 0,
+      durationMonths: 12,
       purpose: "",
     },
   });
 
+  const amount = watch("amount");
+  const duration = watch("durationMonths");
+
+  const monthlyPayment = useMemo(() => {
+    if (!duration || duration <= 0 || !amount || amount <= 0) return 0;
+    if (amount > RATE_THRESHOLD) return 0; // taux à définir par le directeur
+    if (!indicativeRate || indicativeRate <= 0) return 0;
+    const total = amount * (1 + indicativeRate * (duration / 12));
+    return total / duration;
+  }, [amount, duration, indicativeRate]);
+
   const onSubmit = (data: CreateLoanRequestInput) => {
+    setSubmitting(true);
     createLoanRequest(data)
       .then((res) => {
         if (res.status === 201) {
@@ -71,7 +95,8 @@ function LoanRequestPage() {
       .catch((error) => {
         console.error("Loan request error:", error);
         setMessage(error.response?.data?.error || "Erreur lors de la demande");
-      });
+      })
+      .finally(() => setSubmitting(false));
   };
 
   return (
@@ -135,7 +160,53 @@ function LoanRequestPage() {
           {errors.purpose && <p className="text-red-500 mt-1">{errors.purpose.message}</p>}
         </div>
 
-        <Button type="submit" className="w-full">
+        <div className="mb-6">
+          <label className="block mb-2 font-medium text-gray-900">Durée de remboursement</label>
+          <div className="flex gap-2 flex-wrap">
+            {DURATIONS.map((d) => (
+              <button
+                key={d}
+                type="button"
+                onClick={() => setValue("durationMonths", d)}
+                className={`px-4 py-2 rounded border ${
+                  duration === d ? "bg-blue-600 text-white border-blue-600" : "bg-white text-gray-800"
+                }`}
+              >
+                {d} mois
+              </button>
+            ))}
+          </div>
+          {errors.durationMonths && (
+            <p className="text-red-500 mt-1">{errors.durationMonths.message}</p>
+          )}
+        </div>
+
+        <div className="mb-6 p-4 bg-blue-50 border border-blue-100 rounded-lg">
+          <p className="text-sm text-gray-800 font-medium">
+            Simulation mensuelle{" "}
+            {amount > RATE_THRESHOLD
+              ? "(taux à définir par le directeur)"
+              : indicativeRate
+                ? `(taux indicatif ${indicativeRate * 100}%)`
+                : "(taux indicatif non défini)"}
+          </p>
+          <p className="text-lg font-semibold text-blue-700 mt-1">
+            {amount > RATE_THRESHOLD
+              ? "-- €/mois"
+              : monthlyPayment > 0
+                ? `${monthlyPayment.toFixed(2)} €/mois`
+                : "-- €/mois"}
+          </p>
+          <p className="text-xs text-gray-600 mt-1">
+            {amount > RATE_THRESHOLD
+              ? "Pour un montant > 5000€, le taux sera proposé par le directeur."
+              : indicativeRate
+                ? "Calcul simplifié : montant x (1 + taux * durée/12) / durée."
+                : "En attente de taux indicatif défini par le directeur."}
+          </p>
+        </div>
+
+        <Button type="submit" className="w-full" disabled={submitting}>
           Envoyer la demande
         </Button>
 
