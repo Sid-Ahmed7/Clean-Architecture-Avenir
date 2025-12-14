@@ -9,5 +9,15 @@ export const getUserFromToken = (): Token | null => {
 
   const decoded  = jwtDecode<Token>(token);
   return decoded;
+}
 
+export const decodeJwt = (token: string): Token | null => {
+  if (!token) return null;
+  try {
+    const decoded = jwtDecode<Token>(token);
+    return decoded;
+  } catch (error) {
+    console.error("Error decoding JWT:", error);
+    return null;
+  }
 }

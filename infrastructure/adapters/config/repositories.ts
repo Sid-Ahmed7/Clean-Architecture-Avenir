@@ -66,3 +66,10 @@ export const localService = new LocaleValidationService()
 export const loanRequestRepository = new InMemoryLoanRequestRepository();
 export const loanConfigRepository = new InMemoryLoanConfigRepository();
 export const loanRepaymentScheduleRepository = new InMemoryLoanRepaymentScheduleRepository();
+
+// Savings repositories
+import { InMemorySavingsProductRepository } from '../repositories/InMemorySavingsProductRepository';
+import { InMemorySavingsAccountRepository } from '../repositories/InMemorySavingsAccountRepository';
+
+export const savingsProductRepository = new InMemorySavingsProductRepository();
+export const savingsAccountRepository = new InMemorySavingsAccountRepository();

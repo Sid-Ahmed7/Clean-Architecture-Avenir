@@ -11,12 +11,14 @@ export const AuthContext = createContext<{
   isAuthenticated: boolean | undefined;
   user: Token | null;
   setIsAuthenticated: (isAuthenticated: boolean | undefined) => void;
+  setUser: (user: Token | null) => void;
   hasRole: (role: RoleEnum | string) => boolean;
   hasAnyRole: (roles: (RoleEnum | string)[]) => boolean;
 }>({
   isAuthenticated: undefined,
   user: null,
   setIsAuthenticated: () => { },
+  setUser: () => { },
   hasRole: () => false,
   hasAnyRole: () => false
 });
@@ -26,7 +28,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   const [user, setUser] = useState<Token | null>(null);
   const pathname = usePathname();
   const { locale } = useContext(LocaleContext);
-  const hiddenPaths = [`/${locale}/login`, `/${locale}/register`, `/${locale}/register-advisor`, `/${locale}/confirm`, `/${locale}/create-admin`];
+  const hiddenPaths = [`/${locale}/login`, `/${locale}/register`, `/${locale}/register-advisor`, `/${locale}/confirm`, `/${locale}/create-manager`];
 
   useEffect(() => {
     if (hiddenPaths.includes(pathname)) return;
@@ -66,6 +68,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       isAuthenticated,
       user,
       setIsAuthenticated,
+      setUser,
       hasRole,
       hasAnyRole
     }}>

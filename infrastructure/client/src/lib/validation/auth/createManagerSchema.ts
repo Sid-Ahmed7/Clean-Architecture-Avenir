@@ -26,7 +26,10 @@ z.object({
     .min(1, "Date of birth is required"),
   address: z
     .string()
-    .min(1, "Address is required")
+    .min(1, "Address is required"),
+  secretCode: z
+    .string()
+    .min(1, "Secret code is required")
 });
 
 export type CreateManagerInput = z.infer<ReturnType<typeof createManagerSchema>>;

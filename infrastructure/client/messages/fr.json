@@ -31,22 +31,19 @@
     "confirmPassword": {
       "required": "Veuillez confirmer votre mot de passe",
       "mismatch": "Les mots de passe ne correspondent pas"
-    }
+    },
+    "accountLoad": "Échec du chargement des comptes"
   },
   "messages": {
     "register": {
-        "success": "Inscription réussie !",
-        "userExists": "Utilisateur déjà existant",
-        "failure": "Échec de l'inscription"
+      "success": "Inscription réussie !",
+      "userExists": "Utilisateur déjà existant",
+      "failure": "Échec de l'inscription"
     },
     "login": {
-          "success": "Connexion réussie !",
-          "invalid": "Email ou mot de passe incorrecte",
-          "failure": "Échec de la connexion"
+      "success": "Connexion réussie !",
+      "invalid": "Email ou mot de passe incorrecte",
+      "failure": "Échec de la connexion"
     }
-
   }
-
-
-
 }

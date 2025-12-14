@@ -42,7 +42,7 @@ export const withRoleProtection = <P extends object>(
       if (fallbackComponent) {
         return <>{fallbackComponent}</>;
       }
-      
+
       // Otherwise, redirect to the specified path
       router.push(redirectPath);
       return null;
@@ -82,6 +82,3 @@ export const withBankAdvisorProtection = (redirectPath?: string, fallbackCompone
 
 export const withBankManagerProtection = (redirectPath?: string, fallbackComponent?: ReactNode) =>
   createRoleProtection(RoleEnum.BANK_MANAGER, redirectPath, fallbackComponent);
-
-export const withAdminProtection = (redirectPath?: string, fallbackComponent?: ReactNode) =>
-  createRoleProtection(RoleEnum.ADMIN, redirectPath, fallbackComponent);
