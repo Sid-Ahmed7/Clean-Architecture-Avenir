@@ -1,10 +1,10 @@
-import { LoanRepaymentSchedule } from "../../../domain/entities/LoanRepaymentSchedule";
+import { LoanRepaymentEntity } from "../../../domain/entities/LoanRepaymentEntity";
 
 export interface LoanRepaymentScheduleRepositoryInterface {
-  create(schedule: LoanRepaymentSchedule): Promise<LoanRepaymentSchedule | Error>;
-  findActiveByClient(clientId: string): Promise<LoanRepaymentSchedule[]>;
-  findByLoanRequest(loanRequestId: string): Promise<LoanRepaymentSchedule | null>;
-  save(schedule: LoanRepaymentSchedule): Promise<LoanRepaymentSchedule | Error>;
-  findDue(referenceDate: Date): Promise<LoanRepaymentSchedule[]>;
+  create(schedule: LoanRepaymentEntity): Promise<LoanRepaymentEntity | Error>;
+  findActiveByClient(clientId: string): Promise<LoanRepaymentEntity[]>;
+  findByLoanRequest(loanRequestId: string): Promise<LoanRepaymentEntity | null>;
+  save(schedule: LoanRepaymentEntity): Promise<LoanRepaymentEntity | Error>;
+  findDue(referenceDate: Date): Promise<LoanRepaymentEntity[]>;
 }
 

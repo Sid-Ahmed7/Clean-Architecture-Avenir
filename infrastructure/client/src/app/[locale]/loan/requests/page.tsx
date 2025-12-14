@@ -70,113 +70,96 @@ function ClientLoanRequestsPage() {
       {requests.length === 0 ? (
         <div className="bg-white border rounded-lg p-4 shadow-sm">Aucune demande.</div>
       ) : (
-        <div className="bg-white border rounded-lg shadow-sm overflow-hidden">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Conseiller
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Montant
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Motif
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Statut
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Durée
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Taux
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Mensualité
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Reste à payer
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Prochaine échéance
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Créée le
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {requests.map((req) => (
-                <tr key={req.id}>
-                  <td className="px-4 py-3 text-sm text-gray-900">
-                    {req.advisorName ?? req.advisorId}
-                  </td>
-                  <td className="px-4 py-3 text-sm text-gray-900">{req.amount.toLocaleString("fr-FR")} €</td>
-                  <td className="px-4 py-3 text-sm text-gray-700">{req.purpose}</td>
-                  <td className="px-4 py-3 text-sm">
-                    <span className="px-2 py-1 rounded-full text-xs bg-blue-50 text-blue-700 border border-blue-100">
-                      {req.status}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-sm text-gray-900">
-                    {req.durationMonths ? `${req.durationMonths} mois` : "-"}
-                  </td>
-                  <td className="px-4 py-3 text-sm text-gray-900">
-                    {req.appliedRate !== undefined
-                      ? `${(req.appliedRate * 100).toFixed(2)}% (appliqué${req.directorName ? ` par ${req.directorName}` : ""})`
-                      : req.proposedRate !== undefined
-                        ? `${(req.proposedRate * 100).toFixed(2)}% (proposé${req.directorName ? ` par ${req.directorName}` : ""})`
+        <div className="grid gap-4 md:grid-cols-2">
+          {requests.map((req) => {
+            const sched = scheduleFor(req.id);
+            const remainingTerms = sched ? sched.durationMonths - sched.paymentsMade : null;
+            return (
+              <div key={req.id} className="bg-white border rounded-lg shadow-sm p-4 flex flex-col gap-3">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-xs uppercase text-gray-500">Conseiller</p>
+                    <p className="text-sm font-semibold text-gray-900">
+                      {req.advisorName ?? req.advisorId}
+                    </p>
+                  </div>
+                  <span className="px-2 py-1 rounded-full text-xs bg-blue-50 text-blue-700 border border-blue-100">
+                    {req.status}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div className="p-3 rounded-md bg-gray-50">
+                    <p className="text-xs uppercase text-gray-500">Montant</p>
+                    <p className="font-semibold text-gray-900">{req.amount.toLocaleString("fr-FR")} €</p>
+                  </div>
+                  <div className="p-3 rounded-md bg-gray-50">
+                    <p className="text-xs uppercase text-gray-500">Durée</p>
+                    <p className="font-semibold text-gray-900">
+                      {req.durationMonths ? `${req.durationMonths} mois` : "-"}
+                    </p>
+                  </div>
+                  <div className="p-3 rounded-md bg-gray-50 col-span-2">
+                    <p className="text-xs uppercase text-gray-500">Motif</p>
+                    <p className="font-medium text-gray-900">{req.purpose}</p>
+                  </div>
+                  <div className="p-3 rounded-md bg-gray-50">
+                    <p className="text-xs uppercase text-gray-500">Taux</p>
+                    <p className="font-semibold text-gray-900">
+                      {req.appliedRate !== undefined
+                        ? `${(req.appliedRate * 100).toFixed(2)}%${req.directorName ? ` (par ${req.directorName})` : ""}`
+                        : req.proposedRate !== undefined
+                          ? `${(req.proposedRate * 100).toFixed(2)}%${req.directorName ? ` (proposé par ${req.directorName})` : ""}`
+                          : "-"}
+                    </p>
+                  </div>
+                  <div className="p-3 rounded-md bg-gray-50">
+                    <p className="text-xs uppercase text-gray-500">Mensualité</p>
+                    <p className="font-semibold text-gray-900">{formatMonthly(req)}</p>
+                  </div>
+                  <div className="p-3 rounded-md bg-gray-50">
+                    <p className="text-xs uppercase text-gray-500">Reste à payer</p>
+                    <p className="font-semibold text-gray-900">
+                      {sched
+                        ? `${sched.remainingPrincipal.toFixed(2)} €${remainingTerms !== null ? ` (${remainingTerms} échéance${remainingTerms > 1 ? "s" : ""})` : ""}`
                         : "-"}
-                  </td>
-                  <td className="px-4 py-3 text-sm text-gray-900">{formatMonthly(req)}</td>
-                  <td className="px-4 py-3 text-sm text-gray-900">
-                    {(() => {
-                      const sched = scheduleFor(req.id);
-                      if (!sched) return "-";
-                      const remaining = `${sched.remainingPrincipal.toFixed(2)} €`;
-                      const remainingTerms = sched.durationMonths - sched.paymentsMade;
-                      return `${remaining} (reste ${remainingTerms} échéance${remainingTerms > 1 ? "s" : ""})`;
-                    })()}
-                  </td>
-                  <td className="px-4 py-3 text-sm text-gray-900">
-                    {(() => {
-                      const sched = scheduleFor(req.id);
-                      return sched ? new Date(sched.nextDueDate).toLocaleDateString("fr-FR") : "-";
-                    })()}
-                  </td>
-                  <td className="px-4 py-3 text-sm text-gray-500">
-                    {new Date(req.createdAt).toLocaleDateString("fr-FR")}
-                  </td>
-                  <td className="px-4 py-3 text-sm flex gap-2">
-                    {req.status === "RATE_PROPOSED" ? (
-                      <>
-                        <button
-                          disabled={submitting === req.id}
-                          onClick={() => handleDecision(req.id, "approve")}
-                          className="px-3 py-1 rounded bg-green-600 text-white disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                          Accepter
-                        </button>
-                        <button
-                          disabled={submitting === req.id}
-                          onClick={() => handleDecision(req.id, "reject")}
-                          className="px-3 py-1 rounded bg-red-600 text-white disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                          Refuser
-                        </button>
-                      </>
-                    ) : (
-                      <span className="text-gray-500 text-sm">-</span>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    </p>
+                  </div>
+                  <div className="p-3 rounded-md bg-gray-50">
+                    <p className="text-xs uppercase text-gray-500">Prochaine échéance</p>
+                    <p className="font-semibold text-gray-900">
+                      {sched ? new Date(sched.nextDueDate).toLocaleDateString("fr-FR") : "-"}
+                    </p>
+                  </div>
+                  <div className="p-3 rounded-md bg-gray-50">
+                    <p className="text-xs uppercase text-gray-500">Créée le</p>
+                    <p className="font-semibold text-gray-900">
+                      {new Date(req.createdAt).toLocaleDateString("fr-FR")}
+                    </p>
+                  </div>
+                </div>
+
+                {req.status === "RATE_PROPOSED" ? (
+                  <div className="flex gap-2">
+                    <button
+                      disabled={submitting === req.id}
+                      onClick={() => handleDecision(req.id, "approve")}
+                      className="px-3 py-2 rounded bg-green-600 text-white text-sm w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Accepter le taux
+                    </button>
+                    <button
+                      disabled={submitting === req.id}
+                      onClick={() => handleDecision(req.id, "reject")}
+                      className="px-3 py-2 rounded bg-red-600 text-white text-sm w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Refuser
+                    </button>
+                  </div>
+                ) : null}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

@@ -6,6 +6,7 @@ import { RoleEnum } from "../../../domain/enums/RoleEnum";
 import { UuidGeneratorService } from "../../ports/services/UuidGeneratorService";
 import { UserNotFoundError } from "../../errors/UserNotFoundError";
 import { LoanConfigRepositoryInterface } from "../../ports/repositories/LoanConfigRepositoryInterface";
+import { LoanStatusEnum } from "../../../domain/enums/LoanStatusEnum";
 
 export interface CreateLoanRequestInput {
   advisorId: string;
@@ -39,6 +40,20 @@ export class CreateLoanRequestUseCase {
     const advisorRoles = await this.userRoleRepository.findRolesByUserId(input.advisorId);
     if (advisorRoles instanceof Error || !advisorRoles.find((r) => r.name === RoleEnum.BANK_ADVISOR)) {
       return new Error("Advisor not found");
+    }
+
+    const existing = await this.loanRequestRepository.findByClient(clientId);
+    const nonFinalStatuses = [
+      LoanStatusEnum.PENDING,
+      LoanStatusEnum.ADVISOR_APPROVED,
+      LoanStatusEnum.RATE_PROPOSED,
+      LoanStatusEnum.DIRECTOR_APPROVED,
+    ];
+    const hasActive = existing.some((r) => nonFinalStatuses.includes(r.status));
+    if (hasActive) {
+      return new Error(
+        "Vous avez déjà une demande de crédit en cours. Merci d'attendre la décision avant d'en soumettre une nouvelle.",
+      );
     }
 
     const id = this.uuidService.generate();

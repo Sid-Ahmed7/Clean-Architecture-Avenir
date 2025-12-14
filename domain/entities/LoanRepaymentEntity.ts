@@ -1,6 +1,6 @@
 import { RepaymentStatusEnum } from "../enums/RepaymentStatusEnum";
 
-export class LoanRepaymentSchedule {
+export class LoanRepaymentEntity {
   public constructor(
     public readonly id: string,
     public readonly loanRequestId: string,

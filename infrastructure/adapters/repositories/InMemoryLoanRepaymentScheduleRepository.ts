@@ -1,10 +1,10 @@
 import { LoanRepaymentScheduleRepositoryInterface } from "../../../application/ports/repositories/LoanRepaymentScheduleRepositoryInterface";
-import { LoanRepaymentSchedule } from "../../../domain/entities/LoanRepaymentSchedule";
+import { LoanRepaymentEntity } from "../../../domain/entities/LoanRepaymentEntity";
 
 export class InMemoryLoanRepaymentScheduleRepository implements LoanRepaymentScheduleRepositoryInterface {
-  private schedules: LoanRepaymentSchedule[] = [];
+  private schedules: LoanRepaymentEntity[] = [];
 
-  public async create(schedule: LoanRepaymentSchedule) {
+  public async create(schedule: LoanRepaymentEntity) {
     this.schedules.push(schedule);
     return schedule;
   }
@@ -17,7 +17,7 @@ export class InMemoryLoanRepaymentScheduleRepository implements LoanRepaymentSch
     return this.schedules.find((s) => s.loanRequestId === loanRequestId) ?? null;
   }
 
-  public async save(schedule: LoanRepaymentSchedule) {
+  public async save(schedule: LoanRepaymentEntity) {
     const idx = this.schedules.findIndex((s) => s.id === schedule.id);
     if (idx === -1) {
       this.schedules.push(schedule);

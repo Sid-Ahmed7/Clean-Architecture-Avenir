@@ -31,12 +31,6 @@ export class ProcessRepaymentsUseCase {
         continue;
       }
 
-      if (checking.currentBalance < schedule.monthlyAmount) {
-        schedule.markFailed("Insufficient funds");
-        await this.scheduleRepository.save(schedule);
-        continue;
-      }
-
       checking.updateBalance(checking.currentBalance - schedule.monthlyAmount);
       const updatedAccount = await this.accountRepository.updateOneAccount(checking);
       if (updatedAccount instanceof AccountNotFoundError || updatedAccount instanceof Error) {

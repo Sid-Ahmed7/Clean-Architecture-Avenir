@@ -8,6 +8,8 @@ import {
   setIndicativeRate,
   getIndicativeRate,
   getClientInfo,
+  getClientLoanHistory,
+  getClientRepaymentsFor,
 } from "@/lib/api/loan";
 import { LoanRequest } from "@/types/loan";
 import { withBankManagerProtection } from "@/components/auth/withRoleProtection";
@@ -22,6 +24,8 @@ function DirectorLoanRequestsPage() {
   const [savingRate, setSavingRate] = useState(false);
   const [filter, setFilter] = useState<"all" | "pending" | "needsRate" | "ready">("all");
   const [clientDetails, setClientDetails] = useState<Record<string, any>>({});
+  const [clientHistories, setClientHistories] = useState<Record<string, any[]>>({});
+  const [clientRepayments, setClientRepayments] = useState<Record<string, any[]>>({});
   const [profileClientId, setProfileClientId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -77,13 +81,15 @@ function DirectorLoanRequestsPage() {
   };
 
   const loadClientInfo = (clientId: string) => {
-    if (clientDetails[clientId]) {
+    if (clientDetails[clientId] && clientHistories[clientId] && clientRepayments[clientId]) {
       setProfileClientId(clientId);
       return;
     }
-    getClientInfo(clientId)
-      .then((data) => {
-        setClientDetails((prev) => ({ ...prev, [clientId]: data }));
+    Promise.all([getClientInfo(clientId), getClientLoanHistory(clientId), getClientRepaymentsFor(clientId)])
+      .then(([info, history, repayments]) => {
+        setClientDetails((prev) => ({ ...prev, [clientId]: info }));
+        setClientHistories((prev) => ({ ...prev, [clientId]: history }));
+        setClientRepayments((prev) => ({ ...prev, [clientId]: repayments }));
         setProfileClientId(clientId);
       })
       .catch((err) => {
@@ -175,137 +181,95 @@ function DirectorLoanRequestsPage() {
       {requests.length === 0 ? (
         <div className="bg-white border rounded-lg p-4 shadow-sm">Aucune demande à valider.</div>
       ) : (
-        <div className="bg-white border rounded-lg shadow-sm overflow-hidden">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Client
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Conseiller
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Montant
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Motif
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Statut
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {requests
-                .filter((req) => {
-                  if (filter === "pending") return req.status === "ADVISOR_APPROVED";
-                  if (filter === "needsRate") return req.amount > 5000 && req.status === "ADVISOR_APPROVED";
-                  if (filter === "ready") return req.amount <= 5000 && req.status === "ADVISOR_APPROVED";
-                  return true;
-                })
-                .map((req) => {
-                  const pendingDirector = req.status === "ADVISOR_APPROVED";
-                  const needsRate = req.amount > 5000;
-                  return (
-                    <React.Fragment key={req.id}>
-                      <tr>
-                        <td className="px-4 py-3 text-sm text-gray-900">
-                          {req.clientName ?? req.clientId}
-                        </td>
-                        <td className="px-4 py-3 text-sm text-gray-900">
-                          {req.advisorName ?? req.advisorId}
-                        </td>
-                        <td className="px-4 py-3 text-sm text-gray-900">
-                          {req.amount.toLocaleString("fr-FR")} €
-                        </td>
-                        <td className="px-4 py-3 text-sm text-gray-700">{req.purpose}</td>
-                        <td className="px-4 py-3 text-sm">
-                          <span className="px-2 py-1 rounded-full text-xs bg-blue-50 text-blue-700 border border-blue-100">
-                            {req.status}
-                          </span>
-                          {req.proposedRate && (
-                            <span className="ml-2 text-xs text-gray-600">{req.proposedRate}%</span>
-                          )}
-                        </td>
-                        <td className="px-4 py-3 text-sm flex gap-2 items-center">
-                          {needsRate ? (
-                            <>
-                              <input
-                                type="number"
-                                step="0.01"
-                                placeholder="Taux %"
-                                className="w-24 px-2 py-1 border rounded"
-                                value={rates[req.id] ?? ""}
-                                onChange={(e) =>
-                                  setRates((prev) => ({ ...prev, [req.id]: Number(e.target.value) }))
-                                }
-                                disabled={!pendingDirector || submitting === req.id}
-                              />
-                              <button
-                                disabled={!pendingDirector || submitting === req.id}
-                                onClick={() => handlePropose(req.id)}
-                                className="px-3 py-1 rounded bg-blue-600 text-white disabled:opacity-50 disabled:cursor-not-allowed"
-                              >
-                                Proposer
-                              </button>
-                            </>
-                          ) : (
-                            <>
-                              <button
-                                disabled={!pendingDirector || submitting === req.id}
-                                onClick={() => handleDecision(req.id, "approve")}
-                                className="px-3 py-1 rounded bg-green-600 text-white disabled:opacity-50 disabled:cursor-not-allowed"
-                              >
-                                Valider
-                              </button>
-                              <button
-                                disabled={!pendingDirector || submitting === req.id}
-                                onClick={() => handleDecision(req.id, "reject")}
-                                className="px-3 py-1 rounded bg-red-600 text-white disabled:opacity-50 disabled:cursor-not-allowed"
-                              >
-                                Refuser
-                              </button>
-                            </>
-                          )}
-                          <button
-                            onClick={() => loadClientInfo(req.clientId)}
-                            className="px-3 py-1 rounded bg-gray-200 text-gray-800"
-                          >
-                            Voir profil
-                          </button>
-                        </td>
-                      </tr>
-                      {clientDetails[req.clientId] && (
-                        <tr>
-                          <td colSpan={6} className="bg-gray-50 px-4 py-3 text-sm text-gray-800">
-                            <div className="font-semibold mb-1">Profil client</div>
-                            <div className="mb-2">
-                              {clientDetails[req.clientId].user
-                                ? `${clientDetails[req.clientId].user.firstName ?? ""} ${clientDetails[req.clientId].user.lastName ?? ""}`.trim()
-                                : ""}
-                            </div>
-                            <div>
-                              <span className="font-medium">Comptes :</span>
-                              <ul className="list-disc list-inside">
-                                {(clientDetails[req.clientId].accounts ?? []).map((acc: any) => (
-                                  <li key={acc.accountNumber}>
-                                    {acc.accountType} - {acc.accountNumber} : {acc.currentBalance} {acc.currency}
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          </td>
-                        </tr>
-                      )}
-                    </React.Fragment>
-                  );
-                })}
-            </tbody>
-          </table>
+        <div className="grid gap-4 md:grid-cols-2">
+          {requests
+            .filter((req) => {
+              if (filter === "pending") return req.status === "ADVISOR_APPROVED";
+              if (filter === "needsRate") return req.amount > 5000 && req.status === "ADVISOR_APPROVED";
+              if (filter === "ready") return req.amount <= 5000 && req.status === "ADVISOR_APPROVED";
+              return true;
+            })
+            .map((req) => {
+              const pendingDirector = req.status === "ADVISOR_APPROVED";
+              const needsRate = req.amount > 5000;
+              return (
+                <div key={req.id} className="bg-white border rounded-lg shadow-sm p-4 flex flex-col gap-3">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="text-xs uppercase text-gray-500">Client</p>
+                      <p className="text-sm font-semibold text-gray-900">{req.clientName ?? req.clientId}</p>
+                      <p className="text-xs text-gray-500">Conseiller : {req.advisorName ?? req.advisorId}</p>
+                    </div>
+                    <span className="px-2 py-1 rounded-full text-xs bg-blue-50 text-blue-700 border border-blue-100">
+                      {req.status}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 text-sm">
+                    <div className="p-3 rounded-md bg-gray-50">
+                      <p className="text-xs uppercase text-gray-500">Montant</p>
+                      <p className="font-semibold text-gray-900">{req.amount.toLocaleString("fr-FR")} €</p>
+                    </div>
+                    <div className="p-3 rounded-md bg-gray-50">
+                      <p className="text-xs uppercase text-gray-500">Taux</p>
+                      <p className="font-semibold text-gray-900">
+                        {req.proposedRate ? `${req.proposedRate}%` : needsRate ? "À proposer" : "—"}
+                      </p>
+                    </div>
+                    <div className="p-3 rounded-md bg-gray-50 col-span-2">
+                      <p className="text-xs uppercase text-gray-500">Motif</p>
+                      <p className="font-medium text-gray-900">{req.purpose}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2">
+                    {needsRate ? (
+                      <>
+                        <input
+                          type="number"
+                          step="0.01"
+                          placeholder="Taux %"
+                          className="w-24 px-2 py-2 border rounded text-sm"
+                          value={rates[req.id] ?? ""}
+                          onChange={(e) => setRates((prev) => ({ ...prev, [req.id]: Number(e.target.value) }))}
+                          disabled={!pendingDirector || submitting === req.id}
+                        />
+                        <button
+                          disabled={!pendingDirector || submitting === req.id}
+                          onClick={() => handlePropose(req.id)}
+                          className="px-3 py-2 rounded bg-blue-600 text-white text-sm w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          Proposer
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          disabled={!pendingDirector || submitting === req.id}
+                          onClick={() => handleDecision(req.id, "approve")}
+                          className="px-3 py-2 rounded bg-green-600 text-white text-sm w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          Valider
+                        </button>
+                        <button
+                          disabled={!pendingDirector || submitting === req.id}
+                          onClick={() => handleDecision(req.id, "reject")}
+                          className="px-3 py-2 rounded bg-red-600 text-white text-sm w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          Refuser
+                        </button>
+                      </>
+                    )}
+                    <button
+                      onClick={() => loadClientInfo(req.clientId)}
+                      className="px-3 py-2 rounded bg-gray-200 text-gray-800 text-sm w-full"
+                    >
+                      Voir profil
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
         </div>
       )}
 
@@ -360,6 +324,54 @@ function DirectorLoanRequestsPage() {
                   ))}
                   {(clientDetails[profileClientId].accounts ?? []).length === 0 && (
                     <p className="text-sm text-gray-600">Aucun compte trouvé.</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="p-4 rounded-xl border border-gray-100 bg-gray-50">
+                <p className="text-xs uppercase text-gray-500 mb-2">Historique crédits</p>
+                <div className="space-y-2">
+                  {(clientHistories[profileClientId] ?? []).map((loan: any) => {
+                    const repayment = (clientRepayments[profileClientId] ?? []).find(
+                      (r) => r.loanRequestId === loan.id,
+                    );
+                    const remainingTerms = repayment
+                      ? Math.max((repayment.durationMonths ?? 0) - (repayment.paymentsMade ?? 0), 0)
+                      : null;
+                    return (
+                      <div key={loan.id} className="rounded-lg border border-gray-200 px-3 py-2 bg-white">
+                        <div className="flex justify-between text-sm text-gray-900">
+                          <span>{loan.amount?.toLocaleString("fr-FR")} €</span>
+                          <span className="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-100">
+                            {loan.status}
+                          </span>
+                        </div>
+                        <div className="text-xs text-gray-600">{loan.purpose}</div>
+                        <div className="text-[11px] text-gray-500">
+                          Créée le {loan.createdAt ? new Date(loan.createdAt).toLocaleDateString("fr-FR") : "—"}
+                        </div>
+                        {repayment && (
+                          <div className="mt-2 text-[11px] text-gray-700 space-y-1">
+                            <div>Mensualité : {repayment.monthlyAmount?.toFixed(2)} €</div>
+                            <div>
+                              Reste à rembourser : {repayment.remainingPrincipal?.toFixed(2)} €
+                              {remainingTerms !== null
+                                ? ` (${remainingTerms} échéance${remainingTerms > 1 ? "s" : ""} restantes)`
+                                : ""}
+                            </div>
+                            <div>
+                              Prochaine échéance :{" "}
+                              {repayment.nextDueDate
+                                ? new Date(repayment.nextDueDate).toLocaleDateString("fr-FR")
+                                : "—"}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                  {(clientHistories[profileClientId] ?? []).length === 0 && (
+                    <p className="text-sm text-gray-600">Aucune demande de crédit pour ce client.</p>
                   )}
                 </div>
               </div>

@@ -56,8 +56,18 @@ export const getClientRepayments = async () => {
   return data ?? [];
 };
 
+export const getClientRepaymentsFor = async (clientId: string) => {
+  const { data } = await apiClient.get(`/loan/client/${clientId}/repayments`);
+  return data ?? [];
+};
+
 export const getClientInfo = async (clientId: string) => {
   const { data } = await apiClient.get(`/loan/client/${clientId}/info`);
   return data;
+};
+
+export const getClientLoanHistory = async (clientId: string) => {
+  const { data } = await apiClient.get<LoanRequest[]>(`/loan/client/${clientId}/requests`);
+  return data ?? [];
 };
 

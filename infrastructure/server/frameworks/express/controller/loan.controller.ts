@@ -85,6 +85,28 @@ export class LoanController {
     return res.status(200).json(requests);
   }
 
+  async listClientHistory(req: Request, res: Response) {
+    const clientId = req.params.id;
+    if (!clientId) {
+      return res.status(400).json({ error: "Client id is required" });
+    }
+
+    const listUseCase = new ListClientLoanRequestsUseCase(this.loanRequestRepository);
+    const requests = await listUseCase.execute(clientId);
+    return res.status(200).json(requests);
+  }
+
+  async listClientRepaymentsById(req: Request, res: Response) {
+    const clientId = req.params.id;
+    if (!clientId) {
+      return res.status(400).json({ error: "Client id is required" });
+    }
+
+    const useCase = new ListClientRepaymentsUseCase(this.loanRepaymentScheduleRepository);
+    const schedules = await useCase.execute(clientId);
+    return res.status(200).json(schedules);
+  }
+
   async advisorDecision(req: Request, res: Response) {
     const advisorId = req.user?.userId;
     if (!advisorId) {

@@ -1,5 +1,5 @@
 import { LoanRepaymentScheduleRepositoryInterface } from "../../ports/repositories/LoanRepaymentScheduleRepositoryInterface";
-import { LoanRepaymentSchedule } from "../../../domain/entities/LoanRepaymentSchedule";
+import { LoanRepaymentEntity } from "../../../domain/entities/LoanRepaymentEntity";
 import { RepaymentStatusEnum } from "../../../domain/enums/RepaymentStatusEnum";
 import { UuidGeneratorService } from "../../ports/services/UuidGeneratorService";
 
@@ -30,7 +30,7 @@ export class CreateRepaymentScheduleUseCase {
       nextDueDate.setMonth(nextDueDate.getMonth() + 1);
     }
 
-    const schedule = new LoanRepaymentSchedule(
+    const schedule = new LoanRepaymentEntity(
       id,
       loanRequestId,
       clientId,

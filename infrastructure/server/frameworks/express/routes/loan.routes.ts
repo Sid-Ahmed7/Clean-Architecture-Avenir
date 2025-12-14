@@ -46,6 +46,20 @@ router.get(
   (req, res) => loanController.listForClient(req, res),
 );
 
+router.get(
+  "/client/:id/requests",
+  verifyTokenAccess,
+  authorizeRoles([RoleEnum.BANK_ADVISOR, RoleEnum.BANK_MANAGER]),
+  (req, res) => loanController.listClientHistory(req, res),
+);
+
+router.get(
+  "/client/:id/repayments",
+  verifyTokenAccess,
+  authorizeRoles([RoleEnum.BANK_ADVISOR, RoleEnum.BANK_MANAGER]),
+  (req, res) => loanController.listClientRepaymentsById(req, res),
+);
+
 router.post(
   "/advisor/requests/:id/decision",
   verifyTokenAccess,
