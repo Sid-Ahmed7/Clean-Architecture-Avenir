@@ -1,5 +1,7 @@
 import { LoanStatusEnum } from "../enums/LoanStatusEnum";
 import { UserIdValue } from "../values/UserIdValue";
+import { LoanAmountValue } from "../values/LoanAmountValue";
+import { DurationMonthsValue } from "../values/DurationMonthsValue";
 
 export class LoanRequestEntity {
   public static create(
@@ -23,8 +25,14 @@ export class LoanRequestEntity {
       return validatedAdvisor;
     }
 
-    if (typeof amount !== "number" || Number.isNaN(amount) || amount <= 0) {
-      return new Error("Invalid loan amount");
+    const validatedAmount = LoanAmountValue.from(amount);
+    if (validatedAmount instanceof Error) {
+      return validatedAmount;
+    }
+
+    const validatedDuration = DurationMonthsValue.from(durationMonths);
+    if (validatedDuration instanceof Error) {
+      return validatedDuration;
     }
 
     if (!purpose || purpose.trim().length === 0) {
@@ -35,13 +43,13 @@ export class LoanRequestEntity {
       id,
       validatedClient.value,
       validatedAdvisor.value,
-      amount,
+      validatedAmount.value,
       purpose.trim(),
       LoanStatusEnum.PENDING,
       new Date(),
       undefined,
       undefined,
-      durationMonths,
+      validatedDuration.value,
       undefined,
       undefined,
       advisorName,
@@ -68,8 +76,9 @@ export class LoanRequestEntity {
     public clientName?: string,
   ) {}
 
-  public updateStatus(status: LoanStatusEnum) {
+  public updateStatus(status: LoanStatusEnum): LoanRequestEntity | Error {
     this.status = status;
+    return this;
   }
 
   public proposeRate(rate: number) {

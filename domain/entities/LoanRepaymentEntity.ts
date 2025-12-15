@@ -1,7 +1,45 @@
 import { RepaymentStatusEnum } from "../enums/RepaymentStatusEnum";
+import { MonthlyAmountValue } from "../values/MonthlyAmountValue";
+import { RemainingPrincipalValue } from "../values/RemainingPrincipalValue";
+import { DurationMonthsValue } from "../values/DurationMonthsValue";
 
 export class LoanRepaymentEntity {
-  public constructor(
+  public static create(
+    id: string,
+    loanRequestId: string,
+    clientId: string,
+    monthlyAmount: number,
+    remainingPrincipal: number,
+    nextDueDate: Date,
+    durationMonths: number,
+  ): LoanRepaymentEntity | Error {
+    const validatedMonthly = MonthlyAmountValue.from(monthlyAmount);
+    if (validatedMonthly instanceof Error) {
+      return validatedMonthly;
+    }
+
+    const validatedPrincipal = RemainingPrincipalValue.from(remainingPrincipal);
+    if (validatedPrincipal instanceof Error) {
+      return validatedPrincipal;
+    }
+
+    const validatedDuration = DurationMonthsValue.from(durationMonths);
+    if (validatedDuration instanceof Error) {
+      return validatedDuration;
+    }
+
+    return new LoanRepaymentEntity(
+      id,
+      loanRequestId,
+      clientId,
+      Number(validatedMonthly.value.toFixed(2)),
+      Number(validatedPrincipal.value.toFixed(2)),
+      nextDueDate,
+      validatedDuration.value,
+    );
+  }
+
+  private constructor(
     public readonly id: string,
     public readonly loanRequestId: string,
     public readonly clientId: string,

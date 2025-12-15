@@ -1,4 +1,7 @@
-import { LoanRequestRepositoryInterface } from "../../ports/repositories/LoanRequestRepositoryInterface";
+import {
+  CreateLoanRequestInput,
+  LoanRequestRepositoryInterface,
+} from "../../ports/repositories/LoanRequestRepositoryInterface";
 import { UserRepositoryInterface } from "../../ports/repositories/auth/UserRepositoryInterface";
 import { UserRoleRepositoryInterface } from "../../ports/repositories/auth/UserRoleRepositoryInterface";
 import { LoanRequestEntity } from "../../../domain/entities/LoanRequestEntity";
@@ -7,13 +10,6 @@ import { UuidGeneratorService } from "../../ports/services/UuidGeneratorService"
 import { UserNotFoundError } from "../../errors/UserNotFoundError";
 import { LoanConfigRepositoryInterface } from "../../ports/repositories/LoanConfigRepositoryInterface";
 import { LoanStatusEnum } from "../../../domain/enums/LoanStatusEnum";
-
-export interface CreateLoanRequestInput {
-  advisorId: string;
-  amount: number;
-  purpose: string;
-  durationMonths?: number;
-}
 
 export class CreateLoanRequestUseCase {
   public constructor(
@@ -75,7 +71,12 @@ export class CreateLoanRequestUseCase {
       return request;
     }
 
-    return this.loanRequestRepository.create(request);
+    const createdRequest = await this.loanRequestRepository.create(request);
+    if (createdRequest instanceof Error) {
+      return createdRequest;
+    }
+
+    return createdRequest;
   }
 }
 

@@ -1,5 +1,6 @@
 import { LoanRequestRepositoryInterface } from "../../ports/repositories/LoanRequestRepositoryInterface";
 import { LoanStatusEnum } from "../../../domain/enums/LoanStatusEnum";
+import { InterestRateValue } from "../../../domain/values/InterestRateValue";
 
 export class DirectorProposeRateUseCase {
   public constructor(private readonly loanRequestRepository: LoanRequestRepositoryInterface) {}
@@ -18,11 +19,12 @@ export class DirectorProposeRateUseCase {
       return new Error("Rate proposal not required for amount <= 5000");
     }
 
-    if (typeof rate !== "number" || Number.isNaN(rate) || rate <= 0) {
-      return new Error("Invalid rate");
+    const validatedRate = InterestRateValue.from(rate);
+    if (validatedRate instanceof Error) {
+      return validatedRate;
     }
 
-    request.proposeRate(rate);
+    request.proposeRate(validatedRate.value);
     if (directorName) {
       request.setDirectorName(directorName);
     }

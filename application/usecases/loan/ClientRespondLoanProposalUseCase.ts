@@ -32,8 +32,11 @@ export class ClientRespondLoanProposalUseCase {
     request.applyClientDecision(accept);
 
     if (!accept) {
-      await this.loanRequestRepository.save(request);
-      return request;
+      const savedRejected = await this.loanRequestRepository.save(request);
+      if (savedRejected instanceof Error) {
+        return savedRejected;
+      }
+      return savedRejected;
     }
 
     // credit amount to client's checking account
@@ -58,8 +61,15 @@ export class ClientRespondLoanProposalUseCase {
       return savedAccount;
     }
 
-    request.updateStatus(LoanStatusEnum.DISBURSED);
-    await this.loanRequestRepository.save(request);
+    const updatedRequest = request.updateStatus(LoanStatusEnum.DISBURSED);
+    if (updatedRequest instanceof Error) {
+      return updatedRequest;
+    }
+
+    const savedRequest = await this.loanRequestRepository.save(request);
+    if (savedRequest instanceof Error) {
+      return savedRequest;
+    }
 
     await this.createRepaymentScheduleUseCase.execute(
       request.id,
@@ -69,7 +79,7 @@ export class ClientRespondLoanProposalUseCase {
       request.durationMonths,
     );
 
-    return request;
+    return savedRequest;
   }
 }
 

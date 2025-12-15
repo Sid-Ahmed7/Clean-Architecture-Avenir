@@ -57,7 +57,7 @@ export class LoanController {
       if (result instanceof UserNotFoundError) {
         return res.status(404).json({ error: result.message });
       }
-      return res.status(400).json({ error: result.message });
+      return res.status(500).json({ error: result.message });
     }
 
     return res.status(201).json(result);
@@ -126,7 +126,7 @@ export class LoanController {
     const result = await useCase.execute(advisorId, requestId, parseResult.data.decision);
 
     if (result instanceof Error) {
-      return res.status(400).json({ error: result.message });
+      return res.status(500).json({ error: result.message });
     }
 
     return res.status(200).json(result);
@@ -165,7 +165,7 @@ export class LoanController {
     const result = await useCase.execute(requestId, parseResult.data.decision, directorName);
 
     if (result instanceof Error) {
-      return res.status(400).json({ error: result.message });
+      return res.status(500).json({ error: result.message });
     }
 
     return res.status(200).json(result);
@@ -209,7 +209,7 @@ export class LoanController {
     const result = await useCase.execute(requestId, parseResult.data.rate, directorName);
 
     if (result instanceof Error) {
-      return res.status(400).json({ error: result.message });
+      return res.status(500).json({ error: result.message });
     }
 
     return res.status(200).json(result);
@@ -240,7 +240,7 @@ export class LoanController {
     const result = await useCase.execute(clientId, requestId, accept);
 
     if (result instanceof Error) {
-      return res.status(400).json({ error: result.message });
+      return res.status(500).json({ error: result.message });
     }
 
     return res.status(200).json(result);

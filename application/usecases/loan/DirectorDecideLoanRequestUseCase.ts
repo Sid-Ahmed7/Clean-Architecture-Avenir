@@ -1,5 +1,6 @@
 import { LoanRequestRepositoryInterface } from "../../ports/repositories/LoanRequestRepositoryInterface";
 import { LoanStatusEnum } from "../../../domain/enums/LoanStatusEnum";
+import { LoanDecisionEnum } from "../../../domain/enums/LoanDecisionEnum";
 import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
 import { LoanConfigRepositoryInterface } from "../../ports/repositories/LoanConfigRepositoryInterface";
 import { AccountTypeEnum } from "../../../domain/enums/AccountTypeEnum";
@@ -7,6 +8,7 @@ import { UserNotFoundError } from "../../errors/UserNotFoundError";
 import { AccountNotFoundError } from "../../errors/AccountNotFoundError";
 import { LoanRepaymentScheduleRepositoryInterface } from "../../ports/repositories/LoanRepaymentScheduleRepositoryInterface";
 import { CreateRepaymentScheduleUseCase } from "./CreateRepaymentScheduleUseCase";
+import { InterestRateValue } from "../../../domain/values/InterestRateValue";
 
 export class DirectorDecideLoanRequestUseCase {
   public constructor(
@@ -17,7 +19,11 @@ export class DirectorDecideLoanRequestUseCase {
     private readonly createRepaymentScheduleUseCase: CreateRepaymentScheduleUseCase,
   ) {}
 
-  public async execute(requestId: string, decision: "approve" | "reject", directorName?: string) {
+  public async execute(
+    requestId: string,
+    decision: LoanDecisionEnum,
+    directorName?: string,
+  ) {
     const request = await this.loanRequestRepository.findById(requestId);
     if (!request) {
       return new Error("Loan request not found");
@@ -32,19 +38,24 @@ export class DirectorDecideLoanRequestUseCase {
     }
 
     const newStatus =
-      decision === "approve" ? LoanStatusEnum.DIRECTOR_APPROVED : LoanStatusEnum.DIRECTOR_REJECTED;
+      decision === LoanDecisionEnum.APPROVE
+        ? LoanStatusEnum.DIRECTOR_APPROVED
+        : LoanStatusEnum.DIRECTOR_REJECTED;
 
     if (newStatus === LoanStatusEnum.DIRECTOR_REJECTED) {
       request.updateStatus(newStatus);
       return this.loanRequestRepository.save(request);
     }
 
-    // approve path: apply indicative rate and disburse
     const rate = await this.loanConfigRepository.getIndicativeRate();
-    if (rate === null || rate <= 0) {
+    if (rate === null || rate === undefined) {
       return new Error("Indicative rate not defined");
     }
-    request.applyRate(rate);
+    const validatedRate = InterestRateValue.from(rate);
+    if (validatedRate instanceof Error) {
+      return validatedRate;
+    }
+    request.applyRate(validatedRate.value);
     if (directorName) {
       request.setDirectorName(directorName);
     }
@@ -67,13 +78,16 @@ export class DirectorDecideLoanRequestUseCase {
     request.updateStatus(LoanStatusEnum.DISBURSED);
     await this.loanRequestRepository.save(request);
 
-    await this.createRepaymentScheduleUseCase.execute(
+    const createdSchedule = await this.createRepaymentScheduleUseCase.execute(
       request.id,
       request.clientId,
       request.monthlyPayment ?? 0,
       request.amount,
       request.durationMonths,
     );
+    if (createdSchedule instanceof Error) {
+      return createdSchedule;
+    }
 
     return request;
   }
