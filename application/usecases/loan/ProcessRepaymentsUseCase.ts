@@ -13,10 +13,7 @@ export class ProcessRepaymentsUseCase {
 
   public async execute(referenceDate: Date = new Date()) {
     const due = await this.scheduleRepository.findDue(referenceDate);
-    const periodMs =
-      process.env.REPAYMENT_PERIOD_MS && Number(process.env.REPAYMENT_PERIOD_MS) > 0
-        ? Number(process.env.REPAYMENT_PERIOD_MS)
-        : 0;
+    const periodMs = 60 * 1000;
     for (const schedule of due) {
       const accounts = await this.accountRepository.getAccountsByUserId(schedule.clientId);
       if (accounts instanceof UserNotFoundError) {

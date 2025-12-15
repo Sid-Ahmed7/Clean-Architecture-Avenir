@@ -1,9 +1,6 @@
 import { processRepaymentsUseCaseFactory } from "../../../../usecases/processRepaymentsUseCaseFactory";
 
-const INTERVAL_MS =
-  process.env.REPAYMENT_INTERVAL_MS && Number(process.env.REPAYMENT_INTERVAL_MS) > 0
-    ? Number(process.env.REPAYMENT_INTERVAL_MS)
-    : 60 * 1000; // default 1 min in dev
+const INTERVAL_MS = 60 * 1000; // 1 minute
 
 export function processRepaymentsScheduler() {
   const useCase = processRepaymentsUseCaseFactory();
@@ -18,7 +15,6 @@ export function processRepaymentsScheduler() {
     }
   };
 
-  // start loop
   setTimeout(tick, INTERVAL_MS);
 }
 
