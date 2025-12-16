@@ -1,11 +1,5 @@
 import { apiClient } from "./apiClient";
-import { LoanDecision, LoanRequest } from "@/types/loan";
-
-export interface CreateLoanRequestInput {
-  advisorId: string;
-  amount: number;
-  purpose: string;
-}
+import { CreateLoanRequestInput, LoanDecision, LoanRequest } from "@/types/loan";
 
 export const createLoanRequest = async (data: CreateLoanRequestInput) => {
   return apiClient.post("/loan/request", data);

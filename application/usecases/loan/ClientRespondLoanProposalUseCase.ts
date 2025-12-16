@@ -6,6 +6,10 @@ import { AccountNotFoundError } from "../../errors/AccountNotFoundError";
 import { UserNotFoundError } from "../../errors/UserNotFoundError";
 import { LoanRepaymentScheduleRepositoryInterface } from "../../ports/repositories/LoanRepaymentScheduleRepositoryInterface";
 import { CreateRepaymentScheduleUseCase } from "./CreateRepaymentScheduleUseCase";
+import { LoanRequestNotFoundError } from "../../errors/LoanRequestNotFoundError";
+import { UnauthorizedLoanRequestError } from "../../errors/UnauthorizedLoanRequestError";
+import { RateProposalNotRequiredError } from "../../errors/RateProposalNotRequiredError";
+import { IndicativeRateNotDefinedError } from "../../errors/IndicativeRateNotDefinedError";
 
 export class ClientRespondLoanProposalUseCase {
   public constructor(
@@ -18,15 +22,15 @@ export class ClientRespondLoanProposalUseCase {
   public async execute(clientId: string, requestId: string, accept: boolean) {
     const request = await this.loanRequestRepository.findById(requestId);
     if (!request) {
-      return new Error("Loan request not found");
+      return new LoanRequestNotFoundError("Loan request not found");
     }
 
     if (request.clientId !== clientId) {
-      return new Error("Unauthorized");
+      return new UnauthorizedLoanRequestError("Unauthorized");
     }
 
     if (request.status !== LoanStatusEnum.RATE_PROPOSED) {
-      return new Error("No pending proposal");
+      return new RateProposalNotRequiredError("No pending proposal");
     }
 
     request.applyClientDecision(accept);
@@ -51,7 +55,7 @@ export class ClientRespondLoanProposalUseCase {
 
     
     if (!request.proposedRate) {
-      return new Error("No proposed rate found");
+      return new IndicativeRateNotDefinedError("No proposed rate found");
     }
     request.applyRate(request.proposedRate);
 

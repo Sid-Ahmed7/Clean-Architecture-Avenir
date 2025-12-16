@@ -2,19 +2,23 @@ import { LoanRequestRepositoryInterface } from "../../ports/repositories/LoanReq
 import { LoanStatusEnum } from "../../../domain/enums/LoanStatusEnum";
 import { LoanDecisionEnum } from "../../../domain/enums/LoanDecisionEnum";
 import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
-import { LoanConfigRepositoryInterface } from "../../ports/repositories/LoanConfigRepositoryInterface";
+import { LoanConfigService } from "../../ports/services/LoanConfigService";
 import { AccountTypeEnum } from "../../../domain/enums/AccountTypeEnum";
 import { UserNotFoundError } from "../../errors/UserNotFoundError";
 import { AccountNotFoundError } from "../../errors/AccountNotFoundError";
 import { LoanRepaymentScheduleRepositoryInterface } from "../../ports/repositories/LoanRepaymentScheduleRepositoryInterface";
 import { CreateRepaymentScheduleUseCase } from "./CreateRepaymentScheduleUseCase";
 import { InterestRateValue } from "../../../domain/values/InterestRateValue";
+import { LoanNotFoundError } from "../../errors/LoanNotFoundError";
+import { RateProposalRequiredError } from "../../errors/RateProposalRequiredError";
+import { LoanNotValidatedByAdvisorError } from "../../errors/LoanNotValidatedByAdvisorError";
+import { IndicativeRateNotDefinedError } from "../../errors/IndicativeRateNotDefinedError";
 
 export class DirectorDecideLoanRequestUseCase {
   public constructor(
     private readonly loanRequestRepository: LoanRequestRepositoryInterface,
     private readonly accountRepository: AccountRepositoryInterface,
-    private readonly loanConfigRepository: LoanConfigRepositoryInterface,
+    private readonly loanConfigService: LoanConfigService,
     private readonly repaymentScheduleRepository: LoanRepaymentScheduleRepositoryInterface,
     private readonly createRepaymentScheduleUseCase: CreateRepaymentScheduleUseCase,
   ) {}
@@ -26,15 +30,15 @@ export class DirectorDecideLoanRequestUseCase {
   ) {
     const request = await this.loanRequestRepository.findById(requestId);
     if (!request) {
-      return new Error("Loan request not found");
+      return new LoanNotFoundError("Loan request not found");
     }
 
     if (request.amount > 5000) {
-      return new Error("Use rate proposal flow for amount > 5000");
+      return new RateProposalRequiredError("Use rate proposal flow for amount > 5000");
     }
 
     if (request.status !== LoanStatusEnum.ADVISOR_APPROVED) {
-      return new Error("Request not validated by advisor");
+      return new LoanNotValidatedByAdvisorError("Request not validated by advisor");
     }
 
     const newStatus =
@@ -47,9 +51,9 @@ export class DirectorDecideLoanRequestUseCase {
       return this.loanRequestRepository.save(request);
     }
 
-    const rate = await this.loanConfigRepository.getIndicativeRate();
+    const rate = await this.loanConfigService.getIndicativeRate();
     if (rate === null || rate === undefined) {
-      return new Error("Indicative rate not defined");
+      return new IndicativeRateNotDefinedError("Indicative rate not defined");
     }
     const validatedRate = InterestRateValue.from(rate);
     if (validatedRate instanceof Error) {

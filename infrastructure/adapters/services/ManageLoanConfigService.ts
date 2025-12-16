@@ -1,6 +1,6 @@
-import { LoanConfigRepositoryInterface } from "../../../application/ports/repositories/LoanConfigRepositoryInterface";
+import { LoanConfigService } from "../../../application/ports/services/LoanConfigService";
 
-export class InMemoryLoanConfigRepository implements LoanConfigRepositoryInterface {
+export class ManageLoanConfigService implements LoanConfigService {
   private indicativeRate: number | null = 0.05;
 
   public async getIndicativeRate(): Promise<number | null> {
@@ -11,4 +11,5 @@ export class InMemoryLoanConfigRepository implements LoanConfigRepositoryInterfa
     this.indicativeRate = rate;
   }
 }
+
 

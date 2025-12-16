@@ -9,7 +9,7 @@ import {
   userRoleRepository,
   uuidService,
   accountRepository,
-  loanConfigRepository,
+  loanConfigService,
   loanRepaymentScheduleRepository,
 } from "../../../../adapters/config/repositories";
 
@@ -21,7 +21,7 @@ const loanController = new LoanController(
   userRoleRepository,
   uuidService,
   accountRepository,
-  loanConfigRepository,
+  loanConfigService,
   loanRepaymentScheduleRepository,
 );
 

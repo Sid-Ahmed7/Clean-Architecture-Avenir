@@ -1,6 +1,6 @@
 export enum LoanDecisionEnum {
-  APPROVE = "approve",
-  REJECT = "reject",
+  APPROVE = "APPROVE",
+  REJECT = "REJECT",
 }
 
 

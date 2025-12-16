@@ -1,4 +1,4 @@
-import { processRepaymentsUseCaseFactory } from "../../../../usecases/processRepaymentsUseCaseFactory";
+import { processRepaymentsUseCaseFactory } from "../usecases/processRepaymentsUseCaseFactory";
 
 const INTERVAL_MS = 60 * 1000; // 1 minute
 

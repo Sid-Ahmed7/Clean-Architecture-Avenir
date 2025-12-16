@@ -8,7 +8,7 @@ import { ListAdvisorApprovedRequestsUseCase } from "../../../../../application/u
 import { DirectorProposeRateUseCase } from "../../../../../application/usecases/loan/DirectorProposeRateUseCase";
 import { ClientRespondLoanProposalUseCase } from "../../../../../application/usecases/loan/ClientRespondLoanProposalUseCase";
 import { ListClientRepaymentsUseCase } from "../../../../../application/usecases/loan/ListClientRepaymentsUseCase";
-import { LoanConfigRepositoryInterface } from "../../../../../application/ports/repositories/LoanConfigRepositoryInterface";
+import { LoanConfigService } from "../../../../../application/ports/services/LoanConfigService";
 import { LoanRepaymentScheduleRepositoryInterface } from "../../../../../application/ports/repositories/LoanRepaymentScheduleRepositoryInterface";
 import { CreateRepaymentScheduleUseCase } from "../../../../../application/usecases/loan/CreateRepaymentScheduleUseCase";
 import { LoanRequestRepositoryInterface } from "../../../../../application/ports/repositories/LoanRequestRepositoryInterface";
@@ -29,7 +29,7 @@ export class LoanController {
     private readonly userRoleRepository: UserRoleRepositoryInterface,
     private readonly uuidService: UuidGeneratorService,
     private readonly accountRepository: AccountRepositoryInterface,
-    private readonly loanConfigRepository: LoanConfigRepositoryInterface,
+    private readonly loanConfigService: LoanConfigService,
     private readonly loanRepaymentScheduleRepository: LoanRepaymentScheduleRepositoryInterface,
   ) {}
 
@@ -49,7 +49,7 @@ export class LoanController {
       this.userRepository,
       this.userRoleRepository,
       this.uuidService,
-      this.loanConfigRepository,
+      this.loanConfigService,
     );
 
     const result = await createUseCase.execute(clientId, parseResult.data);
@@ -158,7 +158,7 @@ export class LoanController {
     const useCase = new DirectorDecideLoanRequestUseCase(
       this.loanRequestRepository,
       this.accountRepository,
-      this.loanConfigRepository,
+      this.loanConfigService,
       this.loanRepaymentScheduleRepository,
       new CreateRepaymentScheduleUseCase(this.loanRepaymentScheduleRepository, this.uuidService),
     );
@@ -230,7 +230,7 @@ export class LoanController {
       return res.status(400).json({ errors: parseResult.error.message });
     }
 
-    const accept = parseResult.data.decision === "approve";
+    const accept = parseResult.data.decision === "APPROVE";
     const useCase = new ClientRespondLoanProposalUseCase(
       this.loanRequestRepository,
       this.accountRepository,
@@ -257,12 +257,12 @@ export class LoanController {
       return res.status(400).json({ errors: parseResult.error.message });
     }
 
-    await this.loanConfigRepository.setIndicativeRate(parseResult.data.rate);
+    await this.loanConfigService.setIndicativeRate(parseResult.data.rate);
     return res.status(200).json({ rate: parseResult.data.rate });
   }
 
   async getIndicativeRate(req: Request, res: Response) {
-    const rate = await this.loanConfigRepository.getIndicativeRate();
+    const rate = await this.loanConfigService.getIndicativeRate();
     return res.status(200).json({ rate });
   }
 

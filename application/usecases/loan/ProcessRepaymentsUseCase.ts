@@ -15,35 +15,34 @@ export class ProcessRepaymentsUseCase {
     const due = await this.scheduleRepository.findDue(referenceDate);
     const periodMs = 60 * 1000;
     for (const schedule of due) {
-      const accounts = await this.accountRepository.getAccountsByUserId(schedule.clientId);
-      if (accounts instanceof UserNotFoundError) {
-        schedule.markFailed("User not found");
-        await this.scheduleRepository.save(schedule);
-        continue;
-      }
-      const checking = accounts.find((a) => a.accountType === AccountTypeEnum.CHECKING);
-      if (!checking) {
-        schedule.markFailed("No checking account");
-        await this.scheduleRepository.save(schedule);
-        continue;
-      }
+      const accountsResult = await this.accountRepository.getAccountsByUserId(schedule.clientId);
+      let failureMessage: string | null = null;
 
-      checking.updateBalance(checking.currentBalance - schedule.monthlyAmount);
-      const updatedAccount = await this.accountRepository.updateOneAccount(checking);
-      if (updatedAccount instanceof AccountNotFoundError || updatedAccount instanceof Error) {
-        schedule.markFailed("Debit failed");
-        await this.scheduleRepository.save(schedule);
-        continue;
-      }
-
-      schedule.markPaid(schedule.monthlyAmount);
-
-      if (schedule.paymentsMade >= schedule.durationMonths || schedule.remainingPrincipal <= 0) {
-        schedule.markPaidOff();
+      if (accountsResult instanceof UserNotFoundError) {
+        failureMessage = "User not found";
       } else {
-        schedule.scheduleNext(periodMs);
+        const checking = accountsResult.find((a) => a.accountType === AccountTypeEnum.CHECKING);
+        if (!checking) {
+          failureMessage = "No checking account";
+        } else {
+          checking.updateBalance(checking.currentBalance - schedule.monthlyAmount);
+          const updatedAccount = await this.accountRepository.updateOneAccount(checking);
+          if (updatedAccount instanceof AccountNotFoundError || updatedAccount instanceof Error) {
+            failureMessage = "Debit failed";
+          } else {
+            schedule.markPaid(schedule.monthlyAmount);
+            if (schedule.paymentsMade >= schedule.durationMonths || schedule.remainingPrincipal <= 0) {
+              schedule.markPaidOff();
+            } else {
+              schedule.scheduleNext(periodMs);
+            }
+          }
+        }
       }
 
+      if (failureMessage) {
+        schedule.markFailed(failureMessage);
+      }
       await this.scheduleRepository.save(schedule);
     }
   }

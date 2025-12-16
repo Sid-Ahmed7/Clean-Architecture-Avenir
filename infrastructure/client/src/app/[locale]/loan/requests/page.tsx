@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { clientRespondProposal, getClientLoanRequests, getClientRepayments } from "@/lib/api/loan";
-import { LoanRepaymentSchedule, LoanRequest } from "@/types/loan";
+import { LoanDecision, LoanRepaymentSchedule, LoanRequest } from "@/types/loan";
 import { withClientProtection } from "@/components/auth/withRoleProtection";
 
 function ClientLoanRequestsPage() {
@@ -29,7 +29,7 @@ function ClientLoanRequestsPage() {
     return <div className="p-6">Chargement de vos demandes...</div>;
   }
 
-  const handleDecision = (id: string, decision: "approve" | "reject") => {
+  const handleDecision = (id: string, decision: LoanDecision) => {
     setSubmitting(id);
     clientRespondProposal(id, decision)
       .then((res) => {
@@ -143,14 +143,14 @@ function ClientLoanRequestsPage() {
                   <div className="flex gap-2">
                     <button
                       disabled={submitting === req.id}
-                      onClick={() => handleDecision(req.id, "approve")}
+                      onClick={() => handleDecision(req.id, "APPROVE")}
                       className="px-3 py-2 rounded bg-green-600 text-white text-sm w-full disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Accepter le taux
                     </button>
                     <button
                       disabled={submitting === req.id}
-                      onClick={() => handleDecision(req.id, "reject")}
+                      onClick={() => handleDecision(req.id, "REJECT")}
                       className="px-3 py-2 rounded bg-red-600 text-white text-sm w-full disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Refuser

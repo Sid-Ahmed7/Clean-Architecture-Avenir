@@ -2,6 +2,7 @@ import { LoanStatusEnum } from "../enums/LoanStatusEnum";
 import { UserIdValue } from "../values/UserIdValue";
 import { LoanAmountValue } from "../values/LoanAmountValue";
 import { DurationMonthsValue } from "../values/DurationMonthsValue";
+import { LoanPurposeValue } from "../values/LoanPurposeValue";
 
 export class LoanRequestEntity {
   public static create(
@@ -35,8 +36,9 @@ export class LoanRequestEntity {
       return validatedDuration;
     }
 
-    if (!purpose || purpose.trim().length === 0) {
-      return new Error("Purpose is required");
+    const validatedPurpose = LoanPurposeValue.from(purpose);
+    if (validatedPurpose instanceof Error) {
+      return validatedPurpose;
     }
 
     return new LoanRequestEntity(
@@ -44,7 +46,7 @@ export class LoanRequestEntity {
       validatedClient.value,
       validatedAdvisor.value,
       validatedAmount.value,
-      purpose.trim(),
+      validatedPurpose.value,
       LoanStatusEnum.PENDING,
       new Date(),
       undefined,

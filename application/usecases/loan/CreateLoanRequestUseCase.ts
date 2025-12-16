@@ -1,15 +1,15 @@
-import {
-  CreateLoanRequestInput,
-  LoanRequestRepositoryInterface,
-} from "../../ports/repositories/LoanRequestRepositoryInterface";
+import { LoanRequestRepositoryInterface } from "../../ports/repositories/LoanRequestRepositoryInterface";
+import { CreateLoanRequestInput } from "../../requests/CreateLoanRequest";
 import { UserRepositoryInterface } from "../../ports/repositories/auth/UserRepositoryInterface";
 import { UserRoleRepositoryInterface } from "../../ports/repositories/auth/UserRoleRepositoryInterface";
 import { LoanRequestEntity } from "../../../domain/entities/LoanRequestEntity";
 import { RoleEnum } from "../../../domain/enums/RoleEnum";
 import { UuidGeneratorService } from "../../ports/services/UuidGeneratorService";
 import { UserNotFoundError } from "../../errors/UserNotFoundError";
-import { LoanConfigRepositoryInterface } from "../../ports/repositories/LoanConfigRepositoryInterface";
+import { LoanConfigService } from "../../ports/services/LoanConfigService";
 import { LoanStatusEnum } from "../../../domain/enums/LoanStatusEnum";
+import { AdvisorNotFoundError } from "../../errors/AdvisorNotFoundError";
+import { ActiveLoanRequestExistsError } from "../../errors/ActiveLoanRequestExistsError";
 
 export class CreateLoanRequestUseCase {
   public constructor(
@@ -17,7 +17,7 @@ export class CreateLoanRequestUseCase {
     private readonly userRepository: UserRepositoryInterface,
     private readonly userRoleRepository: UserRoleRepositoryInterface,
     private readonly uuidService: UuidGeneratorService,
-    private readonly loanConfigRepository: LoanConfigRepositoryInterface,
+    private readonly loanConfigService: LoanConfigService,
   ) {}
 
   public async execute(clientId: string, input: CreateLoanRequestInput): Promise<LoanRequestEntity | Error> {
@@ -35,7 +35,7 @@ export class CreateLoanRequestUseCase {
 
     const advisorRoles = await this.userRoleRepository.findRolesByUserId(input.advisorId);
     if (advisorRoles instanceof Error || !advisorRoles.find((r) => r.name === RoleEnum.BANK_ADVISOR)) {
-      return new Error("Advisor not found");
+      return new AdvisorNotFoundError("Advisor not found or not a bank advisor");
     }
 
     const existing = await this.loanRequestRepository.findByClient(clientId);
@@ -47,13 +47,13 @@ export class CreateLoanRequestUseCase {
     ];
     const hasActive = existing.some((r) => nonFinalStatuses.includes(r.status));
     if (hasActive) {
-      return new Error(
-        "Vous avez déjà une demande de crédit en cours. Merci d'attendre la décision avant d'en soumettre une nouvelle.",
+      return new ActiveLoanRequestExistsError(
+        "There is already an active loan request. Please wait for a decision before submitting a new one.",
       );
     }
 
     const id = this.uuidService.generate();
-    const configRate = await this.loanConfigRepository.getIndicativeRate();
+    await this.loanConfigService.getIndicativeRate();
 
     const request = LoanRequestEntity.create(
       id,

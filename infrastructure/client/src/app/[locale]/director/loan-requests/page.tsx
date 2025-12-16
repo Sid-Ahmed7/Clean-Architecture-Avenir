@@ -11,7 +11,7 @@ import {
   getClientLoanHistory,
   getClientRepaymentsFor,
 } from "@/lib/api/loan";
-import { LoanRequest } from "@/types/loan";
+import { LoanDecision, LoanRequest } from "@/types/loan";
 import { withBankManagerProtection } from "@/components/auth/withRoleProtection";
 
 function DirectorLoanRequestsPage() {
@@ -65,7 +65,7 @@ function DirectorLoanRequestsPage() {
       .finally(() => setSubmitting(null));
   };
 
-  const handleDecision = (id: string, decision: "approve" | "reject") => {
+  const handleDecision = (id: string, decision: LoanDecision) => {
     setSubmitting(id);
     directorDecideLoanRequest(id, decision)
       .then((res) => {
@@ -246,14 +246,14 @@ function DirectorLoanRequestsPage() {
                       <>
                         <button
                           disabled={!pendingDirector || submitting === req.id}
-                          onClick={() => handleDecision(req.id, "approve")}
+                          onClick={() => handleDecision(req.id, "APPROVE")}
                           className="px-3 py-2 rounded bg-green-600 text-white text-sm w-full disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           Valider
                         </button>
                         <button
                           disabled={!pendingDirector || submitting === req.id}
-                          onClick={() => handleDecision(req.id, "reject")}
+                          onClick={() => handleDecision(req.id, "REJECT")}
                           className="px-3 py-2 rounded bg-red-600 text-white text-sm w-full disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           Refuser

@@ -1,7 +1,9 @@
+import { InvalidRemainingPrincipalError } from "../errors/InvalidRemainingPrincipalError";
+
 export class RemainingPrincipalValue {
-  public static from(amount: number): RemainingPrincipalValue | Error {
+  public static from(amount: number): RemainingPrincipalValue | InvalidRemainingPrincipalError {
     if (typeof amount !== "number" || Number.isNaN(amount) || amount <= 0) {
-      return new Error("Invalid remaining principal");
+      return new InvalidRemainingPrincipalError("Invalid remaining principal");
     }
     return new RemainingPrincipalValue(amount);
   }

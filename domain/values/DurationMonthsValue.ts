@@ -1,7 +1,9 @@
+import { InvalidDurationMonthsError } from "../errors/InvalidDurationMonthsError";
+
 export class DurationMonthsValue {
-  public static from(months: number): DurationMonthsValue | Error {
+  public static from(months: number): DurationMonthsValue | InvalidDurationMonthsError {
     if (typeof months !== "number" || Number.isNaN(months) || months <= 0 || !Number.isInteger(months)) {
-      return new Error("Invalid duration months");
+      return new InvalidDurationMonthsError("Invalid duration months");
     }
     return new DurationMonthsValue(months);
   }

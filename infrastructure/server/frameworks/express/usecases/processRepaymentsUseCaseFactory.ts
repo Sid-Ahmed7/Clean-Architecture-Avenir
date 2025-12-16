@@ -1,4 +1,10 @@
-import { processRepaymentsUseCaseFactory } from "../../../../usecases/processRepaymentsUseCaseFactory";
+import { ProcessRepaymentsUseCase } from "../../../../../application/usecases/loan/ProcessRepaymentsUseCase";
+import {
+  accountRepository,
+  loanRepaymentScheduleRepository,
+} from "../../../../adapters/config/repositories";
 
-export { processRepaymentsUseCaseFactory };
+export function processRepaymentsUseCaseFactory() {
+  return new ProcessRepaymentsUseCase(loanRepaymentScheduleRepository, accountRepository);
+}
 
