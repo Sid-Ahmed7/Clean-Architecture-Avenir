@@ -77,3 +77,9 @@ export const accountService = new BankAccountService(accountRepository);
 export const holdingService = new StockHoldingManager(holdingRepository);
 export const orderValidationService = new OrderValidationEngineService(accountService, holdingService);
 export const localeService = new LocaleValidationService();
+// Savings repositories
+import { InMemorySavingsProductRepository } from '../repositories/InMemorySavingsProductRepository';
+import { InMemorySavingsAccountRepository } from '../repositories/InMemorySavingsAccountRepository';
+
+export const savingsProductRepository = new InMemorySavingsProductRepository();
+export const savingsAccountRepository = new InMemorySavingsAccountRepository();

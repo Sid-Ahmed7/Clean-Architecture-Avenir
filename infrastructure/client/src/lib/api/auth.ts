@@ -1,4 +1,9 @@
 import { apiClient } from "./apiClient";
+import { LoginInput } from "../validation/auth/loginSchema";
+
+export const login = async (data: LoginInput) => {
+  return await apiClient.post("/auth/login", data);
+};
 
 export const getAllAdvisors = async () => {
     const {data} = await apiClient.get(`/auth/getAdvisors`);
@@ -16,14 +21,3 @@ export const refreshToken = async () => {
     };
   }
 };
-
-
-
-export const createAdmin = async (data: any) => {
-    const { adminPassword, ...userData } = data;
-    return await apiClient.post("/auth/create-admin", userData, {
-        headers: {
-            "x-admin-password": adminPassword
-        }
-    });
-}

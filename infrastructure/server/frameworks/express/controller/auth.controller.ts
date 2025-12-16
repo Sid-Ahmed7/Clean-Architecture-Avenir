@@ -7,7 +7,6 @@ import { GetUserRolesUseCase} from "../../../../../application/usecases/auth/Get
 import {ConfirmRegistrationUseCase} from "../../../../../application/usecases/auth/ConfirmRegistrationUseCase";
 import {CreateBankAdvisorUseCase} from "../../../../../application//usecases/auth/CreateBankAdvisorUseCase";
 import {CreateBankManagerUseCase} from "../../../../../application//usecases/auth/CreateBankManagerUseCase";
-import {CreateAdminUseCase} from "../../../../../application/usecases/auth/CreateAdminUseCase";
 import { InMemoryUserRepository} from "../../../../adapters/repositories/InMemoryUserRepository";
 import { InMemoryRoleRepository} from "../../../../adapters/repositories/InMemoryRoleRepository";
 import { InMemoryUserRoleRepository} from "../../../../adapters/repositories/InMemoryUserRoleRepository";
@@ -32,7 +31,6 @@ import { registerSchema } from "../schemas/auth/registerSchema";
 import { registerAdvisorSchema } from "../schemas/auth/registerAdvisorSchema";
 import { loginSchema } from "../schemas/auth/loginSchema";
 import { registerManagerSchema } from "../schemas/auth/registerManagerSchema";
-import { createAdminSchema } from "../schemas/auth/createAdminSchema";
 
 export class AuthController {
 
@@ -164,7 +162,9 @@ export class AuthController {
 
         return res.status(200).json({
           user: result.user,
+          roles: result.roles
         });
+
       }
 
       async refreshToken(req: Request, res: Response) {
@@ -267,6 +267,13 @@ export class AuthController {
           this.uuidService
         );
 
+        // Verify secret code from request body
+        const secretCode = req.body.secretCode;
+        
+        if (!secretCode || secretCode !== process.env.MANAGER_CREATION_PASSWORD) {
+            return res.status(403).json({ error: "Invalid secret code. You are not authorized to create a manager." });
+        }
+
         const parseResult = registerManagerSchema.safeParse(req.body);
         if (!parseResult.success) {
           return res.status(400).json({ errors: parseResult.error.message });
@@ -278,37 +285,6 @@ export class AuthController {
             return res.status(409).json({ error: result.message });
           }
           return res.status(500).json({ error: result.message });
-        }
-
-        return res.status(201).json(result);
-      }
-
-      async createAdmin(req: Request, res: Response) {
-            const createAdminUseCase = new CreateAdminUseCase(
-            this.userRepository,
-            this.roleRepository,
-            this.userRoleRepository,
-            this.passwordService,
-            this.uuidService
-        );
-        const adminPassword = req.headers['x-admin-password'] || req.body.adminPassword;
-
-        if (adminPassword !== process.env.ADMIN_CREATION_PASSWORD) {
-            return res.status(403).json({ error: "Forbidden" });
-        }
-
-        const parseResult = createAdminSchema.safeParse(req.body);
-        if (!parseResult.success) {
-          return res.status(400).json({ errors: parseResult.error.message });
-        }
-
-        const result = await createAdminUseCase.execute(parseResult.data);
-
-        if (result instanceof Error) {
-            if (result instanceof UserAlreadyExistsError) {
-                return res.status(409).json({ error: result.message });
-            }
-            return res.status(500).json({ error: result.message });
         }
 
         return res.status(201).json(result);

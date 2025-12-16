@@ -27,7 +27,7 @@ export function useCreateSubAccount() {
             return;
         }
         setSuccess(true);
-        router.push("/dashboard");
+        router.push("/client/dashboard");
         return res.data;
       })
       .catch((err) => {
