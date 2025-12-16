@@ -35,6 +35,8 @@ import { InMemoryStockHoldingRepository } from "../repositories/InMemoryStockHol
 import { InMemoryStockTransactionRepository } from "../repositories/InMemoryStockTransactionRepository";
 import { InMemoryTransactionRepository } from "../repositories/InMemoryTransactionRepository";
 import { LocaleValidationService } from "../services/LocaleValidationService";
+import { InMemorySavingsProductRepository } from '../repositories/InMemorySavingsProductRepository';
+import { InMemorySavingsAccountRepository } from '../repositories/InMemorySavingsAccountRepository';
 
 const baseUrl = process.env.CLIENT_BASE_URL!;
 export const tokenService = new JwtTokenService();
@@ -77,9 +79,6 @@ export const accountService = new BankAccountService(accountRepository);
 export const holdingService = new StockHoldingManager(holdingRepository);
 export const orderValidationService = new OrderValidationEngineService(accountService, holdingService);
 export const localeService = new LocaleValidationService();
-// Savings repositories
-import { InMemorySavingsProductRepository } from '../repositories/InMemorySavingsProductRepository';
-import { InMemorySavingsAccountRepository } from '../repositories/InMemorySavingsAccountRepository';
 
 export const savingsProductRepository = new InMemorySavingsProductRepository();
 export const savingsAccountRepository = new InMemorySavingsAccountRepository();
