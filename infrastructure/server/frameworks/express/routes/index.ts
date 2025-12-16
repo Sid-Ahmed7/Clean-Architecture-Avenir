@@ -8,6 +8,9 @@ import mediaRoutes from "./media.routes";
 import contentRoutes from "./content.routes";
 import savingsAccountRoutes from "./savings-account.routes";
 import savingsProductRoutes from "./savings-product.routes";
+import stockOrder from "./stockOrder.routes";
+import stockPosition from "./stockPositions.routes";
+import stockTransaction from "./stockTransactions.routes";
 
 const router = express.Router();
 
@@ -15,6 +18,9 @@ router.use("/auth", authRoutes);
 router.use("/accounts", accountRoutes);
 router.use("/savings-accounts", savingsAccountRoutes);
 router.use("/savings-products", savingsProductRoutes);
+router.use("/stock/order", stockOrder);
+router.use("/stock/position", stockPosition);
+router.use("/stock/transaction", stockTransaction);
 router.use("/stock", stockRoutes);
 router.use("/chat", chatRoutes);
 router.use("/feed", newsRoutes);

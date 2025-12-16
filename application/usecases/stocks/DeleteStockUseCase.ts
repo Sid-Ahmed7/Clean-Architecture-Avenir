@@ -1,9 +1,9 @@
-import { StockRepositoryInterface } from "../../ports/repositories/StockRepositoryInterface";
+import { StockRepositoryInterface } from "../../ports/repositories/stocks/StockRepositoryInterface";
 
 export class DeleteStockUseCase {
     public constructor(private readonly stockRepository: StockRepositoryInterface){}
 
-    public async execute(id: number): Promise<void | Error> {
+    public async execute(id: string): Promise<void | Error> {
 
         const existingStock = await this.stockRepository.findStockById(id);
         

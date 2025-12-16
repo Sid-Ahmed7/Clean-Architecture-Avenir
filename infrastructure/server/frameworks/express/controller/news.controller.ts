@@ -27,7 +27,7 @@ export class NewsController {
         const createNewsUseCase = new CreateNewsUseCase(this.newsRepository, this.newPublisher, this.uuidService);
         const parseResult = createNewsSchema.safeParse(req.body);
         if (!parseResult.success) {
-            return res.status(400).json({ errors: parseResult.error.format() });
+            return res.status(400).json({ errors: parseResult.error.message });
         }
 
         const result = await createNewsUseCase.execute(parseResult.data);

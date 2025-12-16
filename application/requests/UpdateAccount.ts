@@ -5,7 +5,7 @@ export interface UpdateAccount {
   accountNumber: number;
   accountType?: AccountTypeEnum;
   currency?: string;
-  accountStatus?: AccountStatusEnum;   // renommer status pour correspondre à AccountEntity
+  accountStatus?: AccountStatusEnum; 
   isActive?: boolean;
   customAccountName?: string;
   currentBalance?: number;

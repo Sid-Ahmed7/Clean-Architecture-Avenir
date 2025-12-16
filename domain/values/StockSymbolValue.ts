@@ -9,25 +9,16 @@ export class StockSymbolValue {
         }
 
         const normalizedSymbol = symbol.trim().toUpperCase();
-        const parts = normalizedSymbol.split(':');
-
-        if (parts.length !== 2) {
-            return new InvalidStockSymbolError(
-                `Invalid stock symbol format: ${normalizedSymbol}. Expected format TICKER:MARKET`
-            );
+        
+        if (normalizedSymbol.length < 1 || normalizedSymbol.length > 10 ) {
+            return new InvalidStockSymbolError("Stock symbol must be between 1 and 10 characters");
         }
 
+   
+        const symbolRegex = /^[A-Z0-9]+$/;
 
-        const tickerRegex= /^[A-Z]{1,4}$/;
-        const [ticker, market] = parts;
-
-         if(!tickerRegex.test(ticker ?? "")) {
-            return new InvalidStockSymbolError(`Invalid stock symbol format: ${symbol}`);
-        }
-
-        const marketRegex = /^[A-Z]{1,6}$/
-        if(!marketRegex.test(market ?? "")) {
-            return new InvalidStockSymbolError(`Invalid stock symbol format: ${symbol}`);
+         if(!symbolRegex.test(normalizedSymbol)) {
+            return new InvalidStockSymbolError("Stock symbol can only contain letters and numbers");
         }
 
         return new StockSymbolValue(normalizedSymbol);
