@@ -1,4 +1,3 @@
-import { StockOrderEntity } from "../../../domain/entities/StockOrderEntity";
 import { StockOrderRepositoryInterface } from "../../ports/repositories/stocks/StockOrderRepositoryInterface";
 import { StockRepositoryInterface } from "../../ports/repositories/stocks/StockRepositoryInterface";
 import { OrderBookService } from "../../ports/services/order/OrderBookService";
@@ -22,7 +21,7 @@ export class UpdateStockPriceUseCase {
         }
         const buyOrders = orders.filter(o => o.orderType === "BUY");
         const sellOrders = orders.filter(o => o.orderType === "SELL");
-          const equilibriumPrice = this.orderBookService.calculateEquilibriumPrice(buyOrders, sellOrders);
+        const equilibriumPrice = this.orderBookService.calculateEquilibriumPrice(buyOrders, sellOrders);
         if(equilibriumPrice === null) {
             return;
         }

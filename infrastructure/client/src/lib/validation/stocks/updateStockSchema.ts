@@ -2,9 +2,9 @@ import z from "zod";
 
 export const updateStockSchema = (t: (key: string) => string) => z.object({
   id: z.string(),
-  companyName: z.string().min(1, t("validation.companyNameRequired")),
-  name: z.string().min(1, t("validation.nameRequired")),
-  currency: z.string().min(1, t("validation.currencyRequired")).length(3, t("validation.currencyLength")),
+  companyName: z.string(),
+  name: z.string(),
+  currency: z.string(),
   isActionAvailable: z.boolean(),
 });
 

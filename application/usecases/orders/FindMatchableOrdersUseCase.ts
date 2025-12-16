@@ -7,12 +7,13 @@ export class FindMatchableOrdersUseCase {
     
 
     constructor(
-        private stockOrderRepository: StockOrderRepositoryInterface,
-        private stockOrderService: OrderBookService
+        private readonly stockOrderRepository: StockOrderRepositoryInterface,
+        private readonly stockOrderService: OrderBookService
     ) {}
 
         public async execute(stockSymbol: string): Promise<Array<OrdersMatchResponse> | Error> {
             const orders = await this.stockOrderRepository.findPendingOrdersBySymbol(stockSymbol);
+            
             if(orders instanceof Error) {
                 return orders;
             }

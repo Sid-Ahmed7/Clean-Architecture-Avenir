@@ -47,6 +47,23 @@ return (
         </div>
       </div>
 
+      {order.status === "PENDING" && (
+        <div className="mb-4 p-3 bg-orange-50 rounded border border-orange-200">
+          <div className="flex items-center gap-2 text-sm text-orange-800 mb-1">
+            <div className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></div>
+            <span className="font-semibold">
+              {isBuy
+                ? `${((order.remainingQuantity ?? order.quantity) * order.orderPrice + (order.feesPaid ? 0 : (order.fee ?? 1))).toFixed(2)}€ bloqués`
+                : `${order.remainingQuantity ?? order.quantity} actions bloquées`
+              }
+            </span>
+          </div>
+          <p className="text-xs text-orange-700">
+            Ces {isBuy ? "fonds" : "actions"} seront débloqué(e)s si vous annulez l&apos;ordre
+          </p>
+        </div>
+      )}
+
       {order.executedAt && (
         <div className="mb-4 p-3 bg-green-50 rounded">
           <p className="text-sm text-green-800">

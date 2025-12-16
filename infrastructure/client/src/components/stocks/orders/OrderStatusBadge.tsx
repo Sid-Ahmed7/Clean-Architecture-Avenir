@@ -1,21 +1,28 @@
 import { Badge } from "@/components/ui/Badge";
-import { OrderStatus } from "@/types/order";
+import { OrderStatusEnum } from "@/types/order";
 
 
-interface OrderStatusBadgeProps {
-  status: OrderStatus;
+interface OrderStatusEnumBadgeProps {
+  status: OrderStatusEnum;
 }
 
-export function OrderStatusBadge({ status }: OrderStatusBadgeProps) {
+export function OrderStatusBadge({ status }: OrderStatusEnumBadgeProps) {
   const statusConfig = {
-    [OrderStatus.PENDING]: { variant: "warning" as const, label: "En attente" },
-    [OrderStatus.EXECUTED]: { variant: "success" as const, label: "Exécuté" },
-    [OrderStatus.CANCELLED]: { variant: "danger" as const, label: "Annulé" },
-    [OrderStatus.PARTIALLY_EXECUTED]: { variant: "info" as const, label: "Partiellement exécuté" },
-    [OrderStatus.REJECTED]: { variant: "danger" as const, label: "Rejeté" }
+    [OrderStatusEnum.PENDING]: { variant: "warning" as const, label: "En attente" },
+    [OrderStatusEnum.EXECUTED]: { variant: "success" as const, label: "Exécuté" },
+    [OrderStatusEnum.CANCELLED]: { variant: "danger" as const, label: "Annulé" },
+    [OrderStatusEnum.PARTIALLY_EXECUTED]: { variant: "info" as const, label: "Partiellement exécuté" },
+    [OrderStatusEnum.REJECTED]: { variant: "danger" as const, label: "Rejeté" }
   };
 
-  const config = statusConfig[status];
+const config = statusConfig[status];
 
-  return <Badge variant={config.variant}>{config.label}</Badge>;
+
+return (
+  <Badge variant={config ? config.variant : "warning"}>
+    {config ? config.label : "Inconnu"}
+  </Badge>
+);
+
+
 }

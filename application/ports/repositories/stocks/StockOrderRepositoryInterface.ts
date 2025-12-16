@@ -9,8 +9,10 @@ export interface StockOrderRepositoryInterface {
     findOrderById(id: string): Promise<StockOrderEntity | OrderNotFoundError>;
     findOrdersByUserId(userId: string): Promise<Array<StockOrderEntity>>;
     findPendingOrdersBySymbol(symbol: string): Promise<Array<StockOrderEntity>>;
+    findAllOrders(): Promise<Array<StockOrderEntity>>;
     findActiveOrders(): Promise<Array<StockOrderEntity>>;
     findActiveOrdersByUserId(userId: string): Promise<Array<StockOrderEntity>>;
+    findActiveOrdersBySymbol(symbol: string): Promise<Array<StockOrderEntity> | Error>;
     findOrdersByStatus(status: OrderStatusEnum): Promise<Array<StockOrderEntity>>;
     findOrdersByUserIdAndSymbol(userId: string, symbol: string): Promise<Array<StockOrderEntity>>;
 

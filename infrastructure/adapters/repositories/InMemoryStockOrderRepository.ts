@@ -29,6 +29,10 @@ export class InMemoryStockOrderRepository implements StockOrderRepositoryInterfa
         return this.orders.filter(o => o.stockSymbol === symbol.toUpperCase() && o.orderStatus === OrderStatusEnum.PENDING).sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
     }
 
+    public async findAllOrders(): Promise<Array<StockOrderEntity>> {
+        return this.orders;
+    }
+
     public async findActiveOrders(): Promise<Array<StockOrderEntity>> {
         return this.orders.filter(o => o.isActive());
     }
@@ -40,6 +44,14 @@ export class InMemoryStockOrderRepository implements StockOrderRepositoryInterfa
     public async findActiveOrdersByUserId(userId: string): Promise<Array<StockOrderEntity>> {
         return this.orders.filter(o => o.userId === userId && o.isActive());
 
+    }
+
+    public async findActiveOrdersBySymbol(symbol: string): Promise<Array<StockOrderEntity> | Error> {
+        try {
+            return this.orders.filter(o => o.stockSymbol === symbol.toUpperCase() && o.isActive());
+        } catch (error) {
+            return error instanceof Error ? error : new Error("Failed to find active orders by symbol");
+        }
     }
 
     public async findOrdersByStatus(status: OrderStatusEnum): Promise<Array<StockOrderEntity>> {

@@ -14,8 +14,5 @@ z.object({
   buyerFee: z.number(),
   sellerFee: z.number(),
   executedAt: z.string(),
-  type: z.nativeEnum(TransactionType).optional(),
-  totalAmount: z.number().optional(),
-  fee: z.number().optional(),
 });
 export type StockTransaction = z.infer<ReturnType<typeof stockTransactionSchema>>;

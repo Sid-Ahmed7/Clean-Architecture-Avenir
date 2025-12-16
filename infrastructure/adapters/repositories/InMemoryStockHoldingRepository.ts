@@ -32,7 +32,7 @@ export class InMemoryStockHoldingRepository implements StockHoldingRepositoryInt
     public async findPositionByUserIdAndSymbol(userId: string, symbol: string): Promise<StockHoldingEntity | PositionNotFoundError> {
         const position = this.positions.find(o => o.userId === userId && o.stockSymbol === symbol);
         if(!position) {
-            return new PositionNotFoundError(`Position not found`);
+            return new PositionNotFoundError(`You don't own any shares of ${symbol}. You need to buy shares before you can sell them.`);
         }
         return position;
     }

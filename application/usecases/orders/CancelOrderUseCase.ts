@@ -43,21 +43,25 @@ export class CancelOrderUseCase {
     } else if (order.orderType === OrderTypeEnum.SELL) {
       const remainingQuantity = order.remainingQuantity;
 
-      const position = await this.holdingRepository.findPositionByUserIdAndSymbol(
-        userId,
-        order.stockSymbol
-      );
+      const position = await this.holdingRepository.findPositionByUserIdAndSymbol(userId,order.stockSymbol);
 
       if (position instanceof Error) {
         return position;
       }
 
       position.unblockShares(remainingQuantity);
-      await this.holdingRepository.updatePosition(position);
+
+      const updatePosition = await this.holdingRepository.updatePosition(position);
+      if (updatePosition instanceof Error) {
+        return updatePosition;
+      }
     }
 
     order.cancel();
 
-    await this.orderRepository.updateOrder(order);
+    const updateOrder = await this.orderRepository.updateOrder(order);
+    if (updateOrder instanceof Error) {
+      return updateOrder;
+    }
   }
 }

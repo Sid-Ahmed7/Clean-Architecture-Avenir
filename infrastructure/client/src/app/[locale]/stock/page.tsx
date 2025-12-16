@@ -2,16 +2,18 @@
 
 import { HybridStockDisplay } from "@/components/stocks/HybridStockDisplay";
 import { PlaceOrderModal } from "@/components/stocks/orders/PlaceOrderModal";
+import { PurchaseIPOModal } from "@/components/stocks/orders/PurchaseIPOModal";
 import { useMarketData } from "@/hooks/useMarketData";
 import { useStocks } from "@/hooks/useStocks";
 import { OrderTypeEnum } from "@/types/createOrder";
 import { useState } from "react";
-import { Stocks } from "@/types/stocks";
+import { StockCard } from "@/components/stocks/StockCard";
+import { ApiPriceChart } from "@/components/stocks/StockChart";
 
 export default function StocksPage() {
   const { data: backendStocks, isLoading: loadingBackend, error: errorBackend } = useStocks();
-  
   const { data: marketData, isLoading: loadingMarket } = useMarketData();
+  const [activeTab, setActiveTab] = useState<"info" | "trading">("trading");
 
   const [selectedStock, setSelectedStock] = useState<{
     symbol: string;
@@ -20,10 +22,15 @@ export default function StocksPage() {
     orderType: OrderTypeEnum;
   } | null>(null);
 
+  const [selectedIPOStock, setSelectedIPOStock] = useState<{
+    symbol: string;
+    name: string;
+    price: number;
+    availableShares: number;
+  } | null>(null);
+
   const handleBuy = (symbol: string) => {
-    console.log("handleBuy called with:", symbol);
     const stock = backendStocks?.find((s) => s.symbol === symbol);
-    console.log("Found stock:", stock);
     if (stock) {
       setSelectedStock({
         symbol: stock.symbol,
@@ -35,9 +42,7 @@ export default function StocksPage() {
   };
 
   const handleSell = (symbol: string) => {
-    console.log("handleSell called with:", symbol);
     const stock = backendStocks?.find((s) => s.symbol === symbol);
-    console.log(" Found stock:", stock);
     if (stock) {
       setSelectedStock({
         symbol: stock.symbol,
@@ -48,14 +53,23 @@ export default function StocksPage() {
     }
   };
 
-
+  const handleBuyIPO = (symbol: string) => {
+    const stock = backendStocks?.find((s) => s.symbol === symbol);
+    if (stock) {
+      setSelectedIPOStock({
+        symbol: stock.symbol,
+        name: stock.companyName,
+        price: stock.currentPrice,
+        availableShares: stock.availableSharesForIPO
+      });
+    }
+  };
 
   if (loadingBackend) {
-    console.log("Rendering LOADING screen");
     return (
       <div className="p-6">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold text-gray-900 mb-6">📈 Actions disponibles</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-6">📈 Actions</h1>
           <div className="bg-white rounded-lg shadow p-12 text-center">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
             <p className="text-gray-500 mt-4">Chargement des actions...</p>
@@ -66,27 +80,15 @@ export default function StocksPage() {
   }
 
   if (errorBackend) {
-    console.log(" ERROR:", errorBackend);
     return (
       <div className="p-6">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold text-gray-900 mb-6">📈 Actions disponibles</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-6">📈 Actions</h1>
           <div className="bg-red-50 border border-red-200 rounded-lg p-6">
             <p className="text-red-800 font-semibold">Erreur de chargement</p>
             <p className="text-red-600 text-sm mt-2">
-              Impossible de charger les actions. Vérifiez que votre backend est démarré sur{" "}
-              <code className="bg-red-100 px-2 py-1 rounded">
-                {process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"}
-              </code>
+              Impossible de charger les actions. Vérifiez que votre backend est démarré.
             </p>
-            <details className="mt-4">
-              <summary className="cursor-pointer text-red-700 font-semibold">
-                Détails de l'erreur
-              </summary>
-              <pre className="mt-2 bg-red-100 p-2 rounded text-xs overflow-auto">
-                {JSON.stringify(errorBackend, null, 2)}
-              </pre>
-            </details>
           </div>
         </div>
       </div>
@@ -96,94 +98,135 @@ export default function StocksPage() {
   const hasMarketData = marketData && marketData.stocks && marketData.stocks.length > 0;
   const hasBackendData = backendStocks && backendStocks.length > 0;
 
-  if (!hasBackendData && !hasMarketData && !loadingMarket) {
-    console.log(" NO DATA");
-    return (
-      <div className="p-6">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold text-gray-900 mb-6">📈 Actions disponibles</h1>
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-            <p className="text-blue-800 font-semibold">ℹ️ Aucune action disponible</p>
-            <p className="text-blue-600 text-sm mt-2">
-              Aucune donnée de marché disponible pour le moment.
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  console.log("✅ Rendering MAIN screen with stocks");
-
-  const stocksToDisplay = hasBackendData ? backendStocks : (marketData?.stocks || []);
-  const displayMode = hasBackendData ? 'hybrid' : 'market-only';
-
   return (
     <div className="p-6">
       <div className="max-w-7xl mx-auto">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">📈 Actions disponibles</h1>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-600">
-              {stocksToDisplay.length} action(s) disponible(s)
-            </span>
-            {loadingMarket && (
-              <span className="text-xs text-blue-600 flex items-center gap-1">
-                <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-600"></div>
-                Chargement données marché...
-              </span>
-            )}
-            {marketData && (
-              <span className="text-xs text-green-600">
-                ✓ Données marché chargées ({marketData.stocks?.length || 0} actions)
-              </span>
-            )}
-            {!hasBackendData && hasMarketData && (
-              <span className="text-xs text-orange-600">
-                ⚠️ Mode marché uniquement (pas d&apos;actions backend)
-              </span>
-            )}
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">📈 Actions</h1>
+
+          {/* Tabs */}
+          <div className="border-b border-gray-200">
+            <nav className="-mb-px flex space-x-8">
+              <button
+                onClick={() => setActiveTab("trading")}
+                className={`${
+                  activeTab === "trading"
+                    ? "border-blue-600 text-blue-600"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors`}
+              >
+                💰 Actions Disponibles
+                {hasBackendData && (
+                  <span className="ml-2 bg-blue-100 text-blue-600 py-0.5 px-2 rounded-full text-xs">
+                    {backendStocks.filter(s => s.isActionAvailable).length}
+                  </span>
+                )}
+              </button>
+              <button
+                onClick={() => setActiveTab("info")}
+                className={`${
+                  activeTab === "info"
+                    ? "border-blue-600 text-blue-600"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors`}
+              >
+                📊 Info Actions (Marché)
+                {loadingMarket && (
+                  <span className="ml-2 inline-block animate-spin rounded-full h-3 w-3 border-b-2 border-blue-600"></span>
+                )}
+                {hasMarketData && (
+                  <span className="ml-2 bg-green-100 text-green-600 py-0.5 px-2 rounded-full text-xs">
+                    {marketData.stocks.length}
+                  </span>
+                )}
+              </button>
+            </nav>
           </div>
         </div>
 
-        <div className="space-y-8">
-          {displayMode === 'hybrid' && backendStocks ? (
-            backendStocks.map((backendStock, index) => {
-              console.log(`🔍 Rendering stock ${index}:`, backendStock.symbol);
-
-              const apiStock = marketData?.stocks?.find(
-                (api) => api.symbol === backendStock.symbol
-              );
-
-              console.log(`🔍 API stock for ${backendStock.symbol}:`, apiStock ? "FOUND" : "NOT FOUND");
-
-              return (
-                <div key={backendStock.id}>
-                  <HybridStockDisplay
-                    backendStock={backendStock}
-                    apiStock={apiStock}
-                    onBuy={handleBuy}
-                    onSell={handleSell}
-                  />
+        <div className="mt-6">
+          {activeTab === "trading" && (
+            <div className="space-y-8">
+              {!hasBackendData ? (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                  <p className="text-blue-800 font-semibold">ℹ️ Aucune action disponible</p>
+                  <p className="text-blue-600 text-sm mt-2">
+                    Aucune action n&apos;est disponible au trading pour le moment.
+                  </p>
                 </div>
-              );
-            })
-          ) : (
-            // Mode market-only: afficher uniquement les données de marché
-            marketData?.stocks?.map((apiStock, index) => {
-              console.log(`🔍 Rendering market stock ${index}:`, apiStock.symbol);
+              ) : (
+                backendStocks.map((backendStock) => {
+                  const apiStock = marketData?.stocks?.find(
+                    (api) => api.symbol === backendStock.symbol
+                  );
 
-              return (
-                <div key={apiStock.symbol}>
-                  <HybridStockDisplay
-                    backendStock={undefined}
-                    apiStock={apiStock}
-                    onBuy={undefined}
-                    onSell={undefined}
-                  />
+                  return (
+                    <div key={backendStock.id}>
+                      <HybridStockDisplay
+                        backendStock={backendStock}
+                        apiStock={apiStock}
+                        onBuy={handleBuy}
+                        onSell={handleSell}
+                        onBuyIPO={handleBuyIPO}
+                      />
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          )}
+
+          {activeTab === "info" && (
+            <div className="space-y-6">
+              {loadingMarket ? (
+                <div className="bg-white rounded-lg shadow p-12 text-center">
+                  <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+                  <p className="text-gray-500 mt-4">Chargement des données de marché...</p>
                 </div>
-              );
-            })
+              ) : !hasMarketData ? (
+                <div className="bg-orange-50 border border-orange-200 rounded-lg p-6">
+                  <p className="text-orange-800 font-semibold">⚠️ Données de marché non disponibles</p>
+                  <p className="text-orange-600 text-sm mt-2">
+                    Les données de marché en temps réel ne sont pas disponibles pour le moment.
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {marketData.stocks.map((apiStock) => (
+                    <div key={apiStock.symbol} className="space-y-4">
+                      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-200">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-2xl">📊</span>
+                          <h3 className="font-bold text-blue-900">
+                            {apiStock.name} ({apiStock.symbol})
+                          </h3>
+                        </div>
+                        <p className="text-sm text-blue-800">
+                          Données de marché en temps réel - {apiStock.exchange}
+                        </p>
+                      </div>
+
+                      <div className="bg-white rounded-lg shadow-md p-6">
+                        <ApiPriceChart stock={apiStock} />
+                      </div>
+
+                      <StockCard stock={apiStock} />
+
+                      {!hasBackendData || !backendStocks.find(s => s.symbol === apiStock.symbol) ? (
+                        <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                          <div className="flex items-center gap-2">
+                            <span className="text-xl">ℹ️</span>
+                            <p className="text-sm text-orange-800">
+                              Cette action n&apos;est pas encore disponible pour le trading.
+                            </p>
+                          </div>
+                        </div>
+                      ) : null}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           )}
         </div>
       </div>
@@ -196,6 +239,17 @@ export default function StocksPage() {
           stockName={selectedStock.name}
           currentPrice={selectedStock.price}
           orderType={selectedStock.orderType}
+        />
+      )}
+
+      {selectedIPOStock && (
+        <PurchaseIPOModal
+          isOpen={!!selectedIPOStock}
+          onClose={() => setSelectedIPOStock(null)}
+          stockSymbol={selectedIPOStock.symbol}
+          stockName={selectedIPOStock.name}
+          ipoPrice={selectedIPOStock.price}
+          availableShares={selectedIPOStock.availableShares}
         />
       )}
     </div>

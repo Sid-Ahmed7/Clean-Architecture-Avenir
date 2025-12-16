@@ -1,7 +1,7 @@
 import { AccountService } from "../../ports/services/AccountService";
 
 export class BlockFundsForOrderUseCase {
-    public constructor(private accountService: AccountService) {}
+    public constructor(private readonly accountService: AccountService) {}
 
     public async execute(userId: string,quantity: number,pricePerShare: number,fee: number): Promise<void | Error> {
         const totalAmount = (quantity * pricePerShare) + fee;

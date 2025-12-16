@@ -8,11 +8,16 @@ import { PlaceOrderModal } from "@/components/stocks/orders/PlaceOrderModal";
 
 export default function PortfolioPage() {
   const { data: positions, isLoading, error } = useUserPositions();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStock, setSelectedStock] = useState<{
     symbol: string;
     name: string;
     price: number;
-  } | null>(null);
+  }>({
+    symbol: "",
+    name: "",
+    price: 0
+  });
 
   const handleSell = (symbol: string) => {
     const position = positions?.find((p) => p.stockSymbol === symbol);
@@ -20,8 +25,9 @@ export default function PortfolioPage() {
       setSelectedStock({
         symbol: position.stockSymbol,
         name:  position.stockSymbol,
-        price: position.averagePrice
+        price: position.averagePurchasePrice
       });
+      setIsModalOpen(true);
     }
   };
 
@@ -56,16 +62,14 @@ export default function PortfolioPage() {
         <PositionList positions={positions || []} onSell={handleSell} />
       </div>
 
-      {selectedStock && (
-        <PlaceOrderModal
-          isOpen={!!selectedStock}
-          onClose={() => setSelectedStock(null)}
-          stockSymbol={selectedStock.symbol}
-          stockName={selectedStock.name}
-          currentPrice={selectedStock.price}
-          orderType={OrderTypeEnum.SELL}
-        />
-      )}
+      <PlaceOrderModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        stockSymbol={selectedStock.symbol}
+        stockName={selectedStock.name}
+        currentPrice={selectedStock.price}
+        orderType={OrderTypeEnum.SELL}
+      />
     </div>
   );
 }

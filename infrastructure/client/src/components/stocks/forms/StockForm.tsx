@@ -17,11 +17,8 @@ export function StockForm({ onSubmit, onCancel, isSubmitting }: CreateStockFormP
       companyName: "",
         name: "",
       currentPrice: 0,
-      rateOfChange: 0,
       isActionAvailable: true,
       currency: "EUR",
-      previousPrice: 0
-
     }
   });
 

@@ -13,14 +13,7 @@ interface PlaceOrderModalProps {
   orderType: OrderTypeEnum;
 }
 
-export function PlaceOrderModal({
-  isOpen,
-  onClose,
-  stockSymbol,
-  stockName,
-  currentPrice,
-  orderType,
-}: PlaceOrderModalProps) {
+export function PlaceOrderModal({isOpen,onClose,stockSymbol,stockName,currentPrice,orderType,}: PlaceOrderModalProps) {
   const placeOrderMutation = usePlaceOrder();
   const matchOrdersMutation = useMatchOrders();
   
@@ -92,9 +85,9 @@ export function PlaceOrderModal({
             <div className="flex items-center gap-2">
               <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-600 border-t-transparent"></div>
               <span className="text-sm text-blue-800 font-medium">
-                {status === 'placing' && '📝 Placement de l\'ordre...'}
-                {status === 'matching' && '🔄 Recherche de correspondances...'}
-                {status === 'success' && '✅ Ordre exécuté avec succès !'}
+                {status === 'placing' && 'Placement de l\'ordre...'}
+                {status === 'matching' && 'Recherche de correspondances...'}
+                {status === 'success' && 'Ordre exécuté avec succès !'}
               </span>
             </div>
           </div>
@@ -155,8 +148,7 @@ export function PlaceOrderModal({
           {!isProcessing && (
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
               <p className="text-xs text-blue-800">
-                💡 <strong>Exécution instantanée :</strong> Votre ordre sera automatiquement 
-                comparé aux ordres existants pour une exécution immédiate si possible.
+                Votre ordre sera automatiquement comparé aux ordres existants pour une exécution immédiate.
               </p>
             </div>
           )}

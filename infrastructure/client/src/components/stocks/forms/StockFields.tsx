@@ -40,7 +40,7 @@ export function StockFields({ form }: CreateStockFieldsProps) {
 
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Nom de l'entreprise <span className="text-red-500">*</span>
+          Nom de l&apos;entreprise <span className="text-red-500">*</span>
         </label>
         <Controller
           name="companyName"
@@ -113,25 +113,6 @@ export function StockFields({ form }: CreateStockFieldsProps) {
 
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Variation (%) depuis le dernier prix
-        </label>
-        <Controller
-          name="rateOfChange"
-          control={control}
-          render={({ field }) => (
-            <input
-              type="number"
-              step="0.01"
-              {...field}
-              onChange={(e) => field.onChange(parseFloat(e.target.value))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          )}
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-1">
           Devise <span className="text-red-500">*</span>
         </label>
         <Controller
@@ -152,6 +133,40 @@ export function StockFields({ form }: CreateStockFieldsProps) {
         )}
       </div>
 
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Quantité totale d&apos;actions <span className="text-red-500">*</span>
+        </label>
+        <Controller
+          name="totalShares"
+          control={control}
+          rules={{
+            required: "La quantité totale est requise",
+            min: { value: 1, message: "La quantité doit être au moins 1" }
+          }}
+          render={({ field }) => (
+            <input
+              type="number"
+              step="1"
+              {...field}
+              value={field.value ?? ""}
+              onChange={(e) => {
+                const value = parseInt(e.target.value);
+                field.onChange(isNaN(value) ? 0 : value);
+              }}
+              placeholder="Ex: 1000000"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          )}
+        />
+        {errors.totalShares && (
+          <p className="text-red-500 text-xs mt-1">{errors.totalShares.message}</p>
+        )}
+        <p className="text-xs text-gray-500 mt-1">
+          Nombre total d&apos;actions disponibles pour cette entreprise
+        </p>
+      </div>
+
       <div className="flex items-center mb-4">
         <Controller
           name="isActionAvailable"
@@ -169,7 +184,7 @@ export function StockFields({ form }: CreateStockFieldsProps) {
           )}
         />
         <label className="ml-2 text-sm text-gray-700">
-          Action disponible au trading
+          Action disponible à l&apos;achat
         </label>
       </div>
     </>

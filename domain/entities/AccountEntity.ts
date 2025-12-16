@@ -12,6 +12,7 @@ import {InsufficientFundsError} from "../errors/InsufficientFundsError";
 import { InvalidAccountStatusError } from "../errors/InvalidAccountStatusError";
 import { InvalidCreditError } from "../errors/InvalidCreditError";
 
+import { InvalidBlockedAmountError } from "../errors/InvalidBlockedAmountError";
 export class AccountEntity {
   public static from(accountNumber: number, iban: string, userId: string, accountType: AccountTypeEnum, currency: string, accountStatus: AccountStatusEnum, isActive: boolean, currentBalance: number = 20, createdAt: Date, withdrawalLimit: number = 3000 , transferLimit: number = 3000, overdraftLimit: number = 1000, customAccountName: string, totalTransfered: number = 0, lastTransferResetDate: Date = new Date(), parentAccountId?: number, closedAt?: Date, blockedBalanced?: number) 
    {
@@ -119,18 +120,18 @@ export class AccountEntity {
     this.overdraftLimit = limit;
   }
  public getAvailableBalance(overdraftLimit: number = 0): number {
-return this.currentBalance - ((this.blockedBalanced ?? 0) + overdraftLimit);
+    return this.currentBalance - (this.blockedBalanced ?? 0) + overdraftLimit;
   }
 
-public blockFunds(amount: number): void | InsufficientFundsError {
+public blockFunds(amount: number): void | InvalidBlockedAmountError {
     if (amount <= 0) {
-        return new InsufficientFundsError("Block amount must be positive");
+        return new InvalidBlockedAmountError("Block amount must be positive");
     }
     if (!this.isActive || this.accountStatus !== AccountStatusEnum.ACTIVE) {
-        return new InsufficientFundsError("Account not active");
+        return new InvalidBlockedAmountError("Account not active");
     }
     if (this.currentBalance - (this.blockedBalanced ?? 0) < amount) {
-        return new InsufficientFundsError(`Insufficient funds to block. Available: ${this.currentBalance - (this.blockedBalanced ?? 0)}, required: ${amount}`);
+        return new InvalidBlockedAmountError(`Insufficient funds to block. Available: ${this.currentBalance - (this.blockedBalanced ?? 0)}, required: ${amount}`);
     }
     if (!this.blockedBalanced) {
         this.blockedBalanced = 0;
@@ -138,15 +139,15 @@ public blockFunds(amount: number): void | InsufficientFundsError {
     this.blockedBalanced += amount;
 }
 
-  public unblockFunds(amount: number): void | InsufficientFundsError {
+  public unblockFunds(amount: number): void | InvalidBlockedAmountError {
     if (amount <= 0) {
-        return new InsufficientFundsError("Unblock amount must be positive");
+        return new InvalidBlockedAmountError("Unblock amount must be positive");
     }
     if (!this.blockedBalanced) {
         this.blockedBalanced = 0;
     }
     if (this.blockedBalanced < amount) {
-        return new InsufficientFundsError(`Insufficient blocked funds to unblock. Blocked: ${this.blockedBalanced}, requested: ${amount}`);
+        return new InvalidBlockedAmountError(`Insufficient blocked funds to unblock. Blocked: ${this.blockedBalanced}, requested: ${amount}`);
     }
     this.blockedBalanced -= amount;
 }

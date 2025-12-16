@@ -24,7 +24,10 @@ export class PostgresStockRepository implements StockRepositoryInterface {
             new Date(row.createdAt),
             row.isActionAvailable,
             new Date(row.updatedAt),
-            row.previousPrice ? Number(row.previousPrice) : undefined
+            Number(row.totalShares ?? 1000000),
+            row.previousPrice ? Number(row.previousPrice) : undefined,
+            row.ipoActive ?? false,
+            Number(row.availableSharesForIPO ?? row.totalShares ?? 1000000)
         );
     }
 
@@ -47,7 +50,10 @@ export class PostgresStockRepository implements StockRepositoryInterface {
             new Date(row.createdAt),
             row.isActionAvailable,
             new Date(row.updatedAt),
-            row.previousPrice ? Number(row.previousPrice) : undefined
+            Number(row.totalShares ?? 1000000),
+            row.previousPrice ? Number(row.previousPrice) : undefined,
+            row.ipoActive ?? false,
+            Number(row.availableSharesForIPO ?? row.totalShares ?? 1000000)
         );
     }
 
@@ -65,15 +71,18 @@ export class PostgresStockRepository implements StockRepositoryInterface {
                 new Date(row.createdAt),
                 row.isActionAvailable,
                 new Date(row.updatedAt),
-                row.previousPrice ? Number(row.previousPrice) : undefined
+                Number(row.totalShares ?? 1000000),
+                row.previousPrice ? Number(row.previousPrice) : undefined,
+                row.ipoActive ?? false,
+                Number(row.availableSharesForIPO ?? row.totalShares ?? 1000000)
             )
         );
     }
 
     async createStock(stock: StockEntity): Promise<StockEntity | Error> {
         const result = await this.dataSource.query(
-            `INSERT INTO stocks (symbol, companyName, name, currentPrice, rateOfChange, currency, isActionAvailable, createdAt, updatedAt, previousPrice)
-             VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *`,
+            `INSERT INTO stocks (symbol, companyName, name, currentPrice, rateOfChange, currency, isActionAvailable, totalShares, createdAt, updatedAt, previousPrice, ipoActive, availableSharesForIPO)
+             VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) RETURNING *`,
             [
                 stock.symbol,
                 stock.companyName,
@@ -82,9 +91,12 @@ export class PostgresStockRepository implements StockRepositoryInterface {
                 stock.rateOfChange,
                 stock.currency,
                 stock.isActionAvailable,
+                stock.totalShares,
                 stock.createdAt,
                 stock.updatedAt,
-                stock.previousPrice ?? null
+                stock.previousPrice ?? null,
+                stock.ipoActive,
+                stock.availableSharesForIPO
             ]
         );
 
@@ -100,14 +112,17 @@ export class PostgresStockRepository implements StockRepositoryInterface {
             new Date(row.createdAt),
             row.isActionAvailable,
             new Date(row.updatedAt),
-            row.previousPrice ? Number(row.previousPrice) : undefined
+            Number(row.totalShares ?? 1000000),
+            row.previousPrice ? Number(row.previousPrice) : undefined,
+            row.ipoActive ?? false,
+            Number(row.availableSharesForIPO ?? row.totalShares ?? 1000000)
         );
     }
 
     async updateStock(stock: StockEntity): Promise<StockEntity | Error> {
         await this.dataSource.query(
-            `UPDATE stocks SET symbol=$1, companyName=$2, name=$3, currentPrice=$4, rateOfChange=$5, currency=$6, isActionAvailable=$7, updatedAt=$8, previousPrice=$9
-             WHERE id=$10`,
+            `UPDATE stocks SET symbol=$1, companyName=$2, name=$3, currentPrice=$4, rateOfChange=$5, currency=$6, isActionAvailable=$7, totalShares=$8, updatedAt=$9, previousPrice=$10, ipoActive=$11, availableSharesForIPO=$12
+             WHERE id=$13`,
             [
                 stock.symbol,
                 stock.companyName,
@@ -116,8 +131,11 @@ export class PostgresStockRepository implements StockRepositoryInterface {
                 stock.rateOfChange,
                 stock.currency,
                 stock.isActionAvailable,
+                stock.totalShares,
                 stock.updatedAt,
                 stock.previousPrice ?? null,
+                stock.ipoActive,
+                stock.availableSharesForIPO,
                 stock.id
             ]
         );

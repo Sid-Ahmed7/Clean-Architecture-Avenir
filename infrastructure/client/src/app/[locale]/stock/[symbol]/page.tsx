@@ -8,8 +8,8 @@ import { OrderTypeEnum } from "@/types/createOrder";
 import { usePositionBySymbol } from "@/hooks/usePositions";
 import { useTransactionsBySymbol } from "@/hooks/useStockTransactions";
 import { PositionCard } from "@/components/stocks/positions/PositionCard";
-import { TransactionCard } from "@/components/stocks/transactions/TransactionCard";
 import { PlaceOrderModal } from "@/components/stocks/orders/PlaceOrderModal";
+import { TransactionTable } from "@/components/stocks/transactions/TransactionTable";
 
 export default function StockDetailPage() {
   const params = useParams();
@@ -86,7 +86,7 @@ export default function StockDetailPage() {
                 </h2>
                 <div className="space-y-4">
                   {transactions.slice(0, 5).map((transaction) => (
-                    <TransactionCard key={transaction.id} transaction={transaction} />
+                    <TransactionTable key={transaction.id} transactions={[transaction]} />
                   ))}
                 </div>
               </div>

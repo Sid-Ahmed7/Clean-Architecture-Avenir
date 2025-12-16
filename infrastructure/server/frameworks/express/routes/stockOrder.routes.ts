@@ -9,7 +9,9 @@ const stockOrderController = new StockOrderController(stockOrderRepository, stoc
 
 router.post("/create", verifyTokenAccess, (req,res) => stockOrderController.placeOrder(req,res));
 router.get("/", verifyTokenAccess, (req,res) => stockOrderController.getUserOrders(req,res));
-router.post("/match/:symbol", verifyTokenAccess, (req,res) => stockOrderController.matchOrders(req,res));
-router.patch('/:id/cancel', (req, res) => stockOrderController.cancelOrder(req, res));
+router.get("/all", verifyTokenAccess, authorizeRoles([RoleEnum.ADMIN]), (req,res) => stockOrderController.getAllOrders(req,res));
+router.get("/book/:symbol", verifyTokenAccess, (req,res) => stockOrderController.getOrderBookBySymbol(req,res));
+router.post("/match/:symbol", verifyTokenAccess,  (req,res) => stockOrderController.matchOrders(req,res));
+router.patch('/:id/cancel', verifyTokenAccess, (req, res) => stockOrderController.cancelOrder(req, res));
 
 export default router;

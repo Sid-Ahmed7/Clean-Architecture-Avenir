@@ -6,10 +6,9 @@ export const createStockRequestSchema = (t: (key: string) => string) =>
     companyName: z.string(),
     name: z.string(),
     currentPrice: z.number(),
-    previousPrice: z.number().optional(),
-    rateOfChange: z.number(),
     currency: z.string(),
     isActionAvailable: z.boolean(),
+    totalShares: z.number().min(1, "La quantité totale doit être au moins 1"),
   });
 
 export type CreateStock = z.infer<ReturnType<typeof createStockRequestSchema>>;

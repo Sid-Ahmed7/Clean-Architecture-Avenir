@@ -10,6 +10,7 @@ import { matchOrdersSchema } from "@/lib/validation/order/matchOrdersSchema";
 
 export const ORDER_KEY = "orders";
 export const USER_ORDERS_KEY = "userOrders";
+export const ALL_ORDERS_KEY = "allOrders";
 
 export const useOrderBook = () => {
     const t = useTranslations();
@@ -23,7 +24,32 @@ export const useOrderBook = () => {
         console.error("Orders data validation failed:", parsed.error);
         return [];
       }
-      return parsed.data;
+      return parsed.data.map(order => ({
+        ...order,
+        status: order.orderStatus
+      }));
+    },
+    enabled: true,
+    staleTime: 10 * 1000,
+  });
+};
+
+export const useAllOrders = () => {
+    const t = useTranslations();
+
+  return useQuery({
+    queryKey: [ALL_ORDERS_KEY],
+    queryFn: async () => {
+      const data = await orderApi.getAllOrders();
+      const parsed = z.array(stockOrderSchema(t)).safeParse(data);
+      if (!parsed.success) {
+        console.error("All orders data validation failed:", parsed.error);
+        return [];
+      }
+      return parsed.data.map(order => ({
+        ...order,
+        status: order.orderStatus
+      }));
     },
     enabled: true,
     staleTime: 10 * 1000,
@@ -62,6 +88,7 @@ export const useMatchOrders = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [ORDER_KEY] });
+      queryClient.invalidateQueries({ queryKey: [ALL_ORDERS_KEY] });
       queryClient.invalidateQueries({ queryKey: ["positions"] });
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
     }

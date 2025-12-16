@@ -5,12 +5,7 @@ interface PositionSummaryProps {
   totalGainLossPercent: number;
 }
 
-export function PositionSummary({
-  totalValue,
-  totalCost,
-  totalGainLoss,
-  totalGainLossPercent
-}: PositionSummaryProps) {
+export function PositionSummary({totalValue,totalCost,totalGainLoss,totalGainLossPercent}: PositionSummaryProps) {
   const isProfit = totalGainLoss >= 0;
 
   return (

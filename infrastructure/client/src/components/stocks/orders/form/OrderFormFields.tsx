@@ -28,7 +28,10 @@ export function OrderFormFields({form,currentPrice }: OrderFormFieldsProps) {
           render={({ field }) => (
             <input
               type="number"
+              step="1"
+              min="1"
               {...field}
+              onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           )}

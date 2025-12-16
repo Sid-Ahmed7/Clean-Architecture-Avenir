@@ -15,7 +15,7 @@ export class StockPositionController {
 
     public async getUserPositions(req: Request, res: Response) {
        const userId = req.user?.userId;
-       const getUserPositionsUseCase = new GetUserPositionsUseCase(this.holdingRepository);
+       const getUserPositionsUseCase = new GetUserPositionsUseCase(this.holdingRepository, this.stockRepository);
         if(!userId) {
             return res.status(401).json({error: "Unauthorized access"});
         }

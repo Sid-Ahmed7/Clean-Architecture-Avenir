@@ -3,6 +3,10 @@ import { PriceValue } from "../values/PriceValue";
 import { QuantityValue } from "../values/QuantityValue";
 import { StockSymbolValue } from "../values/StockSymbolValue";
 import { UserIdValue } from "../values/UserIdValue";
+import { TransactionIdValue } from "../values/TransactionIdValue";
+import { OrderIdValue } from "../values/OrderIdValue";
+import { ExecutionPriceValue } from "../values/ExecutionPriceValue";
+
 
 export class StockTransactionEntity {
 
@@ -42,8 +46,27 @@ export class StockTransactionEntity {
         if(validatedSellerFee instanceof Error) {
             return validatedSellerFee;
         } 
+        const validatedTransactionId = TransactionIdValue.from(id);
+        if (validatedTransactionId instanceof Error){
+            return validatedTransactionId;
+        }
 
-        return new StockTransactionEntity(id, buyOrderId, sellOrderId, validatedSymbol.value, validatedQuantity.value, validatedPrice.value, validatedBuyerUserId.value, validatedSellerUserId.value, validatedByerFee.value, validatedSellerFee.value, executedAt);
+        const validatedBuyOrderId = OrderIdValue.from(buyOrderId);
+        if (validatedBuyOrderId instanceof Error){
+            return validatedBuyOrderId;
+        }
+
+        const validatedSellOrderId = OrderIdValue.from(sellOrderId);
+        if (validatedSellOrderId instanceof Error) {
+            return validatedSellOrderId;
+        }
+
+        const validatedExecutionPrice = ExecutionPriceValue.from(executionPrice);
+        if (validatedExecutionPrice instanceof Error){
+            return validatedExecutionPrice;
+        } 
+
+        return new StockTransactionEntity(validatedTransactionId.value, validatedBuyOrderId.value, validatedSellOrderId.value, validatedSymbol.value, validatedQuantity.value, validatedExecutionPrice.value, validatedBuyerUserId.value, validatedSellerUserId.value, validatedByerFee.value, validatedSellerFee.value, executedAt);
     }
 
 

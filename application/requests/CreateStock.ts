@@ -3,8 +3,7 @@ export interface CreateStock {
     companyName: string;
     name: string;
     currentPrice: number;
-    rateOfChange: number;
     currency: string;
     isActionAvailable: boolean;
-    previousPrice?: number;
+    totalShares: number;
 }

@@ -8,20 +8,25 @@ import { Stocks } from "@/types/stocks";
 import { StockManagementTable } from "@/components/stocks/StockManagementTable";
 import { CreateStockModal } from "@/components/stocks/StockModal";
 import { EditStockForm } from "@/components/stocks/forms/EditStockForm";
+import { OpenIPOModal } from "@/components/stocks/orders/OpenIPOModal";
+import { useOpenIPO, useCloseIPO } from "@/hooks/useIPO";
 
 export default function ManageStocksPage() {
   const { data: stocksData, isLoading } = useStocks();
   const deleteStockMutation = useDeleteStock();
   const toggleAvailabilityMutation = useToggleStockAvailability();
   const updateStockMutation = useUpdateStock();
+  const openIPOMutation = useOpenIPO();
+  const closeIPOMutation = useCloseIPO();
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [editingStock, setEditingStock] = useState<Stocks | null>(null);
+  const [openingIPOStock, setOpeningIPOStock] = useState<Stocks | null>(null);
 
   const stocks = stocksData?.map(stock => ({
     ...stock,
     name: stock.companyName,
-    currency: 'USD'
+    currency: 'EUR'
   }));
 
   const handleDelete = async (stockId: string) => {
@@ -46,15 +51,47 @@ export default function ManageStocksPage() {
     setEditingStock(stock);
   };
 
-  const handleUpdateStock = async (data: Stocks) => {
+const handleUpdateStock = async (data: { id: string; companyName: string; name: string; currency: string; isActionAvailable: boolean }) => {
+  const updatedStock = {
+    ...editingStock,
+    ...data
+  };
+  await updateStockMutation.mutateAsync(updatedStock);
+  setEditingStock(null);
+};
+
+  const handleOpenIPO = (stock: Stocks) => {
+    setOpeningIPOStock(stock);
+  };
+
+  const handleConfirmOpenIPO = async (sharesToMakeAvailable: number, ipoType: 'INITIAL' | 'SECONDARY') => {
+    if (!openingIPOStock) return;
+
     try {
-      await updateStockMutation.mutateAsync(data);
-      setEditingStock(null);
-    } catch (err) {
-      console.error("Failed to update stock:", err);
-      alert("Erreur lors de la modification");
+      await openIPOMutation.mutateAsync({
+        symbol: openingIPOStock.symbol,
+        shares: sharesToMakeAvailable,
+        ipoType: ipoType
+      });
+      setOpeningIPOStock(null);
+    } catch (error) {
+      throw error;
     }
   };
+
+  const handleCloseIPO = async (symbol: string) => {
+    if (!confirm(`Êtes-vous sûr de vouloir fermer l'IPO pour ${symbol} ?`)) {
+      return;
+    }
+
+    try {
+      await closeIPOMutation.mutateAsync(symbol);
+    } catch (err) {
+      console.error("Failed to close IPO:", err);
+      alert("Erreur lors de la fermeture de l'IPO");
+    }
+  };
+
 
   if (isLoading) {
     return (
@@ -79,6 +116,8 @@ export default function ManageStocksPage() {
         onEdit={handleEdit}
         onDelete={handleDelete}
         onToggleAvailability={handleToggleAvailability}
+        onOpenIPO={handleOpenIPO}
+        onCloseIPO={handleCloseIPO}
       />
 
       <CreateStockModal
@@ -109,6 +148,17 @@ export default function ManageStocksPage() {
               />
           </div>
         </div>
+      )}
+
+      {openingIPOStock && (
+        <OpenIPOModal
+          isOpen={true}
+          onClose={() => setOpeningIPOStock(null)}
+          stockSymbol={openingIPOStock.symbol}
+          stockName={openingIPOStock.companyName}
+          totalShares={openingIPOStock.totalShares}
+          onConfirm={handleConfirmOpenIPO}
+        />
       )}
     </div>
   );

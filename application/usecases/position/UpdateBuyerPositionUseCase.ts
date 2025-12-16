@@ -6,11 +6,7 @@ import { StockHoldingService } from "../../ports/services/stocks/StockHoldingSer
 import { UuidGeneratorService } from "../../ports/services/UuidGeneratorService";
 
 export class UpdateBuyerPositionUseCase {
-    public constructor(
-        private holdingStockRepository: StockHoldingRepositoryInterface,
-        private uuidService: UuidGeneratorService
-
-    ){}
+    public constructor(private readonly holdingStockRepository: StockHoldingRepositoryInterface,private readonly uuidService: UuidGeneratorService){}
 
 public async execute({userId,stockSymbol,quantity,pricePerShare}: UpdateBuyer): Promise<StockHoldingEntity | Error> {
         

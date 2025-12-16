@@ -2,18 +2,7 @@
 
 import { useMemo } from 'react';
 import { Stock } from '@/types/stock';
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  ReferenceLine,
-  Area,
-  AreaChart
-} from 'recharts';
+import {XAxis,YAxis,CartesianGrid,Tooltip,ResponsiveContainer,ReferenceLine,Area,AreaChart} from 'recharts';
 
 interface ApiPriceChartProps {
   stock: Stock;

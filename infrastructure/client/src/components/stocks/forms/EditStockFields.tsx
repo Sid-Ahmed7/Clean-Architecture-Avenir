@@ -12,7 +12,7 @@ export function EditStockFields({ form }: EditStockFieldsProps) {
 
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Nom de l'entreprise <span className="text-red-500">*</span>
+          Nom de l&apos;entreprise <span className="text-red-500">*</span>
         </label>
         <Controller
           name="companyName"
@@ -96,7 +96,7 @@ export function EditStockFields({ form }: EditStockFieldsProps) {
           )}
         />
         <label className="ml-2 text-sm text-gray-700">
-          Action disponible au trading
+          Action disponible à l&apos;achat
         </label>
       </div>
     </>

@@ -1,4 +1,4 @@
-import { Order, OrderStatus, OrderType } from "@/types/order";
+import { Order, OrderStatusEnum, OrderType } from "@/types/order";
 import { useMemo, useState } from "react";
 import { OrderFilters } from "./OrderFilters";
 import { OrderCard } from "./OrderCard";
@@ -10,7 +10,7 @@ interface OrderListProps {
 }
 
 export function OrderList({ orders, onCancel, isLoading }: OrderListProps) {
-    const [statusFilter, setStatusFilter] = useState<OrderStatus | "ALL">("ALL");
+    const [statusFilter, setStatusFilter] = useState<OrderStatusEnum | "ALL">("ALL");
     const [typeFilter, setTypeFilter] = useState<OrderType | "ALL">("ALL");
 
     const filteredOrders = useMemo(() => {
@@ -27,7 +27,7 @@ export function OrderList({ orders, onCancel, isLoading }: OrderListProps) {
         <div>
             {orders.length === 0 ? (
                 <div className="text-center py-12">
-                    <p className="text-gray-500">Vous n'avez pas encore d'ordres</p>
+                    <p className="text-gray-500">Vous n&apos;avez pas encore d&apos;ordres</p>
                 </div>
             ) :(
                 <OrderFilters 

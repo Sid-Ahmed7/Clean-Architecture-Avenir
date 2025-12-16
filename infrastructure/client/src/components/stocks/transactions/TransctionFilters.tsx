@@ -1,3 +1,4 @@
+import { Select } from "@/components/ui/Select";
 import { TransactionType } from "@/types/transaction";
 
 interface TransactionFiltersProps {
@@ -8,23 +9,21 @@ interface TransactionFiltersProps {
 }
 
 export function TransactionFilters({typeFilters, onTypeChange, symbolFilter, onSymbolChange}: TransactionFiltersProps) {
-      return (
+ return (
     <div className="bg-white rounded-lg shadow-md p-4 mb-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Type
-          </label>
-          <select
-            value={typeFilters}
-            onChange={(e) => onTypeChange(e.target.value as "ALL" | TransactionType)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          >
-            <option value="ALL">Tous les types</option>
-            <option value="BUY">Achats</option>
-            <option value="SELL">Ventes</option>
-          </select>
-        </div>
+        
+        <Select<"ALL" | TransactionType>
+          label="Type"
+          value={typeFilters}
+          onChange={onTypeChange}
+          options={[
+            { label: "Tous les types", value: "ALL" },
+            { label: "Achats", value: TransactionType.BUY },
+            { label: "Ventes", value: TransactionType.SELL },
+          ]}
+          className=""
+        />
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">

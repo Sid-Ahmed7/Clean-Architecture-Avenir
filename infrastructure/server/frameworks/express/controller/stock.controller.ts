@@ -18,14 +18,25 @@ import { CryptoUuidGenerator } from "../../../../adapters/services/CryptoUuidGen
 import { createStockSchema } from "../schemas/stocks/createStockSchema";
 import { changeStockSchema } from "../schemas/stocks/changeStockSchema";
 import { updateStockSchema } from "../schemas/stocks/updateStockSchema";
+import { PurchaseIPOSharesUseCase } from "../../../../../application/usecases/stocks/PurchaseIPOSharesUseCase";
+import { CloseIPOUseCase } from "../../../../../application/usecases/stocks/CloseIPOUseCase";
+import { OpenIPOUseCase } from "../../../../../application/usecases/stocks/OpenIPOUseCase";
+import { InMemoryStockHoldingRepository } from "../../../../adapters/repositories/InMemoryStockHoldingRepository";
+import { BankAccountService } from "../../../../adapters/services/BankAccountService";
+import { InsufficientFundsError } from "../../../../../domain/errors/InsufficientFundsError";
+import { IPONotActiveError } from "../../../../../application/errors/IPONotActiveError";
+import { InvalidIPOOperationError } from "../../../../../domain/errors/InvalidIPOOperationError";
+
 export class StockController {
 
-    
+
     constructor(
         private readonly stockRepository: InMemoryStockRepository,
         private readonly stockOrderRepository: InMemoryStockOrderRepository,
         private readonly orderBookService: OrderBookEngineService,
-        private readonly uuidGenerator: CryptoUuidGenerator
+        private readonly uuidGenerator: CryptoUuidGenerator,
+        private readonly holdingRepository: InMemoryStockHoldingRepository,
+        private readonly accountService: BankAccountService
     ) {}
 
     async createStock(req: Request, res: Response) {
@@ -34,10 +45,7 @@ export class StockController {
         if (!parseResult.success) {
             return res.status(400).json({ errors: parseResult.error.message });
         }
-        const result = await createStockUseCase.execute({
-            ...parseResult.data,
-            previousPrice: typeof parseResult.data.previousPrice === "number" ? parseResult.data.previousPrice : 0
-        });
+        const result = await createStockUseCase.execute(parseResult.data);
         
         if(result instanceof Error) {
             if(result instanceof StockAlreadyExistsError) {
@@ -81,6 +89,7 @@ export class StockController {
             existingStock.createdAt,
             isActionAvailable,
             new Date(),
+            existingStock.totalShares,
             previousPrice
         );
 
@@ -95,7 +104,6 @@ export class StockController {
             if(result instanceof StockNotFoundError) {
                 return res.status(404).json({error: result.message});
             }
-
             return res.status(500).json({error: result.message});
         }
 
@@ -220,5 +228,110 @@ export class StockController {
             return res.status(500).json({error: result.message});
         }
         return res.status(200).json(result);
+    }
+
+    async purchaseIPOShares(req: Request, res: Response) {
+        const userId = req.user?.userId;
+
+        if(!userId) {
+            return res.status(401).json({error: "Unauthorized access"});
+        }
+
+        const { stockSymbol, quantity } = req.body;
+
+        if (!stockSymbol || !quantity) {
+            return res.status(400).json({ error: "Stock symbol and quantity are required" });
+        }
+
+        if (quantity <= 0) {
+            return res.status(400).json({ error: "Quantity must be positive" });
+        }
+
+        const purchaseIPOSharesUseCase = new PurchaseIPOSharesUseCase(
+            this.stockRepository,
+            this.holdingRepository,
+            this.accountService,
+            this.uuidGenerator
+        );
+
+        const result = await purchaseIPOSharesUseCase.execute({
+            userId,
+            stockSymbol,
+            quantity
+        });
+
+        if (result instanceof Error) {
+            if (result instanceof StockNotFoundError) {
+                return res.status(404).json({ error: result.message });
+            }
+            if (result instanceof InsufficientFundsError) {
+                return res.status(400).json({ error: result.message });
+            }
+            if (result instanceof IPONotActiveError) {
+                return res.status(400).json({ error: result.message });
+            }
+            return res.status(400).json({ error: result.message });
+        }
+
+        return res.status(200).json({
+            message: `Successfully purchased ${quantity} shares via IPO`,
+            position: result
+        });
+    }
+
+    async closeIPO(req: Request, res: Response) {
+        const { symbol } = req.params;
+
+        if (!symbol) {
+            return res.status(400).json({ error: "Stock symbol is required" });
+        }
+
+        const closeIPOUseCase = new CloseIPOUseCase(this.stockRepository);
+        const result = await closeIPOUseCase.execute(symbol);
+
+        if (result instanceof Error) {
+            if (result instanceof StockNotFoundError) {
+                return res.status(404).json({ error: result.message });
+            }
+            if (result instanceof IPONotActiveError) {
+                return res.status(400).json({ error: result.message });
+            }
+            return res.status(400).json({ error: result.message });
+        }
+
+        return res.status(200).json({
+            message: `IPO closed for ${symbol}`,
+            stock: result
+        });
+    }
+
+    async openIPO(req: Request, res: Response) {
+        const { symbol } = req.params;
+        const { sharesToMakeAvailable, ipoType } = req.body;
+
+        if (!symbol) {
+            return res.status(400).json({ error: "Stock symbol is required" });
+        }
+
+        const openIPOUseCase = new OpenIPOUseCase(this.stockRepository);
+        const result = await openIPOUseCase.execute(symbol, sharesToMakeAvailable, ipoType  );
+
+        if (result instanceof Error) {
+            if (result instanceof StockNotFoundError) {
+                return res.status(404).json({ error: result.message });
+            }
+            if (result instanceof IPONotActiveError) {
+                return res.status(400).json({ error: result.message });
+            }
+            if (result instanceof InvalidIPOOperationError) {
+                return res.status(400).json({ error: result.message });
+            }
+            return res.status(400).json({ error: result.message });
+        }
+
+        return res.status(200).json({
+            message: `IPO opened for ${symbol}`,
+            stock: result
+        });
     }
 }

@@ -4,5 +4,7 @@ export interface TransferFunds {
     quantity: number,
     executionPrice: number,
     buyerFee: number,
-    sellerFee: number
+    sellerFee: number,
+    buyerFeesPaid: boolean,
+    sellerFeesPaid: boolean
 }

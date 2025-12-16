@@ -10,6 +10,9 @@ export interface Stocks{
   createdAt: string;
   updatedAt: string;
   isActionAvailable: boolean;
+  totalShares: number;
+  ipoActive: boolean;
+  availableSharesForIPO: number;
 }
 
 export interface StockWithDetails extends Stocks {

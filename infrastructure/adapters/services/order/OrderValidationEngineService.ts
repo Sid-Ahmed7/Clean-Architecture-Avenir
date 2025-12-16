@@ -9,10 +9,7 @@ import { InsufficientSharesError } from "../../../../domain/errors/InsufficientS
 export class OrderValidationEngineService implements OrderValidationService {
     private readonly TRANSACTION_FEE = 1; 
     
-    public constructor(
-        private accountService: AccountService,
-        private stockPositionService: StockHoldingService
-    ){}
+    public constructor(private readonly accountService: AccountService,private readonly stockPositionService: StockHoldingService){}
 
     public async validateOrder(orderValidation: OrderValidation): Promise<void | InsufficientFundsError | InsufficientSharesError> {
         if(orderValidation.orderType === OrderTypeEnum.BUY) {

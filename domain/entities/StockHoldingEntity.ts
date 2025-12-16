@@ -4,7 +4,10 @@ import { BlockedQuantityValue } from "../values/BlockedQuantityValue";
 import { QuantityValue } from "../values/QuantityValue";
 import { StockSymbolValue } from "../values/StockSymbolValue";
 import { UserIdValue } from "../values/UserIdValue";
-
+import { InvalidSharesOperationError } from "../errors/InvalidSharesOperationError";
+import { PositionIdValue } from "../values/PositionIdValue";
+import { AveragePurchasePriceValue } from "../values/AveragePurchasePriceValue";
+import { TotalInvestedValue } from "../values/TotalInvestedValue";
 export class StockHoldingEntity {
 
     public static from(id: string, userId: string, stockSymbol: string, quantity: number, averagePurchasePrice: number, totalInvested: number, createdAt: Date, updatedAt: Date, blockQuantity?: number)  {
@@ -27,8 +30,21 @@ export class StockHoldingEntity {
         if(validatedBlockQuantity instanceof Error) {
             return validatedBlockQuantity;
         }
+        const validatedAveragePurchasePrice = AveragePurchasePriceValue.from(averagePurchasePrice);
+        if(validatedAveragePurchasePrice instanceof Error) {
+            return validatedAveragePurchasePrice;
+        }
+        const validatedTotalInvested = TotalInvestedValue.from(totalInvested);
+        if(validatedTotalInvested instanceof Error) {
+            return validatedTotalInvested;
+        }
 
-        return new StockHoldingEntity(id, validatedUserId.value, validatedSymbol.value, validatedQuantity.value, averagePurchasePrice, totalInvested, createdAt, updatedAt, validatedBlockQuantity.value);
+        const validatedPositionId = PositionIdValue.from(id);
+        if(validatedPositionId instanceof Error) {
+            return validatedPositionId;
+        }
+
+        return new StockHoldingEntity(validatedPositionId.value, validatedUserId.value, validatedSymbol.value, validatedQuantity.value, validatedAveragePurchasePrice.value, validatedTotalInvested.value, createdAt, updatedAt, validatedBlockQuantity.value);
         
     }
 
@@ -102,18 +118,32 @@ export class StockHoldingEntity {
     }
 
     public hasEnoughShares(quantity: number): boolean {
-        return this.quantity >= quantity;
+        const availableQuantity = this.quantity - (this.blockQuantity ?? 0);
+        return availableQuantity >= quantity;
     }
-    public blockShares(quantity: number): void {
+    public blockShares(quantity: number): InvalidSharesOperationError | void {
+    if (quantity <= 0) {
+        return new InvalidSharesOperationError("Block quantity must be positive");
+    }
+    const availableQuantity = this.quantity - (this.blockQuantity ?? 0);
+    if (availableQuantity < quantity) {
+        return new InvalidSharesOperationError(`Insufficient available shares. Available: ${availableQuantity}, required: ${quantity}`);
+    }
     if (!this.blockQuantity) {
         this.blockQuantity = 0;
     }
     this.blockQuantity += quantity;
     this.updatedAt = new Date();
 }
-    public unblockShares(quantity: number): void {
+    public unblockShares(quantity: number): InvalidQuantityError | void {
+    if (quantity <= 0) {
+        return new InvalidSharesOperationError("Unblock quantity must be positive");
+    }
     if (!this.blockQuantity) {
         this.blockQuantity = 0;
+    }
+    if (this.blockQuantity < quantity) {
+        return new InvalidSharesOperationError(`Cannot unblock more than blocked. Blocked: ${this.blockQuantity}, requested: ${quantity}`);
     }
     this.blockQuantity -= quantity;
     this.updatedAt = new Date();

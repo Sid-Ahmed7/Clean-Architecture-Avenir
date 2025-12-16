@@ -21,7 +21,7 @@ export interface Transaction {
 }
 
 export interface UserTransaction extends Transaction {
-  type: TransactionType;
-  totalAmount: number;
-  fee: number;
+  type?: TransactionType;
+  totalAmount?: number;
+  fee?: number;
 }

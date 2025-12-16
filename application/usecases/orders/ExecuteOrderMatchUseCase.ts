@@ -1,16 +1,20 @@
 import { StockHoldingRepositoryInterface } from "../../ports/repositories/stocks/StockHoldingRepositoryInterface";
 import { StockOrderRepositoryInterface } from "../../ports/repositories/stocks/StockOrderRepositoryInterface";
 import {StockTransactionRepositoryInterface} from "../../ports/repositories/stocks/StockTransactionRepositoryInterface";
+import { StockRepositoryInterface } from "../../ports/repositories/stocks/StockRepositoryInterface";
 import { OrderMatchingService } from "../../ports/services/order/OrderMatchingService";
+import { OrderBookService } from "../../ports/services/order/OrderBookService";
 import { StockTransactionEntity } from "../../../domain/entities/StockTransactionEntity";
 import { UuidGeneratorService } from "../../ports/services/UuidGeneratorService";
+import { UpdateStockPriceUseCase } from "../stocks/UpdateStockPriceUseCase";
 export class ExecuteOrderMatchUseCase {
 
     public constructor(
         private readonly stockOrderRepository: StockOrderRepositoryInterface,
         private readonly transactionRepository: StockTransactionRepositoryInterface,
-        private readonly matchingService: OrderMatchingService, 
-        private readonly uuidService: UuidGeneratorService
+        private readonly matchingService: OrderMatchingService,
+        private readonly uuidService: UuidGeneratorService,
+        private readonly updateStockPriceUseCase : UpdateStockPriceUseCase
     ){}
 
 
@@ -54,16 +58,22 @@ export class ExecuteOrderMatchUseCase {
             return sellResult
         }
 
-        await this.stockOrderRepository.updateOrder(buyOrder);
-        await this.stockOrderRepository.updateOrder(sellOrder);
-
+        const updateBuy = await this.stockOrderRepository.updateOrder(buyOrder);
+        if (updateBuy instanceof Error) {
+            return updateBuy;
+        }
+        
+        const updateSell = await this.stockOrderRepository.updateOrder(sellOrder);
+        if (updateSell instanceof Error) {
+            return updateSell;
+        }
+        
+        const updateStockPrice = await this.updateStockPriceUseCase.execute(buyOrder.stockSymbol);
+        
+        if (updateStockPrice instanceof Error) {
+            return updateStockPrice;
+        }
         return savedTransaction;
     }
-
-
-
-
-
-
 
 }

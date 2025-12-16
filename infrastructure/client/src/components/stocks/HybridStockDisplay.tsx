@@ -11,31 +11,24 @@ interface HybridStockDisplayProps {
   apiStock?: ApiStock;
   onBuy?: (symbol: string) => void;
   onSell?: (symbol: string) => void;
+  onBuyIPO?: (symbol: string) => void;
 }
 
-export function HybridStockDisplay({
-  backendStock,
-  apiStock,
-  onBuy,
-  onSell,
-}: HybridStockDisplayProps) {
+export function HybridStockDisplay({backendStock,apiStock,onBuy,onSell,onBuyIPO}: HybridStockDisplayProps) {
   const hasApiData = !!apiStock;
   const hasBackendData = !!backendStock;
-
-
 
   if (!hasBackendData && hasApiData) {
     return (
       <div className="space-y-4">
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-200">
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-2xl">📊</span>
             <h3 className="font-bold text-blue-900">
               {apiStock.name} ({apiStock.symbol})
             </h3>
           </div>
           <p className="text-sm text-blue-800">
-            Données de marché en temps réel - Trading non disponible
+            Données de marché en temps réel
           </p>
         </div>
 
@@ -44,15 +37,6 @@ export function HybridStockDisplay({
         </div>
 
         <StockCard stock={apiStock} />
-
-        <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
-          <div className="flex items-center gap-2">
-            <span className="text-xl">ℹ️</span>
-            <p className="text-sm text-orange-800">
-              Cette action n&apos;est pas encore disponible pour le trading. Contactez l&apos;administrateur pour l&apos;ajouter.
-            </p>
-          </div>
-        </div>
       </div>
     );
   }
@@ -68,7 +52,6 @@ export function HybridStockDisplay({
           <div className="space-y-4">
             <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-200">
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-2xl">📊</span>
                 <h3 className="font-bold text-blue-900">
                   Données de marché réel
                 </h3>
@@ -102,6 +85,7 @@ export function HybridStockDisplay({
               stock={backendStock}
               onBuy={onBuy}
               onSell={onSell}
+              onBuyIPO={onBuyIPO}
             />
 
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
@@ -138,7 +122,7 @@ export function HybridStockDisplay({
 
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
               <p className="text-xs text-blue-800">
-                <strong>💡 Important :</strong> Vos transactions s&apos;effectuent au{" "}
+                <strong>Important :</strong> Vos transactions s&apos;effectuent au{" "}
                 <strong>prix de trading</strong> ({backendStock.currentPrice.toFixed(2)}{" "}
                 {backendStock.currency}), pas au prix du marché.
               </p>
@@ -147,20 +131,12 @@ export function HybridStockDisplay({
         </div>
       ) : (
         <div>
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-            <div className="flex items-center gap-2">
-              <span className="text-xl">ℹ️</span>
-              <p className="text-sm text-blue-800">
-                Données de marché en temps réel non disponibles pour cette action.
-                Affichage du prix de trading uniquement.
-              </p>
-            </div>
-          </div>
 
           <StocksCard
             stock={backendStock}
             onBuy={onBuy}
             onSell={onSell}
+            onBuyIPO={onBuyIPO}
           />
         </div>
       )}

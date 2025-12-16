@@ -10,12 +10,13 @@ z.object({
   quantity: z.number(),
   orderPrice: z.number(),
   fee: z.number(),
-  orderType: z.nativeEnum(OrderTypeEnum),
-  orderStatus: z.nativeEnum(OrderStatusEnum),
+  orderType: z.enum(OrderTypeEnum),
+  orderStatus: z.enum(OrderStatusEnum),
   createdAt: z.string(),
   updatedAt: z.string(),
   executedAt: z.string().optional(),
   remainingQuantity: z.number().optional(),
+  feesPaid: z.boolean().optional(),
 });
 
 export type StockOrder = z.infer<ReturnType<typeof stockOrderSchema>>;

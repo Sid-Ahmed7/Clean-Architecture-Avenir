@@ -3,7 +3,7 @@ import { StockHoldingRepositoryInterface } from "../../../../application/ports/r
 import { StockHoldingService } from "../../../../application/ports/services/stocks/StockHoldingService";
 
 export class StockHoldingManager implements StockHoldingService {
-    public constructor(private stockHoldingRepository: StockHoldingRepositoryInterface){} 
+    public constructor(private readonly stockHoldingRepository: StockHoldingRepositoryInterface){} 
 
     public async hasEnoughShares(userId: string, stockSymbol: string, quantity: number): Promise<boolean | PositionNotFoundError> {
         const position = await this.stockHoldingRepository.findPositionByUserIdAndSymbol(userId, stockSymbol);

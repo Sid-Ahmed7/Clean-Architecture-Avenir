@@ -5,9 +5,8 @@ import { QuantityValue } from "../values/QuantityValue";
 import { StockSymbolValue } from "../values/StockSymbolValue";
 import { UserIdValue } from "../values/UserIdValue";
 import { PriceValue} from "../values/PriceValue";
-import { InvalidPriceError } from "../errors/InvalidPriceError";
 import { InvalidQuantityError } from "../errors/InvalidQuantityError";
-import { InvalidCancelledOrder } from "../errors/InvalidCancelledOrder";
+import { InvalidOrderStatusError } from "../errors/InvalidOrderStatusError";
 
 export class StockOrderEntity {
     public static from(id: string,userId: string, stockSymbol: string, quantity: number, orderPrice: number, fee: number, orderType: OrderTypeEnum, orderStatus: OrderStatusEnum, createdAt: Date, updatedAt: Date, executedAt?: Date, remainingQuantity?: number) {
@@ -53,7 +52,8 @@ export class StockOrderEntity {
         public createdAt: Date,
         public updatedAt: Date,
         public executedAt?: Date,
-        public remainingQuantity: number = quantity
+        public remainingQuantity: number = quantity,
+        public feesPaid: boolean = false
     ) {}
 
 
@@ -78,6 +78,14 @@ export class StockOrderEntity {
         this.updatedAt = new Date();
     }
 
+    public markFeesAsPaid(): void {
+        this.feesPaid = true;
+    }
+
+    public areFeesPaid(): boolean {
+        return this.feesPaid;
+    }
+
       public executeCompletely(): void {
         this.remainingQuantity = 0;
         this.orderStatus = OrderStatusEnum.EXECUTED;
@@ -85,9 +93,9 @@ export class StockOrderEntity {
         this.updatedAt = new Date();
     }
 
-    public cancel(): InvalidCancelledOrder | void {
+    public cancel(): InvalidOrderStatusError | void {
         if (this.orderStatus === OrderStatusEnum.EXECUTED) {
-            return new InvalidCancelledOrder("Cannot cancel an executed order");
+            return new InvalidOrderStatusError("Cannot cancel an executed order");
         }
         
         this.orderStatus = OrderStatusEnum.CANCELLED;
@@ -106,12 +114,16 @@ export class StockOrderEntity {
         if(this.stockSymbol !== order.stockSymbol) {
             return false;
         }
-        
+
         if(this.orderType === order.orderType) {
             return false;
         }
-        
+
         if(!this.isActive() || !order.isActive()) {
+            return false;
+        }
+
+        if(this.userId === order.userId) {
             return false;
         }
 

@@ -5,10 +5,9 @@ export const createStockSchema = z.object({
   companyName: z.string(),
   name: z.string(),
   currentPrice: z.number(),
-  rateOfChange: z.number(),
   currency: z.string(),
   isActionAvailable: z.boolean(),
-  previousPrice: z.number().nullable().optional(),
+  totalShares: z.number().min(1, "Total shares must be at least 1"),
 });
 
 

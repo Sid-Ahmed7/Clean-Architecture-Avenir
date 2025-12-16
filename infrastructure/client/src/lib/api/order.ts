@@ -12,9 +12,14 @@ export const getUserOrders = async () => {
   return data;
 };
 
+export const getAllOrders = async () => {
+  const { data } = await apiClient.get<StockOrder[]>("/stock/order/all");
+  return data;
+};
+
 export const matchOrders = async (symbol: string) => {
   const { data } = await apiClient.post(`/stock/order/match/${symbol}`);
-  return data; 
+  return data;
 };
 export const cancelOrder = async (orderId: string) => {
   const { data } = await apiClient.patch(`/stock/order/${orderId}/cancel`);

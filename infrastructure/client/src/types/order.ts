@@ -1,9 +1,9 @@
 import { OrderTypeEnum } from "./createOrder";
 
-export enum OrderStatus {
+export enum OrderStatusEnum {
     PENDING = 'PENDING',
     EXECUTED = 'EXECUTED',
-    PARTIALLY_EXECUTED ='PARTIALLY_EXECUTED',
+    PARTIALLY_EXECUTED = 'PARTIALLY_EXECUTED',
     CANCELLED = 'CANCELLED',
     REJECTED = 'REJECTED',
 }
@@ -19,10 +19,13 @@ export interface Order {
   orderType: "BUY" | "SELL";
   quantity: number;
   orderPrice: number;
-  status: OrderStatus;
+  fee: number;
+  status: OrderStatusEnum;
   createdAt: string;
   executedAt?: string;
   executionPrice?: number;
+  remainingQuantity?: number;
+  feesPaid?: boolean;
 }
 export interface PlaceOrderPayload {
   stockSymbol: string;
