@@ -21,7 +21,8 @@ z.object({
     totalTransfered: z.number().min(0).default(0),
     lastTransferResetDate: z.string().optional(),
     parentAccountId: z.number().optional(),
-    closedAt: z.string().optional()
+    closedAt: z.string().optional(),
+    blockedBalanced: z.number().optional().default(0)
 
 });
 

@@ -1,17 +1,23 @@
 import express from 'express'
 import { StockController } from '../controller/stock.controller';
-import { InMemoryStockRepository } from '../../../../adapters/repositories/InMemoryStockRepository';
-
+import { stockRepository, stockOrderRepository, orderBookService, uuidService, holdingRepository, accountService} from '../../../../adapters/config/repositories';
+import { verifyTokenAccess } from '../middleware/authMiddleware';
+import { authorizeRoles } from '../middleware/roleMiddleware';
+import { RoleEnum } from '../../../../../domain/enums/RoleEnum';
 const router = express.Router();
-const stockRepository = new InMemoryStockRepository();
-const stockController = new StockController(stockRepository);
+const stockController = new StockController(stockRepository, stockOrderRepository, orderBookService, uuidService, holdingRepository, accountService);
 
-router.post("/create", (req, res) => stockController.createStock(req,res));
-router.get("/", (req,res) => stockController.getAllStocks(req,res));
-router.get("/available", (req,res) => stockController.listAvailableStocks(req,res));
-router.get("/by-symbol", (req,res) => stockController.getStockBySymbol(req,res));
-router.get("/:id", (req,res) => stockController.getStockByIdUseCase(req,res));
-router.delete("/:id", (req,res) => stockController.deleteStock(req,res));
-router.put("/:id/availability", (req,res) => stockController.changeStockAvailability(req,res));
+router.post("/create", verifyTokenAccess, authorizeRoles([RoleEnum.BANK_MANAGER]),(req, res) => stockController.createStock(req,res));
+router.get("/",verifyTokenAccess, (req,res) => stockController.getAllStocks(req,res));
+router.get("/available", verifyTokenAccess, (req,res) => stockController.listAvailableStocks(req,res));
+router.get("/symbol/:symbol", verifyTokenAccess, (req,res) => stockController.getStockBySymbol(req,res));
+router.get("/:id", verifyTokenAccess, (req,res) => stockController.getStockById(req,res));
+router.put("/update", verifyTokenAccess, authorizeRoles([RoleEnum.BANK_MANAGER]), (req,res)=> stockController.updateStock(req,res));
+router.delete("/:id", verifyTokenAccess,authorizeRoles([RoleEnum.BANK_MANAGER]), (req,res) => stockController.deleteStock(req,res));
+router.patch("/:id/availability",verifyTokenAccess, authorizeRoles([RoleEnum.BANK_MANAGER]),(req,res) => stockController.changeStockAvailability(req,res));
+router.post("/:symbol/update-price", verifyTokenAccess, authorizeRoles([RoleEnum.BANK_MANAGER]), (req,res) => stockController.updateStockPrice(req,res));
 
+router.post("/ipo/purchase", verifyTokenAccess, (req, res) => stockController.purchaseIPOShares(req, res));
+router.post("/:symbol/ipo/close", verifyTokenAccess, authorizeRoles([RoleEnum.BANK_MANAGER]), (req, res) => stockController.closeIPO(req, res));
+router.post("/:symbol/ipo/open", verifyTokenAccess, authorizeRoles([RoleEnum.BANK_MANAGER]), (req, res) => stockController.openIPO(req, res));
 export default router;

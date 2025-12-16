@@ -12,6 +12,7 @@ export interface AccountRepositoryInterface {
     getOneAccountById(accountNumber: number): Promise<AccountEntity | AccountNotFoundError>
     getAccountsByUserId(userId: string): Promise<Array<AccountEntity> | UserNotFoundError>
     getSubAccountByParentAccountId(parentAccountId: number): Promise<Array<AccountEntity>>
+   findByUserId(userId: string): Promise<AccountEntity | AccountNotFoundError>;
     getAllAccounts(): Promise<Array<AccountEntity>>
     findByUserIdAndType(userId: string, accountType: AccountTypeEnum): Promise<null | CheckingAccountAlreadyExistError>;
     createOneAccount(account: AccountEntity): Promise<AccountEntity | AccountAlreadyExistsError | InvalidAccountError >
