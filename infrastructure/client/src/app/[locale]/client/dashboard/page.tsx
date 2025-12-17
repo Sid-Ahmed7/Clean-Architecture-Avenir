@@ -1,6 +1,7 @@
 "use client";
 
 import { useUserAccounts } from "@/hooks/useUserAccounts";
+import { useTransactionHistory } from "@/hooks/useTransactionHistory";
 import { MainAccountCard } from "@/components/bankAccount/MainAccountCard";
 import { AccountList } from "@/components/bankAccount/AccountList";
 import SummaryCard from "@/components/bankAccount/SummaryAccountsCard";
@@ -10,9 +11,12 @@ import ChartAccountManage from "@/components/ui/ChartAccountManage";
 import { useEffect, useState } from "react";
 import { getAllSavingsAccounts } from "@/lib/api/savingsAccount";
 import { SavingsAccount } from "@/types/savingsAccount";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 
 export default function ClientDashboard() {
     const { accounts, loading, error } = useUserAccounts();
+    const { transactions, loading: txLoading, error: txError } = useTransactionHistory();
     const [savingsAccounts, setSavingsAccounts] = useState<SavingsAccount[]>([]);
     const [loadingSavings, setLoadingSavings] = useState(true);
 
@@ -59,6 +63,87 @@ export default function ClientDashboard() {
                         <SummaryCard accounts={accounts} />
                         <ChartAccountManage accounts={accounts} />
                     </div>
+
+                    
+                    <section className="mt-8 bg-white border border-gray-200 rounded-xl shadow-sm p-4 flex flex-col gap-4">
+                        <div className="flex justify-between items-center">
+                            <div>
+                                <h2 className="text-lg font-semibold text-gray-900">Dernières opérations</h2>
+                                <p className="text-sm text-gray-500">Aperçu rapide des mouvements récents</p>
+                            </div>
+                            <Link href="/transactions">
+                                <button className="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center gap-1">
+                                    Voir tout
+                                    <ArrowRight className="w-4 h-4" />
+                                </button>
+                            </Link>
+                        </div>
+
+                        {txLoading && (
+                            <div className="rounded-lg border border-dashed border-gray-300 p-4 text-center text-gray-500">
+                                Chargement des opérations…
+                            </div>
+                        )}
+
+                        {!txLoading && txError && (
+                            <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-center text-red-700">
+                                {txError}
+                            </div>
+                        )}
+
+                        {!txLoading && !txError && (
+                            <div className="space-y-3">
+                                {transactions.slice(0, 5).map((tx) => {
+                                    const isDebit = mainAccount && tx.debitAccount === mainAccount.accountNumber;
+                                    const amountSign = isDebit ? "-" : "+";
+                                    const amountColor = isDebit ? "text-red-600" : "text-green-600";
+
+                                    const counterpartAccountNumber = isDebit ? tx.creditAccount : tx.debitAccount;
+                                    const counterpartUserName = isDebit ? tx.creditUserName : tx.debitUserName;
+                                    const counterpartAccount = accounts.find((a) => a.accountNumber === counterpartAccountNumber);
+                                    const userLabel = counterpartUserName ?? "Utilisateur inconnu";
+                                    const accountLabel = counterpartAccount?.customAccountName
+                                        ? counterpartAccount.customAccountName
+                                        : counterpartUserName
+                                        ? `Compte ${userLabel}`
+                                        : counterpartAccountNumber
+                                        ? `Compte ${counterpartAccountNumber}`
+                                        : "Compte inconnu";
+
+                                    return (
+                                        <div
+                                            key={tx.transactionReference}
+                                            className="flex items-center justify-between rounded-lg border border-gray-100 px-4 py-3 hover:border-gray-200"
+                                        >
+                                            <div className="flex flex-col">
+                                                <span className="text-sm font-semibold text-gray-900">
+                                                    {accountLabel}
+                                                </span> 
+                                                <span className="text-sm font-semibold text-gray-900">
+                             
+                                                     {userLabel}
+                                                </span>
+                                                <span className="text-xs text-gray-500">
+                                               {format(new Date(tx.createdAt), "dd MMM yyyy HH:mm", { locale: fr })}
+                                                </span>
+                                                <span className="text-xs text-gray-500">
+                                                    Ref: {tx.transactionReference}
+                                                </span>
+                                            </div>
+                                            <div className="text-right">
+                                                <p className={`text-base font-semibold ${amountColor}`}>
+                                                    {amountSign}
+                                                    {tx.amount.toFixed(2)} €
+                                                </p>
+                                                <p className="text-xs text-gray-600">{tx.transactionType}</p>
+                                                
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
+                    </section>
 
                     {/* Main account */}
                     {mainAccount ? (
