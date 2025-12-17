@@ -4,6 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import routes from "./routes/index";
 import path from "path";
+import { runMigrations } from "../../../adapters/config/database/runMigrations";
 
 config();
 const app = express();
@@ -20,4 +21,9 @@ app.use(cookieParser());
 app.use("/uploads", express.static(path.join(__dirname, "../../public/uploads")));
 app.use("/api", routes)
 
+runMigrations().then(() => {
+    console.log('Migrations completed.');
+}).catch(err => {
+    console.error('Migration error:', err);
+});
 export default app;
