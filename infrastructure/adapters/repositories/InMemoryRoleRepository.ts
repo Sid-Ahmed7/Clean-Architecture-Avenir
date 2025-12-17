@@ -2,18 +2,18 @@ import { RoleRepositoryInterface } from "../../../application/ports/repositories
 import { RoleEntity } from "../../../domain/entities/RoleEntity";
 import { RoleEnum } from "../../../domain/enums/RoleEnum";
 import { RoleNotFoundError } from "../../../application/errors/RoleNotFoundError";
+import { UuidGeneratorService } from "../../../application/ports/services/UuidGeneratorService";
 
 export class InMemoryRoleRepository implements RoleRepositoryInterface {
 
   private roles: Array<RoleEntity>;
-      public constructor() {
-        this.roles = Object.values(RoleEnum).map((roleName, index) => ({
-      id: index + 1,
+
+  constructor(private readonly uuidGenerator: UuidGeneratorService) {
+    this.roles = Object.values(RoleEnum).map((roleName) => ({
+      id: this.uuidGenerator.generate(),
       name: roleName
     }));
-    }
-
-  
+  }
 
   async findByName(name: RoleEnum): Promise<RoleEntity | RoleNotFoundError> {
     const role = this.roles.find(r => r.name === name);
@@ -24,7 +24,7 @@ export class InMemoryRoleRepository implements RoleRepositoryInterface {
     return role;
   }
 
-    async findById(id: number): Promise<RoleEntity | RoleNotFoundError> {
+    async findById(id: string): Promise<RoleEntity | RoleNotFoundError> {
     const role = this.roles.find(r => r.id === id);
     if(!role) {
       return new RoleNotFoundError(`Role with id ${id} not found`);

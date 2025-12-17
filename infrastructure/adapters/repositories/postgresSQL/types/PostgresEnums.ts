@@ -29,9 +29,9 @@ export enum TransactionTypeEnum {
 export enum OrderStatusEnum {
     PENDING = 'PENDING',
     EXECUTED = 'EXECUTED',
+    PARTIALLY_EXECUTED ='PARTIALLY_EXECUTED',
     CANCELLED = 'CANCELLED',
-    FAILED = 'FAILED',
-    PARTIALLY_EXECUTED = 'PARTIALLY_EXECUTED'
+    REJECTED = 'REJECTED',
 }
 
 export enum ReadStatusEnum {
@@ -40,12 +40,11 @@ export enum ReadStatusEnum {
 }
 
 export enum NewsCategoryEnum {
-    FINANCE = 'FINANCE',
-    ECONOMY = 'ECONOMY',
-    TECHNOLOGY = 'TECHNOLOGY',
-    MARKET = 'MARKET',
-    REGULATION = 'REGULATION',
-    GENERAL = 'GENERAL'
+    OFFER = 'OFFER',
+    SECURITY = 'SECURITY',
+    SAVINGS = 'SAVINGS',
+    INVESTMENT = 'INVESTMENT',
+    CREDIT = 'CREDIT'
 }
 
 export enum NewsPriorityEnum {
@@ -62,7 +61,7 @@ export enum MediaTypeEnum {
     AUDIO = 'AUDIO'
 }
 
-export enum IpoTypeEnum {
+export enum IPOTypeEnum {
     INITIAL = 'INITIAL',
     SECONDARY = 'SECONDARY'
 }

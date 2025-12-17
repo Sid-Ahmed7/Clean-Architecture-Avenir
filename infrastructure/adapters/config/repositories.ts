@@ -38,14 +38,17 @@ import { LocaleValidationService } from "../services/LocaleValidationService";
 import { InMemorySavingsProductRepository } from '../repositories/InMemorySavingsProductRepository';
 import { InMemorySavingsAccountRepository } from '../repositories/InMemorySavingsAccountRepository';
 
+
+
 const baseUrl = process.env.CLIENT_BASE_URL!;
+export const cryptoUuidGenerator = new CryptoUuidGenerator();
 export const tokenService = new JwtTokenService();
 export const passwordService = new PasswordEncryptionService();
 export const emailService = new ResendEmailService();
 export const registrationTokenGeneratorService = new RegistrationTokenService();
 export const emailTemplateService = new EmailTemplateService(emailService, baseUrl)
 export const userRepository = new InMemoryUserRepository(passwordService);
-export const roleRepository = new InMemoryRoleRepository();
+export const roleRepository = new InMemoryRoleRepository(cryptoUuidGenerator);
 export const userRoleRepository = new InMemoryUserRoleRepository(roleRepository, userRepository);
 export const eventBus = new InMemoryEventBus();
 export const accountRepository = new InMemoryAccountRepository();

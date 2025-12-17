@@ -8,6 +8,7 @@ import { InvalidSharesOperationError } from "../errors/InvalidSharesOperationErr
 import { PositionIdValue } from "../values/PositionIdValue";
 import { AveragePurchasePriceValue } from "../values/AveragePurchasePriceValue";
 import { TotalInvestedValue } from "../values/TotalInvestedValue";
+import { PositionNotFoundError } from "../../application/errors/PositionNotFoundError";
 export class StockHoldingEntity {
 
     public static from(id: string, userId: string, stockSymbol: string, quantity: number, averagePurchasePrice: number, totalInvested: number, createdAt: Date, updatedAt: Date, blockQuantity?: number)  {
@@ -60,7 +61,7 @@ export class StockHoldingEntity {
         public blockQuantity?: number
     ){}
 
-    public addShares(quantity: number, pricePerShare: number) : InvalidQuantityError | InvalidPriceError |void {
+    public addShares(quantity: number, pricePerShare: number) : PositionNotFoundError| InvalidQuantityError | InvalidPriceError |void {
         if (quantity <= 0) {
         return new InvalidQuantityError("Quantity must be positive");
     }
@@ -78,7 +79,7 @@ export class StockHoldingEntity {
         this.updatedAt = new Date();
     }
 
-    public removeShares(quantity: number) : InvalidQuantityError | void {
+    public removeShares(quantity: number) : PositionNotFoundError | InvalidQuantityError | void {
          if(quantity <= 0) {
         return new InvalidQuantityError("Quantity must be positive");
         }
@@ -117,7 +118,7 @@ export class StockHoldingEntity {
         return this.quantity === 0;
     }
 
-    public hasEnoughShares(quantity: number): boolean {
+    public hasEnoughShares(quantity: number): boolean | PositionNotFoundError   {
         const availableQuantity = this.quantity - (this.blockQuantity ?? 0);
         return availableQuantity >= quantity;
     }

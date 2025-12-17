@@ -1,4 +1,4 @@
-import { IpoTypeEnum } from "./PostgresEnums";
+import { IPOTypeEnum } from "./PostgresEnums";
 
 
 export interface PostgresStockRow {
@@ -16,5 +16,5 @@ export interface PostgresStockRow {
     previous_price: number | null;
     ipo_active: boolean;
     available_shares_for_ipo: number;
-    ipo_type: IpoTypeEnum | null;
+    ipo_type: IPOTypeEnum | null;
 }

@@ -6,5 +6,5 @@ import { RoleNotFoundError } from "../../../errors/RoleNotFoundError";
 
 export interface UserRoleRepositoryInterface {
     findRolesByUserId(userId: string): Promise<RoleEntity[] | RoleNotFoundError>;
-    addRoleToUser(userId: string, roleId: number): Promise<void | UserNotFoundError | RoleNotFoundError>;
+    addRoleToUser(userId: string, roleId: string): Promise<void | UserNotFoundError | RoleNotFoundError>;
 }

@@ -2,7 +2,7 @@ import { RoleIdValue } from "../values/RoleIdValue";
 import { UserIdValue } from "../values/UserIdValue";
 
 export class UserRoleEntity {
-    public static from(userId: string, roleId: number) {
+    public static from(userId: string, roleId: string) {
 
         const validatedUserId = UserIdValue.from(userId);
         if(validatedUserId instanceof Error) {
@@ -18,7 +18,7 @@ export class UserRoleEntity {
     }
     private constructor(
         public readonly userId: string,
-        public readonly roleId: number,
+        public readonly roleId: string,
     ) {}
 
 }
