@@ -34,9 +34,12 @@ import { InMemoryStockOrderRepository } from "../repositories/InMemoryStockOrder
 import { InMemoryStockHoldingRepository } from "../repositories/InMemoryStockHoldingRepository";
 import { InMemoryStockTransactionRepository } from "../repositories/InMemoryStockTransactionRepository";
 import { InMemoryTransactionRepository } from "../repositories/InMemoryTransactionRepository";
+import { InMemoryLoanRepaymentScheduleRepository } from "../repositories/InMemoryLoanRepaymentScheduleRepository";
+import { InMemoryLoanRequestRepository } from "../repositories/InMemoryLoanRequestRepository";
 import { LocaleValidationService } from "../services/LocaleValidationService";
 import { InMemorySavingsProductRepository } from '../repositories/InMemorySavingsProductRepository';
 import { InMemorySavingsAccountRepository } from '../repositories/InMemorySavingsAccountRepository';
+import { ManageLoanConfigService } from "../services/ManageLoanConfigService";
 
 const baseUrl = process.env.CLIENT_BASE_URL!;
 export const tokenService = new JwtTokenService();
@@ -52,6 +55,9 @@ export const accountRepository = new InMemoryAccountRepository();
 export const accountNumberGenerator = new GenerateAccountNumberService(accountRepository);
 export const ibanGenerator = new GenerateIbanService(accountRepository);
 export const transactionRepository = new InMemoryTransactionRepository();
+export const loanRepaymentScheduleRepository = new InMemoryLoanRepaymentScheduleRepository();
+export const loanRequestRepository = new InMemoryLoanRequestRepository();
+export const loanConfigService = new ManageLoanConfigService();
 export const transferLimitService = new ManageTransferLimitService();
 export const transferValidationService = new ValidateTransferService(transferLimitService);
 export const conversationRepository = new InMemoryConversationRepository();
