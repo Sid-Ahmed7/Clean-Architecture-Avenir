@@ -251,4 +251,29 @@ export class SavingsAccountController {
 
         return res.status(200).json(result);
     }
+
+    async deleteSavingsAccount(req: Request, res: Response) {
+        const { DeleteSavingsAccountUseCase } = require("../../../../../application/usecases/accounts/DeleteSavingsAccountUseCase");
+        const { NoCheckingAccountForTransferError } = require("../../../../../application/errors/NoCheckingAccountForTransferError");
+        
+        const deleteUseCase = new DeleteSavingsAccountUseCase(
+            this.savingsAccountRepository,
+            this.accountRepository
+        );
+
+        const accountNumber = Number(req.params.accountNumber);
+        const result = await deleteUseCase.execute(accountNumber);
+
+        if (result instanceof Error) {
+            if (result instanceof AccountNotFoundError) {
+                return res.status(404).json({ error: result.message });
+            }
+            if (result instanceof NoCheckingAccountForTransferError) {
+                return res.status(400).json({ error: result.message });
+            }
+            return res.status(500).json({ error: result.message });
+        }
+
+        return res.status(200).json({ message: "Savings account deleted successfully" });
+    }
 }

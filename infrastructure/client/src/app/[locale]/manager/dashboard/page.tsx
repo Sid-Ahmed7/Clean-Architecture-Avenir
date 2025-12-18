@@ -7,11 +7,6 @@ import { Button } from "@/components/ui/Button";
 export default function ManagerDashboard() {
     return (
         <div className="min-h-screen bg-white p-6 mx-auto space-y-8">
-            {/* Welcome message */}
-            <div className="mb-6">
-                <h1 className="text-2xl font-bold text-gray-900">Tableau de bord gestionnaire</h1>
-            </div>
-
             {/* Manager specific content */}
             <section className="space-y-6">
                 {/* Manager Header */}

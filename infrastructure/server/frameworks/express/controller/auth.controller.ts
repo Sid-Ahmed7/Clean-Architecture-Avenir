@@ -18,6 +18,7 @@ import { InvalidEmailOrPasswordError } from "../../../../../application/errors/I
 import { RoleNotFoundError } from "../../../../../application/errors/RoleNotFoundError";
 import { BankUserEntity } from "../../../../../domain/entities/BankUserEntity";
 import { UserStatusEnum } from "../../../../../domain/enums/UserStatusEnum";
+import { RoleEnum } from "../../../../../domain/enums/RoleEnum";
 import { EmailService } from "../../../../../application/ports/services/EmailService";
 import { RegistrationTokenGeneratorService } from "../../../../../application/ports/services/auth/RegistrationTokenGeneratorService";
 import { EventBusInterface } from "../../../../../application/ports/event/EventBusInterface";
@@ -224,7 +225,21 @@ export class AuthController {
 
 
         const roles = await getUserRolesUseCase.execute(userId);
-        const role = Array.isArray(roles) && roles.length > 0 ? roles[0]?.name : undefined;
+        
+        // Prioritize roles: BANK_MANAGER > BANK_ADVISOR > CLIENT
+        let role: string | undefined = undefined;
+        if (Array.isArray(roles) && roles.length > 0) {
+          const roleNames = roles.map(r => r.name);
+          if (roleNames.includes(RoleEnum.BANK_MANAGER)) {
+            role = RoleEnum.BANK_MANAGER;
+          } else if (roleNames.includes(RoleEnum.BANK_ADVISOR)) {
+            role = RoleEnum.BANK_ADVISOR;
+          } else if (roleNames.includes(RoleEnum.CLIENT)) {
+            role = RoleEnum.CLIENT;
+          } else {
+            role = roleNames[0]; // Fallback to first role
+          }
+        }
 
         return res.status(200).json({
           user: {

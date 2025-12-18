@@ -2,7 +2,7 @@
 
 import { AuthContext } from "@/contexts/AuthProvider";
 import { apiClient } from "@/lib/api/apiClient";
-import { CreditCard, ArrowUpRight, TrendingUp, Calendar, Settings, HelpCircle, X, MessageCircle, LogOut, PiggyBank, Home } from "lucide-react";
+import { CreditCard, ArrowUpRight, TrendingUp, Calendar, Settings, HelpCircle, X, MessageCircle, LogOut, PiggyBank, Home, Users, Wallet } from "lucide-react";
 import { useContext } from "react";
 import { Link } from "@/i18n/navigation";
 import { usePathname } from "next/navigation";
@@ -22,7 +22,11 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   const menuItems = [
     { icon: Home, label: "Dashboard", href: `/${rolePrefix}/dashboard` },
-    { icon: CreditCard, label: "Comptes", href: `/${rolePrefix}/accounts` },
+    ...(user?.role === 'CLIENT' ? [{ icon: CreditCard, label: "Comptes", href: `/${rolePrefix}/accounts` }] : []),
+    ...(user?.role === 'BANK_MANAGER' ? [
+      { icon: Users, label: "Gestion Utilisateurs", href: `/manager/users` },
+      { icon: Wallet, label: "Tous les Comptes", href: `/manager/accounts` },
+    ] : []),
     { icon: ArrowUpRight, label: "Virements", href: `/${rolePrefix}/transfers` },
     ...(user?.role === 'CLIENT' ? [{ icon: PiggyBank, label: "Épargne", href: `/client/savings` }] : []),
     ...(user?.role === 'BANK_MANAGER' ? [{ icon: PiggyBank, label: "Produits d'Épargne", href: `/manager/savings-products` }] : []),

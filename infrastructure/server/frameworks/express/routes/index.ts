@@ -11,6 +11,8 @@ import savingsProductRoutes from "./savings-product.routes";
 import stockOrder from "./stockOrder.routes";
 import stockPosition from "./stockPositions.routes";
 import stockTransaction from "./stockTransactions.routes";
+import userManagementRoutes from "./user-management.routes";
+import directorAccountsRoutes from "./director-accounts.routes";
 
 const router = express.Router();
 
@@ -26,5 +28,7 @@ router.use("/chat", chatRoutes);
 router.use("/feed", newsRoutes);
 router.use("/media", mediaRoutes);
 router.use("/content", contentRoutes);
+router.use("/users", userManagementRoutes);
+router.use("/director", directorAccountsRoutes);
 
 export default router;

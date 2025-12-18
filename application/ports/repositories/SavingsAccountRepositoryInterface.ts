@@ -32,4 +32,9 @@ export interface SavingsAccountRepositoryInterface {
      * Get all savings accounts
      */
     getAllSavingsAccounts(): Promise<Array<SavingsAccountsEntity>>;
+    
+    /**
+     * Delete a savings account by account number
+     */
+    deleteSavingsAccount(accountNumber: number): Promise<void | AccountNotFoundError>;
 }

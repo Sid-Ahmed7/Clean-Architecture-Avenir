@@ -265,6 +265,18 @@ async updateAccount(req: Request, res: Response) {
             if(result instanceof AccountNotFoundError) {
                 return res.status(404).json({error: result.message})
             }
+            
+            // Import needed at top of file
+            const { CannotDeleteLastCheckingAccountError } = require("../../../../../application/errors/CannotDeleteLastCheckingAccountError");
+            const { NoCheckingAccountForTransferError } = require("../../../../../application/errors/NoCheckingAccountForTransferError");
+            
+            if(result instanceof CannotDeleteLastCheckingAccountError) {
+                return res.status(400).json({error: result.message})
+            }
+            
+            if(result instanceof NoCheckingAccountForTransferError) {
+                return res.status(400).json({error: result.message})
+            }
         
             return res.status(500).json({error : result.message})
         }
