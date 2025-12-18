@@ -39,8 +39,12 @@ export class GetTransactionHistoryUseCase {
             const creditUser = transaction.creditUserId ? map.get(transaction.creditUserId) : undefined;
 
             return Object.assign(Object.create(Object.getPrototypeOf(transaction)), transaction, {
-                debitUserName: debitUser ? `${debitUser.firstName} ${debitUser.lastName}`.trim() : undefined,
-                creditUserName: creditUser ? `${creditUser.firstName} ${creditUser.lastName}`.trim() : undefined,
+                debitUserName: debitUser
+                    ? `${debitUser.firstName} ${debitUser.lastName}`.trim()
+                    : transaction.debitUserName,
+                creditUserName: creditUser
+                    ? `${creditUser.firstName} ${creditUser.lastName}`.trim()
+                    : transaction.creditUserName,
             });
         });
     }

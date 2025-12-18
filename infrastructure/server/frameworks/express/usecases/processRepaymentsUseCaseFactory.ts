@@ -2,9 +2,16 @@ import { ProcessRepaymentsUseCase } from "../../../../../application/usecases/lo
 import {
   accountRepository,
   loanRepaymentScheduleRepository,
+  transactionRepository,
+  uuidService,
 } from "../../../../adapters/config/repositories";
 
 export function processRepaymentsUseCaseFactory() {
-  return new ProcessRepaymentsUseCase(loanRepaymentScheduleRepository, accountRepository);
+  return new ProcessRepaymentsUseCase(
+    loanRepaymentScheduleRepository,
+    accountRepository,
+    transactionRepository,
+    uuidService,
+  );
 }
 
