@@ -8,6 +8,7 @@ interface UserProfile {
   lastName?: string;
   name?: string;
   email?: string;
+  address?: string;
 }
 
 
