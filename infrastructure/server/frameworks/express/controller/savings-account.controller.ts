@@ -4,8 +4,8 @@ import { UpdateSavingsAccountConfigUseCase } from "../../../../../application/us
 import { GetSavingsAccountUseCase } from "../../../../../application/usecases/accounts/GetSavingsAccountUseCase";
 import { CalculateDailyInterestUseCase } from "../../../../../application/usecases/accounts/CalculateDailyInterestUseCase";
 import { GetAccountInterestHistoryUseCase } from "../../../../../application/usecases/accounts/GetAccountInterestHistoryUseCase";
-import { InMemorySavingsAccountRepository } from "../../../../adapters/repositories/InMemorySavingsAccountRepository";
-import { InMemoryAccountRepository } from "../../../../adapters/repositories/InMemoryAccountRepository";
+import { SavingsAccountRepositoryInterface } from "../../../../../application/ports/repositories/SavingsAccountRepositoryInterface";
+import { AccountRepositoryInterface } from "../../../../../application/ports/repositories/AccountRepositoryInterface";
 import { AccountNotFoundError } from "../../../../../application/errors/AccountNotFoundError";
 import { InvalidAccountError } from "../../../../../domain/errors/InvalidAccountError";
 import { CreateSavingsAccount } from "../../../../../application/requests/CreateSavingsAccount";
@@ -14,8 +14,8 @@ import { UpdateSavingsAccountConfig } from "../../../../../application/requests/
 export class SavingsAccountController {
 
     constructor(
-        private readonly savingsAccountRepository: InMemorySavingsAccountRepository,
-        private readonly accountRepository: InMemoryAccountRepository
+        private readonly savingsAccountRepository: SavingsAccountRepositoryInterface,
+        private readonly accountRepository: AccountRepositoryInterface
     ) {}
 
     async createSavingsAccount(req: Request, res: Response) {

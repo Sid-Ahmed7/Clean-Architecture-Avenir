@@ -31,7 +31,11 @@ export class PostgresStockTransactionRepository implements StockTransactionRepos
             ]
         );
 
-        const created = this.mapRowToEntity(result.rows[0]);
+        const row = result.rows[0];
+        if(!row) {
+            return new Error("Error creation transaction")
+        }
+        const created = this.mapRowToEntity(row);
         if (created instanceof Error) {
             return created;
         }
@@ -48,8 +52,13 @@ export class PostgresStockTransactionRepository implements StockTransactionRepos
         if (result.rows.length === 0) {
             return new TransactionNotFoundError(`Transaction ${id} not found`);
         }
+        const row = result.rows[0];
+        if(!row) {
+            return new TransactionNotFoundError(`Transaction ${id} not found`);
 
-        const transaction = this.mapRowToEntity(result.rows[0]);
+        }
+
+        const transaction = this.mapRowToEntity(row);
         if (transaction instanceof Error) {
             return transaction;
         }

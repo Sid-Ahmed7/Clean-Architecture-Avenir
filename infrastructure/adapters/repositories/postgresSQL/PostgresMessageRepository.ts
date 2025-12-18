@@ -19,7 +19,14 @@ export class PostgresMessageRepository implements MessageRepositoryInterface {
             return new MessageNotFoundError("Message not found");
         }
 
-        return this.mapRowToEntity(result.rows[0]);
+        const row = result.rows[0];
+        
+        if (!row) {
+            return new MessageNotFoundError("Message not found");
+        
+        }   
+        
+        return this.mapRowToEntity(row)
     }
 
     async findUnreadByRecipient(userId: string): Promise<Array<MessageEntity>> {
@@ -70,7 +77,14 @@ export class PostgresMessageRepository implements MessageRepositoryInterface {
             ]
         );
 
-        return this.mapRowToEntity(result.rows[0]);
+        const row = result.rows[0];
+        
+        if (!row) {
+            return new MessageNotFoundError("Message not found");
+        
+        }   
+        
+        return this.mapRowToEntity(row)
     }
 
     async updateMessage(message: MessageEntity): Promise<MessageEntity | MessageNotFoundError> {
@@ -86,7 +100,12 @@ export class PostgresMessageRepository implements MessageRepositoryInterface {
             return new MessageNotFoundError(`Message with id ${message.id} not found`);
         }
 
-        return this.mapRowToEntity(result.rows[0]);
+        const row = result.rows[0];
+        if (!row) {
+            return new MessageNotFoundError("Message not found");
+        }
+
+        return this.mapRowToEntity(row);
     }
 
     private mapRowToEntity(row: PostgresMessageRow): MessageEntity {

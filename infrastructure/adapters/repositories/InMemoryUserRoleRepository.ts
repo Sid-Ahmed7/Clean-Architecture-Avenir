@@ -4,7 +4,7 @@ import { UserNotFoundError } from "../../../application/errors/UserNotFoundError
 import { UserAlreadyExistsError } from "../../../application/errors/UserAlreadyExistsError";
 import { PasswordService } from "../../../application/ports/services/auth/PasswordService";
 import { UserRoleRepositoryInterface } from "../../../application/ports/repositories/auth/UserRoleRepositoryInterface";
-import { RoleRepositoryInterface } from "../../../application/ports/repositories/auth/RolerepositoryInterface";
+import { RoleRepositoryInterface } from "../../../application/ports/repositories/auth/RoleRepositoryInterface";
 import { RoleEntity } from "../../../domain/entities/RoleEntity";
 import { RoleNotFoundError } from "../../../application/errors/RoleNotFoundError";
 

@@ -6,7 +6,6 @@ import { InvalidOrderError } from "../../../../domain/errors/InvalidOrderError";
 import { pgPool } from "../../config/database/configPostgresSQL";
 import { PostgresStockOrderRow } from "./types/PostgresStockOrderRow";
 
-
 export class PostgresStockOrderRepository implements StockOrderRepositoryInterface {
 
     public async createOrder(order: StockOrderEntity): Promise<StockOrderEntity | InvalidOrderError> {
@@ -17,7 +16,7 @@ export class PostgresStockOrderRepository implements StockOrderRepositoryInterfa
                     order_type, order_status, created_at, updated_at, executed_at,
                     remaining_quantity, fees_paid
                 )
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+                VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
                 RETURNING *`,
                 [
                     order.id,
@@ -36,9 +35,20 @@ export class PostgresStockOrderRepository implements StockOrderRepositoryInterfa
                 ]
             );
 
-            return this.mapRowToEntity(result.rows[0]);
-        } catch (error: any) {
-            return new InvalidOrderError(`Failed to create order: ${error.message}`);
+            const row = result.rows[0];
+            if (!row) {
+                return new InvalidOrderError("Failed to create order");
+            }
+
+            const entity = this.mapRowToEntity(row);
+            if (entity instanceof Error) {
+                return new InvalidOrderError(entity.message);
+            }
+
+            return entity;
+        } catch (error) {
+            const err = error as Error;
+            return new InvalidOrderError(`Failed to create order: ${err.message}`);
         }
     }
 
@@ -50,8 +60,8 @@ export class PostgresStockOrderRepository implements StockOrderRepositoryInterfa
                 executed_at = $3,
                 remaining_quantity = $4,
                 fees_paid = $5
-            WHERE id = $6
-            RETURNING *`,
+             WHERE id = $6
+             RETURNING *`,
             [
                 order.orderStatus,
                 order.updatedAt,
@@ -62,15 +72,24 @@ export class PostgresStockOrderRepository implements StockOrderRepositoryInterfa
             ]
         );
 
-        if (result.rows.length === 0) {
+        const row = result.rows[0];
+        if (!row) {
             return new OrderNotFoundError(`Order ${order.id} not found`);
         }
 
-        return this.mapRowToEntity(result.rows[0]);
+        const entity = this.mapRowToEntity(row);
+        if (entity instanceof Error) {
+            return new OrderNotFoundError(entity.message);
+        }
+
+        return entity;
     }
 
     public async deleteOrder(id: string): Promise<void | OrderNotFoundError> {
-        const result = await pgPool.query('DELETE FROM stock_orders WHERE id = $1', [id]);
+        const result = await pgPool.query(
+            "DELETE FROM stock_orders WHERE id = $1",
+            [id]
+        );
 
         if (result.rowCount === 0) {
             return new OrderNotFoundError(`Order ${id} not found`);
@@ -79,63 +98,69 @@ export class PostgresStockOrderRepository implements StockOrderRepositoryInterfa
 
     public async findOrderById(id: string): Promise<StockOrderEntity | OrderNotFoundError> {
         const result = await pgPool.query<PostgresStockOrderRow>(
-            'SELECT * FROM stock_orders WHERE id = $1',
+            "SELECT * FROM stock_orders WHERE id = $1",
             [id]
         );
 
-        if (result.rows.length === 0) {
+        const row = result.rows[0];
+        if (!row) {
             return new OrderNotFoundError(`Order ${id} not found`);
         }
 
-        return this.mapRowToEntity(result.rows[0]);
+        const entity = this.mapRowToEntity(row);
+        if (entity instanceof Error) {
+            return new OrderNotFoundError(entity.message);
+        }
+
+        return entity;
     }
 
-    public async findOrdersByUserId(userId: string): Promise<Array<StockOrderEntity>> {
+    public async findOrdersByUserId(userId: string): Promise<StockOrderEntity[]> {
         const result = await pgPool.query<PostgresStockOrderRow>(
-            'SELECT * FROM stock_orders WHERE user_id = $1 ORDER BY created_at DESC',
+            "SELECT * FROM stock_orders WHERE user_id = $1 ORDER BY created_at DESC",
             [userId]
         );
 
-        return result.rows.map(row => this.mapRowToEntity(row));
+        return this.mapRowsToEntities(result.rows);
     }
 
-    public async findPendingOrdersBySymbol(symbol: string): Promise<Array<StockOrderEntity>> {
+    public async findPendingOrdersBySymbol(symbol: string): Promise<StockOrderEntity[]> {
         const result = await pgPool.query<PostgresStockOrderRow>(
-            'SELECT * FROM stock_orders WHERE stock_symbol = $1 AND order_status = $2',
+            "SELECT * FROM stock_orders WHERE stock_symbol = $1 AND order_status = $2",
             [symbol, OrderStatusEnum.PENDING]
         );
 
-        return result.rows.map(row => this.mapRowToEntity(row));
+        return this.mapRowsToEntities(result.rows);
     }
 
-    public async findAllOrders(): Promise<Array<StockOrderEntity>> {
+    public async findAllOrders(): Promise<StockOrderEntity[]> {
         const result = await pgPool.query<PostgresStockOrderRow>(
-            'SELECT * FROM stock_orders ORDER BY created_at DESC'
+            "SELECT * FROM stock_orders ORDER BY created_at DESC"
         );
 
-        return result.rows.map(row => this.mapRowToEntity(row));
+        return this.mapRowsToEntities(result.rows);
     }
 
-    public async findActiveOrders(): Promise<Array<StockOrderEntity>> {
+    public async findActiveOrders(): Promise<StockOrderEntity[]> {
         const result = await pgPool.query<PostgresStockOrderRow>(
-            `SELECT * FROM stock_orders 
+            `SELECT * FROM stock_orders
              WHERE order_status IN ($1, $2)
              ORDER BY created_at DESC`,
             [OrderStatusEnum.PENDING, OrderStatusEnum.PARTIALLY_EXECUTED]
         );
 
-        return result.rows.map(row => this.mapRowToEntity(row));
+        return this.mapRowsToEntities(result.rows);
     }
 
-    public async findActiveOrdersByUserId(userId: string): Promise<Array<StockOrderEntity>> {
+    public async findActiveOrdersByUserId(userId: string): Promise<StockOrderEntity[]> {
         const result = await pgPool.query<PostgresStockOrderRow>(
-            `SELECT * FROM stock_orders 
-             WHERE user_id = $1 AND order_status IN ($2, $3)
-             ORDER BY created_at DESC`,
+            `SELECT * FROM stock_orders
+            WHERE user_id = $1 AND order_status IN ($2, $3)
+            ORDER BY created_at DESC`,
             [userId, OrderStatusEnum.PENDING, OrderStatusEnum.PARTIALLY_EXECUTED]
         );
 
-        return result.rows.map(row => this.mapRowToEntity(row));
+        return this.mapRowsToEntities(result.rows);
     }
 
     public async findActiveOrdersBySymbol(symbol: string): Promise<Array<StockOrderEntity> | Error> {
@@ -147,31 +172,42 @@ export class PostgresStockOrderRepository implements StockOrderRepositoryInterfa
                 [symbol, OrderStatusEnum.PENDING, OrderStatusEnum.PARTIALLY_EXECUTED]
             );
 
-            return result.rows.map(row => this.mapRowToEntity(row));
-        } catch (error: any) {
-            return new Error(`Failed to find active orders: ${error.message}`);
-        }
+        return this.mapRowsToEntities(result.rows);
+        } catch (error) {
+        const err = error as Error;
+        throw new Error(`Failed to find active orders: ${err.message}`);
+    }
     }
 
-    public async findOrdersByStatus(status: OrderStatusEnum): Promise<Array<StockOrderEntity>> {
+    public async findOrdersByStatus(status: OrderStatusEnum): Promise<StockOrderEntity[]> {
         const result = await pgPool.query<PostgresStockOrderRow>(
-            'SELECT * FROM stock_orders WHERE order_status = $1 ORDER BY created_at DESC',
+            "SELECT * FROM stock_orders WHERE order_status = $1 ORDER BY created_at DESC",
             [status]
         );
 
-        return result.rows.map(row => this.mapRowToEntity(row));
+        return this.mapRowsToEntities(result.rows);
     }
 
-    public async findOrdersByUserIdAndSymbol(userId: string, symbol: string): Promise<Array<StockOrderEntity>> {
+    public async findOrdersByUserIdAndSymbol(userId: string, symbol: string): Promise<StockOrderEntity[]> {
         const result = await pgPool.query<PostgresStockOrderRow>(
-            'SELECT * FROM stock_orders WHERE user_id = $1 AND stock_symbol = $2 ORDER BY created_at DESC',
+            "SELECT * FROM stock_orders WHERE user_id = $1 AND stock_symbol = $2 ORDER BY created_at DESC",
             [userId, symbol]
         );
 
-        return result.rows.map(row => this.mapRowToEntity(row));
+        return this.mapRowsToEntities(result.rows);
     }
 
-    private mapRowToEntity(row: PostgresStockOrderRow): StockOrderEntity {
+    /* =======================
+       Mapping helpers
+       ======================= */
+
+    private mapRowsToEntities(rows: PostgresStockOrderRow[]): StockOrderEntity[] {
+        return rows
+            .map(row => this.mapRowToEntity(row))
+            .filter((order): order is StockOrderEntity => !(order instanceof Error));
+    }
+
+    private mapRowToEntity(row: PostgresStockOrderRow): StockOrderEntity | Error {
         const order = StockOrderEntity.from(
             row.id,
             row.user_id,
@@ -188,11 +224,10 @@ export class PostgresStockOrderRepository implements StockOrderRepositoryInterfa
         );
 
         if (order instanceof Error) {
-            throw order;
+            return order;
         }
 
         order.feesPaid = row.fees_paid;
-
         return order;
     }
 }

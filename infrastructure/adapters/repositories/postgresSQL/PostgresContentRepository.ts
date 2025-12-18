@@ -16,7 +16,12 @@ export class PostgresContentRepository implements ContentRepositoryInterface {
             return new ContentNotFoundError(`Content with ${contentId} not found`);
         }
 
-        return this.mapRowToEntity(result.rows[0]);
+        const row = result.rows[0];
+        if (!row) {
+            return new ContentNotFoundError(`Content with ${contentId} not found`);
+        }
+
+        return this.mapRowToEntity(row);
     }
 
     async findByNewsId(newsId: string): Promise<Array<ContentEntity>> {
@@ -40,7 +45,12 @@ export class PostgresContentRepository implements ContentRepositoryInterface {
             [content.id, content.newsId, content.order, content.content]
         );
 
-        return this.mapRowToEntity(result.rows[0]);
+        const row = result.rows[0];
+        if (!row) {
+            return new InvalidContentError("Failed to create content");
+        }
+
+        return this.mapRowToEntity(row);
     }
 
     async update(content: ContentEntity): Promise<ContentEntity | ContentNotFoundError> {
@@ -56,7 +66,12 @@ export class PostgresContentRepository implements ContentRepositoryInterface {
             return new ContentNotFoundError(`Content with id ${content.id} not found`);
         }
 
-        return this.mapRowToEntity(result.rows[0]);
+        const row = result.rows[0];
+        if (!row) {
+            return new ContentNotFoundError(`Content with ${content.id} not found`);
+        }
+
+        return this.mapRowToEntity(row);
     }
 
     async delete(contentId: string): Promise<void | ContentNotFoundError> {

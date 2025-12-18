@@ -18,7 +18,12 @@ export class PostgresConversationRepository implements ConversationRepositoryInt
             return new ConversationNotFoundError(`Conversation with id ${conversationId} not found`);
         }
 
-        return this.mapRowToEntity(result.rows[0]);
+        const row = result.rows[0];
+        if (!row) {
+            return new ConversationNotFoundError(`Conversation with id ${conversationId} not found`);
+        }
+
+        return this.mapRowToEntity(row);
     }
 
     async findByAdvisorId(advisorId: string): Promise<Array<ConversationEntity> | UserNotFoundError> {

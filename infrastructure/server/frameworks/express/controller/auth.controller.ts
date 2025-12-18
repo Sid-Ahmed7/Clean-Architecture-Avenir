@@ -7,9 +7,9 @@ import { GetUserRolesUseCase} from "../../../../../application/usecases/auth/Get
 import {ConfirmRegistrationUseCase} from "../../../../../application/usecases/auth/ConfirmRegistrationUseCase";
 import {CreateBankAdvisorUseCase} from "../../../../../application//usecases/auth/CreateBankAdvisorUseCase";
 import {CreateBankManagerUseCase} from "../../../../../application//usecases/auth/CreateBankManagerUseCase";
-import { InMemoryUserRepository} from "../../../../adapters/repositories/InMemoryUserRepository";
-import { InMemoryRoleRepository} from "../../../../adapters/repositories/InMemoryRoleRepository";
-import { InMemoryUserRoleRepository} from "../../../../adapters/repositories/InMemoryUserRoleRepository";
+import { UserRepositoryInterface } from "../../../../../application/ports/repositories/auth/UserRepositoryInterface";
+import { RoleRepositoryInterface } from "../../../../../application/ports/repositories/auth/RoleRepositoryInterface";
+import { UserRoleRepositoryInterface } from "../../../../../application/ports/repositories/auth/UserRoleRepositoryInterface";
 import { UserAlreadyExistsError } from "../../../../../application/errors/UserAlreadyExistsError";
 import { TokenService } from "../../../../../application/ports/services/auth/TokenService";
 import { PasswordService } from "../../../../../application/ports/services/auth/PasswordService";
@@ -35,9 +35,9 @@ import { registerManagerSchema } from "../schemas/auth/registerManagerSchema";
 export class AuthController {
 
       constructor(
-        private readonly userRepository: InMemoryUserRepository,
-        private readonly roleRepository: InMemoryRoleRepository,
-        private readonly userRoleRepository: InMemoryUserRoleRepository,
+        private readonly userRepository: UserRepositoryInterface,
+        private readonly roleRepository: RoleRepositoryInterface,
+        private readonly userRoleRepository: UserRoleRepositoryInterface,
         private readonly tokenService: TokenService,
         private readonly passwordService: PasswordService,
         private readonly emailService: EmailService,

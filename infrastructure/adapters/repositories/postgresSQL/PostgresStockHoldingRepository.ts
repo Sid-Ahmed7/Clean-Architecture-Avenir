@@ -28,18 +28,21 @@ export class PostgresStockHoldingRepository implements StockHoldingRepositoryInt
                     position.updatedAt
                 ]
             );
+            const row = result.rows[0];
 
-            const created = this.mapRowToEntity(result.rows[0]);
+            if (!row) {
+                return new PositionNotFoundError('Position not found');
+            }
+
+            const created = this.mapRowToEntity(row);
             if (created instanceof Error) {
                 return created;
             }
 
             return created;
-        } catch (error: any) {
-            if (error.code === '23505') { // Unique constraint violation
-                return new PositionAlreadyExistsError(`Position already exists for user ${position.userId} and stock ${position.stockSymbol}`);
-            }
-            return new Error(`Failed to create position: ${error.message}`);
+        } catch (error) {
+            const err = error as Error;
+            return new Error(`Failed to create position: ${err.message}`);
         }
     }
 
@@ -66,8 +69,13 @@ export class PostgresStockHoldingRepository implements StockHoldingRepositoryInt
         if (result.rows.length === 0) {
             return new PositionNotFoundError(`Position ${position.id} not found`);
         }
+        const row = result.rows[0];
 
-        const updated = this.mapRowToEntity(result.rows[0]);
+        if (!row) {
+            return new PositionNotFoundError('Position not found');
+        }
+
+        const updated = this.mapRowToEntity(row);
         if (updated instanceof Error) {
             return updated;
         }
@@ -92,8 +100,14 @@ export class PostgresStockHoldingRepository implements StockHoldingRepositoryInt
         if (result.rows.length === 0) {
             return new PositionNotFoundError(`Position ${id} not found`);
         }
+        const row = result.rows[0];
 
-        const position = this.mapRowToEntity(result.rows[0]);
+        if (!row) {
+            return new PositionNotFoundError('Position not found');
+        }
+
+
+        const position = this.mapRowToEntity(row);
         if (position instanceof Error) {
             return position;
         }
@@ -121,8 +135,14 @@ export class PostgresStockHoldingRepository implements StockHoldingRepositoryInt
         if (result.rows.length === 0) {
             return new PositionNotFoundError(`Position for user ${userId} and stock ${symbol} not found`);
         }
+        const row = result.rows[0];
 
-        const position = this.mapRowToEntity(result.rows[0]);
+        if (!row) {
+            return new PositionNotFoundError('Position not found');
+        }
+
+
+        const position = this.mapRowToEntity(row);
         if (position instanceof Error) {
             return position;
         }

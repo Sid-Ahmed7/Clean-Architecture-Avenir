@@ -17,7 +17,12 @@ export class PostgresNewsRepository implements NewsRepositoryInterface {
             return new NewsNotFoundError(`News with ${newsId} not found`);
         }
 
-        return this.mapRowToEntity(result.rows[0]);
+        const row = result.rows[0];
+        if (!row) {
+            return new NewsNotFoundError(`News with ${newsId} not found`);
+        }
+
+        return this.mapRowToEntity(row);
     }
 
     async findAll(filters?: NewsFilters, page = 1, limit = 10): Promise<NewsEntity[]> {
@@ -50,7 +55,7 @@ export class PostgresNewsRepository implements NewsRepositoryInterface {
         return result.rows.map(row => this.mapRowToEntity(row));
     }
 
-    async create(news: NewsEntity): Promise<NewsEntity> {
+    async create(news: NewsEntity): Promise<NewsEntity | NewsNotFoundError> {
         const result = await pgPool.query<PostgresNewsRow>(
             `INSERT INTO news (id, title, category, priority, tags, created_at, updated_at)
              VALUES ($1, $2, $3, $4, $5, $6, $7)
@@ -58,12 +63,17 @@ export class PostgresNewsRepository implements NewsRepositoryInterface {
             [news.id, news.title, news.category, news.priority, news.tags, news.createdAt, news.updatedAt]
         );
 
-        return this.mapRowToEntity(result.rows[0]);
+        const row = result.rows[0];
+        if (!row) {
+            return new NewsNotFoundError(`Failed to create news`);
+        }
+
+        return this.mapRowToEntity(row);
     }
 
     async update(news: NewsEntity): Promise<NewsEntity | NewsNotFoundError> {
         const result = await pgPool.query<PostgresNewsRow>(
-            `UPDATE news 
+            `UPDATE news
              SET title = $1, category = $2, priority = $3, tags = $4, updated_at = $5
              WHERE id = $6
              RETURNING *`,
@@ -74,7 +84,12 @@ export class PostgresNewsRepository implements NewsRepositoryInterface {
             return new NewsNotFoundError(`News with id ${news.id} not found`);
         }
 
-        return this.mapRowToEntity(result.rows[0]);
+        const row = result.rows[0];
+        if (!row) {
+            return new NewsNotFoundError(`News with id ${news.id} not found`);
+        }
+
+        return this.mapRowToEntity(row);
     }
 
     async delete(newsId: string): Promise<void | NewsNotFoundError> {

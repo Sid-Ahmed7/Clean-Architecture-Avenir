@@ -17,7 +17,12 @@ export class PostgresMediaRepository implements MediaRepositoryInterface {
             return new MediaNotFoundError(`Media with id ${mediaId} not found`);
         }
 
-        return this.mapRowToEntity(result.rows[0]);
+        const row = result.rows[0];
+        if (!row) {
+            return new MediaNotFoundError(`Media with id ${mediaId} not found`);
+        }
+
+        return this.mapRowToEntity(row);
     }
 
     async findByNewsId(newsId: string): Promise<Array<MediaEntity>> {
@@ -64,7 +69,14 @@ export class PostgresMediaRepository implements MediaRepositoryInterface {
             ]
         );
 
-        return this.mapRowToEntity(result.rows[0]);
+        const row = result.rows[0];
+
+        if (!row) {
+            return new MediaNotFoundError(`Media with id ${media.id} not found`);
+
+        }   
+
+        return this.mapRowToEntity(row); 
     }
 
     async update(media: MediaEntity): Promise<MediaEntity | MediaNotFoundError> {
@@ -91,7 +103,14 @@ export class PostgresMediaRepository implements MediaRepositoryInterface {
             return new MediaNotFoundError(`Media with id ${media.id} not found`);
         }
 
-        return this.mapRowToEntity(result.rows[0]);
+        const row = result.rows[0];
+
+        if (!row) {
+            return new MediaNotFoundError(`Media with id ${media.id} not found`);
+
+        }   
+
+        return this.mapRowToEntity(row)
     }
 
     async delete(mediaId: string): Promise<void | MediaNotFoundError> {

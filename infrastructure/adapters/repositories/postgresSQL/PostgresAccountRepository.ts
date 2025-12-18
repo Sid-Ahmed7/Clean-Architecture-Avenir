@@ -22,7 +22,13 @@ export class PostgresAccountRepository implements AccountRepositoryInterface {
             return new AccountNotFoundError(`Account with number ${accountNumber} not found.`);
         }
 
-        return this.mapRowToEntity(result.rows[0]);
+        const row = result.rows[0];
+
+        if (!row) {
+            return new AccountNotFoundError(`Account with number ${accountNumber} not found.`);
+        }
+
+return this.mapRowToEntity(row);
     }
 
     public async getOneAccountByIban(iban: string): Promise<AccountEntity | AccountNotFoundError> {
@@ -35,7 +41,13 @@ export class PostgresAccountRepository implements AccountRepositoryInterface {
             return new AccountNotFoundError(`Account with IBAN ${iban} not found.`);
         }
 
-        return this.mapRowToEntity(result.rows[0]);
+        const row = result.rows[0];
+
+        if (!row) {
+            return new AccountNotFoundError(`Account with iban ${iban} not found.`);
+        }
+
+        return this.mapRowToEntity(row);
     }
 
     public async getOneAccountById(accountNumber: number): Promise<AccountEntity | AccountNotFoundError> {
@@ -83,7 +95,13 @@ export class PostgresAccountRepository implements AccountRepositoryInterface {
             return new AccountNotFoundError(`Account for user ${userId} not found.`);
         }
 
-        return this.mapRowToEntity(result.rows[0]);
+        const row = result.rows[0];
+
+        if (!row) {
+            return new AccountNotFoundError(`Account for user ${userId} not found.`);
+        }
+
+return this.mapRowToEntity(row);
     }
 
     public async getAllAccounts(): Promise<Array<AccountEntity>> {
@@ -143,7 +161,13 @@ export class PostgresAccountRepository implements AccountRepositoryInterface {
             ]
         );
 
-        return this.mapRowToEntity(result.rows[0]);
+        const row = result.rows[0];
+
+        if (!row) {
+            return new AccountNotFoundError(`Account not found.`);
+        }   
+
+        return this.mapRowToEntity(row);
     }
 
     public async updateOneAccount(account: AccountEntity): Promise<AccountEntity | AccountNotFoundError | InvalidAccountError> {
@@ -184,7 +208,13 @@ export class PostgresAccountRepository implements AccountRepositoryInterface {
             return new AccountNotFoundError(`Account ${account.accountNumber} not found.`);
         }
 
-        return this.mapRowToEntity(result.rows[0]);
+        const row = result.rows[0];
+
+        if (!row) {
+            return new AccountNotFoundError(`Account not found.`);
+        }   
+
+        return this.mapRowToEntity(row);
     }
 
     public async deleteAccount(accountNumber: number): Promise<void | AccountNotFoundError> {

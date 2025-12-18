@@ -1,6 +1,6 @@
 import { BankUserEntity } from "../../../domain/entities/BankUserEntity";
 import { RoleEnum } from "../../../domain/enums/RoleEnum";
-import { RoleRepositoryInterface } from "../../ports/repositories/auth/RolerepositoryInterface";
+import { RoleRepositoryInterface } from "../../ports/repositories/auth/RoleRepositoryInterface";
 import { UserRepositoryInterface } from "../../ports/repositories/auth/UserRepositoryInterface";
 import { UserRoleRepositoryInterface } from "../../ports/repositories/auth/UserRoleRepositoryInterface";
 

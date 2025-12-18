@@ -1,4 +1,4 @@
-import { RoleRepositoryInterface } from "../../../application/ports/repositories/auth/RolerepositoryInterface";
+import { RoleRepositoryInterface } from "../../../application/ports/repositories/auth/RoleRepositoryInterface";
 import { RoleEntity } from "../../../domain/entities/RoleEntity";
 import { RoleEnum } from "../../../domain/enums/RoleEnum";
 import { RoleNotFoundError } from "../../../application/errors/RoleNotFoundError";
@@ -13,6 +13,10 @@ export class InMemoryRoleRepository implements RoleRepositoryInterface {
       id: this.uuidGenerator.generate(),
       name: roleName
     }));
+  }
+
+  async initialize(): Promise<void> {
+    return Promise.resolve();
   }
 
   async findByName(name: RoleEnum): Promise<RoleEntity | RoleNotFoundError> {

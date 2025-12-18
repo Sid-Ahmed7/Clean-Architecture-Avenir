@@ -28,8 +28,13 @@ export class PostgresSavingsProductRepository implements SavingsProductRepositor
                     product.updatedAt
                 ]
             );
+            const row = result.rows[0];
 
-            const createdProduct = this.mapRowToEntity(result.rows[0]);
+            if (!row) {
+                return new Error('Failed to create product');
+            }
+
+            const createdProduct = this.mapRowToEntity(row);
             if (createdProduct instanceof Error) {
                 return createdProduct;
             }
@@ -48,8 +53,12 @@ export class PostgresSavingsProductRepository implements SavingsProductRepositor
         if (result.rows.length === 0) {
             return new Error(`Product with ID ${id} not found`);
         }
+        const row = result.rows[0];
 
-        const product = this.mapRowToEntity(result.rows[0]);
+        if (!row) {
+            return new Error(`Product with ID ${id} not found`);
+        }
+        const product = this.mapRowToEntity(row);
         if (product instanceof Error) {
             return product;
         }
@@ -100,8 +109,13 @@ export class PostgresSavingsProductRepository implements SavingsProductRepositor
         if (result.rows.length === 0) {
             return new Error(`Product with ID ${product.id} not found`);
         }
+        const row = result.rows[0];
 
-        const updatedProduct = this.mapRowToEntity(result.rows[0]);
+        if (!row) {
+            return new Error(`Product with ID ${product.id} not found`);
+        }
+
+        const updatedProduct = this.mapRowToEntity(row);
         if (updatedProduct instanceof Error) {
             return updatedProduct;
         }
@@ -117,9 +131,10 @@ export class PostgresSavingsProductRepository implements SavingsProductRepositor
             );
 
             return result.rowCount !== null && result.rowCount > 0;
-        } catch (error: any) {
-            return new Error(`Failed to delete product: ${error.message}`);
-        }
+        } catch (error) {
+            const err = error as Error;
+            return new Error(`Failed to delete product: ${err.message}`);
+    }
     }
 
     private mapRowToEntity(row: PostgresSavingsProductRow): SavingsProductEntity | Error {

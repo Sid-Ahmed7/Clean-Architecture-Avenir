@@ -8,6 +8,18 @@ import { PostgresRoleRow } from "./types/PostgresRoleRow";
 
 export class PostgresRoleRepository implements RoleRepositoryInterface {
 
+    async initialize(): Promise<void> {
+        // Initialiser les rôles par défaut s'ils n'existent pas
+        const defaultRoles = Object.values(RoleEnum);
+
+        for (const roleName of defaultRoles) {
+            await pgPool.query(
+                'INSERT INTO roles (id, name) VALUES (gen_random_uuid()::text, $1) ON CONFLICT (name) DO NOTHING',
+                [roleName]
+            );
+        }
+    }
+
     async findByName(name: RoleEnum): Promise<RoleEntity | RoleNotFoundError> {
         const result = await pgPool.query<PostgresRoleRow>(
             'SELECT * FROM roles WHERE name = $1',
@@ -18,7 +30,13 @@ export class PostgresRoleRepository implements RoleRepositoryInterface {
             return new RoleNotFoundError(`Role with name ${name} not found`);
         }
 
-        return RoleEntity.from(result.rows[0].id, result.rows[0].name as RoleEnum);
+        const row = result.rows[0];
+
+        if (!row) {
+            return new RoleNotFoundError(`Role with name ${name} not found`);
+        }
+
+        return RoleEntity.from(row.id, row.name as RoleEnum);
     }
 
     async findById(id: string): Promise<RoleEntity | RoleNotFoundError> {
@@ -31,6 +49,12 @@ export class PostgresRoleRepository implements RoleRepositoryInterface {
             return new RoleNotFoundError(`Role with id ${id} not found`);
         }
 
-        return RoleEntity.from(result.rows[0].id, result.rows[0].name as RoleEnum);
+        const row = result.rows[0];
+
+        if (!row) {
+            return new RoleNotFoundError(`Role with id ${id} not found`);
+        }
+
+        return RoleEntity.from(row.id, row.name as RoleEnum);
     }
 }

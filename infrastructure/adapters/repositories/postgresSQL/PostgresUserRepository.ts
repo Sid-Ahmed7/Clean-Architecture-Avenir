@@ -18,8 +18,12 @@ export class PostgresUserRepository implements UserRepositoryInterface {
         if (result.rows.length === 0) {
             return new UserNotFoundError(`User with ID ${userId} not found.`);
         }
+        const row = result.rows[0];
+        if(!row) {
+            return new UserNotFoundError(`User with ID ${userId} not found.`);
+        }
 
-        const user = this.mapRowToEntity(result.rows[0]);
+        const user = this.mapRowToEntity(row);
 
         return user;
     }
@@ -37,8 +41,12 @@ export class PostgresUserRepository implements UserRepositoryInterface {
         if (result.rows.length === 0) {
             return null;
         }
+        const row = result.rows[0];
+        if(!row) {
+            return null;
+        }
 
-        const user = this.mapRowToEntity(result.rows[0]);
+        const user = this.mapRowToEntity(row);
      
          if (user instanceof Error) {
         return null;
@@ -52,8 +60,12 @@ export class PostgresUserRepository implements UserRepositoryInterface {
         if (result.rows.length === 0) {
             return new UserNotFoundError(`User with confirmation token ${token} not found.`);
         }
+        const row = result.rows[0];
+        if(!row) {
+            return new UserNotFoundError(`User with confirmation token ${token} not found.`);
+        }
 
-        const user = this.mapRowToEntity(result.rows[0]);
+        const user = this.mapRowToEntity(row);
         if (user instanceof Error) {
             return user;
         }
@@ -107,7 +119,11 @@ export class PostgresUserRepository implements UserRepositoryInterface {
                 user.createdAt
             ]
         );
-        return this.mapRowToEntity(result.rows[0]);
+        const row = result.rows[0];
+        if(!row) {
+            return new UserNotFoundError(`User with  not found.`);
+        }
+        return this.mapRowToEntity(row);
     }
 
     public async updateUser(user: BankUserEntity): Promise<BankUserEntity | UserNotFoundError> {
@@ -149,8 +165,12 @@ export class PostgresUserRepository implements UserRepositoryInterface {
         if (result.rows.length === 0) {
             return new UserNotFoundError(`User with ID ${user.id} not found.`);
         }
+        const row = result.rows[0];
+        if(!row) {
+            return new UserNotFoundError(`User with ID ${user.id} not found.`);
+        }
 
-        return this.mapRowToEntity(result.rows[0]);
+        return this.mapRowToEntity(row);
     }
 
     private mapRowToEntity = (row: PostgresBankUserRow): BankUserEntity | Error => {

@@ -8,7 +8,7 @@ import { GetAccountUseCase } from "../../../../../application/usecases/accounts/
 import { GetUserAccountsUseCase} from "../../../../../application/usecases/accounts/GetUserAccountsUseCase"; 
 import { GetAllAccountUseCase } from "../../../../../application/usecases/accounts/GetAllAccountsCase";
 import { UpdateAccountUseCase } from "../../../../../application/usecases/accounts/UpdateAccountUseCase";
-import { InMemoryAccountRepository } from "../../../../adapters/repositories/InMemoryAccountRepository";
+import { AccountRepositoryInterface } from "../../../../../application/ports/repositories/AccountRepositoryInterface";
 import { InvalidAccountError} from "../../../../../domain/errors/InvalidAccountError";
 import { AccountAlreadyExistsError } from "../../../../../application/errors/AccountAlreadyExistsError";
 import { AccountNotFoundError } from "../../../../../application/errors/AccountNotFoundError";
@@ -21,7 +21,7 @@ import { CustomAccountNameUseCase } from "../../../../../application/usecases/ac
 import { ToggleAccountActiveUseCase} from "../../../../../application/usecases/accounts/ToggleAccountActiveUseCase";
 import { AccountNumberGeneratorService } from "../../../../../application/ports/services/AccountNumberGeneratorService";
 import { IbanGeneratorService } from "../../../../../application/ports/services/IbanGeneratorService";
-import { InMemoryTransactionRepository } from "../../../../adapters/repositories/InMemoryTransactionRepository";
+import { TransactionRepositoryInterface } from "../../../../../application/ports/repositories/TransactionRepositoryInterface";
 import { GetTransactionHistoryUseCase } from "../../../../../application/usecases/accounts/GetTransactionHistoryUseCase";
 import { CheckingAccountAlreadyExistError } from "../../../../../application/errors/CheckingAccountAlreadyExistError";
 import { InvalidIbanError } from "../../../../../domain/errors/InvalidIbanError";
@@ -55,10 +55,10 @@ import { transferBetweenAccountsSchema } from "../schemas/accounts/transferBetwe
 export class AccountController {
 
     constructor(
-    private readonly accountRepository: InMemoryAccountRepository,
+    private readonly accountRepository: AccountRepositoryInterface,
     private readonly accountNumberGenerator: AccountNumberGeneratorService,
     private readonly ibanGenerator: IbanGeneratorService,
-    private readonly transactionRepository: InMemoryTransactionRepository,
+    private readonly transactionRepository: TransactionRepositoryInterface,
     private readonly uuidService: CryptoUuidGenerator,
     private readonly transferLimitService: ManageTransferLimitService,
     private readonly validateTransferService: ValidateTransferService

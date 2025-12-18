@@ -34,6 +34,8 @@
   "scripts": {
     "dev": "ts-node frameworks/express/server.ts",
     "build": "tsc -b ../..",
-    "start": "node ../../dist/frameworks/express/server.js"
+    "start": "node ../../dist/frameworks/express/server.js",
+    "switch:repo": "ts-node scripts/switch-repository.ts",
+    "repo:status": "ts-node scripts/switch-repository.ts --status"
   }
 }

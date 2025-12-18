@@ -17,8 +17,12 @@ export class PostgresStockRepository implements StockRepositoryInterface {
         if (result.rows.length === 0) {
             return new StockNotFoundError(`Stock with ID ${id} not found`);
         }
+        const row = result.rows[0];
+        if(!row) {
+            return new StockNotFoundError(`Stock with ID ${id} not found`);
+        }
 
-        const stock = this.mapRowToEntity(result.rows[0]);
+        const stock = this.mapRowToEntity(row);
         if (stock instanceof Error) {
             return stock;
         }
@@ -35,8 +39,12 @@ export class PostgresStockRepository implements StockRepositoryInterface {
         if (result.rows.length === 0) {
             return new StockNotFoundError(`Stock with symbol ${symbol} not found`);
         }
+        const row = result.rows[0];
+        if(!row) {
+            return new StockNotFoundError(`Stock with symbol ${symbol} not found`);
+        }
 
-        const stock = this.mapRowToEntity(result.rows[0]);
+        const stock = this.mapRowToEntity(row);
         if (stock instanceof Error) {
             return stock;
         }
@@ -92,8 +100,11 @@ export class PostgresStockRepository implements StockRepositoryInterface {
                 stock.ipoType
             ]
         );
-
-        const created = this.mapRowToEntity(result.rows[0]);
+        const row = result.rows[0];
+        if(!row) {
+            return new Error("Error creation stock")
+        }
+        const created = this.mapRowToEntity(row);
         if (created instanceof Error) {
             return created;
         }
@@ -130,8 +141,12 @@ export class PostgresStockRepository implements StockRepositoryInterface {
         if (result.rows.length === 0) {
             return new StockNotFoundError(`Stock with ID ${stock.id} not found`);
         }
+        const row = result.rows[0];
+        if(!row) {
+            return new StockNotFoundError(`Stock with ID ${stock.id} not found`);
+        }
 
-        const updated = this.mapRowToEntity(result.rows[0]);
+        const updated = this.mapRowToEntity(row);
         if (updated instanceof Error) {
             return updated;
         }

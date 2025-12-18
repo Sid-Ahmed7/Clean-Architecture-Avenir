@@ -33,8 +33,13 @@ export class PostgresSavingsAccountRepository implements SavingsAccountRepositor
                     savingsAccount.maturity
                 ]
             );
+            const row = result.rows[0];
 
-            const created = this.mapRowToEntity(result.rows[0]);
+            if (!row) {
+                return new InvalidAccountError('Failed to create savings account');
+            }
+
+            const created = this.mapRowToEntity(row);
             if (created instanceof Error) {
                 return new InvalidAccountError(`Failed to map savings account: ${created.message}`);
             }
@@ -54,8 +59,12 @@ export class PostgresSavingsAccountRepository implements SavingsAccountRepositor
         if (result.rows.length === 0) {
             return new AccountNotFoundError(`Savings account ${accountNumber} not found`);
         }
+        const row = result.rows[0];
 
-        const account = this.mapRowToEntity(result.rows[0]);
+        if (!row) {
+            return new AccountNotFoundError(`Savings account ${accountNumber} not found`);
+        }
+        const account = this.mapRowToEntity(row);
         if (account instanceof Error) {
             return new AccountNotFoundError(`Failed to map savings account: ${account.message}`);
         }
@@ -118,8 +127,12 @@ export class PostgresSavingsAccountRepository implements SavingsAccountRepositor
             if (result.rows.length === 0) {
                 return new AccountNotFoundError(`Savings account ${savingsAccount.accountNumber} not found`);
             }
+            const row = result.rows[0];
 
-            const updated = this.mapRowToEntity(result.rows[0]);
+            if (!row) {
+                return new AccountNotFoundError(`Savings account ${savingsAccount.accountNumber} not found`);
+            }
+            const updated = this.mapRowToEntity(row);
             if (updated instanceof Error) {
                 return new InvalidAccountError(`Failed to map savings account: ${updated.message}`);
             }
