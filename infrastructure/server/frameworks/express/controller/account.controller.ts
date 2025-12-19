@@ -16,12 +16,20 @@ import { ManageAllowedAccountStatusService } from "../../../../adapters/services
 import { InvalidAccountStatusError } from "../../../../../domain/errors/InvalidAccountStatusError";
 import { UpdateWithDrawalLimitUseCase } from "../../../../../application/usecases/accounts/UpdateWithDrawalLimitUseCase";
 import { UpdateTransferLimitUseCase } from "../../../../../application/usecases/accounts/UpdateTransferLimitUseCase";
+import { IncreaseTransferLimitUseCase } from "../../../../../application/usecases/accounts/IncreaseTransferLimitUseCase";
 import { UpdateOverdraftLimitUseCase } from "../../../../../application/usecases/accounts/UpdateOverdraftLimitUseCase";
+import { RequestOverdraftIncreaseUseCase } from "../../../../../application/usecases/accounts/RequestOverdraftIncreaseUseCase";
+import { RespondOverdraftIncreaseUseCase } from "../../../../../application/usecases/accounts/RespondOverdraftIncreaseUseCase";
+import { GetPendingOverdraftRequestsUseCase } from "../../../../../application/usecases/accounts/GetPendingOverdraftRequestsUseCase";
+import { ListClientLoanRequestsUseCase } from "../../../../../application/usecases/loan/ListClientLoanRequestsUseCase";
 import { CustomAccountNameUseCase } from "../../../../../application/usecases/accounts/CustomAccountNameUseCase";
 import { ToggleAccountActiveUseCase} from "../../../../../application/usecases/accounts/ToggleAccountActiveUseCase";
 import { AccountNumberGeneratorService } from "../../../../../application/ports/services/AccountNumberGeneratorService";
 import { IbanGeneratorService } from "../../../../../application/ports/services/IbanGeneratorService";
 import { InMemoryTransactionRepository } from "../../../../adapters/repositories/InMemoryTransactionRepository";
+import { InMemoryOverdraftRequestRepository } from "../../../../adapters/repositories/InMemoryOverdraftRequestRepository";
+import { InMemoryLoanRequestRepository } from "../../../../adapters/repositories/InMemoryLoanRequestRepository";
+import { InMemoryUserRepository } from "../../../../adapters/repositories/InMemoryUserRepository";
 import { GetTransactionHistoryUseCase } from "../../../../../application/usecases/accounts/GetTransactionHistoryUseCase";
 import { CheckingAccountAlreadyExistError } from "../../../../../application/errors/CheckingAccountAlreadyExistError";
 import { InvalidIbanError } from "../../../../../domain/errors/InvalidIbanError";
@@ -30,6 +38,7 @@ import { UserNotFoundError } from "../../../../../application/errors/UserNotFoun
 import { TransferBetweenAccountsUseCase } from "../../../../../application/usecases/accounts/TransferBetweenAccountsUseCase";
 import { InsufficientFundsError } from "../../../../../application/errors/InsufficientFundsError";
 import { TransferLimitExceededError } from "../../../../../application/errors/TransferLimitExceededError";
+import { TransferLimitIncreaseError } from "../../../../../application/errors/TransferLimitIncreaseError";
 import { CryptoUuidGenerator } from "../../../../adapters/services/CryptoUuidGenerator";
 import { userRepository } from "../../../../adapters/config/repositories";
 import { ManageTransferLimitService } from "../../../../adapters/services/ManageTransferLimitService";
@@ -41,6 +50,7 @@ import { createSubAccountSchema } from "../schemas/accounts/createSubAccountSche
 import { updateAccountSchema } from "../schemas/accounts/updateAccountSchema";
 import { AccountEntity } from "../../../../../domain/entities/AccountEntity";
 import { AccountStatusEnum } from "../../../../../domain/enums/AccountStatusEnum";
+import { RoleEnum } from "../../../../../domain/enums/RoleEnum";
 import { InvalidUserIdError } from "../../../../../domain/errors/InvalidUserIdError";
 import { InvalidBalanceError } from "../../../../../domain/errors/InvalidBalanceError";
 import { changeAccountStatusSchema } from "../schemas/accounts/changeAccountStatusSchema";
@@ -49,6 +59,8 @@ import { updateAccountNameSchema } from "../schemas/accounts/updateAccountNameSc
 import { updateWithdrawalLimitSchema } from "../schemas/accounts/updateWithdrawalLimitSchema";
 import { updateTransferLimitSchema } from "../schemas/accounts/updateTransferLimitSchema";
 import { updateOverdraftLimitSchema } from "../schemas/accounts/updateOverdraftLimitSchema";
+import { requestOverdraftIncreaseSchema } from "../schemas/accounts/requestOverdraftIncreaseSchema";
+import { respondOverdraftIncreaseSchema } from "../schemas/accounts/respondOverdraftIncreaseSchema";
 import { transferBetweenAccountsSchema } from "../schemas/accounts/transferBetweenAccountsSchema";
 
 
@@ -59,6 +71,9 @@ export class AccountController {
     private readonly accountNumberGenerator: AccountNumberGeneratorService,
     private readonly ibanGenerator: IbanGeneratorService,
     private readonly transactionRepository: InMemoryTransactionRepository,
+    private readonly overdraftRequestRepository: InMemoryOverdraftRequestRepository,
+    private readonly loanRequestRepository: InMemoryLoanRequestRepository,
+    private readonly userRepository: InMemoryUserRepository,
     private readonly uuidService: CryptoUuidGenerator,
     private readonly transferLimitService: ManageTransferLimitService,
     private readonly validateTransferService: ValidateTransferService
@@ -360,18 +375,44 @@ async updateAccount(req: Request, res: Response) {
     }
 
     async updateTransferLimit(req: Request, res: Response) {
-        const updateTransferLimitUseCase = new UpdateTransferLimitUseCase(this.accountRepository);
         const accountNumber = Number(req.params.accountNumber);
+        const userId = req.user?.userId;
+        const roles = req.user?.roles ?? [];
+
         const parseResult = updateTransferLimitSchema.safeParse(req.body);
         if (!parseResult.success) {
             return res.status(400).json({ errors: parseResult.error.message });
         }
 
-        const result = await updateTransferLimitUseCase.execute(accountNumber, parseResult.data.transferLimit);
+        if (!userId) {
+            return res.status(401).json({ error: "User not authenticated" });
+        }
 
-        if(result instanceof Error) {
-            if(result instanceof AccountNotFoundError) {
-                return res.status(404).json({error: result.message})
+        const isManager = roles.includes(RoleEnum.BANK_MANAGER);
+        const transferLimit = parseResult.data.transferLimit;
+
+        const managerUseCase = new UpdateTransferLimitUseCase(this.accountRepository);
+        const clientUseCase = new IncreaseTransferLimitUseCase(this.accountRepository);
+
+        const result = isManager
+            ? await managerUseCase.execute(accountNumber, transferLimit)
+            : await clientUseCase.execute(accountNumber, userId, transferLimit);
+
+        if (result instanceof Error) {
+            if (result instanceof AccountNotFoundError) {
+                return res.status(404).json({ error: result.message });
+            }
+
+            if (result instanceof InvalidAccountError) {
+                return res.status(403).json({ error: result.message });
+            }
+
+            if (result instanceof TransferLimitIncreaseError) {
+                return res.status(400).json({ error: result.message });
+            }
+
+            if (result instanceof InvalidBalanceError) {
+                return res.status(400).json({ error: result.message });
             }
         
             return res.status(500).json({error : result.message})
@@ -397,6 +438,146 @@ async updateAccount(req: Request, res: Response) {
             return res.status(500).json({error : result.message})
         }
         return res.status(200).json(result);
+    }
+
+    async requestOverdraftIncrease(req: Request, res: Response) {
+        const accountNumber = Number(req.params.accountNumber);
+        const userId = req.user?.userId;
+
+        const parseResult = requestOverdraftIncreaseSchema.safeParse(req.body);
+        if (!parseResult.success) {
+            return res.status(400).json({ errors: parseResult.error.message });
+        }
+
+        if (!userId) {
+            return res.status(401).json({ error: "User not authenticated" });
+        }
+
+        const useCase = new RequestOverdraftIncreaseUseCase(
+            this.accountRepository,
+            this.overdraftRequestRepository,
+            this.uuidService,
+        );
+
+        const result = await useCase.execute(accountNumber, userId, parseResult.data.overdraftLimit);
+
+        if (result instanceof AccountNotFoundError) {
+            return res.status(404).json({ error: result.message });
+        }
+
+        if (result instanceof InvalidAccountError) {
+            return res.status(403).json({ error: result.message });
+        }
+
+        if (result instanceof InvalidBalanceError) {
+            return res.status(400).json({ error: result.message });
+        }
+
+        if (result instanceof Error) {
+            return res.status(500).json({ error: result.message });
+        }
+
+        return res.status(201).json(result);
+    }
+
+    async getPendingOverdraftRequests(req: Request, res: Response) {
+        const roles = req.user?.roles ?? [];
+        const isAdvisor = roles.includes(RoleEnum.BANK_ADVISOR) || roles.includes(RoleEnum.BANK_MANAGER);
+        if (!isAdvisor) {
+            return res.status(403).json({ error: "Access denied" });
+        }
+
+        const useCase = new GetPendingOverdraftRequestsUseCase(this.overdraftRequestRepository);
+        const result = await useCase.execute();
+        return res.status(200).json(result);
+    }
+
+    async respondOverdraftIncrease(req: Request, res: Response) {
+        const roles = req.user?.roles ?? [];
+        const isAdvisor = roles.includes(RoleEnum.BANK_ADVISOR) || roles.includes(RoleEnum.BANK_MANAGER);
+        if (!isAdvisor) {
+            return res.status(403).json({ error: "Access denied" });
+        }
+
+        const parseResult = respondOverdraftIncreaseSchema.safeParse(req.body);
+        if (!parseResult.success) {
+            return res.status(400).json({ errors: parseResult.error.message });
+        }
+
+        const { action } = parseResult.data;
+        const requestId = req.params.requestId;
+
+        if (!requestId) {
+            return res.status(400).json({ error: "Request ID is missing" });
+        }
+
+        const useCase = new RespondOverdraftIncreaseUseCase(
+            this.overdraftRequestRepository,
+            this.accountRepository,
+        );
+
+        const result = await useCase.execute(requestId, action);
+
+        if (result instanceof AccountNotFoundError) {
+            return res.status(404).json({ error: result.message });
+        }
+
+        if (result instanceof InvalidAccountError) {
+            return res.status(400).json({ error: result.message });
+        }
+
+        if (result instanceof Error) {
+            return res.status(400).json({ error: result.message });
+        }
+
+        return res.status(200).json(result);
+    }
+
+    async getOverdraftRequestDetails(req: Request, res: Response) {
+        const roles = req.user?.roles ?? [];
+        const isAdvisor = roles.includes(RoleEnum.BANK_ADVISOR) || roles.includes(RoleEnum.BANK_MANAGER);
+        if (!isAdvisor) {
+            return res.status(403).json({ error: "Access denied" });
+        }
+
+        const requestId = req.params.requestId;
+        if (!requestId) {
+            return res.status(400).json({ error: "Request ID is missing" });
+        }
+
+        const request = await this.overdraftRequestRepository.findById(requestId);
+        if (!request) {
+            return res.status(404).json({ error: "Request not found" });
+        }
+
+        const clientId = request.userId;
+
+        const userResult = await this.userRepository.findById(clientId);
+        if (userResult instanceof Error) {
+            return res.status(404).json({ error: "Client not found" });
+        }
+
+        const accounts = await this.accountRepository.getAccountsByUserId(clientId);
+        if (accounts instanceof Error) {
+            return res.status(400).json({ error: "Accounts unavailable" });
+        }
+
+        const loanHistoryUseCase = new ListClientLoanRequestsUseCase(this.loanRequestRepository);
+        const loanRequests = await loanHistoryUseCase.execute(clientId);
+
+        return res.status(200).json({
+            request,
+            client: {
+                id: userResult.id,
+                firstName: userResult.firstName,
+                lastName: userResult.lastName,
+                email: userResult.email,
+                phoneNumber: userResult.phoneNumber,
+                status: userResult.status,
+            },
+            accounts,
+            loanRequests,
+        });
     }
 
     async transferBetweenAccounts(req: Request, res: Response) {
@@ -451,7 +632,7 @@ async updateAccount(req: Request, res: Response) {
     }
 
     async getTransactionHistory(req: Request, res: Response) {
-        const getTransactionHistoryUseCase = new GetTransactionHistoryUseCase(this.transactionRepository, this.accountRepository, userRepository);
+        const getTransactionHistoryUseCase = new GetTransactionHistoryUseCase(this.transactionRepository, this.accountRepository, this.userRepository);
         
         const userId = req.user?.userId;
 
