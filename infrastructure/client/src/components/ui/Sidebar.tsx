@@ -6,6 +6,7 @@ import { CreditCard, ArrowUpRight, TrendingUp, Calendar, Settings, HelpCircle, X
 import { useContext } from "react";
 import { Link } from "@/i18n/navigation";
 import { usePathname } from "next/navigation";
+import { RoleEnum } from "@/types/RoleEnum";
 import { getRolePrefix } from "@/lib/utils/getRolePrefix";
 
 interface SidebarProps {
@@ -14,7 +15,7 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
-  const { isAuthenticated, setIsAuthenticated, user } = useContext(AuthContext);
+  const { isAuthenticated, setIsAuthenticated, hasAnyRole, user } = useContext(AuthContext);
   const pathname = usePathname();
 
   // Get role-based URL prefix
@@ -32,6 +33,10 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     ...(user?.role === 'BANK_MANAGER' ? [{ icon: PiggyBank, label: "Produits d'Épargne", href: `/manager/savings-products` }] : []),
     { icon: TrendingUp, label: "Investissements", href: `/${rolePrefix}/investments` },
     { icon: Calendar, label: "Historique", href: `/${rolePrefix}/history` },
+    { icon: FileText, label: "Demande de crédit", href: "/loan/request", roles: [RoleEnum.CLIENT] },
+    { icon: FileText, label: "Mes demandes de crédit", href: "/loan/requests", roles: [RoleEnum.CLIENT] },
+    { icon: FileText, label: "Demandes crédit (conseiller)", href: "/advisor/loan-requests", roles: [RoleEnum.BANK_ADVISOR] },
+    { icon: FileText, label: "Demandes crédit (directeur)", href: "/director/loan-requests", roles: [RoleEnum.BANK_MANAGER] },
     { icon: MessageCircle, label: "Message", href: `/${rolePrefix}/conversations` },
     { icon: Settings, label: "Paramètres", href: `/${rolePrefix}/settings` },
     { icon: HelpCircle, label: "Aide", href: `/${rolePrefix}/help` },
@@ -79,7 +84,9 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         </div>
 
         <nav className="p-4 space-y-1">
-          {menuItems.map((item) => {
+          {menuItems
+            .filter((item) => !item.roles || hasAnyRole(item.roles))
+            .map((item) => {
             const ItemIcon = item.icon;
             const active = isActive(item.href);
             return (

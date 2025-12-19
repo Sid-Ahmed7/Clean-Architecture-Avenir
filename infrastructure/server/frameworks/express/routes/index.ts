@@ -6,6 +6,7 @@ import chatRoutes from "./chat.routes";
 import newsRoutes from "./news.routes";
 import mediaRoutes from "./media.routes";
 import contentRoutes from "./content.routes";
+import loanRoutes from "./loan.routes";
 import savingsAccountRoutes from "./savings-account.routes";
 import savingsProductRoutes from "./savings-product.routes";
 import stockOrder from "./stockOrder.routes";
@@ -30,5 +31,6 @@ router.use("/media", mediaRoutes);
 router.use("/content", contentRoutes);
 router.use("/users", userManagementRoutes);
 router.use("/director", directorAccountsRoutes);
+router.use("/loan", loanRoutes);
 
 export default router;
