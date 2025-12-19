@@ -9,3 +9,7 @@ export const getAccounts = () => {
 export const addSubAccount = (data: CreateSubAccountModel) => {
     return apiClient.post("/accounts/create/sub", data)
 }
+
+export const getLastTransactions = (limit: number = 10) => {
+    return apiClient.get(`/accounts/transactions/last?limit=${limit}`)
+}

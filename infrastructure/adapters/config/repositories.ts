@@ -14,6 +14,7 @@ import {StockHoldingManager} from "../services/stocks/StockHoldingManager";
 import {CryptoUuidGenerator} from "../services/CryptoUuidGenerator";
 import {ManageTransferLimitService} from "../services/ManageTransferLimitService";
 import {ValidateTransferService} from "../services/ValidateTransferService";
+import {TransactionEnrichmentService} from "../services/TransactionEnrichmentService";
 
 import { InMemoryEventBus } from '../repositories/InMemoryEventBus';
 import { InMemoryUserRepository } from '../repositories/InMemoryUserRepository';
@@ -60,6 +61,7 @@ export const loanRequestRepository = new InMemoryLoanRequestRepository();
 export const loanConfigService = new ManageLoanConfigService();
 export const transferLimitService = new ManageTransferLimitService();
 export const transferValidationService = new ValidateTransferService(transferLimitService);
+export const transactionEnrichmentService = new TransactionEnrichmentService(userRepository);
 export const conversationRepository = new InMemoryConversationRepository();
 export const messageRepository = new InMemoryMessageRepository();
 export const uuidService = new CryptoUuidGenerator()

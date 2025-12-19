@@ -23,6 +23,7 @@ import { AccountNumberGeneratorService } from "../../../../../application/ports/
 import { IbanGeneratorService } from "../../../../../application/ports/services/IbanGeneratorService";
 import { InMemoryTransactionRepository } from "../../../../adapters/repositories/InMemoryTransactionRepository";
 import { GetTransactionHistoryUseCase } from "../../../../../application/usecases/accounts/GetTransactionHistoryUseCase";
+import { GetLastTransactionsUseCase } from "../../../../../application/usecases/accounts/GetLastTransactionsUseCase";
 import { CheckingAccountAlreadyExistError } from "../../../../../application/errors/CheckingAccountAlreadyExistError";
 import { InvalidIbanError } from "../../../../../domain/errors/InvalidIbanError";
 import { GetUserByIdUseCase } from "../../../../../application/usecases/auth/GetUserByIdUseCase";
@@ -34,6 +35,7 @@ import { CryptoUuidGenerator } from "../../../../adapters/services/CryptoUuidGen
 import { userRepository } from "../../../../adapters/config/repositories";
 import { ManageTransferLimitService } from "../../../../adapters/services/ManageTransferLimitService";
 import { ValidateTransferService } from "../../../../adapters/services/ValidateTransferService";
+import { TransactionEnrichmentService } from "../../../../adapters/services/TransactionEnrichmentService";
 import { CreateAccount } from "../../../../../application/requests/CreateAccount";
 import { createAccountSchema } from "../schemas/accounts/createAccountSchema";
 import { CreateSubAccount } from "../../../../../application/requests/CreateSubAccount";
@@ -61,7 +63,8 @@ export class AccountController {
     private readonly transactionRepository: InMemoryTransactionRepository,
     private readonly uuidService: CryptoUuidGenerator,
     private readonly transferLimitService: ManageTransferLimitService,
-    private readonly validateTransferService: ValidateTransferService
+    private readonly validateTransferService: ValidateTransferService,
+    private readonly transactionEnrichmentService: TransactionEnrichmentService
   ) {}
 
 
@@ -451,8 +454,8 @@ async updateAccount(req: Request, res: Response) {
     }
 
     async getTransactionHistory(req: Request, res: Response) {
-        const getTransactionHistoryUseCase = new GetTransactionHistoryUseCase(this.transactionRepository, this.accountRepository, userRepository);
-        
+        const getTransactionHistoryUseCase = new GetTransactionHistoryUseCase(this.transactionRepository, this.accountRepository, this.transactionEnrichmentService);
+
         const userId = req.user?.userId;
 
 
@@ -461,6 +464,26 @@ async updateAccount(req: Request, res: Response) {
         }
 
         const result = await getTransactionHistoryUseCase.execute(userId);
+
+        if (result instanceof UserNotFoundError) {
+            return res.status(404).json({ error: result.message });
+        }
+
+        return res.status(200).json(result);
+    }
+
+    async getLastTransactions(req: Request, res: Response) {
+        const getLastTransactionsUseCase = new GetLastTransactionsUseCase(this.transactionRepository, this.accountRepository, this.transactionEnrichmentService);
+
+        const userId = req.user?.userId;
+
+        if (!userId) {
+            return res.status(401).json({ error: "User not authenticated" });
+        }
+
+        const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 10;
+
+        const result = await getLastTransactionsUseCase.execute(userId, limit);
 
         if (result instanceof UserNotFoundError) {
             return res.status(404).json({ error: result.message });
