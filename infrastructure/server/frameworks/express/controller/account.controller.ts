@@ -40,6 +40,7 @@ import { InsufficientFundsError } from "../../../../../application/errors/Insuff
 import { TransferLimitExceededError } from "../../../../../application/errors/TransferLimitExceededError";
 import { TransferLimitIncreaseError } from "../../../../../application/errors/TransferLimitIncreaseError";
 import { CryptoUuidGenerator } from "../../../../adapters/services/CryptoUuidGenerator";
+import { OverdraftActionEnum } from "../../../../../domain/enums/OverdraftActionEnum";
 import { userRepository } from "../../../../adapters/config/repositories";
 import { ManageTransferLimitService } from "../../../../adapters/services/ManageTransferLimitService";
 import { ValidateTransferService } from "../../../../adapters/services/ValidateTransferService";
@@ -516,7 +517,8 @@ async updateAccount(req: Request, res: Response) {
             this.accountRepository,
         );
 
-        const result = await useCase.execute(requestId, action);
+        const actionEnum = action === "APPROVE" ? OverdraftActionEnum.APPROVE : OverdraftActionEnum.REJECT;
+        const result = await useCase.execute(requestId, actionEnum);
 
         if (result instanceof AccountNotFoundError) {
             return res.status(404).json({ error: result.message });

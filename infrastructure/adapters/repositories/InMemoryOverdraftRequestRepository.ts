@@ -2,31 +2,31 @@ import { OverdraftIncreaseRequestEntity } from "../../../domain/entities/Overdra
 import { OverdraftRequestRepositoryInterface } from "../../../application/ports/repositories/OverdraftRequestRepositoryInterface";
 
 export class InMemoryOverdraftRequestRepository implements OverdraftRequestRepositoryInterface {
-    private items: OverdraftIncreaseRequestEntity[] = [];
+    private overdraftRequests: OverdraftIncreaseRequestEntity[] = [];
 
     async create(request: OverdraftIncreaseRequestEntity): Promise<OverdraftIncreaseRequestEntity> {
-        this.items.push(request);
+        this.overdraftRequests.push(request);
         return request;
     }
 
     async findByUserId(userId: string): Promise<OverdraftIncreaseRequestEntity[]> {
-        return this.items.filter((item) => item.userId === userId);
+        return this.overdraftRequests.filter((request) => request.userId === userId);
     }
 
     async findAll(): Promise<OverdraftIncreaseRequestEntity[]> {
-        return [...this.items];
+        return [...this.overdraftRequests];
     }
 
     async findById(id: string): Promise<OverdraftIncreaseRequestEntity | null> {
-        return this.items.find((item) => item.id === id) ?? null;
+        return this.overdraftRequests.find((request) => request.id === id) ?? null;
     }
 
     async save(request: OverdraftIncreaseRequestEntity): Promise<OverdraftIncreaseRequestEntity> {
-        const index = this.items.findIndex((item) => item.id === request.id);
+        const index = this.overdraftRequests.findIndex((stored) => stored.id === request.id);
         if (index !== -1) {
-            this.items[index] = request;
+            this.overdraftRequests[index] = request;
         } else {
-            this.items.push(request);
+            this.overdraftRequests.push(request);
         }
         return request;
     }
