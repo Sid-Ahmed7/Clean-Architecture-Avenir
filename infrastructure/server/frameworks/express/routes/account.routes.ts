@@ -18,6 +18,7 @@ router.put("/overdraft-requests/:requestId/response", verifyTokenAccess, authori
 router.get("/overdraft-requests/:requestId/details", verifyTokenAccess, authorizeRoles([RoleEnum.BANK_ADVISOR, RoleEnum.BANK_MANAGER]), (req,res) => accountController.getOverdraftRequestDetails(req,res));
 router.post("/:accountNumber/overdraft-limit/request", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req,res) => accountController.requestOverdraftIncrease(req,res));
 
+router.get("/:accountNumber/rib", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER, RoleEnum.BANK_ADVISOR]), (req, res) => accountController.downloadRib(req, res));
 router.get("/:accountNumber",verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req,res) => accountController.getAccount(req,res));
 router.get("/", verifyTokenAccess, authorizeRoles([RoleEnum.BANK_MANAGER]), (req,res) => accountController.getAllAccount(req,res));
 router.delete("/:accountNumber",verifyTokenAccess, authorizeRoles([RoleEnum.BANK_MANAGER]), (req,res) => accountController.deleteAccount(req,res));

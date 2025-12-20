@@ -1,11 +1,21 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 import { AccountModel } from "@/lib/validation/bankAccount/accountSchema";
 import { LimitProgressBar } from "../ui/LimitProgressBar";
 import { CreditCard, ArrowUpCircle, ShieldCheck, X } from "lucide-react";
 import { useUpdateTransferLimit } from "@/hooks/useUpdateTransferLimit";
 import { useRequestOverdraftIncrease } from "@/hooks/useRequestOverdraftIncrease";
+import { getRib } from "@/lib/api/account";
+import { RibData } from "@/types/rib";
+import { RibDocument } from "@/components/rib/RibDocument";
+
+declare global {
+    interface Window {
+        html2pdf?: any;
+    }
+}
 
 interface  MainAccountCardProps {
     account : AccountModel;
@@ -23,12 +33,63 @@ export function MainAccountCard(props : MainAccountCardProps) {
     const { submit, loading: overdraftLoading, error: overdraftError, success: overdraftSuccess, resetState: resetOverdraftState } = useRequestOverdraftIncrease();
     const [showTransferModal, setShowTransferModal] = useState(false);
     const [showOverdraftModal, setShowOverdraftModal] = useState(false);
+    const [ribLoading, setRibLoading] = useState(false);
+    const [ribError, setRibError] = useState<string | null>(null);
 
     useEffect(() => {
         setCurrentTransferLimit(account.transferLimit);
         setNewTransferLimit(account.transferLimit);
         setRequestedOverdraft(account.overdraftLimit);
     }, [account.transferLimit, account.overdraftLimit]);
+
+    const loadHtml2Pdf = () =>
+        new Promise<void>((resolve, reject) => {
+            if (typeof window === "undefined") return reject(new Error("Client side only"));
+            if (window.html2pdf) return resolve();
+            const script = document.createElement("script");
+            script.src = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
+            script.async = true;
+            script.onload = () => resolve();
+            script.onerror = () => reject(new Error("Impossible de charger le module PDF."));
+            document.body.appendChild(script);
+        });
+
+    const downloadRib = async () => {
+        setRibLoading(true);
+        setRibError(null);
+        try {
+            const response = await getRib(account.accountNumber);
+            const rib: RibData = response.data;
+
+            await loadHtml2Pdf();
+            if (!window.html2pdf) {
+                throw new Error("Générateur PDF indisponible.");
+            }
+
+            const html = "<!DOCTYPE html>" + renderToStaticMarkup(<RibDocument rib={rib} />);
+            const container = document.createElement("div");
+            container.innerHTML = html;
+
+            await window.html2pdf()
+                .set({
+                    margin: 10,
+                    filename: `rib-${account.accountNumber}.pdf`,
+                    image: { type: "jpeg", quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true },
+                    jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+                })
+                .from(container)
+                .save();
+        } catch (err: any) {
+            const message =
+                err?.response?.data?.error ||
+                err?.message ||
+                "Impossible de générer le RIB en PDF .";
+            setRibError(message);
+        } finally {
+            setRibLoading(false);
+        }
+    };
 
     const handleSubmit = (event: FormEvent) => {
         event.preventDefault();
@@ -121,6 +182,21 @@ export function MainAccountCard(props : MainAccountCardProps) {
                                 </p>
                             </div>
                         </div>
+                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between p-3 rounded-lg border border-emerald-200 bg-gradient-to-r from-lime-100 via-emerald-50 to-emerald-100">
+                            <div className="text-sm text-gray-700 font-medium">
+                                Récupère ton RIB pour partager tes coordonnées bancaires.
+                            </div>
+                            <button
+                                onClick={downloadRib}
+                                disabled={ribLoading}
+                                className="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm font-semibold shadow hover:bg-emerald-700 transition disabled:opacity-60"
+                            >
+                                {ribLoading ? "Génération..." : "Télécharger mon RIB"}
+                            </button>
+                        </div>
+                        {ribError && (
+                            <p className="text-sm text-red-600">{ribError}</p>
+                        )}
                     </div>
 
                     <div className="space-y-4 pt-2">

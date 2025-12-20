@@ -29,3 +29,7 @@ export const respondOverdraftRequest = (requestId: string, action: "APPROVE" | "
 export const getOverdraftRequestDetails = (requestId: string) => {
     return apiClient.get(`/accounts/overdraft-requests/${requestId}/details`);
 }
+
+export const getRib = (accountNumber: number) => {
+    return apiClient.get(`/accounts/${accountNumber}/rib`);
+}

@@ -21,6 +21,7 @@ import { UpdateOverdraftLimitUseCase } from "../../../../../application/usecases
 import { RequestOverdraftIncreaseUseCase } from "../../../../../application/usecases/accounts/RequestOverdraftIncreaseUseCase";
 import { RespondOverdraftIncreaseUseCase } from "../../../../../application/usecases/accounts/RespondOverdraftIncreaseUseCase";
 import { GetPendingOverdraftRequestsUseCase } from "../../../../../application/usecases/accounts/GetPendingOverdraftRequestsUseCase";
+import { GetRibUseCase } from "../../../../../application/usecases/accounts/GetRibUseCase";
 import { ListClientLoanRequestsUseCase } from "../../../../../application/usecases/loan/ListClientLoanRequestsUseCase";
 import { CustomAccountNameUseCase } from "../../../../../application/usecases/accounts/CustomAccountNameUseCase";
 import { ToggleAccountActiveUseCase} from "../../../../../application/usecases/accounts/ToggleAccountActiveUseCase";
@@ -204,6 +205,38 @@ async updateAccount(req: Request, res: Response) {
         
         return res.status(200).json(result);
 
+    }
+
+    async downloadRib(req: Request, res: Response) {
+        const userId = req.user?.userId;
+        const roles = req.user?.roles ?? [];
+
+        if (!userId) {
+            return res.status(401).json({ error: "User not authenticated" });
+        }
+
+        const accountNumber = Number(req.params.accountNumber);
+        const getRibUseCase = new GetRibUseCase(this.accountRepository, this.userRepository);
+
+        const result = await getRibUseCase.execute(accountNumber, userId, roles);
+
+        if (result instanceof AccountNotFoundError) {
+            return res.status(404).json({ error: result.message });
+        }
+
+        if (result instanceof InvalidAccountError) {
+            return res.status(403).json({ error: result.message });
+        }
+
+        if (result instanceof UserNotFoundError) {
+            return res.status(404).json({ error: result.message });
+        }
+
+        if (result instanceof Error) {
+            return res.status(500).json({ error: result.message });
+        }
+
+        return res.status(200).json(result);
     }
 
     async getAccountByIban(req: Request, res: Response) {
