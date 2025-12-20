@@ -4,7 +4,7 @@ import { BeneficiaryGroupRepositoryInterface } from "../../../ports/repositories
 export class DeleteBeneficiaryGroupUseCase {
   constructor(private readonly beneficiaryGroupRepository: BeneficiaryGroupRepositoryInterface) {}
 
-  async execute(groupId: string): Promise<void | BeneficiaryGroupNotFoundError> {
+  async execute(groupId: string): Promise<void | BeneficiaryGroupNotFoundError | Error> {
     return this.beneficiaryGroupRepository.delete(groupId);
   }
 }

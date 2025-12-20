@@ -10,7 +10,7 @@ export class AddBeneficiaryToGroupUseCase {
     private readonly beneficiaryRepository: BeneficiaryRepositoryInterface
   ) {}
 
-  public async excute(groupId: string, beneficiaryId: string ): Promise<BeneficiaryGroupEntity | BeneficiaryGroupNotFoundError | BeneficiaryNotFoundError> {
+  public async execute(groupId: string, beneficiaryId: string ): Promise<BeneficiaryGroupEntity | BeneficiaryGroupNotFoundError | BeneficiaryNotFoundError | Error> {
     
     const beneficiary = await this.beneficiaryRepository.getById(beneficiaryId);
     if(beneficiary instanceof Error) {

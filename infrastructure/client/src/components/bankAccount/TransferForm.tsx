@@ -17,7 +17,7 @@ type TransferFormProps = {
 
 export default function TransferForm({ accounts, onSuccess }: TransferFormProps) {
     const t = useTranslations();
-    const { transfer, loading, error, success, resetState } = useTransferBetweenAccounts();
+    const { transfer, loading, error, success, transaction, resetState } = useTransferBetweenAccounts();
     const [showConfirm, setShowConfirm] = useState(false);
     const [pendingTransfer, setPendingTransfer] = useState<TransferModel | null>(null);
 
@@ -251,9 +251,38 @@ export default function TransferForm({ accounts, onSuccess }: TransferFormProps)
                             {error}
                         </div>
                     )}
-                    {success && (
-                        <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-700 text-sm">
-                            Virement effectué avec succès.
+                    {success && transaction && (
+                        <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 space-y-2">
+                            <div className="flex items-center gap-2 text-emerald-700 font-semibold">
+                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                </svg>
+                                Virement effectué avec succès
+                            </div>
+                            <div className="text-sm text-emerald-700 space-y-1 bg-white/50 rounded-lg p-3">
+                                <p className="flex justify-between">
+                                    <span className="font-medium">Référence:</span>
+                                    <span className="font-mono">{transaction.reference}</span>
+                                </p>
+                                <p className="flex justify-between">
+                                    <span className="font-medium">Montant:</span>
+                                    <span className="font-semibold">{transaction.amount.toFixed(2)} EUR</span>
+                                </p>
+                                <p className="flex justify-between">
+                                    <span className="font-medium">Statut:</span>
+                                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                                        transaction.status === 'COMPLETED'
+                                            ? 'bg-emerald-100 text-emerald-700'
+                                            : 'bg-yellow-100 text-yellow-700'
+                                    }`}>
+                                        {transaction.status === 'COMPLETED' ? 'Complété' : 'En cours'}
+                                    </span>
+                                </p>
+                                <p className="flex justify-between">
+                                    <span className="font-medium">Date:</span>
+                                    <span>{new Date(transaction.createdAt).toLocaleString('fr-FR')}</span>
+                                </p>
+                            </div>
                         </div>
                     )}
                 </div>

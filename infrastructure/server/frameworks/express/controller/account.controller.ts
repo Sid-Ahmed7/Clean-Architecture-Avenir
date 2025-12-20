@@ -28,14 +28,14 @@ import { CheckingAccountAlreadyExistError } from "../../../../../application/err
 import { InvalidIbanError } from "../../../../../domain/errors/InvalidIbanError";
 import { GetUserByIdUseCase } from "../../../../../application/usecases/auth/GetUserByIdUseCase";
 import { UserNotFoundError } from "../../../../../application/errors/UserNotFoundError";
-import { TransferBetweenAccountsUseCase } from "../../../../../application/usecases/accounts/TransferBetweenAccountsUseCase";
+import { TransferBetweenAccountsUseCase } from "../../../../../application/usecases/transfer/TransferBetweenAccountsUseCase";
 import { InsufficientFundsError } from "../../../../../application/errors/InsufficientFundsError";
 import { TransferLimitExceededError } from "../../../../../application/errors/TransferLimitExceededError";
 import { CryptoUuidGenerator } from "../../../../adapters/services/CryptoUuidGenerator";
 import { userRepository } from "../../../../adapters/config/repositories";
 import { ManageTransferLimitService } from "../../../../adapters/services/ManageTransferLimitService";
 import { ValidateTransferService } from "../../../../adapters/services/ValidateTransferService";
-import { TransactionEnrichmentService } from "../../../../adapters/services/TransactionEnrichmentService";
+import { TransactionEnrichmentServiceImpl } from "../../../../adapters/services/TransactionEnrichmentService";
 import { CreateAccount } from "../../../../../application/requests/CreateAccount";
 import { createAccountSchema } from "../schemas/accounts/createAccountSchema";
 import { CreateSubAccount } from "../../../../../application/requests/CreateSubAccount";
@@ -64,7 +64,7 @@ export class AccountController {
     private readonly uuidService: CryptoUuidGenerator,
     private readonly transferLimitService: ManageTransferLimitService,
     private readonly validateTransferService: ValidateTransferService,
-    private readonly transactionEnrichmentService: TransactionEnrichmentService
+    private readonly transactionEnrichmentService: TransactionEnrichmentServiceImpl
   ) {}
 
 

@@ -19,8 +19,16 @@ export class GetLastTransactionsUseCase {
         }
 
         const accountNumbers = accountsOrError.map((account) => account.accountNumber);
-        const transactions = await this.transactionRepository.getLastTransactions(accountNumbers, limit);
+        const allTransactions = await this.transactionRepository.getTransactionsByAccountNumbers(accountNumbers);
 
-        return await this.transactionEnrichmentService.enrichTransactionsWithUserNames(transactions);
+        const sortedTransactions = allTransactions
+            .sort((a, b) => {
+                const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+                const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+                return dateB - dateA;
+            })
+            .slice(0, limit);
+
+        return await this.transactionEnrichmentService.enrichTransactionsWithUserNames(sortedTransactions);
     }
 }

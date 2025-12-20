@@ -19,15 +19,6 @@ export class InMemoryTransactionRepository implements TransactionRepositoryInter
         );
     }
 
-    public async getLastTransactions(accountNumbers: number[], limit: number): Promise<TransactionEntity[]> {
-        const filtered = this.transactions.filter((transaction) =>
-            accountNumbers.includes(transaction.debitAccount) ||
-            accountNumbers.includes(transaction.creditAccount)
-        );
 
-        return filtered
-            .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-            .slice(0, limit);
-    }
 }
 
