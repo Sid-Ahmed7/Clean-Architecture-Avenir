@@ -1,14 +1,12 @@
 "use client";
 
 import { TransactionModel } from "@/hooks/useTransactionHistory";
-import { format } from "date-fns";
-import { fr } from "date-fns/locale";
+import { formatDate } from "@/lib/utils/date";
 
 type TransactionHistoryTableProps = {
     transactions: TransactionModel[];
 };
 
-const formatDate = (value: string) => format(new Date(value), "dd MMM yyyy • HH:mm", { locale: fr });
 
 export default function TransactionHistoryTable({ transactions }: TransactionHistoryTableProps) {
     if (transactions.length === 0) {

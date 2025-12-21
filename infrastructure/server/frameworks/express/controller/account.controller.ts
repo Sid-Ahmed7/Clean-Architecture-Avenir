@@ -29,6 +29,7 @@ import { InvalidIbanError } from "../../../../../domain/errors/InvalidIbanError"
 import { GetUserByIdUseCase } from "../../../../../application/usecases/auth/GetUserByIdUseCase";
 import { UserNotFoundError } from "../../../../../application/errors/UserNotFoundError";
 import { TransferBetweenAccountsUseCase } from "../../../../../application/usecases/transfer/TransferBetweenAccountsUseCase";
+import { QuickTransferUseCase } from "../../../../../application/usecases/transfer/QuickTransferUseCase";
 import { InsufficientFundsError } from "../../../../../application/errors/InsufficientFundsError";
 import { TransferLimitExceededError } from "../../../../../application/errors/TransferLimitExceededError";
 import { CryptoUuidGenerator } from "../../../../adapters/services/CryptoUuidGenerator";
@@ -451,6 +452,47 @@ async updateAccount(req: Request, res: Response) {
         }
 
         return res.status(500).json({ error: "Unable to process transfer" });
+    }
+
+    async quickTransfer(req: Request, res: Response) {
+        const quickTransferUseCase = new QuickTransferUseCase(this.accountRepository,this.transactionRepository,this.uuidService);
+
+        const userId = req.user?.userId;
+
+        if (!userId) {
+            return res.status(401).json({ error: "User not authenticated" });
+        }
+
+        const { sourceAccountNumber, destinationAccountNumber, amount } = req.body;
+
+        if (!sourceAccountNumber || !destinationAccountNumber || !amount) {
+            return res.status(400).json({ error: "Missing required fields" });
+        }
+
+        const result = await quickTransferUseCase.execute({
+            userId,
+            sourceAccountNumber: parseInt(sourceAccountNumber),
+            destinationAccountNumber: parseInt(destinationAccountNumber),
+            amount: parseFloat(amount),
+        });
+
+        if (!(result instanceof Error)) {
+            return res.status(200).json(result);
+        }
+
+        if (result instanceof AccountNotFoundError) {
+            return res.status(404).json({ error: result.message });
+        }
+
+        if (result instanceof InsufficientFundsError) {
+            return res.status(400).json({ error: result.message });
+        }
+
+        if (result instanceof InvalidAccountError) {
+            return res.status(400).json({ error: result.message });
+        }
+
+        return res.status(500).json({ error: "Unable to process quick transfer" });
     }
 
     async getTransactionHistory(req: Request, res: Response) {

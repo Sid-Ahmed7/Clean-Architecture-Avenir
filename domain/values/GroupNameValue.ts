@@ -1,3 +1,5 @@
+import {InvalidGroupNameError} from "../errors/InvalidGroupNameError";
+
 export class GroupNameValue {
 
 

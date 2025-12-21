@@ -3,12 +3,9 @@
 import { apiClient } from "@/lib/api/apiClient";
 import { useCallback, useState } from "react";
 import { BankTransferTransaction } from "@/types/bankTransfer";
+import { type TransferBetweenAccountsModel } from "@/lib/validation/transfer/transferBetweenAccountsSchema";
 
-type TransferPayload = {
-    fromIban: string;
-    toIban: string;
-    amount: number;
-};
+type TransferPayload = TransferBetweenAccountsModel;
 
 export function useTransferBetweenAccounts() {
     const [loading, setLoading] = useState(false);

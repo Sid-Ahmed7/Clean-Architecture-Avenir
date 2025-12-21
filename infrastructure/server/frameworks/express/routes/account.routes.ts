@@ -22,6 +22,7 @@ router.put("/:accountNumber/transfer-limit",verifyTokenAccess, authorizeRoles([R
 router.put("/:accountNumber/overdraft-limit",verifyTokenAccess, authorizeRoles([RoleEnum.BANK_MANAGER]), (req,res) => accountController.updateOverdraftLimit(req,res));
 router.put("/:accountNumber/active", verifyTokenAccess, authorizeRoles([RoleEnum.BANK_MANAGER]), (req,res) => accountController.toggleAccountActive(req,res));
 router.post("/transfer", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req,res) => accountController.transferBetweenAccounts(req,res));
+router.post("/quick-transfer", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req,res) => accountController.quickTransfer(req,res));
 router.get("/transactions/history", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req,res) => accountController.getTransactionHistory(req,res));
 router.get("/transactions/last", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req,res) => accountController.getLastTransactions(req,res));
 

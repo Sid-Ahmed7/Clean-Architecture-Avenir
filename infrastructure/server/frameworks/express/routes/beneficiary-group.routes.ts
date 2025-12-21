@@ -11,6 +11,7 @@ const beneficiaryGroupController = new BeneficiaryGroupController(beneficiaryGro
 
 router.post("/", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req, res) => beneficiaryGroupController.createBeneficiaryGroup(req, res));
 router.get("/", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req, res) => beneficiaryGroupController.getGroupsByUser(req, res));
+router.put("/:groupId", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req, res) => beneficiaryGroupController.updateBeneficiaryGroup(req, res));
 router.post("/:groupId/beneficiaries", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req, res) => beneficiaryGroupController.addBeneficiaryToGroup(req, res));
 router.delete("/:groupId/beneficiaries/:beneficiaryId", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req, res) => beneficiaryGroupController.removeBeneficiaryFromGroup(req, res));
 router.delete("/:groupId", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req, res) => beneficiaryGroupController.deleteBeneficiaryGroup(req, res));

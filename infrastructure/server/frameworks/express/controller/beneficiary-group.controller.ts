@@ -4,6 +4,7 @@ import { GetGroupsByUserUseCase } from "../../../../../application/usecases/bene
 import { AddBeneficiaryToGroupUseCase } from "../../../../../application/usecases/beneficiaries/groups/AddBeneficiaryToGroupUseCase";
 import { RemoveBeneficiaryFromGroupUseCase } from "../../../../../application/usecases/beneficiaries/groups/RemoveBeneficiaryFromGroupUseCase";
 import { DeleteBeneficiaryGroupUseCase } from "../../../../../application/usecases/beneficiaries/groups/DeleteBeneficiaryGroupUseCase";
+import { UpdateBeneficiaryGroupUseCase } from "../../../../../application/usecases/beneficiaries/groups/UpdateBeneficiaryGroupUseCase";
 import { TransferToGroupUseCase } from "../../../../../application/usecases/transfer/TransferToGroupUseCase";
 import { InMemoryBeneficiaryGroupRepository } from "../../../../adapters/repositories/InMemoryBeneficiaryGroupRepository";
 import { InMemoryBeneficiaryRepository } from "../../../../adapters/repositories/InMemoryBeneficiaryRepository";
@@ -17,8 +18,10 @@ import { AccountNotFoundError } from "../../../../../application/errors/AccountN
 import { InsufficientFundsError } from "../../../../../application/errors/InsufficientFundsError";
 import { UnauthorizedAccessError } from "../../../../../application/errors/UnauthorizedAccessError";
 import { CreateBeneficiaryGroup } from "../../../../../application/requests/CreateBeneficiaryGroup";
+import { UpdateBeneficiaryGroup } from "../../../../../application/requests/UpdateBeneficiaryGroup";
 import { TransferToGroup } from "../../../../../application/requests/TransferToGroup";
 import { createBeneficiaryGroupSchema } from "../schemas/beneficiaries/createBeneficiaryGroupSchema";
+import { updateBeneficiaryGroupSchema } from "../schemas/beneficiaries/updateBeneficiaryGroupSchema";
 import { addBeneficiaryToGroupSchema } from "../schemas/beneficiaries/addBeneficiaryToGroupSchema";
 import { transferToGroupSchema } from "../schemas/accounts/transferToGroupSchema";
 
@@ -131,15 +134,55 @@ export class BeneficiaryGroupController {
         return res.status(200).json(result);
     }
 
+    async updateBeneficiaryGroup(req: Request, res: Response) {
+        const updateBeneficiaryGroupUseCase = new UpdateBeneficiaryGroupUseCase(this.beneficiaryGroupRepository);
+
+        const userId = req.user?.userId;
+
+        if (!userId) {
+            return res.status(401).json({ error: "User not authenticated" });
+        }
+
+        const groupId = req.params.groupId;
+
+        if (!groupId) {
+            return res.status(400).json({ error: "Beneficiaries Group Id must be provided" });
+        }
+
+        const parseResult = updateBeneficiaryGroupSchema.safeParse(req.body);
+        if (!parseResult.success) {
+            return res.status(400).json({ errors: parseResult.error.message });
+        }
+
+        const updateData: UpdateBeneficiaryGroup = {
+            groupId,
+            userId,
+            ...(parseResult.data.groupName !== undefined && { groupName: parseResult.data.groupName }),
+            ...(parseResult.data.beneficiaryIds !== undefined && { beneficiaryIds: parseResult.data.beneficiaryIds }),
+        };
+
+        const result = await updateBeneficiaryGroupUseCase.execute(updateData);
+
+        if (result instanceof Error) {
+            if (result instanceof BeneficiaryGroupNotFoundError) {
+                return res.status(404).json({ error: result.message });
+            }
+
+            return res.status(500).json({ error: result.message });
+        }
+
+        return res.status(200).json(result);
+    }
+
     async deleteBeneficiaryGroup(req: Request, res: Response) {
         const deleteBeneficiaryGroupUseCase = new DeleteBeneficiaryGroupUseCase(this.beneficiaryGroupRepository);
 
         const groupId = req.params.groupId;
-        
+
         if (!groupId) {
             return res.status(400).json({ error: "Beneficiaries Group Id must be provided" });
         }
-        
+
         const result = await deleteBeneficiaryGroupUseCase.execute(groupId);
 
         if (result instanceof Error) {

@@ -44,7 +44,7 @@ export default function CreateAdminPage() {
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-red-50 px-4 py-8">
             <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="bg-white p-8 sm:p-10 rounded-2xl shadow-2xl w-full max-w-4xl max-w border border-gray-100"
+                className="bg-white p-8 sm:p-10 rounded-2xl shadow-2xl w-full max-w-4xl border border-gray-100"
             >
                 <div className="text-center mb-8">
                     <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-red-500 to-pink-500 rounded-full mb-4">

@@ -6,35 +6,24 @@ import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { useTransferBetweenAccounts } from "@/hooks/useTransferBetweenAccounts";
 import { AccountModel } from "@/lib/validation/bankAccount/accountSchema";
-
-interface Transaction {
-    transactionReference: string;
-    debitAccount: number;
-    creditAccount: number;
-    amount: number;
-    transactionType: string;
-    createdAt: string;
-    debitUserId?: string;
-    creditUserId?: string;
-    debitUserName?: string;
-    creditUserName?: string;
-}
+import { BankTransaction } from "@/types/bankTransaction";
+import { quickTransfer } from "@/lib/api/account";
 
 interface QuickTransferCardProps {
-    transactions: Transaction[];
+    transactions: BankTransaction[];
     accounts: AccountModel[];
     onTransferSuccess?: () => void;
 }
 
 export default function QuickTransferCard({ transactions, accounts, onTransferSuccess }: QuickTransferCardProps) {
     const { transfer, loading } = useTransferBetweenAccounts();
-    const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
+    const [selectedTransaction, setSelectedTransaction] = useState<BankTransaction | null>(null);
     const [amount, setAmount] = useState<string>("");
     const [showConfirm, setShowConfirm] = useState(false);
 
     const mainAccount = accounts.find((a) => a.accountType === "CHECKING");
 
-    const handleQuickTransfer = (transaction: Transaction) => {
+    const handleQuickTransfer = (transaction: BankTransaction) => {
         setSelectedTransaction(transaction);
         setAmount(transaction.amount.toString());
         setShowConfirm(true);
@@ -44,27 +33,24 @@ export default function QuickTransferCard({ transactions, accounts, onTransferSu
         if (!selectedTransaction || !mainAccount) return;
 
         const isDebit = mainAccount.accountNumber === selectedTransaction.debitAccount;
-        const targetAccount = accounts.find((a) =>
-            a.accountNumber === (isDebit ? selectedTransaction.creditAccount : selectedTransaction.debitAccount)
-        );
+        const targetAccountNumber = isDebit ? selectedTransaction.creditAccount : selectedTransaction.debitAccount;
 
-        if (!targetAccount) {
-            alert("Compte destinataire introuvable");
-            return;
-        }
+        const targetAccount = accounts.find((a) => a.accountNumber === targetAccountNumber);
 
         try {
-            await transfer({
-                fromIban: mainAccount.iban,
-                toIban: targetAccount.iban,
-                amount: parseFloat(amount),
-            });
+            if (targetAccount) {
+                await transfer({fromIban: mainAccount.iban,toIban: targetAccount.iban,amount: parseFloat(amount)});
+            } else {
+                await quickTransfer({sourceAccountNumber: mainAccount.accountNumber,destinationAccountNumber: targetAccountNumber,amount: parseFloat(amount)});
+            }
+
             setShowConfirm(false);
             setSelectedTransaction(null);
             setAmount("");
             onTransferSuccess?.();
         } catch (error) {
             console.error("Erreur lors du transfert:", error);
+            alert("Erreur lors du transfert. Veuillez réessayer.");
         }
     };
 
