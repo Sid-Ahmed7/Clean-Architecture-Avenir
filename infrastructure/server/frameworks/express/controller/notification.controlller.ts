@@ -9,24 +9,35 @@ import {DeleteNotificationUseCase} from "../../../../../application/usecases/not
 import { InvalidNotificationError } from "../../../../../domain/errors/InvalidNotificationError";
 import { InvalidUserIdError } from "../../../../../domain/errors/InvalidUserIdError";
 import { NotificationNotFoundError } from "../../../../../application/errors/notification/NotificationNotFoundError";
-
+import { CryptoUuidGenerator } from "../../../../adapters/services/CryptoUuidGenerator";
+import { createNotificationSchema } from "../schemas/notifications/createNotificationSchema";
+import { sendNotificationToClientSchema } from "../schemas/notifications/sendNotificationToClientSchema";
+import { markNotificationAsReadSchema } from "../schemas/notifications/markNotificationAsReadSchema";
+import { userRepository } from "../../../../adapters/config/repositories";
 
 
 export class NotificationController {
     public constructor(
-        private notificationRepository: InMemoryNotificationRepository,
-        private notificationService: NotificationPublisher
+        private readonly notificationRepository: InMemoryNotificationRepository,
+        private readonly notificationService: NotificationPublisher,
+        private readonly uuidService: CryptoUuidGenerator
 
     ){}
 
     public async createNotification(req: Request, res: Response) {
-        const createNotificationUseCase = new CreateNotificationUseCase(this.notificationRepository);
+        const createNotificationUseCase = new CreateNotificationUseCase(this.notificationRepository, this.uuidService);
         const userId = req.user?.userId;
-        const {message, type} = req.body;
+
         if(!userId) {
             return res.status(401).json({error: "Unauthorized access"});
         }
 
+        const parseResult = createNotificationSchema.safeParse(req.body);
+        if (!parseResult.success) {
+            return res.status(400).json({ errors: parseResult.error.issues });
+        }
+
+        const {message, type} = parseResult.data;
         const result = await createNotificationUseCase.execute(userId, message, type);
 
         if (result instanceof Error) {
@@ -44,15 +55,20 @@ export class NotificationController {
         return res.status(201).json(result);
     }
         public async sendNotificationToClient (req: Request, res: Response) {
-        const senderNotificationUseCase = new SendNotificationToClientUseCase(this.notificationRepository, this.notificationService);
+        const senderNotificationUseCase = new SendNotificationToClientUseCase(this.notificationRepository, this.notificationService, this.uuidService, userRepository);
         const advisorId = req.user?.userId;
-        const {clientId, message, type} = req.body;
+
         if(!advisorId) {
             return res.status(401).json({error: "Unauthorized access"});
         }
 
+        const parseResult = sendNotificationToClientSchema.safeParse(req.body);
+        if (!parseResult.success) {
+            return res.status(400).json({ errors: parseResult.error.issues });
+        }
 
-        const result = await senderNotificationUseCase.execute(advisorId, clientId, message, type);
+        const {clientId, message, type} = parseResult.data;
+        const result = await senderNotificationUseCase.execute(clientId, message, type, advisorId);
 
         if (result instanceof Error) {
             if(result instanceof InvalidNotificationError) {
@@ -87,11 +103,17 @@ export class NotificationController {
     public async markNotificationAsRead(req: Request, res: Response) {
         const markNotificationAsReadUseCase = new MarkNotificationAsReadUseCase(this.notificationRepository);
         const userId = req.user?.userId;
-        const { notificationId } = req.body;
+
         if(!userId) {
             return res.status(401).json({error: "Unauthorized access"});
         }
 
+        const parseResult = markNotificationAsReadSchema.safeParse(req.body);
+        if (!parseResult.success) {
+            return res.status(400).json({ errors: parseResult.error.issues });
+        }
+
+        const { notificationId } = parseResult.data;
         const result = await markNotificationAsReadUseCase.execute(notificationId);
 
         if(result instanceof Error) {
@@ -106,7 +128,11 @@ export class NotificationController {
     public async deleteNotification(req: Request, res: Response) {
         const deleteNotificationUseCase = new DeleteNotificationUseCase(this.notificationRepository);
 
-        const notificationId = Number(req.params.id);
+        const notificationId = req.params.id;
+        if(!notificationId) {
+            return  res.status(404).json({error: "Notification not found"});
+
+        }
 
         const result = await deleteNotificationUseCase.execute(notificationId);
         if(result instanceof Error) {

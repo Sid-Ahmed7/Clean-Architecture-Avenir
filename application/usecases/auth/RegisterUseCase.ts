@@ -10,6 +10,7 @@ import { LocaleService } from "../../ports/services/LocaleService";
 import { UuidGeneratorService } from "../../ports/services/UuidGeneratorService";
 import { Register} from "../../requests/Register";
 import { EmailComposerService } from "../../ports/services/EmailComposerService";
+
 export class RegisterUseCase {
   public constructor(
     private readonly userRepository: UserRepositoryInterface,
@@ -19,7 +20,7 @@ export class RegisterUseCase {
     private readonly emailComposerService: EmailComposerService,
     private readonly registrationTokenGeneratorService: RegistrationTokenGeneratorService,
     private readonly localeService: LocaleService,
-    private readonly uuidService: UuidGeneratorService
+    private readonly uuidService: UuidGeneratorService,
   ) {}
 
 public async execute(user: Register, locale?: string): Promise<BankUserEntity | Error> {

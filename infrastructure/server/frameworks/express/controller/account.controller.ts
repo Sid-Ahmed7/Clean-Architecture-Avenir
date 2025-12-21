@@ -44,7 +44,6 @@ import { TransferLimitExceededError } from "../../../../../application/errors/Tr
 import { TransferLimitIncreaseError } from "../../../../../application/errors/TransferLimitIncreaseError";
 import { CryptoUuidGenerator } from "../../../../adapters/services/CryptoUuidGenerator";
 import { OverdraftActionEnum } from "../../../../../domain/enums/OverdraftActionEnum";
-import { userRepository } from "../../../../adapters/config/repositories";
 import { ManageTransferLimitService } from "../../../../adapters/services/ManageTransferLimitService";
 import { ValidateTransferService } from "../../../../adapters/services/ValidateTransferService";
 import { TransactionEnrichmentServiceImpl } from "../../../../adapters/services/TransactionEnrichmentService";
@@ -67,6 +66,10 @@ import { updateOverdraftLimitSchema } from "../schemas/accounts/updateOverdraftL
 import { requestOverdraftIncreaseSchema } from "../schemas/accounts/requestOverdraftIncreaseSchema";
 import { respondOverdraftIncreaseSchema } from "../schemas/accounts/respondOverdraftIncreaseSchema";
 import { transferBetweenAccountsSchema } from "../schemas/accounts/transferBetweenAccountsSchema";
+import { InMemoryNotificationRepository } from "../../../../adapters/repositories/InMemoryNotificationRepository";
+import { NotificationService } from "../../../../adapters/services/notification/NotificationService";
+import { SendNotificationToClientUseCase } from "../../../../../application/usecases/notification/SendNotificationToClientUseCase";
+import { StatusMessageService } from "../../../../adapters/services/StatusMessageService";
 
 
 export class AccountController {
@@ -82,12 +85,24 @@ export class AccountController {
     private readonly uuidService: CryptoUuidGenerator,
     private readonly transferLimitService: ManageTransferLimitService,
     private readonly validateTransferService: ValidateTransferService,
-    private readonly transactionEnrichmentService: TransactionEnrichmentServiceImpl
+    private readonly transactionEnrichmentService: TransactionEnrichmentServiceImpl,
+    private readonly notificationRepository: InMemoryNotificationRepository,
+    private readonly notificationPublisher: NotificationService,
   ) {}
 
 
     async createAnAccount(req: Request, res: Response) {
-        const createAnAccount = new CreateAccountUseCase(this.accountRepository, this.accountNumberGenerator, this.ibanGenerator);
+        const sendNotificationUseCase = new SendNotificationToClientUseCase(
+            this.notificationRepository,
+            this.notificationPublisher,
+            this.uuidService,
+            this.userRepository
+        );
+        const createAnAccount = new CreateAccountUseCase(
+            this.accountRepository,
+            this.accountNumberGenerator,
+            this.ibanGenerator,
+            sendNotificationUseCase);
         const userId = req.user?.userId;
         
         const parseResult = createAccountSchema.safeParse(req.body);
@@ -174,8 +189,15 @@ export class AccountController {
         return res.status(201).json(result);
     }
 async updateAccount(req: Request, res: Response) {
-
-        const updateAccountUseCase = new UpdateAccountUseCase(this.accountRepository);
+        const sendNotificationUseCase = new SendNotificationToClientUseCase(
+            this.notificationRepository,
+            this.notificationPublisher,
+            this.uuidService,
+            this.userRepository
+        );
+        const updateAccountUseCase = new UpdateAccountUseCase(
+            this.accountRepository,
+            sendNotificationUseCase);
         const result = await updateAccountUseCase.execute(req.body);
 
         if(result instanceof Error) {
@@ -310,7 +332,15 @@ async updateAccount(req: Request, res: Response) {
     }
 
     async deleteAccount(req: Request, res: Response) {
-        const deleteAccountUseCase = new DeleteAccountUseCase(this.accountRepository);
+        const sendNotificationUseCase = new SendNotificationToClientUseCase(
+            this.notificationRepository,
+            this.notificationPublisher,
+            this.uuidService,
+            this.userRepository
+        );
+        const deleteAccountUseCase = new DeleteAccountUseCase(
+            this.accountRepository,
+            sendNotificationUseCase);
         const accountNumber = Number(req.params.accountNumber);
         const result = await deleteAccountUseCase.execute(accountNumber);
         
@@ -327,7 +357,17 @@ async updateAccount(req: Request, res: Response) {
     }
 
     async changeStatusOfAccount(req: Request, res: Response) {
-        const changeStatusAccountUseCase = new ChangeAccountStatusUseCase(this.accountRepository, new ManageAllowedAccountStatusService());
+        const sendNotificationUseCase = new SendNotificationToClientUseCase(
+            this.notificationRepository,
+            this.notificationPublisher,
+            this.uuidService,
+            this.userRepository
+        );
+        const changeStatusAccountUseCase = new ChangeAccountStatusUseCase(
+            this.accountRepository,
+            new ManageAllowedAccountStatusService(),
+            new StatusMessageService(),
+            sendNotificationUseCase);
         const accountNumber = Number(req.params.accountNumber);
         const parseResult = changeAccountStatusSchema.safeParse(req.body);
         if (!parseResult.success) {
@@ -371,7 +411,16 @@ async updateAccount(req: Request, res: Response) {
 
     
     async updateAccountName(req: Request, res: Response) {
-        const updateCustomAccountNameUseCase = new CustomAccountNameUseCase(this.accountRepository);
+        const sendNotificationUseCase = new SendNotificationToClientUseCase(
+            this.notificationRepository,
+            this.notificationPublisher,
+            this.uuidService,
+            this.userRepository
+        );
+        const updateCustomAccountNameUseCase = new CustomAccountNameUseCase(
+            this.accountRepository,
+            sendNotificationUseCase
+        );
         const accountNumber = Number(req.params.accountNumber);
         const parseResult = updateAccountNameSchema.safeParse(req.body);
         if (!parseResult.success) {
@@ -491,11 +540,17 @@ async updateAccount(req: Request, res: Response) {
             return res.status(401).json({ error: "User not authenticated" });
         }
 
+        const sendNotificationUseCase = new SendNotificationToClientUseCase(
+            this.notificationRepository,
+            this.notificationPublisher,
+            this.uuidService,
+            this.userRepository
+        );
         const useCase = new RequestOverdraftIncreaseUseCase(
             this.accountRepository,
             this.overdraftRequestRepository,
             this.uuidService,
-        );
+            sendNotificationUseCase);
 
         const result = await useCase.execute(accountNumber, userId, parseResult.data.overdraftLimit);
 
@@ -549,9 +604,16 @@ async updateAccount(req: Request, res: Response) {
             return res.status(400).json({ error: "Request ID is missing" });
         }
 
+        const sendNotificationUseCase = new SendNotificationToClientUseCase(
+            this.notificationRepository,
+            this.notificationPublisher,
+            this.uuidService,
+            this.userRepository
+        );
         const useCase = new RespondOverdraftIncreaseUseCase(
             this.overdraftRequestRepository,
             this.accountRepository,
+            sendNotificationUseCase
         );
 
         const actionEnum = action === "APPROVE" ? OverdraftActionEnum.APPROVE : OverdraftActionEnum.REJECT;
@@ -620,13 +682,19 @@ async updateAccount(req: Request, res: Response) {
     }
 
     async transferBetweenAccounts(req: Request, res: Response) {
+        const sendNotificationUseCase = new SendNotificationToClientUseCase(
+            this.notificationRepository,
+            this.notificationPublisher,
+            this.uuidService,
+            this.userRepository
+        );
         const transferUseCase = new TransferBetweenAccountsUseCase(
             this.accountRepository,
             this.transactionRepository,
             this.uuidService,
             this.transferLimitService,
-            this.validateTransferService
-        );
+            this.validateTransferService,
+            sendNotificationUseCase);
         const userId = req.user?.userId;
 
         if (!userId) {

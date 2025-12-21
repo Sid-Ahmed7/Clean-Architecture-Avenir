@@ -7,12 +7,15 @@ import { PendingOverdraftRequestError } from "../../errors/PendingOverdraftReque
 import { InvalidOverdraftRequestError } from "../../../domain/errors/InvalidOverdraftRequestError";
 import { OverdraftIncreaseRequestEntity } from "../../../domain/entities/OverdraftIncreaseRequestEntity";
 import { OverdraftLimitValue } from "../../../domain/values/OverdraftLimitValue";
+import { SendNotificationToClientUseCase } from "../notification/SendNotificationToClientUseCase";
+import { NotificationTypeEnum } from "../../../domain/enums/NotificationTypeEnum";
 
 export class RequestOverdraftIncreaseUseCase {
     public constructor(
         private readonly accountRepository: AccountRepositoryInterface,
         private readonly overdraftRequestRepository: OverdraftRequestRepositoryInterface,
         private readonly uuidService: UuidGeneratorService,
+        private readonly sendNotificationUseCase: SendNotificationToClientUseCase,
     ) {}
 
     public async execute(accountNumber: number, userId: string, requestedOverdraftLimit: number): Promise<OverdraftIncreaseRequestEntity | Error> {
@@ -54,7 +57,19 @@ export class RequestOverdraftIncreaseUseCase {
             return request;
         }
 
-        return this.overdraftRequestRepository.create(request);
+        const createdRequest = await this.overdraftRequestRepository.create(request);
+
+        if (!(createdRequest instanceof Error)) {
+            if (this.sendNotificationUseCase) {
+                await this.sendNotificationUseCase.execute(
+                    userId,
+                    `Votre demande d'augmentation de découvert à ${validatedRequested.value}€ a été soumise.`,
+                    NotificationTypeEnum.INFO
+                );
+            }
+        }
+
+        return createdRequest;
     }
 }
 

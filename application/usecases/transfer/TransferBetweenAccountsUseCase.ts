@@ -8,6 +8,8 @@ import { UuidGeneratorService } from "../../ports/services/UuidGeneratorService"
 import { TransferLimitService } from "../../ports/services/TransferLimitService";
 import { TransferValidationService } from "../../ports/services/TransferValidationService";
 import { TransferStatusEnum } from "../../../domain/enums/TransferStatusEnum";
+import { SendNotificationToClientUseCase } from "../notification/SendNotificationToClientUseCase";
+import { NotificationTypeEnum } from "../../../domain/enums/NotificationTypeEnum";
 
 
 export class TransferBetweenAccountsUseCase {
@@ -16,7 +18,8 @@ export class TransferBetweenAccountsUseCase {
         private readonly transactionRepository: TransactionRepositoryInterface,
         private readonly uuidService: UuidGeneratorService,
         private readonly transferLimitService: TransferLimitService,
-        private readonly transferValidationService: TransferValidationService
+        private readonly transferValidationService: TransferValidationService,
+        private readonly sendNotificationUseCase: SendNotificationToClientUseCase,
     ) {}
 
     public async execute(input: TransferInput): Promise<TransactionEntity | Error> {
@@ -98,6 +101,14 @@ export class TransferBetweenAccountsUseCase {
 
         transactionOrError.status = TransferStatusEnum.COMPLETED;
         await this.transactionRepository.save(transactionOrError);
+
+        if (this.sendNotificationUseCase) {
+            await this.sendNotificationUseCase.execute(
+                userId,
+                `Transfert de ${amount}€ effectué avec succès vers ${creditAccount.accountNumber}`,
+                NotificationTypeEnum.INFO
+            );
+        }
 
         return transactionOrError;
     }

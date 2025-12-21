@@ -5,11 +5,16 @@ import { LoanAmountValue } from "../../../domain/values/LoanAmountValue";
 import { LoanNotFoundError } from "../../errors/LoanNotFoundError";
 import { LoanNotValidatedByAdvisorError } from "../../errors/LoanNotValidatedByAdvisorError";
 import { RateProposalNotRequiredError } from "../../errors/RateProposalNotRequiredError";
+import { SendNotificationToClientUseCase } from "../notification/SendNotificationToClientUseCase";
+import { NotificationTypeEnum } from "../../../domain/enums/NotificationTypeEnum";
 
 export class DirectorProposeRateUseCase {
-  public constructor(private readonly loanRequestRepository: LoanRequestRepositoryInterface) {}
+  public constructor(
+    private readonly loanRequestRepository: LoanRequestRepositoryInterface,
+    private readonly sendNotificationUseCase: SendNotificationToClientUseCase,
+  ) {}
 
-  public async execute(requestId: string, rate: number, directorName?: string) {
+  public async execute(directorId: string, requestId: string, rate: number, directorName?: string) {
     const request = await this.loanRequestRepository.findById(requestId);
     if (!request) {
       return new LoanNotFoundError("Loan request not found");
@@ -37,7 +42,21 @@ export class DirectorProposeRateUseCase {
     if (directorName) {
       request.setDirectorName(directorName);
     }
-    return this.loanRequestRepository.save(request);
+
+    const savedRequest = await this.loanRequestRepository.save(request);
+
+    if (!(savedRequest instanceof Error)) {
+      if (this.sendNotificationUseCase) {
+        await this.sendNotificationUseCase.execute(
+          request.clientId,
+          `Le directeur vous propose un taux de ${validatedRate.value}% pour votre prêt de ${request.amount}€. Veuillez répondre à cette proposition.`,
+          NotificationTypeEnum.INFO,
+          directorId
+        );
+      }
+    }
+
+    return savedRequest;
   }
 }
 

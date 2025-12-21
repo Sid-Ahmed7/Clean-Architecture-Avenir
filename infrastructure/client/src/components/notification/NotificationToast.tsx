@@ -9,8 +9,6 @@ interface NotificationToastProps {
     notification: NotificationModel;
     index: number;
 }
-
-
 export const NotificationToast = ({notification, index} : NotificationToastProps) => {
      
     const [isVisible, setIsVisible] = useState(false);

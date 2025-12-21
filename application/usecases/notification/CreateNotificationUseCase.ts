@@ -5,15 +5,19 @@ import { InvalidNotificationError } from "../../../domain/errors/InvalidNotifica
 import { InvalidUserIdError } from "../../../domain/errors/InvalidUserIdError";
 import { NotificationRepositoryInterface } from "../../ports/repositories/notification/NotificationRepositoryInterface";
 import { NotificationPublisher } from "../../ports/services/notification/NotificationPublisher";
+import { UuidGeneratorService } from "../../ports/services/UuidGeneratorService";
 
 export class CreateNotificationUseCase {
 
-    public constructor(private repositoryNotification: NotificationRepositoryInterface){}
+    public constructor(
+        private readonly repositoryNotification: NotificationRepositoryInterface,
+        private readonly uuidService: UuidGeneratorService){}
 
 
     public async execute(userId: string , message: string, type: NotificationTypeEnum): Promise<NotificationEntity | Error> {
 
-        const notification = NotificationEntity.from(0, userId, message, ReadStatusEnum.UNREAD, type, new Date());
+        const notificationId = this.uuidService.generate();
+        const notification = NotificationEntity.from(notificationId, userId, message, ReadStatusEnum.UNREAD, type, new Date());
 
         if(notification instanceof Error  ) {
             return notification;

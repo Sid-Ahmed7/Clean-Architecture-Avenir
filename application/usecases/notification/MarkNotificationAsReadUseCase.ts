@@ -4,9 +4,9 @@ import { NotificationRepositoryInterface } from "../../ports/repositories/notifi
 
 export class MarkNotificationAsReadUseCase {
 
-    public constructor(private notificationRepository: NotificationRepositoryInterface){}
+    public constructor(private readonly notificationRepository: NotificationRepositoryInterface){}
 
-    public async execute(notificationId: number): Promise<NotificationEntity | Error> {
+    public async execute(notificationId: string): Promise<NotificationEntity | Error> {
        const notification = await this.notificationRepository.findById(notificationId);
         
        if(notification instanceof Error) {

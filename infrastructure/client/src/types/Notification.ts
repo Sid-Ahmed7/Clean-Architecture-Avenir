@@ -8,7 +8,7 @@ export enum NotificationEnum {
 
 
 export interface Notification {
-    id: number;
+    id: string;
     userId: string;
     message: string;
     type: NotificationEnum;
@@ -16,4 +16,5 @@ export interface Notification {
     createAt: string;
     readAt?: string;
     senderId?: string;
+    senderName?: string;
 }

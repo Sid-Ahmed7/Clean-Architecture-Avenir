@@ -1,13 +1,13 @@
 "use client";
 
 import { NotificationModel } from "@/lib/validation/notification/notificationSchema";
-import { NotificationCard } from "../ui/NotificationCard";
+import { NotificationCard } from "./NotificationCard";
 
 
 interface NotificationListProps  {
     notifications: NotificationModel[];
-    onMarkRead?: (id: number) => void;
-    onDelete?: (id: number) => void;
+    onMarkRead?: (id: string) => void;
+    onDelete?: (id: string) => void;
 }
 
 export const NotificationList = ({notifications, onMarkRead, onDelete} :  NotificationListProps) => {

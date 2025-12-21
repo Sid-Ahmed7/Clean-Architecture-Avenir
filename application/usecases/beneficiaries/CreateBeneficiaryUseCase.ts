@@ -5,6 +5,8 @@ import { CreateBeneficiary } from "../../requests/CreateBeneficiary";
 import { BeneficiaryEntity } from "../../../domain/entities/BeneficiaryEntity";
 import { BeneficiaryAlreadyExistsError } from "../../errors/BeneficiaryAlreadyExistsError";
 import { IbanNotFoundError } from "../../errors/IbanNotFoundError";
+import { SendNotificationToClientUseCase } from "../notification/SendNotificationToClientUseCase";
+import { NotificationTypeEnum } from "../../../domain/enums/NotificationTypeEnum";
 
 
 
@@ -12,7 +14,8 @@ export class CreateBeneficiaryUseCase {
     public constructor(
         private readonly beneficiaryRepository: BeneficiaryRepositoryInterface,
         private readonly accountRepository: AccountRepositoryInterface,
-        private readonly uuidService: UuidGeneratorService
+        private readonly uuidService: UuidGeneratorService,
+        private readonly sendNotificationUseCase: SendNotificationToClientUseCase,
     ){}
 
     public async execute(data: CreateBeneficiary  ): Promise<BeneficiaryEntity | BeneficiaryAlreadyExistsError | IbanNotFoundError | Error> {
@@ -50,6 +53,24 @@ export class CreateBeneficiaryUseCase {
 
     if(createBeneficiary instanceof Error) {
         return createBeneficiary;
+    }
+
+    if (this.sendNotificationUseCase) {
+        await this.sendNotificationUseCase.execute(
+            data.userId,
+            `Le bénéficiaire ${data.beneficiaryName} a été ajouté avec succès !`,
+            NotificationTypeEnum.INFO
+        );
+    }
+
+    if (this.sendNotificationUseCase && account.userId !== data.userId) {
+        await this.sendNotificationUseCase.execute(
+            account.userId,
+            `Vous avez été ajouté comme bénéficiaire par un autre utilisateur.`,
+            NotificationTypeEnum.INFO,
+            data.userId,
+
+        );
     }
 
     return createBeneficiary;

@@ -1,10 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { getUserNotifications, markNotificationAsRead, deleteNotification, createNotification, sendNotificationToClient } from "../api/notification";
 import { useTranslations } from "next-intl";
 import { NotificationEnum } from "@/types/Notification";
 import { NotificationModel, notificationSchema } from "@/lib/validation/notification/notificationSchema";
+import { createNotification, deleteNotification, getUserNotifications, markNotificationAsRead, sendNotificationToClient } from "@/lib/api/notification";
 
 export function useNotification() {
     const [notifications, setNotifications] = useState<NotificationModel[]>([]);
@@ -77,7 +77,7 @@ export function useNotification() {
     
     }
 
-    const markReadNotification = async (notificationId: number) => {
+    const markReadNotification = async (notificationId: string) => {
         try {
             await markNotificationAsRead(notificationId);
             const updatedStatus: NotificationModel[] = notifications.map((notification) => notification.id === notificationId ? {...notification, readStatus: "READ"} : notification);
@@ -94,7 +94,7 @@ export function useNotification() {
         }
     };
 
-    const deleteOneNotification = async (notificationId: number) => {
+    const deleteOneNotification = async (notificationId: string) => {
         try {
             await deleteNotification(notificationId);
             setNotifications(prev => prev.filter(notification => notification.id !== notificationId));

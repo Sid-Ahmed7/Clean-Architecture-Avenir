@@ -1,12 +1,12 @@
 import express from "express";
 import { NotificationController } from "../controller/notification.controlller";
-import {notificationRepository, notificationService} from "../../../../adapters/config/repositories";
+import {notificationRepository, notificationService, uuidService} from "../../../../adapters/config/repositories";
 import { verifyTokenAccess } from "../middleware/authMiddleware";
 import { authorizeRoles } from "../middleware/roleMiddleware";
 import { RoleEnum } from "../../../../../domain/enums/RoleEnum";
 const router = express.Router();
 
-const notificationController = new NotificationController(notificationRepository, notificationService);
+const notificationController = new NotificationController(notificationRepository, notificationService, uuidService);
 
 router.get("/subscribe", verifyTokenAccess, (req, res) => notificationController.subscribe(req, res));
 router.post("/create", verifyTokenAccess, (req, res) =>  notificationController.createNotification(req, res));

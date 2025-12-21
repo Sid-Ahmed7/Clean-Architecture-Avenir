@@ -7,11 +7,14 @@ import { InvalidAccountError } from "../../../domain/errors/InvalidAccountError"
 import { OverdraftRequestNotFoundError } from "../../errors/OverdraftRequestNotFoundError";
 import { OverdraftRequestAlreadyProcessedError } from "../../../domain/errors/OverdraftRequestAlreadyProcessedError";
 import { InvalidOverdraftActionError } from "../../errors/InvalidOverdraftActionError";
+import { SendNotificationToClientUseCase } from "../notification/SendNotificationToClientUseCase";
+import { NotificationTypeEnum } from "../../../domain/enums/NotificationTypeEnum";
 
 export class RespondOverdraftIncreaseUseCase {
     public constructor(
         private readonly overdraftRequestRepository: OverdraftRequestRepositoryInterface,
         private readonly accountRepository: AccountRepositoryInterface,
+        private readonly sendNotificationUseCase: SendNotificationToClientUseCase,
     ) {}
 
     public async execute(requestId: string, action: OverdraftActionEnum) {
@@ -43,10 +46,27 @@ export class RespondOverdraftIncreaseUseCase {
             if (updatedAccount instanceof Error) {
                 return updatedAccount;
             }
+
+            if (this.sendNotificationUseCase) {
+                await this.sendNotificationUseCase.execute(
+                    request.userId,
+                    `Votre demande d'augmentation de découvert à ${request.requestedOverdraftLimit}€ a été approuvée !`,
+                    NotificationTypeEnum.ALERT
+                );
+            }
         } else if (action === OverdraftActionEnum.REJECT) {
             const rejectedStatus = request.reject();
             if (rejectedStatus instanceof Error) {
                 return rejectedStatus;
+            }
+
+            if (this.sendNotificationUseCase) {
+                await this.sendNotificationUseCase.execute(
+
+                    request.userId,
+                    `Votre demande d'augmentation de découvert à ${request.requestedOverdraftLimit}€ a été refusée.`,
+                    NotificationTypeEnum.ALERT
+                );
             }
         } else {
             return new InvalidOverdraftActionError();

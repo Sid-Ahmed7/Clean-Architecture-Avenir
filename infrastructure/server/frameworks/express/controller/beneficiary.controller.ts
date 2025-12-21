@@ -20,17 +20,30 @@ import { createBeneficiarySchema } from "../schemas/beneficiaries/createBenefici
 import { updateBeneficiarySchema } from "../schemas/beneficiaries/updateBeneficiarySchema";
 import { transferToBeneficiarySchema } from "../schemas/accounts/transferToBeneficiarySchema";
 import { UpdateBeneficiary } from "../../../../../application/requests/UpdateBeneficiary";
+import { InMemoryUserRepository } from "../../../../adapters/repositories/InMemoryUserRepository";
+import { InMemoryNotificationRepository } from "../../../../adapters/repositories/InMemoryNotificationRepository";
+import { NotificationService } from "../../../../adapters/services/notification/NotificationService";
+import { SendNotificationToClientUseCase } from "../../../../../application/usecases/notification/SendNotificationToClientUseCase";
 
 export class BeneficiaryController {
     constructor(
         private readonly beneficiaryRepository: InMemoryBeneficiaryRepository,
         private readonly accountRepository: InMemoryAccountRepository,
         private readonly uuidService: CryptoUuidGenerator,
-        private readonly transactionRepository?: InMemoryTransactionRepository
+        private readonly transactionRepository: InMemoryTransactionRepository,
+        private readonly userRepository: InMemoryUserRepository,
+        private readonly notificationRepository: InMemoryNotificationRepository,
+        private readonly notificationPublisher: NotificationService,
     ) {}
 
     async createBeneficiary(req: Request, res: Response) {
-        const createBeneficiaryUseCase = new CreateBeneficiaryUseCase(this.beneficiaryRepository,this.accountRepository,this.uuidService);
+       const sendNotificationUseCase = new SendNotificationToClientUseCase(
+            this.notificationRepository,
+            this.notificationPublisher,
+            this.uuidService,
+            this.userRepository
+        );
+        const createBeneficiaryUseCase = new CreateBeneficiaryUseCase(this.beneficiaryRepository,this.accountRepository,this.uuidService, sendNotificationUseCase);
 
         const userId = req.user?.userId;
 
@@ -87,7 +100,13 @@ export class BeneficiaryController {
     }
 
     async updateBeneficiary(req: Request, res: Response) {
-        const updateBeneficiaryUseCase = new UpdateBeneficiaryUseCase(this.beneficiaryRepository);
+        const sendNotificationUseCase = new SendNotificationToClientUseCase(
+            this.notificationRepository,
+            this.notificationPublisher,
+            this.uuidService,
+            this.userRepository
+        );
+        const updateBeneficiaryUseCase = new UpdateBeneficiaryUseCase(this.beneficiaryRepository,sendNotificationUseCase);
 
         const beneficiaryId = req.params.beneficiaryId;
         const userId = req.user?.userId;
@@ -125,7 +144,13 @@ export class BeneficiaryController {
     }
 
     async deleteBeneficiary(req: Request, res: Response) {
-        const deleteBeneficiaryUseCase = new DeleteBeneficiaryUseCase(this.beneficiaryRepository);
+        const sendNotificationUseCase = new SendNotificationToClientUseCase(
+            this.notificationRepository,
+            this.notificationPublisher,
+            this.uuidService,
+            this.userRepository
+        );
+        const deleteBeneficiaryUseCase = new DeleteBeneficiaryUseCase(this.beneficiaryRepository, sendNotificationUseCase);
 
         const beneficiaryId = req.params.beneficiaryId;
         const userId = req.user?.userId;

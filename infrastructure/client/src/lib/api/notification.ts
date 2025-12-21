@@ -7,13 +7,7 @@ export const createNotification = async (message: string, type: NotificationEnum
 }
 
 
-export const sendNotificationToClient = async (
-    clientId: string, 
-    message: string, 
-    type: NotificationEnum, 
-    senderId?: string
-): Promise<Notification> => {
-    
+export const sendNotificationToClient = async (clientId: string,message: string,type: NotificationEnum,senderId?: string): Promise<Notification> => {
     const {data} = await apiClient.post<Notification>("/notification/send-notification", {
         clientId, 
         message, 
@@ -29,12 +23,12 @@ export const getUserNotifications = async(): Promise<Notification[]> => {
     return data;
 }
 
-export const markNotificationAsRead = async (notificationId: number) => {
+export const markNotificationAsRead = async (notificationId: string) => {
     const {data} = await apiClient.put("/notification/read", {notificationId});
     return data
 }
 
-export const deleteNotification = async (notificationId: number) => {
+export const deleteNotification = async (notificationId: string) => {
 await apiClient.delete(`/notification/${notificationId}`);
 }
 

@@ -13,6 +13,8 @@ import { LoanNotFoundError } from "../../errors/LoanNotFoundError";
 import { RateProposalRequiredError } from "../../errors/RateProposalRequiredError";
 import { LoanNotValidatedByAdvisorError } from "../../errors/LoanNotValidatedByAdvisorError";
 import { IndicativeRateNotDefinedError } from "../../errors/IndicativeRateNotDefinedError";
+import { SendNotificationToClientUseCase } from "../notification/SendNotificationToClientUseCase";
+import { NotificationTypeEnum } from "../../../domain/enums/NotificationTypeEnum";
 
 export class DirectorDecideLoanRequestUseCase {
   public constructor(
@@ -21,9 +23,11 @@ export class DirectorDecideLoanRequestUseCase {
     private readonly loanConfigService: LoanConfigService,
     private readonly repaymentScheduleRepository: LoanRepaymentScheduleRepositoryInterface,
     private readonly createRepaymentScheduleUseCase: CreateRepaymentScheduleUseCase,
+    private readonly sendNotificationUseCase: SendNotificationToClientUseCase,
   ) {}
 
   public async execute(
+    directorId: string,
     requestId: string,
     decision: LoanDecisionEnum,
     directorName?: string,
@@ -48,7 +52,18 @@ export class DirectorDecideLoanRequestUseCase {
 
     if (newStatus === LoanStatusEnum.DIRECTOR_REJECTED) {
       request.updateStatus(newStatus);
-      return this.loanRequestRepository.save(request);
+      const savedRequest = await this.loanRequestRepository.save(request);
+
+      if (this.sendNotificationUseCase) {
+        await this.sendNotificationUseCase.execute(
+          request.clientId,
+          `Votre demande de prêt de ${request.amount}€ a été refusée par le directeur.`,
+          NotificationTypeEnum.ALERT,
+          directorId,
+        );
+      }
+
+      return savedRequest;
     }
 
     const rate = await this.loanConfigService.getIndicativeRate();
@@ -91,6 +106,15 @@ export class DirectorDecideLoanRequestUseCase {
     );
     if (createdSchedule instanceof Error) {
       return createdSchedule;
+    }
+
+    if (this.sendNotificationUseCase) {
+      await this.sendNotificationUseCase.execute(
+        request.clientId,
+        `Félicitations ! Votre prêt de ${request.amount}€ a été approuvé et versé sur votre compte.`,
+        NotificationTypeEnum.INFO,
+        directorId
+      );
     }
 
     return request;

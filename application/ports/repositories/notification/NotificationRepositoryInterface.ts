@@ -5,8 +5,8 @@ import { NotificationNotFoundError } from "../../../errors/notification/Notifica
 
 export interface NotificationRepositoryInterface {
     findByUserId(userId: string): Promise<Array<NotificationEntity>>
-    findById(notificationId: number): Promise<NotificationEntity | NotificationNotFoundError>
+    findById(notificationId: string): Promise<NotificationEntity | NotificationNotFoundError>
     save(notification: NotificationEntity): Promise<NotificationEntity | InvalidNotificationError | InvalidUserIdError>;
     update(notification: NotificationEntity): Promise<NotificationEntity | NotificationNotFoundError>
-    delete(notificationId: number): Promise<void | NotificationNotFoundError>;
+    delete(notificationId: string): Promise<void | NotificationNotFoundError>;
 }

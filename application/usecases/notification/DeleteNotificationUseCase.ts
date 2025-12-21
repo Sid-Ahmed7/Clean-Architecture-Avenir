@@ -2,9 +2,9 @@ import { NotificationRepositoryInterface } from "../../ports/repositories/notifi
 
 export class DeleteNotificationUseCase {
 
-    public constructor(private notificationRepository: NotificationRepositoryInterface){}
+    public constructor(private readonly notificationRepository: NotificationRepositoryInterface){}
 
-    public async execute(notificationId: number): Promise<void | Error> {
+    public async execute(notificationId: string): Promise<void | Error> {
         const deletedNotification = await this.notificationRepository.delete(notificationId);
         
         if(deletedNotification instanceof Error) {

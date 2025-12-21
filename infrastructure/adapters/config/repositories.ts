@@ -16,6 +16,7 @@ import {ManageTransferLimitService} from "../services/ManageTransferLimitService
 import {ValidateTransferService} from "../services/ValidateTransferService";
 import {TransactionEnrichmentServiceImpl} from "../services/TransactionEnrichmentService";
 import {NotificationService} from "../services/notification/NotificationService";
+import {StatusMessageService} from "../services/StatusMessageService";
 
 import { InMemoryEventBus } from '../repositories/InMemoryEventBus';
 import { InMemoryUserRepository } from '../repositories/InMemoryUserRepository';
@@ -102,3 +103,5 @@ export const beneficiaryGroupRepository = new InMemoryBeneficiaryGroupRepository
 
 export const notificationRepository = new InMemoryNotificationRepository();
 export const notificationService = new NotificationService();
+
+export const statusMessageService = new StatusMessageService();

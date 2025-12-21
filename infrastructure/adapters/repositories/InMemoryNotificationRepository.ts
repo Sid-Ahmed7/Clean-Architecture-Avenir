@@ -7,11 +7,9 @@ import { InvalidUserIdError } from "../../../domain/errors/InvalidUserIdError";
 export class InMemoryNotificationRepository implements NotificationRepositoryInterface {
 
     private notifications: Array<NotificationEntity>;
-    private incrId;
 
     public constructor() {
         this.notifications = [];
-        this.incrId = 0;
     }
 
     public async save(notification: NotificationEntity): Promise<NotificationEntity | InvalidNotificationError | InvalidUserIdError> {
@@ -23,9 +21,6 @@ export class InMemoryNotificationRepository implements NotificationRepositoryInt
             return new InvalidUserIdError("UserId invalid")
         }
         
-        this.incrId++;
-        notification.id = this.incrId;
-
         this.notifications.push(notification);
         return notification;
     }
@@ -34,7 +29,7 @@ export class InMemoryNotificationRepository implements NotificationRepositoryInt
         return this.notifications.filter((notification) => notification.userId === userId);
     }
 
-    public async findById(notificationId: number): Promise<NotificationEntity | NotificationNotFoundError> {
+    public async findById(notificationId: string): Promise<NotificationEntity | NotificationNotFoundError> {
         const notification = this.notifications.find((n) => n.id === notificationId);
 
         if(!notification) {
@@ -53,7 +48,7 @@ export class InMemoryNotificationRepository implements NotificationRepositoryInt
     return notification;
     }
 
-    public async delete(notificationId: number): Promise<void | NotificationNotFoundError> {
+    public async delete(notificationId: string): Promise<void | NotificationNotFoundError> {
         const index = this.notifications.findIndex((n) => n.id === notificationId); 
     
         if(index === -1) {

@@ -1,10 +1,10 @@
 "use client";
 
-import { useNotification } from "@/lib/hooks/useNotifications";
-import { useNotificationSSE } from "@/lib/hooks/useNotificationSSE";
 import { Bell } from "lucide-react";
 import { useState } from "react"
 import { NotificationList } from "./NotificationList";
+import { useNotificationSSE } from "@/hooks/useNotificationSSE";
+import { useNotification } from "@/hooks/useNotifications";
 
 export const NotificationMenu = () => {
     const [open, setOpen] = useState(false);
@@ -15,11 +15,11 @@ export const NotificationMenu = () => {
         setOpen(prev => !prev)
     };
 
-    const handleMarkRead = (notificationId: number) => {
+    const handleMarkRead = (notificationId: string) => {
         markReadNotification(notificationId);
     }
 
-    const handleDelete = (notificationId: number) => {
+    const handleDelete = (notificationId: string) => {
         deleteOneNotification(notificationId);
     }
 

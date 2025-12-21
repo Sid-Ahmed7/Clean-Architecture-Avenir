@@ -206,7 +206,7 @@ export default function AdvisorConversationsDashboard() {
           onClose={() => setModalOpen(false)}
           onTransfer={(advisorId, advisorName) => {
             if (selectedConversationId !== null) {
-              handleTransfer(selectedConversationId, advisorId, advisorName);
+              handleTransfer(selectedConversationId, advisorId);
             }
           }}
           currentAdvisorId={user?.userId ?? ""}
