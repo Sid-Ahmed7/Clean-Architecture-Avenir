@@ -24,18 +24,33 @@ import { createBeneficiaryGroupSchema } from "../schemas/beneficiaries/createBen
 import { updateBeneficiaryGroupSchema } from "../schemas/beneficiaries/updateBeneficiaryGroupSchema";
 import { addBeneficiaryToGroupSchema } from "../schemas/beneficiaries/addBeneficiaryToGroupSchema";
 import { transferToGroupSchema } from "../schemas/accounts/transferToGroupSchema";
+import { InMemoryNotificationRepository } from "../../../../adapters/repositories/InMemoryNotificationRepository";
+import { SendNotificationToClientUseCase } from "../../../../../application/usecases/notification/SendNotificationToClientUseCase";
+import { NotificationService } from "../../../../adapters/services/notification/NotificationService";
+import { InMemoryUserRoleRepository } from "../../../../adapters/repositories/InMemoryUserRoleRepository";
+import { InMemoryUserRepository } from "../../../../adapters/repositories/InMemoryUserRepository";
 
 export class BeneficiaryGroupController {
     constructor(
         private readonly beneficiaryGroupRepository: InMemoryBeneficiaryGroupRepository,
         private readonly beneficiaryRepository: InMemoryBeneficiaryRepository,
         private readonly uuidService: CryptoUuidGenerator,
-        private readonly accountRepository?: InMemoryAccountRepository,
-        private readonly transactionRepository?: InMemoryTransactionRepository
+        private readonly accountRepository: InMemoryAccountRepository,
+        private readonly transactionRepository: InMemoryTransactionRepository, 
+        private readonly notificationRepository: InMemoryNotificationRepository,
+        private readonly notificationPublisher: NotificationService,
+        private readonly userRepository: InMemoryUserRepository,
+        
     ) {}
 
     async createBeneficiaryGroup(req: Request, res: Response) {
-        const createBeneficiaryGroupUseCase = new CreateBeneficiaryGroupUseCase(this.beneficiaryGroupRepository,this.uuidService);
+        const sendNotificationUseCase = new SendNotificationToClientUseCase(
+            this.notificationRepository,
+            this.notificationPublisher,
+            this.uuidService,
+            this.userRepository
+        );
+        const createBeneficiaryGroupUseCase = new CreateBeneficiaryGroupUseCase(this.beneficiaryGroupRepository,this.uuidService, sendNotificationUseCase);
 
         const userId = req.user?.userId;
 
@@ -135,7 +150,14 @@ export class BeneficiaryGroupController {
     }
 
     async updateBeneficiaryGroup(req: Request, res: Response) {
-        const updateBeneficiaryGroupUseCase = new UpdateBeneficiaryGroupUseCase(this.beneficiaryGroupRepository);
+          const sendNotificationUseCase = new SendNotificationToClientUseCase(
+            this.notificationRepository,
+            this.notificationPublisher,
+            this.uuidService,
+            this.userRepository
+        );
+        
+        const updateBeneficiaryGroupUseCase = new UpdateBeneficiaryGroupUseCase(this.beneficiaryGroupRepository,sendNotificationUseCase);
 
         const userId = req.user?.userId;
 
@@ -175,7 +197,13 @@ export class BeneficiaryGroupController {
     }
 
     async deleteBeneficiaryGroup(req: Request, res: Response) {
-        const deleteBeneficiaryGroupUseCase = new DeleteBeneficiaryGroupUseCase(this.beneficiaryGroupRepository);
+          const sendNotificationUseCase = new SendNotificationToClientUseCase(
+            this.notificationRepository,
+            this.notificationPublisher,
+            this.uuidService,
+            this.userRepository
+        );
+        const deleteBeneficiaryGroupUseCase = new DeleteBeneficiaryGroupUseCase(this.beneficiaryGroupRepository, sendNotificationUseCase);
 
         const groupId = req.params.groupId;
 

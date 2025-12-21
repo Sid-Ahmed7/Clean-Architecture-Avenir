@@ -1,12 +1,26 @@
 import express from 'express'
 import { AccountController } from '../controller/account.controller'
-import { accountRepository, accountNumberGenerator, ibanGenerator, transactionRepository, overdraftRequestRepository, loanRequestRepository, userRepository, uuidService, transferLimitService, transferValidationService, transactionEnrichmentService } from '../../../../adapters/config/repositories'
+import { accountRepository, accountNumberGenerator, ibanGenerator, transactionRepository, overdraftRequestRepository, loanRequestRepository, userRepository, uuidService, transferLimitService, transferValidationService, transactionEnrichmentService, notificationRepository, notificationService} from '../../../../adapters/config/repositories'
 import { verifyTokenAccess } from '../middleware/authMiddleware';
 import { authorizeRoles } from '../middleware/roleMiddleware';
 import { RoleEnum } from '../../../../../domain/enums/RoleEnum';
 const router = express.Router();
 
-const accountController = new AccountController(accountRepository, accountNumberGenerator, ibanGenerator, transactionRepository, overdraftRequestRepository, loanRequestRepository, userRepository, uuidService, transferLimitService, transferValidationService, transactionEnrichmentService);
+const accountController = new AccountController(
+    accountRepository,
+    accountNumberGenerator,
+    ibanGenerator,
+    transactionRepository,
+    overdraftRequestRepository,
+    loanRequestRepository,
+    userRepository,
+    uuidService,
+    transferLimitService,
+    transferValidationService,
+    transactionEnrichmentService,
+    notificationRepository,
+    notificationService
+);
 router.get("/my-accounts", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req, res) => accountController.getUserAccounts(req, res));
 router.post("/create", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req, res) => accountController.createAnAccount(req,res));
 router.post("/create/sub", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req, res) => accountController.createSubAccount(req,res));

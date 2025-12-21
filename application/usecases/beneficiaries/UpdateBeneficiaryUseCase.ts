@@ -2,10 +2,13 @@ import { BeneficiaryRepositoryInterface } from "../../ports/repositories/benefic
 import { UpdateBeneficiary } from "../../requests/UpdateBeneficiary";
 import { BeneficiaryEntity } from "../../../domain/entities/BeneficiaryEntity";
 import { BeneficiaryNotFoundError } from "../../errors/BeneficiaryNotFoundError";
+import { SendNotificationToClientUseCase } from "../notification/SendNotificationToClientUseCase";
+import { NotificationTypeEnum } from "../../../domain/enums/NotificationTypeEnum";
 
 export class UpdateBeneficiaryUseCase {
     public constructor(
-        private readonly beneficiaryRepository: BeneficiaryRepositoryInterface
+        private readonly beneficiaryRepository: BeneficiaryRepositoryInterface,
+        private readonly sendNotificationUseCase: SendNotificationToClientUseCase,
     ) {}
 
     public async execute(data: UpdateBeneficiary): Promise<BeneficiaryEntity | BeneficiaryNotFoundError | Error> {
@@ -45,6 +48,14 @@ export class UpdateBeneficiaryUseCase {
 
         if (result instanceof BeneficiaryNotFoundError) {
             return result;
+        }
+
+        if (this.sendNotificationUseCase) {
+            await this.sendNotificationUseCase.execute(
+                data.userId,
+                `Le bénéficiaire ${updatedBeneficiary.beneficiaryName} a été mis à jour avec succès.`,
+                NotificationTypeEnum.INFO
+            );
         }
 
         return result;

@@ -9,16 +9,15 @@ export class CreateSavingsAccountUseCase {
     ) {}
 
     public async execute(dto: CreateSavingsAccount): Promise<SavingsAccountsEntity | InvalidAccountError | Error> {
-        // Create the savings account entity
         const savingsAccount = SavingsAccountsEntity.from(
             dto.accountNumber,
             dto.productId,
             dto.userId,
             dto.interestRate,
             dto.maxDepositAmount,
-            0, // totalInterestEarned starts at 0
-            true, // isActive by default
-            undefined, // lastInterestApplied
+            0,
+            true, 
+            undefined, 
             dto.maturity
         );
 
@@ -26,7 +25,6 @@ export class CreateSavingsAccountUseCase {
             return savingsAccount;
         }
 
-        // Save to repository
         const result = await this.savingsAccountRepository.createSavingsAccount(savingsAccount);
         
         if (result instanceof Error) {

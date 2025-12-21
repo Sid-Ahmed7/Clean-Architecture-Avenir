@@ -15,6 +15,8 @@ import {CryptoUuidGenerator} from "../services/CryptoUuidGenerator";
 import {ManageTransferLimitService} from "../services/ManageTransferLimitService";
 import {ValidateTransferService} from "../services/ValidateTransferService";
 import {TransactionEnrichmentServiceImpl} from "../services/TransactionEnrichmentService";
+import {NotificationService} from "../services/notification/NotificationService";
+import {StatusMessageService} from "../services/StatusMessageService";
 
 import { InMemoryEventBus } from '../repositories/InMemoryEventBus';
 import { InMemoryUserRepository } from '../repositories/InMemoryUserRepository';
@@ -44,6 +46,7 @@ import { InMemorySavingsAccountRepository } from '../repositories/InMemorySaving
 import { ManageLoanConfigService } from "../services/ManageLoanConfigService";
 import { InMemoryBeneficiaryRepository } from '../repositories/InMemoryBeneficiaryRepository';
 import { InMemoryBeneficiaryGroupRepository } from '../repositories/InMemoryBeneficiaryGroupRepository';
+import { InMemoryNotificationRepository } from '../repositories/InMemoryNotificationRepository';
 
 const baseUrl = process.env.CLIENT_BASE_URL!;
 export const tokenService = new JwtTokenService();
@@ -97,3 +100,8 @@ export const savingsAccountRepository = new InMemorySavingsAccountRepository();
 
 export const beneficiaryRepository = new InMemoryBeneficiaryRepository();
 export const beneficiaryGroupRepository = new InMemoryBeneficiaryGroupRepository();
+
+export const notificationRepository = new InMemoryNotificationRepository();
+export const notificationService = new NotificationService();
+
+export const statusMessageService = new StatusMessageService();

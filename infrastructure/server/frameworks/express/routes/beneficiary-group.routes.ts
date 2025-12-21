@@ -1,13 +1,13 @@
 import express from 'express';
 import { BeneficiaryGroupController } from '../controller/beneficiary-group.controller';
-import { uuidService, beneficiaryGroupRepository, beneficiaryRepository, accountRepository, transactionRepository } from '../../../../adapters/config/repositories';
+import { uuidService, beneficiaryGroupRepository, beneficiaryRepository, accountRepository, transactionRepository, notificationRepository, notificationService, userRepository } from '../../../../adapters/config/repositories';
 import { verifyTokenAccess } from '../middleware/authMiddleware';
 import { authorizeRoles } from '../middleware/roleMiddleware';
 import { RoleEnum } from '../../../../../domain/enums/RoleEnum';
 
 const router = express.Router();
 
-const beneficiaryGroupController = new BeneficiaryGroupController(beneficiaryGroupRepository, beneficiaryRepository, uuidService, accountRepository, transactionRepository);
+const beneficiaryGroupController = new BeneficiaryGroupController(beneficiaryGroupRepository, beneficiaryRepository, uuidService, accountRepository, transactionRepository, notificationRepository, notificationService, userRepository);
 
 router.post("/", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req, res) => beneficiaryGroupController.createBeneficiaryGroup(req, res));
 router.get("/", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req, res) => beneficiaryGroupController.getGroupsByUser(req, res));

@@ -2,10 +2,13 @@ import { BeneficiaryGroupEntity } from "../../../../domain/entities/BeneficiaryG
 import { BeneficiaryGroupNotFoundError } from "../../../errors/BeneficiaryGroupNotFoundError";
 import { BeneficiaryGroupRepositoryInterface } from "../../../ports/repositories/beneficiaries/BeneficiaryGroupRepositoryInterface";
 import { UpdateBeneficiaryGroup } from "../../../requests/UpdateBeneficiaryGroup";
+import { SendNotificationToClientUseCase } from "../../notification/SendNotificationToClientUseCase";
+import { NotificationTypeEnum } from "../../../../domain/enums/NotificationTypeEnum";
 
 export class UpdateBeneficiaryGroupUseCase {
   constructor(
-    private readonly beneficiaryGroupRepository: BeneficiaryGroupRepositoryInterface
+    private readonly beneficiaryGroupRepository: BeneficiaryGroupRepositoryInterface,
+    private readonly sendNotificationUseCase: SendNotificationToClientUseCase,
   ) {}
 
   public async execute(data: UpdateBeneficiaryGroup): Promise<BeneficiaryGroupEntity | BeneficiaryGroupNotFoundError | Error> {
@@ -32,6 +35,14 @@ export class UpdateBeneficiaryGroupUseCase {
 
     if (updatedGroup instanceof Error) {
       return updatedGroup;
+    }
+
+    if (this.sendNotificationUseCase) {
+        await this.sendNotificationUseCase.execute(
+            data.userId,
+            `Le groupe de bénéficiaires "${existingGroup.groupName}" a été mis à jour.`,
+            NotificationTypeEnum.INFO
+        );
     }
 
     return updatedGroup;

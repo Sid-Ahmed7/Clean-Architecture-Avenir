@@ -14,6 +14,7 @@ import stockPosition from "./stockPositions.routes";
 import stockTransaction from "./stockTransactions.routes";
 import beneficiaryRoutes from "./beneficiary.routes";
 import beneficiaryGroupRoutes from "./beneficiary-group.routes";
+import notificationRoutes from "./notification.routes";
 
 const router = express.Router();
 
@@ -32,5 +33,6 @@ router.use("/content", contentRoutes);
 router.use("/loan", loanRoutes);
 router.use("/beneficiaries", beneficiaryRoutes);
 router.use("/beneficiary-groups", beneficiaryGroupRoutes);
+router.use("/notification", notificationRoutes)
 
 export default router;

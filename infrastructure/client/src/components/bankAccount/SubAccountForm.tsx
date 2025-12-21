@@ -17,7 +17,6 @@ export default function SubAccountForm(props: SubAccountsFormProps) {
     const {parentAccountId} = props;
     const t = useTranslations();
     const {createSubAccount, loading, error, success} = useCreateSubAccount();
-
     const accountTypes = [
         { value: "SAVINGS", label: "Épargne", icon: PiggyBank },
     ]
@@ -32,7 +31,7 @@ export default function SubAccountForm(props: SubAccountsFormProps) {
         }
     });
 
-   const onSubmit = (data: CreateSubAccountModel) => {
+   const onSubmit = async  (data: CreateSubAccountModel) => {
         createSubAccount({ ...data, parentAccountId });
     };
 

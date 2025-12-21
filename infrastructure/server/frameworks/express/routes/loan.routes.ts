@@ -3,27 +3,11 @@ import { verifyTokenAccess } from "../middleware/authMiddleware";
 import { authorizeRoles } from "../middleware/roleMiddleware";
 import { RoleEnum } from "../../../../../domain/enums/RoleEnum";
 import { LoanController } from "../controller/loan.controller";
-import {
-  loanRequestRepository,
-  userRepository,
-  userRoleRepository,
-  uuidService,
-  accountRepository,
-  loanConfigService,
-  loanRepaymentScheduleRepository,
-} from "../../../../adapters/config/repositories";
+import { loanRequestRepository,userRepository,userRoleRepository,uuidService,accountRepository,loanConfigService,loanRepaymentScheduleRepository, notificationRepository, notificationService} from "../../../../adapters/config/repositories";
 
 const router = express.Router();
 
-const loanController = new LoanController(
-  loanRequestRepository,
-  userRepository,
-  userRoleRepository,
-  uuidService,
-  accountRepository,
-  loanConfigService,
-  loanRepaymentScheduleRepository,
-);
+const loanController = new LoanController(loanRequestRepository,userRepository,userRoleRepository,uuidService,accountRepository,loanConfigService,loanRepaymentScheduleRepository, notificationRepository, notificationService);
 
 router.post(
   "/request",

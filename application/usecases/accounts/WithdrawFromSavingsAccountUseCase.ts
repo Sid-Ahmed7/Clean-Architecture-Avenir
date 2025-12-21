@@ -3,12 +3,15 @@ import { SavingsAccountRepositoryInterface } from "../../ports/repositories/Savi
 import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
 import { TransactionRepositoryInterface } from "../../ports/repositories/TransactionRepositoryInterface";
 import { WithdrawFromSavingsAccount } from "../../requests/WithdrawFromSavingsAccount";
+import { SendNotificationToClientUseCase } from "../notification/SendNotificationToClientUseCase";
+import { NotificationTypeEnum } from "../../../domain/enums/NotificationTypeEnum";
 
 export class WithdrawFromSavingsAccountUseCase {
     constructor(
         private readonly savingsAccountRepository: SavingsAccountRepositoryInterface,
         private readonly accountRepository: AccountRepositoryInterface,
-        private readonly transactionRepository: TransactionRepositoryInterface
+        private readonly transactionRepository: TransactionRepositoryInterface,
+        private readonly sendNotificationUseCase: SendNotificationToClientUseCase,
     ) {}
 
     public async execute(dto: WithdrawFromSavingsAccount): Promise<SavingsAccountsEntity | Error> {
@@ -86,7 +89,14 @@ export class WithdrawFromSavingsAccountUseCase {
             return result;
         }
 
-        // TODO: Create transaction records
+
+        if (this.sendNotificationUseCase) {
+            await this.sendNotificationUseCase.execute(
+                dto.userId,
+                `Retrait de ${dto.amount}€ effectué de votre compte d'épargne ${dto.savingsAccountNumber}.`,
+                NotificationTypeEnum.INFO
+            );
+        }
 
         return result;
     }
