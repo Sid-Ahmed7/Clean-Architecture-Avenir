@@ -26,7 +26,7 @@ export class ManageTransferLimitService implements TransferLimitService {
     }
 
     public recordTransfer(account: AccountEntity, amount: number): void {
-        account.totalTransfered += amount;
+        account.recordTransfer(amount);
     }
 
     private calculateHoursSinceReset(lastResetDate: Date): number {

@@ -17,7 +17,7 @@ type TransferFormProps = {
 
 export default function TransferForm({ accounts, onSuccess }: TransferFormProps) {
     const t = useTranslations();
-    const { transfer, loading, error, success, resetState } = useTransferBetweenAccounts();
+    const { transfer, loading, error, success, transaction, resetState } = useTransferBetweenAccounts();
     const [showConfirm, setShowConfirm] = useState(false);
     const [pendingTransfer, setPendingTransfer] = useState<TransferModel | null>(null);
 
@@ -38,6 +38,7 @@ export default function TransferForm({ accounts, onSuccess }: TransferFormProps)
     });
 
     const selectedIban = watch("fromIban");
+    const selectedToIban = watch("toIban");
 
     useEffect(() => {
         if (success) {
@@ -63,6 +64,10 @@ export default function TransferForm({ accounts, onSuccess }: TransferFormProps)
 
     const handleAccountSelect = (iban: string) => {
         setValue("fromIban", iban, { shouldValidate: true });
+    };
+
+    const handleDestinationAccountSelect = (iban: string) => {
+        setValue("toIban", iban, { shouldValidate: true });
     };
 
     const handleConfirm = () => {
@@ -140,56 +145,97 @@ export default function TransferForm({ accounts, onSuccess }: TransferFormProps)
                         )}
                     </div>
 
-                    <div className="space-y-4">
-                        <div className="space-y-2">
-                            <label className="block text-sm font-semibold text-gray-900">
-                                IBAN destinataire
+                    <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                            <label className="text-sm font-semibold text-gray-900">
+                                Compte destinataire
                             </label>
-                            <input
-                                type="text"
-                                {...register("toIban")}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white shadow-sm"
-                                placeholder="FR76 3000 ..."
-                            />
-                            {errors.toIban && (
-                                <p className="text-red-500 text-sm">{errors.toIban.message}</p>
-                            )}
+                            <span className="text-xs text-gray-500">Choisis un compte à créditer</span>
                         </div>
-
-                        <div className="space-y-2">
-                            <label className="block text-sm font-semibold text-gray-900">Montant</label>
-                            <div className="relative">
-                                <input
-                                    type="number"
-                                    step="0.01"
-                                    {...register("amount", { valueAsNumber: true })}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white shadow-sm"
-                                    placeholder="0.00"
-                                />
-                                <span className="absolute inset-y-0 right-4 flex items-center text-gray-500 text-sm font-semibold">
-                                    EUR
-                                </span>
-                            </div>
-                            {errors.amount && (
-                                <p className="text-red-500 text-sm">{errors.amount.message}</p>
-                            )}
+                        <div className="grid grid-cols-1 gap-3">
+                            {accounts
+                                .filter((account) => account.iban !== selectedIban)
+                                .map((account) => (
+                                    <button
+                                        key={account.accountNumber}
+                                        type="button"
+                                        onClick={() => handleDestinationAccountSelect(account.iban)}
+                                        className={`rounded-2xl border p-4 text-left transition-all shadow-sm ${
+                                            selectedToIban === account.iban
+                                                ? "border-emerald-500 bg-emerald-50 ring-2 ring-emerald-100"
+                                                : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                                        }`}
+                                    >
+                                        <div className="flex justify-between items-start">
+                                            <div className="space-y-1">
+                                                <p className="text-sm font-semibold text-gray-900">
+                                                    {account.customAccountName || `Compte ${account.accountNumber}`}
+                                                </p>
+                                                <p className="text-xs text-gray-500">{account.iban}</p>
+                                            </div>
+                                            <span className="text-xs font-medium px-2 py-1 rounded-full bg-gray-100 text-gray-600">
+                                                {account.currency}
+                                            </span>
+                                        </div>
+                                        <p className="mt-3 text-lg font-semibold text-gray-900">
+                                            {account.currentBalance.toLocaleString("fr-FR")}
+                                            <span className="text-sm ml-1">{account.currency}</span>
+                                        </p>
+                                    </button>
+                                ))}
                         </div>
-
-                        <div className="flex flex-col gap-2 text-xs text-gray-500 bg-gray-50 rounded-xl p-3 border border-dashed border-gray-200">
-                            <p>Assure-toi que l’IBAN destinataire est correct avant de confirmer.</p>
-                            <p>Les transferts peuvent être soumis à des vérifications supplémentaires.</p>
-                        </div>
+                        <input type="hidden" value={selectedToIban} {...register("toIban")} />
+                        {errors.toIban && (
+                            <p className="text-red-500 text-sm mt-1">{errors.toIban.message}</p>
+                        )}
                     </div>
                 </div>
+
+                <div className="space-y-2">
+                    <label className="block text-sm font-semibold text-gray-900">Montant du virement</label>
+                    <div className="relative">
+                        <input
+                            type="number"
+                            step="0.01"
+                            {...register("amount", { valueAsNumber: true })}
+                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white shadow-sm"
+                            placeholder="0.00"
+                        />
+                        <span className="absolute inset-y-0 right-4 flex items-center text-gray-500 text-sm font-semibold">
+                            EUR
+                        </span>
+                    </div>
+                    {errors.amount && (
+                        <p className="text-red-500 text-sm">{errors.amount.message}</p>
+                    )}
+                </div>
+
+                <div className="flex flex-col gap-2 text-xs text-gray-500 bg-blue-50 rounded-xl p-4 border border-blue-100">
+                    <p className="font-medium text-blue-900">ℹ️ Informations importantes</p>
+                    <ul className="list-disc list-inside space-y-1 text-blue-700">
+                        <li>Le transfert sera effectué entre tes comptes personnels uniquement</li>
+                        <li>Les deux comptes doivent avoir la même devise</li>
+                        <li>Le transfert est instantané et sécurisé</li>
+                    </ul>
+                </div>
+
+                {accounts.length < 2 && (
+                    <div className="flex flex-col gap-2 text-sm bg-yellow-50 rounded-xl p-4 border border-yellow-200">
+                        <p className="font-semibold text-yellow-900">⚠️ Transfert impossible</p>
+                        <p className="text-yellow-700">
+                            Tu dois avoir au moins 2 comptes pour effectuer un transfert entre tes comptes.
+                        </p>
+                    </div>
+                )}
 
                 <div className="flex flex-col gap-3">
                     <div className="flex gap-3 flex-wrap">
                         <button
                             type="submit"
-                            disabled={loading}
-                            className="flex-1 min-w-[180px] px-6 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-all disabled:opacity-50 shadow-sm"
+                            disabled={loading || accounts.length < 2}
+                            className="flex-1 min-w-[180px] px-6 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
                         >
-                            {loading ? "Traitement..." : "Envoyer"}
+                            {loading ? "Traitement..." : accounts.length < 2 ? "2 comptes minimum requis" : "Envoyer"}
                         </button>
                         <button
                             type="button"
@@ -205,9 +251,38 @@ export default function TransferForm({ accounts, onSuccess }: TransferFormProps)
                             {error}
                         </div>
                     )}
-                    {success && (
-                        <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-700 text-sm">
-                            Virement effectué avec succès.
+                    {success && transaction && (
+                        <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 space-y-2">
+                            <div className="flex items-center gap-2 text-emerald-700 font-semibold">
+                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                </svg>
+                                Virement effectué avec succès
+                            </div>
+                            <div className="text-sm text-emerald-700 space-y-1 bg-white/50 rounded-lg p-3">
+                                <p className="flex justify-between">
+                                    <span className="font-medium">Référence:</span>
+                                    <span className="font-mono">{transaction.reference}</span>
+                                </p>
+                                <p className="flex justify-between">
+                                    <span className="font-medium">Montant:</span>
+                                    <span className="font-semibold">{transaction.amount.toFixed(2)} EUR</span>
+                                </p>
+                                <p className="flex justify-between">
+                                    <span className="font-medium">Statut:</span>
+                                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                                        transaction.status === 'COMPLETED'
+                                            ? 'bg-emerald-100 text-emerald-700'
+                                            : 'bg-yellow-100 text-yellow-700'
+                                    }`}>
+                                        {transaction.status === 'COMPLETED' ? 'Complété' : 'En cours'}
+                                    </span>
+                                </p>
+                                <p className="flex justify-between">
+                                    <span className="font-medium">Date:</span>
+                                    <span>{new Date(transaction.createdAt).toLocaleString('fr-FR')}</span>
+                                </p>
+                            </div>
                         </div>
                     )}
                 </div>
@@ -218,9 +293,9 @@ export default function TransferForm({ accounts, onSuccess }: TransferFormProps)
                     <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
                         <h3 className="text-xl font-semibold text-gray-900 mb-2">Confirmer le virement</h3>
                         <p className="text-sm text-gray-600 mb-4">
-                            Tu t'apprêtes à transférer
+                            Tu t&apos;apprêtes à transférer
                             <span className="font-semibold text-gray-900"> {pendingTransfer.amount.toFixed(2)} EUR </span>
-                            de l'IBAN
+                            de l&apos;IBAN
                             <span className="font-semibold text-gray-900"> {pendingTransfer.fromIban} </span>
                             vers
                             <span className="font-semibold text-gray-900"> {pendingTransfer.toIban}</span>.

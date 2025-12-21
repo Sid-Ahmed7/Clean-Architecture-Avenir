@@ -32,11 +32,13 @@ import { InMemoryOverdraftRequestRepository } from "../../../../adapters/reposit
 import { InMemoryLoanRequestRepository } from "../../../../adapters/repositories/InMemoryLoanRequestRepository";
 import { InMemoryUserRepository } from "../../../../adapters/repositories/InMemoryUserRepository";
 import { GetTransactionHistoryUseCase } from "../../../../../application/usecases/accounts/GetTransactionHistoryUseCase";
+import { GetLastTransactionsUseCase } from "../../../../../application/usecases/accounts/GetLastTransactionsUseCase";
 import { CheckingAccountAlreadyExistError } from "../../../../../application/errors/CheckingAccountAlreadyExistError";
 import { InvalidIbanError } from "../../../../../domain/errors/InvalidIbanError";
 import { GetUserByIdUseCase } from "../../../../../application/usecases/auth/GetUserByIdUseCase";
 import { UserNotFoundError } from "../../../../../application/errors/UserNotFoundError";
-import { TransferBetweenAccountsUseCase } from "../../../../../application/usecases/accounts/TransferBetweenAccountsUseCase";
+import { TransferBetweenAccountsUseCase } from "../../../../../application/usecases/transfer/TransferBetweenAccountsUseCase";
+import { QuickTransferUseCase } from "../../../../../application/usecases/transfer/QuickTransferUseCase";
 import { InsufficientFundsError } from "../../../../../application/errors/InsufficientFundsError";
 import { TransferLimitExceededError } from "../../../../../application/errors/TransferLimitExceededError";
 import { TransferLimitIncreaseError } from "../../../../../application/errors/TransferLimitIncreaseError";
@@ -45,6 +47,7 @@ import { OverdraftActionEnum } from "../../../../../domain/enums/OverdraftAction
 import { userRepository } from "../../../../adapters/config/repositories";
 import { ManageTransferLimitService } from "../../../../adapters/services/ManageTransferLimitService";
 import { ValidateTransferService } from "../../../../adapters/services/ValidateTransferService";
+import { TransactionEnrichmentServiceImpl } from "../../../../adapters/services/TransactionEnrichmentService";
 import { CreateAccount } from "../../../../../application/requests/CreateAccount";
 import { createAccountSchema } from "../schemas/accounts/createAccountSchema";
 import { CreateSubAccount } from "../../../../../application/requests/CreateSubAccount";
@@ -78,7 +81,8 @@ export class AccountController {
     private readonly userRepository: InMemoryUserRepository,
     private readonly uuidService: CryptoUuidGenerator,
     private readonly transferLimitService: ManageTransferLimitService,
-    private readonly validateTransferService: ValidateTransferService
+    private readonly validateTransferService: ValidateTransferService,
+    private readonly transactionEnrichmentService: TransactionEnrichmentServiceImpl
   ) {}
 
 
@@ -666,9 +670,50 @@ async updateAccount(req: Request, res: Response) {
         return res.status(500).json({ error: "Unable to process transfer" });
     }
 
+    async quickTransfer(req: Request, res: Response) {
+        const quickTransferUseCase = new QuickTransferUseCase(this.accountRepository,this.transactionRepository,this.uuidService);
+
+        const userId = req.user?.userId;
+
+        if (!userId) {
+            return res.status(401).json({ error: "User not authenticated" });
+        }
+
+        const { sourceAccountNumber, destinationAccountNumber, amount } = req.body;
+
+        if (!sourceAccountNumber || !destinationAccountNumber || !amount) {
+            return res.status(400).json({ error: "Missing required fields" });
+        }
+
+        const result = await quickTransferUseCase.execute({
+            userId,
+            sourceAccountNumber: parseInt(sourceAccountNumber),
+            destinationAccountNumber: parseInt(destinationAccountNumber),
+            amount: parseFloat(amount),
+        });
+
+        if (!(result instanceof Error)) {
+            return res.status(200).json(result);
+        }
+
+        if (result instanceof AccountNotFoundError) {
+            return res.status(404).json({ error: result.message });
+        }
+
+        if (result instanceof InsufficientFundsError) {
+            return res.status(400).json({ error: result.message });
+        }
+
+        if (result instanceof InvalidAccountError) {
+            return res.status(400).json({ error: result.message });
+        }
+
+        return res.status(500).json({ error: "Unable to process quick transfer" });
+    }
+
     async getTransactionHistory(req: Request, res: Response) {
-        const getTransactionHistoryUseCase = new GetTransactionHistoryUseCase(this.transactionRepository, this.accountRepository, this.userRepository);
-        
+        const getTransactionHistoryUseCase = new GetTransactionHistoryUseCase(this.transactionRepository, this.accountRepository, this.transactionEnrichmentService);
+
         const userId = req.user?.userId;
 
 
@@ -677,6 +722,26 @@ async updateAccount(req: Request, res: Response) {
         }
 
         const result = await getTransactionHistoryUseCase.execute(userId);
+
+        if (result instanceof UserNotFoundError) {
+            return res.status(404).json({ error: result.message });
+        }
+
+        return res.status(200).json(result);
+    }
+
+    async getLastTransactions(req: Request, res: Response) {
+        const getLastTransactionsUseCase = new GetLastTransactionsUseCase(this.transactionRepository, this.accountRepository, this.transactionEnrichmentService);
+
+        const userId = req.user?.userId;
+
+        if (!userId) {
+            return res.status(401).json({ error: "User not authenticated" });
+        }
+
+        const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 10;
+
+        const result = await getLastTransactionsUseCase.execute(userId, limit);
 
         if (result instanceof UserNotFoundError) {
             return res.status(404).json({ error: result.message });

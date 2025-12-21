@@ -1,12 +1,12 @@
 import express from 'express'
 import { AccountController } from '../controller/account.controller'
-import { accountRepository, accountNumberGenerator, ibanGenerator, transactionRepository, overdraftRequestRepository, loanRequestRepository, userRepository, uuidService, transferLimitService, transferValidationService } from '../../../../adapters/config/repositories'
+import { accountRepository, accountNumberGenerator, ibanGenerator, transactionRepository, overdraftRequestRepository, loanRequestRepository, userRepository, uuidService, transferLimitService, transferValidationService, transactionEnrichmentService } from '../../../../adapters/config/repositories'
 import { verifyTokenAccess } from '../middleware/authMiddleware';
 import { authorizeRoles } from '../middleware/roleMiddleware';
 import { RoleEnum } from '../../../../../domain/enums/RoleEnum';
 const router = express.Router();
 
-const accountController = new AccountController(accountRepository, accountNumberGenerator, ibanGenerator, transactionRepository, overdraftRequestRepository, loanRequestRepository, userRepository, uuidService, transferLimitService, transferValidationService);
+const accountController = new AccountController(accountRepository, accountNumberGenerator, ibanGenerator, transactionRepository, overdraftRequestRepository, loanRequestRepository, userRepository, uuidService, transferLimitService, transferValidationService, transactionEnrichmentService);
 router.get("/my-accounts", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req, res) => accountController.getUserAccounts(req, res));
 router.post("/create", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req, res) => accountController.createAnAccount(req,res));
 router.post("/create/sub", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req, res) => accountController.createSubAccount(req,res));
@@ -30,7 +30,9 @@ router.put("/:accountNumber/transfer-limit",verifyTokenAccess, authorizeRoles([R
 router.put("/:accountNumber/overdraft-limit",verifyTokenAccess, authorizeRoles([RoleEnum.BANK_MANAGER]), (req,res) => accountController.updateOverdraftLimit(req,res));
 router.put("/:accountNumber/active", verifyTokenAccess, authorizeRoles([RoleEnum.BANK_MANAGER]), (req,res) => accountController.toggleAccountActive(req,res));
 router.post("/transfer", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req,res) => accountController.transferBetweenAccounts(req,res));
+router.post("/quick-transfer", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req,res) => accountController.quickTransfer(req,res));
 router.get("/transactions/history", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req,res) => accountController.getTransactionHistory(req,res));
+router.get("/transactions/last", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req,res) => accountController.getLastTransactions(req,res));
 
 
 export default router;

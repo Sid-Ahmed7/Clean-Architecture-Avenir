@@ -2,12 +2,12 @@ import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepo
 import { AccountNotFoundError } from "../../errors/AccountNotFoundError";
 import { TransactionRepositoryInterface } from "../../ports/repositories/TransactionRepositoryInterface";
 import { TransactionEntity } from "../../../domain/entities/TransactionEntity";
-import { OrderStatusEnum } from "../../../domain/enums/OrderStatusEnum";
 import { TransactionTypeEnum } from "../../../domain/enums/TransactionTypeEnum";
 import { TransferInput } from "../../requests/TransferInput"
 import { UuidGeneratorService } from "../../ports/services/UuidGeneratorService";
 import { TransferLimitService } from "../../ports/services/TransferLimitService";
 import { TransferValidationService } from "../../ports/services/TransferValidationService";
+import { TransferStatusEnum } from "../../../domain/enums/TransferStatusEnum";
 
 
 export class TransferBetweenAccountsUseCase {
@@ -19,7 +19,7 @@ export class TransferBetweenAccountsUseCase {
         private readonly transferValidationService: TransferValidationService
     ) {}
 
-    public async execute(input: TransferInput) {
+    public async execute(input: TransferInput): Promise<TransactionEntity | Error> {
         const { fromIban, toIban, amount, userId } = input;
 
         const debitAccount = await this.accountRepository.getOneAccountByIban(fromIban);
@@ -43,18 +43,27 @@ export class TransferBetweenAccountsUseCase {
             return validationError;
         }
 
+        const originalDebitBalance = debitAccount.currentBalance;
+        const originalCreditBalance = creditAccount.currentBalance;
+
         debitAccount.updateBalance(debitAccount.currentBalance - amount);
         creditAccount.updateBalance(creditAccount.currentBalance + amount);
 
-        this.transferLimitService.recordTransfer(debitAccount, amount);
-
         const debitUpdate = await this.accountRepository.updateOneAccount(debitAccount);
         if (debitUpdate instanceof Error) {
+            debitAccount.updateBalance(originalDebitBalance);
             return debitUpdate;
         }
 
         const creditUpdate = await this.accountRepository.updateOneAccount(creditAccount);
         if (creditUpdate instanceof Error) {
+            debitAccount.updateBalance(originalDebitBalance);
+            const rollbackResult = await this.accountRepository.updateOneAccount(debitAccount);
+
+            if (rollbackResult instanceof Error) {
+                return rollbackResult;
+            }
+
             return creditUpdate;
         }
 
@@ -67,11 +76,15 @@ export class TransferBetweenAccountsUseCase {
             amount,
             TransactionTypeEnum.TRANSFER,
             userId,
-            OrderStatusEnum.PENDING,
+            TransferStatusEnum.PENDING,
             new Date()
         );
 
         if (!(transactionOrError instanceof TransactionEntity)) {
+            debitAccount.updateBalance(originalDebitBalance);
+            creditAccount.updateBalance(originalCreditBalance);
+            await this.accountRepository.updateOneAccount(debitAccount);
+            await this.accountRepository.updateOneAccount(creditAccount);
             return transactionOrError;
         }
 
@@ -80,10 +93,13 @@ export class TransferBetweenAccountsUseCase {
 
         await this.transactionRepository.save(transactionOrError);
 
-        return {
-            fromAccount: debitUpdate,
-            toAccount: creditUpdate,
-        };
+        debitAccount.recordTransfer(amount);
+        await this.accountRepository.updateOneAccount(debitAccount);
+
+        transactionOrError.status = TransferStatusEnum.COMPLETED;
+        await this.transactionRepository.save(transactionOrError);
+
+        return transactionOrError;
     }
 }
 

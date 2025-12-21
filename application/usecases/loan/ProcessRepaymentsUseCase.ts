@@ -9,6 +9,7 @@ import { TransactionEntity } from "../../../domain/entities/TransactionEntity";
 import { TransactionTypeEnum } from "../../../domain/enums/TransactionTypeEnum";
 import { OrderStatusEnum } from "../../../domain/enums/OrderStatusEnum";
 import { UuidGeneratorService } from "../../ports/services/UuidGeneratorService";
+import { TransferStatusEnum } from "../../../domain/enums/TransferStatusEnum";
 import { RepaymentUserNotFoundError } from "../../errors/RepaymentUserNotFoundError";
 import { RepaymentNoCheckingAccountError } from "../../errors/RepaymentNoCheckingAccountError";
 import { RepaymentDebitFailedError } from "../../errors/RepaymentDebitFailedError";
@@ -49,7 +50,7 @@ export class ProcessRepaymentsUseCase {
         schedule.monthlyAmount,
         TransactionTypeEnum.PAYMENT,
         schedule.clientId,
-        OrderStatusEnum.EXECUTED,
+        TransferStatusEnum.COMPLETED,
         new Date(),
         "Remboursement mensuel",
         "LOAN_REPAYMENT",

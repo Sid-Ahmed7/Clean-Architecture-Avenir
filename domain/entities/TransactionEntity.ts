@@ -1,4 +1,4 @@
-import { OrderStatusEnum } from "../enums/OrderStatusEnum";
+import { TransferStatusEnum } from "../enums/TransferStatusEnum";
 import { TransactionTypeEnum } from "../enums/TransactionTypeEnum";
 import { AccountNumberValue } from "../values/AccountNumberValue";
 import { TransactionAmountValue } from "../values/TransactionAmountValue";
@@ -14,10 +14,12 @@ export class TransactionEntity {
         amount: number,
         transactionType: TransactionTypeEnum,
         executedBy: string,
-        status: OrderStatusEnum,
+        status: TransferStatusEnum,
         createdAt: Date,
         description?: string,
-        category?: string
+        category?: string,
+        beneficiaryId?: string,
+        groupId?: string
     ) {
 
         const validatedDebitAccount = AccountNumberValue.from(debitAccount);
@@ -55,7 +57,9 @@ export class TransactionEntity {
             status,
             description,
             category,
-            createdAt
+            createdAt,
+            beneficiaryId,
+            groupId
         );
 
     }
@@ -67,13 +71,26 @@ export class TransactionEntity {
         public readonly amount: number,
         public readonly transactionType: TransactionTypeEnum,
         public readonly executedBy: string,
-        public status: OrderStatusEnum,
+        public status: TransferStatusEnum,
         public readonly description?: string,
         public readonly category?: string,
         public readonly createdAt?: Date,
+        public readonly beneficiaryId?: string,
+        public readonly groupId?: string,
         public  debitUserId?: string,
         public  creditUserId?: string,
         public  debitUserName?: string,
         public  creditUserName?: string
     ) {}
+
+    public complete(): void {
+        this.status = TransferStatusEnum.COMPLETED;
+    }
+    public fail(): void {
+        this.status = TransferStatusEnum.FAILED;
+    }
+
+    public isCompleted(): boolean {
+        return this.status === TransferStatusEnum.COMPLETED;
+    }
     }

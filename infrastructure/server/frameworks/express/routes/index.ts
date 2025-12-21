@@ -12,6 +12,8 @@ import savingsProductRoutes from "./savings-product.routes";
 import stockOrder from "./stockOrder.routes";
 import stockPosition from "./stockPositions.routes";
 import stockTransaction from "./stockTransactions.routes";
+import beneficiaryRoutes from "./beneficiary.routes";
+import beneficiaryGroupRoutes from "./beneficiary-group.routes";
 
 const router = express.Router();
 
@@ -28,5 +30,7 @@ router.use("/feed", newsRoutes);
 router.use("/media", mediaRoutes);
 router.use("/content", contentRoutes);
 router.use("/loan", loanRoutes);
+router.use("/beneficiaries", beneficiaryRoutes);
+router.use("/beneficiary-groups", beneficiaryGroupRoutes);
 
 export default router;
