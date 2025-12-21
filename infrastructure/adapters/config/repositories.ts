@@ -37,6 +37,7 @@ import { InMemoryStockTransactionRepository } from "../repositories/InMemoryStoc
 import { InMemoryTransactionRepository } from "../repositories/InMemoryTransactionRepository";
 import { InMemoryLoanRepaymentScheduleRepository } from "../repositories/InMemoryLoanRepaymentScheduleRepository";
 import { InMemoryLoanRequestRepository } from "../repositories/InMemoryLoanRequestRepository";
+import { InMemoryOverdraftRequestRepository } from "../repositories/InMemoryOverdraftRequestRepository";
 import { LocaleValidationService } from "../services/LocaleValidationService";
 import { InMemorySavingsProductRepository } from '../repositories/InMemorySavingsProductRepository';
 import { InMemorySavingsAccountRepository } from '../repositories/InMemorySavingsAccountRepository';
@@ -60,6 +61,7 @@ export const ibanGenerator = new GenerateIbanService(accountRepository);
 export const transactionRepository = new InMemoryTransactionRepository();
 export const loanRepaymentScheduleRepository = new InMemoryLoanRepaymentScheduleRepository();
 export const loanRequestRepository = new InMemoryLoanRequestRepository();
+export const overdraftRequestRepository = new InMemoryOverdraftRequestRepository();
 export const loanConfigService = new ManageLoanConfigService();
 export const transferLimitService = new ManageTransferLimitService();
 export const transferValidationService = new ValidateTransferService(transferLimitService);

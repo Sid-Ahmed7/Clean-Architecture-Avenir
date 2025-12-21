@@ -10,6 +10,9 @@ import { TransactionTypeEnum } from "../../../domain/enums/TransactionTypeEnum";
 import { OrderStatusEnum } from "../../../domain/enums/OrderStatusEnum";
 import { UuidGeneratorService } from "../../ports/services/UuidGeneratorService";
 import { TransferStatusEnum } from "../../../domain/enums/TransferStatusEnum";
+import { RepaymentUserNotFoundError } from "../../errors/RepaymentUserNotFoundError";
+import { RepaymentNoCheckingAccountError } from "../../errors/RepaymentNoCheckingAccountError";
+import { RepaymentDebitFailedError } from "../../errors/RepaymentDebitFailedError";
 
 export class ProcessRepaymentsUseCase {
   public constructor(
@@ -19,58 +22,51 @@ export class ProcessRepaymentsUseCase {
     private readonly uuidService: UuidGeneratorService,
   ) {}
 
-  public async execute(referenceDate: Date = new Date()) {
+  public async execute(referenceDate: Date = new Date()): Promise<void | Error> {
     const due = await this.scheduleRepository.findDue(referenceDate);
     const periodMs = 60 * 1000;
     for (const schedule of due) {
       const accountsResult = await this.accountRepository.getAccountsByUserId(schedule.clientId);
-      let failureMessage: string | null = null;
-
       if (accountsResult instanceof UserNotFoundError) {
-        failureMessage = "User not found";
-      } else {
-        const checking = accountsResult.find((a) => a.accountType === AccountTypeEnum.CHECKING);
-        if (!checking) {
-          failureMessage = "No checking account";
-        } else {
-          checking.updateBalance(checking.currentBalance - schedule.monthlyAmount);
-          const updatedAccount = await this.accountRepository.updateOneAccount(checking);
-          if (updatedAccount instanceof AccountNotFoundError || updatedAccount instanceof Error) {
-            failureMessage = "Debit failed";
-          } else {
-            
-            const reference = this.uuidService.generate();
-            const tx = TransactionEntity.from(
-              reference,
-              checking.accountNumber,
-              checking.accountNumber, 
-              schedule.monthlyAmount,
-              TransactionTypeEnum.PAYMENT,
-              schedule.clientId,
-              TransferStatusEnum.COMPLETED,
-              new Date(),
-              "Remboursement mensuel",
-              "LOAN_REPAYMENT",
-            );
-
-            if (tx instanceof TransactionEntity) {
-              tx.debitUserId = schedule.clientId;
-              tx.creditUserName = "Banque";
-              await this.transactionRepository.save(tx);
-            }
-
-            schedule.markPaid(schedule.monthlyAmount);
-            if (schedule.paymentsMade >= schedule.durationMonths || schedule.remainingPrincipal <= 0) {
-              schedule.markPaidOff();
-            } else {
-              schedule.scheduleNext(periodMs);
-            }
-          }
-        }
+        return new RepaymentUserNotFoundError();
       }
 
-      if (failureMessage) {
-        schedule.markFailed(failureMessage);
+      const checking = accountsResult.find((a) => a.accountType === AccountTypeEnum.CHECKING);
+      if (!checking) {
+        return new RepaymentNoCheckingAccountError();
+      }
+
+      checking.updateBalance(checking.currentBalance - schedule.monthlyAmount);
+      const updatedAccount = await this.accountRepository.updateOneAccount(checking);
+      if (updatedAccount instanceof AccountNotFoundError || updatedAccount instanceof Error) {
+        return new RepaymentDebitFailedError();
+      }
+
+      const reference = this.uuidService.generate();
+      const tx = TransactionEntity.from(
+        reference,
+        checking.accountNumber,
+        checking.accountNumber, 
+        schedule.monthlyAmount,
+        TransactionTypeEnum.PAYMENT,
+        schedule.clientId,
+        TransferStatusEnum.COMPLETED,
+        new Date(),
+        "Remboursement mensuel",
+        "LOAN_REPAYMENT",
+      );
+
+      if (tx instanceof TransactionEntity) {
+        tx.debitUserId = schedule.clientId;
+        tx.creditUserName = "Banque";
+        await this.transactionRepository.save(tx);
+      }
+
+      schedule.markPaid(schedule.monthlyAmount);
+      if (schedule.paymentsMade >= schedule.durationMonths || schedule.remainingPrincipal <= 0) {
+        schedule.markPaidOff();
+      } else {
+        schedule.scheduleNext(periodMs);
       }
       await this.scheduleRepository.save(schedule);
     }
