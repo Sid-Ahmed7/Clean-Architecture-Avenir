@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   advisorDecideLoanRequest,
   getAdvisorLoanRequests,
@@ -65,34 +65,75 @@ export function AdvisorLoanRequestsPageContent() {
       });
   };
 
-  if (loading) {
-    return <div className="p-6">Chargement des demandes...</div>;
-  }
-
-  if (error) {
-    return <div className="p-6 text-red-600">{error}</div>;
-  }
+  const stats = useMemo(() => {
+    const total = requests.length;
+    const pending = requests.filter((r) => r.status === "PENDING").length;
+    const approved = requests.filter((r) => r.status?.includes("APPROVED")).length;
+    const rejected = requests.filter((r) => r.status === "REJECTED").length;
+    return { total, pending, approved, rejected };
+  }, [requests]);
 
   return (
-    <div className="p-6 max-w-5xl mx-auto">
-      <h1 className="text-2xl font-bold text-gray-900 mb-4">Demandes de crédit</h1>
-      <p className="text-sm text-gray-600 mb-6">Voici les demandes créées par les clients et assignées à vous.</p>
-
-      {requests.length === 0 ? (
-        <div className="bg-white border rounded-lg p-4 shadow-sm">Aucune demande pour le moment.</div>
-      ) : (
-        <div className="grid gap-4 md:grid-cols-2">
-          {requests.map((req) => (
-            <AdvisorLoanRequestCard
-              key={req.id}
-              request={req}
-              submittingId={submitting}
-              onDecision={handleDecision}
-              onViewProfile={loadClientInfo}
-            />
-          ))}
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
+      <div className="max-w-6xl mx-auto px-6 py-10 space-y-6">
+        <div className="flex flex-col gap-3">
+          <div>
+            <p className="text-sm uppercase tracking-wide text-slate-500">Conseiller</p>
+            <h1 className="text-3xl font-bold text-slate-900">Demandes de crédit</h1>
+          </div>
+          <p className="text-sm text-slate-600">
+            Suivez, analysez et décidez des demandes de crédit de vos clients dans un espace clair et cohérent.
+          </p>
         </div>
-      )}
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="rounded-2xl border bg-white shadow-sm px-4 py-3">
+            <p className="text-xs uppercase text-slate-500">Total</p>
+            <p className="text-2xl font-semibold text-slate-900">{stats.total}</p>
+          </div>
+          <div className="rounded-2xl border bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-sm px-4 py-3">
+            <p className="text-xs uppercase text-white/80">En attente</p>
+            <p className="text-2xl font-semibold">{stats.pending}</p>
+          </div>
+          <div className="rounded-2xl border bg-white shadow-sm px-4 py-3">
+            <p className="text-xs uppercase text-slate-500">Approuvées</p>
+            <p className="text-2xl font-semibold text-emerald-700">{stats.approved}</p>
+          </div>
+          <div className="rounded-2xl border bg-white shadow-sm px-4 py-3">
+            <p className="text-xs uppercase text-slate-500">Refusées</p>
+            <p className="text-2xl font-semibold text-rose-600">{stats.rejected}</p>
+          </div>
+        </div>
+
+        {loading ? (
+          <div className="flex justify-center items-center py-12">
+            <div className="w-12 h-12 border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin" />
+          </div>
+        ) : error ? (
+          <div className="rounded-xl border border-rose-100 bg-rose-50 text-rose-700 px-4 py-3">
+            {error}
+          </div>
+        ) : requests.length === 0 ? (
+          <div className="rounded-2xl border bg-white shadow-sm px-6 py-10 text-center">
+            <p className="text-lg font-semibold text-slate-900">Aucune demande pour le moment</p>
+            <p className="text-sm text-slate-600 mt-1">
+              Les nouvelles demandes de vos clients apparaîtront ici dès leur création.
+            </p>
+          </div>
+        ) : (
+          <div className="grid gap-4 md:grid-cols-2">
+            {requests.map((req) => (
+              <AdvisorLoanRequestCard
+                key={req.id}
+                request={req}
+                submittingId={submitting}
+                onDecision={handleDecision}
+                onViewProfile={loadClientInfo}
+              />
+            ))}
+          </div>
+        )}
+      </div>
 
       {profileClientId && clientDetails[profileClientId] && (
         <ClientProfileModal

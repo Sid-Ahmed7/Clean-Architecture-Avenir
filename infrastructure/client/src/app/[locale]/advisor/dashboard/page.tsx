@@ -24,9 +24,21 @@ export default function AdvisorDashboard() {
             </section>
 
             <section className="mt-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-4">Demandes de crédit</h2>
+                <div className="bg-white p-4 rounded-lg shadow flex flex-col gap-3">
+                    <p className="text-gray-700">Consultez et traitez les demandes de crédit de vos clients.</p>
+                    <Link href="/advisor/loan-requests">
+                        <button className="w-fit bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">
+                            Voir les demandes de crédit
+                        </button>
+                    </Link>
+                </div>
+            </section>
+
+            <section className="mt-6">
                 <h2 className="text-xl font-bold text-gray-900 mb-4">Demandes de découvert</h2>
                 <div className="bg-white p-4 rounded-lg shadow flex flex-col gap-3">
-                    <p className="text-gray-700">Consulte et traite les demandes d’augmentation de découvert.</p>
+                    <p className="text-gray-700">Consultez et traitez les demandes d’augmentation de découvert.</p>
                     <Link href="/advisor/overdraft-requests">
                         <button className="w-fit bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition">
                             Ouvrir les demandes de découvert

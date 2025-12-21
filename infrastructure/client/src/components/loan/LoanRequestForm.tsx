@@ -103,44 +103,74 @@ export function LoanRequestForm() {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="bg-white p-8 sm:p-10 rounded-xl shadow-lg w-full max-w-xl border border-gray-200"
-    >
-      <h2 className="text-2xl sm:text-3xl font-semibold mb-6 text-gray-800 text-center">Demande de crédit</h2>
+    <div className="max-w-6xl mx-auto">
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-2">
+          <div className="bg-white border border-slate-100 shadow-sm rounded-2xl p-6 sm:p-8 space-y-6">
+            <div className="space-y-2">
+              <p className="text-xs uppercase tracking-wide text-slate-500">Client</p>
+              <h2 className="text-3xl font-bold text-slate-900">Demande de crédit</h2>
+              <p className="text-sm text-slate-600">
+                Renseignez les informations essentielles. Votre conseiller recevra automatiquement la demande.
+              </p>
+            </div>
 
-      {message && (
-        <div
-          className={`mb-4 rounded-lg p-3 text-sm ${
-            messageType === "error"
-              ? "bg-red-50 text-red-800 border border-red-100"
-              : "bg-green-50 text-green-800 border border-green-100"
-          }`}
-        >
-          {message}
+            {message && (
+              <div
+                className={`rounded-xl p-4 text-sm ${
+                  messageType === "error"
+                    ? "bg-rose-50 text-rose-700 border border-rose-100"
+                    : "bg-emerald-50 text-emerald-700 border border-emerald-100"
+                }`}
+              >
+                {message}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              <LoanRequestFields
+                advisors={advisors}
+                loadingAdvisors={loadingAdvisors}
+                advisorError={advisorError}
+                register={register}
+                errors={errors}
+                duration={duration}
+                onSelectDuration={(value) => setValue("durationMonths", value)}
+                amount={amount}
+                indicativeRate={indicativeRate}
+                monthlyPayment={monthlyPayment}
+                submitting={submitting}
+                durations={DURATIONS}
+                rateThreshold={RATE_THRESHOLD}
+              />
+
+              <p className="text-xs text-slate-500 text-center">
+                Une fois envoyée, la demande sera visible par votre conseiller.
+              </p>
+            </form>
+          </div>
         </div>
-      )}
 
-      <LoanRequestFields
-        advisors={advisors}
-        loadingAdvisors={loadingAdvisors}
-        advisorError={advisorError}
-        register={register}
-        errors={errors}
-        duration={duration}
-        onSelectDuration={(value) => setValue("durationMonths", value)}
-        amount={amount}
-        indicativeRate={indicativeRate}
-        monthlyPayment={monthlyPayment}
-        submitting={submitting}
-        durations={DURATIONS}
-        rateThreshold={RATE_THRESHOLD}
-      />
-
-      <p className="text-xs text-gray-500 mt-2 text-center">
-        Une fois envoyée, la demande sera visible par votre conseiller.
-      </p>
-    </form>
+        <div className="space-y-4">
+          <div className="bg-white border border-slate-100 shadow-sm rounded-2xl p-5">
+            <p className="text-xs uppercase text-slate-500 mb-1">Conseil</p>
+            <p className="text-sm text-slate-700">
+              Préparez un motif clair et un montant cohérent avec votre besoin. Si le montant dépasse 5000€, le taux sera
+              proposé par le directeur après validation.
+            </p>
+          </div>
+          <div className="bg-gradient-to-br from-blue-600 to-blue-500 rounded-2xl text-white p-5 shadow-sm space-y-2">
+            <p className="text-xs uppercase text-white/80">Taux indicatif</p>
+            <p className="text-2xl font-semibold">
+              {indicativeRate ? `${(indicativeRate * 100).toFixed(2)}%` : "En attente"}
+            </p>
+            <p className="text-sm text-white/80">
+              Appliqué automatiquement aux demandes ≤ 5000€. Au-delà, un taux personnalisé sera proposé.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
