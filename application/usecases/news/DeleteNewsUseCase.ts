@@ -1,0 +1,21 @@
+import { NewsRepositoryInterface } from "../../ports/repositories/news/NewsRepositoryInterface";
+import { NewsPublisher } from "../../ports/services/news/NewsPublisher";
+
+export class DeleteNewsUseCase {
+    public constructor(private readonly newsRepository: NewsRepositoryInterface, private readonly publisher: NewsPublisher ){}
+
+    public async execute(newsId: string): Promise<void | Error> {
+        const news = await this.newsRepository.findById(newsId);
+        
+        if(news instanceof Error) {
+            return news;
+        }
+        const deletedNews = await this.newsRepository.delete(news.id);
+        
+        if(deletedNews instanceof Error) {
+            return deletedNews;
+        }
+
+        this.publisher.publishDelete(newsId);
+    }
+}

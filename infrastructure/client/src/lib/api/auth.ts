@@ -1,4 +1,14 @@
 import { apiClient } from "./apiClient";
+import { LoginInput } from "../validation/auth/loginSchema";
+import { CreateAdminInput } from "../validation/auth/createAdminSchema";
+
+export const login = async (data: LoginInput) => {
+  return await apiClient.post("/auth/login", data);
+};
+
+export const createAdmin = async (data: CreateAdminInput) => {
+  return await apiClient.post("/auth/admin/create", data);
+};
 
 export const getAllAdvisors = async () => {
     const {data} = await apiClient.get(`/auth/getAdvisors`);
@@ -6,8 +16,13 @@ export const getAllAdvisors = async () => {
 }
 
 export const refreshToken = async () => {
-  const {data} = await apiClient.post('/auth/refresh-token');
-  return data;
-}
-
-
+  try {
+    const { data } = await apiClient.post('/auth/refresh-token');
+    return { success: true, data };
+  } catch (error) {
+    return { 
+      success: false, 
+      error: error instanceof Error ? error.message : 'Refresh failed' 
+    };
+  }
+};

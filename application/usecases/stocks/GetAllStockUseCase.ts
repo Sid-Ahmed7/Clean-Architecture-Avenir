@@ -1,8 +1,8 @@
-import { StockRepositoryInterface } from "../../ports/repositories/StockRepositoryInterface";
+import { StockRepositoryInterface } from "../../ports/repositories/stocks/StockRepositoryInterface";
 
 export class GetAllStockUseCase {
 
-    public constructor(private stockRepository: StockRepositoryInterface) {}
+    public constructor(private readonly stockRepository: StockRepositoryInterface) {}
 
     public async execute() {
 

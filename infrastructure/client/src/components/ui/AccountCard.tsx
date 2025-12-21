@@ -8,6 +8,8 @@ interface AccountProps {
 }
 
 export function AccountCard({ account }: { account: AccountModel }) {
+    const blockedBalance = account.blockedBalanced ?? 0;
+    const availableBalance = account.currentBalance - blockedBalance;
 
     return (
         <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
@@ -24,11 +26,29 @@ export function AccountCard({ account }: { account: AccountModel }) {
                 </div>
             </div>
 
-            <div className="mb-6">
-                <p className="text-sm text-gray-500 mb-1">Solde disponible</p>
-                <p className="text-3xl font-bold text-gray-900">
+            <div className="mb-2">
+                <p className="text-sm text-gray-500 mb-1">Solde total</p>
+                <p className="text-2xl font-bold text-gray-900">
                   {account.currentBalance.toLocaleString()} {account.currency}
                 </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 mb-6">
+                <div className="p-3 bg-green-50 rounded-lg">
+                    <p className="text-xs text-green-700 mb-1">Disponible</p>
+                    <p className="text-lg font-semibold text-green-800">
+                        {availableBalance.toLocaleString()} {account.currency}
+                    </p>
+                </div>
+
+                {blockedBalance > 0 && (
+                    <div className="p-3 bg-orange-50 rounded-lg">
+                        <p className="text-xs text-orange-700 mb-1">Bloqué</p>
+                        <p className="text-lg font-semibold text-orange-800">
+                            {blockedBalance.toLocaleString()} {account.currency}
+                        </p>
+                    </div>
+                )}
             </div>
 
             <div className="mt-4 pt-4 border-t border-gray-100 flex justify-between text-sm">

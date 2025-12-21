@@ -1,5 +1,5 @@
 export type UserChat = {
-    id: number;
+    id: string;
     advisorId: string;
     clientId: string;
     clientName?: string;

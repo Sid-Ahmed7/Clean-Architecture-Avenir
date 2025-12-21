@@ -1,12 +1,12 @@
 import { AccountStatusEnum } from "../../../domain/enums/AccountStatusEnum";
 import { AccountAlreadyExistsError } from "../../errors/AccountAlreadyExistsError";
 import { InvalidAccountError } from "../../../domain/errors/InvalidAccountError";
-import { AllowedAccountStatus } from "../../../domain/services/AllowedAccountStatus";
+import { AllowedAccountStatusService } from "../../ports/services/AllowedAccountStatusService";
 import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
 
 export class ChangeAccountStatusUseCase {
 
-    public constructor ( private accountRepository: AccountRepositoryInterface, private allowedStatusCheck: AllowedAccountStatus){}
+    public constructor ( private readonly accountRepository: AccountRepositoryInterface, private readonly allowedStatusCheck: AllowedAccountStatusService){}
     
     public async execute(accountNumber: number, status: AccountStatusEnum) {
         const account = await this.accountRepository.getOneAccountByAccountNumber(accountNumber);

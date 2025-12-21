@@ -1,9 +1,9 @@
 import { StockEntity } from "../../../domain/entities/StockEntity";
-import { StockRepositoryInterface } from "../../ports/repositories/StockRepositoryInterface";
+import { StockRepositoryInterface } from "../../ports/repositories/stocks/StockRepositoryInterface";
 
 export class GetStockBySymbolUseCase {
 
-    public constructor(private stockRepository: StockRepositoryInterface) {}
+    public constructor(private readonly stockRepository: StockRepositoryInterface) {}
 
     public async execute(symbol: string) : Promise<StockEntity | Error> {
 

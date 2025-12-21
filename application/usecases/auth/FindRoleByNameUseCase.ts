@@ -3,7 +3,7 @@ import { RoleRepositoryInterface } from "../../ports/repositories/auth/Rolerepos
 
 export class FindRolesByNameUseCase {
 
-    public constructor(private roleRepository: RoleRepositoryInterface){}
+    public constructor(private readonly roleRepository: RoleRepositoryInterface){}
 
     public async execute(name: RoleEnum) {
 

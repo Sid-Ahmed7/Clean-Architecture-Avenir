@@ -1,12 +1,11 @@
 import { UserRepositoryInterface } from "../../ports/repositories/auth/UserRepositoryInterface";
 import { ConversationRepositoryInterface } from "../../ports/repositories/chat/ConversationRepositoryInterface";
-import { MessageRepositoryInterface } from "../../ports/repositories/chat/MessageRepositoryInterface";
-import {ClientConversationDTO} from "./dto/ClientConversationDTO";
+import {ClientConversationResponse} from "../../responses/ClientConversationResponse";
 export class GetClientConversationUseCase {
 
     public constructor(
-        private conversationRepository: ConversationRepositoryInterface,
-        private userRepository: UserRepositoryInterface
+        private readonly conversationRepository: ConversationRepositoryInterface,
+        private readonly userRepository: UserRepositoryInterface
          ) {}
 
 
@@ -18,7 +17,7 @@ export class GetClientConversationUseCase {
             }
 
          
-        const result: ClientConversationDTO[] = await Promise.all(
+        const result: ClientConversationResponse[] = await Promise.all(
             conversations.map(async (conversation) => {
 
                 let advisorName: string | undefined;
@@ -35,10 +34,10 @@ export class GetClientConversationUseCase {
                     advisorId: conversation.advisorId || null,
                     createdAt: conversation.createdAt,
                     advisorName,
-                } as ClientConversationDTO;
+                } as ClientConversationResponse;
             })
         );
-        return result.filter((result) => result !== null) as ClientConversationDTO[];
+        return result.filter((result) => result !== null) as ClientConversationResponse[];
             
         
     }

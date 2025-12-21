@@ -4,6 +4,7 @@ node_modules/
 # Fichiers d'environnement
 infrastructure/server/.env
 .env.local
+.env.*
 
 # Fichiers de compilation TypeScript
 dist/

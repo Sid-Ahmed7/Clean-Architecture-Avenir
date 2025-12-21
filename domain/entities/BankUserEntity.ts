@@ -3,7 +3,7 @@ import { EmailValue } from "../values/EmailValue";
 import { PasswordValue } from "../values/PasswordValue";
 
 export class BankUserEntity {
-    public static from(email: string, password: string, status: UserStatusEnum, firstName: string, lastName: string, phoneNumber: string, dateOfBirth: Date, address: string, isRegistered?: boolean, confirmationToken?: string, confirmationTokenExpiresAt?: Date, resetPasswordToken?: string, resetTokenExpiresAt?: Date, id?: string, createdAt?: Date) {
+    public static from(id: string,email: string, password: string, status: UserStatusEnum, firstName: string, lastName: string, phoneNumber: string, dateOfBirth: Date, address: string, isRegistered?: boolean, confirmationToken?: string, confirmationTokenExpiresAt?: Date, resetPasswordToken?: string, resetTokenExpiresAt?: Date,  createdAt?: Date) {
 
         const validatedEmail = EmailValue.from(email);
 
@@ -16,28 +16,28 @@ export class BankUserEntity {
             return validatedPassword;
         }
 
-        return new BankUserEntity(id ?? crypto.randomUUID(), validatedEmail.value, validatedPassword.value, status, firstName, lastName, phoneNumber, dateOfBirth, address, isRegistered ?? false, confirmationToken, confirmationTokenExpiresAt, resetPasswordToken, resetTokenExpiresAt, createdAt ?? new Date());
+        return new BankUserEntity(id , validatedEmail.value, validatedPassword.value, status, firstName, lastName, phoneNumber, dateOfBirth, address, isRegistered ?? false, confirmationToken, confirmationTokenExpiresAt, resetPasswordToken, resetTokenExpiresAt, createdAt ?? new Date());
         
 
     }
 
         private constructor(
-            public id: string,
+            public readonly id: string,
             public email: string,
             public password: string,
             public status: UserStatusEnum,
             public firstName: string,
             public lastName: string,
             public phoneNumber: string,
-            public dateOfBirth: Date,
+            public readonly dateOfBirth: Date,
             public address: string,
             public isRegistered: boolean,
             public confirmationToken?: string,
             public confirmationTokenExpiresAt?: Date,
             public resetPasswordToken?: string,
             public resetTokenExpiresAt?: Date,
-            public createdAt?: Date
-            
+            public readonly createdAt?: Date
+
         ){}
 
 

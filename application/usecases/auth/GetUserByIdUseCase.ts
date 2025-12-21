@@ -3,7 +3,7 @@ import { UserRepositoryInterface } from "../../ports/repositories/auth/UserRepos
 
 export class GetUserByIdUseCase {
 
-    public constructor(private userRepository: UserRepositoryInterface){}
+    public constructor(private readonly userRepository: UserRepositoryInterface){}
 
 
     public async execute(userId: string) : Promise<BankUserEntity | Error> {

@@ -2,12 +2,12 @@ import { InvalidIbanError } from "../errors/InvalidIbanError";
 
 
 export class IbanValue {
-    public static from(iban: string) {
+    public static from(iban: string): IbanValue | InvalidIbanError {
 
         const cleanedIban = iban.replace(/\s+/g, '').toUpperCase();
 
         if(!cleanedIban || cleanedIban.length < 15 || cleanedIban.length > 34) {
-            return new InvalidIbanError(iban);
+            return new InvalidIbanError(`IBAN must be between 15 and 34 characters: ${iban}`);
         }
 
         const countryCode = cleanedIban.slice(0, 2);
@@ -17,15 +17,15 @@ export class IbanValue {
 
 
         if(!countryCodeRegex.test(countryCode)) {
-            return new InvalidIbanError('Invalid country code in IBAN');
+            return new InvalidIbanError(`Invalid country code in IBAN: ${iban}`);
         }
 
         if(!characterRegex.test(cleanedIban)) {
-            return new InvalidIbanError('IBAN contains invalid characters');
+            return new InvalidIbanError(`IBAN contains invalid characters: ${iban}`);
         }
 
         if(!IbanValue.isIbanValid(cleanedIban)) {
-            return new InvalidIbanError("Invalid Iban");
+            return new InvalidIbanError(`Invalid IBAN: ${iban}`);
         }
 
         return new IbanValue(cleanedIban);
@@ -34,7 +34,7 @@ export class IbanValue {
 
 
 
-    private constructor(public value: string) {}
+    private constructor(public readonly value: string) {}
 
     private static isIbanValid(iban: string) : boolean {
         const ibanForValidation = iban.slice(4) + iban.slice(0, 4);

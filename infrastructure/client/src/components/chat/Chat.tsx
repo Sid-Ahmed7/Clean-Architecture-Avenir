@@ -2,11 +2,11 @@
 
 import { useState, useRef, useEffect } from "react";
 import Button from "../ui/Button";
-import { useChat } from "@/lib/hooks/useChat";
+import { useChat } from "@/hooks/useChat";
 import { Token } from "@/types/Token";
 
 interface ChatBoxProps {
-  conversationId: number | null;
+  conversationId: string | null;
   user: Token;
 }
 

@@ -34,14 +34,9 @@ export class InMemoryAccountRepository implements AccountRepositoryInterface {
         return account;
     
     }
+
     public async getOneAccountById(accountNumber: number): Promise<AccountEntity | AccountNotFoundError> {
-        const account = this.accounts.find(acc => acc.accountNumber === accountNumber);
-
-        if (!account) {
-            return new AccountNotFoundError(`Account with  ${accountNumber} not found`);
-        }
-
-        return account;
+        return this.getOneAccountByAccountNumber(accountNumber);
     }
 
     public async findByUserIdAndType(userId: string, accountType: AccountTypeEnum): Promise<null | CheckingAccountAlreadyExistError> {
@@ -51,6 +46,14 @@ export class InMemoryAccountRepository implements AccountRepositoryInterface {
             return new CheckingAccountAlreadyExistError("Account with checking type already exist");
         }
         return null;
+    }
+    
+    public async findByUserId(userId: string): Promise<AccountEntity | AccountNotFoundError> {
+        const account = this.accounts.find(acc => acc.userId === userId);
+        if (!account) {
+            return new AccountNotFoundError(`Account for user ${userId} not found`);
+        }
+        return account;
     }
 
     public async getSubAccountByParentAccountId(parentAccountId: number): Promise<Array<AccountEntity>> {

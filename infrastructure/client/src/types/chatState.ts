@@ -8,6 +8,6 @@ export interface ChatState {
   onlineUsers: Record<string, boolean>; 
   isConnected: boolean;
   assignedConversations: Conversation[];
-  typingUsers: Record<number, string[]>;
+  typingUsers: Record<string, string[]>;
   error: string | null;
 }

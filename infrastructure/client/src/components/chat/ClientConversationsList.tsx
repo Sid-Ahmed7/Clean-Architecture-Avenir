@@ -1,12 +1,12 @@
 "use client";
 
-import { Conversation } from "@/types/Conversation";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import { getClientConversation, createConversation } from "@/lib/api/chat";
 import { Link } from "@/i18n/navigation";
 import { ChevronRight, MessageCircle, Plus } from "lucide-react";
 import { LocaleContext } from "@/contexts/LocaleProvider";
+import { Conversation } from "@/types/conversation";
 
 export default function ClientConversationList() {
   const router = useRouter();

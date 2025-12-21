@@ -4,11 +4,11 @@ import { ConversationRepositoryInterface } from "../../ports/repositories/chat/C
 
 export class AssignAdvisorToConversationUseCase {
     public constructor(
-        private conversationRepository: ConversationRepositoryInterface
+        private readonly conversationRepository: ConversationRepositoryInterface
     ){}
 
 
-    public async execute(conversationId: number, advisorId: string) {
+    public async execute(conversationId: string, advisorId: string) {
         const conversation = await this.conversationRepository.findByConversationId(conversationId);
 
         if(conversation instanceof Error) {
@@ -16,7 +16,7 @@ export class AssignAdvisorToConversationUseCase {
         }
 
           if(conversation?.advisorId && conversation.advisorId !== "" && conversation.advisorId !== advisorId) {
-            return new AdvisorAlreadyAssignedError();
+            return new AdvisorAlreadyAssignedError("An advisor is already assigned to this conversation");
         }
 
         if(conversation?.advisorId === advisorId) {

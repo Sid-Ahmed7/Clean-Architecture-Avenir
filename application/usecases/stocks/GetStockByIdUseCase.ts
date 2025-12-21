@@ -1,11 +1,11 @@
 import { StockEntity } from "../../../domain/entities/StockEntity";
-import { StockRepositoryInterface } from "../../ports/repositories/StockRepositoryInterface";
+import { StockRepositoryInterface } from "../../ports/repositories/stocks/StockRepositoryInterface";
 
 export class GetStockByIdUseCase {
 
-    public constructor(private stockRepository: StockRepositoryInterface) {}
+    public constructor(private readonly stockRepository: StockRepositoryInterface) {}
 
-    public async execute(id: number) : Promise<StockEntity | Error> {
+    public async execute(id: string) : Promise<StockEntity | Error> {
 
         const stock = await this.stockRepository.findStockById(id);
 

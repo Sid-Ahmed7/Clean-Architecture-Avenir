@@ -2,7 +2,7 @@ import { UserRepositoryInterface } from "../../ports/repositories/auth/UserRepos
 
 export class GetUserByEmailUseCase {
 
-    public constructor(private userRepository: UserRepositoryInterface){}
+    public constructor(private readonly userRepository: UserRepositoryInterface){}
 
 
     public async execute(email: string) {

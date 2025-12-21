@@ -20,41 +20,29 @@ export default function AdvisorConversationsDashboard() {
   const [pendingConversations, setPendingConversations] = useState<UserChat[]>([]);
   const [assignedConversations, setAssignedConversations] = useState<UserChat[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectedConversationId, setSelectedConversationId] = useState<number | null>(null);
+  const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [viewMode, setViewMode] = useState<"cards" | "list">("cards");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [socketConnected, setSocketConnected] = useState(false);
 
-  const handleTakeOver = useCallback((id: number) => router.push(`/${locale}/chat/${id}`), [router, locale]);
-  const openTransferModal = useCallback((id: number) => { setSelectedConversationId(id); setModalOpen(true); }, []);
+  const handleTakeOver = useCallback((id: string) => router.push(`/${locale}/chat/${id}`), [router, locale]);
+  const openTransferModal = useCallback((id: string) => { setSelectedConversationId(id); setModalOpen(true); }, []);
   
-const handleTransfer = useCallback(async (id: number, newAdvisorId: string, newAdvisorName: string) => {
-  const conversationToTransfer = assignedConversations.find(c => c.id === id);
-  if (!conversationToTransfer) {
-    console.error("Impossible de transférer : conversation non assignée");
-    return;
-  }
-  console.log(conversationToTransfer);
+  const handleTransfer = useCallback(async (id: string, newAdvisorId: string) => {
+    try {
+      await transferConversation(id, newAdvisorId);
+      setAssignedConversations(prev => prev.filter(c => c.id !== id));
+      alert("Conversation transférée !");
+    } catch {
+      alert("Erreur lors du transfert.");
+    } finally {
+      setModalOpen(false);
+      setSelectedConversationId(null);
+    }
+  }, []);
 
-  try {
-    await transferConversation(id, newAdvisorId);
-    await notifyClientAssigned(conversationToTransfer.clientId, newAdvisorName, user?.userId ?? "");
-
-    setAssignedConversations(prev => prev.filter(c => c.id !== id));
-
-    alert("Conversation transférée !");
-  } catch {
-    alert("Erreur lors du transfert.");
-  } finally {
-    setModalOpen(false);
-    setSelectedConversationId(null);
-  }
-}, [assignedConversations]);
-
-
-  
   useEffect(() => {
     if (!user?.userId) return;
     let isMounted = true;

@@ -1,18 +1,17 @@
-import { RoleEnum } from "../../../domain/enums/RoleEnum";
-import { BankUserEntity } from "../../../domain/entities/BankUserEntity";
 import { TokenService } from "../../ports/services/auth/TokenService";
 import { UserRoleRepositoryInterface } from "../../ports/repositories/auth/UserRoleRepositoryInterface";
 import { UserRepositoryInterface } from "../../ports/repositories/auth/UserRepositoryInterface";
+import { RefreshTokenResponse } from "../../responses/RefreshTokenResponse";
 
 
 export class RefreshTokenUseCase {
   constructor(
-    private tokenService: TokenService,
-    private userRoleRepository: UserRoleRepositoryInterface,
-    private userRepository: UserRepositoryInterface
+    private readonly tokenService: TokenService,
+    private readonly userRoleRepository: UserRoleRepositoryInterface,
+    private readonly userRepository: UserRepositoryInterface
   ) {}
 
-  async execute(refreshToken: string): Promise<{ accessToken: string; user: BankUserEntity; roles: RoleEnum[] } | Error> {
+  async execute(refreshToken: string): Promise<RefreshTokenResponse | Error> {
     const tokenData = await this.tokenService.verifyRefreshToken(refreshToken);
     if (tokenData instanceof Error) { 
       return tokenData;

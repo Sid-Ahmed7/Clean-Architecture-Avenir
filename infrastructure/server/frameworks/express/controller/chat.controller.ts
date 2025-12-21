@@ -13,7 +13,6 @@ import { MessageNotFoundError } from "../../../../../application/errors/chat/Mes
 import { SameAdvisorError } from "../../../../../application/errors/chat/SameAdvisorErrror";
 import { InvalidUserIdError } from "../../../../../domain/errors/InvalidUserIdError";
 import { Server } from "socket.io";
-import { conversationRepository, messageRepository, userRepository} from "../../../../adapters/config/repositories";
 import { ClientsSocket } from "../interfaces/ClientSocket";
 import { OnlineUser } from "../interfaces/OnlineUser";
 import { InvalidConversationError } from "../../../../../domain/errors/InvalidConversationError";
@@ -21,16 +20,26 @@ import { error } from "console";
 import { NoAdvisorAssignedError } from "../../../../../application/errors/chat/NoAdvisorAssignedError";
 import { ConversationNotFoundError } from "../../../../../application/errors/chat/ConversationNotFoundError";
 import { UserNotFoundError } from "../../../../../application/errors/UserNotFoundError";
-
+import { InMemoryUserRepository } from "../../../../adapters/repositories/InMemoryUserRepository";
+import { InMemoryConversationRepository } from "../../../../adapters/repositories/InMemoryConversationRepository";
+import { InMemoryMessageRepository } from "../../../../adapters/repositories/InMemoryMessageRepository";
+import {CryptoUuidGenerator} from "../../../../adapters/services/CryptoUuidGenerator";
+import { sendMessageSchema } from "../schemas/chat/sendMessageSchema";
+import { transferConversationSchema } from "../schemas/chat/transferConversationSchema";
 export class ChatController {
     constructor(
+        private readonly conversationRepository: InMemoryConversationRepository,
+        private readonly messageRepository: InMemoryMessageRepository,
+        private readonly userRepository: InMemoryUserRepository,
+        private readonly uuidService: CryptoUuidGenerator,
         private readonly io?: Server,
         private readonly clients?: ClientsSocket,
         private readonly onlineUsers?: Record<string, OnlineUser>,
+
     ){}
 
     async createConversation(req: Request, res: Response) {
-        const createConversationUseCase = new CreateConversationUseCase(conversationRepository);
+        const createConversationUseCase = new CreateConversationUseCase(this.conversationRepository, this.uuidService);
         const userId = req.user?.userId;
         const role = req.user?.roles?.[0];
 
@@ -65,9 +74,8 @@ export class ChatController {
         }
 
     async sendMessage(req: Request, res: Response) {
-        const sendMessageUseCase = new SendMessageUseCase(conversationRepository, messageRepository);
+        const sendMessageUseCase = new SendMessageUseCase(this.conversationRepository, this.messageRepository, this.uuidService);
 
-        const {conversationId, content} = req.body;
         const userId = req.user?.userId;
         const role = req.user?.roles?.[0];
 
@@ -75,7 +83,12 @@ export class ChatController {
             return res.status(401).json({error: "Unauthorized access"});
         }
 
-        const result = await sendMessageUseCase.execute(userId, role, conversationId, content)
+        const parseResult = sendMessageSchema.safeParse(req.body);
+        if (!parseResult.success) {
+          return res.status(400).json({ errors: parseResult.error.message });
+        }
+
+        const result = await sendMessageUseCase.execute(userId, role, parseResult.data.conversationId, parseResult.data.content)
 
         if(result instanceof Error) {
             if(result instanceof InvalidMessageError) {
@@ -101,7 +114,7 @@ export class ChatController {
     }
 
     async getPendingConversation(req: Request, res: Response) {
-        const getAllPendingConversationUseCase = new GetPendingConversationUseCase(conversationRepository);
+        const getAllPendingConversationUseCase = new GetPendingConversationUseCase(this.conversationRepository);
         const result = await getAllPendingConversationUseCase.execute();
         if(result instanceof Error) {
             return res.status(500).json({ error: result.message });
@@ -111,7 +124,7 @@ export class ChatController {
     }
 
     async getAdvisorConversation(req: Request, res: Response) {
-        const getAdvisorConversationUseCase = new GetAdvisorConversationUseCase(conversationRepository, userRepository);
+        const getAdvisorConversationUseCase = new GetAdvisorConversationUseCase(this.conversationRepository, this.userRepository);
         const userId = req.user?.userId;
         if(!userId) {
             return res.status(401).json({error: "Unauthorized access"});
@@ -129,7 +142,7 @@ export class ChatController {
 
     async getClientConversation(req: Request, res: Response) {
         
-        const getClientConversationUseCase = new GetClientConversationUseCase(conversationRepository, userRepository);
+        const getClientConversationUseCase = new GetClientConversationUseCase(this.conversationRepository, this.userRepository);
         
         const userId = req.user?.userId;
         if(!userId) {
@@ -148,7 +161,7 @@ export class ChatController {
     }
 
     async getConversationMessages(req: Request, res: Response) {
-        const getConversationMessagesUseCase = new GetConversationMessagesUseCase(conversationRepository, messageRepository);
+        const getConversationMessagesUseCase = new GetConversationMessagesUseCase(this.conversationRepository, this.messageRepository);
 
         const {conversationId} = req.params;
         const userId = req.user?.userId;
@@ -162,7 +175,7 @@ export class ChatController {
             return res.status(404).json({ error: "conversation not found" });
         }
 
-        const result = await getConversationMessagesUseCase.execute(Number(conversationId));
+        const result = await getConversationMessagesUseCase.execute(conversationId);
             
             if(result instanceof MessageNotFoundError) {
                 return res.status(404).json({error: result.message});
@@ -180,7 +193,7 @@ export class ChatController {
 
     async markMessageAsRead(req: Request, res: Response) {
 
-        const markMessageAsReadUseCase = new MarkMessageAsReadUseCase(messageRepository);
+        const markMessageAsReadUseCase = new MarkMessageAsReadUseCase(this.messageRepository);
 
         const {message} = req.body;
         const userId = req.user?.userId;
@@ -205,17 +218,20 @@ export class ChatController {
 
     async transferConversation(req: Request, res: Response) {
 
-    const transferUseCase = new TransferConversationUseCase(conversationRepository);
-    
-    const {conversationId, newAdvisorId} = req.body;
+    const transferUseCase = new TransferConversationUseCase(this.conversationRepository);
     const userId = req.user?.userId;
     const role = req.user?.roles?.[0];
+
+    const parseResult = transferConversationSchema.safeParse(req.body);
+    if (!parseResult.success) {
+        return res.status(400).json({ errors: parseResult.error.message });
+    }
 
     if(!userId || !role) {
         return res.status(401).json({error: "Unauthorized access"});
     }
 
-    const result = await transferUseCase.execute(conversationId,newAdvisorId);
+    const result = await transferUseCase.execute(parseResult.data.conversationId, parseResult.data.newAdvisorId);
 
     if (result instanceof Error) {
         if(result instanceof SameAdvisorError) {

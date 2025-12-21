@@ -1,8 +1,9 @@
 "use client";
 
 import Button from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
 import { AuthContext } from "@/contexts/AuthProvider";
-import { apiClient } from "@/lib/api/apiClient";
+import { login } from "@/lib/api/auth";
 import { LoginInput, loginSchema } from "@/lib/validation/auth/loginSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -11,95 +12,111 @@ import { useForm } from "react-hook-form";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { LocaleContext } from "@/contexts/LocaleProvider";
-import { NotificationEnum } from "@/types/Notification";
-import { useNotification } from "@/lib/hooks/useNotifications";
-
-
+import { Mail, Lock } from "lucide-react";
+import { decodeJwt } from "@/lib/utils/decodeJwt";
 
 export default function LoginPage() {
-    const router = useRouter();
-    const {locale} = useContext(LocaleContext);
-    const {setIsAuthenticated} = useContext(AuthContext);
-    const {addNotification} = useNotification();
-    const [message, setMessage] = useState("");
-    const t = useTranslations();
+  const router = useRouter();
+  const { locale } = useContext(LocaleContext);
+  const { setIsAuthenticated, setUser } = useContext(AuthContext);
+  const [message, setMessage] = useState("");
+  const t = useTranslations();
 
+  const { register, handleSubmit, formState: { errors } } = useForm<LoginInput>({
+    resolver: zodResolver(loginSchema(t)),
+  });
 
-    const {register, handleSubmit, formState: {errors}} = useForm<LoginInput>({
-        resolver: zodResolver(loginSchema(t)),
-    });
+  const onSubmit = async (data: LoginInput) => {
+    try {
+      const res = await login(data);
 
-    const onSubmit = (data: LoginInput) => {
-        apiClient.post("/auth/login", data).then((res) => {
-            if(res.status === 200) {
-                setIsAuthenticated(true);
-                setMessage(t("messages.login.success"));
-                addNotification(NotificationEnum.INFO, t("messages.login.success"));
-                router.push(`/${locale}/dashboard`);
-            } else if (res.status === 401) {
-                setMessage(t("messages.login.invalid"));
-            } else {
-                setMessage(t("messages.login.failure"));
-            }
-        })
+      if (res.status === 200) {
+        const decodedToken = decodeJwt(res.data.token);
+        const userRole = decodedToken?.role;
+
+        // Set authentication state AND user data immediately
+        setIsAuthenticated(true);
+        setUser({
+          userId: decodedToken?.userId || '',
+          role: userRole || 'CLIENT'
+        });
+
+        const rolePrefixMap: Record<string, string> = {
+          'CLIENT': 'client',
+          'BANK_ADVISOR': 'advisor',
+          'BANK_MANAGER': 'manager'
+        };
+
+        const rolePrefix = rolePrefixMap[userRole || 'CLIENT'] || 'client';
+
+        // Redirect to role-specific dashboard
+        router.push(`/${locale}/${rolePrefix}/dashboard`);
+      } else if (res.status === 401) {
+        setMessage(t("messages.login.invalid"));
+      } else {
+        setMessage(t("messages.login.failure"));
+      }
+    } catch (error: any) {
+      console.error("Login error:", error);
+      if (error.response?.status === 401) {
+        setMessage("Email ou mot de passe incorrect");
+      } else if (error.response?.status === 404) {
+        setMessage("Utilisateur non trouvé");
+      } else {
+        setMessage(error.response?.data?.error || "Erreur de connexion");
+      }
     }
+  }
 
-    return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-blue-50 px-4">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white p-8 sm:p-10 rounded-xl shadow-lg w-full max-w-md border border-gray-200"
+        className="bg-white p-8 sm:p-10 rounded-2xl shadow-2xl w-full max-w-md border border-gray-100"
       >
-        <h2 className="text-2xl sm:text-3xl font-semibold mb-6 text-gray-800 text-center">
-        {t("titles.login")}
+        <h2 className="text-3xl font-bold mb-8 text-gray-900 text-center">
+          {t("titles.login")}
         </h2>
 
-        <div className="mb-4">
-        <label className="block mb-1 font-medium text-gray-700" htmlFor="email">
-          {t("labels.email")}
-        </label>
-          <input
+        <div className="space-y-6">
+          <Input
+            label={t("labels.email")}
             type="email"
+            icon={Mail}
+            variant="gradient"
+            placeholder="exemple@email.com"
+            error={errors.email?.message}
             {...register("email")}
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
           />
-          {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-          )}
-        </div>
-        <div className="mb-6">
-                    <label className="block mb-1 font-medium text-gray-700" htmlFor="password">
-          {t("labels.password")}
-        </label>
-          <input
+
+          <Input
+            label={t("labels.password")}
             type="password"
+            icon={Lock}
+            variant="gradient"
+            placeholder="••••••••"
+            error={errors.password?.message}
             {...register("password")}
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
           />
-          {errors.password && (
-            <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
-          )}
         </div>
-
-
 
         {message && (
           <p className="mt-4 text-center text-sm text-gray-600 break-words">{message}</p>
         )}
 
-        <Button type="submit" variant="primary" fullWidth>
+        <div className="mt-8">
+          <Button type="submit" variant="primary" fullWidth>
             {t("labels.login")}
-        </Button>
+          </Button>
+        </div>
 
         <p className="mt-6 text-center text-sm text-gray-600">
-        Don’t have an account?
-        <Link href="/register" className="text-blue-700 hover:underline">
+          Don't have an account?
+          <Link href="/register" className="text-blue-700 hover:underline ml-1 font-semibold">
             Create one
-        </Link>
+          </Link>
         </p>
       </form>
     </div>
   );
-
-
 }

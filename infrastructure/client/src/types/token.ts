@@ -1,5 +1,7 @@
 
+import { RoleEnum } from './RoleEnum';
+
 export interface Token {
   userId: string;
-  role: string;
+  role: RoleEnum | string;
 }

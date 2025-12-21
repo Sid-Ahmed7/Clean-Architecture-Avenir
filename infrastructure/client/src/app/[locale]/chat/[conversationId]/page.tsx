@@ -11,8 +11,8 @@ export default function ChatPage({ params }: ChatPageProps) {
   const router = useRouter();
   const { isAuthenticated , user} = useContext(AuthContext);
   const unwrappedParams = use(params);
-  const rawId = Number(unwrappedParams.conversationId);
-  const conversationId = !isNaN(rawId) ? rawId : null;
+  const conversationId = unwrappedParams.conversationId || null;
+
   
   
 

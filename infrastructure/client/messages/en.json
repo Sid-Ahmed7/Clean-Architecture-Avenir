@@ -9,6 +9,9 @@
     "email": "Email",
     "password": "Password",
     "confirmPassword": "Confirm Password",
+    "phoneNumber": "Phone Number",
+    "dateOfBirth": "Date of Birth",
+    "address": "Address",
     "submit": "Register",
     "login": "Login"
   },
@@ -24,24 +27,23 @@
       "minLength": "Password must be at least 8 characters",
       "maxLength": "Password is too long",
       "regex": "Password must contain at least one special character"
-
     },
     "confirmPassword": {
       "required": "Please confirm your password",
       "mismatch": "Passwords do not match"
-    }
+    },
+    "accountLoad": "Failed to load accounts"
   },
   "messages": {
     "register": {
-        "success": "Registration successful!",
-        "userExists": "User already exists",
-        "failure": "Registration failed"
+      "success": "Registration successful!",
+      "userExists": "User already exists",
+      "failure": "Registration failed"
     },
     "login": {
-        "success": "Login successful",
-        "invalid": "Invalid credentials",
-        "failure": "Login failed"
+      "success": "Login successful",
+      "invalid": "Invalid credentials",
+      "failure": "Login failed"
     }
-
   }
 }

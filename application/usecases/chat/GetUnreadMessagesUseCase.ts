@@ -1,7 +1,7 @@
 import { MessageRepositoryInterface } from "../../ports/repositories/chat/MessageRepositoryInterface";
 
 export class GetUnreadMessagesUseCase {
-  constructor(private messageRepository: MessageRepositoryInterface) {}
+  constructor(private readonly messageRepository: MessageRepositoryInterface) {}
 
   public async execute(userId: string) {
     const unreadMessages = await this.messageRepository.findUnreadByRecipient(userId);

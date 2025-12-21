@@ -10,7 +10,7 @@ export const responseSubAccountSchema = (t: (key: string) => string) =>
         userId: z.string(),
         accountType: z.enum(["SAVINGS"]),
         currentBalance: z.number(),
-        currency: z.enum(["EUR", "USD"]),
+        currency: z.enum(["EUR", "USD", "GBP"]),
         accountStatus: z.enum(["ACTIVE","CLOSED", "SUSPENDED", "PENDING", "FROZEN", "BANNED"]),
         customAccountName: z.string().min(1, "Le nom du compte est requis"),
         isActive: z.boolean(),
@@ -18,6 +18,8 @@ export const responseSubAccountSchema = (t: (key: string) => string) =>
         transferLimit: z.number(),
         overdraftLimit: z.number(),
         createdAt: z.string(),
+        totalTransfered: z.number().min(0).default(0),
+        lastTransferResetDate: z.string().optional(),
         parentAccountId: z.number(),
         closedAt: z.string().optional()
     });
