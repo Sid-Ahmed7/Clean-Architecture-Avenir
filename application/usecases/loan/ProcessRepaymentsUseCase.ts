@@ -9,8 +9,9 @@ import { TransactionEntity } from "../../../domain/entities/TransactionEntity";
 import { TransactionTypeEnum } from "../../../domain/enums/TransactionTypeEnum";
 import { OrderStatusEnum } from "../../../domain/enums/OrderStatusEnum";
 import { UuidGeneratorService } from "../../ports/services/UuidGeneratorService";
-
-class MessageError extends Error {}
+import { RepaymentUserNotFoundError } from "../../errors/RepaymentUserNotFoundError";
+import { RepaymentNoCheckingAccountError } from "../../errors/RepaymentNoCheckingAccountError";
+import { RepaymentDebitFailedError } from "../../errors/RepaymentDebitFailedError";
 
 export class ProcessRepaymentsUseCase {
   public constructor(
@@ -20,30 +21,24 @@ export class ProcessRepaymentsUseCase {
     private readonly uuidService: UuidGeneratorService,
   ) {}
 
-  public async execute(referenceDate: Date = new Date()): Promise<void | MessageError> {
+  public async execute(referenceDate: Date = new Date()): Promise<void | Error> {
     const due = await this.scheduleRepository.findDue(referenceDate);
     const periodMs = 60 * 1000;
     for (const schedule of due) {
       const accountsResult = await this.accountRepository.getAccountsByUserId(schedule.clientId);
       if (accountsResult instanceof UserNotFoundError) {
-        schedule.markFailed("User not found");
-        await this.scheduleRepository.save(schedule);
-        return new MessageError("User not found");
+        return new RepaymentUserNotFoundError();
       }
 
       const checking = accountsResult.find((a) => a.accountType === AccountTypeEnum.CHECKING);
       if (!checking) {
-        schedule.markFailed("No checking account");
-        await this.scheduleRepository.save(schedule);
-        return new MessageError("No checking account");
+        return new RepaymentNoCheckingAccountError();
       }
 
       checking.updateBalance(checking.currentBalance - schedule.monthlyAmount);
       const updatedAccount = await this.accountRepository.updateOneAccount(checking);
       if (updatedAccount instanceof AccountNotFoundError || updatedAccount instanceof Error) {
-        schedule.markFailed("Debit failed");
-        await this.scheduleRepository.save(schedule);
-        return new MessageError("Debit failed");
+        return new RepaymentDebitFailedError();
       }
 
       const reference = this.uuidService.generate();
