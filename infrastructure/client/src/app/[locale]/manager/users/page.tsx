@@ -6,20 +6,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Users, UserCheck, Briefcase, Trash2, Edit, X } from "lucide-react";
-
-interface User {
-    id: string;
-    email: string;
-    firstName: string;
-    lastName: string;
-    phoneNumber: string;
-    dateOfBirth: Date;
-    address: string;
-    status: string;
-    isRegistered: boolean;
-    createdAt: Date;
-    roles?: string[];
-}
+import { User } from "@/types/user";
 
 export default function UsersManagementPage() {
     const { user } = useContext(AuthContext);

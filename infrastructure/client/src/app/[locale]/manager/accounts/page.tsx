@@ -5,18 +5,7 @@ import { AuthContext } from "@/contexts/AuthProvider";
 import { Badge } from "@/components/ui/Badge";
 import { Input } from "@/components/ui/Input";
 import { Wallet, Search, TrendingUp, Trash2 } from "lucide-react";
-
-interface Account {
-    accountNumber: number;
-    iban: string;
-    balance: number;
-    accountType: string;
-    accountStatus: string;
-    isActive: boolean;
-    userId: string;
-    userName: string;
-    createdAt: Date;
-}
+import { Account } from "@/types/account";
 
 export default function AccountsOverviewPage() {
     const { user } = useContext(AuthContext);

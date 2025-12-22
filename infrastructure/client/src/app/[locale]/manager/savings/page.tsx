@@ -5,19 +5,7 @@ import { AuthContext } from "@/contexts/AuthProvider";
 import { Badge } from "@/components/ui/Badge";
 import { Input } from "@/components/ui/Input";
 import { PiggyBank, Search, TrendingUp, DollarSign, Trash2 } from "lucide-react";
-
-interface SavingsAccount {
-    accountNumber: number;
-    balance: number;
-    interestRate: number;
-    productId: string;
-    isActive: boolean;
-    totalInterestEarned: number;
-    userId: string;
-    userName: string;
-    lastBalanceUpdate: Date;
-    lastInterestApplied?: Date;
-}
+import { SavingsAccount } from "@/types/savingsAccount";
 
 export default function SavingsAccountsOverviewPage() {
     const { user } = useContext(AuthContext);
