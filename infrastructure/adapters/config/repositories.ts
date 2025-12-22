@@ -14,6 +14,9 @@ import {StockHoldingManager} from "../services/stocks/StockHoldingManager";
 import {CryptoUuidGenerator} from "../services/CryptoUuidGenerator";
 import {ManageTransferLimitService} from "../services/ManageTransferLimitService";
 import {ValidateTransferService} from "../services/ValidateTransferService";
+import {TransactionEnrichmentServiceImpl} from "../services/TransactionEnrichmentService";
+import {NotificationService} from "../services/notification/NotificationService";
+import {StatusMessageService} from "../services/StatusMessageService";
 
 import { InMemoryEventBus } from '../repositories/InMemoryEventBus';
 import { InMemoryUserRepository } from '../repositories/InMemoryUserRepository';
@@ -36,10 +39,14 @@ import { InMemoryStockTransactionRepository } from "../repositories/InMemoryStoc
 import { InMemoryTransactionRepository } from "../repositories/InMemoryTransactionRepository";
 import { InMemoryLoanRepaymentScheduleRepository } from "../repositories/InMemoryLoanRepaymentScheduleRepository";
 import { InMemoryLoanRequestRepository } from "../repositories/InMemoryLoanRequestRepository";
+import { InMemoryOverdraftRequestRepository } from "../repositories/InMemoryOverdraftRequestRepository";
 import { LocaleValidationService } from "../services/LocaleValidationService";
 import { InMemorySavingsProductRepository } from '../repositories/InMemorySavingsProductRepository';
 import { InMemorySavingsAccountRepository } from '../repositories/InMemorySavingsAccountRepository';
 import { ManageLoanConfigService } from "../services/ManageLoanConfigService";
+import { InMemoryBeneficiaryRepository } from '../repositories/InMemoryBeneficiaryRepository';
+import { InMemoryBeneficiaryGroupRepository } from '../repositories/InMemoryBeneficiaryGroupRepository';
+import { InMemoryNotificationRepository } from '../repositories/InMemoryNotificationRepository';
 
 const baseUrl = process.env.CLIENT_BASE_URL!;
 export const tokenService = new JwtTokenService();
@@ -57,9 +64,11 @@ export const ibanGenerator = new GenerateIbanService(accountRepository);
 export const transactionRepository = new InMemoryTransactionRepository();
 export const loanRepaymentScheduleRepository = new InMemoryLoanRepaymentScheduleRepository();
 export const loanRequestRepository = new InMemoryLoanRequestRepository();
+export const overdraftRequestRepository = new InMemoryOverdraftRequestRepository();
 export const loanConfigService = new ManageLoanConfigService();
 export const transferLimitService = new ManageTransferLimitService();
 export const transferValidationService = new ValidateTransferService(transferLimitService);
+export const transactionEnrichmentService = new TransactionEnrichmentServiceImpl(userRepository);
 export const conversationRepository = new InMemoryConversationRepository();
 export const messageRepository = new InMemoryMessageRepository();
 export const uuidService = new CryptoUuidGenerator()
@@ -88,3 +97,11 @@ export const localeService = new LocaleValidationService();
 
 export const savingsProductRepository = new InMemorySavingsProductRepository();
 export const savingsAccountRepository = new InMemorySavingsAccountRepository();
+
+export const beneficiaryRepository = new InMemoryBeneficiaryRepository();
+export const beneficiaryGroupRepository = new InMemoryBeneficiaryGroupRepository();
+
+export const notificationRepository = new InMemoryNotificationRepository();
+export const notificationService = new NotificationService();
+
+export const statusMessageService = new StatusMessageService();

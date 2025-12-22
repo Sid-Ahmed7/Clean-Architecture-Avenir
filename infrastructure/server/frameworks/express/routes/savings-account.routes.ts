@@ -7,13 +7,8 @@ import { RoleEnum } from "../../../../../domain/enums/RoleEnum";
 
 const router = Router();
 
-// Initialize controller with singleton repositories
-const savingsAccountController = new SavingsAccountController(
-    savingsAccountRepository,
-    accountRepository
-);
+const savingsAccountController = new SavingsAccountController(savingsAccountRepository,accountRepository);
 
-// Routes
 router.get(
     "/",
     verifyTokenAccess,
@@ -78,7 +73,6 @@ router.post(
     (req, res) => savingsAccountController.depositToSavingsAccount(req, res)
 );
 
-// Withdraw from savings account
 router.post(
     "/:accountNumber/withdraw",
     verifyTokenAccess,

@@ -10,6 +10,8 @@ import { LoanConfigService } from "../../ports/services/LoanConfigService";
 import { LoanStatusEnum } from "../../../domain/enums/LoanStatusEnum";
 import { AdvisorNotFoundError } from "../../errors/AdvisorNotFoundError";
 import { ActiveLoanRequestExistsError } from "../../errors/ActiveLoanRequestExistsError";
+import { SendNotificationToClientUseCase } from "../notification/SendNotificationToClientUseCase";
+import { NotificationTypeEnum } from "../../../domain/enums/NotificationTypeEnum";
 
 export class CreateLoanRequestUseCase {
   public constructor(
@@ -18,6 +20,7 @@ export class CreateLoanRequestUseCase {
     private readonly userRoleRepository: UserRoleRepositoryInterface,
     private readonly uuidService: UuidGeneratorService,
     private readonly loanConfigService: LoanConfigService,
+    private readonly sendNotificationUseCase: SendNotificationToClientUseCase,
   ) {}
 
   public async execute(clientId: string, input: CreateLoanRequestInput): Promise<LoanRequestEntity | Error> {
@@ -74,6 +77,14 @@ export class CreateLoanRequestUseCase {
     const createdRequest = await this.loanRequestRepository.create(request);
     if (createdRequest instanceof Error) {
       return createdRequest;
+    }
+
+    if (this.sendNotificationUseCase) {
+      await this.sendNotificationUseCase.execute(
+        clientId,
+        `Votre demande de prêt de ${input.amount}€ a été soumise avec succès.`,
+        NotificationTypeEnum.INFO
+      );
     }
 
     return createdRequest;

@@ -24,6 +24,10 @@ export class ValidateTransferService implements TransferValidationService {
             return new InvalidAccountError("The source account does not belong to the user");
         }
 
+        if (creditAccount.userId !== userId) {
+            return new InvalidAccountError("The destination account does not belong to the user. Use beneficiary transfer instead.");
+        }
+
         if (!debitAccount.isActive || !creditAccount.isActive) {
             return new InvalidAccountError("Both accounts must be active");
         }

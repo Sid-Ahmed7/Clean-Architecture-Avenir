@@ -194,14 +194,22 @@ export class SavingsAccountController {
 
     async depositToSavingsAccount(req: Request, res: Response) {
         const { DepositToSavingsAccountUseCase } = require("../../../../../application/usecases/accounts/DepositToSavingsAccountUseCase");
-        const { transactionRepository } = require("../../../../adapters/config/repositories");
         const { savingsProductRepository } = require("../../../../adapters/config/repositories");
+        const { SendNotificationToClientUseCase } = require("../../../../../application/usecases/notification/SendNotificationToClientUseCase");
+        const { notificationRepository, notificationPublisher, uuidService, userRepository } = require("../../../../adapters/config/repositories");
+        
+        const sendNotificationUseCase = new SendNotificationToClientUseCase(
+            notificationRepository,
+            notificationPublisher,
+            uuidService,
+            userRepository
+        );
         
         const depositUseCase = new DepositToSavingsAccountUseCase(
             this.savingsAccountRepository,
             savingsProductRepository,
             this.accountRepository,
-            transactionRepository
+            sendNotificationUseCase
         );
 
         const userId = (req as any).user?.userId;
@@ -227,11 +235,21 @@ export class SavingsAccountController {
     async withdrawFromSavingsAccount(req: Request, res: Response) {
         const { WithdrawFromSavingsAccountUseCase } = require("../../../../../application/usecases/accounts/WithdrawFromSavingsAccountUseCase");
         const { transactionRepository } = require("../../../../adapters/config/repositories");
+        const { SendNotificationToClientUseCase } = require("../../../../../application/usecases/notification/SendNotificationToClientUseCase");
+        const { notificationRepository, notificationPublisher, uuidService, userRepository } = require("../../../../adapters/config/repositories");
+        
+        const sendNotificationUseCase = new SendNotificationToClientUseCase(
+            notificationRepository,
+            notificationPublisher,
+            uuidService,
+            userRepository
+        );
         
         const withdrawUseCase = new WithdrawFromSavingsAccountUseCase(
             this.savingsAccountRepository,
             this.accountRepository,
-            transactionRepository
+            transactionRepository,
+            sendNotificationUseCase
         );
 
         const userId = (req as any).user?.userId;

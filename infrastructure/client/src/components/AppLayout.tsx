@@ -6,6 +6,7 @@ import Header from "./ui/Header";
 import { usePathname } from "next/navigation";
 import { LocaleContext } from "@/contexts/LocaleProvider";
 import { useAuthRedirect } from "@/hooks/useAuthRedirect";
+import { NotificationToastContainer } from "./notification/NotificationToastContainer";
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -42,6 +43,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
         />
         <main className="flex-1 overflow-auto">{children}</main>
       </div>
+      <NotificationToastContainer />
     </div>
   );
 }

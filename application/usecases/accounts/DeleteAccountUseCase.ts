@@ -1,11 +1,16 @@
 import { AccountNotFoundError } from "../../errors/AccountNotFoundError";
 import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
+import { SendNotificationToClientUseCase } from "../notification/SendNotificationToClientUseCase";
+import { NotificationTypeEnum } from "../../../domain/enums/NotificationTypeEnum";
 import { CannotDeleteLastCheckingAccountError } from "../../errors/CannotDeleteLastCheckingAccountError";
 import { NoCheckingAccountForTransferError } from "../../errors/NoCheckingAccountForTransferError";
 import { AccountTypeEnum } from "../../../domain/enums/AccountTypeEnum";
 
 export class DeleteAccountUseCase {
-    public constructor(private readonly accountRepository: AccountRepositoryInterface) {}
+    public constructor (
+        private readonly accountRepository: AccountRepositoryInterface,
+        private readonly sendNotificationUseCase: SendNotificationToClientUseCase,
+    ){}
     
     public async execute(accountNumber: number): Promise<void | Error> {
         // 1. Récupérer le compte à supprimer
@@ -54,6 +59,14 @@ export class DeleteAccountUseCase {
             // Mettre à jour les deux comptes
             await this.accountRepository.updateOneAccount(destinationAccount);
             await this.accountRepository.updateOneAccount(account);
+        }
+
+        if (this.sendNotificationUseCase ) {
+            await this.sendNotificationUseCase.execute(
+                account.userId,
+                `Votre compte a été supprimé.`,
+                NotificationTypeEnum.INFO
+            );
         }
 
         // 5. Supprimer le compte (maintenant avec solde = 0)

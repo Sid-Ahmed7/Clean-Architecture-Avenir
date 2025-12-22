@@ -1,7 +1,7 @@
 import express from 'express'
 import { AuthController } from '../controller/auth.controller';
 import {registerUserConfirmedSubscriber} from '../../../../subscribers/UserConfirmedSuscriber';
-import {accountRepository, userRepository, roleRepository, userRoleRepository,tokenService, passwordService,emailService, emailTemplateService,registrationTokenGeneratorService, localeService, uuidService,eventBus } from '../../../../adapters/config/repositories';
+import {accountRepository, userRepository, roleRepository, userRoleRepository,tokenService, passwordService,emailService, emailTemplateService,registrationTokenGeneratorService, localeService, uuidService,eventBus, notificationRepository, notificationService} from '../../../../adapters/config/repositories';
 import { verifyTokenAccess } from '../middleware/authMiddleware';
 import { authorizeRoles } from '../middleware/roleMiddleware';
 import { RoleEnum } from '../../../../../domain/enums/RoleEnum';
@@ -11,7 +11,21 @@ const router = express.Router();
 
 registerUserConfirmedSubscriber(eventBus,accountRepository );
 const rolePriorityService = new RolePriorityService();
-const authController = new AuthController(userRepository, roleRepository, userRoleRepository,tokenService, passwordService, emailService,emailTemplateService,registrationTokenGeneratorService, localeService, uuidService, eventBus, rolePriorityService);
+const authController = new AuthController(
+  userRepository,
+  roleRepository,
+  userRoleRepository,
+  tokenService,
+  passwordService,
+  emailService,
+  emailTemplateService,
+  registrationTokenGeneratorService,
+  localeService,
+  uuidService,
+  eventBus, rolePriorityService,
+  notificationRepository,
+  notificationService,
+);
 
 
 router.post("/register", (req, res) => authController.register(req,res));

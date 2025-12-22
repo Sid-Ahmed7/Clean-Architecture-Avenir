@@ -8,13 +8,16 @@ import { NoAdvisorAssignedError } from "../../errors/chat/NoAdvisorAssignedError
 import { ConversationRepositoryInterface } from "../../ports/repositories/chat/ConversationRepositoryInterface";
 import { MessageRepositoryInterface } from "../../ports/repositories/chat/MessageRepositoryInterface";
 import {UuidGeneratorService} from "../../ports/services/UuidGeneratorService"
+import { SendNotificationToClientUseCase } from "../notification/SendNotificationToClientUseCase";
+import { NotificationTypeEnum } from "../../../domain/enums/NotificationTypeEnum";
 
 export class SendMessageUseCase {
 
     public constructor(
         private conversationRepository: ConversationRepositoryInterface,
         private messageRepository: MessageRepositoryInterface,
-        private uuidService: UuidGeneratorService
+        private uuidService: UuidGeneratorService,
+        private readonly sendNotificationUseCase: SendNotificationToClientUseCase,
          ) {}
 
 
@@ -50,6 +53,18 @@ export class SendMessageUseCase {
         const addMessage = await this.messageRepository.save(message);
         if(addMessage instanceof Error) {
             return addMessage;
+        }
+
+        if (this.sendNotificationUseCase) {
+            const recipientId = isAdvisor ? existingConversation.clientId : (existingConversation.advisorId || "");
+            if (recipientId) {
+                await this.sendNotificationUseCase.execute(
+                    recipientId,
+                    `Nouveau message de votre ${isAdvisor ? "conseiller" : "client"}.`,
+                    NotificationTypeEnum.INFO,
+                    userId
+                );
+            }
         }
 
 return addMessage;

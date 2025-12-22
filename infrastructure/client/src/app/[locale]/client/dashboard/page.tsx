@@ -2,9 +2,11 @@
 
 import { useUserAccounts } from "@/hooks/useUserAccounts";
 import { useTransactionHistory } from "@/hooks/useTransactionHistory";
+import { useLastTransactions } from "@/hooks/useLastTransactions";
 import { MainAccountCard } from "@/components/bankAccount/MainAccountCard";
 import { AccountList } from "@/components/bankAccount/AccountList";
 import SummaryCard from "@/components/bankAccount/SummaryAccountsCard";
+import QuickTransferCard from "@/components/bankAccount/QuickTransferCard";
 import { Plus, PiggyBank, ArrowRight, TrendingUp } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import ChartAccountManage from "@/components/ui/ChartAccountManage";
@@ -17,6 +19,7 @@ import { fr } from "date-fns/locale";
 export default function ClientDashboard() {
     const { accounts, loading, error } = useUserAccounts();
     const { transactions, loading: txLoading, error: txError } = useTransactionHistory();
+    const { transactions: lastTransactions, loading: lastTxLoading, refetch: refetchLastTransactions } = useLastTransactions(6);
     const [savingsAccounts, setSavingsAccounts] = useState<SavingsAccount[]>([]);
     const [loadingSavings, setLoadingSavings] = useState(true);
 
@@ -144,6 +147,13 @@ export default function ClientDashboard() {
                             </div>
                         )}
                     </section>
+
+                    {/* Quick Transfer Card */}
+                    <QuickTransferCard
+                        transactions={lastTransactions}
+                        accounts={accounts}
+                        onTransferSuccess={refetchLastTransactions}
+                    />
 
                     {/* Main account */}
                     {mainAccount ? (

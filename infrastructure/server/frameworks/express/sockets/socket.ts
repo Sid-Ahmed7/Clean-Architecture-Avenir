@@ -8,9 +8,11 @@ import { OnlineUser } from "../interfaces/OnlineUser";
 import { Message } from "../interfaces/Message";
 import { MessageEntity } from "../../../../../domain/entities/MessageEntity";
 import { ConversationEntity } from "../../../../../domain/entities/ConversationEntity";
-import { conversationRepository, messageRepository, uuidService } from "../../../../adapters/config/repositories";
+import { conversationRepository, messageRepository, uuidService, notificationRepository, notificationService, userRepository } from "../../../../adapters/config/repositories";
 import { Identification } from "../interfaces/Identification";
 import { Data } from "../interfaces/Data";
+import { SendNotificationToClientUseCase } from "../../../../../application/usecases/notification/SendNotificationToClientUseCase";
+import { sendNotificationToClientSchema } from "../schemas/notifications/sendNotificationToClientSchema";
 
 
 export const clients: Record<string, string[]> = {};
@@ -107,7 +109,8 @@ export const socketSetup = (server: Server) => {
 
     socket.on("message", async (data: Message) => {
       try {
-        const sendMessageUseCase = new SendMessageUseCase(conversationRepository, messageRepository, uuidService);
+            const sendNotificationUseCase = new SendNotificationToClientUseCase(notificationRepository,notificationService,uuidService,userRepository);
+        const sendMessageUseCase = new SendMessageUseCase(conversationRepository, messageRepository, uuidService, sendNotificationUseCase);
         const message = await sendMessageUseCase.execute(data.userId, data.role, data.conversationId, data.content);
         
         if (!(message instanceof MessageEntity)) {
@@ -185,7 +188,13 @@ export const socketSetup = (server: Server) => {
 
         if (conversation && !conversation.advisorId) {
 
-          const assignUseCase = new AssignAdvisorToConversationUseCase(conversationRepository);
+          const sendNotificationUseCase = new SendNotificationToClientUseCase(
+            notificationRepository,
+            notificationService,
+            uuidService,
+            userRepository
+          );
+          const assignUseCase = new AssignAdvisorToConversationUseCase(conversationRepository, sendNotificationUseCase);
           const mess = await assignUseCase.execute(data.conversationId, data.userId);
 
           const roomName = `conversation_${data.conversationId}`;
@@ -207,8 +216,8 @@ export const socketSetup = (server: Server) => {
             }
           }
         }
-
-        const sendMessageUseCase = new SendMessageUseCase(conversationRepository, messageRepository, uuidService);
+            const sendNotificationUseCase = new SendNotificationToClientUseCase(notificationRepository,notificationService,uuidService,userRepository);
+        const sendMessageUseCase = new SendMessageUseCase(conversationRepository, messageRepository, uuidService, sendNotificationUseCase);
 
         const message = await sendMessageUseCase.execute(data.userId, data.role, data.conversationId, data.content);
 

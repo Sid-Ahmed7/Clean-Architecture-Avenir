@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 interface TransferModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onTransfer: (advisorId: string) => void;
+    onTransfer: (advisorId: string, advisorName: string) => void;
     currentAdvisorId: string;
 }
 
@@ -43,6 +43,17 @@ export default function SelectAdvisorsModal({isOpen, onClose, onTransfer, curren
         }
         fetchAdvisors();
     }, [isOpen, currentAdvisorId]);
+
+    const handleConfirmTransfer = () => {
+      if(!selectedAdvisor) {
+        return;
+      }
+      const advisor = advisors.find(adv => adv.id === selectedAdvisor);
+      if(!advisor) {
+        return;
+      }
+      onTransfer(selectedAdvisor, getNameAdvisor(advisor));
+    }
 
     if(!isOpen) {
         return null;
@@ -188,7 +199,7 @@ export default function SelectAdvisorsModal({isOpen, onClose, onTransfer, curren
             Annuler
           </button>
           <button
-          onClick={() => selectedAdvisor && onTransfer(selectedAdvisor)}
+          onClick={handleConfirmTransfer}
             disabled={!selectedAdvisor}
             className="flex-1 px-6 py-3 bg-slate-800 text-white rounded-xl font-semibold hover:bg-slate-900 disabled:bg-slate-300 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 shadow-lg shadow-slate-900/20 disabled:shadow-none"
           >

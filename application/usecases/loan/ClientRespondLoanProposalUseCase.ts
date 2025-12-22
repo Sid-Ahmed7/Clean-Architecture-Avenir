@@ -10,6 +10,8 @@ import { LoanRequestNotFoundError } from "../../errors/LoanRequestNotFoundError"
 import { UnauthorizedLoanRequestError } from "../../errors/UnauthorizedLoanRequestError";
 import { RateProposalNotRequiredError } from "../../errors/RateProposalNotRequiredError";
 import { IndicativeRateNotDefinedError } from "../../errors/IndicativeRateNotDefinedError";
+import { SendNotificationToClientUseCase } from "../notification/SendNotificationToClientUseCase";
+import { NotificationTypeEnum } from "../../../domain/enums/NotificationTypeEnum";
 
 export class ClientRespondLoanProposalUseCase {
   public constructor(
@@ -17,6 +19,7 @@ export class ClientRespondLoanProposalUseCase {
     private readonly accountRepository: AccountRepositoryInterface,
     private readonly repaymentScheduleRepository: LoanRepaymentScheduleRepositoryInterface,
     private readonly createRepaymentScheduleUseCase: CreateRepaymentScheduleUseCase,
+    private readonly sendNotificationUseCase: SendNotificationToClientUseCase,
   ) {}
 
   public async execute(clientId: string, requestId: string, accept: boolean) {
@@ -40,10 +43,18 @@ export class ClientRespondLoanProposalUseCase {
       if (savedRejected instanceof Error) {
         return savedRejected;
       }
+
+      if (this.sendNotificationUseCase) {
+        await this.sendNotificationUseCase.execute(
+          clientId,
+          `Vous avez refusé la proposition de prêt de ${request.amount}€ au taux de ${request.proposedRate}%.`,
+          NotificationTypeEnum.ACTION
+        );
+      }
+
       return savedRejected;
     }
 
-    // credit amount to client's checking account
     const accounts = await this.accountRepository.getAccountsByUserId(clientId);
     if (accounts instanceof UserNotFoundError) {
       return accounts;
@@ -82,6 +93,14 @@ export class ClientRespondLoanProposalUseCase {
       request.amount,
       request.durationMonths,
     );
+
+    if (this.sendNotificationUseCase) {
+      await this.sendNotificationUseCase.execute(
+        clientId,
+        `Félicitations ! Vous avez accepté le prêt de ${request.amount}€ au taux de ${request.proposedRate}%. Les fonds ont été versés sur votre compte.`,
+        NotificationTypeEnum.INFO
+      );
+    }
 
     return savedRequest;
   }

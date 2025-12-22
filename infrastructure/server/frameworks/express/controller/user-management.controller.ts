@@ -140,7 +140,18 @@ export class UserManagementController {
             return res.status(400).json({ error: updatedUserData.message });
         }
 
-        const updateUserUseCase = new UpdateUserUseCase(this.userRepository);
+        // Import dependencies for SendNotificationToClientUseCase
+        const { SendNotificationToClientUseCase } = require("../../../../../application/usecases/notification/SendNotificationToClientUseCase");
+        const { notificationRepository, notificationPublisher, uuidService } = require("../../../../adapters/config/repositories");
+        
+        const sendNotificationUseCase = new SendNotificationToClientUseCase(
+            notificationRepository,
+            notificationPublisher,
+            uuidService,
+            this.userRepository
+        );
+
+        const updateUserUseCase = new UpdateUserUseCase(this.userRepository, sendNotificationUseCase);
         const result = await updateUserUseCase.execute(updatedUserData);
 
         if (result instanceof UserNotFoundError) {

@@ -21,6 +21,9 @@ import { decideLoanRequestSchema } from "../schemas/loan/decideLoanRequestSchema
 import { proposeRateSchema } from "../schemas/loan/proposeRateSchema";
 import { setRateSchema } from "../schemas/loan/setRateSchema";
 import { UserNotFoundError } from "../../../../../application/errors/UserNotFoundError";
+import { InMemoryNotificationRepository } from "../../../../adapters/repositories/InMemoryNotificationRepository";
+import { NotificationService } from "../../../../adapters/services/notification/NotificationService";
+import { SendNotificationToClientUseCase } from "../../../../../application/usecases/notification/SendNotificationToClientUseCase";
 
 export class LoanController {
   constructor(
@@ -31,9 +34,17 @@ export class LoanController {
     private readonly accountRepository: AccountRepositoryInterface,
     private readonly loanConfigService: LoanConfigService,
     private readonly loanRepaymentScheduleRepository: LoanRepaymentScheduleRepositoryInterface,
+    private readonly notificationRepository: InMemoryNotificationRepository,
+    private readonly notificationPublisher: NotificationService,
   ) {}
 
   async createLoanRequest(req: Request, res: Response) {
+      const sendNotificationUseCase = new SendNotificationToClientUseCase(
+            this.notificationRepository,
+            this.notificationPublisher,
+            this.uuidService,
+            this.userRepository
+        );
     const clientId = req.user?.userId;
     if (!clientId) {
       return res.status(401).json({ error: "Unauthorized" });
@@ -50,6 +61,7 @@ export class LoanController {
       this.userRoleRepository,
       this.uuidService,
       this.loanConfigService,
+      sendNotificationUseCase
     );
 
     const result = await createUseCase.execute(clientId, parseResult.data);
@@ -108,6 +120,12 @@ export class LoanController {
   }
 
   async advisorDecision(req: Request, res: Response) {
+   const sendNotificationUseCase = new SendNotificationToClientUseCase(
+            this.notificationRepository,
+            this.notificationPublisher,
+            this.uuidService,
+            this.userRepository
+        );
     const advisorId = req.user?.userId;
     if (!advisorId) {
       return res.status(401).json({ error: "Unauthorized" });
@@ -122,7 +140,7 @@ export class LoanController {
       return res.status(400).json({ errors: parseResult.error.message });
     }
 
-    const useCase = new AdvisorDecideLoanRequestUseCase(this.loanRequestRepository);
+    const useCase = new AdvisorDecideLoanRequestUseCase(this.loanRequestRepository, sendNotificationUseCase);
     const result = await useCase.execute(advisorId, requestId, parseResult.data.decision);
 
     if (result instanceof Error) {
@@ -133,6 +151,12 @@ export class LoanController {
   }
 
   async directorDecision(req: Request, res: Response) {
+    const sendNotificationUseCase = new SendNotificationToClientUseCase(
+            this.notificationRepository,
+            this.notificationPublisher,
+            this.uuidService,
+            this.userRepository
+        );
     const directorId = req.user?.userId;
     if (!directorId) {
       return res.status(401).json({ error: "Unauthorized" });
@@ -161,8 +185,9 @@ export class LoanController {
       this.loanConfigService,
       this.loanRepaymentScheduleRepository,
       new CreateRepaymentScheduleUseCase(this.loanRepaymentScheduleRepository, this.uuidService),
+      sendNotificationUseCase
     );
-    const result = await useCase.execute(requestId, parseResult.data.decision, directorName);
+    const result = await useCase.execute(directorId, requestId, parseResult.data.decision, directorName);
 
     if (result instanceof Error) {
       return res.status(500).json({ error: result.message });
@@ -183,6 +208,12 @@ export class LoanController {
   }
 
   async directorProposeRate(req: Request, res: Response) {
+      const sendNotificationUseCase = new SendNotificationToClientUseCase(
+            this.notificationRepository,
+            this.notificationPublisher,
+            this.uuidService,
+            this.userRepository
+        );
     const directorId = req.user?.userId;
     if (!directorId) {
       return res.status(401).json({ error: "Unauthorized" });
@@ -205,8 +236,8 @@ export class LoanController {
           director.email ||
           director.id;
 
-    const useCase = new DirectorProposeRateUseCase(this.loanRequestRepository);
-    const result = await useCase.execute(requestId, parseResult.data.rate, directorName);
+    const useCase = new DirectorProposeRateUseCase(this.loanRequestRepository, sendNotificationUseCase);
+    const result = await useCase.execute(directorId, requestId, parseResult.data.rate, directorName);
 
     if (result instanceof Error) {
       return res.status(500).json({ error: result.message });
@@ -216,6 +247,12 @@ export class LoanController {
   }
 
   async clientRespondProposal(req: Request, res: Response) {
+    const sendNotificationUseCase = new SendNotificationToClientUseCase(
+            this.notificationRepository,
+            this.notificationPublisher,
+            this.uuidService,
+            this.userRepository
+        );
     const clientId = req.user?.userId;
     if (!clientId) {
       return res.status(401).json({ error: "Unauthorized" });
@@ -236,6 +273,7 @@ export class LoanController {
       this.accountRepository,
       this.loanRepaymentScheduleRepository,
       new CreateRepaymentScheduleUseCase(this.loanRepaymentScheduleRepository, this.uuidService),
+      sendNotificationUseCase
     );
     const result = await useCase.execute(clientId, requestId, accept);
 

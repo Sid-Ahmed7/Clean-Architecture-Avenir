@@ -1,8 +1,13 @@
 import { apiClient } from "./apiClient";
 import { LoginInput } from "../validation/auth/loginSchema";
+import { CreateAdminInput } from "../validation/auth/createAdminSchema";
 
 export const login = async (data: LoginInput) => {
   return await apiClient.post("/auth/login", data);
+};
+
+export const createAdmin = async (data: CreateAdminInput) => {
+  return await apiClient.post("/auth/admin/create", data);
 };
 
 export const getAllAdvisors = async () => {

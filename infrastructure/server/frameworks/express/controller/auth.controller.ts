@@ -32,6 +32,10 @@ import { registerSchema } from "../schemas/auth/registerSchema";
 import { registerAdvisorSchema } from "../schemas/auth/registerAdvisorSchema";
 import { loginSchema } from "../schemas/auth/loginSchema";
 import { registerManagerSchema } from "../schemas/auth/registerManagerSchema";
+import { SendNotificationToClientUseCase } from "../../../../../application/usecases/notification/SendNotificationToClientUseCase";
+import { NotificationTypeEnum } from "../../../../../domain/enums/NotificationTypeEnum";
+import { InMemoryNotificationRepository } from "../../../../adapters/repositories/InMemoryNotificationRepository";
+import { NotificationService } from "../../../../adapters/services/notification/NotificationService";
 import { RolePriorityService } from "../../../../adapters/services/RolePriorityService";
 
 export class AuthController {
@@ -48,12 +52,41 @@ export class AuthController {
         private readonly localeService: LocaleValidationService,
         private readonly uuidService: CryptoUuidGenerator,
         private readonly eventBus: EventBusInterface,
-        private readonly rolePriorityService: RolePriorityService
-      ) {}
+        private readonly rolePriorityService: RolePriorityService,
+        private readonly notificationRepository: InMemoryNotificationRepository,
+        private readonly notificationPublisher: NotificationService) {}
+
+      private async sendNotification(userId: string, message: string, type: NotificationTypeEnum): Promise<void> {
+        try {
+          const sendNotificationUseCase = new SendNotificationToClientUseCase(
+            this.notificationRepository,
+            this.notificationPublisher,
+            this.uuidService,
+            this.userRepository
+          );
+          await sendNotificationUseCase.execute(userId, message, type);
+        } catch (error) {
+          console.error('[AuthController] Erreur envoi notification:', error);
+        }
+      }
 
 
       async register(req: Request, res: Response) {
-        const registerUseCase = new RegisterUseCase(this.userRepository,this.roleRepository,this.userRoleRepository,this.passwordService,this.emailTemplateService,this.registrationTokenGeneratorService, this.localeService,this.uuidService);
+        const sendNotificationUseCase = new SendNotificationToClientUseCase(
+          this.notificationRepository,
+          this.notificationPublisher,
+          this.uuidService,
+          this.userRepository
+        );
+        const registerUseCase = new RegisterUseCase(
+          this.userRepository,
+          this.roleRepository,
+          this.userRoleRepository,
+          this.passwordService,
+          this.emailTemplateService,
+          this.registrationTokenGeneratorService,
+          this.localeService,
+          this.uuidService);
         const parseResult = registerSchema.safeParse(req.body);
         if (!parseResult.success) {
           return res.status(400).json({ errors: parseResult.error.message });
@@ -127,7 +160,19 @@ export class AuthController {
 
 
       async login(req: Request, res: Response) {
-        const loginUseCase = new LoginUseCase(this.userRepository, this.userRoleRepository, this.tokenService, this.passwordService )
+        const sendNotificationUseCase = new SendNotificationToClientUseCase(
+          this.notificationRepository,
+          this.notificationPublisher,
+          this.uuidService,
+          this.userRepository
+        );
+        const loginUseCase = new LoginUseCase(
+          this.userRepository,
+          this.userRoleRepository,
+          this.tokenService,
+          this.passwordService,
+          sendNotificationUseCase,
+        );
         const parseResult = loginSchema.safeParse(req.body);
         if (!parseResult.success) {
           return res.status(400).json({ errors: parseResult.error.message });

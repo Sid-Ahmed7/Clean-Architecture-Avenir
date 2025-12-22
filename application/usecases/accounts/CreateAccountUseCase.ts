@@ -7,9 +7,16 @@ import {IbanGeneratorService} from "../../ports/services/IbanGeneratorService";
 import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
 import { AccountStatusEnum } from "../../../domain/enums/AccountStatusEnum";
 import { AccountTypeEnum } from "../../../domain/enums/AccountTypeEnum";
+import { SendNotificationToClientUseCase } from "../notification/SendNotificationToClientUseCase";
+import { NotificationTypeEnum } from "../../../domain/enums/NotificationTypeEnum";
 
 export class CreateAccountUseCase {
-    public constructor ( private readonly accountRepository: AccountRepositoryInterface, private readonly accountNumberGenerator: AccountNumberGeneratorService, private readonly ibanGenerator: IbanGeneratorService ){}
+    public constructor(
+        private readonly accountRepository: AccountRepositoryInterface,
+        private readonly accountNumberGenerator: AccountNumberGeneratorService,
+        private readonly ibanGenerator: IbanGeneratorService,
+        private readonly sendNotificationUseCase: SendNotificationToClientUseCase,
+    ){}
 
     public async execute(accountData: CreateAccount): Promise<AccountEntity | Error>{
 
@@ -52,12 +59,20 @@ export class CreateAccountUseCase {
         }
 
         const createdAccount = await this.accountRepository.createOneAccount(account);
-        
+
         if(createdAccount instanceof Error) {
             return createdAccount;
         }
 
+        if (this.sendNotificationUseCase) {
+            await this.sendNotificationUseCase.execute(
+                accountData.userId,
+                `Votre compte a été créé avec succès !`,
+                NotificationTypeEnum.INFO
+            );
+        }
+
         return createdAccount;
     }
-    
+
 }

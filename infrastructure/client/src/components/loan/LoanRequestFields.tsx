@@ -1,5 +1,5 @@
-import Button from "@/components/ui/Button";
 import { LoanRequestFieldsProps } from "@/types/loan";
+import Button from "@/components/ui/Button";
 
 export function LoanRequestFields({
   advisors,
@@ -18,19 +18,19 @@ export function LoanRequestFields({
 }: LoanRequestFieldsProps) {
   return (
     <>
-      <div className="mb-4">
-        <label className="block mb-1 font-medium text-gray-900" htmlFor="advisorId">
+      <div className="space-y-1">
+        <label className="text-sm font-semibold text-slate-800" htmlFor="advisorId">
           Choisir un conseiller
         </label>
         {loadingAdvisors ? (
-          <p className="text-sm text-gray-600">Chargement des conseillers...</p>
+          <p className="text-sm text-slate-600">Chargement des conseillers...</p>
         ) : advisorError ? (
-          <p className="text-sm text-red-600">{advisorError}</p>
+          <p className="text-sm text-rose-600">{advisorError}</p>
         ) : (
           <select
             id="advisorId"
             {...register("advisorId")}
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900 bg-white"
+            className="w-full px-3 py-3 rounded-lg border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-100"
           >
             {advisors.map((a) => (
               <option key={a.id} value={a.id}>
@@ -39,11 +39,11 @@ export function LoanRequestFields({
             ))}
           </select>
         )}
-        {errors.advisorId && <p className="text-red-500 mt-1">{errors.advisorId.message}</p>}
+        {errors.advisorId && <p className="text-rose-600 text-sm">{errors.advisorId.message}</p>}
       </div>
 
-      <div className="mb-4">
-        <label className="block mb-1 font-medium text-gray-900" htmlFor="amount">
+      <div className="space-y-1">
+        <label className="text-sm font-semibold text-slate-800" htmlFor="amount">
           Montant demandé
         </label>
         <input
@@ -51,39 +51,41 @@ export function LoanRequestFields({
           type="number"
           step="0.01"
           {...register("amount", { valueAsNumber: true })}
-          className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900"
+          className="w-full px-3 py-3 rounded-lg border border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-100"
         />
         {errors.amount && (
-          <p className="text-red-500 mt-1">Veuillez saisir un montant valide et supérieur à 0.</p>
+          <p className="text-rose-600 text-sm">Veuillez saisir un montant valide et supérieur à 0.</p>
         )}
       </div>
 
-      <div className="mb-6">
-        <label className="block mb-1 font-medium text-gray-900" htmlFor="purpose">
+      <div className="space-y-1">
+        <label className="text-sm font-semibold text-slate-800" htmlFor="purpose">
           Motif
         </label>
         <textarea
           id="purpose"
           {...register("purpose")}
-          className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900"
+          className="w-full px-3 py-3 rounded-lg border border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-100"
           rows={3}
           placeholder="Exemple : Achat d'un véhicule, rénovation de la maison, etc."
         />
         {errors.purpose && (
-          <p className="text-red-500 mt-1">Veuillez préciser le motif de votre demande.</p>
+          <p className="text-rose-600 text-sm">Veuillez préciser le motif de votre demande.</p>
         )}
       </div>
 
-      <div className="mb-6">
-        <label className="block mb-2 font-medium text-gray-900">Durée de remboursement</label>
+      <div className="space-y-2">
+        <label className="text-sm font-semibold text-slate-800">Durée de remboursement</label>
         <div className="flex gap-2 flex-wrap">
           {durations.map((d) => (
             <button
               key={d}
               type="button"
               onClick={() => onSelectDuration(d)}
-              className={`px-4 py-2 rounded border ${
-                duration === d ? "bg-blue-600 text-white border-blue-600" : "bg-white text-gray-800"
+              className={`px-4 py-2 rounded-full border text-sm transition ${
+                duration === d
+                  ? "bg-slate-900 text-white border-slate-900"
+                  : "bg-white text-slate-800 border-slate-200 hover:bg-slate-50"
               }`}
             >
               {d} mois
@@ -91,32 +93,32 @@ export function LoanRequestFields({
           ))}
         </div>
         {errors.durationMonths && (
-          <p className="text-red-500 mt-1">{errors.durationMonths.message}</p>
+          <p className="text-rose-600 text-sm">{errors.durationMonths.message}</p>
         )}
       </div>
 
-      <div className="mb-6 p-4 bg-blue-50 border border-blue-100 rounded-lg">
-        <p className="text-sm text-gray-800 font-medium">
+      <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-50 to-blue-50 border border-slate-100">
+        <p className="text-sm font-semibold text-slate-800">
           Simulation mensuelle{" "}
           {amount > rateThreshold
             ? "(taux à définir par le directeur)"
             : indicativeRate
-              ? `(taux indicatif ${indicativeRate * 100}%)`
+              ? `(taux indicatif ${(indicativeRate * 100).toFixed(2)}%)`
               : "(taux indicatif non défini)"}
         </p>
-        <p className="text-lg font-semibold text-blue-700 mt-1">
+        <p className="text-2xl font-bold text-slate-900 mt-1">
           {amount > rateThreshold
             ? "-- €/mois"
             : monthlyPayment > 0
               ? `${monthlyPayment.toFixed(2)} €/mois`
               : "-- €/mois"}
         </p>
-        <p className="text-xs text-gray-600 mt-1">
+        <p className="text-xs text-slate-600 mt-1">
           {amount > rateThreshold
             ? "Pour un montant > 5000€, le taux sera proposé par le directeur."
             : indicativeRate
               ? "En attente de taux indicatif défini par le directeur."
-              : ""}
+              : "Dès qu’un taux indicatif sera publié, une estimation apparaîtra ici."}
         </p>
       </div>
 
