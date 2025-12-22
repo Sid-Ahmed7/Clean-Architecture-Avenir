@@ -10,6 +10,8 @@ import { AccountNotFoundError } from "../../../../../application/errors/AccountN
 import { InvalidAccountError } from "../../../../../domain/errors/InvalidAccountError";
 import { CreateSavingsAccount } from "../../../../../application/requests/CreateSavingsAccount";
 import { UpdateSavingsAccountConfig } from "../../../../../application/requests/UpdateSavingsAccountConfig";
+import { DeleteSavingsAccountUseCase } from "../../../../../application/usecases/accounts/DeleteSavingsAccountUseCase";
+import { NoCheckingAccountForTransferError } from "../../../../../application/errors/NoCheckingAccountForTransferError";
 
 export class SavingsAccountController {
 
@@ -253,9 +255,6 @@ export class SavingsAccountController {
     }
 
     async deleteSavingsAccount(req: Request, res: Response) {
-        const { DeleteSavingsAccountUseCase } = require("../../../../../application/usecases/accounts/DeleteSavingsAccountUseCase");
-        const { NoCheckingAccountForTransferError } = require("../../../../../application/errors/NoCheckingAccountForTransferError");
-        
         const deleteUseCase = new DeleteSavingsAccountUseCase(
             this.savingsAccountRepository,
             this.accountRepository
