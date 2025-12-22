@@ -50,6 +50,8 @@ import { updateWithdrawalLimitSchema } from "../schemas/accounts/updateWithdrawa
 import { updateTransferLimitSchema } from "../schemas/accounts/updateTransferLimitSchema";
 import { updateOverdraftLimitSchema } from "../schemas/accounts/updateOverdraftLimitSchema";
 import { transferBetweenAccountsSchema } from "../schemas/accounts/transferBetweenAccountsSchema";
+import { CannotDeleteLastCheckingAccountError } from "../../../../../application/errors/CannotDeleteLastCheckingAccountError";
+import { NoCheckingAccountForTransferError } from "../../../../../application/errors/NoCheckingAccountForTransferError";
 
 
 export class AccountController {
@@ -265,10 +267,6 @@ async updateAccount(req: Request, res: Response) {
             if(result instanceof AccountNotFoundError) {
                 return res.status(404).json({error: result.message})
             }
-            
-            // Import needed at top of file
-            const { CannotDeleteLastCheckingAccountError } = require("../../../../../application/errors/CannotDeleteLastCheckingAccountError");
-            const { NoCheckingAccountForTransferError } = require("../../../../../application/errors/NoCheckingAccountForTransferError");
             
             if(result instanceof CannotDeleteLastCheckingAccountError) {
                 return res.status(400).json({error: result.message})
