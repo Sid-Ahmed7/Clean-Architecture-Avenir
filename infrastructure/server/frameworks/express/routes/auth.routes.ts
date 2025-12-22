@@ -5,11 +5,13 @@ import {accountRepository, userRepository, roleRepository, userRoleRepository,to
 import { verifyTokenAccess } from '../middleware/authMiddleware';
 import { authorizeRoles } from '../middleware/roleMiddleware';
 import { RoleEnum } from '../../../../../domain/enums/RoleEnum';
+import { RolePriorityService } from '../../../../adapters/services/RolePriorityService';
 const router = express.Router();
 
 
 registerUserConfirmedSubscriber(eventBus,accountRepository );
-const authController = new AuthController(userRepository, roleRepository, userRoleRepository,tokenService, passwordService, emailService,emailTemplateService,registrationTokenGeneratorService, localeService, uuidService, eventBus);
+const rolePriorityService = new RolePriorityService();
+const authController = new AuthController(userRepository, roleRepository, userRoleRepository,tokenService, passwordService, emailService,emailTemplateService,registrationTokenGeneratorService, localeService, uuidService, eventBus, rolePriorityService);
 
 
 router.post("/register", (req, res) => authController.register(req,res));

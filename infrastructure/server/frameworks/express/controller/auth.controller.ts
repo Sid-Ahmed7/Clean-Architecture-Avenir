@@ -32,6 +32,7 @@ import { registerSchema } from "../schemas/auth/registerSchema";
 import { registerAdvisorSchema } from "../schemas/auth/registerAdvisorSchema";
 import { loginSchema } from "../schemas/auth/loginSchema";
 import { registerManagerSchema } from "../schemas/auth/registerManagerSchema";
+import { RolePriorityService } from "../../../../adapters/services/RolePriorityService";
 
 export class AuthController {
 
@@ -46,7 +47,8 @@ export class AuthController {
         private readonly registrationTokenGeneratorService: RegistrationTokenGeneratorService,
         private readonly localeService: LocaleValidationService,
         private readonly uuidService: CryptoUuidGenerator,
-        private readonly eventBus: EventBusInterface
+        private readonly eventBus: EventBusInterface,
+        private readonly rolePriorityService: RolePriorityService
       ) {}
 
 
@@ -226,20 +228,9 @@ export class AuthController {
 
         const roles = await getUserRolesUseCase.execute(userId);
         
-        // Prioritize roles: BANK_MANAGER > BANK_ADVISOR > CLIENT
-        let role: string | undefined = undefined;
-        if (Array.isArray(roles) && roles.length > 0) {
-          const roleNames = roles.map(r => r.name);
-          if (roleNames.includes(RoleEnum.BANK_MANAGER)) {
-            role = RoleEnum.BANK_MANAGER;
-          } else if (roleNames.includes(RoleEnum.BANK_ADVISOR)) {
-            role = RoleEnum.BANK_ADVISOR;
-          } else if (roleNames.includes(RoleEnum.CLIENT)) {
-            role = RoleEnum.CLIENT;
-          } else {
-            role = roleNames[0]; // Fallback to first role
-          }
-        }
+        // Utiliser le service de priorité des rôles
+        const roleNames = Array.isArray(roles) ? roles.map(r => r.name) : [];
+        const role = this.rolePriorityService.getHighestPriorityRole(roleNames);
 
         return res.status(200).json({
           user: {
