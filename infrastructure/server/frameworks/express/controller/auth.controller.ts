@@ -18,6 +18,7 @@ import { InvalidEmailOrPasswordError } from "../../../../../application/errors/I
 import { RoleNotFoundError } from "../../../../../application/errors/RoleNotFoundError";
 import { BankUserEntity } from "../../../../../domain/entities/BankUserEntity";
 import { UserStatusEnum } from "../../../../../domain/enums/UserStatusEnum";
+import { RoleEnum } from "../../../../../domain/enums/RoleEnum";
 import { EmailService } from "../../../../../application/ports/services/EmailService";
 import { RegistrationTokenGeneratorService } from "../../../../../application/ports/services/auth/RegistrationTokenGeneratorService";
 import { EventBusInterface } from "../../../../../application/ports/event/EventBusInterface";
@@ -35,6 +36,7 @@ import { SendNotificationToClientUseCase } from "../../../../../application/usec
 import { NotificationTypeEnum } from "../../../../../domain/enums/NotificationTypeEnum";
 import { InMemoryNotificationRepository } from "../../../../adapters/repositories/InMemoryNotificationRepository";
 import { NotificationService } from "../../../../adapters/services/notification/NotificationService";
+import { RolePriorityService } from "../../../../adapters/services/RolePriorityService";
 
 export class AuthController {
 
@@ -50,6 +52,7 @@ export class AuthController {
         private readonly localeService: LocaleValidationService,
         private readonly uuidService: CryptoUuidGenerator,
         private readonly eventBus: EventBusInterface,
+        private readonly rolePriorityService: RolePriorityService,
         private readonly notificationRepository: InMemoryNotificationRepository,
         private readonly notificationPublisher: NotificationService) {}
 
@@ -269,7 +272,10 @@ export class AuthController {
 
 
         const roles = await getUserRolesUseCase.execute(userId);
-        const role = Array.isArray(roles) && roles.length > 0 ? roles[0]?.name : undefined;
+        
+        // Utiliser le service de priorité des rôles
+        const roleNames = Array.isArray(roles) ? roles.map(r => r.name) : [];
+        const role = this.rolePriorityService.getHighestPriorityRole(roleNames);
 
         return res.status(200).json({
           user: {

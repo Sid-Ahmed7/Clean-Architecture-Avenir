@@ -66,6 +66,8 @@ import { updateOverdraftLimitSchema } from "../schemas/accounts/updateOverdraftL
 import { requestOverdraftIncreaseSchema } from "../schemas/accounts/requestOverdraftIncreaseSchema";
 import { respondOverdraftIncreaseSchema } from "../schemas/accounts/respondOverdraftIncreaseSchema";
 import { transferBetweenAccountsSchema } from "../schemas/accounts/transferBetweenAccountsSchema";
+import { CannotDeleteLastCheckingAccountError } from "../../../../../application/errors/CannotDeleteLastCheckingAccountError";
+import { NoCheckingAccountForTransferError } from "../../../../../application/errors/NoCheckingAccountForTransferError";
 import { InMemoryNotificationRepository } from "../../../../adapters/repositories/InMemoryNotificationRepository";
 import { NotificationService } from "../../../../adapters/services/notification/NotificationService";
 import { SendNotificationToClientUseCase } from "../../../../../application/usecases/notification/SendNotificationToClientUseCase";
@@ -347,6 +349,14 @@ async updateAccount(req: Request, res: Response) {
         if(result instanceof Error) {
             if(result instanceof AccountNotFoundError) {
                 return res.status(404).json({error: result.message})
+            }
+            
+            if(result instanceof CannotDeleteLastCheckingAccountError) {
+                return res.status(400).json({error: result.message})
+            }
+            
+            if(result instanceof NoCheckingAccountForTransferError) {
+                return res.status(400).json({error: result.message})
             }
         
             return res.status(500).json({error : result.message})

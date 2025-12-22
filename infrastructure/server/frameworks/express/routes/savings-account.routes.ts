@@ -80,4 +80,12 @@ router.post(
     (req, res) => savingsAccountController.withdrawFromSavingsAccount(req, res)
 );
 
+// Delete savings account
+router.delete(
+    "/:accountNumber",
+    verifyTokenAccess,
+    authorizeRoles([RoleEnum.BANK_MANAGER]),
+    (req, res) => savingsAccountController.deleteSavingsAccount(req, res)
+);
+
 export default router;

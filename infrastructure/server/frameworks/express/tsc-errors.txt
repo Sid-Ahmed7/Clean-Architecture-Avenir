@@ -1,0 +1,2 @@
+﻿frameworks/express/controller/user-management.controller.ts(163,57): error TS2339: Property 'message' does not exist on type 'never'.
+frameworks/express/controller/user-management.controller.ts(199,57): error TS2339: Property 'message' does not exist on type 'never'.
