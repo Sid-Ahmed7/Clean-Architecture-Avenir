@@ -23,6 +23,24 @@ export class UserManagementController {
         private readonly savingsAccountRepository: InMemorySavingsAccountRepository
     ) {}
 
+    /**
+     * Map user entity to DTO (removes sensitive data like password)
+     */
+    private mapUserToDTO(user: BankUserEntity) {
+        return {
+            id: user.id,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            phoneNumber: user.phoneNumber,
+            dateOfBirth: user.dateOfBirth,
+            address: user.address,
+            status: user.status,
+            isRegistered: user.isRegistered,
+            createdAt: user.createdAt
+        };
+    }
+
     async getAllUsers(req: Request, res: Response) {
         const users = await this.userRepository.findAll();
         
@@ -31,16 +49,7 @@ export class UserManagementController {
             users.map(async (user) => {
                 const roles = await this.userRoleRepository.findRolesByUserId(user.id);
                 return {
-                    id: user.id,
-                    email: user.email,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    phoneNumber: user.phoneNumber,
-                    dateOfBirth: user.dateOfBirth,
-                    address: user.address,
-                    status: user.status,
-                    isRegistered: user.isRegistered,
-                    createdAt: user.createdAt,
+                    ...this.mapUserToDTO(user),
                     roles: Array.isArray(roles) ? roles.map(r => r.name) : []
                 };
             })
@@ -62,18 +71,7 @@ export class UserManagementController {
         }
 
         // Remove sensitive data (password)
-        const clients = result.map(user => ({
-            id: user.id,
-            email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            phoneNumber: user.phoneNumber,
-            dateOfBirth: user.dateOfBirth,
-            address: user.address,
-            status: user.status,
-            isRegistered: user.isRegistered,
-            createdAt: user.createdAt
-        }));
+        const clients = result.map(user => this.mapUserToDTO(user));
 
         return res.status(200).json(clients);
     }
@@ -91,18 +89,7 @@ export class UserManagementController {
         }
 
         // Remove sensitive data (password)
-        const advisors = result.map(user => ({
-            id: user.id,
-            email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            phoneNumber: user.phoneNumber,
-            dateOfBirth: user.dateOfBirth,
-            address: user.address,
-            status: user.status,
-            isRegistered: user.isRegistered,
-            createdAt: user.createdAt
-        }));
+        const advisors = result.map(user => this.mapUserToDTO(user));
 
         return res.status(200).json(advisors);
     }
@@ -164,18 +151,7 @@ export class UserManagementController {
             return res.status(500).json({ error: result.message });
         }
 
-        return res.status(200).json({
-            id: result.id,
-            email: result.email,
-            firstName: result.firstName,
-            lastName: result.lastName,
-            phoneNumber: result.phoneNumber,
-            dateOfBirth: result.dateOfBirth,
-            address: result.address,
-            status: result.status,
-            isRegistered: result.isRegistered,
-            createdAt: result.createdAt
-        });
+        return res.status(200).json(this.mapUserToDTO(result));
     }
 
     async deleteUser(req: Request, res: Response) {
