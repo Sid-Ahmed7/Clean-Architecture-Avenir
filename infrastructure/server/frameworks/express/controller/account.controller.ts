@@ -28,14 +28,10 @@ import { ToggleAccountActiveUseCase} from "../../../../../application/usecases/a
 import { AccountNumberGeneratorService } from "../../../../../application/ports/services/AccountNumberGeneratorService";
 import { IbanGeneratorService } from "../../../../../application/ports/services/IbanGeneratorService";
 import { TransactionRepositoryInterface } from "../../../../../application/ports/repositories/TransactionRepositoryInterface";
-import { InMemoryOverdraftRequestRepository } from "../../../../adapters/repositories/InMemoryOverdraftRequestRepository";
-import { InMemoryLoanRequestRepository } from "../../../../adapters/repositories/InMemoryLoanRequestRepository";
-import { InMemoryUserRepository } from "../../../../adapters/repositories/InMemoryUserRepository";
 import { GetTransactionHistoryUseCase } from "../../../../../application/usecases/accounts/GetTransactionHistoryUseCase";
 import { GetLastTransactionsUseCase } from "../../../../../application/usecases/accounts/GetLastTransactionsUseCase";
 import { CheckingAccountAlreadyExistError } from "../../../../../application/errors/CheckingAccountAlreadyExistError";
 import { InvalidIbanError } from "../../../../../domain/errors/InvalidIbanError";
-import { GetUserByIdUseCase } from "../../../../../application/usecases/auth/GetUserByIdUseCase";
 import { UserNotFoundError } from "../../../../../application/errors/UserNotFoundError";
 import { TransferBetweenAccountsUseCase } from "../../../../../application/usecases/transfer/TransferBetweenAccountsUseCase";
 import { QuickTransferUseCase } from "../../../../../application/usecases/transfer/QuickTransferUseCase";
@@ -51,11 +47,7 @@ import { CreateAccount } from "../../../../../application/requests/CreateAccount
 import { createAccountSchema } from "../schemas/accounts/createAccountSchema";
 import { CreateSubAccount } from "../../../../../application/requests/CreateSubAccount";
 import { createSubAccountSchema } from "../schemas/accounts/createSubAccountSchema";
-import { updateAccountSchema } from "../schemas/accounts/updateAccountSchema";
-import { AccountEntity } from "../../../../../domain/entities/AccountEntity";
-import { AccountStatusEnum } from "../../../../../domain/enums/AccountStatusEnum";
 import { RoleEnum } from "../../../../../domain/enums/RoleEnum";
-import { InvalidUserIdError } from "../../../../../domain/errors/InvalidUserIdError";
 import { InvalidBalanceError } from "../../../../../domain/errors/InvalidBalanceError";
 import { changeAccountStatusSchema } from "../schemas/accounts/changeAccountStatusSchema";
 import { toggleAccountActiveSchema } from "../schemas/accounts/toggleAccountActiveSchema";
@@ -68,10 +60,13 @@ import { respondOverdraftIncreaseSchema } from "../schemas/accounts/respondOverd
 import { transferBetweenAccountsSchema } from "../schemas/accounts/transferBetweenAccountsSchema";
 import { CannotDeleteLastCheckingAccountError } from "../../../../../application/errors/CannotDeleteLastCheckingAccountError";
 import { NoCheckingAccountForTransferError } from "../../../../../application/errors/NoCheckingAccountForTransferError";
-import { InMemoryNotificationRepository } from "../../../../adapters/repositories/InMemoryNotificationRepository";
 import { NotificationService } from "../../../../adapters/services/notification/NotificationService";
 import { SendNotificationToClientUseCase } from "../../../../../application/usecases/notification/SendNotificationToClientUseCase";
 import { StatusMessageService } from "../../../../adapters/services/StatusMessageService";
+import { OverdraftRequestRepositoryInterface } from "../../../../../application/ports/repositories/OverdraftRequestRepositoryInterface";
+import { LoanRequestRepositoryInterface } from "../../../../../application/ports/repositories/LoanRequestRepositoryInterface";
+import { UserRepositoryInterface } from "../../../../../application/ports/repositories/auth/UserRepositoryInterface";
+import { NotificationRepositoryInterface } from "../../../../../application/ports/repositories/notification/NotificationRepositoryInterface";
 
 
 export class AccountController {
@@ -81,14 +76,14 @@ export class AccountController {
     private readonly accountNumberGenerator: AccountNumberGeneratorService,
     private readonly ibanGenerator: IbanGeneratorService,
     private readonly transactionRepository: TransactionRepositoryInterface,
-    private readonly overdraftRequestRepository: InMemoryOverdraftRequestRepository,
-    private readonly loanRequestRepository: InMemoryLoanRequestRepository,
-    private readonly userRepository: InMemoryUserRepository,
+    private readonly overdraftRequestRepository: OverdraftRequestRepositoryInterface,
+    private readonly loanRequestRepository: LoanRequestRepositoryInterface,
+    private readonly userRepository: UserRepositoryInterface,
     private readonly uuidService: CryptoUuidGenerator,
     private readonly transferLimitService: ManageTransferLimitService,
     private readonly validateTransferService: ValidateTransferService,
     private readonly transactionEnrichmentService: TransactionEnrichmentServiceImpl,
-    private readonly notificationRepository: InMemoryNotificationRepository,
+    private readonly notificationRepository: NotificationRepositoryInterface,
     private readonly notificationPublisher: NotificationService,
   ) {}
 

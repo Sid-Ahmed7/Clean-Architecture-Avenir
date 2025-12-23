@@ -173,6 +173,17 @@ export class PostgresUserRepository implements UserRepositoryInterface {
         return this.mapRowToEntity(row);
     }
 
+    public async deleteUser(userId: string): Promise<void | UserNotFoundError> {
+        const result = await pgPool.query(
+            'DELETE FROM bank_users WHERE id = $1 RETURNING id',
+            [userId]
+        );
+
+        if (result.rows.length === 0) {
+            return new UserNotFoundError(`User with ID ${userId} not found.`);
+        }
+    }
+
     private mapRowToEntity = (row: PostgresBankUserRow): BankUserEntity | Error => {
         const user = BankUserEntity.from(
             row.id,

@@ -15,7 +15,6 @@ const userManagementController = new UserManagementController(
     savingsAccountRepository
 );
 
-// All routes are protected and require BANK_MANAGER role
 router.get(
     "/", 
     verifyTokenAccess, 

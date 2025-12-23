@@ -9,8 +9,8 @@ import { StockRepositoryInterface } from '../../../../../application/ports/repos
 export class StockPositionController {
 
     public constructor(
-        private stockRepository: StockRepositoryInterface,
-        private holdingRepository: StockHoldingRepositoryInterface,
+        private readonly stockRepository: StockRepositoryInterface,
+        private readonly holdingRepository: StockHoldingRepositoryInterface,
     ){}
 
     public async getUserPositions(req: Request, res: Response) {

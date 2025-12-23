@@ -16,7 +16,6 @@ import {UpdateBuyerPositionUseCase} from "../../../../../application/usecases/po
 import {UpdatedSellerPositionUseCase} from "../../../../../application/usecases/position/UpdatedSellerPositionUseCase";
 import {AutoMatchOrdersUseCase} from "../../../../../application/usecases/orders/AutoMatchOrdersUseCase";
 import {UpdateStockPriceUseCase} from "../../../../../application/usecases/stocks/UpdateStockPriceUseCase";
-import { OrderTypeEnum } from '../../../../../domain/enums/OrderTypeEnum';
 import { StockNotFoundError } from '../../../../../application/errors/StockNotFoundError';
 import { OrderNotFoundError } from '../../../../../application/errors/OrderNotFoundError';
 import { OrderMatchingError } from '../../../../../domain/errors/OrderMatchingError';

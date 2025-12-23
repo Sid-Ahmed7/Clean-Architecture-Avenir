@@ -3,7 +3,7 @@ import { AccountEntity } from '../../../../domain/entities/AccountEntity';
 import { pgPool } from '../../config/database/configPostgresSQL';
 import { PostgresAccountRow } from './types/PostgresAccountRow';
 import { AccountNotFoundError } from '../../../../application/errors/AccountNotFoundError';
-import { AccountTypeEnum, AccountStatusEnum } from './types/PostgresEnums';
+import { AccountTypeEnum} from './types/PostgresEnums';
 import { CheckingAccountAlreadyExistError } from '../../../../application/errors/CheckingAccountAlreadyExistError';
 import { AccountAlreadyExistsError } from '../../../../application/errors/AccountAlreadyExistsError';
 import { UserNotFoundError } from '../../../../application/errors/UserNotFoundError';
@@ -28,7 +28,7 @@ export class PostgresAccountRepository implements AccountRepositoryInterface {
             return new AccountNotFoundError(`Account with number ${accountNumber} not found.`);
         }
 
-return this.mapRowToEntity(row);
+        return this.mapRowToEntity(row);
     }
 
     public async getOneAccountByIban(iban: string): Promise<AccountEntity | AccountNotFoundError> {
@@ -101,7 +101,7 @@ return this.mapRowToEntity(row);
             return new AccountNotFoundError(`Account for user ${userId} not found.`);
         }
 
-return this.mapRowToEntity(row);
+        return this.mapRowToEntity(row);
     }
 
     public async getAllAccounts(): Promise<Array<AccountEntity>> {

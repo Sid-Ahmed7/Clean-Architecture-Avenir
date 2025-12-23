@@ -35,7 +35,9 @@
     "dev": "ts-node frameworks/express/server.ts",
     "build": "tsc -b ../..",
     "start": "node ../../dist/frameworks/express/server.js",
-    "switch:repo": "ts-node scripts/switch-repository.ts",
-    "repo:status": "ts-node scripts/switch-repository.ts --status"
+    "switch:postgres": "ts-node scripts/switch-repository.ts postgres",
+    "switch:inmemory": "ts-node scripts/switch-repository.ts inmemory",
+    "repo:status": "ts-node scripts/switch-repository.ts --status",
+    "migrate": "ts-node scripts/run-migrations.ts"
   }
 }

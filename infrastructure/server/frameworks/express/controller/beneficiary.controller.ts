@@ -4,10 +4,12 @@ import { GetBeneficiariesByUserUseCase } from "../../../../../application/usecas
 import { UpdateBeneficiaryUseCase } from "../../../../../application/usecases/beneficiaries/UpdateBeneficiaryUseCase";
 import { DeleteBeneficiaryUseCase } from "../../../../../application/usecases/beneficiaries/DeleteBeneficiaryUseCase";
 import { TransferToBeneficiaryUseCase } from "../../../../../application/usecases/transfer/TransferToBeneficiaryUseCase";
-import { InMemoryBeneficiaryRepository } from "../../../../adapters/repositories/InMemoryBeneficiaryRepository";
-import { InMemoryAccountRepository } from "../../../../adapters/repositories/InMemoryAccountRepository";
-import { InMemoryTransactionRepository } from "../../../../adapters/repositories/InMemoryTransactionRepository";
-import { CryptoUuidGenerator } from "../../../../adapters/services/CryptoUuidGenerator";
+import { BeneficiaryRepositoryInterface } from "../../../../../application/ports/repositories/beneficiaries/BeneficiaryRepositoryInterface";
+import { AccountRepositoryInterface } from "../../../../../application/ports/repositories/AccountRepositoryInterface";
+import { TransactionRepositoryInterface } from "../../../../../application/ports/repositories/TransactionRepositoryInterface";
+import { UserRepositoryInterface } from "../../../../../application/ports/repositories/auth/UserRepositoryInterface";
+import { NotificationRepositoryInterface } from "../../../../../application/ports/repositories/notification/NotificationRepositoryInterface";
+import { UuidGeneratorService } from "../../../../../application/ports/services/UuidGeneratorService";
 import { BeneficiaryAlreadyExistsError } from "../../../../../application/errors/BeneficiaryAlreadyExistsError";
 import { BeneficiaryNotFoundError } from "../../../../../application/errors/BeneficiaryNotFoundError";
 import { IbanNotFoundError } from "../../../../../application/errors/IbanNotFoundError";
@@ -20,19 +22,17 @@ import { createBeneficiarySchema } from "../schemas/beneficiaries/createBenefici
 import { updateBeneficiarySchema } from "../schemas/beneficiaries/updateBeneficiarySchema";
 import { transferToBeneficiarySchema } from "../schemas/accounts/transferToBeneficiarySchema";
 import { UpdateBeneficiary } from "../../../../../application/requests/UpdateBeneficiary";
-import { InMemoryUserRepository } from "../../../../adapters/repositories/InMemoryUserRepository";
-import { InMemoryNotificationRepository } from "../../../../adapters/repositories/InMemoryNotificationRepository";
 import { NotificationService } from "../../../../adapters/services/notification/NotificationService";
 import { SendNotificationToClientUseCase } from "../../../../../application/usecases/notification/SendNotificationToClientUseCase";
 
 export class BeneficiaryController {
     constructor(
-        private readonly beneficiaryRepository: InMemoryBeneficiaryRepository,
-        private readonly accountRepository: InMemoryAccountRepository,
-        private readonly uuidService: CryptoUuidGenerator,
-        private readonly transactionRepository: InMemoryTransactionRepository,
-        private readonly userRepository: InMemoryUserRepository,
-        private readonly notificationRepository: InMemoryNotificationRepository,
+        private readonly beneficiaryRepository: BeneficiaryRepositoryInterface,
+        private readonly accountRepository: AccountRepositoryInterface,
+        private readonly uuidService: UuidGeneratorService,
+        private readonly transactionRepository: TransactionRepositoryInterface,
+        private readonly userRepository: UserRepositoryInterface,
+        private readonly notificationRepository: NotificationRepositoryInterface,
         private readonly notificationPublisher: NotificationService,
     ) {}
 

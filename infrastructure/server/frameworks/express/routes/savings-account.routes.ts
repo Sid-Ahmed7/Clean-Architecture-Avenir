@@ -12,7 +12,7 @@ const savingsAccountController = new SavingsAccountController(savingsAccountRepo
 router.get(
     "/",
     verifyTokenAccess,
-    authorizeRoles([RoleEnum.BANK_MANAGER, RoleEnum.CLIENT]), // Allow both manager and client
+    authorizeRoles([RoleEnum.BANK_MANAGER, RoleEnum.CLIENT]), 
     (req, res) => savingsAccountController.getAllSavingsAccounts(req, res)
 );
 

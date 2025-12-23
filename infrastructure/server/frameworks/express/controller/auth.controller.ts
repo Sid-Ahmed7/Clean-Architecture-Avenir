@@ -16,9 +16,6 @@ import { PasswordService } from "../../../../../application/ports/services/auth/
 import { UserNotFoundError } from "../../../../../application/errors/UserNotFoundError";
 import { InvalidEmailOrPasswordError } from "../../../../../application/errors/InvalidEmailOrPasswordError";
 import { RoleNotFoundError } from "../../../../../application/errors/RoleNotFoundError";
-import { BankUserEntity } from "../../../../../domain/entities/BankUserEntity";
-import { UserStatusEnum } from "../../../../../domain/enums/UserStatusEnum";
-import { RoleEnum } from "../../../../../domain/enums/RoleEnum";
 import { EmailService } from "../../../../../application/ports/services/EmailService";
 import { RegistrationTokenGeneratorService } from "../../../../../application/ports/services/auth/RegistrationTokenGeneratorService";
 import { EventBusInterface } from "../../../../../application/ports/event/EventBusInterface";
@@ -33,10 +30,9 @@ import { registerAdvisorSchema } from "../schemas/auth/registerAdvisorSchema";
 import { loginSchema } from "../schemas/auth/loginSchema";
 import { registerManagerSchema } from "../schemas/auth/registerManagerSchema";
 import { SendNotificationToClientUseCase } from "../../../../../application/usecases/notification/SendNotificationToClientUseCase";
-import { NotificationTypeEnum } from "../../../../../domain/enums/NotificationTypeEnum";
-import { InMemoryNotificationRepository } from "../../../../adapters/repositories/InMemoryNotificationRepository";
 import { NotificationService } from "../../../../adapters/services/notification/NotificationService";
 import { RolePriorityService } from "../../../../adapters/services/RolePriorityService";
+import { NotificationRepositoryInterface } from "../../../../../application/ports/repositories/notification/NotificationRepositoryInterface";
 
 export class AuthController {
 
@@ -53,31 +49,11 @@ export class AuthController {
         private readonly uuidService: CryptoUuidGenerator,
         private readonly eventBus: EventBusInterface,
         private readonly rolePriorityService: RolePriorityService,
-        private readonly notificationRepository: InMemoryNotificationRepository,
+        private readonly notificationRepository: NotificationRepositoryInterface,
         private readonly notificationPublisher: NotificationService) {}
-
-      private async sendNotification(userId: string, message: string, type: NotificationTypeEnum): Promise<void> {
-        try {
-          const sendNotificationUseCase = new SendNotificationToClientUseCase(
-            this.notificationRepository,
-            this.notificationPublisher,
-            this.uuidService,
-            this.userRepository
-          );
-          await sendNotificationUseCase.execute(userId, message, type);
-        } catch (error) {
-          console.error('[AuthController] Erreur envoi notification:', error);
-        }
-      }
 
 
       async register(req: Request, res: Response) {
-        const sendNotificationUseCase = new SendNotificationToClientUseCase(
-          this.notificationRepository,
-          this.notificationPublisher,
-          this.uuidService,
-          this.userRepository
-        );
         const registerUseCase = new RegisterUseCase(
           this.userRepository,
           this.roleRepository,

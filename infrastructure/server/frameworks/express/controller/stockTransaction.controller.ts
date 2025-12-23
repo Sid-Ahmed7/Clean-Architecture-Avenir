@@ -4,7 +4,7 @@ import { GetTransactionsBySymbolUseCase } from "../../../../../application/useca
 import { GetUserTransactionsUseCase } from "../../../../../application/usecases/transactions/GetUserTransactionsUseCase";
 
 export class StockTransactionController {
-    public constructor( private stockTransactionRepository: StockTransactionRepositoryInterface){}
+    public constructor( private readonly stockTransactionRepository: StockTransactionRepositoryInterface){}
 
 
     async getUserTransaction(req: Request, res: Response) {

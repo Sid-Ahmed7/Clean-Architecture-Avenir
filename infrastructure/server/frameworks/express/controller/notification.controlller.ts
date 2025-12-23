@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { InMemoryNotificationRepository } from "../../../../adapters/repositories/InMemoryNotificationRepository";
 import { NotificationPublisher, SseClient} from "../../../../../application/ports/services/notification/NotificationPublisher";
 import {CreateNotificationUseCase} from "../../../../../application/usecases/notification/CreateNotificationUseCase";
 import {GetUserNotificationUseCase} from "../../../../../application/usecases/notification/GetUserNotificationUseCase";
@@ -14,11 +13,12 @@ import { createNotificationSchema } from "../schemas/notifications/createNotific
 import { sendNotificationToClientSchema } from "../schemas/notifications/sendNotificationToClientSchema";
 import { markNotificationAsReadSchema } from "../schemas/notifications/markNotificationAsReadSchema";
 import { userRepository } from "../../../../adapters/config/repositories";
+import { NotificationRepositoryInterface } from "../../../../../application/ports/repositories/notification/NotificationRepositoryInterface";
 
 
 export class NotificationController {
     public constructor(
-        private readonly notificationRepository: InMemoryNotificationRepository,
+        private readonly notificationRepository: NotificationRepositoryInterface,
         private readonly notificationService: NotificationPublisher,
         private readonly uuidService: CryptoUuidGenerator
 

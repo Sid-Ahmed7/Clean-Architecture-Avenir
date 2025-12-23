@@ -7,14 +7,12 @@ import { RoleEnum } from "../../../../../domain/enums/RoleEnum";
 
 const router = Router();
 
-// Initialize controller with singleton repositories
 const savingsProductController = new SavingsProductController(
     savingsProductRepository,
     savingsAccountRepository,
     accountRepository
 );
 
-// Routes for savings products
 router.post(
     "/",
     verifyTokenAccess,
@@ -24,7 +22,7 @@ router.post(
 
 router.get(
     "/",
-    (req, res) => savingsProductController.getAllProducts(req, res) // Public route to see available products
+    (req, res) => savingsProductController.getAllProducts(req, res) 
 );
 
 router.put(

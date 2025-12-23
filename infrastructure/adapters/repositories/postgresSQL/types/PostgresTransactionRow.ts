@@ -1,4 +1,4 @@
-import { TransactionTypeEnum, OrderStatusEnum } from "./PostgresEnums";
+import { TransactionTypeEnum, TransferStatusEnum } from "./PostgresEnums";
 
 
 export interface PostgresTransactionRow {
@@ -8,7 +8,7 @@ export interface PostgresTransactionRow {
     amount: number;
     transaction_type: TransactionTypeEnum;
     executed_by: string;
-    status: OrderStatusEnum;
+    status: TransferStatusEnum;
     description: string | null;
     category: string | null;
     created_at: Date;

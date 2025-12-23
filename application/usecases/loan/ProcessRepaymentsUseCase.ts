@@ -7,7 +7,6 @@ import { UserNotFoundError } from "../../errors/UserNotFoundError";
 import { AccountNotFoundError } from "../../errors/AccountNotFoundError";
 import { TransactionEntity } from "../../../domain/entities/TransactionEntity";
 import { TransactionTypeEnum } from "../../../domain/enums/TransactionTypeEnum";
-import { OrderStatusEnum } from "../../../domain/enums/OrderStatusEnum";
 import { UuidGeneratorService } from "../../ports/services/UuidGeneratorService";
 import { TransferStatusEnum } from "../../../domain/enums/TransferStatusEnum";
 import { RepaymentUserNotFoundError } from "../../errors/RepaymentUserNotFoundError";

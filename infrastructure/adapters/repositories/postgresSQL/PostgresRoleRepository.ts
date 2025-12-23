@@ -9,7 +9,6 @@ import { PostgresRoleRow } from "./types/PostgresRoleRow";
 export class PostgresRoleRepository implements RoleRepositoryInterface {
 
     async initialize(): Promise<void> {
-        // Initialiser les rôles par défaut s'ils n'existent pas
         const defaultRoles = Object.values(RoleEnum);
 
         for (const roleName of defaultRoles) {

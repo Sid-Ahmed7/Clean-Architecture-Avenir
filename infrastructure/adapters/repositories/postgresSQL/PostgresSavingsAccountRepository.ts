@@ -150,6 +150,21 @@ export class PostgresSavingsAccountRepository implements SavingsAccountRepositor
             .filter((account): account is SavingsAccountsEntity => !(account instanceof Error));
     }
 
+    public async deleteSavingsAccount(accountNumber: number): Promise<void | AccountNotFoundError> {
+        try {
+            const result = await pgPool.query(
+                'DELETE FROM savings_accounts WHERE account_number = $1 RETURNING account_number',
+                [accountNumber]
+            );
+
+            if (result.rows.length === 0) {
+                return new AccountNotFoundError(`Savings account ${accountNumber} not found`);
+            }
+        } catch (error: any) {
+            return new AccountNotFoundError(`Failed to delete savings account: ${error.message}`);
+        }
+    }
+
     private mapRowToEntity(row: PostgresSavingsAccountRow): SavingsAccountsEntity | Error {
         const savingsAccount = SavingsAccountsEntity.from(
             row.account_number,

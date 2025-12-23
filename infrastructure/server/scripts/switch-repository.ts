@@ -2,6 +2,8 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
+import { runMigrations } from '../../adapters/config/database/runMigrations';
+import { pgPool } from '../../adapters/config/database/configPostgresSQL';
 
 const ENV_FILE_PATH = path.join(__dirname, '..', '.env');
 
@@ -49,7 +51,7 @@ function getCurrentRepositoryType(envContent: string): string {
   return match ? match[1]! : 'non défini';
 }
 
-function switchRepository(type: RepositoryType): void {
+async function switchRepository(type: RepositoryType): Promise<void> {
   const envContent = readEnvFile();
   const currentType = getCurrentRepositoryType(envContent);
 
@@ -62,24 +64,51 @@ function switchRepository(type: RepositoryType): void {
   writeEnvFile(updatedContent);
 
   console.log(`Repository type changé de '${currentType}' à '${type}' avec succès.`);
+
+  if (type === 'postgres') {
+    console.log('\n🔄 Exécution des migrations PostgreSQL...\n');
+    try {
+      await runMigrations();
+      console.log('\n✅ Migrations PostgreSQL terminées avec succès.');
+    } catch (error) {
+      console.error('\n❌ Erreur lors de l\'exécution des migrations:', error);
+      process.exit(1);
+    } finally {
+      await pgPool.end();
+    }
+  }
 }
 
-function main(): void {
+function showStatus(): void {
+  const envContent = readEnvFile();
+  const currentType = getCurrentRepositoryType(envContent);
+  console.log(`📊 Type de repository actuel: ${currentType}`);
+}
+
+async function main(): Promise<void> {
   const args = process.argv.slice(2);
 
   if (args.length === 0) {
-    console.error('Usage: ts-node switch-repository.ts <inmemory|postgres>');
+    console.error('Usage: ts-node switch-repository.ts <inmemory|postgres|--status>');
     process.exit(1);
   }
 
   const type = args[0]!.toLowerCase();
 
+  if (type === '--status' || type === 'status') {
+    showStatus();
+    return;
+  }
+
   if (type !== 'inmemory' && type !== 'postgres') {
-    console.error('Type de repository invalide. Utilisez "inmemory" ou "postgres".');
+    console.error('Type de repository invalide. Utilisez "inmemory", "postgres" ou "--status".');
     process.exit(1);
   }
 
-  switchRepository(type as RepositoryType);
+  await switchRepository(type as RepositoryType);
 }
 
-main();
+main().catch((error) => {
+  console.error('Erreur fatale:', error);
+  process.exit(1);
+});

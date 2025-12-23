@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-
 import { NewsRepositoryInterface } from "../../../../../application/ports/repositories/news/NewsRepositoryInterface";
 import { NewsService} from "../../../../adapters/services/news/NewsService";
 import { CreateNewsUseCase } from "../../../../../application/usecases/news/CreateNewsUseCase";
@@ -16,9 +15,9 @@ import { createNewsSchema } from "../schemas/news/createNewsSchema";
 export class NewsController {
 
     public constructor(
-        private newsRepository: NewsRepositoryInterface,
-        private newPublisher: NewsService,
-        private uuidService: CryptoUuidGenerator
+        private readonly newsRepository: NewsRepositoryInterface,
+        private readonly newPublisher: NewsService,
+        private readonly uuidService: CryptoUuidGenerator
     ){}
 
 

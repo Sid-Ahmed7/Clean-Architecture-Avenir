@@ -16,12 +16,12 @@ import { UserRepositoryInterface } from "../../../../../application/ports/reposi
 import { UserRoleRepositoryInterface } from "../../../../../application/ports/repositories/auth/UserRoleRepositoryInterface";
 import { UuidGeneratorService } from "../../../../../application/ports/services/UuidGeneratorService";
 import { AccountRepositoryInterface } from "../../../../../application/ports/repositories/AccountRepositoryInterface";
+import { NotificationRepositoryInterface } from "../../../../../application/ports/repositories/notification/NotificationRepositoryInterface";
 import { createLoanRequestSchema } from "../schemas/loan/createLoanRequestSchema";
 import { decideLoanRequestSchema } from "../schemas/loan/decideLoanRequestSchema";
 import { proposeRateSchema } from "../schemas/loan/proposeRateSchema";
 import { setRateSchema } from "../schemas/loan/setRateSchema";
 import { UserNotFoundError } from "../../../../../application/errors/UserNotFoundError";
-import { InMemoryNotificationRepository } from "../../../../adapters/repositories/InMemoryNotificationRepository";
 import { NotificationService } from "../../../../adapters/services/notification/NotificationService";
 import { SendNotificationToClientUseCase } from "../../../../../application/usecases/notification/SendNotificationToClientUseCase";
 
@@ -34,7 +34,7 @@ export class LoanController {
     private readonly accountRepository: AccountRepositoryInterface,
     private readonly loanConfigService: LoanConfigService,
     private readonly loanRepaymentScheduleRepository: LoanRepaymentScheduleRepositoryInterface,
-    private readonly notificationRepository: InMemoryNotificationRepository,
+    private readonly notificationRepository: NotificationRepositoryInterface,
     private readonly notificationPublisher: NotificationService,
   ) {}
 

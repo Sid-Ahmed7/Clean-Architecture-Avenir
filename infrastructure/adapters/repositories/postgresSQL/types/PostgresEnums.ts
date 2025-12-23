@@ -26,6 +26,12 @@ export enum TransactionTypeEnum {
     INTEREST = 'INTEREST'
 }
 
+export enum TransferStatusEnum {
+  PENDING = "PENDING",
+  COMPLETED = "COMPLETED",
+  FAILED = "FAILED"
+}
+
 export enum OrderStatusEnum {
     PENDING = 'PENDING',
     EXECUTED = 'EXECUTED',
@@ -69,4 +75,35 @@ export enum IPOTypeEnum {
 export enum OrderTypeEnum {
     BUY = 'BUY',
     SELL = 'SELL'
+}
+
+export enum RepaymentStatusEnum {
+    PAYING = 'PAYING',
+    PAID_OFF = 'PAID_OFF',
+    FAILED = 'FAILED',
+}
+export enum LoanStatusEnum {
+    PENDING = 'PENDING',
+    ADVISOR_APPROVED = 'ADVISOR_APPROVED',
+    ADVISOR_REJECTED = 'ADVISOR_REJECTED',
+    DIRECTOR_APPROVED = 'DIRECTOR_APPROVED',
+    DIRECTOR_REJECTED = 'DIRECTOR_REJECTED',
+    RATE_PROPOSED = 'RATE_PROPOSED',
+    CLIENT_REJECTED = 'CLIENT_REJECTED',
+    DISBURSED = 'DISBURSED',
+    PAID_OFF = 'PAID_OFF'
+}
+
+export enum OverdraftRequestStatusEnum {
+    PENDING = "PENDING",
+    APPROVED = "APPROVED",
+    REJECTED = "REJECTED",
+}
+
+export enum NotificationTypeEnum {
+    INFO = "INFO",
+    ALERT = "ALERT",
+    ACTION = "ACTION",
+    MESSAGING = "MESSAGING",
+    SYSTEM = "SYSTEM"
 }

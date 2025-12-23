@@ -16,7 +16,6 @@ import { Server } from "socket.io";
 import { ClientsSocket } from "../interfaces/ClientSocket";
 import { OnlineUser } from "../interfaces/OnlineUser";
 import { InvalidConversationError } from "../../../../../domain/errors/InvalidConversationError";
-import { error } from "console";
 import { NoAdvisorAssignedError } from "../../../../../application/errors/chat/NoAdvisorAssignedError";
 import { ConversationNotFoundError } from "../../../../../application/errors/chat/ConversationNotFoundError";
 import { UserNotFoundError } from "../../../../../application/errors/UserNotFoundError";
@@ -26,16 +25,16 @@ import { MessageRepositoryInterface } from "../../../../../application/ports/rep
 import {CryptoUuidGenerator} from "../../../../adapters/services/CryptoUuidGenerator";
 import { sendMessageSchema } from "../schemas/chat/sendMessageSchema";
 import { transferConversationSchema } from "../schemas/chat/transferConversationSchema";
-import { InMemoryNotificationRepository } from "../../../../adapters/repositories/InMemoryNotificationRepository";
 import { NotificationService } from "../../../../adapters/services/notification/NotificationService";
 import { SendNotificationToClientUseCase } from "../../../../../application/usecases/notification/SendNotificationToClientUseCase";
+import { NotificationRepositoryInterface } from "../../../../../application/ports/repositories/notification/NotificationRepositoryInterface";
 export class ChatController {
     constructor(
         private readonly conversationRepository: ConversationRepositoryInterface,
         private readonly messageRepository: MessageRepositoryInterface,
         private readonly userRepository: UserRepositoryInterface,
         private readonly uuidService: CryptoUuidGenerator,
-        private readonly notificationRepository: InMemoryNotificationRepository,
+        private readonly notificationRepository: NotificationRepositoryInterface,
         private readonly notificationPublisher: NotificationService,
         private readonly io?: Server,
         private readonly clients?: ClientsSocket,

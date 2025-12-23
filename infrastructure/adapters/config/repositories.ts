@@ -54,14 +54,10 @@ import { InMemoryStockOrderRepository } from "../repositories/InMemoryStockOrder
 import { InMemoryStockHoldingRepository } from "../repositories/InMemoryStockHoldingRepository";
 import { InMemoryStockTransactionRepository } from "../repositories/InMemoryStockTransactionRepository";
 import { InMemoryTransactionRepository } from "../repositories/InMemoryTransactionRepository";
-import { InMemoryLoanRepaymentScheduleRepository } from "../repositories/InMemoryLoanRepaymentScheduleRepository";
-import { InMemoryLoanRequestRepository } from "../repositories/InMemoryLoanRequestRepository";
-import { InMemoryOverdraftRequestRepository } from "../repositories/InMemoryOverdraftRequestRepository";
 import { LocaleValidationService } from "../services/LocaleValidationService";
 import { InMemorySavingsProductRepository } from '../repositories/InMemorySavingsProductRepository';
 import { InMemorySavingsAccountRepository } from '../repositories/InMemorySavingsAccountRepository';
 
-// PostgreSQL repositories
 import { PostgresEventBus } from '../repositories/postgresSQL/PostgresEventBus';
 import { PostgresUserRepository } from '../repositories/postgresSQL/PostgresUserRepository';
 import { PostgresRoleRepository } from '../repositories/postgresSQL/PostgresRoleRepository';
@@ -81,15 +77,31 @@ import { PostgresSavingsProductRepository } from '../repositories/postgresSQL/Po
 import { PostgresSavingsAccountRepository } from '../repositories/postgresSQL/PostgresSavingsAccountRepository';
 
 
-import { ManageLoanConfigService } from "../services/ManageLoanConfigService";
+import { BeneficiaryRepositoryInterface } from '../../../application/ports/repositories/beneficiaries/BeneficiaryRepositoryInterface';
+import { BeneficiaryGroupRepositoryInterface } from '../../../application/ports/repositories/beneficiaries/BeneficiaryGroupRepositoryInterface';
+import { NotificationRepositoryInterface } from '../../../application/ports/repositories/notification/NotificationRepositoryInterface';
+import { LoanRequestRepositoryInterface } from '../../../application/ports/repositories/LoanRequestRepositoryInterface';
+import { LoanRepaymentScheduleRepositoryInterface } from '../../../application/ports/repositories/LoanRepaymentScheduleRepositoryInterface';
+import { OverdraftRequestRepositoryInterface } from '../../../application/ports/repositories/OverdraftRequestRepositoryInterface';
+
 import { InMemoryBeneficiaryRepository } from '../repositories/InMemoryBeneficiaryRepository';
 import { InMemoryBeneficiaryGroupRepository } from '../repositories/InMemoryBeneficiaryGroupRepository';
 import { InMemoryNotificationRepository } from '../repositories/InMemoryNotificationRepository';
 
+import { PostgresBeneficiaryRepository } from '../repositories/postgresSQL/PostgresBeneficiaryRepository';
+import { PostgresBeneficiaryGroupRepository } from '../repositories/postgresSQL/PostgresBeneficiaryGroupRepository';
+import { PostgresNotificationRepository } from '../repositories/postgresSQL/PostgresNotificationRepository';
+import { PostgresLoanRequestRepository } from '../repositories/postgresSQL/PostgresLoanRequestRepository';
+import { PostgresLoanRepaymentScheduleRepository } from '../repositories/postgresSQL/PostgresLoanRepaymentScheduleRepository';
+import { PostgresOverdraftRequestRepository } from '../repositories/postgresSQL/PostgresOverdraftRequestRepository';
+import { ManageLoanConfigService } from '../services/ManageLoanConfigService';
+import { InMemoryLoanRequestRepository } from "../repositories/InMemoryLoanRequestRepository";
+import { InMemoryLoanRepaymentScheduleRepository } from './../repositories/InMemoryLoanRepaymentScheduleRepository';
+import { InMemoryOverdraftRequestRepository } from "../repositories/InMemoryOverdraftRequestRepository";
+
 const baseUrl = process.env.CLIENT_BASE_URL!;
 const repositoryType = process.env.REPOSITORY_TYPE || 'inmemory';
 
-// Services (common to both repository types)
 export const cryptoUuidGenerator = new CryptoUuidGenerator();
 export const tokenService = new JwtTokenService();
 export const passwordService = new PasswordEncryptionService();
@@ -100,7 +112,6 @@ export const uuidService = new CryptoUuidGenerator();
 export const newsService = new NewsService();
 export const fileStorageService = new LocalFileStorageService();
 export const altService = new GenerateAltTextService();
-export const transferLimitService = new ManageTransferLimitService();
 export const orderBookService = new OrderBookEngineService();
 export const matchingService = new OrderMatchingEngineService();
 export const localeService = new LocaleValidationService();
@@ -173,10 +184,8 @@ export const savingsAccountRepository: SavingsAccountRepositoryInterface = repos
   ? new PostgresSavingsAccountRepository()
   : new InMemorySavingsAccountRepository();
 
-// Services that depend on repositories
 export const accountNumberGenerator = new GenerateAccountNumberService(accountRepository);
 export const ibanGenerator = new GenerateIbanService(accountRepository);
-export const transactionRepository = new InMemoryTransactionRepository();
 export const transferLimitService = new ManageTransferLimitService();
 export const transferValidationService = new ValidateTransferService(transferLimitService);
 export const transactionEnrichmentService = new TransactionEnrichmentServiceImpl(userRepository);
@@ -184,11 +193,32 @@ export const orderService = new ManageOrderService(contentRepository, mediaRepos
 export const accountService = new BankAccountService(accountRepository);
 export const holdingService = new StockHoldingManager(holdingRepository);
 export const orderValidationService = new OrderValidationEngineService(accountService, holdingService);
+export const loanConfigService = new ManageLoanConfigService();
 
-export const beneficiaryRepository = new InMemoryBeneficiaryRepository();
-export const beneficiaryGroupRepository = new InMemoryBeneficiaryGroupRepository();
+export const beneficiaryRepository: BeneficiaryRepositoryInterface = repositoryType === 'postgres'
+  ? new PostgresBeneficiaryRepository()
+  : new InMemoryBeneficiaryRepository();
 
-export const notificationRepository = new InMemoryNotificationRepository();
+export const beneficiaryGroupRepository: BeneficiaryGroupRepositoryInterface = repositoryType === 'postgres'
+  ? new PostgresBeneficiaryGroupRepository()
+  : new InMemoryBeneficiaryGroupRepository();
+
+export const notificationRepository: NotificationRepositoryInterface = repositoryType === 'postgres'
+  ? new PostgresNotificationRepository()
+  : new InMemoryNotificationRepository();
+
+export const loanRequestRepository: LoanRequestRepositoryInterface = repositoryType === 'postgres'
+  ? new PostgresLoanRequestRepository()
+  : new InMemoryLoanRequestRepository();
+
+export const loanRepaymentScheduleRepository: LoanRepaymentScheduleRepositoryInterface = repositoryType === 'postgres'
+  ? new PostgresLoanRepaymentScheduleRepository()
+  : new InMemoryLoanRepaymentScheduleRepository();
+
+export const overdraftRequestRepository: OverdraftRequestRepositoryInterface = repositoryType === 'postgres'
+  ? new PostgresOverdraftRequestRepository()
+  : new InMemoryOverdraftRequestRepository();
+
 export const notificationService = new NotificationService();
 
 export const statusMessageService = new StatusMessageService();
