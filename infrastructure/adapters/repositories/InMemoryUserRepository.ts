@@ -69,4 +69,11 @@ export class InMemoryUserRepository implements UserRepositoryInterface {
     this.users[index] = user;
     return user;
   }
+
+  public async deleteUser(userId: string): Promise<void | UserNotFoundError> {
+    const index = this.users.findIndex(u => u.id === userId);
+    if (index === -1) return new UserNotFoundError(`User with id ${userId} not found`);
+
+    this.users.splice(index, 1);
+  }
 }

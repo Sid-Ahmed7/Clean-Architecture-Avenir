@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import SelectAdvisorsModal from "./SelectAdvisorsModal";
 import { getTimeAgo } from "@/lib/utils/chatUtils";
 import { UserChat } from "@/types/chat/userChat";
+import { notifyClientAssigned } from "@/lib/utils/notificationUtils";
 
 export default function AdvisorConversationsDashboard() {
   const { user } = useContext(AuthContext);
@@ -73,6 +74,8 @@ export default function AdvisorConversationsDashboard() {
         onConversationAssigned(data => {
           setAssignedConversations(prev => prev.some(c => c.id === data.id) ? prev : [...prev, data]);
           setPendingConversations(prev => prev.filter(c => c.id !== data.id));
+          
+        
         });
         onRemovePendingConversation(({ conversationId }) => setPendingConversations(prev => prev.filter(c => c.id !== conversationId)));
       } catch {
@@ -85,6 +88,8 @@ export default function AdvisorConversationsDashboard() {
 
     return () => { isMounted = false; disconnectSocket("BANK_ADVISOR"); };
   }, [user?.userId]);
+
+ 
 
   const filteredAssigned = assignedConversations.filter(c => c.clientName?.toLowerCase().includes(search.toLowerCase()));
 
@@ -196,12 +201,17 @@ export default function AdvisorConversationsDashboard() {
         )}
       </div>
 
-      <SelectAdvisorsModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        onTransfer={advisorId => selectedConversationId !== null && handleTransfer(selectedConversationId, advisorId)}
-        currentAdvisorId={user?.userId ?? ""}
-      />
+        <SelectAdvisorsModal
+          isOpen={modalOpen}
+          onClose={() => setModalOpen(false)}
+          onTransfer={(advisorId, advisorName) => {
+            if (selectedConversationId !== null) {
+              handleTransfer(selectedConversationId, advisorId);
+            }
+          }}
+          currentAdvisorId={user?.userId ?? ""}
+        />
+
     </div>
   );
 }

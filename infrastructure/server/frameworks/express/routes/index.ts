@@ -6,11 +6,17 @@ import chatRoutes from "./chat.routes";
 import newsRoutes from "./news.routes";
 import mediaRoutes from "./media.routes";
 import contentRoutes from "./content.routes";
+import loanRoutes from "./loan.routes";
 import savingsAccountRoutes from "./savings-account.routes";
 import savingsProductRoutes from "./savings-product.routes";
 import stockOrder from "./stockOrder.routes";
 import stockPosition from "./stockPositions.routes";
 import stockTransaction from "./stockTransactions.routes";
+import userManagementRoutes from "./user-management.routes";
+import directorAccountsRoutes from "./director-accounts.routes";
+import beneficiaryRoutes from "./beneficiary.routes";
+import beneficiaryGroupRoutes from "./beneficiary-group.routes";
+import notificationRoutes from "./notification.routes";
 
 const router = express.Router();
 
@@ -26,5 +32,11 @@ router.use("/chat", chatRoutes);
 router.use("/feed", newsRoutes);
 router.use("/media", mediaRoutes);
 router.use("/content", contentRoutes);
+router.use("/users", userManagementRoutes);
+router.use("/director", directorAccountsRoutes);
+router.use("/loan", loanRoutes);
+router.use("/beneficiaries", beneficiaryRoutes);
+router.use("/beneficiary-groups", beneficiaryGroupRoutes);
+router.use("/notification", notificationRoutes)
 
 export default router;

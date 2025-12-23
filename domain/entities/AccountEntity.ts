@@ -194,6 +194,14 @@ public getBlockedBalance(): number {
     return this.parentAccountId === undefined;
   }
 
+  public recordTransfer(amount: number): void {
+    this.totalTransfered += amount;
+  }
+
+  public rollbackTransfer(amount: number): void {
+    this.totalTransfered = Math.max(0, this.totalTransfered - amount);
+  }
+
 
 
 }

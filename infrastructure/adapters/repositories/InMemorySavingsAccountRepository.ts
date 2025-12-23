@@ -63,4 +63,14 @@ export class InMemorySavingsAccountRepository implements SavingsAccountRepositor
     public async getAllSavingsAccounts(): Promise<Array<SavingsAccountsEntity>> {
         return this.savingsAccounts;
     }
+
+    public async deleteSavingsAccount(accountNumber: number): Promise<void | AccountNotFoundError> {
+        const index = this.savingsAccounts.findIndex(acc => acc.accountNumber === accountNumber);
+        
+        if (index === -1) {
+            return new AccountNotFoundError(`Savings account with number ${accountNumber} not found`);
+        }
+
+        this.savingsAccounts.splice(index, 1);
+    }
 }

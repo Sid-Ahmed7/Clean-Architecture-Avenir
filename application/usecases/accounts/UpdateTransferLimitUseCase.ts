@@ -1,5 +1,7 @@
 import { AccountEntity } from "../../../domain/entities/AccountEntity";
+import { TransferLimitValue } from "../../../domain/values/TransferLimitValue";
 import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
+import { InvalidTransferLimitError } from "../../errors/InvalidTransferLimitError";
 
 export class UpdateTransferLimitUseCase {
 
@@ -13,7 +15,12 @@ export class UpdateTransferLimitUseCase {
             return account;
         }
 
-        account.updateTransferLimit(limit);
+        const validatedLimit = TransferLimitValue.from(limit);
+        if (validatedLimit instanceof Error) {
+            return new InvalidTransferLimitError(validatedLimit.message);
+        }
+
+        account.updateTransferLimit(validatedLimit.value);
 
         const updatedTransferLimit = await this.accountRepository.updateOneAccount(account);
 

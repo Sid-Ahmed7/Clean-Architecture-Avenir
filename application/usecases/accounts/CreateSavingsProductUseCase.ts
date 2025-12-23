@@ -19,7 +19,7 @@ export class CreateSavingsProductUseCase {
             dto.interestRate,
             dto.maxDepositAmount,
             dto.minDepositAmount,
-            true // isActive by default
+            true 
         );
 
         if (product instanceof Error) {

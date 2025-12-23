@@ -12,5 +12,5 @@ export interface UserRepositoryInterface {
     findAll(): Promise<Array<BankUserEntity>>
     createUser(user: BankUserEntity): Promise<BankUserEntity | UserAlreadyExistsError>
     updateUser(user: BankUserEntity): Promise<BankUserEntity | UserNotFoundError>;
-    
+    deleteUser(userId: string): Promise<void | UserNotFoundError>;
 }

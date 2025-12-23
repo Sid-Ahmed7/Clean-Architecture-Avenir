@@ -14,6 +14,9 @@ import {StockHoldingManager} from "../services/stocks/StockHoldingManager";
 import {CryptoUuidGenerator} from "../services/CryptoUuidGenerator";
 import {ManageTransferLimitService} from "../services/ManageTransferLimitService";
 import {ValidateTransferService} from "../services/ValidateTransferService";
+import {TransactionEnrichmentServiceImpl} from "../services/TransactionEnrichmentService";
+import {NotificationService} from "../services/notification/NotificationService";
+import {StatusMessageService} from "../services/StatusMessageService";
 import { AccountRepositoryInterface } from '../../../application/ports/repositories/AccountRepositoryInterface';
 import { TransactionRepositoryInterface } from '../../../application/ports/repositories/TransactionRepositoryInterface';
 import { SavingsAccountRepositoryInterface } from '../../../application/ports/repositories/SavingsAccountRepositoryInterface';
@@ -51,6 +54,9 @@ import { InMemoryStockOrderRepository } from "../repositories/InMemoryStockOrder
 import { InMemoryStockHoldingRepository } from "../repositories/InMemoryStockHoldingRepository";
 import { InMemoryStockTransactionRepository } from "../repositories/InMemoryStockTransactionRepository";
 import { InMemoryTransactionRepository } from "../repositories/InMemoryTransactionRepository";
+import { InMemoryLoanRepaymentScheduleRepository } from "../repositories/InMemoryLoanRepaymentScheduleRepository";
+import { InMemoryLoanRequestRepository } from "../repositories/InMemoryLoanRequestRepository";
+import { InMemoryOverdraftRequestRepository } from "../repositories/InMemoryOverdraftRequestRepository";
 import { LocaleValidationService } from "../services/LocaleValidationService";
 import { InMemorySavingsProductRepository } from '../repositories/InMemorySavingsProductRepository';
 import { InMemorySavingsAccountRepository } from '../repositories/InMemorySavingsAccountRepository';
@@ -75,6 +81,10 @@ import { PostgresSavingsProductRepository } from '../repositories/postgresSQL/Po
 import { PostgresSavingsAccountRepository } from '../repositories/postgresSQL/PostgresSavingsAccountRepository';
 
 
+import { ManageLoanConfigService } from "../services/ManageLoanConfigService";
+import { InMemoryBeneficiaryRepository } from '../repositories/InMemoryBeneficiaryRepository';
+import { InMemoryBeneficiaryGroupRepository } from '../repositories/InMemoryBeneficiaryGroupRepository';
+import { InMemoryNotificationRepository } from '../repositories/InMemoryNotificationRepository';
 
 const baseUrl = process.env.CLIENT_BASE_URL!;
 const repositoryType = process.env.REPOSITORY_TYPE || 'inmemory';
@@ -166,8 +176,19 @@ export const savingsAccountRepository: SavingsAccountRepositoryInterface = repos
 // Services that depend on repositories
 export const accountNumberGenerator = new GenerateAccountNumberService(accountRepository);
 export const ibanGenerator = new GenerateIbanService(accountRepository);
+export const transactionRepository = new InMemoryTransactionRepository();
+export const transferLimitService = new ManageTransferLimitService();
 export const transferValidationService = new ValidateTransferService(transferLimitService);
+export const transactionEnrichmentService = new TransactionEnrichmentServiceImpl(userRepository);
 export const orderService = new ManageOrderService(contentRepository, mediaRepository);
 export const accountService = new BankAccountService(accountRepository);
 export const holdingService = new StockHoldingManager(holdingRepository);
 export const orderValidationService = new OrderValidationEngineService(accountService, holdingService);
+
+export const beneficiaryRepository = new InMemoryBeneficiaryRepository();
+export const beneficiaryGroupRepository = new InMemoryBeneficiaryGroupRepository();
+
+export const notificationRepository = new InMemoryNotificationRepository();
+export const notificationService = new NotificationService();
+
+export const statusMessageService = new StatusMessageService();

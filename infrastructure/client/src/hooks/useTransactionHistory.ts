@@ -2,19 +2,12 @@
 
 import { apiClient } from "@/lib/api/apiClient";
 import { useEffect, useState } from "react";
+import {
+    transactionHistoryArraySchema,
+    type TransactionHistoryModel
+} from "@/lib/validation/transfer/transactionHistorySchema";
 
-export type TransactionModel = {
-    debitAccount: number;
-    creditAccount: number;
-    amount: number;
-    transactionType: string;
-    status: string;
-    transactionReference: string;
-    executedBy: string;
-    createdAt: string;
-    debitUserName?: string;
-    creditUserName?: string;
-};
+export type TransactionModel = TransactionHistoryModel;
 
 export const useTransactionHistory = () => {
     const [transactions, setTransactions] = useState<TransactionModel[]>([]);
@@ -27,7 +20,8 @@ export const useTransactionHistory = () => {
         apiClient
             .get("/accounts/transactions/history")
             .then((res) => {
-                setTransactions(res.data);
+                const validatedData = transactionHistoryArraySchema.parse(res.data);
+                setTransactions(validatedData);
             })
             .catch((err) => {
                 const message = err?.response?.data?.error ?? "Impossible de charger l'historique";

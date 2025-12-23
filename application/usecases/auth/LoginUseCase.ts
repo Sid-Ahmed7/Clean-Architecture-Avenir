@@ -9,6 +9,8 @@ import { PasswordService } from "../../ports/services/auth/PasswordService";
 import { InvalidEmailOrPasswordError } from "../../errors/InvalidEmailOrPasswordError";
 import { InvalidAccountError } from "../../../domain/errors/InvalidAccountError";
 import { LoginResponse } from "../../responses/LoginResponse";
+import { SendNotificationToClientUseCase } from "../notification/SendNotificationToClientUseCase";
+import { NotificationTypeEnum } from "../../../domain/enums/NotificationTypeEnum";
 
 
  export class LoginUseCase {
@@ -16,7 +18,8 @@ import { LoginResponse } from "../../responses/LoginResponse";
     private readonly userRepository: UserRepositoryInterface,
     private readonly userRoleRepository: UserRoleRepositoryInterface,
     private readonly tokenService: TokenService,
-    private readonly passwordService: PasswordService
+    private readonly passwordService: PasswordService,
+    private readonly sendNotificationUseCase: SendNotificationToClientUseCase,
   ) {}
 
   public async execute(email: string,password: string): Promise<LoginResponse | Error> {
@@ -44,6 +47,14 @@ import { LoginResponse } from "../../responses/LoginResponse";
 
     const accessToken = this.tokenService.generateAccessToken(user.id, roles);
     const refreshTokenEntity = await this.tokenService.generateRefreshToken(user.id);
+
+    if (this.sendNotificationUseCase) {
+      await this.sendNotificationUseCase.execute(
+        user.id,
+        `Bienvenue ${user.firstName} ! Vous êtes maintenant connecté.`,
+        NotificationTypeEnum.INFO
+      );
+    }
 
     return {
       accessToken: accessToken,

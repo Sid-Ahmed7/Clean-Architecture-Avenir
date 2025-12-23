@@ -26,16 +26,20 @@ import { MessageRepositoryInterface } from "../../../../../application/ports/rep
 import {CryptoUuidGenerator} from "../../../../adapters/services/CryptoUuidGenerator";
 import { sendMessageSchema } from "../schemas/chat/sendMessageSchema";
 import { transferConversationSchema } from "../schemas/chat/transferConversationSchema";
+import { InMemoryNotificationRepository } from "../../../../adapters/repositories/InMemoryNotificationRepository";
+import { NotificationService } from "../../../../adapters/services/notification/NotificationService";
+import { SendNotificationToClientUseCase } from "../../../../../application/usecases/notification/SendNotificationToClientUseCase";
 export class ChatController {
     constructor(
         private readonly conversationRepository: ConversationRepositoryInterface,
         private readonly messageRepository: MessageRepositoryInterface,
         private readonly userRepository: UserRepositoryInterface,
         private readonly uuidService: CryptoUuidGenerator,
+        private readonly notificationRepository: InMemoryNotificationRepository,
+        private readonly notificationPublisher: NotificationService,
         private readonly io?: Server,
         private readonly clients?: ClientsSocket,
         private readonly onlineUsers?: Record<string, OnlineUser>,
-
     ){}
 
     async createConversation(req: Request, res: Response) {
@@ -74,7 +78,13 @@ export class ChatController {
         }
 
     async sendMessage(req: Request, res: Response) {
-        const sendMessageUseCase = new SendMessageUseCase(this.conversationRepository, this.messageRepository, this.uuidService);
+        const sendNotificationUseCase = new SendNotificationToClientUseCase(
+                    this.notificationRepository,
+                    this.notificationPublisher,
+                    this.uuidService,
+                    this.userRepository
+                );
+        const sendMessageUseCase = new SendMessageUseCase(this.conversationRepository, this.messageRepository, this.uuidService, sendNotificationUseCase);
 
         const userId = req.user?.userId;
         const role = req.user?.roles?.[0];

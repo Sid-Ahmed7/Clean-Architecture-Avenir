@@ -10,6 +10,8 @@ import { AccountNotFoundError } from "../../../../../application/errors/AccountN
 import { InvalidAccountError } from "../../../../../domain/errors/InvalidAccountError";
 import { CreateSavingsAccount } from "../../../../../application/requests/CreateSavingsAccount";
 import { UpdateSavingsAccountConfig } from "../../../../../application/requests/UpdateSavingsAccountConfig";
+import { DeleteSavingsAccountUseCase } from "../../../../../application/usecases/accounts/DeleteSavingsAccountUseCase";
+import { NoCheckingAccountForTransferError } from "../../../../../application/errors/NoCheckingAccountForTransferError";
 
 export class SavingsAccountController {
 
@@ -192,14 +194,22 @@ export class SavingsAccountController {
 
     async depositToSavingsAccount(req: Request, res: Response) {
         const { DepositToSavingsAccountUseCase } = require("../../../../../application/usecases/accounts/DepositToSavingsAccountUseCase");
-        const { transactionRepository } = require("../../../../adapters/config/repositories");
         const { savingsProductRepository } = require("../../../../adapters/config/repositories");
+        const { SendNotificationToClientUseCase } = require("../../../../../application/usecases/notification/SendNotificationToClientUseCase");
+        const { notificationRepository, notificationPublisher, uuidService, userRepository } = require("../../../../adapters/config/repositories");
+        
+        const sendNotificationUseCase = new SendNotificationToClientUseCase(
+            notificationRepository,
+            notificationPublisher,
+            uuidService,
+            userRepository
+        );
         
         const depositUseCase = new DepositToSavingsAccountUseCase(
             this.savingsAccountRepository,
             savingsProductRepository,
             this.accountRepository,
-            transactionRepository
+            sendNotificationUseCase
         );
 
         const userId = (req as any).user?.userId;
@@ -225,11 +235,21 @@ export class SavingsAccountController {
     async withdrawFromSavingsAccount(req: Request, res: Response) {
         const { WithdrawFromSavingsAccountUseCase } = require("../../../../../application/usecases/accounts/WithdrawFromSavingsAccountUseCase");
         const { transactionRepository } = require("../../../../adapters/config/repositories");
+        const { SendNotificationToClientUseCase } = require("../../../../../application/usecases/notification/SendNotificationToClientUseCase");
+        const { notificationRepository, notificationPublisher, uuidService, userRepository } = require("../../../../adapters/config/repositories");
+        
+        const sendNotificationUseCase = new SendNotificationToClientUseCase(
+            notificationRepository,
+            notificationPublisher,
+            uuidService,
+            userRepository
+        );
         
         const withdrawUseCase = new WithdrawFromSavingsAccountUseCase(
             this.savingsAccountRepository,
             this.accountRepository,
-            transactionRepository
+            transactionRepository,
+            sendNotificationUseCase
         );
 
         const userId = (req as any).user?.userId;
@@ -250,5 +270,27 @@ export class SavingsAccountController {
         }
 
         return res.status(200).json(result);
+    }
+
+    async deleteSavingsAccount(req: Request, res: Response) {
+        const deleteUseCase = new DeleteSavingsAccountUseCase(
+            this.savingsAccountRepository,
+            this.accountRepository
+        );
+
+        const accountNumber = Number(req.params.accountNumber);
+        const result = await deleteUseCase.execute(accountNumber);
+
+        if (result instanceof Error) {
+            if (result instanceof AccountNotFoundError) {
+                return res.status(404).json({ error: result.message });
+            }
+            if (result instanceof NoCheckingAccountForTransferError) {
+                return res.status(400).json({ error: result.message });
+            }
+            return res.status(500).json({ error: result.message });
+        }
+
+        return res.status(200).json({ message: "Savings account deleted successfully" });
     }
 }
