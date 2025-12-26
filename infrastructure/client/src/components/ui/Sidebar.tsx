@@ -2,7 +2,7 @@
 
 import { AuthContext } from "@/contexts/AuthProvider";
 import { apiClient } from "@/lib/api/apiClient";
-import { CreditCard, ArrowUpRight, TrendingUp, Calendar, Settings, HelpCircle, X, MessageCircle, LogOut, PiggyBank, Home, Users, Wallet } from "lucide-react";
+import { CreditCard, ArrowUpRight, TrendingUp, Calendar, Settings, HelpCircle, X, MessageCircle, LogOut, PiggyBank, Home, Users, Wallet, FileText } from "lucide-react";
 import { useContext } from "react";
 import { Link } from "@/i18n/navigation";
 import { usePathname } from "next/navigation";
@@ -33,7 +33,6 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     ...(user?.role === 'BANK_MANAGER' ? [{ icon: PiggyBank, label: "Produits d'Épargne", href: `/manager/savings-products` }] : []),
     { icon: TrendingUp, label: "Investissements", href: `/${rolePrefix}/investments` },
     { icon: Calendar, label: "Historique", href: `/${rolePrefix}/history` },
-    { icon: FileText, label: "Demande de crédit", href: "/loan/request", roles: [RoleEnum.CLIENT] },
     { icon: FileText, label: "Mes demandes de crédit", href: "/loan/requests", roles: [RoleEnum.CLIENT] },
     { icon: FileText, label: "Demandes crédit (conseiller)", href: "/advisor/loan-requests", roles: [RoleEnum.BANK_ADVISOR] },
     { icon: FileText, label: "Demandes crédit (directeur)", href: "/director/loan-requests", roles: [RoleEnum.BANK_MANAGER] },
