@@ -3,9 +3,9 @@ import { TransactionTypeEnum, TransferStatusEnum } from "./PostgresEnums";
 
 export interface PostgresTransactionRow {
     transaction_reference: string;
-    debit_account: number;
-    credit_account: number;
-    amount: number;
+    debit_account: string;
+    credit_account: string;
+    amount: string;
     transaction_type: TransactionTypeEnum;
     executed_by: string;
     status: TransferStatusEnum;

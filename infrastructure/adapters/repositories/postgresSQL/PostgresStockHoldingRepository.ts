@@ -177,12 +177,12 @@ export class PostgresStockHoldingRepository implements StockHoldingRepositoryInt
             row.id,
             row.user_id,
             row.stock_symbol,
-            row.quantity,
-            row.average_purchase_price,
-            row.total_invested,
+            Number(row.quantity),
+            Number(row.average_purchase_price),
+            Number(row.total_invested),
             row.created_at,
             row.updated_at,
-            row.block_quantity
+            Number(row.block_quantity)
         );
 
         if (holding instanceof Error) {

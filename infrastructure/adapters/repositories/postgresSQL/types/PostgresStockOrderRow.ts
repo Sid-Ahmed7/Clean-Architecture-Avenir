@@ -5,14 +5,14 @@ export interface PostgresStockOrderRow {
     id: string;
     user_id: string;
     stock_symbol: string;
-    quantity: number;
-    order_price: number;
-    fee: number;
+    quantity: string;
+    order_price: string;
+    fee: string;
     order_type: OrderTypeEnum;
     order_status: OrderStatusEnum;
     created_at: Date;
     updated_at: Date;
     executed_at: Date | null;
-    remaining_quantity: number;
+    remaining_quantity: string;
     fees_paid: boolean;
 }

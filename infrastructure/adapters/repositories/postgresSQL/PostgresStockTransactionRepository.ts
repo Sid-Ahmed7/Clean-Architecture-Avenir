@@ -173,12 +173,12 @@ export class PostgresStockTransactionRepository implements StockTransactionRepos
             row.buy_order_id,
             row.sell_order_id,
             row.stock_symbol,
-            row.quantity,
-            row.execution_price,
+            Number(row.quantity),
+            Number(row.execution_price),
             row.buyer_user_id,
             row.seller_user_id,
-            row.buyer_fee,
-            row.seller_fee,
+            Number(row.buyer_fee),
+            Number(row.seller_fee),
             row.executed_at
         );
 

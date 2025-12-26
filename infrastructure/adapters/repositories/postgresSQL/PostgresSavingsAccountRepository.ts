@@ -167,14 +167,14 @@ export class PostgresSavingsAccountRepository implements SavingsAccountRepositor
 
     private mapRowToEntity(row: PostgresSavingsAccountRow): SavingsAccountsEntity | Error {
         const savingsAccount = SavingsAccountsEntity.from(
-            row.account_number,
+            Number(row.account_number),
             row.product_id,
             row.user_id,
-            row.interest_rate,
-            row.max_deposit_amount,
-            row.total_interest_earned,
+            Number(row.interest_rate),
+            row.max_deposit_amount ? Number(row.max_deposit_amount) : undefined,
+            Number(row.total_interest_earned),
             row.is_active,
-            row.balance,
+            Number(row.balance),
             row.last_balance_update,
             row.last_interest_applied ?? undefined,
             row.maturity ?? undefined

@@ -138,7 +138,8 @@ export class PostgresAccountRepository implements AccountRepositoryInterface {
                 overdraft_limit, created_at, custom_account_name, total_transfered,
                 last_transfer_reset_date, parent_account_id, closed_at, blocked_balanced
             )
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)
+
             RETURNING *`,
             [
                 account.accountNumber,
@@ -231,24 +232,24 @@ export class PostgresAccountRepository implements AccountRepositoryInterface {
 
     private mapRowToEntity(row: PostgresAccountRow): AccountEntity | Error {
         const account = AccountEntity.from(
-            row.account_number,
+            Number(row.account_number),
             row.iban,
             row.user_id,
             row.account_type,
             row.currency,
             row.account_status,
             row.is_active,
-            row.current_balance,
+            Number(row.current_balance),
             row.created_at,
-            row.withdrawal_limit ?? 1000,
-            row.transfer_limit ?? 5000,
-            row.overdraft_limit ?? 0,
+            row.withdrawal_limit ? Number(row.withdrawal_limit) : 1000,
+            row.transfer_limit ? Number(row.transfer_limit) : 5000,
+            row.overdraft_limit ? Number(row.overdraft_limit) : 0,
             row.custom_account_name ?? '',
-            row.total_transfered,
+            Number(row.total_transfered),
             row.last_transfer_reset_date,
-            row.parent_account_id ?? undefined,
+            row.parent_account_id ? Number(row.parent_account_id) : undefined,
             row.closed_at ?? undefined,
-            row.blocked_balanced ?? undefined
+            row.blocked_balanced ? Number(row.blocked_balanced) : undefined
         );
 
         if (account instanceof Error) {

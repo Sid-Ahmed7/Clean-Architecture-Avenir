@@ -212,15 +212,15 @@ export class PostgresStockOrderRepository implements StockOrderRepositoryInterfa
             row.id,
             row.user_id,
             row.stock_symbol,
-            row.quantity,
-            row.order_price,
-            row.fee,
+            Number(row.quantity),
+            Number(row.order_price),
+            Number(row.fee),
             row.order_type,
             row.order_status,
             row.created_at,
             row.updated_at,
             row.executed_at ?? undefined,
-            row.remaining_quantity
+            Number(row.remaining_quantity)
         );
 
         if (order instanceof Error) {

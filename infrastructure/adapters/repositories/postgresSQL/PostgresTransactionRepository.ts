@@ -48,9 +48,9 @@ export class PostgresTransactionRepository implements TransactionRepositoryInter
     private mapRowToEntity(row: PostgresTransactionRow): TransactionEntity | Error {
         const transaction = TransactionEntity.from(
             row.transaction_reference,
-            row.debit_account,
-            row.credit_account,
-            row.amount,
+            Number(row.debit_account),
+            Number(row.credit_account),
+            Number(row.amount),
             row.transaction_type,
             row.executed_by,
             row.status,

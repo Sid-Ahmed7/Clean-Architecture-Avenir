@@ -1,13 +1,13 @@
 
 export interface PostgresSavingsAccountRow {
-    account_number: number;
+    account_number: string;
     product_id: string;
     user_id: string;
-    interest_rate: number;
-    max_deposit_amount: number | null;
-    total_interest_earned: number;
+    interest_rate: string;
+    max_deposit_amount: string | null;
+    total_interest_earned: string;
     is_active: boolean;
-    balance: number;
+    balance: string;
     last_balance_update: Date;
     last_interest_applied: Date | null;
     maturity: Date | null;

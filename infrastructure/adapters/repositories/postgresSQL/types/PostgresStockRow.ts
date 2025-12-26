@@ -6,15 +6,15 @@ export interface PostgresStockRow {
     symbol: string;
     company_name: string;
     name: string;
-    current_price: number;
-    rate_of_change: number;
+    current_price: string;
+    rate_of_change: string;
     currency: string;
     created_at: Date;
     is_action_available: boolean;
     updated_at: Date;
-    total_shares: number;
-    previous_price: number | null;
+    total_shares: string;
+    previous_price: string | null;
     ipo_active: boolean;
-    available_shares_for_ipo: number;
+    available_shares_for_ipo: string;
     ipo_type: IPOTypeEnum | null;
 }

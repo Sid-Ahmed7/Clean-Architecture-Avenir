@@ -168,16 +168,16 @@ export class PostgresStockRepository implements StockRepositoryInterface {
             row.symbol,
             row.company_name,
             row.name,
-            row.current_price,
-            row.rate_of_change,
+            Number(row.current_price),
+            Number(row.rate_of_change),
             row.currency,
             row.created_at,
             row.is_action_available,
             row.updated_at,
-            row.total_shares,
-            row.previous_price ?? undefined,
+            Number(row.total_shares),
+            row.previous_price ? Number(row.previous_price) : undefined,
             row.ipo_active,
-            row.available_shares_for_ipo,
+            Number(row.available_shares_for_ipo),
             row.ipo_type ?? undefined
         );
 
