@@ -133,7 +133,7 @@ export class PostgresAccountRepository implements AccountRepositoryInterface {
 
         const result = await pgPool.query<PostgresAccountRow>(
             `INSERT INTO accounts (
-                iban, user_id, account_type, current_balance, currency,
+                account_number,iban, user_id, account_type, current_balance, currency,
                 account_status, is_active, withdrawal_limit, transfer_limit,
                 overdraft_limit, created_at, custom_account_name, total_transfered,
                 last_transfer_reset_date, parent_account_id, closed_at, blocked_balanced
@@ -141,6 +141,7 @@ export class PostgresAccountRepository implements AccountRepositoryInterface {
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
             RETURNING *`,
             [
+                account.accountNumber,
                 account.iban,
                 account.userId,
                 account.accountType,
