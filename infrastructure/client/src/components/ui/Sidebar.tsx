@@ -2,7 +2,7 @@
 
 import { AuthContext } from "@/contexts/AuthProvider";
 import { apiClient } from "@/lib/api/apiClient";
-import { CreditCard, ArrowUpRight, TrendingUp, Calendar, Settings, HelpCircle, X, MessageCircle, LogOut, PiggyBank, Home, Users, Wallet, FileText, UserPlus, Newspaper, LineChart, ShoppingCart, BarChart3, Building2, Briefcase } from "lucide-react";
+import { CreditCard, ArrowUpRight, Calendar, Settings, HelpCircle, X, MessageCircle, LogOut, PiggyBank, Home, Users, Wallet, FileText, UserPlus, Newspaper, LineChart, ShoppingCart, BarChart3, Building2, Briefcase } from "lucide-react";
 import { useContext } from "react";
 import { Link } from "@/i18n/navigation";
 import { usePathname } from "next/navigation";
@@ -40,7 +40,6 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     { icon: MessageCircle, label: "Conversations en attente", href: "/advisor/pending-conversations", roles: [RoleEnum.BANK_ADVISOR] },
 
     { icon: ArrowUpRight, label: "Virements", href: `/${rolePrefix}/transfers` },
-    { icon: TrendingUp, label: "Investissements", href: `/${rolePrefix}/investments` },
     { icon: LineChart, label: "Trading", href: `/stock` },
     { icon: ShoppingCart, label: "Mes Ordres", href: `/orders` },
     { icon: BarChart3, label: "Mes Positions", href: `/position` },
@@ -96,23 +95,23 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           {menuItems
             .filter((item) => !item.roles || hasAnyRole(item.roles))
             .map((item) => {
-            const ItemIcon = item.icon;
-            const active = isActive(item.href);
-            return (
-              <Link
-                key={item.label}
-                href={item.href}
-                onClick={onClose}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${active
-                  ? "bg-blue-50 text-blue-600"
-                  : "text-gray-700 hover:bg-gray-50"
-                  }`}
-              >
-                <ItemIcon className="w-5 h-5" />
-                <span className="font-medium">{item.label}</span>
-              </Link>
-            );
-          })}
+              const ItemIcon = item.icon;
+              const active = isActive(item.href);
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  onClick={onClose}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${active
+                    ? "bg-blue-50 text-blue-600"
+                    : "text-gray-700 hover:bg-gray-50"
+                    }`}
+                >
+                  <ItemIcon className="w-5 h-5" />
+                  <span className="font-medium">{item.label}</span>
+                </Link>
+              );
+            })}
         </nav>
 
         <div className="flex flex-col absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 gap-2 bg-white">
