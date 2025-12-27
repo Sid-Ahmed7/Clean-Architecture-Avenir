@@ -217,7 +217,14 @@ export class AuthController {
           httpOnly: true,
           secure: false,
           sameSite: "lax",
-          maxAge: 1000 * 60 * 60 * 24 * 7 
+          maxAge: 1000 * 60 * 60 * 24 * 7
+        })
+
+        res.cookie("refreshToken", result.refreshToken, {
+          httpOnly: true,
+          secure: false,
+          sameSite: "lax",
+          maxAge: 1000 * 60 * 60 * 24 * 7
         })
 
         return res.status(200).json({
@@ -294,7 +301,6 @@ export class AuthController {
           this.uuidService
         );
 
-        // Verify secret code from request body
         const secretCode = req.body.secretCode;
         
         if (!secretCode || secretCode !== process.env.MANAGER_CREATION_PASSWORD) {

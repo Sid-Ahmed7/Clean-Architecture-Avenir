@@ -1,7 +1,7 @@
 "use client";
 
 import { AuthContext } from "@/contexts/AuthProvider";
-import { apiClient } from "@/lib/api/apiClient";
+import { apiClient, stopTokenRefresh } from "@/lib/api/apiClient";
 import { CreditCard, ArrowUpRight, Calendar, Settings, HelpCircle, X, MessageCircle, LogOut, PiggyBank, Home, Users, Wallet, FileText, UserPlus, Newspaper, LineChart, ShoppingCart, BarChart3, Building2, Briefcase } from "lucide-react";
 import { useContext } from "react";
 import { Link } from "@/i18n/navigation";
@@ -51,6 +51,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   ];
 
   const handleLogout = () => {
+    stopTokenRefresh();
+
     apiClient.post("/auth/logout").then(() => {
       setIsAuthenticated(false);
     })
