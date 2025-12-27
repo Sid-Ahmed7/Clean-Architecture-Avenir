@@ -34,9 +34,9 @@ export function BeneficiaryCard({beneficiary, onEdit, onDelete, onTransfer} : Be
         <div className="mb-4 text-sm text-gray-600">
           <p>{beneficiary.address.street}</p>
           <p>{beneficiary.address.postalCode} {beneficiary.address.city}</p>
-          <p>{beneficiary.address.country}</p>
         </div>
       )}
+      <p className="text-sm text-gray-600 mb-4">{beneficiary.country}</p>
 
       <div className="flex gap-2 mt-4">
         <Button

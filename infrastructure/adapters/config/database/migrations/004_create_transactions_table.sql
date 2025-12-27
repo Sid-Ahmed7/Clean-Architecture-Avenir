@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS transactions (
     description TEXT,
     category VARCHAR(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    
     debit_user_id VARCHAR(255),
     credit_user_id VARCHAR(255),
     debit_user_name VARCHAR(255),

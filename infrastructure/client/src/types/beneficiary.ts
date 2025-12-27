@@ -2,7 +2,6 @@ export interface Address {
   street: string;
   city: string;
   postalCode: string;
-  country: string;
 }
 
 export interface Beneficiary {
@@ -10,8 +9,8 @@ export interface Beneficiary {
   userId: string;
   iban: string;
   beneficiaryName: string;
+  country: string;
   email?: string;
-  country?: string;
   address?: Address;
   isVerified: boolean;
   createdAt: string;
@@ -21,14 +20,14 @@ export interface Beneficiary {
 export interface CreateBeneficiaryRequest {
   iban: string;
   beneficiaryName: string;
+  country: string;
   email?: string;
-  country?: string;
   address?: Address;
 }
 
 export interface UpdateBeneficiaryRequest {
   beneficiaryName?: string;
-  email?: string;
   country?: string;
+  email?: string;
   address?: Address;
 }

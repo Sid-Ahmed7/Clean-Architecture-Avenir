@@ -13,9 +13,9 @@ export class BeneficiaryEntity {
         userId: string,
         iban: string,
         beneficiaryName: string,
+        country: string,
         email?: string,
-        country?: string,
-        address?: { street: string; city: string; postalCode: string; country: string },
+        address?: { street: string; city: string; postalCode: string },
         isVerified: boolean = false,
         createdAt: Date = new Date(),
         updatedAt: Date = new Date()
@@ -41,7 +41,6 @@ export class BeneficiaryEntity {
             return validatedBeneficiaryName;
         }
 
-        // Validation optionnelle de l'email
         let validatedEmail: string | undefined;
         if (email) {
             const emailResult = EmailValue.from(email);
@@ -51,24 +50,17 @@ export class BeneficiaryEntity {
             validatedEmail = emailResult.value;
         }
 
-        // Validation optionnelle du country
-        let validatedCountry: string | undefined;
-        if (country) {
-            const countryResult = CountryValue.from(country);
-            if (countryResult instanceof Error) {
-                return countryResult;
-            }
-            validatedCountry = countryResult.value;
+        const validatedCountry = CountryValue.from(country);
+        if (validatedCountry instanceof Error) {
+            return validatedCountry;
         }
 
-        // Validation optionnelle de l'adresse
         let validatedAddress: AddressValue | undefined;
         if (address) {
             const addressResult = AddressValue.from(
                 address.street,
                 address.city,
-                address.postalCode,
-                address.country
+                address.postalCode
             );
             if (addressResult instanceof Error) {
                 return addressResult;
@@ -81,8 +73,8 @@ export class BeneficiaryEntity {
             validatedUserId.value,
             validatedIban.value,
             validatedBeneficiaryName.value,
+            validatedCountry.value,
             validatedEmail,
-            validatedCountry,
             validatedAddress,
             isVerified,
             createdAt,
@@ -95,8 +87,8 @@ export class BeneficiaryEntity {
     public readonly userId: string,
     public readonly iban: string,
     public readonly beneficiaryName: string,
+    public readonly country: string,
     public readonly email?: string,
-    public readonly country?: string,
     public readonly address?: AddressValue,
     public isVerified: boolean = false,
     public readonly createdAt: Date = new Date(),

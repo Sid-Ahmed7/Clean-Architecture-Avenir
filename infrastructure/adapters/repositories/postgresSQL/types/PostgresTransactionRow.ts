@@ -12,6 +12,8 @@ export interface PostgresTransactionRow {
     description: string | null;
     category: string | null;
     created_at: Date;
+    beneficiary_id: string | null;
+    group_id: string | null;
     debit_user_id: string | null;
     credit_user_id: string | null;
     debit_user_name: string | null;

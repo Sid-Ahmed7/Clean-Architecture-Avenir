@@ -25,6 +25,13 @@ export function BeneficiaryFormFields({ register, errors }: BeneficiaryFormField
       />
 
       <Input
+        label="Pays"
+        {...register("country")}
+        error={errors.country?.message}
+        placeholder="France"
+      />
+
+      <Input
         label="Email (optionnel)"
         type="email"
         {...register("email")}
@@ -54,13 +61,6 @@ export function BeneficiaryFormFields({ register, errors }: BeneficiaryFormField
           {...register("address.postalCode")}
           error={errors.address?.postalCode?.message}
           placeholder="75001"
-        />
-
-        <Input
-          label="Pays"
-          {...register("address.country")}
-          error={errors.address?.country?.message}
-          placeholder="France"
         />
       </div>
     </div>

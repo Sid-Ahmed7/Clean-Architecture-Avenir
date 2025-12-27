@@ -5,14 +5,14 @@ import { PostgresTransactionRow } from './types/PostgresTransactionRow';
 export class PostgresTransactionRepository implements TransactionRepositoryInterface {
 
     public async save(transaction: TransactionEntity): Promise<void> {
-    
+
         await pgPool.query<PostgresTransactionRow>(
             `INSERT INTO transactions (
                 transaction_reference, debit_account, credit_account, amount,
                 transaction_type, executed_by, status, description, category,
-                created_at, debit_user_id, credit_user_id, debit_user_name, credit_user_name
+                created_at, beneficiary_id, group_id, debit_user_id, credit_user_id, debit_user_name, credit_user_name
             )
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)`,
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)`,
             [
                 transaction.transactionReference,
                 transaction.debitAccount,
@@ -24,6 +24,8 @@ export class PostgresTransactionRepository implements TransactionRepositoryInter
                 transaction.description,
                 transaction.category,
                 transaction.createdAt,
+                transaction.beneficiaryId,
+                transaction.groupId,
                 transaction.debitUserId,
                 transaction.creditUserId,
                 transaction.debitUserName,
@@ -56,17 +58,18 @@ export class PostgresTransactionRepository implements TransactionRepositoryInter
             row.status,
             row.created_at,
             row.description ?? undefined,
-            row.category ?? undefined
+            row.category ?? undefined,
+            row.beneficiary_id ?? undefined,
+            row.group_id ?? undefined,
+            row.debit_user_id ?? undefined,
+            row.credit_user_id ?? undefined,
+            row.debit_user_name ?? undefined,
+            row.credit_user_name ?? undefined
         );
 
         if (transaction instanceof Error) {
             return transaction;
         }
-
-        transaction.debitUserId = row.debit_user_id ?? undefined;
-        transaction.creditUserId = row.credit_user_id ?? undefined;
-        transaction.debitUserName = row.debit_user_name ?? undefined;
-        transaction.creditUserName = row.credit_user_name ?? undefined;
 
         return transaction;
     }

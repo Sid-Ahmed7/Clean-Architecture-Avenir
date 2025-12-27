@@ -16,9 +16,9 @@ export class PostgresBeneficiaryRepository implements BeneficiaryRepositoryInter
     const result = await pgPool.query<PostgresBeneficiaryRow>(
       `INSERT INTO beneficiaries (
         beneficiary_id, user_id, iban, beneficiary_name, email, country,
-        street, city, postal_code, address_country, is_verified, created_at, updated_at
+        street, city, postal_code, is_verified, created_at, updated_at
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
       RETURNING *`,
       [
         beneficiary.beneficiaryId,
@@ -26,11 +26,10 @@ export class PostgresBeneficiaryRepository implements BeneficiaryRepositoryInter
         beneficiary.iban,
         beneficiary.beneficiaryName,
         beneficiary.email || null,
-        beneficiary.country || null,
+        beneficiary.country,
         beneficiary.address?.street || null,
         beneficiary.address?.city || null,
         beneficiary.address?.postalCode || null,
-        beneficiary.address?.country || null,
         beneficiary.isVerified,
         beneficiary.createdAt,
         beneficiary.updatedAt
@@ -102,20 +101,18 @@ export class PostgresBeneficiaryRepository implements BeneficiaryRepositoryInter
         street = $5,
         city = $6,
         postal_code = $7,
-        address_country = $8,
-        is_verified = $9,
-        updated_at = $10
-      WHERE beneficiary_id = $11
+        is_verified = $8,
+        updated_at = $9
+      WHERE beneficiary_id = $10
       RETURNING *`,
       [
         beneficiary.iban,
         beneficiary.beneficiaryName,
         beneficiary.email || null,
-        beneficiary.country || null,
+        beneficiary.country,
         beneficiary.address?.street || null,
         beneficiary.address?.city || null,
         beneficiary.address?.postalCode || null,
-        beneficiary.address?.country || null,
         beneficiary.isVerified,
         new Date(),
         beneficiary.beneficiaryId
@@ -146,12 +143,11 @@ export class PostgresBeneficiaryRepository implements BeneficiaryRepositoryInter
   }
 
   private mapRowToEntity(row: PostgresBeneficiaryRow): BeneficiaryEntity | Error {
-    const address = row.street && row.city && row.postal_code && row.address_country
+    const address = row.street && row.city && row.postal_code
       ? {
           street: row.street,
           city: row.city,
-          postalCode: row.postal_code,
-          country: row.address_country
+          postalCode: row.postal_code
         }
       : undefined;
 
@@ -160,8 +156,8 @@ export class PostgresBeneficiaryRepository implements BeneficiaryRepositoryInter
       row.user_id,
       row.iban,
       row.beneficiary_name,
+      row.country!,
       row.email || undefined,
-      row.country || undefined,
       address,
       row.is_verified,
       row.created_at,

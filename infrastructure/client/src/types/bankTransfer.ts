@@ -7,7 +7,10 @@ export enum TransferStatus {
 export enum TransactionType {
   TRANSFER = "TRANSFER",
   DEPOSIT = "DEPOSIT",
-  WITHDRAWAL = "WITHDRAWAL"
+  WITHDRAWAL = "WITHDRAWAL",
+  PAYMENT = "PAYMENT",
+  FEE = "FEE",
+  INTEREST = "INTEREST"
 }
 
 export interface BankTransferTransaction {

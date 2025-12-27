@@ -45,7 +45,7 @@ export class ProcessRepaymentsUseCase {
       const tx = TransactionEntity.from(
         reference,
         checking.accountNumber,
-        checking.accountNumber, 
+        checking.accountNumber,
         schedule.monthlyAmount,
         TransactionTypeEnum.PAYMENT,
         schedule.clientId,
@@ -53,11 +53,15 @@ export class ProcessRepaymentsUseCase {
         new Date(),
         "Remboursement mensuel",
         "LOAN_REPAYMENT",
+        undefined,
+        undefined,
+        schedule.clientId,
+        undefined,
+        undefined,
+        "Banque"
       );
 
       if (tx instanceof TransactionEntity) {
-        tx.debitUserId = schedule.clientId;
-        tx.creditUserName = "Banque";
         await this.transactionRepository.save(tx);
       }
 

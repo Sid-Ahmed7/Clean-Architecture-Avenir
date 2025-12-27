@@ -56,13 +56,18 @@ export class BeneficiaryController {
             return res.status(400).json({ errors: parseResult.error.message });
         }
 
+        let cleanedAddress = parseResult.data.address;
+        if (cleanedAddress && !cleanedAddress.street && !cleanedAddress.city && !cleanedAddress.postalCode) {
+            cleanedAddress = undefined;
+        }
+
         const beneficiaryData: CreateBeneficiary = {
             userId,
             iban: parseResult.data.iban,
             beneficiaryName: parseResult.data.beneficiaryName,
+            country: parseResult.data.country,
             ...(parseResult.data.email && { email: parseResult.data.email }),
-            ...(parseResult.data.country && { country: parseResult.data.country }),
-            ...(parseResult.data.address && { address: parseResult.data.address }),
+            ...(cleanedAddress && { address: cleanedAddress }),
         };
 
         const result = await createBeneficiaryUseCase.execute(beneficiaryData);
@@ -122,13 +127,19 @@ export class BeneficiaryController {
         if (!parseResult.success) {
             return res.status(400).json({ errors: parseResult.error.message });
         }
+
+        let cleanedAddress = parseResult.data.address;
+        if (cleanedAddress && !cleanedAddress.street && !cleanedAddress.city && !cleanedAddress.postalCode) {
+            cleanedAddress = undefined;
+        }
+
         const payload: UpdateBeneficiary = {
             beneficiaryId,
             userId,
             ...(parseResult.data.beneficiaryName && { beneficiaryName: parseResult.data.beneficiaryName }),
             ...(parseResult.data.email && { email: parseResult.data.email }),
             ...(parseResult.data.country && { country: parseResult.data.country }),
-            ...(parseResult.data.address && { address: parseResult.data.address }),
+            ...(cleanedAddress && { address: cleanedAddress }),
         };
         const result = await updateBeneficiaryUseCase.execute(payload);
 

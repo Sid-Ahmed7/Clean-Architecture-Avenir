@@ -2,12 +2,12 @@
 
 import { AuthContext } from "@/contexts/AuthProvider";
 import { apiClient } from "@/lib/api/apiClient";
-import { CreditCard, ArrowUpRight, TrendingUp, Calendar, Settings, HelpCircle, X, MessageCircle, LogOut, PiggyBank, Home, Users, Wallet, FileText } from "lucide-react";
+import { CreditCard, ArrowUpRight, TrendingUp, Calendar, Settings, HelpCircle, X, MessageCircle, LogOut, PiggyBank, Home, Users, Wallet, FileText, UserPlus, Newspaper, LineChart, ShoppingCart, BarChart3, Building2, Briefcase } from "lucide-react";
 import { useContext } from "react";
 import { Link } from "@/i18n/navigation";
 import { usePathname } from "next/navigation";
-import { RoleEnum } from "@/types/RoleEnum";
 import { getRolePrefix } from "@/lib/utils/getRolePrefix";
+import { RoleEnum } from "@/types/RoleEnum";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -23,20 +23,30 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   const menuItems = [
     { icon: Home, label: "Dashboard", href: `/${rolePrefix}/dashboard` },
-    ...(user?.role === 'CLIENT' ? [{ icon: CreditCard, label: "Comptes", href: `/${rolePrefix}/accounts` }] : []),
-    ...(user?.role === 'BANK_MANAGER' ? [
-      { icon: Users, label: "Gestion Utilisateurs", href: `/manager/users` },
-      { icon: Wallet, label: "Tous les Comptes", href: `/manager/accounts` },
-    ] : []),
-    { icon: ArrowUpRight, label: "Virements", href: `/${rolePrefix}/transfers` },
-    ...(user?.role === 'CLIENT' ? [{ icon: PiggyBank, label: "Épargne", href: `/client/savings` }] : []),
-    ...(user?.role === 'BANK_MANAGER' ? [{ icon: PiggyBank, label: "Produits d'Épargne", href: `/manager/savings-products` }] : []),
-    { icon: TrendingUp, label: "Investissements", href: `/${rolePrefix}/investments` },
-    { icon: Calendar, label: "Historique", href: `/${rolePrefix}/history` },
+
+    { icon: CreditCard, label: "Comptes", href: `/${rolePrefix}/accounts`, roles: [RoleEnum.CLIENT] },
+    { icon: UserPlus, label: "Bénéficiaires", href: `/client/beneficiaries`, roles: [RoleEnum.CLIENT] },
+    { icon: PiggyBank, label: "Épargne", href: `/client/savings`, roles: [RoleEnum.CLIENT] },
     { icon: FileText, label: "Mes demandes de crédit", href: "/loan/requests", roles: [RoleEnum.CLIENT] },
-    { icon: FileText, label: "Demandes crédit (conseiller)", href: "/advisor/loan-requests", roles: [RoleEnum.BANK_ADVISOR] },
-    { icon: FileText, label: "Demandes crédit (directeur)", href: "/director/loan-requests", roles: [RoleEnum.BANK_MANAGER] },
-    { icon: MessageCircle, label: "Message", href: `/${rolePrefix}/conversations` },
+
+    { icon: Users, label: "Gestion Utilisateurs", href: `/manager/users`, roles: [RoleEnum.BANK_MANAGER] },
+    { icon: Wallet, label: "Tous les Comptes", href: `/manager/accounts`, roles: [RoleEnum.BANK_MANAGER] },
+    { icon: PiggyBank, label: "Produits d'Épargne", href: `/manager/savings-products`, roles: [RoleEnum.BANK_MANAGER] },
+    { icon: Building2, label: "Gestion des Stocks", href: `/manage-stock`, roles: [RoleEnum.BANK_MANAGER] },
+    { icon: FileText, label: "Demandes crédit", href: "/director/loan-requests", roles: [RoleEnum.BANK_MANAGER] },
+
+    { icon: FileText, label: "Demandes de crédit", href: "/advisor/loan-requests", roles: [RoleEnum.BANK_ADVISOR] },
+    { icon: Briefcase, label: "Demandes de découvert", href: "/advisor/overdraft-requests", roles: [RoleEnum.BANK_ADVISOR] },
+    { icon: MessageCircle, label: "Conversations en attente", href: "/advisor/pending-conversations", roles: [RoleEnum.BANK_ADVISOR] },
+
+    { icon: ArrowUpRight, label: "Virements", href: `/${rolePrefix}/transfers` },
+    { icon: TrendingUp, label: "Investissements", href: `/${rolePrefix}/investments` },
+    { icon: LineChart, label: "Trading", href: `/stock` },
+    { icon: ShoppingCart, label: "Mes Ordres", href: `/orders` },
+    { icon: BarChart3, label: "Mes Positions", href: `/position` },
+    { icon: Calendar, label: "Historique", href: `/${rolePrefix}/history` },
+    { icon: Newspaper, label: "Actualités", href: `/feed` },
+    { icon: MessageCircle, label: "Messages", href: `/${rolePrefix}/conversations` },
     { icon: Settings, label: "Paramètres", href: `/${rolePrefix}/settings` },
     { icon: HelpCircle, label: "Aide", href: `/${rolePrefix}/help` },
   ];

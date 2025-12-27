@@ -80,7 +80,15 @@ export class TransferBetweenAccountsUseCase {
             TransactionTypeEnum.TRANSFER,
             userId,
             TransferStatusEnum.PENDING,
-            new Date()
+            new Date(),
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            debitAccount.userId,
+            creditAccount.userId,
+            undefined,
+            undefined
         );
 
         if (!(transactionOrError instanceof TransactionEntity)) {
@@ -90,9 +98,6 @@ export class TransferBetweenAccountsUseCase {
             await this.accountRepository.updateOneAccount(creditAccount);
             return transactionOrError;
         }
-
-        transactionOrError.debitUserId = debitAccount.userId;
-        transactionOrError.creditUserId = creditAccount.userId;
 
         await this.transactionRepository.save(transactionOrError);
 

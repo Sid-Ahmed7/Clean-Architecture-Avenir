@@ -39,8 +39,8 @@ export class CreateBeneficiaryUseCase {
         data.userId,
         data.iban,
         data.beneficiaryName,
-        data.email,
         data.country,
+        data.email,
         data.address,
         isVerified
     );
