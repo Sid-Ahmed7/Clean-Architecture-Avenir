@@ -1,0 +1,31 @@
+{
+  "extends": "@adonisjs/tsconfig/tsconfig.app.json",
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "./build",
+    "types": [
+      "@adonisjs/core",
+      "@adonisjs/cors",
+      "@adonisjs/static"
+    ],
+    "paths": {
+      "#config/*": ["./config/*.ts"],
+      "#controllers/*": ["./app/controllers/*.ts"],
+      "#middleware/*": ["./app/middleware/*.ts"],
+      "#validators/*": ["./app/validators/*.ts"],
+      "#sockets/*": ["./app/sockets/*.ts"],
+      "#exceptions/*": ["./app/exceptions/*.ts"],
+      "#start/*": ["./start/*.ts"],
+      "#domain/*": ["../../../domain/*.ts"],
+      "#application/*": ["../../../application/*.ts"],
+      "#infrastructure/*": ["../../../infrastructure/*.ts"]
+    }
+  },
+  "include": [
+    "**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "build"
+  ]
+}

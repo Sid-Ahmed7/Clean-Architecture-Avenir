@@ -2,7 +2,8 @@
 node_modules/
 
 # Fichiers d'environnement
-infrastructure/server/.env
+infrastructure/server/frameworks/express/.env
+infrastructure/server/frameworks/adonisjs/.env
 .env.local
 .env.*
 

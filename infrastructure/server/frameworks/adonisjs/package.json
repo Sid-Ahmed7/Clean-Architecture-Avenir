@@ -1,0 +1,33 @@
+{
+  "name": "adonisjs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@adonisjs/auth": "^9.5.1",
+    "@adonisjs/core": "^6.19.1",
+    "@adonisjs/cors": "^2.2.1",
+    "@adonisjs/lucid": "^21.8.1",
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.2.3",
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.16.3",
+    "socket.io": "^4.8.3",
+    "zod": "^4.2.1"
+  },
+  "devDependencies": {
+    "@adonisjs/assembler": "^7.8.2",
+    "@adonisjs/static": "^1.1.1",
+    "@adonisjs/tsconfig": "^1.4.1",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^25.0.3",
+    "typescript": "^5.9.3"
+  }
+}
