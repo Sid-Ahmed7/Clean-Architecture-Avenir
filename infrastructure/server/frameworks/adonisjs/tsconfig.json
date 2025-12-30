@@ -1,7 +1,8 @@
 {
   "extends": "@adonisjs/tsconfig/tsconfig.app.json",
   "compilerOptions": {
-    "rootDir": "./",
+    "rootDir": "../../../../",
+    "baseUrl": "../../../../",
     "outDir": "./build",
     "types": [
       "@adonisjs/core",
@@ -9,23 +10,28 @@
       "@adonisjs/static"
     ],
     "paths": {
-      "#config/*": ["./config/*.ts"],
-      "#controllers/*": ["./app/controllers/*.ts"],
-      "#middleware/*": ["./app/middleware/*.ts"],
-      "#validators/*": ["./app/validators/*.ts"],
-      "#sockets/*": ["./app/sockets/*.ts"],
-      "#exceptions/*": ["./app/exceptions/*.ts"],
-      "#start/*": ["./start/*.ts"],
-      "#domain/*": ["../../../domain/*.ts"],
-      "#application/*": ["../../../application/*.ts"],
-      "#infrastructure/*": ["../../../infrastructure/*.ts"]
+      "#config/*": ["infrastructure/server/frameworks/adonisjs/config/*"],
+      "#controllers/*": ["infrastructure/server/frameworks/adonisjs/app/controllers/*"],
+      "#middleware/*": ["infrastructure/server/frameworks/adonisjs/app/middleware/*"],
+      "#validators/*": ["infrastructure/server/frameworks/adonisjs/app/validators/*"],
+      "#sockets/*": ["infrastructure/server/frameworks/adonisjs/app/sockets/*"],
+      "#exceptions/*": ["infrastructure/server/frameworks/adonisjs/app/exceptions/*"],
+      "#start/*": ["infrastructure/server/frameworks/adonisjs/start/*"],
+
+      "#domain/*": ["domain/*"],
+      "#application/*": ["application/*"],
+      "#infrastructure/*": ["infrastructure/*"]
     }
   },
   "include": [
-    "**/*"
+    "./**/*",
+    "../../../../domain/**/*",
+    "../../../../application/**/*"
   ],
   "exclude": [
     "node_modules",
-    "build"
+    "build",
+    "infrastructure/server/frameworks/express",
+    "infrastructure/server/frameworks/fastify"
   ]
 }
