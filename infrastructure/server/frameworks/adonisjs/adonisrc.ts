@@ -1,11 +1,11 @@
-import { defineConfig } from '@adonisjs/core/app';
+import { defineConfig } from '@adonisjs/core/app'
 
 
 export default defineConfig({
 
-typescript: true,
+  typescript: true,
 
-directories: {
+  directories: {
     config: 'config',
     public: 'public',
     contracts: 'contracts',
@@ -15,38 +15,41 @@ directories: {
     seeders: 'database/seeders',
     factories: 'database/factories',
     views: 'resources/views',
-    start: 'start', 
+    start: 'start',
     tmp: 'tmp',
     httpControllers: 'app/controllers',
     httpMiddleware: 'app/middleware',
     commands: 'commands',
-    tests: 'tests'
-},
+    tests: 'tests',
+    types: 'types',
+    bin: 'bin'
+  },
 
-commands: [
+  commands: [
     () => import('@adonisjs/core/commands'),
-    
-],
 
-providers: [
+  ],
+
+  providers: [
     () => import('@adonisjs/core/providers/app_provider'),
     () => import('@adonisjs/core/providers/hash_provider'),
     () => import('@adonisjs/cors/cors_provider'),
     () => import('@adonisjs/static/static_provider'),
-    () => import('./providers/app.js')
-],
+    () => import('#providers/app.js'),
+    () => import('@adonisjs/core/providers/vinejs_provider')
+  ],
 
-preloads: [
-    () => import('./start/routes'),
-    () => import('./start/kernel.js'),
-],
+  preloads: [
+    () => import('#start/routes'),
+    () => import('#start/kernel.js'),
+  ],
 
-metaFiles: [
+  metaFiles: [
     {
-    pattern: 'public/**',
-    reloadServer: false,
+      pattern: 'public/**',
+      reloadServer: false,
     },
-],
+  ],
 
-assetsBundler: false,
+  assetsBundler: false,
 })

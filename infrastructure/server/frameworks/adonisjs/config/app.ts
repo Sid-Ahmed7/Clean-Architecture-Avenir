@@ -1,4 +1,4 @@
-import env from "../start/env.js";
+import env from "#start/env.js";
 
 export default {
     appKey: env.get('APP_KEY'),

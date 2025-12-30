@@ -17,6 +17,10 @@
       "#sockets/*": ["infrastructure/server/frameworks/adonisjs/app/sockets/*"],
       "#exceptions/*": ["infrastructure/server/frameworks/adonisjs/app/exceptions/*"],
       "#start/*": ["infrastructure/server/frameworks/adonisjs/start/*"],
+      "#providers/*": ["infrastructure/server/frameworks/adonisjs/providers/*"],
+      "#types/*": ["infrastructure/server/frameworks/adonisjs/types/*"],
+      "#bin/*": ["infrastructure/server/frameworks/adonisjs/bin/*"],
+
 
       "#domain/*": ["domain/*"],
       "#application/*": ["application/*"],
@@ -32,6 +36,5 @@
     "node_modules",
     "build",
     "infrastructure/server/frameworks/express",
-    "infrastructure/server/frameworks/fastify"
   ]
 }

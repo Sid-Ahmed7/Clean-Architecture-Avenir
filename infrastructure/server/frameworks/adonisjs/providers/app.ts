@@ -1,11 +1,11 @@
 import type { ApplicationService } from "@adonisjs/core/types";
-import * as repositories from "../../../../adapters/config/repositories.js";
+import * as repositories from "#infrastructure/adapters/config/repositories.js";
 export default class AppProvider {
 
     constructor(protected app: ApplicationService) {}
 
     async register() {
-      
+
     this.app.container.bind('userRepository', () => repositories.userRepository)
     this.app.container.bind('roleRepository', () => repositories.roleRepository)
     this.app.container.bind('userRoleRepository', () => repositories.userRoleRepository)

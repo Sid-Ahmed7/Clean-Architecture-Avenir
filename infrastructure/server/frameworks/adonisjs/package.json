@@ -10,6 +10,13 @@
   "author": "",
   "license": "ISC",
   "type": "module",
+  "imports": {
+    "#bin/*": "./bin/*.js",
+    "#start/*": "./start/*.js",
+    "#providers/*": "./providers/*.js",
+    "#config/*": "./config/*.js",
+    "#types/*": "./types/*.js"
+  },
   "dependencies": {
     "@adonisjs/ace": "^13.4.0",
     "@adonisjs/auth": "^9.5.1",
@@ -19,6 +26,7 @@
     "@adonisjs/http-server": "^7.7.0",
     "@adonisjs/lucid": "^21.8.1",
     "@adonisjs/session": "^7.7.1",
+    "@vinejs/vine": "^4.2.0",
     "bcrypt": "^6.0.0",
     "dotenv": "^17.2.3",
     "jsonwebtoken": "^9.0.3",

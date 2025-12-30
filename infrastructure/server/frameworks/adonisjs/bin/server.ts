@@ -32,7 +32,32 @@ const IMPORTER = (filePath: string) => {
 new Ignitor(APP_ROOT, { importer: IMPORTER })
   .tap((app) => {
     app.booting(async () => {
-      await import('../start/env.js')
+      await import('#start/env.js')
+    })
+    app.ready(async () => {
+      const { Server } = await import('socket.io')
+      const { socketSetup } = await import('#start/socket.js')
+      const router = await app.container.make('router')
+
+      // Get the underlying HTTP server from AdonisJS
+      router.commit()
+      const server = await app.container.make('server')
+      const nodeServer = server.getNodeServer()
+
+      if (!nodeServer) {
+        console.error('❌ HTTP server not available')
+        return
+      }
+
+      const io = new Server(nodeServer, {
+        cors: {
+          origin: process.env.CLIENT_BASE_URL,
+          credentials: true,
+        },
+      })
+
+      socketSetup(io)
+
     })
     app.listen('SIGTERM', () => app.terminate())
     app.listenIf(app.managedByPm2, 'SIGINT', () => app.terminate())

@@ -1,5 +1,5 @@
 import { defineConfig, targets } from '@adonisjs/core/logger'
-import env from '../start/env.js'
+import env from '#start/env.js'
 
 const loggerConfig = defineConfig({
   default: 'app',
