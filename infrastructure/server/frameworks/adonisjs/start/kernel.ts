@@ -2,14 +2,14 @@ import router from '@adonisjs/core/services/router'
 import server from '@adonisjs/core/services/server'
 
 server.use([
-  () => import('#middleware/container_bindings_middleware'),
+  () => import('../app/middleware/container_bindings_middleware.js'),
   () => import('@adonisjs/cors/cors_middleware'),
   () => import('@adonisjs/static/static_middleware'),
 ])
 
 
 export const middleware = router.named({
-  auth: () => import('#middleware/auth_middleware'),
-  refreshAuth: () => import('#middleware/refresh_token_middleware'),
-  role: () => import('#middleware/role_middleware'),
+  auth: () => import('../app/middleware/auth_middleware.js'),
+  refreshAuth: () => import('../app/middleware/refresh_token_middleware.js'),
+  role: () => import('../app/middleware/role_middleware'),
 })

@@ -25,6 +25,7 @@ directories: {
 
 commands: [
     () => import('@adonisjs/core/commands'),
+    
 ],
 
 providers: [
@@ -36,7 +37,7 @@ providers: [
 ],
 
 preloads: [
-    () => import('#start/routes'),
+    () => import('./start/routes'),
     () => import('./start/kernel.js'),
 ],
 
