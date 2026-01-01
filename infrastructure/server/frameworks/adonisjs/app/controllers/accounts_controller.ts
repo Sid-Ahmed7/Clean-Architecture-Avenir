@@ -96,7 +96,7 @@ export default class AccountsController {
       return response.status(401).json({ error: "User not authenticated" });
     }
 
-    const input = await vine.validate({schema: accountValidator.createAccountValidator, data: request.body});
+    const input = await vine.validate({schema: accountValidator.createAccountValidator, data: request.body()});
     const account = {
       userId: userId,
       accountType: input.accountType,
@@ -141,7 +141,7 @@ export default class AccountsController {
       return response.status(401).json({ error: "User not authenticated" });
     }
 
-    const input = await vine.validate({schema: accountValidator.createSubAccountValidator, data: request.body});
+    const input = await vine.validate({schema: accountValidator.createSubAccountValidator, data: request.body()});
 
     const account = {
       userId: userId,
@@ -185,7 +185,7 @@ export default class AccountsController {
       sendNotificationUseCase
     );
 
-    const input = await vine.validate({schema: accountValidator.updateAccountValidator, data: request.body});
+    const input = await vine.validate({schema: accountValidator.updateAccountValidator, data: request.body()});
 
     const result = await updateAccountUseCase.execute(input);
 
@@ -363,7 +363,7 @@ export default class AccountsController {
     );
 
     const accountNumber = Number(request.param('accountNumber'));
-    const input = await vine.validate({schema: accountValidator.changeAccountValidator, data: request.body});
+    const input = await vine.validate({schema: accountValidator.changeAccountValidator, data: request.body()});
 
 
     const result = await changeStatusAccountUseCase.execute(accountNumber, input.status);
@@ -384,7 +384,7 @@ export default class AccountsController {
   async toggleAccountActive({ request, response }: HttpContext) {
     const toggleAccountActiveUseCase = new ToggleAccountActiveUseCase(this.accountRepository);
     const accountNumber = Number(request.param('accountNumber'));
-    const input = await vine.validate({schema: accountValidator.toggleAccountActiveValidator, data: request.body});
+    const input = await vine.validate({schema: accountValidator.toggleAccountActiveValidator, data: request.body()});
 
 
     const result = await toggleAccountActiveUseCase.execute(accountNumber, input.isActive);
@@ -414,7 +414,7 @@ export default class AccountsController {
     );
 
     const accountNumber = Number(request.param('accountNumber'));
-    const input = await vine.validate({schema: accountValidator.updateAccountNameValidator, data: request.body});
+    const input = await vine.validate({schema: accountValidator.updateAccountNameValidator, data: request.body()});
 
     const result = await updateCustomAccountNameUseCase.execute(
       accountNumber,
@@ -437,7 +437,7 @@ export default class AccountsController {
   async updateWithdrawalLimit({ request, response }: HttpContext) {
     const updateWithDrawalLimitUseCase = new UpdateWithDrawalLimitUseCase(this.accountRepository);
     const accountNumber = Number(request.param('accountNumber'));
-    const input = await vine.validate({schema: accountValidator.updateWithdrawalLimitValidator, data: request.body});
+    const input = await vine.validate({schema: accountValidator.updateWithdrawalLimitValidator, data: request.body()});
 
 
     const result = await updateWithDrawalLimitUseCase.execute(
@@ -464,7 +464,7 @@ export default class AccountsController {
       return response.status(401).json({ error: "User not authenticated" });
     }
 
-    const input = await vine.validate({schema: accountValidator.updateTransferLimitValidator, data: request.body});
+    const input = await vine.validate({schema: accountValidator.updateTransferLimitValidator, data: request.body()});
 
     const isManager = roles.includes(RoleEnum.BANK_MANAGER);
     const transferLimit = input.transferLimit;
@@ -501,7 +501,7 @@ export default class AccountsController {
   async updateOverdraftLimit({ request, response }: HttpContext) {
     const updateOverdraftLimitUseCase = new UpdateOverdraftLimitUseCase(this.accountRepository);
     const accountNumber = Number(request.param('accountNumber'));
-    const input = await vine.validate({schema: accountValidator.updateOverdraftLimitValidator, data: request.body});
+    const input = await vine.validate({schema: accountValidator.updateOverdraftLimitValidator, data: request.body()});
 
     const result = await updateOverdraftLimitUseCase.execute(
       accountNumber,
@@ -526,7 +526,7 @@ export default class AccountsController {
       return response.status(401).json({ error: "User not authenticated" });
     }
 
-    const input = await vine.validate({schema: accountValidator.requestOverdraftIncreaseValidator, data: request.body});
+    const input = await vine.validate({schema: accountValidator.requestOverdraftIncreaseValidator, data: request.body()});
 
     const sendNotificationUseCase = new SendNotificationToClientUseCase(
       this.notificationRepository,
@@ -582,7 +582,7 @@ export default class AccountsController {
       return response.status(403).json({ error: "Access denied" });
     }
 
-    const input = await vine.validate({schema: accountValidator.respondOverdraftIncreaseValidator, data: request.body});
+    const input = await vine.validate({schema: accountValidator.respondOverdraftIncreaseValidator, data: request.body()});
     const requestId = request.param('requestId');
 
     if (!requestId) {
@@ -690,7 +690,7 @@ export default class AccountsController {
       return response.status(401).json({ error: "User not authenticated" });
     }
 
-    const input = await vine.validate({schema: accountValidator.transferBetweenAccountsValidator, data: request.body});
+    const input = await vine.validate({schema: accountValidator.transferBetweenAccountsValidator, data: request.body()});
 
     const result = await transferUseCase.execute({
       fromIban: input.fromIban,
@@ -735,7 +735,7 @@ export default class AccountsController {
       return response.status(401).json({ error: "User not authenticated" });
     }
 
-    const input = await vine.validate({schema: accountValidator.quickTransferValidator, data: request.body});
+    const input = await vine.validate({schema: accountValidator.quickTransferValidator, data: request.body()});
 
     const result = await quickTransferUseCase.execute({
       userId,

@@ -10,10 +10,9 @@ export const createNewsValidator = vine.object({
 })
 
 export const updateNewsValidator = vine.object({
-  id: vine.string(),
-  title: vine.string(),
-  category: vine.enum(Object.values(NewsCategoryEnum)),
-  priority: vine.enum(Object.values(NewsPriorityEnum)),
-  tags: vine.array(vine.string()),
+  title: vine.string().optional(),
+  category: vine.enum(Object.values(NewsCategoryEnum)).optional(),
+  priority: vine.enum(Object.values(NewsPriorityEnum)).optional(),
+  tags: vine.array(vine.string()).optional(),
   published: vine.boolean().optional()
 })

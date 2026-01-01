@@ -9,7 +9,7 @@ export const createLoanRequestValidator = vine.object({
 })
 
 export const decideLoanRequestValidator = vine.object({
-  decision: vine.enum(LoanDecisionEnum)
+  decision: vine.enum(Object.values(LoanDecisionEnum))
 })
 
 export const proposeRateValidator = vine.object({

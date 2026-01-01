@@ -3,7 +3,7 @@ import vine from '@vinejs/vine'
 
 export const createNotificationValidator = vine.object({
   message: vine.string(),
-  type: vine.enum(NotificationTypeEnum)
+  type: vine.enum(Object.values(NotificationTypeEnum))
 })
 
 export const markNotificationAsReadValidator = vine.object({
@@ -13,5 +13,5 @@ export const markNotificationAsReadValidator = vine.object({
 export const sendNotificationToClientValidator = vine.object({
   clientId: vine.string(),
   message: vine.string(),
-  type: vine.enum(NotificationTypeEnum)
+  type: vine.enum(Object.values(NotificationTypeEnum))
 })

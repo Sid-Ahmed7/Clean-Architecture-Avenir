@@ -5,14 +5,14 @@ export const createMediaValidator = vine.object({
   newsId: vine.string(),
   url: vine.string(),
   type: vine.enum(Object.values(MediaTypeEnum)),
-  caption: vine.string(),
+  order: vine.number(),
   altText: vine.string(),
-  size: vine.number(),
-  mimeType: vine.string()
+  caption: vine.string().optional(),
+  size: vine.number().optional(),
+  mimeType: vine.string().optional()
 })
 
 export const updateMediaValidator = vine.object({
-  id: vine.string(),
   caption: vine.string().optional(),
   altText: vine.string().optional(),
   order: vine.number().optional()

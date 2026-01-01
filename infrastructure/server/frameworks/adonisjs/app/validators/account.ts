@@ -55,23 +55,14 @@ export const transferBetweenAccountsValidator = vine.object({
 })
 
 export const updateAccountValidator = vine.object({
-  accountNumber: vine.number(),
-  iban: vine.string(),
-  userId: vine.string(),
-  accountType: vine.enum(Object.values(AccountTypeEnum)),
-  currentBalance: vine.number(),
-  currency: vine.string(),
-  accountStatus: vine.enum(Object.values(AccountStatusEnum)),
-  isActive: vine.boolean(),
-  createdAt: vine.date(),
-  withdrawalLimit: vine.number(),
-  transferLimit: vine.number(),
-  overdraftLimit: vine.number(),
-  customAccountName: vine.string(),
-  totalTransfered: vine.number(),
-  lastTransferResetDate: vine.date(),
-  parentAccountId: vine.number().optional(),
-  closedAt: vine.date().optional()
+  accountType: vine.enum(Object.values(AccountTypeEnum)).optional(),
+  currency: vine.string().optional(),
+  accountStatus: vine.enum(Object.values(AccountStatusEnum)).optional(),
+  isActive: vine.boolean().optional(),
+  withdrawalLimit: vine.number().optional(),
+  transferLimit: vine.number().optional(),
+  overdraftLimit: vine.number().optional(),
+  customAccountName: vine.string().optional()
 })
 
 export const transferToBeneficiaryValidator = vine.object({

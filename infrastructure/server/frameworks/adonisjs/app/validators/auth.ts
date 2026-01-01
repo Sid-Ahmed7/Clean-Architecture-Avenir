@@ -1,4 +1,5 @@
 import vine from '@vinejs/vine'
+import { UserStatusEnum } from '#domain/enums/UserStatusEnum.js'
 
 
 export const registerValidator = vine.object({
@@ -42,6 +43,6 @@ export const updateUserValidator = vine.object({
   lastName: vine.string().optional(),
   phoneNumber: vine.string().optional(),
   address: vine.string().optional(),
-  status: vine.enum(['ACTIVE', 'INACTIVE', 'SUSPENDED']).optional()
+  status: vine.enum(Object.values(UserStatusEnum)).optional()
 })
 

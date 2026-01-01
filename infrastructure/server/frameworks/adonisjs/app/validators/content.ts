@@ -10,8 +10,6 @@ export const reorderContentValidator = vine.object({
 })
 
 export const updateContentValidator = vine.object({
-  id: vine.string(),
-  content: vine.string(),
-  order: vine.number().optional(),
-  newsId: vine.string()
+  content: vine.string().optional(),
+  order: vine.number().optional()
 })

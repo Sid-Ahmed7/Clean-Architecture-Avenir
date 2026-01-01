@@ -11,11 +11,10 @@ export const createStockValidator = vine.object({
 })
 
 export const updateStockValidator = vine.object({
-  id: vine.string(),
-  companyName: vine.string(),
-  name: vine.string(),
-  currency: vine.string(),
-  isActionAvailable: vine.boolean()
+  companyName: vine.string().optional(),
+  name: vine.string().optional(),
+  currency: vine.string().optional(),
+  isActionAvailable: vine.boolean().optional()
 })
 
 export const changeStockValidator = vine.object({
