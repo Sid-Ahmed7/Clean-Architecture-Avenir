@@ -32,11 +32,11 @@ const IMPORTER = (filePath: string) => {
 new Ignitor(APP_ROOT, { importer: IMPORTER })
   .tap((app) => {
     app.booting(async () => {
-      await import('#start/env.js')
+      await import('#start/env')
     })
     app.ready(async () => {
       const { Server } = await import('socket.io')
-      const { socketSetup } = await import('#start/socket.js')
+      const { socketSetup } = await import('#start/socket')
       const router = await app.container.make('router')
 
       // Get the underlying HTTP server from AdonisJS

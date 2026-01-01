@@ -1,5 +1,7 @@
 import type { ApplicationService } from "@adonisjs/core/types";
-import * as repositories from "#infrastructure/adapters/config/repositories.js";
+import * as repositories from "#config/repositories";
+import { registerUserConfirmedSubscriber } from "#infrastructure/subscribers/UserConfirmedSuscriber.js";
+
 export default class AppProvider {
 
     constructor(protected app: ApplicationService) {}
@@ -55,5 +57,9 @@ export default class AppProvider {
     this.app.container.bind('localeService', () => repositories.localeService)
     this.app.container.bind('notificationService', () => repositories.notificationService)
     this.app.container.bind('statusMessageService', () => repositories.statusMessageService)
+  }
+
+  async boot() {
+    registerUserConfirmedSubscriber(repositories.eventBus, repositories.accountRepository);
   }
 }

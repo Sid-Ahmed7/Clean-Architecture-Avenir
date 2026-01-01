@@ -22,7 +22,31 @@ export const changeStockValidator = vine.object({
   isActionAvailable: vine.boolean()
 })
 
+export const changeAvailabilityValidator = vine.object({
+  isActionAvailable: vine.boolean()
+})
+
+export const purchaseIPOValidator = vine.object({
+  stockSymbol: vine.string(),
+  quantity: vine.number()
+})
+
 export const purchaseIPOSharesValidator = vine.object({
   stockSymbol: vine.string(),
   quantity: vine.number()
+})
+
+export const launchIPOValidator = vine.object({
+  stockSymbol: vine.string(),
+  totalShares: vine.number(),
+  pricePerShare: vine.number()
+})
+
+export const openIPOValidator = vine.object({
+  sharesToMakeAvailable: vine.number(),
+  ipoType: vine.string().optional()
+})
+
+export const closeIPOValidator = vine.object({
+  stockSymbol: vine.string()
 })

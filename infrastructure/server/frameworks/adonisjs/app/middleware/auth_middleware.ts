@@ -9,10 +9,20 @@ const JWT_SECRET = env.get('JWT_SECRET')
 
 export default class AuthMiddleware {
   async handle(ctx: HttpContext, next: NextFn) {
-    const token = ctx.request.cookie('accessToken')
+    console.log('All cookies:', ctx.request.header('cookie'))
+    console.log('Cookie:', ctx.request.cookie('accessToken'))
+
+    const token = ctx.request.plainCookie('accessToken')
+    console.log('Unsigned cookie:', token)
+
+
+    console.log('Cookie header:', ctx.request.header('cookie'))
+    console.log('Auth Middleware - accessToken:', token)
+
     if(!token) {
       return ctx.response.unauthorized({ message: 'Access token is missing' })
     }
+
     try {
       const decoded = jwt.verify(token, JWT_SECRET)
       const payload: JwtPayload = decoded as JwtPayload
@@ -33,6 +43,7 @@ export default class AuthMiddleware {
           message: `Token expired after ${env.get('JWT_EXPIRATION')}`
         })
       }
+      console.log('JWT verification error:', error)
       return ctx.response.unauthorized({ message: 'Invalid token' })
     }
 

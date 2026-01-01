@@ -35,13 +35,13 @@ export default defineConfig({
     () => import('@adonisjs/core/providers/hash_provider'),
     () => import('@adonisjs/cors/cors_provider'),
     () => import('@adonisjs/static/static_provider'),
-    () => import('#providers/app.js'),
+    () => import('#providers/app'),
     () => import('@adonisjs/core/providers/vinejs_provider')
   ],
 
   preloads: [
     () => import('#start/routes'),
-    () => import('#start/kernel.js'),
+    () => import('#start/kernel'),
   ],
 
   metaFiles: [

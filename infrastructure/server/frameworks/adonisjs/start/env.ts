@@ -18,7 +18,7 @@ const env =  await Env.create(new URL('../', import.meta.url), {
   JWT_SECRET: Env.schema.string(),
   JWT_SECRET_REFRESH: Env.schema.string(),
 
-  CLIENT_BASE_URL: Env.schema.string({ format: 'url' }),
+CLIENT_BASE_URL: Env.schema.string(),
 
   RESEND_API_KEY: Env.schema.string(),
   EMAIL_FROM: Env.schema.string(),

@@ -1,4 +1,4 @@
-import env from "#start/env.js";
+import env from "#start/env";
 
 export default {
     appKey: env.get('APP_KEY'),
@@ -9,6 +9,9 @@ export default {
         trustProxy: false,
         etag: false,
         jsonpCallbackName: 'callback',
+        qs: {
+            parse: {},
+        },
         cookie: {
             domain: '',
             maxAge: '2h',

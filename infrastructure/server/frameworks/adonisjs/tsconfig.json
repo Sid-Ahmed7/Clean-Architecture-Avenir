@@ -30,11 +30,13 @@
   "include": [
     "./**/*",
     "../../../../domain/**/*",
-    "../../../../application/**/*"
+    "../../../../application/**/*",
+    "../../../../infrastructure/adapters/**/*",
+    "../../../../infrastructure/subscribers/**/*"
   ],
   "exclude": [
     "node_modules",
     "build",
-    "infrastructure/server/frameworks/express",
+    "infrastructure/server/frameworks/express"
   ]
 }

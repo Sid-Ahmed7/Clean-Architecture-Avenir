@@ -1,10 +1,10 @@
 import { defineConfig } from '@adonisjs/cors'
-import env from '#start/env.js'
+import env from '#start/env'
 
 export default defineConfig({
   enabled: true,
 
-  origin: env.get('CLIENT_BASE_URL'),
+  origin: [env.get('CLIENT_BASE_URL')],
 
   methods: ['GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'PATCH'],
 

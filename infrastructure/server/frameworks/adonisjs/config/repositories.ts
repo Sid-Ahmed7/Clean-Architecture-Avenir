@@ -1,0 +1,1 @@
+export * from '../../../../adapters/config/repositories.js'

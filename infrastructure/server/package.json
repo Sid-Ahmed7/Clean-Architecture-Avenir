@@ -1,0 +1,25 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Server infrastructure with Express and AdonisJS frameworks",
+  "private": true,
+  "main": "index.ts",
+  "scripts": {
+    "dev": "ts-node index.ts",
+    "start": "ts-node index.ts",
+    "switch:express": "ts-node switch-framework.ts express",
+    "switch:adonisjs": "ts-node switch-framework.ts adonisjs",
+    "switch": "ts-node switch-framework.ts",
+    "express:dev": "cd frameworks/express && npm run dev",
+    "express:build": "cd frameworks/express && npm run build",
+    "express:start": "cd frameworks/express && npm start",
+    "adonisjs:dev": "cd frameworks/adonisjs && node ace serve --watch",
+    "adonisjs:build": "cd frameworks/adonisjs && node ace build",
+    "adonisjs:start": "cd frameworks/adonisjs && node bin/server.js"
+  },
+  "devDependencies": {
+    "@types/node": "^24.4.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  }
+}
