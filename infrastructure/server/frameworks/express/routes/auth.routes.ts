@@ -10,7 +10,7 @@ import { RolePriorityService } from '../../../../adapters/services/RolePriorityS
 const router = express.Router();
 
 
-registerUserConfirmedSubscriber(eventBus,accountRepository );
+registerUserConfirmedSubscriber(eventBus,accountRepository);
 const rolePriorityService = new RolePriorityService();
 const authController = new AuthController(
   userRepository,

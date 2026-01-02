@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
-import { InMemoryStockHoldingRepository } from '../../../../adapters/repositories/InMemoryStockHoldingRepository';
+import { StockHoldingRepositoryInterface } from '../../../../../application/ports/repositories/stocks/StockHoldingRepositoryInterface';
 import {GetUserPositionsUseCase} from "../../../../../application/usecases/position/GetUserPositionsUseCase";
 import {GetPositionDetailsUseCase} from "../../../../../application/usecases/position/GetPositionDetailsUseCase";
 import { PositionNotFoundError } from '../../../../../application/errors/PositionNotFoundError';
 import { StockNotFoundError } from '../../../../../application/errors/StockNotFoundError';
-import { InMemoryStockRepository } from '../../../../adapters/repositories/InMemoryStockRepository';
+import { StockRepositoryInterface } from '../../../../../application/ports/repositories/stocks/StockRepositoryInterface';
 
 export class StockPositionController {
 
     public constructor(
-        private stockRepository: InMemoryStockRepository,
-        private holdingRepository: InMemoryStockHoldingRepository,
+        private readonly stockRepository: StockRepositoryInterface,
+        private readonly holdingRepository: StockHoldingRepositoryInterface,
     ){}
 
     public async getUserPositions(req: Request, res: Response) {

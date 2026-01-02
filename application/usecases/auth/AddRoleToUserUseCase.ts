@@ -5,7 +5,7 @@ export class AddRoleToUserUseCase {
     public constructor(private readonly userRoleRepository: UserRoleRepositoryInterface){}
 
 
-    public async execute(userId: string, roleId: number) {
+    public async execute(userId: string, roleId: string) {
 
         const result = await this.userRoleRepository.addRoleToUser(userId, roleId);
 

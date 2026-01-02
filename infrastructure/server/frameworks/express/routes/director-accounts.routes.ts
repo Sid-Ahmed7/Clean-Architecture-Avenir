@@ -7,25 +7,10 @@ import { RoleEnum } from '../../../../../domain/enums/RoleEnum';
 
 const router = express.Router();
 
-const directorAccountsController = new DirectorAccountsController(
-    accountRepository,
-    savingsAccountRepository,
-    userRepository
-);
+const directorAccountsController = new DirectorAccountsController(accountRepository,savingsAccountRepository,userRepository);
 
-// All routes are protected and require BANK_MANAGER role
-router.get(
-    "/accounts", 
-    verifyTokenAccess, 
-    authorizeRoles([RoleEnum.BANK_MANAGER]), 
-    (req, res) => directorAccountsController.getAllAccounts(req, res)
-);
+router.get("/accounts",verifyTokenAccess,authorizeRoles([RoleEnum.BANK_MANAGER]),(req, res) => directorAccountsController.getAllAccounts(req, res));
 
-router.get(
-    "/savings-accounts", 
-    verifyTokenAccess, 
-    authorizeRoles([RoleEnum.BANK_MANAGER]), 
-    (req, res) => directorAccountsController.getAllSavingsAccounts(req, res)
-);
+router.get("/savings-accounts",verifyTokenAccess,authorizeRoles([RoleEnum.BANK_MANAGER]),(req, res) => directorAccountsController.getAllSavingsAccounts(req, res));
 
 export default router;

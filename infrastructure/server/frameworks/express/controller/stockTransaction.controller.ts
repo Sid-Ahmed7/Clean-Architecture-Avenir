@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import { InMemoryStockTransactionRepository } from "../../../../adapters/repositories/InMemoryStockTransactionRepository";
+import { StockTransactionRepositoryInterface } from "../../../../../application/ports/repositories/stocks/StockTransactionRepositoryInterface";
 import { GetTransactionsBySymbolUseCase } from "../../../../../application/usecases/transactions/GetTransactionsBySymbolUseCase";
 import { GetUserTransactionsUseCase } from "../../../../../application/usecases/transactions/GetUserTransactionsUseCase";
 
 export class StockTransactionController {
-    public constructor( private stockTransactionRepository: InMemoryStockTransactionRepository){}
+    public constructor( private readonly stockTransactionRepository: StockTransactionRepositoryInterface){}
 
 
     async getUserTransaction(req: Request, res: Response) {

@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
 import { GetAllAccountsUseCase } from "../../../../../application/usecases/accounts/GetAllAccountsUseCase";
 import { GetAllSavingsAccountsUseCase } from "../../../../../application/usecases/accounts/GetAllSavingsAccountsUseCase";
-import { InMemoryAccountRepository } from "../../../../adapters/repositories/InMemoryAccountRepository";
-import { InMemorySavingsAccountRepository } from "../../../../adapters/repositories/InMemorySavingsAccountRepository";
-import { InMemoryUserRepository } from "../../../../adapters/repositories/InMemoryUserRepository";
+import { AccountRepositoryInterface } from "../../../../../application/ports/repositories/AccountRepositoryInterface";
+import { SavingsAccountRepositoryInterface } from "../../../../../application/ports/repositories/SavingsAccountRepositoryInterface";
+import { UserRepositoryInterface } from "../../../../../application/ports/repositories/auth/UserRepositoryInterface";
 
 export class DirectorAccountsController {
     constructor(
-        private readonly accountRepository: InMemoryAccountRepository,
-        private readonly savingsAccountRepository: InMemorySavingsAccountRepository,
-        private readonly userRepository: InMemoryUserRepository
+        private readonly accountRepository: AccountRepositoryInterface,
+        private readonly savingsAccountRepository: SavingsAccountRepositoryInterface,
+        private readonly userRepository: UserRepositoryInterface
     ) {}
 
     async getAllAccounts(req: Request, res: Response) {

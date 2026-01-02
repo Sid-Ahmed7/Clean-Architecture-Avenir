@@ -29,7 +29,6 @@ const userManagementController = new UserManagementController(
     uuidService
 );
 
-// All routes are protected and require BANK_MANAGER role
 router.get(
     "/", 
     verifyTokenAccess, 

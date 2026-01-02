@@ -30,7 +30,7 @@ export class InMemoryUserRoleRepository implements UserRoleRepositoryInterface {
         return roles;
     }
 
-    public async addRoleToUser(userId: string, roleId: number): Promise<void | UserNotFoundError | RoleNotFoundError> {
+    public async addRoleToUser(userId: string, roleId: string): Promise<void | UserNotFoundError | RoleNotFoundError> {
         const user = await this.userRepository.findById(userId);
         if(user instanceof UserNotFoundError) {
             return new UserNotFoundError(`User with id ${userId} not found`);

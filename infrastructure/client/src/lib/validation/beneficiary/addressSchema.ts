@@ -5,7 +5,6 @@ export const addressSchema = (t: (key: string) => string) =>
     street: z.string(),
     city: z.string(),
     postalCode: z.string(),
-    country: z.string(),
   });
 
 export type AddressModel = z.infer<ReturnType<typeof addressSchema>>;

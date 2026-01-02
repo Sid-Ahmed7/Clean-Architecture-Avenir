@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
-import { InMemoryMediaRepository } from "../../../../adapters/repositories/InMemoryMediaRepository";
-import { InMemoryNewsRepository } from "../../../../adapters/repositories/InMemoryNewsRepository";
+import { MediaRepositoryInterface } from "../../../../../application/ports/repositories/news/MediaRepositoryInterface";
+import { NewsRepositoryInterface } from "../../../../../application/ports/repositories/news/NewsRepositoryInterface";
 import {ManageOrderService} from "../../../../adapters/services/news/ManageOrderService";
 import {GenerateAltTextService} from "../../../../adapters/services/news/GenerateAltTextService";
 import { LocalFileStorageService } from "../../../../adapters/services/news/LocalFileStorageService";
@@ -11,22 +11,20 @@ import { CreateMediaUseCase } from "../../../../../application/usecases/news/upl
 import { GetMediaByNewsIdUseCase } from "../../../../../application/usecases/news/upload/GetMediaByNewsIdUseCase";
 import { DeleteMediaUseCase } from "../../../../../application/usecases/news/upload/DeleteMediaUseCase";
 import { MediaTypeEnum } from "../../../../../domain/enums/MediaTypeEnum";
-import { MediaEntity } from "../../../../../domain/entities/MediaEntity";
 import { MediaNotFoundError } from "../../../../../application/errors/MediaNotFoundError";
 import {CryptoUuidGenerator} from "../../../../adapters/services/CryptoUuidGenerator";
 import { createMediaSchema } from "../schemas/media/createMediaSchema";
-import { CreateMedia } from "../../../../../application/requests/CreateMedia";
 
 
 export class MediaController {
     
     public constructor(
-        private readonly mediaRepository: InMemoryMediaRepository,
-        private readonly newsRepository: InMemoryNewsRepository,
+        private readonly mediaRepository: MediaRepositoryInterface,
+        private readonly newsRepository: NewsRepositoryInterface,
         private readonly fileStorageService: LocalFileStorageService,
         private readonly orderService: ManageOrderService,
         private readonly altService: GenerateAltTextService,
-        private readonly uuidService:CryptoUuidGenerator 
+        private readonly uuidService:CryptoUuidGenerator
     ){}
 
     async uploadMedia(req: Request, res: Response) {

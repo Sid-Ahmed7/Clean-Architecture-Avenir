@@ -5,6 +5,10 @@ export interface BankTransaction {
     amount: number;
     transactionType: string;
     createdAt: string;
+    description?: string;
+    category?: string;
+    beneficiaryId?: string;
+    groupId?: string;
     debitUserId?: string;
     creditUserId?: string;
     debitUserName?: string;

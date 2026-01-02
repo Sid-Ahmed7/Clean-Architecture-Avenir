@@ -4,12 +4,12 @@ import { PositionNotFoundError } from "../../../errors/PositionNotFoundError";
 
 export interface StockHoldingRepositoryInterface {
 
-    createPosition(position: StockHoldingEntity): Promise<StockHoldingEntity | PositionAlreadyExistsError>;
-    updatePosition(position: StockHoldingEntity): Promise<StockHoldingEntity | PositionNotFoundError>;
+    createPosition(position: StockHoldingEntity): Promise<StockHoldingEntity | PositionAlreadyExistsError | Error>;
+    updatePosition(position: StockHoldingEntity): Promise<StockHoldingEntity | PositionNotFoundError | Error>;
     deletePosition(id: string): Promise<void | PositionNotFoundError>;
-    findPositionById(id: string): Promise<StockHoldingEntity | PositionNotFoundError>;
+    findPositionById(id: string): Promise<StockHoldingEntity | PositionNotFoundError | Error>;
     findPositionsByUserId(userId: string): Promise<Array<StockHoldingEntity>>;
-    findPositionByUserIdAndSymbol(userId: string, symbol: string): Promise<StockHoldingEntity | PositionNotFoundError>;
+    findPositionByUserIdAndSymbol(userId: string, symbol: string): Promise<StockHoldingEntity | PositionNotFoundError | Error>;
     findNonEmptyPositions(userId: string):Promise<Array<StockHoldingEntity>>;
     findPositionsBySymbol(symbol: string): Promise<Array<StockHoldingEntity>>;
 }

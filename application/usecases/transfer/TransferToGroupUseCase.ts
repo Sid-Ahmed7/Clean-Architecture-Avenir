@@ -100,11 +100,11 @@ export class TransferToGroupUseCase {
         currentSourceAccount.accountNumber,
         destinationAccount.accountNumber,
         data.amountPerBeneficiary,
-        TransactionTypeEnum.BENEFICIARY,
+        TransactionTypeEnum.TRANSFER,
         data.userId,
         TransferStatusEnum.PENDING,
         new Date(),
-        beneficiary.beneficiaryName,
+        undefined,
         undefined,
         beneficiaryId,
         data.groupId

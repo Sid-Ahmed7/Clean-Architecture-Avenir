@@ -4,6 +4,7 @@ import Button from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { AuthContext } from "@/contexts/AuthProvider";
 import { login } from "@/lib/api/auth";
+import { startTokenRefresh } from "@/lib/api/apiClient";
 import { LoginInput, loginSchema } from "@/lib/validation/auth/loginSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -34,12 +35,13 @@ export default function LoginPage() {
         const decodedToken = decodeJwt(res.data.token);
         const userRole = decodedToken?.role;
 
-        // Set authentication state AND user data immediately
         setIsAuthenticated(true);
         setUser({
           userId: decodedToken?.userId || '',
           role: userRole || 'CLIENT'
         });
+
+        startTokenRefresh();
 
         const rolePrefixMap: Record<string, string> = {
           'CLIENT': 'client',

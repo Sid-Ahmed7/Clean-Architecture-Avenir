@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import {InMemoryStockRepository} from "../../../../adapters/repositories/InMemoryStockRepository";
+import { StockRepositoryInterface } from "../../../../../application/ports/repositories/stocks/StockRepositoryInterface";
 import { StockEntity } from "../../../../../domain/entities/StockEntity";
 import { ChangeStockAvailabilityUseCase } from "../../../../../application/usecases/stocks/ChangeStockAvailabilityUseCase";
 import { GetStockByIdUseCase } from "../../../../../application/usecases/stocks/GetStockByIdUseCase";
@@ -13,7 +13,7 @@ import { ListAvailableStocksUseCase} from "../../../../../application/usecases/s
 import { StockAlreadyExistsError } from "../../../../../application/errors/StockAlreadyExistsError";
 import { StockNotFoundError } from "../../../../../application/errors/StockNotFoundError";
 import {OrderBookEngineService} from "../../../../adapters/services/order/OrderBookEngineService";
-import { InMemoryStockOrderRepository } from "../../../../adapters/repositories/InMemoryStockOrderRepository";
+import { StockOrderRepositoryInterface } from "../../../../../application/ports/repositories/stocks/StockOrderRepositoryInterface";
 import { CryptoUuidGenerator } from "../../../../adapters/services/CryptoUuidGenerator";
 import { createStockSchema } from "../schemas/stocks/createStockSchema";
 import { changeStockSchema } from "../schemas/stocks/changeStockSchema";
@@ -21,7 +21,7 @@ import { updateStockSchema } from "../schemas/stocks/updateStockSchema";
 import { PurchaseIPOSharesUseCase } from "../../../../../application/usecases/stocks/PurchaseIPOSharesUseCase";
 import { CloseIPOUseCase } from "../../../../../application/usecases/stocks/CloseIPOUseCase";
 import { OpenIPOUseCase } from "../../../../../application/usecases/stocks/OpenIPOUseCase";
-import { InMemoryStockHoldingRepository } from "../../../../adapters/repositories/InMemoryStockHoldingRepository";
+import { StockHoldingRepositoryInterface } from "../../../../../application/ports/repositories/stocks/StockHoldingRepositoryInterface";
 import { BankAccountService } from "../../../../adapters/services/BankAccountService";
 import { InsufficientFundsError } from "../../../../../domain/errors/InsufficientFundsError";
 import { IPONotActiveError } from "../../../../../application/errors/IPONotActiveError";
@@ -31,11 +31,11 @@ export class StockController {
 
 
     constructor(
-        private readonly stockRepository: InMemoryStockRepository,
-        private readonly stockOrderRepository: InMemoryStockOrderRepository,
+        private readonly stockRepository: StockRepositoryInterface,
+        private readonly stockOrderRepository: StockOrderRepositoryInterface,
         private readonly orderBookService: OrderBookEngineService,
         private readonly uuidGenerator: CryptoUuidGenerator,
-        private readonly holdingRepository: InMemoryStockHoldingRepository,
+        private readonly holdingRepository: StockHoldingRepositoryInterface,
         private readonly accountService: BankAccountService
     ) {}
 

@@ -4,5 +4,6 @@ import { RoleNotFoundError } from "../../../errors/RoleNotFoundError";
 
 export interface RoleRepositoryInterface {
     findByName(name: RoleEnum): Promise<RoleEntity | RoleNotFoundError>;
-    findById(id: number): Promise<RoleEntity | RoleNotFoundError>;
+    findById(id: string): Promise<RoleEntity | RoleNotFoundError>;
+    initialize(): Promise<void>;
 }

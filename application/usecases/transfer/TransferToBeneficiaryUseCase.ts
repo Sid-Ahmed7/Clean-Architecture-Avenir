@@ -74,7 +74,7 @@ export class TransferToBeneficiaryUseCase {
       sourceAccount.accountNumber,
       destinationAccount.accountNumber,
       data.amount,
-      TransactionTypeEnum.BENEFICIARY,
+      TransactionTypeEnum.TRANSFER,
       data.userId,
       TransferStatusEnum.PENDING,
       new Date(),

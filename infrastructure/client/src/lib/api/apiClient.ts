@@ -3,6 +3,7 @@ import { CookieValueTypes, getCookie, setCookie } from "cookies-next";
 import { refreshToken } from "./auth";
 
 let refreshPromise: Promise<{ success: boolean; error?: string }> | null = null;
+let tokenRefreshTimer: NodeJS.Timeout | null = null;
 
 export const createApiClient = (cookies?: Record<string, CookieValueTypes>): AxiosInstance => {
   const isServer = typeof window === "undefined";
@@ -10,7 +11,7 @@ export const createApiClient = (cookies?: Record<string, CookieValueTypes>): Axi
 
   const client = axios.create({
     baseURL,
-    withCredentials: true, 
+    withCredentials: true,
   });
 
   client.interceptors.response.use(
@@ -59,15 +60,16 @@ const refreshTokenRequest = async () => {
 
   try {
     const response = await refreshToken();
-    
+
     if (!response.success) {
       return { success: false, error: response.error };
     }
 
     const accessToken = response.data?.accessToken;
-    
+
     if (accessToken) {
       setCookie("accessToken", accessToken);
+      scheduleTokenRefresh(); 
       return { success: true };
     }
 
@@ -75,5 +77,33 @@ const refreshTokenRequest = async () => {
   } catch (error) {
     console.error("Token refresh failed:", error);
     return { success: false, error: "Token refresh failed" };
+  }
+};
+
+const scheduleTokenRefresh = () => {
+  const isServer = typeof window === "undefined";
+  if (isServer) return;
+
+  if (tokenRefreshTimer) {
+    clearTimeout(tokenRefreshTimer);
+  }
+
+  const refreshBeforeExpiry = 30 * 1000;
+  const tokenDuration = 1000 * 60 * 60 * 24 * 7;
+  const refreshTime = tokenDuration - refreshBeforeExpiry;
+
+  tokenRefreshTimer = setTimeout(async () => {
+    await refreshTokenRequest();
+  }, refreshTime);
+};
+
+export const startTokenRefresh = () => {
+  scheduleTokenRefresh();
+};
+
+export const stopTokenRefresh = () => {
+  if (tokenRefreshTimer) {
+    clearTimeout(tokenRefreshTimer);
+    tokenRefreshTimer = null;
   }
 };

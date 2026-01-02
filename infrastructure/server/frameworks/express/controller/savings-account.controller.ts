@@ -4,12 +4,8 @@ import { UpdateSavingsAccountConfigUseCase } from "../../../../../application/us
 import { GetSavingsAccountUseCase } from "../../../../../application/usecases/accounts/GetSavingsAccountUseCase";
 import { CalculateDailyInterestUseCase } from "../../../../../application/usecases/accounts/CalculateDailyInterestUseCase";
 import { GetAccountInterestHistoryUseCase } from "../../../../../application/usecases/accounts/GetAccountInterestHistoryUseCase";
-import { InMemorySavingsAccountRepository } from "../../../../adapters/repositories/InMemorySavingsAccountRepository";
-import { InMemoryAccountRepository } from "../../../../adapters/repositories/InMemoryAccountRepository";
-import { InMemoryNotificationRepository } from "../../../../adapters/repositories/InMemoryNotificationRepository";
-import { InMemoryUserRepository } from "../../../../adapters/repositories/InMemoryUserRepository";
-import { InMemorySavingsProductRepository } from "../../../../adapters/repositories/InMemorySavingsProductRepository";
-import { InMemoryTransactionRepository } from "../../../../adapters/repositories/InMemoryTransactionRepository";
+import { SavingsAccountRepositoryInterface } from "../../../../../application/ports/repositories/SavingsAccountRepositoryInterface";
+import { AccountRepositoryInterface } from "../../../../../application/ports/repositories/AccountRepositoryInterface";
 import { AccountNotFoundError } from "../../../../../application/errors/AccountNotFoundError";
 import { InvalidAccountError } from "../../../../../domain/errors/InvalidAccountError";
 import { CreateSavingsAccount } from "../../../../../application/requests/CreateSavingsAccount";
@@ -26,14 +22,8 @@ import { PasswordEncryptionService } from "../../../../adapters/services/auth/Pa
 export class SavingsAccountController {
 
     constructor(
-        private readonly savingsAccountRepository: InMemorySavingsAccountRepository,
-        private readonly accountRepository: InMemoryAccountRepository,
-        private readonly notificationRepository: InMemoryNotificationRepository,
-        private readonly notificationService: NotificationService,
-        private readonly uuidService: CryptoUuidGenerator,
-        private readonly userRepository: InMemoryUserRepository,
-        private readonly savingsProductRepository: InMemorySavingsProductRepository,
-        private readonly transactionRepository: InMemoryTransactionRepository
+        private readonly savingsAccountRepository: SavingsAccountRepositoryInterface,
+        private readonly accountRepository: AccountRepositoryInterface
     ) {}
 
     async createSavingsAccount(req: Request, res: Response) {

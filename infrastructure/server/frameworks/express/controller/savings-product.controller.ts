@@ -3,18 +3,18 @@ import { CreateSavingsProductUseCase } from "../../../../../application/usecases
 import { GetAllSavingsProductsUseCase } from "../../../../../application/usecases/accounts/GetAllSavingsProductsUseCase";
 import { UpdateSavingsProductUseCase } from "../../../../../application/usecases/accounts/UpdateSavingsProductUseCase";
 import { SubscribeToSavingsProductUseCase } from "../../../../../application/usecases/accounts/SubscribeToSavingsProductUseCase";
-import { InMemorySavingsProductRepository } from "../../../../adapters/repositories/InMemorySavingsProductRepository";
-import { InMemorySavingsAccountRepository } from "../../../../adapters/repositories/InMemorySavingsAccountRepository";
-import { InMemoryAccountRepository } from "../../../../adapters/repositories/InMemoryAccountRepository";
+import { SavingsProductRepositoryInterface } from "../../../../../application/ports/repositories/SavingsProductRepositoryInterface";
+import { SavingsAccountRepositoryInterface } from "../../../../../application/ports/repositories/SavingsAccountRepositoryInterface";
+import { AccountRepositoryInterface } from "../../../../../application/ports/repositories/AccountRepositoryInterface";
 import { CreateSavingsProduct } from "../../../../../application/requests/CreateSavingsProduct";
 import { UpdateSavingsProduct } from "../../../../../application/requests/UpdateSavingsProduct";
 import { uuidService } from "../../../../adapters/config/services";
 
 export class SavingsProductController {
     constructor(
-        private readonly savingsProductRepository: InMemorySavingsProductRepository,
-        private readonly savingsAccountRepository: InMemorySavingsAccountRepository,
-        private readonly accountRepository: InMemoryAccountRepository
+        private readonly savingsProductRepository: SavingsProductRepositoryInterface,
+        private readonly savingsAccountRepository: SavingsAccountRepositoryInterface,
+        private readonly accountRepository: AccountRepositoryInterface
     ) {}
 
     async createProduct(req: Request, res: Response) {
