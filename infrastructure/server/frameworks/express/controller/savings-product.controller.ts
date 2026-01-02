@@ -8,7 +8,7 @@ import { InMemorySavingsAccountRepository } from "../../../../adapters/repositor
 import { InMemoryAccountRepository } from "../../../../adapters/repositories/InMemoryAccountRepository";
 import { CreateSavingsProduct } from "../../../../../application/requests/CreateSavingsProduct";
 import { UpdateSavingsProduct } from "../../../../../application/requests/UpdateSavingsProduct";
-import { uuidService } from "../../../../adapters/config/repositories";
+import { uuidService } from "../../../../adapters/config/services";
 
 export class SavingsProductController {
     constructor(

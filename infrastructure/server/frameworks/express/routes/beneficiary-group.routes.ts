@@ -1,6 +1,7 @@
 import express from 'express';
 import { BeneficiaryGroupController } from '../controller/beneficiary-group.controller';
-import { uuidService, beneficiaryGroupRepository, beneficiaryRepository, accountRepository, transactionRepository, notificationRepository, notificationService, userRepository } from '../../../../adapters/config/repositories';
+import { beneficiaryGroupRepository, beneficiaryRepository, accountRepository, transactionRepository, notificationRepository, userRepository } from '../../../../adapters/config/repositories';
+import { uuidService, notificationService } from '../../../../adapters/config/services';
 import { verifyTokenAccess } from '../middleware/authMiddleware';
 import { authorizeRoles } from '../middleware/roleMiddleware';
 import { RoleEnum } from '../../../../../domain/enums/RoleEnum';

@@ -1,24 +1,27 @@
 import router from '@adonisjs/core/services/router'
 import MediaController from '#controllers/media_controller.js'
-import * as repositories from '#config/repositories.js'
+import app from '@adonisjs/core/services/app'
 
-const mediaController = new MediaController(
-  repositories.mediaRepository,
-  repositories.newsRepository,
-  repositories.fileStorageService,
-  repositories.orderService,
-  repositories.altService,
-  repositories.uuidService
-)
+
+const getMediaController = (async () => {
+  return new MediaController(
+    await app.container.make('mediaRepository'),
+    await app.container.make('newsRepository'),
+    await app.container.make('fileStorageService'),
+    await app.container.make('orderService'),
+    await app.container.make('altService'),
+    await app.container.make('uuidService')
+  )
+})()
 
 router
   .group(() => {
-    router.post('/upload', (ctx) => mediaController.uploadMedia(ctx))
+    router.post('/upload', async (ctx) => (await getMediaController).uploadMedia(ctx))
 
-    router.get('/news/:newsId', (ctx) => mediaController.getMediaByNewsId(ctx))
+    router.get('/news/:newsId', async (ctx) => (await getMediaController).getMediaByNewsId(ctx))
 
-    router.put('/update', (ctx) => mediaController.updateMedia(ctx))
+    router.put('/update', async (ctx) => (await getMediaController).updateMedia(ctx))
 
-    router.delete('/:mediaId', (ctx) => mediaController.deleteMedia(ctx))
+    router.delete('/:mediaId', async (ctx) => (await getMediaController).deleteMedia(ctx))
   })
   .prefix('/api/media')

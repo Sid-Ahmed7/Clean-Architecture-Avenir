@@ -1,5 +1,6 @@
 import express from "express";
-import { altService, fileStorageService, mediaRepository, newsRepository, orderService, uuidService } from "../../../../adapters/config/repositories";
+import { mediaRepository, newsRepository } from "../../../../adapters/config/repositories";
+import { altService, fileStorageService, orderService, uuidService } from "../../../../adapters/config/services";
 import { MediaController } from "../controller/media.controller";
 import { mediaUpload } from "../middleware/mediaMiddleware";
 

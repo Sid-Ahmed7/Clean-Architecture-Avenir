@@ -24,7 +24,8 @@
 
       "#domain/*": ["domain/*"],
       "#application/*": ["application/*"],
-      "#infrastructure/*": ["infrastructure/*"]
+      "#infrastructure/*": ["infrastructure/*"],
+      "~/*": ["infrastructure/*"]
     }
   },
   "include": [

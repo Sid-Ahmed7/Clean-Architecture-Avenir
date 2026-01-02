@@ -1,4 +1,4 @@
-import { MediaTypeEnum } from '#domain/enums/MediaTypeEnum.js'
+import { MediaTypeEnum } from '#config/enums.js'
 import vine from '@vinejs/vine'
 
 export const createMediaValidator = vine.object({

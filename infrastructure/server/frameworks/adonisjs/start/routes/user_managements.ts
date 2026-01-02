@@ -1,45 +1,48 @@
 import router from '@adonisjs/core/services/router'
-import { middleware } from '#start/kernel'
+import { middleware } from '#start/kernel.js'
 import UserManagementsController from '#controllers/user_managements_controller.js'
 import { authorizeRoles } from '#middleware/role_middleware.js'
-import { RoleEnum } from '#domain/enums/RoleEnum.js'
-import * as repositories from '#config/repositories.js'
+import { RoleEnum } from '../../../../../../domain/enums/RoleEnum.js'
+import app from '@adonisjs/core/services/app'
 
-const userManagementsController = new UserManagementsController(
-  repositories.userRepository,
-  repositories.roleRepository,
-  repositories.userRoleRepository,
-  repositories.accountRepository,
-  repositories.savingsAccountRepository,
-  repositories.notificationRepository,
-  repositories.notificationService,
-  repositories.uuidService
-)
+
+const getUserManagementsController = (async () => {
+  return new UserManagementsController(
+    await app.container.make('userRepository'),
+    await app.container.make('roleRepository'),
+    await app.container.make('userRoleRepository'),
+    await app.container.make('accountRepository'),
+    await app.container.make('savingsAccountRepository'),
+    await app.container.make('notificationRepository'),
+    await app.container.make('notificationService'),
+    await app.container.make('uuidService')
+  )
+})()
 
 router
   .group(() => {
     router
-      .get('/', (ctx) => userManagementsController.getAllUsers(ctx))
+      .get('/', async (ctx) => (await getUserManagementsController).getAllUsers(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.BANK_MANAGER]))
 
     router
-      .get('/clients', (ctx) => userManagementsController.getClientUsers(ctx))
+      .get('/clients', async (ctx) => (await getUserManagementsController).getClientUsers(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.BANK_MANAGER]))
 
     router
-      .get('/advisors', (ctx) => userManagementsController.getAdvisorUsers(ctx))
+      .get('/advisors', async (ctx) => (await getUserManagementsController).getAdvisorUsers(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.BANK_MANAGER]))
 
     router
-      .put('/:id', (ctx) => userManagementsController.updateUser(ctx))
+      .put('/:id', async (ctx) => (await getUserManagementsController).updateUser(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.BANK_MANAGER]))
 
     router
-      .delete('/:id', (ctx) => userManagementsController.deleteUser(ctx))
+      .delete('/:id', async (ctx) => (await getUserManagementsController).deleteUser(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.BANK_MANAGER]))
   })

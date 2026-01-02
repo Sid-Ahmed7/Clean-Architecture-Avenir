@@ -32,9 +32,9 @@ import type { OverdraftRequestRepositoryInterface } from "#application/ports/rep
 import type { LoanRequestRepositoryInterface } from "#application/ports/repositories/LoanRequestRepositoryInterface.js";
 import type { UserRepositoryInterface } from "#application/ports/repositories/auth/UserRepositoryInterface.js";
 import type { CryptoUuidGenerator } from "#infrastructure/adapters/services/CryptoUuidGenerator.js";
-import type { ManageTransferLimitService } from "#infrastructure/adapters/services/ManageTransferLimitService.js";
+import type { TransferLimitService } from "#application/ports/services/TransferLimitService.js";
 import type { ValidateTransferService } from "#infrastructure/adapters/services/ValidateTransferService.js";
-import type { TransactionEnrichmentServiceImpl } from "#infrastructure/adapters/services/TransactionEnrichmentService.js";
+import type { TransactionEnrichmentService } from "#application/ports/services/TransactionEnrichmentService.js";
 import type { NotificationRepositoryInterface } from "#application/ports/repositories/notification/NotificationRepositoryInterface.js";
 import type { NotificationService } from "#infrastructure/adapters/services/notification/NotificationService.js";
 import { ManageAllowedAccountStatusService } from "#infrastructure/adapters/services/ManageAllowedAccountStatusService.js";
@@ -68,9 +68,9 @@ export default class AccountsController {
     private readonly loanRequestRepository: LoanRequestRepositoryInterface,
     private readonly userRepository: UserRepositoryInterface,
     private readonly uuidService: CryptoUuidGenerator,
-    private readonly transferLimitService: ManageTransferLimitService,
-    private readonly validateTransferService: ValidateTransferService,
-    private readonly transactionEnrichmentService: TransactionEnrichmentServiceImpl,
+    private readonly transferLimitService: TransferLimitService,
+    private readonly transferValidationService: ValidateTransferService,
+    private readonly transactionEnrichmentService: TransactionEnrichmentService,
     private readonly notificationRepository: NotificationRepositoryInterface,
     private readonly notificationService: NotificationService
   ) {}
@@ -680,7 +680,7 @@ export default class AccountsController {
       this.transactionRepository,
       this.uuidService,
       this.transferLimitService,
-      this.validateTransferService,
+      this.transferValidationService,
       sendNotificationUseCase
     );
 

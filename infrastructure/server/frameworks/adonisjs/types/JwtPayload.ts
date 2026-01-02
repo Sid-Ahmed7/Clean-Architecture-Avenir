@@ -1,4 +1,4 @@
-import { RoleEnum } from "#domain/enums/RoleEnum.js";
+import { RoleEnum } from "../../../../../../domain/enums/RoleEnum.js";
 
 export interface JwtPayload {
   sub: string;

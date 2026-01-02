@@ -1,140 +1,143 @@
 import router from '@adonisjs/core/services/router'
-import { middleware } from '#start/kernel'
-import AccountsController from '#controllers/accounts_controller.js'
-import { authorizeRoles } from '#middleware/role_middleware.js'
-import { RoleEnum } from '#domain/enums/RoleEnum.js'
-import * as repositories from '#config/repositories.js'
+import { middleware } from '#start/kernel.js'
+import AccountsController from '#controllers/accounts_controller'
+import { authorizeRoles } from '#middleware/role_middleware'
+import { RoleEnum } from '../../../../../../domain/enums/RoleEnum.js'
+import app from '@adonisjs/core/services/app'
 
-const accountsController = new AccountsController(
-  repositories.accountRepository,
-  repositories.accountNumberGenerator,
-  repositories.ibanGenerator,
-  repositories.transactionRepository,
-  repositories.overdraftRequestRepository,
-  repositories.loanRequestRepository,
-  repositories.userRepository,
-  repositories.uuidService,
-  repositories.transferLimitService,
-  repositories.transferValidationService,
-  repositories.transactionEnrichmentService,
-  repositories.notificationRepository,
-  repositories.notificationService
-)
+
+const getAccountsController = (async () => {
+  return new AccountsController(
+    await app.container.make('accountRepository'),
+    await app.container.make('accountNumberGenerator'),
+    await app.container.make('ibanGenerator'),
+    await app.container.make('transactionRepository'),
+    await app.container.make('overdraftRequestRepository'),
+    await app.container.make('loanRequestRepository'),
+    await app.container.make('userRepository'),
+    await app.container.make('uuidService'),
+    await app.container.make('transferLimitService'),
+    await app.container.make('transferValidationService'),
+    await app.container.make('transactionEnrichmentService'),
+    await app.container.make('notificationRepository'),
+    await app.container.make('notificationService')
+  )
+})()
 
 router
   .group(() => {
     router
-      .get('/my-accounts', (ctx) => accountsController.getUserAccounts(ctx))
+      .get('/my-accounts', async (ctx) => (await getAccountsController).getUserAccounts(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]))
 
     router
-      .post('/create', (ctx) => accountsController.createAnAccount(ctx))
+      .post('/create', async (ctx) => (await getAccountsController).createAnAccount(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]))
 
     router
-      .post('/create/sub', (ctx) => accountsController.createSubAccount(ctx))
+      .post('/create/sub', async (ctx) => (await getAccountsController).createSubAccount(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]))
 
     router
-      .put('/update', (ctx) => accountsController.updateAccount(ctx))
+      .put('/update', async (ctx) => (await getAccountsController).updateAccount(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.BANK_MANAGER]))
 
     router
-      .get('/overdraft-requests', (ctx) => accountsController.getPendingOverdraftRequests(ctx))
+      .get('/overdraft-requests', async (ctx) => (await getAccountsController).getPendingOverdraftRequests(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.BANK_ADVISOR, RoleEnum.BANK_MANAGER]))
 
     router
-      .put('/overdraft-requests/:requestId/response', (ctx) => accountsController.respondOverdraftIncrease(ctx))
+      .put('/overdraft-requests/:requestId/response', async (ctx) => (await getAccountsController).respondOverdraftIncrease(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.BANK_ADVISOR, RoleEnum.BANK_MANAGER]))
 
     router
-      .get('/overdraft-requests/:requestId/details', (ctx) => accountsController.getOverdraftRequestDetails(ctx))
+      .get('/overdraft-requests/:requestId/details', async (ctx) => (await getAccountsController).getOverdraftRequestDetails(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.BANK_ADVISOR, RoleEnum.BANK_MANAGER]))
 
     router
-      .get('/transactions/history', (ctx) => accountsController.getTransactionHistory(ctx))
+      .get('/transactions/history', async (ctx) => (await getAccountsController).getTransactionHistory(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]))
 
     router
-      .get('/transactions/last', (ctx) => accountsController.getLastTransactions(ctx))
+      .get('/transactions/last', async (ctx) => (await getAccountsController).getLastTransactions(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]))
 
     router
-      .post('/transfer', (ctx) => accountsController.transferBetweenAccounts(ctx))
+      .post('/transfer', async (ctx) => (await getAccountsController).transferBetweenAccounts(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]))
 
     router
-      .post('/quick-transfer', (ctx) => accountsController.quickTransfer(ctx))
+      .post('/quick-transfer', async (ctx) => (await getAccountsController).quickTransfer(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]))
 
     router
-      .get('/iban/:iban', (ctx) => accountsController.getAccountByIban(ctx))
+      .get('/iban/:iban', async (ctx) => (await getAccountsController).getAccountByIban(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]))
 
     router
-      .post('/:accountNumber/overdraft-limit/request', (ctx) => accountsController.requestOverdraftIncrease(ctx))
+      .post('/:accountNumber/overdraft-limit/request', async (ctx) => (await getAccountsController).requestOverdraftIncrease(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]))
 
     router
-      .get('/:accountNumber/rib', (ctx) => accountsController.downloadRib(ctx))
+      .get('/:accountNumber/rib', async (ctx) => (await getAccountsController).downloadRib(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER, RoleEnum.BANK_ADVISOR]))
 
     router
-      .put('/:accountNumber/status', (ctx) => accountsController.changeStatusOfAccount(ctx))
+      .put('/:accountNumber/status', async (ctx) => (await getAccountsController).changeStatusOfAccount(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.BANK_MANAGER]))
 
     router
-      .put('/:accountNumber/name', (ctx) => accountsController.updateAccountName(ctx))
+      .put('/:accountNumber/name', async (ctx) => (await getAccountsController).updateAccountName(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]))
 
     router
-      .put('/:accountNumber/withdrawal-limit', (ctx) => accountsController.updateWithdrawalLimit(ctx))
+      .put('/:accountNumber/withdrawal-limit', async (ctx) => (await getAccountsController).updateWithdrawalLimit(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.BANK_MANAGER]))
 
     router
-      .put('/:accountNumber/transfer-limit', (ctx) => accountsController.updateTransferLimit(ctx))
+      .put('/:accountNumber/transfer-limit', async (ctx) => (await getAccountsController).updateTransferLimit(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]))
 
     router
-      .put('/:accountNumber/overdraft-limit', (ctx) => accountsController.updateOverdraftLimit(ctx))
+      .put('/:accountNumber/overdraft-limit', async (ctx) => (await getAccountsController).updateOverdraftLimit(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.BANK_MANAGER]))
 
     router
-      .put('/:accountNumber/active', (ctx) => accountsController.toggleAccountActive(ctx))
+      .put('/:accountNumber/active', async (ctx) => (await getAccountsController).toggleAccountActive(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.BANK_MANAGER]))
 
     router
-      .get('/:accountNumber', (ctx) => accountsController.getAccount(ctx))
+      .get('/:accountNumber', async (ctx) => (await getAccountsController).getAccount(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]))
 
     router
-      .delete('/:accountNumber', (ctx) => accountsController.deleteAccount(ctx))
+      .delete('/:accountNumber', async (ctx) => (await getAccountsController).deleteAccount(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.BANK_MANAGER]))
 
     router
-      .get('/', (ctx) => accountsController.getAllAccount(ctx))
+      .get('/', async (ctx) => (await getAccountsController).getAllAccount(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.BANK_MANAGER]))
   })

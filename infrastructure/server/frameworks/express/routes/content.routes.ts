@@ -1,6 +1,7 @@
 import express from "express";
 import { ContentController } from "../controller/content.controller";
-import { contentRepository, orderService, uuidService } from "../../../../adapters/config/repositories";
+import { contentRepository } from "../../../../adapters/config/repositories";
+import { orderService, uuidService } from "../../../../adapters/config/services";
 import { verifyTokenAccess } from "../middleware/authMiddleware";
 import { authorizeRoles } from "../middleware/roleMiddleware";
 import { RoleEnum } from "../../../../../domain/enums/RoleEnum";

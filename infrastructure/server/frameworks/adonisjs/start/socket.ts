@@ -7,15 +7,21 @@ import { MarkMessageAsReadUseCase } from '#application/usecases/chat/MarkMessage
 import { SendNotificationToClientUseCase } from '#application/usecases/notification/SendNotificationToClientUseCase.js'
 import { MessageEntity } from '#domain/entities/MessageEntity.js'
 import { ConversationEntity } from '#domain/entities/ConversationEntity.js'
-import {conversationRepository,messageRepository,uuidService,notificationRepository,notificationService,userRepository} from '#infrastructure/adapters/config/repositories.js'
 import {OnlineUser, Message, Identification, Data } from "#types/Socket.js"
-
+import app from '@adonisjs/core/services/app'
 
 export const clients: Record<string, string[]> = {}
 export const onlineUsers: Record<string, OnlineUser> = {}
 export let io: Server
 
-export const socketSetup = (server: Server) => {
+export const socketSetup = async (server: Server) => {
+    const conversationRepository = await app.container.make('conversationRepository')
+  const messageRepository = await app.container.make('messageRepository')
+  const uuidService = await app.container.make('uuidService')
+  const notificationRepository = await app.container.make('notificationRepository')
+  const notificationService = await app.container.make('notificationService')
+  const userRepository = await app.container.make('userRepository')
+
   io = server
 
   const clientIo = io.of('/clients')

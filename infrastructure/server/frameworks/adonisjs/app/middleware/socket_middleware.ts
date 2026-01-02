@@ -82,7 +82,6 @@ export default class SocketMiddleware {
   }
 }
 
-// Helper pour parser les cookies
 function parseCookies(cookieHeader: string): Record<string, string> {
   return cookieHeader.split(';').reduce((cookies, cookie) => {
     const [name, ...rest] = cookie.split('=')

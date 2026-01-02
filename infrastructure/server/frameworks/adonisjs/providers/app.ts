@@ -1,65 +1,76 @@
 import type { ApplicationService } from "@adonisjs/core/types";
-import * as repositories from "#config/repositories";
-import { registerUserConfirmedSubscriber } from "#infrastructure/subscribers/UserConfirmedSuscriber.js";
 
 export default class AppProvider {
 
     constructor(protected app: ApplicationService) {}
 
     async register() {
+    let repositoriesCache: typeof import("#infrastructure/adapters/config/repositories.js") | null = null;
+    const getRepositories = async () => {
+      if (!repositoriesCache) {
+        repositoriesCache = await import("#infrastructure/adapters/config/repositories.js");
+      }
+      return repositoriesCache;
+    };
 
-    this.app.container.bind('userRepository', () => repositories.userRepository)
-    this.app.container.bind('roleRepository', () => repositories.roleRepository)
-    this.app.container.bind('userRoleRepository', () => repositories.userRoleRepository)
-    this.app.container.bind('accountRepository', () => repositories.accountRepository)
-    this.app.container.bind('transactionRepository', () => repositories.transactionRepository)
-    this.app.container.bind('beneficiaryRepository', () => repositories.beneficiaryRepository)
-    this.app.container.bind('beneficiaryGroupRepository', () => repositories.beneficiaryGroupRepository)
-    this.app.container.bind('notificationRepository', () => repositories.notificationRepository)
-    this.app.container.bind('loanRequestRepository', () => repositories.loanRequestRepository)
-    this.app.container.bind('loanRepaymentScheduleRepository', () => repositories.loanRepaymentScheduleRepository)
-    this.app.container.bind('overdraftRequestRepository', () => repositories.overdraftRequestRepository)
-    this.app.container.bind('savingsAccountRepository', () => repositories.savingsAccountRepository)
-    this.app.container.bind('savingsProductRepository', () => repositories.savingsProductRepository)
-    this.app.container.bind('conversationRepository', () => repositories.conversationRepository)
-    this.app.container.bind('messageRepository', () => repositories.messageRepository)
-    this.app.container.bind('newsRepository', () => repositories.newsRepository)
-    this.app.container.bind('mediaRepository', () => repositories.mediaRepository)
-    this.app.container.bind('contentRepository', () => repositories.contentRepository)
-    this.app.container.bind('stockRepository', () => repositories.stockRepository)
-    this.app.container.bind('stockOrderRepository', () => repositories.stockOrderRepository)
-    this.app.container.bind('holdingRepository', () => repositories.holdingRepository)
-    this.app.container.bind('stockTransactionRepository', () => repositories.stockTransactionRepository)
-    this.app.container.bind('eventBus', () => repositories.eventBus)
+    let servicesCache: typeof import("#infrastructure/adapters/config/services.js") | null = null;
+    const getServices = async () => {
+      if (!servicesCache) {
+        servicesCache = await import("#infrastructure/adapters/config/services.js");
+      }
+      return servicesCache;
+    };
+
+    this.app.container.bind('userRepository', async () => (await getRepositories()).userRepository)
+    this.app.container.bind('roleRepository', async () => (await getRepositories()).roleRepository)
+    this.app.container.bind('userRoleRepository', async () => (await getRepositories()).userRoleRepository)
+    this.app.container.bind('accountRepository', async () => (await getRepositories()).accountRepository)
+    this.app.container.bind('transactionRepository', async () => (await getRepositories()).transactionRepository)
+    this.app.container.bind('beneficiaryRepository', async () => (await getRepositories()).beneficiaryRepository)
+    this.app.container.bind('beneficiaryGroupRepository', async () => (await getRepositories()).beneficiaryGroupRepository)
+    this.app.container.bind('notificationRepository', async () => (await getRepositories()).notificationRepository)
+    this.app.container.bind('loanRequestRepository', async () => (await getRepositories()).loanRequestRepository)
+    this.app.container.bind('loanRepaymentScheduleRepository', async () => (await getRepositories()).loanRepaymentScheduleRepository)
+    this.app.container.bind('overdraftRequestRepository', async () => (await getRepositories()).overdraftRequestRepository)
+    this.app.container.bind('savingsAccountRepository', async () => (await getRepositories()).savingsAccountRepository)
+    this.app.container.bind('savingsProductRepository', async () => (await getRepositories()).savingsProductRepository)
+    this.app.container.bind('conversationRepository', async () => (await getRepositories()).conversationRepository)
+    this.app.container.bind('messageRepository', async () => (await getRepositories()).messageRepository)
+    this.app.container.bind('newsRepository', async () => (await getRepositories()).newsRepository)
+    this.app.container.bind('mediaRepository', async () => (await getRepositories()).mediaRepository)
+    this.app.container.bind('contentRepository', async () => (await getRepositories()).contentRepository)
+    this.app.container.bind('stockRepository', async () => (await getRepositories()).stockRepository)
+    this.app.container.bind('stockOrderRepository', async () => (await getRepositories()).stockOrderRepository)
+    this.app.container.bind('holdingRepository', async () => (await getRepositories()).holdingRepository)
+    this.app.container.bind('stockTransactionRepository', async () => (await getRepositories()).stockTransactionRepository)
+    this.app.container.bind('eventBus', async () => (await getRepositories()).eventBus)
 
     // Services
-    this.app.container.bind('tokenService', () => repositories.tokenService)
-    this.app.container.bind('passwordService', () => repositories.passwordService)
-    this.app.container.bind('emailService', () => repositories.emailService)
-    this.app.container.bind('emailTemplateService', () => repositories.emailTemplateService)
-    this.app.container.bind('registrationTokenGeneratorService', () => repositories.registrationTokenGeneratorService)
-    this.app.container.bind('accountNumberGenerator', () => repositories.accountNumberGenerator)
-    this.app.container.bind('ibanGenerator', () => repositories.ibanGenerator)
-    this.app.container.bind('uuidService', () => repositories.uuidService)
-    this.app.container.bind('loanConfigService', () => repositories.loanConfigService)
-    this.app.container.bind('transferLimitService', () => repositories.transferLimitService)
-    this.app.container.bind('transferValidationService', () => repositories.transferValidationService)
-    this.app.container.bind('transactionEnrichmentService', () => repositories.transactionEnrichmentService)
-    this.app.container.bind('newsService', () => repositories.newsService)
-    this.app.container.bind('fileStorageService', () => repositories.fileStorageService)
-    this.app.container.bind('altService', () => repositories.altService)
-    this.app.container.bind('orderService', () => repositories.orderService)
-    this.app.container.bind('orderBookService', () => repositories.orderBookService)
-    this.app.container.bind('matchingService', () => repositories.matchingService)
-    this.app.container.bind('accountService', () => repositories.accountService)
-    this.app.container.bind('holdingService', () => repositories.holdingService)
-    this.app.container.bind('orderValidationService', () => repositories.orderValidationService)
-    this.app.container.bind('localeService', () => repositories.localeService)
-    this.app.container.bind('notificationService', () => repositories.notificationService)
-    this.app.container.bind('statusMessageService', () => repositories.statusMessageService)
-  }
-
-  async boot() {
-    registerUserConfirmedSubscriber(repositories.eventBus, repositories.accountRepository);
+    this.app.container.bind('tokenService', async () => (await getServices()).tokenService)
+    this.app.container.bind('passwordService', async () => (await getRepositories()).passwordService)
+    this.app.container.bind('emailService', async () => (await getServices()).emailService)
+    this.app.container.bind('emailTemplateService', async () => (await getServices()).emailTemplateService)
+    this.app.container.bind('registrationTokenGeneratorService', async () => (await getServices()).registrationTokenGeneratorService)
+    this.app.container.bind('accountNumberGenerator', async () => (await getServices()).accountNumberGenerator)
+    this.app.container.bind('ibanGenerator', async () => (await getServices()).ibanGenerator)
+    this.app.container.bind('uuidService', async () => (await getServices()).uuidService)
+    this.app.container.bind('loanConfigService', async () => (await getServices()).loanConfigService)
+    this.app.container.bind('transferLimitService', async () => (await getServices()).transferLimitService)
+    this.app.container.bind('transferValidationService', async () => (await getServices()).transferValidationService)
+    this.app.container.bind('transactionEnrichmentService', async () => (await getServices()).transactionEnrichmentService)
+    this.app.container.bind('newsService', async () => (await getServices()).newsService)
+    this.app.container.bind('fileStorageService', async () => (await getServices()).fileStorageService)
+    this.app.container.bind('altService', async () => (await getServices()).altService)
+    this.app.container.bind('orderService', async () => (await getServices()).orderService)
+    this.app.container.bind('orderBookService', async () => (await getServices()).orderBookService)
+    this.app.container.bind('matchingService', async () => (await getServices()).matchingService)
+    this.app.container.bind('accountService', async () => (await getServices()).accountService)
+    this.app.container.bind('holdingService', async () => (await getServices()).holdingService)
+    this.app.container.bind('orderValidationService', async () => (await getServices()).orderValidationService)
+    this.app.container.bind('localeService', async () => (await getServices()).localeService)
+    this.app.container.bind('notificationService', async () => (await getServices()).notificationService)
+    this.app.container.bind('statusMessageService', async () => (await getServices()).statusMessageService)
+    this.app.container.bind('rolePriorityService', async () => (await getServices()).rolePriorityService)
+    this.app.container.bind('eventSubscriberService', async () => (await getServices()).eventSubscriberService)
   }
 }

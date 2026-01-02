@@ -39,7 +39,6 @@ new Ignitor(APP_ROOT, { importer: IMPORTER })
       const { socketSetup } = await import('#start/socket')
       const router = await app.container.make('router')
 
-      // Get the underlying HTTP server from AdonisJS
       router.commit()
       const server = await app.container.make('server')
       const nodeServer = server.getNodeServer()
@@ -56,7 +55,7 @@ new Ignitor(APP_ROOT, { importer: IMPORTER })
         },
       })
 
-      socketSetup(io)
+      await socketSetup(io)
 
     })
     app.listen('SIGTERM', () => app.terminate())

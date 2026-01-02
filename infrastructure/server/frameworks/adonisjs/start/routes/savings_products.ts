@@ -1,33 +1,36 @@
 import router from '@adonisjs/core/services/router'
-import { middleware } from '#start/kernel'
+import { middleware } from '#start/kernel.js'
 import SavingsProductsController from '#controllers/savings_products_controller.js'
 import { authorizeRoles } from '#middleware/role_middleware.js'
-import { RoleEnum } from '#domain/enums/RoleEnum.js'
-import * as repositories from '#config/repositories.js'
+import { RoleEnum } from '../../../../../../domain/enums/RoleEnum.js'
+import app from '@adonisjs/core/services/app'
 
-const savingsProductsController = new SavingsProductsController(
-  repositories.savingsProductRepository,
-  repositories.savingsAccountRepository,
-  repositories.accountRepository,
-  repositories.uuidService
-)
+
+const getSavingsProductsController = (async () => {
+  return new SavingsProductsController(
+    await app.container.make('savingsProductRepository'),
+    await app.container.make('savingsAccountRepository'),
+    await app.container.make('accountRepository'),
+    await app.container.make('uuidService')
+  )
+})()
 
 router
   .group(() => {
     router
-      .post('/', (ctx) => savingsProductsController.createProduct(ctx))
+      .post('/', async (ctx) => (await getSavingsProductsController).createProduct(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.BANK_MANAGER]))
 
-    router.get('/', (ctx) => savingsProductsController.getAllProducts(ctx))
+    router.get('/', async (ctx) => (await getSavingsProductsController).getAllProducts(ctx))
 
     router
-      .put('/:productId', (ctx) => savingsProductsController.updateProduct(ctx))
+      .put('/:productId', async (ctx) => (await getSavingsProductsController).updateProduct(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.BANK_MANAGER]))
 
     router
-      .post('/subscribe', (ctx) => savingsProductsController.subscribeToProduct(ctx))
+      .post('/subscribe', async (ctx) => (await getSavingsProductsController).subscribeToProduct(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.CLIENT]))
   })

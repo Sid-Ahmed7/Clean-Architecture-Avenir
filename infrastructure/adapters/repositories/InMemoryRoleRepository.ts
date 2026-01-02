@@ -1,11 +1,11 @@
-import { RoleRepositoryInterface } from "../../../application/ports/repositories/auth/RolerepositoryInterface";
+import { RoleRepositoryInterface } from "../../../application/ports/repositories/auth/RoleRepositoryInterface";
 import { RoleEntity } from "../../../domain/entities/RoleEntity";
 import { RoleEnum } from "../../../domain/enums/RoleEnum";
 import { RoleNotFoundError } from "../../../application/errors/RoleNotFoundError";
 
 export class InMemoryRoleRepository implements RoleRepositoryInterface {
 
-  private roles: Array<RoleEntity>;
+  private readonly roles: Array<RoleEntity>;
       public constructor() {
         this.roles = Object.values(RoleEnum).map((roleName, index) => ({
       id: index + 1,

@@ -3,6 +3,9 @@
   "type": "module",
   "workspaces": [
     "application",
-    "infrastructure/server"
+    "domain",
+    "infrastructure/server",
+    "infrastructure/server/frameworks/adonisjs",
+    "infrastructure/server/frameworks/express"
   ]
 }

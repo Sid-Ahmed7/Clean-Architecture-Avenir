@@ -1,6 +1,7 @@
 import express from 'express'
 import { AccountController } from '../controller/account.controller'
-import { accountRepository, accountNumberGenerator, ibanGenerator, transactionRepository, overdraftRequestRepository, loanRequestRepository, userRepository, uuidService, transferLimitService, transferValidationService, transactionEnrichmentService, notificationRepository, notificationService} from '../../../../adapters/config/repositories'
+import { accountRepository, transactionRepository, overdraftRequestRepository, loanRequestRepository, userRepository, notificationRepository} from '../../../../adapters/config/repositories';
+import { accountNumberGenerator, ibanGenerator, uuidService, transferLimitService, transferValidationService, transactionEnrichmentService, notificationService} from '../../../../adapters/config/services'
 import { verifyTokenAccess } from '../middleware/authMiddleware';
 import { authorizeRoles } from '../middleware/roleMiddleware';
 import { RoleEnum } from '../../../../../domain/enums/RoleEnum';

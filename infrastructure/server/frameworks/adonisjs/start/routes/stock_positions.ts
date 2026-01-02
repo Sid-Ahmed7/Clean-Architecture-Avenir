@@ -1,21 +1,24 @@
 import router from '@adonisjs/core/services/router'
-import { middleware } from '#start/kernel'
+import { middleware } from '#start/kernel.js'
 import StockPositionsController from '#controllers/stock_positions_controller.js'
-import * as repositories from '#config/repositories.js'
+import app from '@adonisjs/core/services/app'
 
-const stockPositionsController = new StockPositionsController(
-  repositories.holdingRepository,
-  repositories.stockRepository
-)
+
+const getStockPositionsController = (async () => {
+  return new StockPositionsController(
+    await app.container.make('holdingRepository'),
+    await app.container.make('stockRepository')
+  )
+})()
 
 router
   .group(() => {
     router
-      .get('/', (ctx) => stockPositionsController.getUserPositions(ctx))
+      .get('/', async (ctx) => (await getStockPositionsController).getUserPositions(ctx))
       .use(middleware.auth())
 
     router
-      .get('/:symbol', (ctx) => stockPositionsController.getPositionBySymbol(ctx))
+      .get('/:symbol', async (ctx) => (await getStockPositionsController).getPositionBySymbol(ctx))
       .use(middleware.auth())
   })
   .prefix('/api/stock-positions')

@@ -5,10 +5,10 @@ import { RefreshTokenEntity } from '../../../../domain/entities/RefreshTokenEnti
 import { InvalidRefreshTokenError } from '../../../../domain/errors/InvalidRefreshTokenError';
 
 export class JwtTokenService implements TokenService {
-    private accessTokenSecret: string;
-    private refreshTokenSecret: string;
-    private accessTokenExpiry: number;
-    private refreshTokenExpiry: number;
+    private readonly accessTokenSecret: string;
+    private readonly refreshTokenSecret: string;
+    private readonly accessTokenExpiry: number;
+    private readonly refreshTokenExpiry: number;
     
     constructor() {
         if (!process.env.JWT_SECRET || !process.env.JWT_SECRET_REFRESH) {

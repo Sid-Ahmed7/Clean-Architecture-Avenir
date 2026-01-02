@@ -1,6 +1,17 @@
 import express from 'express';
 import { UserManagementController } from '../controller/user-management.controller';
-import { userRepository, roleRepository, userRoleRepository, accountRepository, savingsAccountRepository } from '../../../../adapters/config/repositories';
+import {
+    userRepository,
+    roleRepository,
+    userRoleRepository,
+    accountRepository,
+    savingsAccountRepository,
+    notificationRepository
+} from '../../../../adapters/config/repositories';
+import {
+    notificationService,
+    uuidService
+} from '../../../../adapters/config/services';
 import { verifyTokenAccess } from '../middleware/authMiddleware';
 import { authorizeRoles } from '../middleware/roleMiddleware';
 import { RoleEnum } from '../../../../../domain/enums/RoleEnum';
@@ -12,7 +23,10 @@ const userManagementController = new UserManagementController(
     roleRepository,
     userRoleRepository,
     accountRepository,
-    savingsAccountRepository
+    savingsAccountRepository,
+    notificationRepository,
+    notificationService,
+    uuidService
 );
 
 // All routes are protected and require BANK_MANAGER role

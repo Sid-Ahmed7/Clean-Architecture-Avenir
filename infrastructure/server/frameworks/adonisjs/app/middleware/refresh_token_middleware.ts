@@ -1,8 +1,8 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import type { NextFn } from '@adonisjs/core/types/http'
-import { AuthContext, JwtPayload } from '../../types/JwtPayload.js'
+import { AuthContext, JwtPayload } from '#types/JwtPayload.js'
 import jwt, { JwtPayload as DefaultPayload } from 'jsonwebtoken'
-import env from '../../start/env.js'
+import env from  '#start/env.js'
 
 
 const JWT_SECRET_REFRESH = env.get('JWT_SECRET_REFRESH')

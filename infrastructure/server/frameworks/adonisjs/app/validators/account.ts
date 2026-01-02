@@ -1,5 +1,4 @@
-import { AccountStatusEnum } from '#domain/enums/AccountStatusEnum.js'
-import { AccountTypeEnum } from '#domain/enums/AccountTypeEnum.js'
+import { AccountStatusEnum, AccountTypeEnum } from '#config/enums.js'
 import vine from '@vinejs/vine'
 
 

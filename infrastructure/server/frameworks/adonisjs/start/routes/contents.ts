@@ -1,43 +1,46 @@
 import router from '@adonisjs/core/services/router'
-import { middleware } from '#start/kernel'
+import { middleware } from '#start/kernel.js'
 import ContentsController from '#controllers/contents_controller.js'
 import { authorizeRoles } from '#middleware/role_middleware.js'
-import { RoleEnum } from '#domain/enums/RoleEnum.js'
-import * as repositories from '#config/repositories.js'
+import { RoleEnum } from '../../../../../../domain/enums/RoleEnum.js'
+import app from '@adonisjs/core/services/app'
 
-const contentsController = new ContentsController(
-  repositories.contentRepository,
-  repositories.orderService,
-  repositories.uuidService
-)
+
+const getContentsController = (async () => {
+  return new ContentsController(
+    await app.container.make('contentRepository'),
+    await app.container.make('orderService'),
+    await app.container.make('uuidService')
+  )
+})()
 
 router
   .group(() => {
     router
-      .post('/create', (ctx) => contentsController.create(ctx))
+      .post('/create', async (ctx) => (await getContentsController).create(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.BANK_ADVISOR]))
 
     router
-      .get('/:id', (ctx) => contentsController.getById(ctx))
+      .get('/:id', async (ctx) => (await getContentsController).getById(ctx))
       .use(middleware.auth())
 
     router
-      .get('/news/:newsId', (ctx) => contentsController.getByNewsId(ctx))
+      .get('/news/:newsId', async (ctx) => (await getContentsController).getByNewsId(ctx))
       .use(middleware.auth())
 
     router
-      .put('/update', (ctx) => contentsController.update(ctx))
-      .use(middleware.auth())
-      .use(authorizeRoles([RoleEnum.BANK_ADVISOR]))
-
-    router
-      .delete('/:id', (ctx) => contentsController.delete(ctx))
+      .put('/update', async (ctx) => (await getContentsController).update(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.BANK_ADVISOR]))
 
     router
-      .post('/reorder/:newsId', (ctx) => contentsController.reorder(ctx))
+      .delete('/:id', async (ctx) => (await getContentsController).delete(ctx))
+      .use(middleware.auth())
+      .use(authorizeRoles([RoleEnum.BANK_ADVISOR]))
+
+    router
+      .post('/reorder/:newsId', async (ctx) => (await getContentsController).reorder(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.BANK_ADVISOR]))
   })

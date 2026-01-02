@@ -1,4 +1,4 @@
-import { OrderTypeEnum } from '#domain/enums/OrderTypeEnum.js'
+import { OrderTypeEnum } from '#config/enums.js'
 import vine from '@vinejs/vine'
 
 export const placeOrderValidator = vine.object({

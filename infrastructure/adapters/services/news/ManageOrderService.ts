@@ -1,10 +1,9 @@
 import { OrderService } from "../../../../application/ports/services/news/OrderService";
 import { ContentRepositoryInterface } from "../../../../application/ports/repositories/news/ContentRepositoryInterface";
-import { MediaController } from "../../../server/frameworks/express/controller/media.controller";
 import { MediaRepositoryInterface } from "../../../../application/ports/repositories/news/MediaRepositoryInterface";
 export class ManageOrderService implements OrderService {
 
-    constructor(private contentRepository: ContentRepositoryInterface, private mediaRepository: MediaRepositoryInterface) {}
+    constructor(private readonly contentRepository: ContentRepositoryInterface, private mediaRepository: MediaRepositoryInterface) {}
 
 async getNextOrder(newsId: string): Promise<number> {
     const contents = await this.contentRepository.findByNewsId(newsId);

@@ -1,17 +1,15 @@
 import { UserRepositoryInterface } from "../../../application/ports/repositories/auth/UserRepositoryInterface";
 import { UserRoleEntity } from "../../../domain/entities/UserRoleEntity";
 import { UserNotFoundError } from "../../../application/errors/UserNotFoundError";
-import { UserAlreadyExistsError } from "../../../application/errors/UserAlreadyExistsError";
-import { PasswordService } from "../../../application/ports/services/auth/PasswordService";
 import { UserRoleRepositoryInterface } from "../../../application/ports/repositories/auth/UserRoleRepositoryInterface";
-import { RoleRepositoryInterface } from "../../../application/ports/repositories/auth/RolerepositoryInterface";
+import { RoleRepositoryInterface } from "../../../application/ports/repositories/auth/RoleRepositoryInterface";
 import { RoleEntity } from "../../../domain/entities/RoleEntity";
 import { RoleNotFoundError } from "../../../application/errors/RoleNotFoundError";
 
 export class InMemoryUserRoleRepository implements UserRoleRepositoryInterface {
-  private userRoles: Array<UserRoleEntity>;
+  private readonly userRoles: Array<UserRoleEntity>;
 
-  public constructor(private roleRepository: RoleRepositoryInterface, private userRepository: UserRepositoryInterface) {
+  public constructor(private readonly roleRepository: RoleRepositoryInterface, private userRepository: UserRepositoryInterface) {
     this.userRoles = [];
   }
 

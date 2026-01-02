@@ -1,7 +1,8 @@
 import express from 'express'
 import { AuthController } from '../controller/auth.controller';
 import {registerUserConfirmedSubscriber} from '../../../../subscribers/UserConfirmedSuscriber';
-import {accountRepository, userRepository, roleRepository, userRoleRepository,tokenService, passwordService,emailService, emailTemplateService,registrationTokenGeneratorService, localeService, uuidService,eventBus, notificationRepository, notificationService} from '../../../../adapters/config/repositories';
+import {accountRepository, userRepository, roleRepository, userRoleRepository, passwordService, eventBus, notificationRepository} from '../../../../adapters/config/repositories';
+import {tokenService, emailService, emailTemplateService, registrationTokenGeneratorService, localeService, uuidService, notificationService} from '../../../../adapters/config/services';
 import { verifyTokenAccess } from '../middleware/authMiddleware';
 import { authorizeRoles } from '../middleware/roleMiddleware';
 import { RoleEnum } from '../../../../../domain/enums/RoleEnum';

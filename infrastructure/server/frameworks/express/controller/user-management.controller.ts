@@ -9,10 +9,14 @@ import { InMemoryRoleRepository } from "../../../../adapters/repositories/InMemo
 import { InMemoryUserRoleRepository } from "../../../../adapters/repositories/InMemoryUserRoleRepository";
 import { InMemoryAccountRepository } from "../../../../adapters/repositories/InMemoryAccountRepository";
 import { InMemorySavingsAccountRepository } from "../../../../adapters/repositories/InMemorySavingsAccountRepository";
+import { InMemoryNotificationRepository } from "../../../../adapters/repositories/InMemoryNotificationRepository";
 import { UserNotFoundError } from "../../../../../application/errors/UserNotFoundError";
 import { BankUserEntity } from "../../../../../domain/entities/BankUserEntity";
 import { UserStatusEnum } from "../../../../../domain/enums/UserStatusEnum";
 import { updateUserSchema } from "../schemas/auth/updateUserSchema";
+import { SendNotificationToClientUseCase } from "../../../../../application/usecases/notification/SendNotificationToClientUseCase";
+import { NotificationService } from "../../../../adapters/services/notification/NotificationService";
+import { CryptoUuidGenerator } from "../../../../adapters/services/CryptoUuidGenerator";
 
 export class UserManagementController {
     constructor(
@@ -20,7 +24,10 @@ export class UserManagementController {
         private readonly roleRepository: InMemoryRoleRepository,
         private readonly userRoleRepository: InMemoryUserRoleRepository,
         private readonly accountRepository: InMemoryAccountRepository,
-        private readonly savingsAccountRepository: InMemorySavingsAccountRepository
+        private readonly savingsAccountRepository: InMemorySavingsAccountRepository,
+        private readonly notificationRepository: InMemoryNotificationRepository,
+        private readonly notificationService: NotificationService,
+        private readonly uuidService: CryptoUuidGenerator
     ) {}
 
     /**
@@ -140,14 +147,10 @@ export class UserManagementController {
             return res.status(400).json({ error: updatedUserData.message });
         }
 
-        // Import dependencies for SendNotificationToClientUseCase
-        const { SendNotificationToClientUseCase } = require("../../../../../application/usecases/notification/SendNotificationToClientUseCase");
-        const { notificationRepository, notificationPublisher, uuidService } = require("../../../../adapters/config/repositories");
-        
         const sendNotificationUseCase = new SendNotificationToClientUseCase(
-            notificationRepository,
-            notificationPublisher,
-            uuidService,
+            this.notificationRepository,
+            this.notificationService,
+            this.uuidService,
             this.userRepository
         );
 

@@ -1,7 +1,3 @@
-/**
- * Routes consolidation file
- * Imports all route modules to register them with the router
- */
 
 import '#start/routes/auth.js'
 import '#start/routes/accounts.js'

@@ -1,5 +1,5 @@
 import vine from '@vinejs/vine'
-import { UserStatusEnum } from '#domain/enums/UserStatusEnum.js'
+import { UserStatusEnum } from '#config/enums.js'
 
 export const updateUserValidator = vine.object({
   email: vine.string().optional(),

@@ -1,4 +1,4 @@
-import { NotificationTypeEnum } from '#domain/enums/NotificationTypeEnum.js'
+import { NotificationTypeEnum } from '#config/enums.js'
 import vine from '@vinejs/vine'
 
 export const createNotificationValidator = vine.object({

@@ -1,4 +1,4 @@
-import { LoanDecisionEnum } from '#domain/enums/LoanDecisionEnum.js'
+import { LoanDecisionEnum } from '#config/enums.js'
 import vine from '@vinejs/vine'
 
 export const createLoanRequestValidator = vine.object({

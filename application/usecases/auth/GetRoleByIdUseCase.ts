@@ -1,5 +1,5 @@
 import { RoleEnum } from "../../../domain/enums/RoleEnum";
-import { RoleRepositoryInterface } from "../../ports/repositories/auth/RolerepositoryInterface";
+import { RoleRepositoryInterface } from "../../ports/repositories/auth/RoleRepositoryInterface";
 
 export class GetRoleByIdUseCase {
 

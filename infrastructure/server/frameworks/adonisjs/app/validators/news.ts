@@ -1,5 +1,4 @@
-import { NewsCategoryEnum } from '#domain/enums/NewsCategoryEnum.js'
-import { NewsPriorityEnum } from '#domain/enums/NewsPriorityEnum.js'
+import { NewsCategoryEnum, NewsPriorityEnum } from '#config/enums.js'
 import vine from '@vinejs/vine'
 
 export const createNewsValidator = vine.object({

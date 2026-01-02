@@ -1,6 +1,7 @@
 import express from 'express'
 import { StockController } from '../controller/stock.controller';
-import { stockRepository, stockOrderRepository, orderBookService, uuidService, holdingRepository, accountService} from '../../../../adapters/config/repositories';
+import { stockRepository, stockOrderRepository, holdingRepository} from '../../../../adapters/config/repositories';
+import { orderBookService, uuidService, accountService} from '../../../../adapters/config/services';
 import { verifyTokenAccess } from '../middleware/authMiddleware';
 import { authorizeRoles } from '../middleware/roleMiddleware';
 import { RoleEnum } from '../../../../../domain/enums/RoleEnum';

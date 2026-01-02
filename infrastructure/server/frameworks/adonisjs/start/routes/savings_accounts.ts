@@ -1,75 +1,78 @@
 import router from '@adonisjs/core/services/router'
-import { middleware } from '#start/kernel'
+import { middleware } from '#start/kernel.js'
 import SavingsAccountsController from '#controllers/savings_accounts_controller.js'
 import { authorizeRoles } from '#middleware/role_middleware.js'
-import { RoleEnum } from '#domain/enums/RoleEnum.js'
-import * as repositories from '#config/repositories.js'
+import { RoleEnum } from '../../../../../../domain/enums/RoleEnum.js'
+import app from '@adonisjs/core/services/app'
 
-const savingsAccountsController = new SavingsAccountsController(
-  repositories.savingsAccountRepository,
-  repositories.accountRepository,
-  repositories.savingsProductRepository,
-  repositories.transactionRepository,
-  repositories.userRepository,
-  repositories.notificationRepository,
-  repositories.notificationService,
-  repositories.uuidService
-)
+
+const getSavingsAccountsController = (async () => {
+  return new SavingsAccountsController(
+    await app.container.make('savingsAccountRepository'),
+    await app.container.make('accountRepository'),
+    await app.container.make('savingsProductRepository'),
+    await app.container.make('transactionRepository'),
+    await app.container.make('userRepository'),
+    await app.container.make('notificationRepository'),
+    await app.container.make('notificationService'),
+    await app.container.make('uuidService')
+  )
+})()
 
 router
   .group(() => {
     router
-      .get('/', (ctx) => savingsAccountsController.getAllSavingsAccounts(ctx))
+      .get('/', async (ctx) => (await getSavingsAccountsController).getAllSavingsAccounts(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.BANK_MANAGER, RoleEnum.CLIENT]))
 
     router
-      .post('/', (ctx) => savingsAccountsController.createSavingsAccount(ctx))
+      .post('/', async (ctx) => (await getSavingsAccountsController).createSavingsAccount(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.BANK_MANAGER]))
 
     router
-      .get('/:accountNumber', (ctx) => savingsAccountsController.getSavingsAccount(ctx))
+      .get('/:accountNumber', async (ctx) => (await getSavingsAccountsController).getSavingsAccount(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]))
 
     router
-      .put('/:accountNumber', (ctx) => savingsAccountsController.updateSavingsAccountConfig(ctx))
+      .put('/:accountNumber', async (ctx) => (await getSavingsAccountsController).updateSavingsAccountConfig(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.BANK_MANAGER]))
 
     router
-      .put('/:accountNumber/interest-rate', (ctx) => savingsAccountsController.updateInterestRate(ctx))
+      .put('/:accountNumber/interest-rate', async (ctx) => (await getSavingsAccountsController).updateInterestRate(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.BANK_MANAGER]))
 
     router
-      .put('/:accountNumber/max-deposit', (ctx) => savingsAccountsController.updateMaxDeposit(ctx))
+      .put('/:accountNumber/max-deposit', async (ctx) => (await getSavingsAccountsController).updateMaxDeposit(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.BANK_MANAGER]))
 
     router
-      .post('/calculate-interest', (ctx) => savingsAccountsController.calculateDailyInterest(ctx))
+      .post('/calculate-interest', async (ctx) => (await getSavingsAccountsController).calculateDailyInterest(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.BANK_MANAGER]))
 
     router
-      .get('/:accountNumber/interest-summary', (ctx) => savingsAccountsController.getInterestSummary(ctx))
+      .get('/:accountNumber/interest-summary', async (ctx) => (await getSavingsAccountsController).getInterestSummary(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]))
 
     router
-      .post('/:accountNumber/deposit', (ctx) => savingsAccountsController.depositToSavingsAccount(ctx))
+      .post('/:accountNumber/deposit', async (ctx) => (await getSavingsAccountsController).depositToSavingsAccount(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.CLIENT]))
 
     router
-      .post('/:accountNumber/withdraw', (ctx) => savingsAccountsController.withdrawFromSavingsAccount(ctx))
+      .post('/:accountNumber/withdraw', async (ctx) => (await getSavingsAccountsController).withdrawFromSavingsAccount(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.CLIENT]))
 
     router
-      .delete('/:accountNumber', (ctx) => savingsAccountsController.deleteSavingsAccount(ctx))
+      .delete('/:accountNumber', async (ctx) => (await getSavingsAccountsController).deleteSavingsAccount(ctx))
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.BANK_MANAGER]))
   })

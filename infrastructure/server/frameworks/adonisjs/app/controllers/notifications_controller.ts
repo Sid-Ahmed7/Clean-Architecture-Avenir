@@ -12,7 +12,7 @@ import { InvalidNotificationError } from '#domain/errors/InvalidNotificationErro
 import { InvalidUserIdError } from '#domain/errors/InvalidUserIdError.js'
 import { NotificationNotFoundError } from '#application/errors/notification/NotificationNotFoundError.js'
 import type { CryptoUuidGenerator } from '#infrastructure/adapters/services/CryptoUuidGenerator.js'
-import { userRepository } from '#infrastructure/adapters/config/repositories.js'
+import type { UserRepositoryInterface } from '#application/ports/repositories/auth/UserRepositoryInterface.js'
 import {
   createNotificationValidator,
   sendNotificationToClientValidator,
@@ -26,7 +26,8 @@ export default class NotificationsController {
   public constructor(
     private readonly notificationRepository: InMemoryNotificationRepository,
     private readonly notificationService: NotificationPublisher,
-    private readonly uuidService: CryptoUuidGenerator
+    private readonly uuidService: CryptoUuidGenerator,
+    private readonly userRepository: UserRepositoryInterface
   ) {}
 
   public async createNotification({ request, response, auth }: HttpContext) {
@@ -65,7 +66,7 @@ export default class NotificationsController {
       this.notificationRepository,
       this.notificationService,
       this.uuidService,
-      userRepository
+      this.userRepository
     )
     const advisorId = auth?.userId;
 
