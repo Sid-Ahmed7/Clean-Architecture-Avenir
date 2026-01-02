@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { InMemoryStockOrderRepository } from '../../../../adapters/repositories/InMemoryStockOrderRepository';
+import { StockOrderRepositoryInterface } from '../../../../../application/ports/repositories/stocks/StockOrderRepositoryInterface';
 import {OrderMatchingEngineService} from "../../../../adapters/services/order/OrderMatchingEngineService";
 import {OrderBookEngineService} from "../../../../adapters/services/order/OrderBookEngineService";
 import {OrderValidationEngineService} from "../../../../adapters/services/order/OrderValidationEngineService";
@@ -16,7 +16,6 @@ import {UpdateBuyerPositionUseCase} from "../../../../../application/usecases/po
 import {UpdatedSellerPositionUseCase} from "../../../../../application/usecases/position/UpdatedSellerPositionUseCase";
 import {AutoMatchOrdersUseCase} from "../../../../../application/usecases/orders/AutoMatchOrdersUseCase";
 import {UpdateStockPriceUseCase} from "../../../../../application/usecases/stocks/UpdateStockPriceUseCase";
-import { OrderTypeEnum } from '../../../../../domain/enums/OrderTypeEnum';
 import { StockNotFoundError } from '../../../../../application/errors/StockNotFoundError';
 import { OrderNotFoundError } from '../../../../../application/errors/OrderNotFoundError';
 import { OrderMatchingError } from '../../../../../domain/errors/OrderMatchingError';
@@ -29,9 +28,9 @@ import { PositionNotFoundError } from '../../../../../application/errors/Positio
 import { IPONotActiveError } from '../../../../../application/errors/IPONotActiveError';
 import { InsufficientAvailableSharesError } from '../../../../../application/errors/InsufficientAvailableSharesError';
 import { StockNotAvailableError } from '../../../../../application/errors/StockNotAvailableError';
-import { InMemoryStockTransactionRepository } from '../../../../adapters/repositories/InMemoryStockTransactionRepository';
-import { InMemoryStockRepository } from '../../../../adapters/repositories/InMemoryStockRepository';
-import { InMemoryStockHoldingRepository } from '../../../../adapters/repositories/InMemoryStockHoldingRepository';
+import { StockTransactionRepositoryInterface } from '../../../../../application/ports/repositories/stocks/StockTransactionRepositoryInterface';
+import { StockRepositoryInterface } from '../../../../../application/ports/repositories/stocks/StockRepositoryInterface';
+import { StockHoldingRepositoryInterface } from '../../../../../application/ports/repositories/stocks/StockHoldingRepositoryInterface';
 import { CryptoUuidGenerator } from '../../../../adapters/services/CryptoUuidGenerator';
 import { placeOrderSchema } from '../schemas/order/placeOrderSchema';
 
@@ -39,10 +38,10 @@ import { placeOrderSchema } from '../schemas/order/placeOrderSchema';
 export class StockOrderController {
 
     public constructor(
-        private readonly stockOrderRepository: InMemoryStockOrderRepository,
-        private readonly transactionRepository: InMemoryStockTransactionRepository,
-        private readonly stockRepository: InMemoryStockRepository,
-        private readonly holdingRepository: InMemoryStockHoldingRepository,
+        private readonly stockOrderRepository: StockOrderRepositoryInterface,
+        private readonly transactionRepository: StockTransactionRepositoryInterface,
+        private readonly stockRepository: StockRepositoryInterface,
+        private readonly holdingRepository: StockHoldingRepositoryInterface,
         private readonly matchingService: OrderMatchingEngineService,
         private readonly stockOrderService: OrderBookEngineService,
         private readonly orderValidationService: OrderValidationEngineService,

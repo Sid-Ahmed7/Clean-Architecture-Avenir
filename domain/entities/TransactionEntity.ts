@@ -19,7 +19,11 @@ export class TransactionEntity {
         description?: string,
         category?: string,
         beneficiaryId?: string,
-        groupId?: string
+        groupId?: string,
+        debitUserId?: string,
+        creditUserId?: string,
+        debitUserName?: string,
+        creditUserName?: string
     ) {
 
         const validatedDebitAccount = AccountNumberValue.from(debitAccount);
@@ -55,11 +59,15 @@ export class TransactionEntity {
             transactionType,
             validatedExecutedBy.value,
             status,
+            createdAt,
             description,
             category,
-            createdAt,
             beneficiaryId,
-            groupId
+            groupId,
+            debitUserId,
+            creditUserId,
+            debitUserName,
+            creditUserName
         );
 
     }
@@ -72,9 +80,9 @@ export class TransactionEntity {
         public readonly transactionType: TransactionTypeEnum,
         public readonly executedBy: string,
         public status: TransferStatusEnum,
+        public readonly createdAt: Date,
         public readonly description?: string,
         public readonly category?: string,
-        public readonly createdAt?: Date,
         public readonly beneficiaryId?: string,
         public readonly groupId?: string,
         public  debitUserId?: string,

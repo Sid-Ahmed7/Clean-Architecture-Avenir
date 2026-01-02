@@ -10,36 +10,36 @@ import { useForm } from "react-hook-form";
 
 
 interface SubAccountsFormProps {
-    parentAccountId: number;
+  parentAccountId: number;
 }
 
 export default function SubAccountForm(props: SubAccountsFormProps) {
-    const {parentAccountId} = props;
-    const t = useTranslations();
-    const {createSubAccount, loading, error, success} = useCreateSubAccount();
-    const accountTypes = [
-        { value: "SAVINGS", label: "Épargne", icon: PiggyBank },
-    ]
+  const { parentAccountId } = props;
+  const t = useTranslations();
+  const { createSubAccount, loading, error, success } = useCreateSubAccount();
+  const accountTypes = [
+    { value: "SAVINGS", label: "Épargne", icon: PiggyBank },
+  ]
 
-    const { register, handleSubmit, formState: { errors }, watch, setValue } = useForm<CreateSubAccountModel>({
-        resolver: zodResolver(createSubAccountSchema(t)),
-        defaultValues: {
-            accountType: "SAVINGS", 
-            currency: "EUR",
-            customAccountName: "",
-            parentAccountId: parentAccountId
-        }
-    });
+  const { register, handleSubmit, formState: { errors }, watch, setValue } = useForm<CreateSubAccountModel>({
+    resolver: zodResolver(createSubAccountSchema(t)),
+    defaultValues: {
+      accountType: "SAVINGS",
+      currency: "EUR",
+      customAccountName: "",
+      parentAccountId: parentAccountId
+    }
+  });
 
-   const onSubmit = async  (data: CreateSubAccountModel) => {
-        createSubAccount({ ...data, parentAccountId });
-    };
+  const onSubmit = async (data: CreateSubAccountModel) => {
+    createSubAccount({ ...data, parentAccountId });
+  };
 
-    const selectedType = watch("accountType");
+  const selectedType = watch("accountType");
 
 
 
- return (
+  return (
     <div className="max-w-2xl w-full bg-white rounded-2xl shadow-2xl overflow-hidden p-6">
       <h2 className="text-2xl font-bold text-gray-900 mb-6">Ajouter un sous-compte</h2>
 
@@ -49,7 +49,7 @@ export default function SubAccountForm(props: SubAccountsFormProps) {
           <input
             type="text"
             {...register("customAccountName")}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder:text-gray-400"
             placeholder="Nom du sous-compte"
           />
           {errors.customAccountName && <p className="text-red-500 text-sm mt-1">{errors.customAccountName.message}</p>}
@@ -65,11 +65,10 @@ export default function SubAccountForm(props: SubAccountsFormProps) {
                   key={type.value}
                   type="button"
                   onClick={() => setValue("accountType", type.value as CreateSubAccountModel["accountType"])}
-                  className={`p-4 border-2 rounded-lg flex flex-col items-center gap-2 transition-all ${
-                    selectedType === type.value
-                      ? "border-blue-500 bg-blue-50"
-                      : "border-gray-200 hover:border-gray-300"
-                  }`}
+                  className={`p-4 border-2 rounded-lg flex flex-col items-center gap-2 transition-all ${selectedType === type.value
+                      ? "border-blue-500 bg-blue-50 text-blue-700"
+                      : "border-gray-200 hover:border-gray-300 text-gray-700"
+                    }`}
                 >
                   <TypeIcon className="w-6 h-6" />
                   <span className="text-sm font-medium">{type.label}</span>
@@ -83,7 +82,7 @@ export default function SubAccountForm(props: SubAccountsFormProps) {
           <label className="block text-sm font-medium text-gray-700 mb-1">Devise *</label>
           <select
             {...register("currency")}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
           >
             <option value="EUR">EUR (€)</option>
             <option value="USD">USD ($)</option>
@@ -107,5 +106,5 @@ export default function SubAccountForm(props: SubAccountsFormProps) {
     </div>
   );
 }
-       
+
 

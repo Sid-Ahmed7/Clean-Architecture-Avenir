@@ -3,7 +3,7 @@ import { CreateSubAccountModel } from "../lib/validation/bankAccount/createSubAc
 import { responseSubAccountSchema } from "../lib/validation/bankAccount/responseSubAccountSchema";
 import z from "zod";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { addSubAccount } from "../lib/api/account";
 
 export function useCreateSubAccount() {

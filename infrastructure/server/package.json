@@ -11,6 +11,7 @@
     "@types/jsonwebtoken": "^9.0.5",
     "@types/multer": "^2.0.0",
     "@types/node": "^24.4.0",
+    "@types/pg": "^8.16.0",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.9.2"
@@ -25,6 +26,7 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "multer": "^2.0.2",
+    "pg": "^8.16.3",
     "resend": "^6.1.2",
     "socket.io": "^4.8.1",
     "zod": "^4.1.13"
@@ -32,6 +34,10 @@
   "scripts": {
     "dev": "ts-node frameworks/express/server.ts",
     "build": "tsc -b ../..",
-    "start": "node ../../dist/frameworks/express/server.js"
+    "start": "node ../../dist/frameworks/express/server.js",
+    "switch:postgres": "ts-node scripts/switch-repository.ts postgres",
+    "switch:inmemory": "ts-node scripts/switch-repository.ts inmemory",
+    "repo:status": "ts-node scripts/switch-repository.ts --status",
+    "migrate": "ts-node scripts/run-migrations.ts"
   }
 }

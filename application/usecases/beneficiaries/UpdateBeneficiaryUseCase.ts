@@ -27,13 +27,12 @@ export class UpdateBeneficiaryUseCase {
             existingBeneficiary.userId,
             existingBeneficiary.iban, 
             data.beneficiaryName ?? existingBeneficiary.beneficiaryName,
-            data.email ?? existingBeneficiary.email,
             data.country ?? existingBeneficiary.country,
+            data.email ?? existingBeneficiary.email,
             data.address ?? (existingBeneficiary.address ? {
                 street: existingBeneficiary.address.street,
                 city: existingBeneficiary.address.city,
-                postalCode: existingBeneficiary.address.postalCode,
-                country: existingBeneficiary.address.country
+                postalCode: existingBeneficiary.address.postalCode
             } : undefined),
             existingBeneficiary.isVerified,
             existingBeneficiary.createdAt,

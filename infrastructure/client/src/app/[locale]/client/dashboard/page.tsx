@@ -67,7 +67,7 @@ export default function ClientDashboard() {
                         <ChartAccountManage accounts={accounts} />
                     </div>
 
-                    
+
                     <section className="mt-8 bg-white border border-gray-200 rounded-xl shadow-sm p-4 flex flex-col gap-4">
                         <div className="flex justify-between items-center">
                             <div>
@@ -108,10 +108,10 @@ export default function ClientDashboard() {
                                     const accountLabel = counterpartAccount?.customAccountName
                                         ? counterpartAccount.customAccountName
                                         : counterpartUserName
-                                        ? `Compte ${userLabel}`
-                                        : counterpartAccountNumber
-                                        ? `Compte ${counterpartAccountNumber}`
-                                        : "Compte inconnu";
+                                            ? `Compte ${userLabel}`
+                                            : counterpartAccountNumber
+                                                ? `Compte ${counterpartAccountNumber}`
+                                                : "Compte inconnu";
 
                                     return (
                                         <div
@@ -121,13 +121,13 @@ export default function ClientDashboard() {
                                             <div className="flex flex-col">
                                                 <span className="text-sm font-semibold text-gray-900">
                                                     {accountLabel}
-                                                </span> 
+                                                </span>
                                                 <span className="text-sm font-semibold text-gray-900">
-                             
-                                                     {userLabel}
+
+                                                    {userLabel}
                                                 </span>
                                                 <span className="text-xs text-gray-500">
-                                               {format(new Date(tx.createdAt), "dd MMM yyyy HH:mm", { locale: fr })}
+                                                    {format(new Date(tx.createdAt), "dd MMM yyyy HH:mm", { locale: fr })}
                                                 </span>
                                                 <span className="text-xs text-gray-500">
                                                     Ref: {tx.transactionReference}
@@ -139,7 +139,7 @@ export default function ClientDashboard() {
                                                     {tx.amount.toFixed(2)} €
                                                 </p>
                                                 <p className="text-xs text-gray-600">{tx.transactionType}</p>
-                                                
+
                                             </div>
                                         </div>
                                     );
@@ -175,7 +175,7 @@ export default function ClientDashboard() {
                                 </button>
                             </Link>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="flex flex-col gap-4">
                             <AccountList accounts={subAccounts} />
                         </div>
                     </section>

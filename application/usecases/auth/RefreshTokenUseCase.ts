@@ -13,7 +13,7 @@ export class RefreshTokenUseCase {
 
   async execute(refreshToken: string): Promise<RefreshTokenResponse | Error> {
     const tokenData = await this.tokenService.verifyRefreshToken(refreshToken);
-    if (tokenData instanceof Error) { 
+    if (tokenData instanceof Error) {
       return tokenData;
     }
 
@@ -26,13 +26,19 @@ export class RefreshTokenUseCase {
     if(userRoles instanceof Error) {
       return userRoles;
     }
-        
+
     const roles = userRoles.map(role => role.name);
 
     const accessToken = this.tokenService.generateAccessToken(user.id, roles);
+    const newRefreshToken = await this.tokenService.generateRefreshToken(user.id);
+
+    if (newRefreshToken instanceof Error) {
+      return newRefreshToken;
+    }
 
     return {
       accessToken,
+      refreshToken: newRefreshToken.token,
       user,
       roles
     };

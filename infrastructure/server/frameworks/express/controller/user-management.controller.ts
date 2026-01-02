@@ -4,23 +4,23 @@ import { GetAllClientsUseCase } from "../../../../../application/usecases/auth/G
 import { UpdateUserUseCase } from "../../../../../application/usecases/auth/UpdateUserUseCase";
 import { DeleteUserUseCase } from "../../../../../application/usecases/auth/DeleteUserUseCase";
 import { GetUserByIdUseCase } from "../../../../../application/usecases/auth/GetUserByIdUseCase";
-import { InMemoryUserRepository } from "../../../../adapters/repositories/InMemoryUserRepository";
-import { InMemoryRoleRepository } from "../../../../adapters/repositories/InMemoryRoleRepository";
-import { InMemoryUserRoleRepository } from "../../../../adapters/repositories/InMemoryUserRoleRepository";
-import { InMemoryAccountRepository } from "../../../../adapters/repositories/InMemoryAccountRepository";
-import { InMemorySavingsAccountRepository } from "../../../../adapters/repositories/InMemorySavingsAccountRepository";
 import { UserNotFoundError } from "../../../../../application/errors/UserNotFoundError";
 import { BankUserEntity } from "../../../../../domain/entities/BankUserEntity";
 import { UserStatusEnum } from "../../../../../domain/enums/UserStatusEnum";
 import { updateUserSchema } from "../schemas/auth/updateUserSchema";
+import { UserRepositoryInterface } from "../../../../../application/ports/repositories/auth/UserRepositoryInterface";
+import { RoleRepositoryInterface } from "../../../../../application/ports/repositories/auth/RoleRepositoryInterface";
+import { UserRoleRepositoryInterface } from "../../../../../application/ports/repositories/auth/UserRoleRepositoryInterface";
+import { AccountRepositoryInterface } from "../../../../../application/ports/repositories/AccountRepositoryInterface";
+import { SavingsAccountRepositoryInterface } from "../../../../../application/ports/repositories/SavingsAccountRepositoryInterface";
 
 export class UserManagementController {
     constructor(
-        private readonly userRepository: InMemoryUserRepository,
-        private readonly roleRepository: InMemoryRoleRepository,
-        private readonly userRoleRepository: InMemoryUserRoleRepository,
-        private readonly accountRepository: InMemoryAccountRepository,
-        private readonly savingsAccountRepository: InMemorySavingsAccountRepository
+        private readonly userRepository: UserRepositoryInterface,
+        private readonly roleRepository: RoleRepositoryInterface,
+        private readonly userRoleRepository: UserRoleRepositoryInterface,
+        private readonly accountRepository: AccountRepositoryInterface,
+        private readonly savingsAccountRepository: SavingsAccountRepositoryInterface
     ) {}
 
     /**

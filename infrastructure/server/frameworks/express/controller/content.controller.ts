@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { InMemoryContentRepository } from "../../../../adapters/repositories/InMemoryContentRepository";
+import { ContentRepositoryInterface } from "../../../../../application/ports/repositories/news/ContentRepositoryInterface";
 import {ManageOrderService} from "../../../../adapters/services/news/ManageOrderService";
 import {CreateContentUseCase} from  "../../../../../application/usecases/news/content/CreateContentUseCase";
 import {GetContentByIdUseCase} from "../../../../../application/usecases/news/content/GetContentByIdUseCase";
@@ -14,9 +14,9 @@ import { createContentSchema } from "../schemas/content/createContentSchema";
 import { reorderContentSchema } from "../schemas/content/reorderContentSchema";
 
 export class ContentController {
-    public constructor(private readonly contentRepository: InMemoryContentRepository, 
+    public constructor(private readonly contentRepository: ContentRepositoryInterface,
                        private readonly orderService : ManageOrderService,
-                       private readonly uuidService:CryptoUuidGenerator 
+                       private readonly uuidService:CryptoUuidGenerator
                        ){}
 
     async create(req: Request, res: Response) {

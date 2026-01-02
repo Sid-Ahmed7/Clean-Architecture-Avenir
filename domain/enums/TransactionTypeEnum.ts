@@ -4,7 +4,5 @@ export enum TransactionTypeEnum {
     TRANSFER = 'TRANSFER',
     PAYMENT = 'PAYMENT',
     FEE = 'FEE',
-    INTEREST = 'INTEREST',
-    BENEFICIARY = "BENEFICIARY",     
-    GROUP = "GROUP"   
+    INTEREST = 'INTEREST'
 }

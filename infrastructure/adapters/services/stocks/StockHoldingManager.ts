@@ -7,7 +7,7 @@ export class StockHoldingManager implements StockHoldingService {
 
     public async hasEnoughShares(userId: string, stockSymbol: string, quantity: number): Promise<boolean | PositionNotFoundError> {
         const position = await this.stockHoldingRepository.findPositionByUserIdAndSymbol(userId, stockSymbol);
-        if(position instanceof PositionNotFoundError) {
+        if(position instanceof Error) {
             return position;
         }
 
@@ -16,21 +16,23 @@ export class StockHoldingManager implements StockHoldingService {
 
     public async addShares(userId: string, stockSymbol: string, quantity: number, pricePerShare: number): Promise<void | PositionNotFoundError> {
         const position = await this.stockHoldingRepository.findPositionByUserIdAndSymbol(userId, stockSymbol);
-        if(position instanceof PositionNotFoundError) {
+        if(position instanceof Error) {
             return position;
         }
 
         position.addShares(quantity, pricePerShare);
         await this.stockHoldingRepository.updatePosition(position);
+        return;
     }
 
-    public async  removeShares(userId: string, stockSymbol: string, quantity: number): Promise<void | PositionNotFoundError> {
+    public async removeShares(userId: string, stockSymbol: string, quantity: number): Promise<void | PositionNotFoundError> {
         const position = await this.stockHoldingRepository.findPositionByUserIdAndSymbol(userId, stockSymbol);
-        if(position instanceof PositionNotFoundError) {
+        if(position instanceof Error) {
             return position;
         }
 
         position.removeShares(quantity);
         await this.stockHoldingRepository.updatePosition(position);
+        return;
     }
 }

@@ -7,18 +7,15 @@ import { GetUserRolesUseCase} from "../../../../../application/usecases/auth/Get
 import {ConfirmRegistrationUseCase} from "../../../../../application/usecases/auth/ConfirmRegistrationUseCase";
 import {CreateBankAdvisorUseCase} from "../../../../../application//usecases/auth/CreateBankAdvisorUseCase";
 import {CreateBankManagerUseCase} from "../../../../../application//usecases/auth/CreateBankManagerUseCase";
-import { InMemoryUserRepository} from "../../../../adapters/repositories/InMemoryUserRepository";
-import { InMemoryRoleRepository} from "../../../../adapters/repositories/InMemoryRoleRepository";
-import { InMemoryUserRoleRepository} from "../../../../adapters/repositories/InMemoryUserRoleRepository";
+import { UserRepositoryInterface } from "../../../../../application/ports/repositories/auth/UserRepositoryInterface";
+import { RoleRepositoryInterface } from "../../../../../application/ports/repositories/auth/RoleRepositoryInterface";
+import { UserRoleRepositoryInterface } from "../../../../../application/ports/repositories/auth/UserRoleRepositoryInterface";
 import { UserAlreadyExistsError } from "../../../../../application/errors/UserAlreadyExistsError";
 import { TokenService } from "../../../../../application/ports/services/auth/TokenService";
 import { PasswordService } from "../../../../../application/ports/services/auth/PasswordService";
 import { UserNotFoundError } from "../../../../../application/errors/UserNotFoundError";
 import { InvalidEmailOrPasswordError } from "../../../../../application/errors/InvalidEmailOrPasswordError";
 import { RoleNotFoundError } from "../../../../../application/errors/RoleNotFoundError";
-import { BankUserEntity } from "../../../../../domain/entities/BankUserEntity";
-import { UserStatusEnum } from "../../../../../domain/enums/UserStatusEnum";
-import { RoleEnum } from "../../../../../domain/enums/RoleEnum";
 import { EmailService } from "../../../../../application/ports/services/EmailService";
 import { RegistrationTokenGeneratorService } from "../../../../../application/ports/services/auth/RegistrationTokenGeneratorService";
 import { EventBusInterface } from "../../../../../application/ports/event/EventBusInterface";
@@ -33,17 +30,16 @@ import { registerAdvisorSchema } from "../schemas/auth/registerAdvisorSchema";
 import { loginSchema } from "../schemas/auth/loginSchema";
 import { registerManagerSchema } from "../schemas/auth/registerManagerSchema";
 import { SendNotificationToClientUseCase } from "../../../../../application/usecases/notification/SendNotificationToClientUseCase";
-import { NotificationTypeEnum } from "../../../../../domain/enums/NotificationTypeEnum";
-import { InMemoryNotificationRepository } from "../../../../adapters/repositories/InMemoryNotificationRepository";
 import { NotificationService } from "../../../../adapters/services/notification/NotificationService";
 import { RolePriorityService } from "../../../../adapters/services/RolePriorityService";
+import { NotificationRepositoryInterface } from "../../../../../application/ports/repositories/notification/NotificationRepositoryInterface";
 
 export class AuthController {
 
       constructor(
-        private readonly userRepository: InMemoryUserRepository,
-        private readonly roleRepository: InMemoryRoleRepository,
-        private readonly userRoleRepository: InMemoryUserRoleRepository,
+        private readonly userRepository: UserRepositoryInterface,
+        private readonly roleRepository: RoleRepositoryInterface,
+        private readonly userRoleRepository: UserRoleRepositoryInterface,
         private readonly tokenService: TokenService,
         private readonly passwordService: PasswordService,
         private readonly emailService: EmailService,
@@ -53,31 +49,11 @@ export class AuthController {
         private readonly uuidService: CryptoUuidGenerator,
         private readonly eventBus: EventBusInterface,
         private readonly rolePriorityService: RolePriorityService,
-        private readonly notificationRepository: InMemoryNotificationRepository,
+        private readonly notificationRepository: NotificationRepositoryInterface,
         private readonly notificationPublisher: NotificationService) {}
-
-      private async sendNotification(userId: string, message: string, type: NotificationTypeEnum): Promise<void> {
-        try {
-          const sendNotificationUseCase = new SendNotificationToClientUseCase(
-            this.notificationRepository,
-            this.notificationPublisher,
-            this.uuidService,
-            this.userRepository
-          );
-          await sendNotificationUseCase.execute(userId, message, type);
-        } catch (error) {
-          console.error('[AuthController] Erreur envoi notification:', error);
-        }
-      }
 
 
       async register(req: Request, res: Response) {
-        const sendNotificationUseCase = new SendNotificationToClientUseCase(
-          this.notificationRepository,
-          this.notificationPublisher,
-          this.uuidService,
-          this.userRepository
-        );
         const registerUseCase = new RegisterUseCase(
           this.userRepository,
           this.roleRepository,
@@ -241,7 +217,14 @@ export class AuthController {
           httpOnly: true,
           secure: false,
           sameSite: "lax",
-          maxAge: 1000 * 60 * 60 * 24 * 7 
+          maxAge: 1000 * 60 * 60 * 24 * 7
+        })
+
+        res.cookie("refreshToken", result.refreshToken, {
+          httpOnly: true,
+          secure: false,
+          sameSite: "lax",
+          maxAge: 1000 * 60 * 60 * 24 * 7
         })
 
         return res.status(200).json({
@@ -318,7 +301,6 @@ export class AuthController {
           this.uuidService
         );
 
-        // Verify secret code from request body
         const secretCode = req.body.secretCode;
         
         if (!secretCode || secretCode !== process.env.MANAGER_CREATION_PASSWORD) {

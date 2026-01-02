@@ -4,7 +4,7 @@ import { UserNotFoundError } from "../../../application/errors/UserNotFoundError
 import { UserAlreadyExistsError } from "../../../application/errors/UserAlreadyExistsError";
 import { PasswordService } from "../../../application/ports/services/auth/PasswordService";
 import { UserRoleRepositoryInterface } from "../../../application/ports/repositories/auth/UserRoleRepositoryInterface";
-import { RoleRepositoryInterface } from "../../../application/ports/repositories/auth/RolerepositoryInterface";
+import { RoleRepositoryInterface } from "../../../application/ports/repositories/auth/RoleRepositoryInterface";
 import { RoleEntity } from "../../../domain/entities/RoleEntity";
 import { RoleNotFoundError } from "../../../application/errors/RoleNotFoundError";
 
@@ -32,7 +32,7 @@ export class InMemoryUserRoleRepository implements UserRoleRepositoryInterface {
         return roles;
     }
 
-    public async addRoleToUser(userId: string, roleId: number): Promise<void | UserNotFoundError | RoleNotFoundError> {
+    public async addRoleToUser(userId: string, roleId: string): Promise<void | UserNotFoundError | RoleNotFoundError> {
         const user = await this.userRepository.findById(userId);
         if(user instanceof UserNotFoundError) {
             return new UserNotFoundError(`User with id ${userId} not found`);

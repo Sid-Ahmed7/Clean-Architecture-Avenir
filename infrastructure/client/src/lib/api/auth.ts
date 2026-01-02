@@ -17,12 +17,25 @@ export const getAllAdvisors = async () => {
 
 export const refreshToken = async () => {
   try {
-    const { data } = await apiClient.post('/auth/refresh-token');
+    const baseURL = process.env.NEXT_PUBLIC_API_URL;
+    const response = await fetch(`${baseURL}/auth/refresh-token`, {
+      method: 'POST',
+      credentials: 'include', 
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Refresh token failed');
+    }
+
+    const data = await response.json();
     return { success: true, data };
   } catch (error) {
-    return { 
-      success: false, 
-      error: error instanceof Error ? error.message : 'Refresh failed' 
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Refresh failed'
     };
   }
 };

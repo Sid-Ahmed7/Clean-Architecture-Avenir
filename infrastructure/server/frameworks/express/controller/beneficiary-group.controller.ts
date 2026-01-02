@@ -6,11 +6,13 @@ import { RemoveBeneficiaryFromGroupUseCase } from "../../../../../application/us
 import { DeleteBeneficiaryGroupUseCase } from "../../../../../application/usecases/beneficiaries/groups/DeleteBeneficiaryGroupUseCase";
 import { UpdateBeneficiaryGroupUseCase } from "../../../../../application/usecases/beneficiaries/groups/UpdateBeneficiaryGroupUseCase";
 import { TransferToGroupUseCase } from "../../../../../application/usecases/transfer/TransferToGroupUseCase";
-import { InMemoryBeneficiaryGroupRepository } from "../../../../adapters/repositories/InMemoryBeneficiaryGroupRepository";
-import { InMemoryBeneficiaryRepository } from "../../../../adapters/repositories/InMemoryBeneficiaryRepository";
-import { InMemoryAccountRepository } from "../../../../adapters/repositories/InMemoryAccountRepository";
-import { InMemoryTransactionRepository } from "../../../../adapters/repositories/InMemoryTransactionRepository";
-import { CryptoUuidGenerator } from "../../../../adapters/services/CryptoUuidGenerator";
+import { BeneficiaryGroupRepositoryInterface } from "../../../../../application/ports/repositories/beneficiaries/BeneficiaryGroupRepositoryInterface";
+import { BeneficiaryRepositoryInterface } from "../../../../../application/ports/repositories/beneficiaries/BeneficiaryRepositoryInterface";
+import { AccountRepositoryInterface } from "../../../../../application/ports/repositories/AccountRepositoryInterface";
+import { TransactionRepositoryInterface } from "../../../../../application/ports/repositories/TransactionRepositoryInterface";
+import { UserRepositoryInterface } from "../../../../../application/ports/repositories/auth/UserRepositoryInterface";
+import { NotificationRepositoryInterface } from "../../../../../application/ports/repositories/notification/NotificationRepositoryInterface";
+import { UuidGeneratorService } from "../../../../../application/ports/services/UuidGeneratorService";
 import { BeneficiaryGroupAlreadyExistsError } from "../../../../../application/errors/BeneficiaryGroupAlreadyExistsError";
 import { BeneficiaryGroupNotFoundError } from "../../../../../application/errors/BeneficiaryGroupNotFoundError";
 import { BeneficiaryNotFoundError } from "../../../../../application/errors/BeneficiaryNotFoundError";
@@ -24,23 +26,20 @@ import { createBeneficiaryGroupSchema } from "../schemas/beneficiaries/createBen
 import { updateBeneficiaryGroupSchema } from "../schemas/beneficiaries/updateBeneficiaryGroupSchema";
 import { addBeneficiaryToGroupSchema } from "../schemas/beneficiaries/addBeneficiaryToGroupSchema";
 import { transferToGroupSchema } from "../schemas/accounts/transferToGroupSchema";
-import { InMemoryNotificationRepository } from "../../../../adapters/repositories/InMemoryNotificationRepository";
 import { SendNotificationToClientUseCase } from "../../../../../application/usecases/notification/SendNotificationToClientUseCase";
 import { NotificationService } from "../../../../adapters/services/notification/NotificationService";
-import { InMemoryUserRoleRepository } from "../../../../adapters/repositories/InMemoryUserRoleRepository";
-import { InMemoryUserRepository } from "../../../../adapters/repositories/InMemoryUserRepository";
 
 export class BeneficiaryGroupController {
     constructor(
-        private readonly beneficiaryGroupRepository: InMemoryBeneficiaryGroupRepository,
-        private readonly beneficiaryRepository: InMemoryBeneficiaryRepository,
-        private readonly uuidService: CryptoUuidGenerator,
-        private readonly accountRepository: InMemoryAccountRepository,
-        private readonly transactionRepository: InMemoryTransactionRepository, 
-        private readonly notificationRepository: InMemoryNotificationRepository,
+        private readonly beneficiaryGroupRepository: BeneficiaryGroupRepositoryInterface,
+        private readonly beneficiaryRepository: BeneficiaryRepositoryInterface,
+        private readonly uuidService: UuidGeneratorService,
+        private readonly accountRepository: AccountRepositoryInterface,
+        private readonly transactionRepository: TransactionRepositoryInterface,
+        private readonly notificationRepository: NotificationRepositoryInterface,
         private readonly notificationPublisher: NotificationService,
-        private readonly userRepository: InMemoryUserRepository,
-        
+        private readonly userRepository: UserRepositoryInterface,
+
     ) {}
 
     async createBeneficiaryGroup(req: Request, res: Response) {
