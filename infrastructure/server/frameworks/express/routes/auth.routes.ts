@@ -1,17 +1,14 @@
 import express from 'express'
 import { AuthController } from '../controller/auth.controller';
-import {registerUserConfirmedSubscriber} from '../../../../subscribers/UserConfirmedSuscriber';
-import {accountRepository, userRepository, roleRepository, userRoleRepository, passwordService, eventBus, notificationRepository} from '../../../../adapters/config/repositories';
-import {tokenService, emailService, emailTemplateService, registrationTokenGeneratorService, localeService, uuidService, notificationService} from '../../../../adapters/config/services';
+import {accountRepository, userRepository, roleRepository, userRoleRepository, notificationRepository, eventBus, passwordService} from '../../../../adapters/config/repositories';
+import {tokenService, emailService, emailTemplateService, registrationTokenGeneratorService, localeService, uuidService, notificationService, rolePriorityService, eventSubscriberService} from '../../../../adapters/config/services';
 import { verifyTokenAccess } from '../middleware/authMiddleware';
 import { authorizeRoles } from '../middleware/roleMiddleware';
 import { RoleEnum } from '../../../../../domain/enums/RoleEnum';
-import { RolePriorityService } from '../../../../adapters/services/RolePriorityService';
 const router = express.Router();
 
 
-registerUserConfirmedSubscriber(eventBus,accountRepository);
-const rolePriorityService = new RolePriorityService();
+eventSubscriberService.registerUserConfirmedSubscriber(eventBus, accountRepository);
 const authController = new AuthController(
   userRepository,
   roleRepository,
@@ -23,7 +20,8 @@ const authController = new AuthController(
   registrationTokenGeneratorService,
   localeService,
   uuidService,
-  eventBus, rolePriorityService,
+  eventBus,
+  rolePriorityService,
   notificationRepository,
   notificationService,
 );

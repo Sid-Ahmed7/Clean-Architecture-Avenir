@@ -72,7 +72,9 @@ export default class AccountsController {
     private readonly transferValidationService: ValidateTransferService,
     private readonly transactionEnrichmentService: TransactionEnrichmentService,
     private readonly notificationRepository: NotificationRepositoryInterface,
-    private readonly notificationService: NotificationService
+    private readonly notificationService: NotificationService,
+    private readonly manageAllowedAccountStatusService: ManageAllowedAccountStatusService,
+    private readonly statusMessageService: StatusMessageService
   ) {}
 
   async createAnAccount({ request, response, auth }: HttpContext) {
@@ -357,8 +359,8 @@ export default class AccountsController {
 
     const changeStatusAccountUseCase = new ChangeAccountStatusUseCase(
       this.accountRepository,
-      new ManageAllowedAccountStatusService(),
-      new StatusMessageService(),
+      this.manageAllowedAccountStatusService,
+      this.statusMessageService,
       sendNotificationUseCase
     );
 

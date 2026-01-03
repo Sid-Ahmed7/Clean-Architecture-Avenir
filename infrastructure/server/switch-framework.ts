@@ -1,8 +1,8 @@
-#!/usr/bin/env ts-node
+#!/usr/bin/env tsx
 
 /**
  * Script pour basculer entre Express et AdonisJS
- * Usage: ts-node switch-framework.ts <express|adonisjs>
+ * Usage: tsx switch-framework.ts <express|adonisjs>
  */
 
 import fs from 'fs';
@@ -17,8 +17,6 @@ interface FrameworkConfig {
   env: string;
   scripts: {
     dev: string;
-    build: string;
-    start: string;
   };
 }
 
@@ -40,8 +38,6 @@ const FRAMEWORKS: FrameworksConfig = {
     env: 'frameworks/express/.env',
     scripts: {
       dev: 'cd frameworks/express && npm run dev',
-      build: 'cd frameworks/express && npm run build',
-      start: 'cd frameworks/express && npm start'
     }
   },
   adonisjs: {
@@ -51,9 +47,7 @@ const FRAMEWORKS: FrameworksConfig = {
     packageJson: 'frameworks/adonisjs/package.json',
     env: 'frameworks/adonisjs/.env',
     scripts: {
-      dev: 'cd frameworks/adonisjs && node ace serve --watch',
-      build: 'cd frameworks/adonisjs && node ace build',
-      start: 'cd frameworks/adonisjs && node bin/server.js'
+      dev: 'cd frameworks/adonisjs && npm run dev'
     }
   }
 };
@@ -67,7 +61,6 @@ function getCurrentFramework(): string | null {
       return config.current;
     }
   } catch (error) {
-    // Fichier de config inexistant ou invalide
   }
   return null;
 }
@@ -122,15 +115,13 @@ function updatePackageJsonScripts(framework: string): void {
     // Mise à jour des scripts
     packageJson.scripts = packageJson.scripts || {};
     packageJson.scripts.dev = config.scripts.dev;
-    packageJson.scripts.build = config.scripts.build;
-    packageJson.scripts.start = config.scripts.start;
-    packageJson.scripts['switch:express'] = 'ts-node switch-framework.ts express';
-    packageJson.scripts['switch:adonisjs'] = 'ts-node switch-framework.ts adonisjs';
+    packageJson.scripts['switch:express'] = 'tsx switch-framework.ts express';
+    packageJson.scripts['switch:adonisjs'] = 'tsx switch-framework.ts adonisjs';
 
     // Ajouter les dépendances nécessaires si elles n'existent pas
     packageJson.devDependencies = packageJson.devDependencies || {};
-    if (!packageJson.devDependencies['ts-node']) {
-      packageJson.devDependencies['ts-node'] = '^10.9.2';
+    if (!packageJson.devDependencies['tsx']) {
+      packageJson.devDependencies['tsx'] = '^4.19.2';
     }
     if (!packageJson.devDependencies['@types/node']) {
       packageJson.devDependencies['@types/node'] = '^24.4.0';
@@ -185,7 +176,7 @@ function displayInfo(framework: string): void {
   console.log(`  • npm start     → Démarrer le serveur en production`);
   console.log(`\n💡 Pour basculer vers l'autre framework:`);
   console.log(`  npm run switch:${framework === 'express' ? 'adonisjs' : 'express'}`);
-  console.log(`  ou: ts-node switch-framework.ts ${framework === 'express' ? 'adonisjs' : 'express'}`);
+  console.log(`  ou: tsx switch-framework.ts ${framework === 'express' ? 'adonisjs' : 'express'}`);
   console.log(`${'='.repeat(60)}\n`);
 }
 
@@ -229,7 +220,7 @@ function main(): void {
   if (args.length === 0) {
     const current = getCurrentFramework();
 
-    console.log('\n📋 Usage: ts-node switch-framework.ts <express|adonisjs>\n');
+    console.log('\n📋 Usage: tsx switch-framework.ts <express|adonisjs>\n');
     console.log('Frameworks disponibles:');
     console.log('  • express   → Express.js + Socket.IO');
     console.log('  • adonisjs  → AdonisJS 6 + Lucid ORM\n');

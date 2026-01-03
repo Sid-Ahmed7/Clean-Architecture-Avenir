@@ -1,4 +1,4 @@
-#!/usr/bin/env ts-node
+#!/usr/bin/env tsx
 
 /**
  * Point d'entrée unifié pour le serveur backend
@@ -50,7 +50,7 @@ function startServer(): void {
       });
     } else if (framework === 'adonisjs') {
       // Démarrer AdonisJS
-      execSync('node ace serve --watch', {
+      execSync('npm run dev', {
         cwd: path.join(__dirname, 'frameworks/adonisjs'),
         stdio: 'inherit'
       });

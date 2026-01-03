@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { SavingsProductController } from "../controller/savings-product.controller";
 import { savingsProductRepository, savingsAccountRepository, accountRepository } from "../../../../adapters/config/repositories";
+import { uuidService } from "../../../../adapters/config/services";
 import { verifyTokenAccess } from "../middleware/authMiddleware";
 import { authorizeRoles } from '../middleware/roleMiddleware';
 import { RoleEnum } from "../../../../../domain/enums/RoleEnum";
@@ -10,7 +11,8 @@ const router = Router();
 const savingsProductController = new SavingsProductController(
     savingsProductRepository,
     savingsAccountRepository,
-    accountRepository
+    accountRepository,
+    uuidService
 );
 
 router.post(

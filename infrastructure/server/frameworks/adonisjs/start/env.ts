@@ -6,13 +6,13 @@ const env =  await Env.create(new URL('../', import.meta.url), {
   HOST: Env.schema.string({ format: 'host' }),
   APP_NAME: Env.schema.string(),
   LOG_LEVEL: Env.schema.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']),
-  REPOSITORY_TYPE: Env.schema.enum(['inmemory', 'postgress'] as const),
+  REPOSITORY_TYPE: Env.schema.enum(['inmemory', 'postgres'] as const),
 
   DB_HOST: Env.schema.string({ format: 'host' }),
   DB_PORT: Env.schema.number(),
   DB_USER: Env.schema.string(),
   DB_PASSWORD: Env.schema.string.optional(),
-  DB_DATABASE: Env.schema.string(),
+  DB_NAME: Env.schema.string(),
 
 
   JWT_SECRET: Env.schema.string(),

@@ -2,7 +2,7 @@ import { EmailService, SendEmailOptions } from "../../../application/ports/servi
 import { Resend } from "resend";
 
 export class ResendEmailService implements EmailService {
-  private resend: Resend;
+  private readonly resend: Resend;
 
   constructor() {
     this.resend = new Resend(process.env.RESEND_API_KEY);

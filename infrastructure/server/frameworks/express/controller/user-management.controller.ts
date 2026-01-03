@@ -13,6 +13,10 @@ import { RoleRepositoryInterface } from "../../../../../application/ports/reposi
 import { UserRoleRepositoryInterface } from "../../../../../application/ports/repositories/auth/UserRoleRepositoryInterface";
 import { AccountRepositoryInterface } from "../../../../../application/ports/repositories/AccountRepositoryInterface";
 import { SavingsAccountRepositoryInterface } from "../../../../../application/ports/repositories/SavingsAccountRepositoryInterface";
+import { NotificationRepositoryInterface } from "../../../../../application/ports/repositories/notification/NotificationRepositoryInterface";
+import { NotificationService } from "../../../../adapters/services/notification/NotificationService";
+import { CryptoUuidGenerator } from "../../../../adapters/services/CryptoUuidGenerator";
+import { SendNotificationToClientUseCase } from "../../../../../application/usecases/notification/SendNotificationToClientUseCase";
 
 export class UserManagementController {
     constructor(
@@ -20,12 +24,12 @@ export class UserManagementController {
         private readonly roleRepository: RoleRepositoryInterface,
         private readonly userRoleRepository: UserRoleRepositoryInterface,
         private readonly accountRepository: AccountRepositoryInterface,
-        private readonly savingsAccountRepository: SavingsAccountRepositoryInterface
+        private readonly savingsAccountRepository: SavingsAccountRepositoryInterface,
+        private readonly notificationRepository: NotificationRepositoryInterface,
+        private readonly notificationService: NotificationService,
+        private readonly uuidService: CryptoUuidGenerator
     ) {}
 
-    /**
-     * Map user entity to DTO (removes sensitive data like password)
-     */
     private mapUserToDTO(user: BankUserEntity) {
         return {
             id: user.id,

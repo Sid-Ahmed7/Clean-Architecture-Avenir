@@ -16,6 +16,7 @@ import { ValidateTransferService } from "../services/ValidateTransferService";
 import { TransactionEnrichmentServiceImpl } from "../services/TransactionEnrichmentService";
 import { NotificationService } from "../services/notification/NotificationService";
 import { StatusMessageService } from "../services/StatusMessageService";
+import { ManageAllowedAccountStatusService } from "../services/ManageAllowedAccountStatusService";
 import { RolePriorityService } from "../services/RolePriorityService";
 import { NewsService } from "../services/news/NewsService";
 import { LocalFileStorageService } from "../services/news/LocalFileStorageService";
@@ -61,6 +62,7 @@ export const localeService = new LocaleValidationService();
 
 export const notificationService = new NotificationService();
 export const statusMessageService = new StatusMessageService();
+export const manageAllowedAccountStatusService = new ManageAllowedAccountStatusService();
 export const rolePriorityService = new RolePriorityService();
 
 export const eventSubscriberService = new EventSubscriberService(

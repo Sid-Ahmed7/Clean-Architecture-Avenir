@@ -17,13 +17,22 @@ import { WithdrawFromSavingsAccountUseCase } from "../../../../../application/us
 import { SendNotificationToClientUseCase } from "../../../../../application/usecases/notification/SendNotificationToClientUseCase";
 import { NotificationService } from "../../../../adapters/services/notification/NotificationService";
 import { CryptoUuidGenerator } from "../../../../adapters/services/CryptoUuidGenerator";
-import { PasswordEncryptionService } from "../../../../adapters/services/auth/PasswordEncryptionService";
+import { NotificationRepositoryInterface } from "../../../../../application/ports/repositories/notification/NotificationRepositoryInterface";
+import { UserRepositoryInterface } from "../../../../../application/ports/repositories/auth/UserRepositoryInterface";
+import { SavingsProductRepositoryInterface } from "../../../../../application/ports/repositories/SavingsProductRepositoryInterface";
+import { TransactionRepositoryInterface } from "../../../../../application/ports/repositories/TransactionRepositoryInterface";
 
 export class SavingsAccountController {
 
     constructor(
         private readonly savingsAccountRepository: SavingsAccountRepositoryInterface,
-        private readonly accountRepository: AccountRepositoryInterface
+        private readonly accountRepository: AccountRepositoryInterface,
+        private readonly notificationRepository: NotificationRepositoryInterface,
+        private readonly notificationService: NotificationService,
+        private readonly uuidService: CryptoUuidGenerator,
+        private readonly userRepository: UserRepositoryInterface,
+        private readonly savingsProductRepository: SavingsProductRepositoryInterface,
+        private readonly transactionRepository: TransactionRepositoryInterface
     ) {}
 
     async createSavingsAccount(req: Request, res: Response) {

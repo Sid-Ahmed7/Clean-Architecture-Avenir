@@ -5,22 +5,26 @@
   "private": true,
   "main": "index.ts",
   "scripts": {
-    "dev": "ts-node index.ts",
-    "start": "ts-node index.ts",
-    "switch:express": "ts-node switch-framework.ts express",
-    "switch:adonisjs": "ts-node switch-framework.ts adonisjs",
-    "switch": "ts-node switch-framework.ts",
+    "dev": "tsx index.ts",
+    "start": "tsx index.ts",
+    "switch:express": "tsx switch-framework.ts express",
+    "switch:adonisjs": "tsx switch-framework.ts adonisjs",
+    "switch": "tsx switch-framework.ts",
+    "switch:postgres": "tsx scripts/switch-repository.ts postgres",
+    "switch:inmemory": "tsx scripts/switch-repository.ts inmemory",
+    "repo:status": "tsx scripts/switch-repository.ts --status",
+    "migrate": "tsx scripts/run-migrations.ts",
     "express:dev": "cd frameworks/express && npm run dev",
-    "express:build": "cd frameworks/express && npm run build",
-    "express:start": "cd frameworks/express && npm start",
-    "adonisjs:dev": "cd frameworks/adonisjs && node ace serve --watch",
-    "adonisjs:build": "cd frameworks/adonisjs && node ace build",
-    "adonisjs:start": "cd frameworks/adonisjs && node bin/server.js"
+    "adonisjs:dev": "cd frameworks/adonisjs && npm run dev"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.2",
+    "pg": "^8.16.3"
   },
   "devDependencies": {
     "@types/node": "^24.4.0",
     "@types/pg": "^8.16.0",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.19.2",
     "typescript": "^5.9.2"
   }
 }

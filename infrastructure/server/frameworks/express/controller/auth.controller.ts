@@ -11,18 +11,18 @@ import { UserRepositoryInterface } from "../../../../../application/ports/reposi
 import { RoleRepositoryInterface } from "../../../../../application/ports/repositories/auth/RoleRepositoryInterface";
 import { UserRoleRepositoryInterface } from "../../../../../application/ports/repositories/auth/UserRoleRepositoryInterface";
 import { UserAlreadyExistsError } from "../../../../../application/errors/UserAlreadyExistsError";
-import { TokenService } from "../../../../../application/ports/services/auth/TokenService";
-import { PasswordService } from "../../../../../application/ports/services/auth/PasswordService";
 import { UserNotFoundError } from "../../../../../application/errors/UserNotFoundError";
 import { InvalidEmailOrPasswordError } from "../../../../../application/errors/InvalidEmailOrPasswordError";
 import { RoleNotFoundError } from "../../../../../application/errors/RoleNotFoundError";
-import { EmailService } from "../../../../../application/ports/services/EmailService";
-import { RegistrationTokenGeneratorService } from "../../../../../application/ports/services/auth/RegistrationTokenGeneratorService";
-import { EventBusInterface } from "../../../../../application/ports/event/EventBusInterface";
 import { TokenNotFoundError } from "../../../../../application/errors/TokenNotFoundError";
 import { ExpiredTokenError } from "../../../../../application/errors/ExpiredTokenError";
-import { EmailTemplateService } from "../../../../adapters/services/EmailTemplateService";
+import { EventBusInterface } from "../../../../../application/ports/event/EventBusInterface";
 import { GetAllAdvisorUseCase } from "../../../../../application/usecases/auth/GetAllAdvisorUseCase";
+import { JwtTokenService } from "../../../../adapters/services/auth/JwtTokenService";
+import { PasswordEncryptionService } from "../../../../adapters/services/auth/PasswordEncryptionService";
+import { ResendEmailService } from "../../../../adapters/services/ResendEmailService";
+import { EmailTemplateService } from "../../../../adapters/services/EmailTemplateService";
+import { RegistrationTokenService } from "../../../../adapters/services/auth/RegistrationTokenService";
 import { CryptoUuidGenerator } from "../../../../adapters/services/CryptoUuidGenerator";
 import { LocaleValidationService } from "../../../../adapters/services/LocaleValidationService";
 import { registerSchema } from "../schemas/auth/registerSchema";
@@ -30,9 +30,9 @@ import { registerAdvisorSchema } from "../schemas/auth/registerAdvisorSchema";
 import { loginSchema } from "../schemas/auth/loginSchema";
 import { registerManagerSchema } from "../schemas/auth/registerManagerSchema";
 import { SendNotificationToClientUseCase } from "../../../../../application/usecases/notification/SendNotificationToClientUseCase";
+import { NotificationRepositoryInterface } from "../../../../../application/ports/repositories/notification/NotificationRepositoryInterface";
 import { NotificationService } from "../../../../adapters/services/notification/NotificationService";
 import { RolePriorityService } from "../../../../adapters/services/RolePriorityService";
-import { NotificationRepositoryInterface } from "../../../../../application/ports/repositories/notification/NotificationRepositoryInterface";
 
 export class AuthController {
 
@@ -40,11 +40,11 @@ export class AuthController {
         private readonly userRepository: UserRepositoryInterface,
         private readonly roleRepository: RoleRepositoryInterface,
         private readonly userRoleRepository: UserRoleRepositoryInterface,
-        private readonly tokenService: TokenService,
-        private readonly passwordService: PasswordService,
-        private readonly emailService: EmailService,
+        private readonly tokenService: JwtTokenService,
+        private readonly passwordService: PasswordEncryptionService,
+        private readonly emailService: ResendEmailService,
         private readonly emailTemplateService: EmailTemplateService,
-        private readonly registrationTokenGeneratorService: RegistrationTokenGeneratorService,
+        private readonly registrationTokenGeneratorService: RegistrationTokenService,
         private readonly localeService: LocaleValidationService,
         private readonly uuidService: CryptoUuidGenerator,
         private readonly eventBus: EventBusInterface,

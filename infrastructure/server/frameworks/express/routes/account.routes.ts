@@ -1,7 +1,7 @@
 import express from 'express'
 import { AccountController } from '../controller/account.controller'
 import { accountRepository, transactionRepository, overdraftRequestRepository, loanRequestRepository, userRepository, notificationRepository} from '../../../../adapters/config/repositories';
-import { accountNumberGenerator, ibanGenerator, uuidService, transferLimitService, transferValidationService, transactionEnrichmentService, notificationService} from '../../../../adapters/config/services'
+import { accountNumberGenerator, ibanGenerator, uuidService, transferLimitService, transferValidationService, transactionEnrichmentService, notificationService, manageAllowedAccountStatusService, statusMessageService} from '../../../../adapters/config/services'
 import { verifyTokenAccess } from '../middleware/authMiddleware';
 import { authorizeRoles } from '../middleware/roleMiddleware';
 import { RoleEnum } from '../../../../../domain/enums/RoleEnum';
@@ -20,7 +20,9 @@ const accountController = new AccountController(
     transferValidationService,
     transactionEnrichmentService,
     notificationRepository,
-    notificationService
+    notificationService,
+    manageAllowedAccountStatusService,
+    statusMessageService
 );
 router.get("/my-accounts", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req, res) => accountController.getUserAccounts(req, res));
 router.post("/create", verifyTokenAccess, authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]), (req, res) => accountController.createAnAccount(req,res));

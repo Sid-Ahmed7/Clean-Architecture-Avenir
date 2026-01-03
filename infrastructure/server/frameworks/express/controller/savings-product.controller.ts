@@ -8,19 +8,20 @@ import { SavingsAccountRepositoryInterface } from "../../../../../application/po
 import { AccountRepositoryInterface } from "../../../../../application/ports/repositories/AccountRepositoryInterface";
 import { CreateSavingsProduct } from "../../../../../application/requests/CreateSavingsProduct";
 import { UpdateSavingsProduct } from "../../../../../application/requests/UpdateSavingsProduct";
-import { uuidService } from "../../../../adapters/config/services";
+import { CryptoUuidGenerator } from "../../../../adapters/services/CryptoUuidGenerator";
 
 export class SavingsProductController {
     constructor(
         private readonly savingsProductRepository: SavingsProductRepositoryInterface,
         private readonly savingsAccountRepository: SavingsAccountRepositoryInterface,
-        private readonly accountRepository: AccountRepositoryInterface
+        private readonly accountRepository: AccountRepositoryInterface,
+        private readonly uuidService: CryptoUuidGenerator
     ) {}
 
     async createProduct(req: Request, res: Response) {
         const createProductUseCase = new CreateSavingsProductUseCase(
             this.savingsProductRepository,
-            uuidService
+            this.uuidService
         );
 
         const dto: CreateSavingsProduct = {

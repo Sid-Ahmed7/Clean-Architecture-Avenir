@@ -47,6 +47,7 @@ import type { OrderValidationService } from '#application/ports/services/order/O
 import type { LocaleService } from '#application/ports/services/LocaleService.js'
 import type { NotificationService } from '#infrastructure/adapters/services/notification/NotificationService.js'
 import type { StatusMessageService } from '#application/ports/services/StatusMessageService.js'
+import type { ManageAllowedAccountStatusService } from '#infrastructure/adapters/services/ManageAllowedAccountStatusService.js'
 import type { EventSubscriberService } from '#infrastructure/adapters/services/EventSubscriberService.js'
 import type { RolePriorityService } from '#infrastructure/adapters/services/RolePriorityService.js'
 
@@ -102,6 +103,7 @@ declare module '@adonisjs/core/types' {
     localeService: LocaleService
     notificationService: NotificationService
     statusMessageService: StatusMessageService
+    manageAllowedAccountStatusService: ManageAllowedAccountStatusService
     rolePriorityService: RolePriorityService
     eventSubscriberService: EventSubscriberService
 

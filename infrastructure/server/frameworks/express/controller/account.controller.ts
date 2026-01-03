@@ -85,6 +85,8 @@ export class AccountController {
     private readonly transactionEnrichmentService: TransactionEnrichmentServiceImpl,
     private readonly notificationRepository: NotificationRepositoryInterface,
     private readonly notificationPublisher: NotificationService,
+    private readonly manageAllowedAccountStatusService: ManageAllowedAccountStatusService,
+    private readonly statusMessageService: StatusMessageService,
   ) {}
 
 
@@ -370,8 +372,8 @@ async updateAccount(req: Request, res: Response) {
         );
         const changeStatusAccountUseCase = new ChangeAccountStatusUseCase(
             this.accountRepository,
-            new ManageAllowedAccountStatusService(),
-            new StatusMessageService(),
+            this.manageAllowedAccountStatusService,
+            this.statusMessageService,
             sendNotificationUseCase);
         const accountNumber = Number(req.params.accountNumber);
         const parseResult = changeAccountStatusSchema.safeParse(req.body);

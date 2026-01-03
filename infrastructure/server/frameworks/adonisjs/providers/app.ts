@@ -70,7 +70,16 @@ export default class AppProvider {
     this.app.container.bind('localeService', async () => (await getServices()).localeService)
     this.app.container.bind('notificationService', async () => (await getServices()).notificationService)
     this.app.container.bind('statusMessageService', async () => (await getServices()).statusMessageService)
+    this.app.container.bind('manageAllowedAccountStatusService', async () => (await getServices()).manageAllowedAccountStatusService)
     this.app.container.bind('rolePriorityService', async () => (await getServices()).rolePriorityService)
     this.app.container.bind('eventSubscriberService', async () => (await getServices()).eventSubscriberService)
+  }
+
+  async boot() {
+    const eventSubscriberService = await this.app.container.make('eventSubscriberService')
+    const eventBus = await this.app.container.make('eventBus')
+    const accountRepository = await this.app.container.make('accountRepository')
+
+    eventSubscriberService.registerUserConfirmedSubscriber(eventBus, accountRepository)
   }
 }
