@@ -82,13 +82,57 @@
         "account": "Compte",
         "unknownAccount": "Compte inconnu",
         "repeatTransfer": "Répéter",
-        "amount": "Montant"
+        "amount": "Montant",
+        "repeatButton": "Répéter ce virement",
+        "confirmTitle": "Confirmer le virement",
+        "amountLabel": "Montant",
+        "toLabel": "Vers :",
+        "originalTransaction": "Transaction originale du",
+        "processing": "Traitement...",
+        "confirmButton": "Confirmer",
+        "cancelButton": "Annuler"
       },
       "mainAccountCard": {
-        "title": "Compte Principal"
+        "title": "Compte Principal",
+        "mainLabel": "Principal",
+        "availableBalance": "Solde disponible",
+        "accountNumber": "Numéro de compte",
+        "ribMessage": "Téléchargez votre RIB en PDF",
+        "downloadRib": "Télécharger le RIB",
+        "generatingRib": "Génération...",
+        "limits": "Limites",
+        "overdraftRequest": "Demande de découvert",
+        "currentOverdraft": "Découvert actuel",
+        "increaseTransferLimit": "Augmenter la limite de virement",
+        "currentLimit": "Limite actuelle",
+        "close": "Fermer",
+        "overdraftModalTitle": "Demande d'augmentation de découvert",
+        "overdraftModalSubtitle": "Votre découvert actuel est de",
+        "overdraftSuccess": "Demande envoyée avec succès",
+        "cancel": "Annuler",
+        "sending": "Envoi...",
+        "requestButton": "Envoyer la demande",
+        "transferModalTitle": "Augmentation de limite de virement",
+        "transferModalSubtitle": "Votre limite actuelle est de",
+        "transferSuccess": "Limite mise à jour avec succès",
+        "updating": "Mise à jour...",
+        "increaseButton": "Augmenter la limite"
       },
       "accountList": {
         "noAccounts": "Aucun compte disponible"
+      },
+      "subAccountForm": {
+        "title": "Créer un sous-compte",
+        "accountNameLabel": "Nom du compte",
+        "accountNamePlaceholder": "Mon compte épargne",
+        "accountTypeLabel": "Type de compte",
+        "accountTypes": {
+          "savings": "Épargne"
+        },
+        "currencyLabel": "Devise",
+        "creating": "Création...",
+        "createButton": "Créer le compte",
+        "success": "Compte créé avec succès !"
       }
     }
   },

@@ -82,13 +82,57 @@
         "account": "Account",
         "unknownAccount": "Unknown account",
         "repeatTransfer": "Repeat",
-        "amount": "Amount"
+        "amount": "Amount",
+        "repeatButton": "Repeat this transfer",
+        "confirmTitle": "Confirm Transfer",
+        "amountLabel": "Amount",
+        "toLabel": "To:",
+        "originalTransaction": "Original transaction from",
+        "processing": "Processing...",
+        "confirmButton": "Confirm",
+        "cancelButton": "Cancel"
       },
       "mainAccountCard": {
-        "title": "Main Account"
+        "title": "Main Account",
+        "mainLabel": "Main",
+        "availableBalance": "Available Balance",
+        "accountNumber": "Account Number",
+        "ribMessage": "Download your RIB as PDF",
+        "downloadRib": "Download RIB",
+        "generatingRib": "Generating...",
+        "limits": "Limits",
+        "overdraftRequest": "Overdraft Request",
+        "currentOverdraft": "Current overdraft",
+        "increaseTransferLimit": "Increase Transfer Limit",
+        "currentLimit": "Current limit",
+        "close": "Close",
+        "overdraftModalTitle": "Overdraft Increase Request",
+        "overdraftModalSubtitle": "Your current overdraft is",
+        "overdraftSuccess": "Request sent successfully",
+        "cancel": "Cancel",
+        "sending": "Sending...",
+        "requestButton": "Send Request",
+        "transferModalTitle": "Transfer Limit Increase",
+        "transferModalSubtitle": "Your current limit is",
+        "transferSuccess": "Limit updated successfully",
+        "updating": "Updating...",
+        "increaseButton": "Increase Limit"
       },
       "accountList": {
         "noAccounts": "No accounts available"
+      },
+      "subAccountForm": {
+        "title": "Create a Sub-Account",
+        "accountNameLabel": "Account Name",
+        "accountNamePlaceholder": "My savings account",
+        "accountTypeLabel": "Account Type",
+        "accountTypes": {
+          "savings": "Savings"
+        },
+        "currencyLabel": "Currency",
+        "creating": "Creating...",
+        "createButton": "Create Account",
+        "success": "Account created successfully!"
       }
     }
   },
