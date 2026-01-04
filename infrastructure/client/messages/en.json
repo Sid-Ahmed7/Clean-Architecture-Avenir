@@ -1614,5 +1614,11 @@
         "button": "Open overdraft requests"
       }
     }
+  },
+  "chat": {
+    "page": {
+      "verifyingAuth": "Verifying authentication...",
+      "loadingUser": "Loading user..."
+    }
   }
 }
