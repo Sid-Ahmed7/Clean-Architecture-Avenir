@@ -7,8 +7,10 @@ import { Link } from "@/i18n/navigation";
 import { ChevronRight, MessageCircle, Plus } from "lucide-react";
 import { LocaleContext } from "@/contexts/LocaleProvider";
 import { Conversation } from "@/types/conversation";
+import { useTranslations } from "next-intl";
 
 export default function ClientConversationList() {
+  const t = useTranslations("components.chat.clientConversations");
   const router = useRouter();
   const {locale} = useContext(LocaleContext);
   const [conversations, setConversations] = useState<Conversation[]>([]);
@@ -21,7 +23,7 @@ export default function ClientConversationList() {
       setConversations(clientConversations);
       console.log(clientConversations)
     } catch (err) {
-        setError("Impossible de récupérer vos conversations");
+        setError(t("errorFetch"));
     }
   };
 
@@ -32,7 +34,7 @@ export default function ClientConversationList() {
       setConversations((prev) => [...prev, newConversation]);
       router.replace(`/${locale}/chat/${newConversation.id}`);
     } catch (err) {
-      setError("Erreur lors de la création de la conversation");
+      setError(t("errorCreate"));
     } finally {
       setLoading(false);
     }
@@ -46,14 +48,14 @@ export default function ClientConversationList() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-6">
       <div className="max-w-4xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between mb-6 gap-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Mes conversations</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900">{t("title")}</h2>
           <button
             onClick={handleCreateConversation}
             disabled={loading}
             className="flex items-center gap-2 px-5 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed font-medium"
           >
             <Plus size={20} />
-            {loading ? "Création..." : "Nouvelle conversation"}
+            {loading ? t("creating") : t("newConversation")}
           </button>
         </div>
 
@@ -62,7 +64,7 @@ export default function ClientConversationList() {
         {conversations.length === 0 ? (
           <div className="bg-white rounded-2xl p-12 text-center shadow-sm">
             <MessageCircle className="mx-auto text-slate-300 mb-4" size={64} />
-            <p className="text-slate-600 text-lg">Vous n&apos;avez pas encore de conversation.</p>
+            <p className="text-slate-600 text-lg">{t("empty")}</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -74,7 +76,7 @@ export default function ClientConversationList() {
               >
                 <div className="flex items-center gap-4">
                   <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-semibold text-lg shadow-md">
-                  {conv.advisorName ? conv.advisorName.slice(0,2).toUpperCase() : "Non assigné"}
+                  {conv.advisorName ? conv.advisorName.slice(0,2).toUpperCase() : t("notAssigned")}
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold text-slate-900 text-lg">{conv.advisorName}</h3>

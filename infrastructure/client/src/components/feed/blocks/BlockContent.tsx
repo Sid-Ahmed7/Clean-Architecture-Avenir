@@ -4,6 +4,7 @@ import { BlocksBadge } from "./BlocksBadge";
 import { TextContent } from "./TextContent";
 import { MediaContent } from "./MediaContent";
 import { DraggableProvidedDragHandleProps } from "@hello-pangea/dnd";
+import { useTranslations } from "next-intl";
 
 interface BlockContentProps {
     block: Block;
@@ -15,6 +16,7 @@ interface BlockContentProps {
 }
 
 export function BlockContent({block, newsId, onUpdate, onRemove, disabled, dragAndDropHandle}: BlockContentProps) {
+    const t = useTranslations('components.feed.blocks.content');
     return (
     <div className="bg-white border border-gray-200 rounded-lg p-4 flex gap-3 hover:shadow-md transition-shadow">
       <div
@@ -55,7 +57,7 @@ export function BlockContent({block, newsId, onUpdate, onRemove, disabled, dragA
         }}
         disabled={disabled}
         className="text-red-500 hover:text-red-700 hover:bg-red-50 rounded p-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
-        title="Supprimer ce bloc"
+        title={t('deleteBlock')}
       >
         <Trash2 size={18} />
       </button>

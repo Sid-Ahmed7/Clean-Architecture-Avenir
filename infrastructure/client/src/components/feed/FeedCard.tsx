@@ -8,6 +8,7 @@ import { Calendar, Eye, ImageIcon, Video } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
+import { useTranslations } from "next-intl";
 
 interface FeedCardProps {
     news: News;
@@ -16,6 +17,7 @@ interface FeedCardProps {
 
 export function FeedCard({ news, media }: FeedCardProps) {
 
+    const t = useTranslations("components.feed.card");
     const router = useRouter();
     const {locale} = useContext(LocaleContext);
     const sortedMedia = sortMedia(media);
@@ -97,12 +99,12 @@ export function FeedCard({ news, media }: FeedCardProps) {
                     
                     <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-gray-700 shadow-md flex items-center gap-1.5">
                         <ImageIcon size={12} />
-                        {sortedMedia.length} média{sortedMedia.length > 1 ? 's' : ''}
+                        {sortedMedia.length} {t("media", { count: sortedMedia.length })}
                     </div>
                     
                     {sortedMedia.length > 4 && (
                         <div className="absolute bottom-2 left-2 right-2 text-center text-sm font-medium text-gray-700 py-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-md">
-                            +{sortedMedia.length - 4} autre{sortedMedia.length - 4 > 1 ? 's' : ''} média{sortedMedia.length - 4 > 1 ? 's' : ''}
+                            {t("moreMedia", { count: sortedMedia.length - 4 })}
                         </div>
                     )}
                 </div>

@@ -7,6 +7,7 @@ import { BeneficiaryDetailsSidebar } from "./BeneficiaryDetailsSidebar";
 import { Table } from "../ui/Table";
 import { TableColumn } from "../ui/TableHeader";
 import { formatDate } from "@/lib/utils/date";
+import { useTranslations } from "next-intl";
 
 interface BeneficiariesTableProps {
   beneficiaries: Beneficiary[];
@@ -17,6 +18,7 @@ interface BeneficiariesTableProps {
 }
 
 export function BeneficiariesTable({beneficiaries,onEdit,onDelete,onTransfer,isLoading = false}: BeneficiariesTableProps) {
+  const t = useTranslations("components.beneficiariesManager.table");
   const [selectedBeneficiary, setSelectedBeneficiary] = useState<Beneficiary | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -32,13 +34,13 @@ export function BeneficiariesTable({beneficiaries,onEdit,onDelete,onTransfer,isL
 
 
   const columns: TableColumn[] = [
-    { key: "name", label: "Nom", align: "left" },
-    { key: "iban", label: "IBAN", align: "left" },
-    { key: "email", label: "Email", align: "left" },
-    { key: "country", label: "Pays", align: "left" },
-    { key: "status", label: "Statut", align: "left" },
-    { key: "created", label: "Date de création", align: "left" },
-    { key: "action", label: "Action", align: "center" },
+    { key: "name", label: t("columns.name"), align: "left" },
+    { key: "iban", label: t("columns.iban"), align: "left" },
+    { key: "email", label: t("columns.email"), align: "left" },
+    { key: "country", label: t("columns.country"), align: "left" },
+    { key: "status", label: t("columns.status"), align: "left" },
+    { key: "created", label: t("columns.created"), align: "left" },
+    { key: "action", label: t("columns.action"), align: "center" },
   ];
 
   const renderRow = (beneficiary: Beneficiary) => (
@@ -82,12 +84,12 @@ export function BeneficiariesTable({beneficiaries,onEdit,onDelete,onTransfer,isL
         {beneficiary.isVerified ? (
           <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
             <CheckCircle className="w-3 h-3" />
-            Vérifié
+            {t("status.verified")}
           </span>
         ) : (
           <span className="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 text-gray-600 text-xs font-medium rounded-full">
             <XCircle className="w-3 h-3" />
-            Non vérifié
+            {t("status.notVerified")}
           </span>
         )}
       </td>
@@ -105,7 +107,7 @@ export function BeneficiariesTable({beneficiaries,onEdit,onDelete,onTransfer,isL
               handleRowClick(beneficiary);
             }}
             className="p-2 hover:bg-blue-100 rounded-lg transition-colors group"
-            aria-label="Voir les détails"
+            aria-label={t("viewDetails")}
           >
             <Eye className="w-5 h-5 text-gray-600 group-hover:text-blue-600" />
           </button>
@@ -118,7 +120,7 @@ export function BeneficiariesTable({beneficiaries,onEdit,onDelete,onTransfer,isL
     return (
       <div className="w-full bg-white rounded-lg shadow-md p-8 text-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-        <p className="mt-4 text-gray-600">Chargement des bénéficiaires...</p>
+        <p className="mt-4 text-gray-600">{t("loading")}</p>
       </div>
     );
   }
@@ -130,9 +132,9 @@ export function BeneficiariesTable({beneficiaries,onEdit,onDelete,onTransfer,isL
         columns={columns}
         renderRow={renderRow}
         keyExtractor={(beneficiary) => beneficiary.beneficiaryId}
-        emptyMessage="Aucun bénéficiaire trouvé"
+        emptyMessage={t("empty")}
         initialItemsPerPage={10}
-        itemLabel="bénéficiaires"
+        itemLabel={t("itemLabel")}
         showControls={true}
       />
 

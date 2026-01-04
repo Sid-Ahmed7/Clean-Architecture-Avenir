@@ -4,12 +4,14 @@ import { TransactionType, UserTransaction } from "@/types/transaction";
 import { useState, useMemo } from "react";
 import { TransactionFilters } from "./TransctionFilters";
 import { TransactionTable } from "./TransactionTable";
+import { useTranslations } from 'next-intl';
 
 interface TransactionListProps {
   transactions: UserTransaction[];
 }
 
 export function TransactionList({ transactions }: TransactionListProps) {
+  const t = useTranslations('components.stocks.transactions.list');
   const [typeFilter, setTypeFilter] = useState<"ALL" | TransactionType>("ALL");
   const [symbolFilter, setSymbolFilter] = useState("");
 
@@ -26,7 +28,7 @@ return (
   <div>
     {transactions.length === 0 ? (
       <div className="text-center py-12">
-        <p className="text-gray-500">Vous n&apos;avez pas encore de transactions</p>
+        <p className="text-gray-500">{t('noTransactions')}</p>
       </div>
     ) : (
       <>
@@ -40,7 +42,7 @@ return (
         {filteredTransactions.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-500">
-              Aucune transaction ne correspond aux filtres sélectionnés
+              {t('noMatchingTransactions')}
             </p>
           </div>
         ) : (

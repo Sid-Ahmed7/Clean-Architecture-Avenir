@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl';
+
 interface StockHeaderProps {
     symbol: string;
     name: string;
@@ -6,6 +8,7 @@ interface StockHeaderProps {
 }
 
 export function StockHeader({symbol, name, exchange, isMarketOpen} :StockHeaderProps) {
+    const t = useTranslations('components.stocks.structure.header');
     return (
     <div className="flex justify-between items-start mb-4">
       <div className="flex-1">
@@ -24,7 +27,7 @@ export function StockHeader({symbol, name, exchange, isMarketOpen} :StockHeaderP
               ? 'bg-green-100 text-green-800' 
               : 'bg-gray-100 text-gray-800'
           }`}>
-            {isMarketOpen ? '🟢 Ouvert' : '⚫ Fermé'}
+            {isMarketOpen ? `🟢 ${t('open')}` : `⚫ ${t('closed')}`}
           </span>
         </div>
       </div>

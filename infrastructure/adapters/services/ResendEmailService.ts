@@ -11,22 +11,15 @@ export class ResendEmailService implements EmailService {
   async sendEmail(options: SendEmailOptions): Promise<void> {
     const textHtml = `<p>${options.text?.replace(/\n/g, "<br>")}</p>`;
     console.log("Role vaut", options.role);
-    let toAddress = "delivered@resend.dev"; 
-
-    if (options.role === "CLIENT") {
-      toAddress = "delivered+client@resend.dev";
-    } else if (options.role === "BANK_ADVISOR") {
-      toAddress = "delivered+advisor@resend.dev";
-    }
 
     await this.resend.emails.send({
       from: "Banque Avenir <onboarding@resend.dev>",
-      to: toAddress,
+      to: options.to,
       subject: options.subject,
       html: textHtml,
     });
     console.log("Contenu du mail :", options.text);
 
-    console.log(`✉️ [SANDBOX] Email envoyé à ${toAddress}`);
+    console.log(`✉️ Email envoyé à ${options.to}`);
   }
 }

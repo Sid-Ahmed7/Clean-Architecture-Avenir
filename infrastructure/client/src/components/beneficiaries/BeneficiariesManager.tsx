@@ -6,6 +6,7 @@ import { BeneficiaryGroup } from "@/types/beneficiaryGroup";
 import { BeneficiariesTable } from "./BeneficiariesTable";
 import { BeneficiaryGroupsTable } from "./group/BeneficiaryGroupsTable";
 import { Users, FolderOpen } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface BeneficiariesManagerProps {
   beneficiaries: Beneficiary[];
@@ -26,6 +27,7 @@ interface BeneficiariesManagerProps {
 type Tab = "beneficiaries" | "groups";
 
 export function BeneficiariesManager({beneficiaries,groups,isLoadingBeneficiaries = false,isLoadingGroups = false,onEditBeneficiary,onDeleteBeneficiary,onTransferBeneficiary,onEditGroup,onDeleteGroup,onAddBeneficiaryToGroup,onRemoveBeneficiaryFromGroup,onViewGroupBeneficiaries,onTransferToGroup}: BeneficiariesManagerProps) {
+  const t = useTranslations("components.beneficiariesManager.tabs");
   const [activeTab, setActiveTab] = useState<Tab>("beneficiaries");
 
   return (
@@ -41,7 +43,7 @@ export function BeneficiariesManager({beneficiaries,groups,isLoadingBeneficiarie
             }`}
           >
             <Users className="w-5 h-5" />
-            <span>Bénéficiaires</span>
+            <span>{t("beneficiaries")}</span>
             <span className="ml-2 px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
               {beneficiaries.length}
             </span>
@@ -56,7 +58,7 @@ export function BeneficiariesManager({beneficiaries,groups,isLoadingBeneficiarie
             }`}
           >
             <FolderOpen className="w-5 h-5" />
-            <span>Groupes</span>
+            <span>{t("groups")}</span>
             <span className="ml-2 px-2 py-1 bg-purple-100 text-purple-800 text-xs font-medium rounded-full">
               {groups.length}
             </span>

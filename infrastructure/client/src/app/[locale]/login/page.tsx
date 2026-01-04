@@ -7,18 +7,15 @@ import { login } from "@/lib/api/auth";
 import { startTokenRefresh } from "@/lib/api/apiClient";
 import { LoginInput, loginSchema } from "@/lib/validation/auth/loginSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { useState, useContext } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
-import { LocaleContext } from "@/contexts/LocaleProvider";
 import { Mail, Lock } from "lucide-react";
 import { decodeJwt } from "@/lib/utils/decodeJwt";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { locale } = useContext(LocaleContext);
   const { setIsAuthenticated, setUser } = useContext(AuthContext);
   const [message, setMessage] = useState("");
   const t = useTranslations();
@@ -52,7 +49,7 @@ export default function LoginPage() {
         const rolePrefix = rolePrefixMap[userRole || 'CLIENT'] || 'client';
 
         // Redirect to role-specific dashboard
-        router.push(`/${locale}/${rolePrefix}/dashboard`);
+        router.push(`/${rolePrefix}/dashboard`);
       } else if (res.status === 401) {
         setMessage(t("messages.login.invalid"));
       } else {
@@ -61,11 +58,11 @@ export default function LoginPage() {
     } catch (error: any) {
       console.error("Login error:", error);
       if (error.response?.status === 401) {
-        setMessage("Email ou mot de passe incorrect");
+        setMessage(t("auth.login.errors.invalidCredentials"));
       } else if (error.response?.status === 404) {
-        setMessage("Utilisateur non trouvé");
+        setMessage(t("auth.login.errors.userNotFound"));
       } else {
-        setMessage(error.response?.data?.error || "Erreur de connexion");
+        setMessage(error.response?.data?.error || t("auth.login.errors.connectionError"));
       }
     }
   }
@@ -113,9 +110,9 @@ export default function LoginPage() {
         </div>
 
         <p className="mt-6 text-center text-sm text-gray-600">
-          Don't have an account?
+          {t("auth.login.noAccount")}
           <Link href="/register" className="text-blue-700 hover:underline ml-1 font-semibold">
-            Create one
+            {t("auth.login.register")}
           </Link>
         </p>
       </form>

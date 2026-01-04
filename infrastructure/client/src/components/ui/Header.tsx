@@ -3,6 +3,7 @@
 import { User, Menu, Search } from "lucide-react";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { NotificationMenu } from "@/components/notification/NotificationMenu";
+import { useTranslations } from 'next-intl';
 
 interface HeaderProps {
   searchQuery: string;
@@ -11,6 +12,7 @@ interface HeaderProps {
 }
 
 export default function Header({ searchQuery, setSearchQuery, onMenuClick }: HeaderProps) {
+  const t = useTranslations('components.header');
   const { user, loading } = useUserProfile();
   return (
     <header className="bg-white border-b border-gray-200 px-6 py-4">
@@ -19,7 +21,7 @@ export default function Header({ searchQuery, setSearchQuery, onMenuClick }: Hea
           <button
             onClick={onMenuClick}
             className="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
-            aria-label="Ouvrir le menu"
+            aria-label={t('openMenu')}
           >
             <Menu className="w-6 h-6" />
           </button>
@@ -28,7 +30,7 @@ export default function Header({ searchQuery, setSearchQuery, onMenuClick }: Hea
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
               type="text"
-              placeholder="Rechercher une transaction..."
+              placeholder={t('searchPlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10 pr-4 text-gray-900 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64"

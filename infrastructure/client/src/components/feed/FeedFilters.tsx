@@ -3,6 +3,7 @@ import { NewsFilters } from "@/types/filtersNews";
 import { useEffect, useState } from "react";
 import { Select } from "../ui/Select";
 import { NewsCategoryEnum, NewsPriorityEnum } from "@/types/news";
+import { useTranslations } from "next-intl";
 
 interface FeedFiltersProps {
     initialFilters?: NewsFilters;
@@ -10,6 +11,7 @@ interface FeedFiltersProps {
 }
 
 export function FeedFilters({initialFilters, onChange} : FeedFiltersProps) {
+    const t = useTranslations("components.feed.filters");
     const [category, setCategory] = useState(initialFilters?.category || "");
     const [priority, setPriority] = useState(initialFilters?.priority ||"");
     const [tags, setTags] = useState(initialFilters?.tags?.join(",") || "");
@@ -31,32 +33,32 @@ export function FeedFilters({initialFilters, onChange} : FeedFiltersProps) {
  return (
     <div className="flex flex-wrap gap-4 items-end mb-4">
       <Select
-        label="Catégorie"
+        label={t("category")}
         value={category}
         options={[
-          { label: "Toutes", value: "" },
+          { label: t("all"), value: "" },
           ...Object.values(NewsCategoryEnum).map(c => ({ label: c, value: c })),
         ]}
         onChange={val => { setCategory(val); handleFiltersChange(); }}
       />
 
       <Select
-        label="Priorité"
+        label={t("priority")}
         value={priority}
         options={[
-          { label: "Toutes", value: "" },
+          { label: t("all"), value: "" },
           ...Object.values(NewsPriorityEnum).map(p => ({ label: p, value: p })),
         ]}
         onChange={val => { setPriority(val); handleFiltersChange(); }}
       />
 
       <div className="flex flex-col">
-        <label className="text-sm font-medium mb-1">Tags (virgule séparés)</label>
+        <label className="text-sm font-medium mb-1">{t("tagsLabel")}</label>
         <input
           type="text"
           value={tags}
           onChange={e => { setTags(e.target.value); handleFiltersChange(); }}
-          placeholder="ex: security,savings"
+          placeholder={t("tagsPlaceholder")}
           className="px-3 py-2 border rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
       </div>

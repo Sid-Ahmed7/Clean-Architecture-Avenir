@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/Input";
 import { Beneficiary } from "@/types/beneficiary";
 import { CreateBeneficiaryGroupRequest } from "@/types/beneficiaryGroup";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
+import { useTranslations } from "next-intl";
 
 interface GroupFormFieldsProps {
   register: UseFormRegister<CreateBeneficiaryGroupRequest>;
@@ -13,11 +14,11 @@ interface GroupFormFieldsProps {
 }
 
 export function GroupFormFields({register,errors,beneficiaries,selectedBeneficiaries,onBeneficiaryToggle}: GroupFormFieldsProps) {
-  
+  const t = useTranslations('components.beneficiaries.group.form.fields');
     return (
     <div className="space-y-6">
       <Input
-        label="Nom du groupe"
+        label={t('groupName')}
         {...register("groupName")}
         error={errors.groupName?.message}
         placeholder="Groupe famille"
@@ -25,11 +26,11 @@ export function GroupFormFields({register,errors,beneficiaries,selectedBeneficia
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-3">
-          Sélectionner les bénéficiaires
+          {t('selectBeneficiaries')}
         </label>
 
         {beneficiaries.length === 0 ? (
-          <p className="text-gray-500 text-sm">Aucun bénéficiaire disponible</p>
+          <p className="text-gray-500 text-sm">{t('noBeneficiaries')}</p>
         ) : (
           <div className="space-y-2 max-h-64 overflow-y-auto border border-gray-200 rounded-lg p-3">
             {beneficiaries.map((beneficiary) => (
@@ -54,7 +55,7 @@ export function GroupFormFields({register,errors,beneficiaries,selectedBeneficia
 
         {selectedBeneficiaries.length > 0 && (
           <p className="text-sm text-gray-600 mt-2">
-            {selectedBeneficiaries.length} bénéficiaire{selectedBeneficiaries.length > 1 ? 's' : ''} sélectionné{selectedBeneficiaries.length > 1 ? 's' : ''}
+            {t('selectedCount', { count: selectedBeneficiaries.length })}
           </p>
         )}
       </div>

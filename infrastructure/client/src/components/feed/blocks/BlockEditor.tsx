@@ -152,12 +152,12 @@ return (
 
     {blocks.length === 0 && (
       <div className="text-center py-8 text-gray-500">
-        Aucun bloc. Ajoutez-en un pour commencer !
+        {t('noBlocks')}
       </div>
     )}
 
     <div className="text-xs text-gray-500 text-center">
-      {blocks.length} bloc{blocks.length > 1 ? 's' : ''} • Glissez-déposez pour réorganiser
+      {t('blocksCount', { count: blocks.length })}
     </div>
   </div>
 );

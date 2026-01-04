@@ -6,6 +6,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
 import { LocaleContext } from "@/contexts/LocaleProvider";
+import { useTranslations } from "next-intl";
 
 
 interface FeedManageListProps {
@@ -14,7 +15,7 @@ interface FeedManageListProps {
 }
 
 export function FeedManageList({news, onDelete} : FeedManageListProps) {
-
+  const t = useTranslations('components.feed.manageList');
   const router = useRouter();
   const {locale} = useContext(LocaleContext);
 
@@ -26,7 +27,7 @@ export function FeedManageList({news, onDelete} : FeedManageListProps) {
   return (
     <section className="space-y-4">
       {news.length === 0 ? (
-        <p className="text-center text-gray-500">Aucun article à afficher.</p>
+        <p className="text-center text-gray-500">{t('noArticles')}</p>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {news.map((n) => (
@@ -34,8 +35,8 @@ export function FeedManageList({news, onDelete} : FeedManageListProps) {
               <div>
                 <h3 className="text-lg font-semibold mb-1">{n.title}</h3>
                 <div className="text-xs text-gray-400">
-                  <span>Catégorie : {n.category}</span> •{" "}
-                  <span>Priorité : {n.priority}</span> •{" "}
+                  <span>{t('category')}: {n.category}</span> •{" "}
+                  <span>{t('priority')}: {n.priority}</span> •{" "}
                 </div>
               </div>
 
@@ -45,7 +46,7 @@ export function FeedManageList({news, onDelete} : FeedManageListProps) {
                   onClick={() => handleEdit(n.id)}
                 >
                   <Pencil size={14} />
-                  Modifier
+                  {t('edit')}
                 </Button>
 
                 <Button
@@ -53,7 +54,7 @@ export function FeedManageList({news, onDelete} : FeedManageListProps) {
                   onClick={() => onDelete(n.id)}
                 >
                   <Trash2 size={14} />
-                  Supprimer
+                  {t('delete')}
                 </Button>
               </div>
             </Card>

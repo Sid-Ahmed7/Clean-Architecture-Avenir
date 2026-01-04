@@ -1,4 +1,441 @@
 {
+  "common": {
+    "appName": "BankAvenir",
+    "actions": {
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "delete": "Supprimer",
+      "edit": "Modifier",
+      "confirm": "Confirmer",
+      "close": "Fermer",
+      "submit": "Soumettre",
+      "search": "Rechercher",
+      "filter": "Filtrer",
+      "download": "Télécharger",
+      "upload": "Téléverser",
+      "view": "Voir",
+      "back": "Retour",
+      "next": "Suivant",
+      "previous": "Précédent",
+      "loading": "Chargement...",
+      "send": "Envoyer"
+    },
+    "currency": "EUR",
+    "yes": "Oui",
+    "no": "Non"
+  },
+  "components": {
+    "sidebar": {
+      "menu": {
+        "dashboard": "Dashboard",
+        "accounts": "Comptes",
+        "beneficiaries": "Bénéficiaires",
+        "savings": "Épargne",
+        "myLoanRequests": "Mes demandes de crédit",
+        "userManagement": "Gestion Utilisateurs",
+        "allAccounts": "Tous les Comptes",
+        "savingsProducts": "Produits d'Épargne",
+        "stockManagement": "Gestion des Stocks",
+        "loanRequests": "Demandes crédit",
+        "overdraftRequests": "Demandes de découvert",
+        "pendingConversations": "Conversations en attente",
+        "transfers": "Virements",
+        "trading": "Trading",
+        "myOrders": "Mes Ordres",
+        "myPositions": "Mes Positions",
+        "history": "Historique",
+        "news": "Actualités",
+        "messages": "Messages",
+        "settings": "Paramètres",
+        "help": "Aide"
+      },
+      "logout": "Déconnexion",
+      "login": "Login",
+      "register": "Register",
+      "closeMenu": "Fermer le menu"
+    },
+    "header": {
+      "searchPlaceholder": "Rechercher une transaction...",
+      "openMenu": "Ouvrir le menu"
+    },
+    "accountSummary": {
+      "title": "Répartition du solde",
+      "available": "Disponible",
+      "blocked": "Bloqué",
+      "blockedInfo": "sont actuellement bloqués dans vos ordres d'achat en attente."
+    },
+    "limitProgressBar": {
+      "nearLimit": "⚠️ Limite proche",
+      "attention": "⚡ Attention",
+      "available": "✓ Disponible",
+      "remaining": "restant"
+    }
+  },
+  "nav": {
+    "home": "Accueil",
+    "about": "À propos",
+    "contact": "Contact",
+    "help": "Aide",
+    "legal": "Mentions légales",
+    "privacy": "Confidentialité",
+    "terms": "CGV",
+    "dashboard": "Tableau de bord",
+    "accounts": "Comptes",
+    "transfers": "Virements",
+    "beneficiaries": "Bénéficiaires",
+    "savings": "Épargne",
+    "stock": "Bourse",
+    "feed": "Actualités",
+    "settings": "Paramètres",
+    "logout": "Déconnexion",
+    "login": "Connexion",
+    "register": "S'inscrire"
+  },
+  "meta": {
+    "home": {
+      "title": "Accueil",
+      "description": "Découvrez BankAvenir, votre banque en ligne. Ouvrez un compte en quelques minutes.",
+      "ogTitle": "BankAvenir - La banque de demain, aujourd'hui",
+      "ogDescription": "Gérez vos finances en toute simplicité. 100% en ligne, 100% sécurisé."
+    },
+    "about": {
+      "title": "À propos",
+      "description": "Découvrez l'histoire et les valeurs de BankAvenir, la banque en ligne qui révolutionne la finance.",
+      "ogTitle": "À propos de BankAvenir",
+      "ogDescription": "Notre mission : rendre la banque accessible, transparente et moderne."
+    },
+    "contact": {
+      "title": "Contact",
+      "description": "Contactez BankAvenir : support disponible 24/7 par téléphone, email ou chat.",
+      "ogTitle": "Contactez-nous - BankAvenir",
+      "ogDescription": "Notre équipe est à votre écoute 24h/24 et 7j/7."
+    },
+    "help": {
+      "title": "Centre d'aide",
+      "description": "Trouvez des réponses à vos questions dans notre centre d'aide.",
+      "ogTitle": "Centre d'aide - BankAvenir",
+      "ogDescription": "FAQ et guides pour vous aider à utiliser nos services."
+    },
+    "login": {
+      "title": "Connexion",
+      "description": "Connectez-vous à votre espace client BankAvenir."
+    },
+    "register": {
+      "title": "Inscription",
+      "description": "Créez votre compte BankAvenir en quelques minutes."
+    }
+  },
+  "landing": {
+    "header": {
+      "services": "Services",
+      "about": "À propos",
+      "help": "Aide",
+      "contact": "Contact",
+      "login": "Connexion",
+      "openAccount": "Ouvrir un compte"
+    },
+    "hero": {
+      "title": "La banque de demain,",
+      "titleHighlight": "aujourd'hui",
+      "description": "Gérez vos finances en toute simplicité avec BankAvenir. 100% en ligne, 100% sécurisé, 0% frais cachés.",
+      "createAccount": "Créer mon compte",
+      "learnMore": "En savoir plus",
+      "demo": {
+        "checkingAccount": "Compte Courant",
+        "active": "Actif",
+        "availableBalance": "Solde disponible",
+        "transfer": "Virement",
+        "savings": "Épargne",
+        "stock": "Bourse"
+      }
+    },
+    "footer": {
+      "tagline": "La banque en ligne nouvelle génération.",
+      "services": {
+        "title": "Services",
+        "accounts": "Comptes",
+        "savings": "Épargne",
+        "stock": "Bourse",
+        "mortgage": "Crédits"
+      },
+      "company": {
+        "title": "Entreprise",
+        "about": "À propos",
+        "careers": "Carrières",
+        "press": "Presse",
+        "blog": "Blog"
+      },
+      "help": {
+        "title": "Aide",
+        "helpCenter": "Centre d'aide",
+        "security": "Sécurité",
+        "legal": "Mentions légales",
+        "contact": "Contact"
+      },
+      "copyright": "BankAvenir. Tous droits réservés. | Établissement bancaire agréé par l'ACPR",
+      "legalLinks": {
+        "legal": "Mentions légales",
+        "privacy": "Confidentialité",
+        "terms": "CGV"
+      }
+    },
+    "services": {
+      "title": "Nos services",
+      "subtitle": "Tout ce dont vous avez besoin pour gérer votre argent",
+      "learnMore": "En savoir plus",
+      "items": {
+        "accounts": {
+          "title": "Comptes bancaires",
+          "description": "Compte courant avec carte bancaire gratuite, RIB français, et gestion multi-devises."
+        },
+        "savings": {
+          "title": "Épargne",
+          "description": "Livrets d'épargne, assurance vie, PEA : faites fructifier votre argent en toute sécurité."
+        },
+        "stock": {
+          "title": "Bourse",
+          "description": "Investissez en bourse facilement avec notre plateforme de trading intuitive."
+        },
+        "mortgage": {
+          "title": "Crédit immobilier",
+          "description": "Réalisez votre projet immobilier avec nos taux compétitifs et notre accompagnement personnalisé."
+        }
+      }
+    },
+    "features": {
+      "title": "Pourquoi choisir BankAvenir ?",
+      "subtitle": "Des services bancaires modernes pour simplifier votre quotidien",
+      "items": {
+        "security": {
+          "title": "Sécurité maximale",
+          "description": "Vos données sont protégées par un cryptage de niveau bancaire et une authentification à deux facteurs."
+        },
+        "mobile": {
+          "title": "100% Mobile",
+          "description": "Gérez vos comptes n'importe où, n'importe quand depuis votre smartphone ou tablette."
+        },
+        "noFees": {
+          "title": "0 frais cachés",
+          "description": "Tarification transparente et prévisible. Aucun frais surprise, jamais."
+        },
+        "support": {
+          "title": "Support 24/7",
+          "description": "Notre équipe est disponible à tout moment pour répondre à vos questions."
+        },
+        "instantTransfer": {
+          "title": "Virements instantanés",
+          "description": "Envoyez et recevez de l'argent en quelques secondes, 24h/24 et 7j/7."
+        },
+        "analytics": {
+          "title": "Analyse intelligente",
+          "description": "Suivez vos dépenses avec des graphiques détaillés et des insights personnalisés."
+        }
+      }
+    },
+    "stats": {
+      "clients": {
+        "value": "500K+",
+        "label": "Clients satisfaits"
+      },
+      "transfers": {
+        "value": "15M€",
+        "label": "Virements par jour"
+      },
+      "support": {
+        "value": "24/7",
+        "label": "Support disponible"
+      },
+      "rating": {
+        "value": "4.9/5",
+        "label": "Note moyenne"
+      }
+    },
+    "services": {
+      "title": "Nos services",
+      "subtitle": "Tout ce dont vous avez besoin pour gérer vos finances",
+      "learnMore": "En savoir plus",
+      "bankAccounts": {
+        "title": "Comptes bancaires",
+        "description": "Compte courant avec carte bancaire gratuite, RIB français, et gestion multi-devises."
+      },
+      "savings": {
+        "title": "Épargne",
+        "description": "Livrets d'épargne, assurance vie, PEA : faites fructifier votre argent en toute sécurité."
+      },
+      "trading": {
+        "title": "Bourse",
+        "description": "Investissez en bourse facilement avec notre plateforme de trading intuitive."
+      },
+      "mortgage": {
+        "title": "Crédit immobilier",
+        "description": "Réalisez votre projet immobilier avec nos taux compétitifs et notre accompagnement personnalisé."
+      }
+    },
+    "cta": {
+      "title": "Prêt à rejoindre l'aventure ?",
+      "description": "Ouvrez votre compte en moins de 5 minutes et profitez de tous nos services bancaires gratuitement.",
+      "button": "Créer mon compte gratuitement",
+      "benefits": "Aucune condition de revenus · Pas de frais cachés · Sans engagement"
+    },
+    "about": {
+      "hero": {
+        "title": "Notre mission : réinventer la banque",
+        "description": "Chez BankAvenir, nous croyons que la banque doit être simple, transparente et accessible à tous. Depuis 2020, nous construisons la banque de demain."
+      },
+      "history": {
+        "title": "Notre histoire",
+        "paragraph1": "Fondée en 2025, BankAvenir est née d'un constat simple : les banques traditionnelles ne répondent plus aux besoins des utilisateurs modernes.",
+        "paragraph2": "Nous avons construit une plateforme 100% digitale avec l'agilité et l'innovation des startups technologiques.",
+        "paragraph3": "Aujourd'hui, plus de 500 000 clients nous font confiance pour gérer leurs finances au quotidien."
+      },
+      "values": {
+        "title": "Nos valeurs",
+        "clientFirst": {
+          "title": "Client au centre",
+          "description": "Chaque décision est prise en pensant d'abord à nos clients."
+        },
+        "transparency": {
+          "title": "Transparence",
+          "description": "Zéro frais cachés, communication claire et honnête."
+        },
+        "responsibility": {
+          "title": "Responsabilité",
+          "description": "Engagement pour une finance durable et éthique."
+        },
+        "excellence": {
+          "title": "Excellence",
+          "description": "Innovation constante pour offrir le meilleur service."
+        }
+      }
+    },
+    "contact": {
+      "hero": {
+        "title": "Nous sommes là pour vous aider",
+        "description": "Notre équipe est disponible 24h/24 et 7j/7 pour répondre à toutes vos questions."
+      },
+      "methods": {
+        "phone": {
+          "title": "Téléphone",
+          "availability": "Disponible 24/7",
+          "number": "01 23 45 67 89"
+        },
+        "email": {
+          "title": "Email",
+          "availability": "Réponse sous 24h",
+          "address": "contact@bankavenir.com"
+        },
+        "address": {
+          "title": "Adresse",
+          "street": "42 Avenue des Champs-Élysées",
+          "city": "75008 Paris, France"
+        }
+      },
+      "form": {
+        "title": "Envoyez-nous un message",
+        "name": "Nom complet",
+        "namePlaceholder": "Jean Dupont",
+        "email": "Email",
+        "emailPlaceholder": "jean.dupont@example.com",
+        "subject": "Sujet",
+        "subjectPlaceholder": "Comment puis-je vous aider ?",
+        "message": "Message",
+        "messagePlaceholder": "Décrivez votre demande en détail...",
+        "submit": "Envoyer le message",
+        "sending": "Envoi en cours...",
+        "success": "Votre message a été envoyé avec succès ! Nous vous répondrons dans les plus brefs délais.",
+        "error": "Une erreur s'est produite lors de l'envoi du message. Veuillez réessayer.",
+        "submitError": "Échec de l'envoi du message. Veuillez réessayer.",
+        "errors": {
+          "nameMin": "Le nom doit contenir au moins 2 caractères",
+          "emailInvalid": "Adresse email invalide",
+          "subjectMin": "Le sujet doit contenir au moins 2 caractères",
+          "messageMin": "Le message doit contenir au moins 10 caractères"
+        }
+      }
+    },
+    "help": {
+      "hero": {
+        "title": "Comment pouvons-nous vous aider ?",
+        "searchPlaceholder": "Rechercher dans l'aide..."
+      },
+      "sections": {
+        "faq": {
+          "title": "Questions fréquentes",
+          "description": "Réponses aux questions les plus posées",
+          "link": "Voir la FAQ"
+        },
+        "security": {
+          "title": "Sécurité",
+          "description": "Tout savoir sur la protection de vos données",
+          "link": "En savoir plus"
+        },
+        "support": {
+          "title": "Contacter le support",
+          "description": "Support disponible 24/7",
+          "link": "Nous contacter"
+        }
+      },
+      "faqTitle": "Questions fréquentes",
+      "faqs": [
+        {
+          "question": "Comment ouvrir un compte ?",
+          "answer": "L'ouverture de compte se fait en moins de 5 minutes depuis notre application ou site web. Il vous suffit de fournir une pièce d'identité valide et un justificatif de domicile."
+        },
+        {
+          "question": "Quels sont les frais ?",
+          "answer": "L'ouverture et la tenue de compte sont totalement gratuites. Les virements SEPA et la carte bancaire sont également inclus sans frais."
+        },
+        {
+          "question": "Comment contacter le support ?",
+          "answer": "Notre support est disponible 24/7 par téléphone, email ou chat directement dans l'application."
+        }
+      ]
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Connectez-vous à votre compte",
+      "email": "Email",
+      "password": "Mot de passe",
+      "submit": "Connexion",
+      "forgotPassword": "Mot de passe oublié ?",
+      "noAccount": "Pas encore de compte ?",
+      "register": "S'inscrire",
+      "errors": {
+        "invalidCredentials": "Email ou mot de passe incorrect",
+        "userNotFound": "Utilisateur non trouvé",
+        "connectionError": "Erreur de connexion"
+      }
+    },
+    "register": {
+      "title": "Créer votre compte",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "Email",
+      "password": "Mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "phoneNumber": "Numéro de téléphone",
+      "dateOfBirth": "Date de naissance",
+      "address": "Adresse",
+      "submit": "S'inscrire",
+      "submitting": "Inscription en cours...",
+      "hasAccount": "Déjà un compte ?",
+      "login": "Se connecter",
+      "passwordHelper": "Min. 8 caractères avec un caractère spécial",
+      "placeholders": {
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "john.doe@example.com",
+        "phone": "+33 6 12 34 56 78",
+        "address": "123 Rue de la Paix, 75001 Paris"
+      },
+      "messages": {
+        "success": "Inscription réussie ! Vérifiez votre email pour confirmer votre compte.",
+        "userExists": "Un utilisateur avec cet email existe déjà.",
+        "error": "Une erreur est survenue lors de l'inscription. Veuillez réessayer."
+      }
+    }
+  },
   "titles": {
     "register": "Créer votre compte",
     "login": "Connectez-vous à votre compte"
@@ -11,8 +448,8 @@
     "confirmPassword": "Confirmer le mot de passe",
     "phoneNumber": "Numéro de téléphone",
     "dateOfBirth": "Date de naissance",
-    "address": "Addresse",
-    "submit": "S’inscrire",
+    "address": "Adresse",
+    "submit": "S'inscrire",
     "login": "Connexion"
   },
   "errors": {
@@ -26,7 +463,7 @@
       "required": "Le mot de passe est requis",
       "minLength": "Le mot de passe doit contenir au moins 8 caractères",
       "maxLength": "Le mot de passe est trop long",
-      "regex": "Le mot de passe doit contenir un caractère special"
+      "regex": "Le mot de passe doit contenir un caractère spécial"
     },
     "confirmPassword": {
       "required": "Veuillez confirmer votre mot de passe",
@@ -45,5 +482,846 @@
       "invalid": "Email ou mot de passe incorrecte",
       "failure": "Échec de la connexion"
     }
+  },
+  "client": {
+    "dashboard": {
+      "loading": "Chargement...",
+      "welcome": "Bienvenue sur votre tableau de bord client",
+      "recentTransactions": {
+        "title": "Dernières opérations",
+        "subtitle": "Aperçu rapide des mouvements récents",
+        "viewAll": "Voir tout",
+        "loading": "Chargement des opérations…",
+        "ref": "Ref",
+        "unknownUser": "Utilisateur inconnu",
+        "account": "Compte",
+        "unknownAccount": "Compte inconnu"
+      },
+      "otherAccounts": {
+        "title": "Autres comptes",
+        "addAccount": "Ajouter un compte",
+        "noMain": "Aucun compte principal trouvé."
+      },
+      "savings": {
+        "title": "Mes Livrets d'Épargne",
+        "subtitle": "Livret A, LDDS et autres produits d'épargne",
+        "viewAll": "Voir tout",
+        "loading": "Chargement des livrets...",
+        "account": "Compte",
+        "active": "Actif",
+        "inactive": "Inactif",
+        "availableBalance": "Solde disponible",
+        "interestRate": "Taux d'intérêt",
+        "earnedInterests": "Intérêts gagnés",
+        "noSavings": "Aucun livret d'épargne",
+        "startSaving": "Commencez à épargner dès aujourd'hui avec nos produits d'épargne",
+        "discover": "Découvrir nos livrets"
+      }
+    },
+    "accounts": {
+      "title": "Comptes",
+      "inDevelopment": "Page des comptes bancaires - En cours de développement"
+    },
+    "transfers": {
+      "loading": "Chargement de tes comptes…",
+      "noAccounts": "Aucun compte disponible",
+      "createAccount": "Crée un compte pour effectuer un virement.",
+      "form": {
+        "title": "Virements",
+        "subtitle": "Effectuer un virement",
+        "description": "Déplace tes fonds en toute sécurité, entre tes comptes ou vers un IBAN externe.",
+        "fromAccount": "Compte émetteur",
+        "selectDebit": "Choisis un compte à débiter",
+        "toAccount": "Compte destinataire",
+        "selectCredit": "Choisis un compte à créditer",
+        "account": "Compte",
+        "amount": "Montant du virement",
+        "infoTitle": "Informations importantes",
+        "info1": "Le transfert sera effectué entre tes comptes personnels uniquement",
+        "info2": "Les deux comptes doivent avoir la même devise",
+        "info3": "Le transfert est instantané et sécurisé",
+        "warningTitle": "Transfert impossible",
+        "warningMessage": "Tu dois avoir au moins 2 comptes pour effectuer un transfert entre tes comptes.",
+        "processing": "Traitement...",
+        "minAccountsRequired": "2 comptes minimum requis",
+        "send": "Envoyer",
+        "reset": "Réinitialiser",
+        "successMessage": "Virement effectué avec succès",
+        "reference": "Référence",
+        "status": "Statut",
+        "completed": "Complété",
+        "pending": "En cours",
+        "date": "Date",
+        "confirmTitle": "Confirmer le virement",
+        "confirmMessage": "Tu t'apprêtes à transférer",
+        "from": "de l'IBAN",
+        "to": "vers",
+        "confirmButton": "Oui, confirmer",
+        "cancel": "Annuler"
+      }
+    },
+    "beneficiaries": {
+      "title": "Mes Bénéficiaires",
+      "subtitle": "Gérez vos bénéficiaires et organisez-les en groupes",
+      "newBeneficiary": "Nouveau bénéficiaire",
+      "newGroup": "Nouveau groupe",
+      "confirmDeleteBeneficiary": "Êtes-vous sûr de vouloir supprimer ce bénéficiaire ?",
+      "confirmDeleteGroup": "Êtes-vous sûr de vouloir supprimer ce groupe ?",
+      "confirmRemoveFromGroup": "Êtes-vous sûr de vouloir retirer ce bénéficiaire du groupe ?"
+    },
+    "beneficiariesManager": {
+      "tabs": {
+        "beneficiaries": "Bénéficiaires",
+        "groups": "Groupes"
+      },
+      "table": {
+        "columns": {
+          "name": "Nom",
+          "iban": "IBAN",
+          "email": "Email",
+          "country": "Pays",
+          "status": "Statut",
+          "created": "Date de création",
+          "action": "Action"
+        },
+        "status": {
+          "verified": "Vérifié",
+          "notVerified": "Non vérifié"
+        },
+        "loading": "Chargement des bénéficiaires...",
+        "empty": "Aucun bénéficiaire trouvé",
+        "itemLabel": "bénéficiaires",
+        "viewDetails": "Voir les détails"
+      },
+      "card": {
+        "verified": "Vérifié",
+        "transferButton": "Transférer",
+        "editButton": "Modifier",
+        "deleteButton": "Supprimer"
+      },
+      "sidebar": {
+        "title": "Détails du bénéficiaire",
+        "close": "Fermer"
+      },
+      "deleteConfirm": {
+        "title": "Supprimer le bénéficiaire",
+        "message": "Êtes-vous sûr de vouloir supprimer",
+        "warning": "? Cette action est irréversible.",
+        "cancel": "Annuler",
+        "confirm": "Supprimer"
+      },
+      "form": {
+        "transferToBeneficiary": {
+          "beneficiary": "Bénéficiaire",
+          "sourceAccount": "Compte source",
+          "selectAccount": "Sélectionnez un compte",
+          "amount": "Montant (€)",
+          "cancel": "Annuler",
+          "submitTransfer": "Effectuer le transfert"
+        },
+        "transferToAll": {
+          "title": "Transfert à tous vos bénéficiaires",
+          "description": "Le montant total sera réparti équitablement entre {count} bénéficiaire(s)",
+          "errors": {
+            "accountRequired": "Le numéro de compte source est requis",
+            "amountRequired": "Le montant total est requis",
+            "amountPositive": "Le montant doit être supérieur à 0",
+            "minBeneficiaries": "Vous devez avoir au moins un bénéficiaire"
+          },
+          "sourceAccountLabel": "Numéro de compte source",
+          "totalAmountLabel": "Montant total à transférer (€)",
+          "distribution": {
+            "title": "Répartition du montant",
+            "totalAmount": "Montant total",
+            "beneficiariesCount": "Nombre de bénéficiaires",
+            "perBeneficiary": "Chaque bénéficiaire recevra: {amount} €"
+          },
+          "beneficiariesList": "Bénéficiaires concernés ({count})",
+          "confirm": "Confirmer le transfert",
+          "cancel": "Annuler"
+        },
+        "fields": {
+          "beneficiaryName": "Nom du bénéficiaire",
+          "iban": "IBAN",
+          "country": "Pays",
+          "email": "Email (optionnel)",
+          "address": {
+            "title": "Adresse (optionnel)",
+            "street": "Rue",
+            "city": "Ville",
+            "postalCode": "Code postal"
+          }
+        }
+      },
+      "group": {
+        "card": {
+          "beneficiariesCount": "{count, plural, =0 {aucun bénéficiaire} =1 {1 bénéficiaire} other {# bénéficiaires}}",
+          "badge": "Groupe",
+          "createdAt": "Créé le {date}",
+          "updatedAt": "Dernière modification le {date}",
+          "viewMembers": "Voir les membres",
+          "transfer": "Transférer au groupe",
+          "add": "Ajouter",
+          "edit": "Modifier",
+          "delete": "Supprimer"
+        },
+        "sidebar": {
+          "title": "Détails du groupe",
+          "close": "Fermer"
+        },
+        "table": {
+          "loading": "Chargement des groupes...",
+          "noGroups": "Aucun groupe trouvé",
+          "noGroupsDesc": "Créez un groupe pour organiser vos bénéficiaires",
+          "columns": {
+            "groupName": "Nom du groupe",
+            "membersCount": "Nombre de membres",
+            "createdAt": "Date de création",
+            "updatedAt": "Dernière modification",
+            "action": "Action"
+          },
+          "members": "{count, plural, =0 {aucun membre} =1 {1 membre} other {# membres}}",
+          "viewDetails": "Voir les détails"
+        },
+        "membersTable": {
+          "columns": {
+            "beneficiary": "Bénéficiaire",
+            "iban": "IBAN",
+            "contact": "Contact",
+            "status": "Statut",
+            "actions": "Actions"
+          },
+          "noContact": "Non renseigné",
+          "verified": "Vérifié",
+          "pending": "En attente",
+          "details": "Détails",
+          "transfer": "Transférer",
+          "remove": "Retirer",
+          "membersCount": "{count, plural, =0 {aucun membre} =1 {1 membre dans ce groupe} other {# membres dans ce groupe}}",
+          "noMembers": "Aucun membre",
+          "noMembersDesc": "Ce groupe ne contient aucun bénéficiaire pour le moment. Ajoutez des membres pour commencer.",
+          "noMembersInGroup": "Aucun membre dans ce groupe",
+          "itemLabel": "membres",
+          "createdAt": "Créé le {date}",
+          "updatedAt": "Dernière modification le {date}",
+          "close": "Fermer"
+        },
+        "form": {
+          "groupForm": {
+            "save": "Enregistrer"
+          },
+          "fields": {
+            "groupName": "Nom du groupe",
+            "selectBeneficiaries": "Sélectionner les bénéficiaires",
+            "noBeneficiaries": "Aucun bénéficiaire disponible",
+            "selectedCount": "{count, plural, =0 {aucun bénéficiaire sélectionné} =1 {1 bénéficiaire sélectionné} other {# bénéficiaires sélectionnés}}"
+          },
+          "transferToGroup": {
+            "group": "Groupe",
+            "beneficiariesCount": "{count, plural, =0 {aucun bénéficiaire} =1 {1 bénéficiaire} other {# bénéficiaires}}",
+            "sourceAccount": "Compte source",
+            "loadingAccounts": "Chargement des comptes...",
+            "selectAccount": "Sélectionnez un compte",
+            "totalAmount": "Montant total à transférer (€)",
+            "distributionTitle": "Répartition par bénéficiaire",
+            "totalAmountLabel": "Montant total",
+            "distributedAmount": "Montant distribué",
+            "difference": "Écart",
+            "remainingAmount": "Il reste {amount} € à distribuer",
+            "exceededAmount": "Vous avez dépassé de {amount} €",
+            "cancel": "Annuler",
+            "submit": "Envoyer le transfert"
+          }
+        }
+      }
+    },
+    "feed": {
+      "grid": {
+        "noNews": "Aucune actualité trouvée."
+      },
+      "list": {
+        "loading": "Chargement...",
+        "error": "Erreur : {message}"
+      },
+      "manageList": {
+        "noArticles": "Aucun article à afficher.",
+        "category": "Catégorie",
+        "priority": "Priorité",
+        "edit": "Modifier",
+        "delete": "Supprimer"
+      },
+      "details": {
+        "noContent": "Aucun contenu disponible pour cette actualité."
+      },
+      "blocks": {
+        "content": {
+          "deleteBlock": "Supprimer ce bloc"
+        },
+        "toolbar": {
+          "addBlock": "Ajouter un bloc :",
+          "text": "Texte",
+          "media": "Médias"
+        },
+        "editor": {
+          "noBlocks": "Aucun bloc. Ajoutez-en un pour commencer !",
+          "blocksCount": "{count, plural, =0 {aucun bloc} =1 {1 bloc • Glissez-déposez pour réorganiser} other {# blocs • Glissez-déposez pour réorganiser}}"
+        }
+      },
+      "form": {
+        "fields": {
+          "title": "Titre *",
+          "titlePlaceholder": "Titre de l'actualité",
+          "category": "Catégorie *",
+          "priority": "Priorité *",
+          "tags": "Tags",
+          "tagsPlaceholder": "Tags (séparés par des virgules, ex: épargne, taux, offre)",
+          "cancel": "Annuler",
+          "saving": "Enregistrement...",
+          "update": "Mettre à jour",
+          "create": "Créer l'actualité"
+        }
+      },
+      "structure": {
+        "media": {
+          "videoNotSupported": "Votre navigateur ne supporte pas la lecture de vidéos."
+        }
+      },
+      "card": {
+        "media": "média",
+        "moreMedia": "+{count} autre(s) média(s)"
+      },
+      "filters": {
+        "category": "Catégorie",
+        "priority": "Priorité",
+        "all": "Toutes",
+        "tagsLabel": "Tags (virgule séparés)",
+        "tagsPlaceholder": "ex: security,savings"
+      },
+      "loadMore": {
+        "loading": "Chargement...",
+        "loadMore": "Charger plus"
+      }
+    },
+    "stocks": {
+      "forms": {
+        "stockForm": {
+          "cancel": "Annuler",
+          "creating": "Création...",
+          "create": "Créer l'action"
+        },
+        "editStockForm": {
+          "cancel": "Annuler",
+          "updating": "Modification...",
+          "update": "Modifier l'action"
+        }
+      },
+      "orders": {
+        "filters": {
+          "allStatuses": "Tous les statuts",
+          "pending": "En attente",
+          "executed": "Exécuté",
+          "cancelled": "Annulé",
+          "partiallyExecuted": "Partiellement exécuté",
+          "rejected": "Rejeté",
+          "allTypes": "Tous les types",
+          "buy": "Achat",
+          "sell": "Vente",
+          "status": "Statut",
+          "orderType": "Type d'ordre"
+        },
+        "card": {
+          "type": "Type",
+          "buy": "Achat",
+          "sell": "Vente",
+          "quantity": "Quantité",
+          "unitPrice": "Prix unitaire",
+          "totalAmount": "Montant total",
+          "fundsBlocked": "{amount}€ bloqués",
+          "sharesBlocked": "{count} actions bloquées",
+          "fundsWillBeUnlocked": "Ces fonds seront débloqués si vous annulez l'ordre",
+          "sharesWillBeUnlocked": "Ces actions seront débloquées si vous annulez l'ordre",
+          "executedAt": "Exécuté le {date}",
+          "executionPrice": "Prix d'exécution: {price}€",
+          "cancelling": "Annulation...",
+          "cancelOrder": "Annuler l'ordre"
+        },
+        "statusBadge": {
+          "pending": "En attente",
+          "executed": "Exécuté",
+          "cancelled": "Annulé",
+          "partiallyExecuted": "Partiellement exécuté",
+          "rejected": "Rejeté",
+          "unknown": "Inconnu"
+        },
+        "list": {
+          "noOrders": "Vous n'avez pas encore d'ordres",
+          "noMatchingOrders": "Aucun ordre ne correspond aux filtres sélectionnés"
+        },
+        "blockedResources": {
+          "fundsBlocked": "{amount}€ bloqués",
+          "sharesBlocked": "{count} actions bloquées",
+          "fundsWillBeUnlocked": "Ces fonds seront débloqués si vous annulez l'ordre",
+          "sharesWillBeUnlocked": "Ces actions seront débloquées si vous annulez l'ordre"
+        },
+        "placeOrder": {
+          "buyTitle": "Acheter",
+          "sellTitle": "Vendre",
+          "error": "Erreur lors du placement de l'ordre",
+          "statusPlacing": "Placement de l'ordre...",
+          "statusMatching": "Recherche de correspondances...",
+          "statusSuccess": "Ordre exécuté avec succès !",
+          "quantity": "Quantité",
+          "pricePerShare": "Prix par action (€)",
+          "currentMarketPrice": "Prix actuel du marché",
+          "totalAmount": "Montant total",
+          "transactionFee": "Frais de transaction",
+          "totalToPay": "Total à payer",
+          "totalToReceive": "Total à recevoir",
+          "autoMatchInfo": "Votre ordre sera automatiquement comparé aux ordres existants pour une exécution immédiate.",
+          "cancel": "Annuler",
+          "confirmBuy": "Confirmer l'achat",
+          "confirmSell": "Confirmer la vente",
+          "buttonPlacing": "Placement...",
+          "buttonMatching": "Matching...",
+          "buttonExecuted": "✓ Exécuté"
+        },
+        "directorCard": {
+          "orderDetails": "Détails de l'ordre",
+          "symbol": "Symbole",
+          "type": "Type",
+          "quantity": "Quantité",
+          "pricePerShare": "Prix par action",
+          "totalAmount": "Montant total",
+          "status": "Statut",
+          "buy": "Achat",
+          "sell": "Vente"
+        },
+        "directorFilters": {
+          "allStatuses": "Tous les statuts",
+          "allTypes": "Tous les types",
+          "pending": "En attente",
+          "executed": "Exécuté",
+          "cancelled": "Annulé",
+          "partiallyExecuted": "Partiellement exécuté",
+          "rejected": "Rejeté",
+          "buy": "Achat",
+          "sell": "Vente",
+          "status": "Statut",
+          "orderType": "Type d'ordre"
+        },
+        "directorList": {
+          "noOrders": "Aucun ordre de directeur disponible",
+          "noMatchingOrders": "Aucun ordre ne correspond aux filtres sélectionnés"
+        },
+        "openIPO": {
+          "errorMinShares": "Le nombre d'actions doit être supérieur à 0",
+          "errorMaxShares": "Le nombre d'actions ne peut pas dépasser {max}",
+          "success": "IPO ouverte avec succès pour {symbol}",
+          "error": "Erreur lors de l'ouverture de l'IPO",
+          "title": "Ouvrir IPO",
+          "ipoTitle": "Introduction en Bourse (IPO)",
+          "ipoDescription": "Permettez aux utilisateurs d'acheter des actions.",
+          "totalShares": "Actions totales",
+          "sharesLabel": "Nombre d'actions à mettre en IPO",
+          "maxShares": "Maximum : {max} actions (total du stock)",
+          "ipoType": "Type d'IPO",
+          "initialIPO": "IPO Initial",
+          "secondaryIPO": "IPO Secondaire",
+          "cancel": "Annuler",
+          "opening": "Ouverture...",
+          "openIPO": "Ouvrir l'IPO"
+        },
+        "purchaseIPO": {
+          "errorMaxShares": "Seulement {available} actions disponibles en IPO",
+          "error": "Erreur lors de l'achat IPO",
+          "title": "Achat IPO",
+          "ipoTitle": "Introduction en Bourse",
+          "ipoDescription": "Achat direct au prix d'émission initial",
+          "sharesRemaining": "actions restantes",
+          "quantity": "Quantité",
+          "maxAvailable": "Maximum : {max} actions disponibles",
+          "fixedPrice": "Prix IPO fixe (€)",
+          "fixedPriceDescription": "Prix fixe d'",
+          "totalAmount": "Montant total",
+          "transactionFee": "Frais de transaction",
+          "totalToPay": "Total à payer",
+          "instantExecutionInfo": "Votre achat sera exécuté instantanément au prix IPO. Les actions seront ajoutées directement à votre portefeuille.",
+          "cancel": "Annuler",
+          "purchasing": "Achat en cours...",
+          "buyShares": "Acheter {count} action(s) IPO"
+        }
+      },
+      "positions": {
+        "summary": {
+          "title": "Résumé du portefeuille",
+          "totalValue": "Valeur totale",
+          "totalCost": "Coût total",
+          "gainLoss": "Gain/Perte",
+          "performance": "Performance"
+        },
+        "card": {
+          "totalQuantity": "Quantité totale",
+          "available": "Disponible",
+          "blocked": "{count} bloquées",
+          "averagePrice": "Prix moyen",
+          "currentPrice": "Prix actuel",
+          "currentValue": "Valeur actuelle",
+          "totalCost": "Coût total",
+          "allBlocked": "Toutes vos actions sont bloquées dans des ordres en attente",
+          "sell": "Vendre",
+          "availableCount": "({count} disponibles)"
+        }
+      },
+      "transactions": {
+        "list": {
+          "noTransactions": "Vous n'avez pas encore de transactions",
+          "noMatchingTransactions": "Aucune transaction ne correspond aux filtres sélectionnés"
+        },
+        "filters": {
+          "type": "Type",
+          "allTypes": "Tous les types",
+          "buys": "Achats",
+          "sells": "Ventes",
+          "symbol": "Symbole",
+          "symbolPlaceholder": "Ex: AAPL"
+        },
+        "tableHeader": {
+          "symbol": "Symbole",
+          "date": "Date",
+          "type": "Type",
+          "quantity": "Quantité",
+          "unitPrice": "Prix unitaire",
+          "total": "Total"
+        },
+        "row": {
+          "buy": "Achat",
+          "sell": "Vente"
+        }
+      },
+      "structure": {
+        "actions": {
+          "buy": "Acheter",
+          "sell": "Vendre",
+          "lastUpdated": "Mis à jour"
+        },
+        "stats": {
+          "open": "Ouverture",
+          "previousClose": "Clôture préc.",
+          "high": "Plus haut",
+          "low": "Plus bas"
+        },
+        "price": {
+          "afterClose": "Après clôture"
+        },
+        "fiftyTwoWeek": {
+          "title": "Sur 52 semaines",
+          "low": "Plus bas",
+          "high": "Plus haut"
+        },
+        "header": {
+          "open": "Ouvert",
+          "closed": "Fermé"
+        },
+        "volume": {
+          "volume": "Volume",
+          "averageVolume": "Volume moy."
+        }
+      },
+      "modal": {
+        "createStock": "Créer une action"
+      },
+      "table": {
+        "noStocks": "Aucune action créée",
+        "symbol": "Symbole",
+        "company": "Entreprise",
+        "previousPrice": "Prix précédent",
+        "currentPrice": "Prix actuel",
+        "variation": "Variation",
+        "status": "Statut",
+        "actions": "Actions",
+        "available": "Disponible",
+        "unavailable": "Indisponible",
+        "ipoActive": "IPO Active",
+        "shares": "actions",
+        "closeIPO": "Fermer IPO",
+        "openIPO": "Ouvrir IPO",
+        "deactivate": "Désactiver",
+        "activate": "Activer",
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "confirmDelete": "Êtes-vous sûr de vouloir supprimer {symbol} ?"
+      }
+    },
+    "chat": {
+      "title": "Chat",
+      "connected": "Connecté",
+      "disconnected": "Déconnecté",
+      "noMessages": "Aucun message pour le moment",
+      "typing": "En train d'écrire...",
+      "inputPlaceholder": "Écris ton message...",
+      "inputDisabled": "Connexion en cours...",
+      "sendButton": "Envoyer",
+      "clientConversations": {
+        "title": "Mes conversations",
+        "newConversation": "Nouvelle conversation",
+        "creating": "Création...",
+        "errorFetch": "Impossible de récupérer vos conversations",
+        "errorCreate": "Erreur lors de la création de la conversation",
+        "empty": "Vous n'avez pas encore de conversation.",
+        "notAssigned": "Non assigné"
+      },
+      "advisorConversations": {
+        "loading": "Chargement…",
+        "errorTitle": "Erreur",
+        "reloadPage": "Recharger la page",
+        "stats": {
+          "pending": "En attente",
+          "assigned": "Mes conversations"
+        },
+        "searchPlaceholder": "Rechercher par nom client...",
+        "pendingTitle": "Demandes en attente",
+        "pendingEmpty": "Aucune demande en attente",
+        "searchEmpty": "Aucun résultat pour cette recherche",
+        "takeOver": "Prendre en charge",
+        "continue": "Continuer",
+        "transfer": "Transférer",
+        "assignedTitle": "Vos conversations",
+        "assignedEmpty": "Aucune conversation assignée"
+      },
+      "selectAdvisorsModal": {
+        "title": "Transfert de Dossier Client",
+        "subtitle": "Sélectionnez un nouveau conseiller",
+        "searchPlaceholder": "Rechercher par nom ou identifiant...",
+        "loading": "Chargement des conseillers...",
+        "errorFetch": "Impossible de récupérer les conseillers",
+        "retry": "Réessayer",
+        "noAdvisors": "Aucun conseiller trouvé",
+        "noAdvisorsHint": "Essayez avec d'autres critères",
+        "cancel": "Annuler",
+        "confirm": "Valider le transfert",
+        "transferSuccess": "Conversation transférée !",
+        "transferError": "Erreur lors du transfert."
+      }
+    },
+    "bankAccount": {
+      "transactionHistory": {
+        "noTransactions": "Aucune transaction pour le moment.",
+        "reference": "Ref",
+        "unknownUser": "Utilisateur inconnu",
+        "sender": "Émetteur",
+        "recipient": "Destinataire"
+      },
+      "summaryCard": {
+        "totalBalance": "Solde total de vos comptes"
+      },
+      "subAccountForm": {
+        "title": "Ajouter un sous-compte",
+        "accountNameLabel": "Nom du compte *",
+        "accountNamePlaceholder": "Nom du sous-compte",
+        "accountTypeLabel": "Type de compte *",
+        "currencyLabel": "Devise *",
+        "creating": "Création...",
+        "createButton": "Créer le sous-compte",
+        "success": "Sous-compte créé avec succès !",
+        "accountTypes": {
+          "savings": "Épargne"
+        }
+      },
+      "quickTransfer": {
+        "title": "Transferts rapides",
+        "subtitle": "Réeffectuer un transfert en un clic",
+        "noTransactions": "Aucune transaction récente disponible",
+        "unknownUser": "Utilisateur inconnu",
+        "unknownAccount": "Compte inconnu",
+        "account": "Compte",
+        "repeatButton": "Répéter",
+        "confirmTitle": "Confirmer le transfert rapide",
+        "amountLabel": "Montant",
+        "toLabel": "Vers:",
+        "originalTransaction": "Transaction originale du",
+        "processing": "En cours...",
+        "confirmButton": "Confirmer",
+        "cancelButton": "Annuler"
+      },
+      "overdraftRequests": {
+        "title": "Demandes de découvert",
+        "requestsCount": "demandes",
+        "loading": "Chargement...",
+        "noPendingRequests": "Aucune demande en attente.",
+        "account": "Compte",
+        "current": "Actuel",
+        "requested": "Demande",
+        "client": "Client",
+        "status": "Statut",
+        "viewProfile": "Voir profil client",
+        "loadingProfile": "Chargement...",
+        "reject": "Refuser",
+        "approve": "Approuver",
+        "close": "Fermer",
+        "loadingDetails": "Chargement du profil...",
+        "phoneNA": "N/A",
+        "accounts": "Comptes",
+        "loanRequests": "Demandes de crédit",
+        "noLoanRequests": "Aucune demande",
+        "overdraftRequestLabel": "Demande de découvert",
+        "purpose": "Motif"
+      },
+      "mainAccountCard": {
+        "mainLabel": "Principal",
+        "availableBalance": "Solde disponible",
+        "accountNumber": "Numéro de compte",
+        "ribMessage": "Récupère ton RIB pour partager tes coordonnées bancaires.",
+        "downloadRib": "Télécharger mon RIB",
+        "generatingRib": "Génération...",
+        "limits": "Limites",
+        "overdraftRequest": "Demande de découvert",
+        "currentOverdraft": "Actuel",
+        "increaseTransferLimit": "Augmenter limite de virement",
+        "currentLimit": "Actuelle",
+        "overdraftModalTitle": "Demander une augmentation de découvert",
+        "overdraftModalSubtitle": "Découvert actuel :",
+        "overdraftSuccess": "Demande envoyée à votre conseiller.",
+        "requestButton": "Demander",
+        "sending": "Envoi...",
+        "transferModalTitle": "Augmenter la limite de virement",
+        "transferModalSubtitle": "Limite actuelle :",
+        "transferSuccess": "Limite mise à jour.",
+        "updating": "Mise à jour...",
+        "increaseButton": "Augmenter"
+      },
+      "accountList": {
+        "noAccounts": "Aucun autre compte disponible"
+      }
+    },
+    "loan": {
+      "form": {
+        "clientLabel": "Client",
+        "title": "Demande de crédit",
+        "description": "Renseignez les informations essentielles. Votre conseiller recevra automatiquement la demande.",
+        "errorLoadAdvisors": "Impossible de charger les conseillers",
+        "successMessage": "Demande envoyée au conseiller.",
+        "failureMessage": "Échec de la demande",
+        "errorMessage": "Erreur lors de la demande. Veuillez réessayer ou contacter votre conseiller.",
+        "footerNote": "Une fois envoyée, la demande sera visible par votre conseiller.",
+        "adviceLabel": "Conseil",
+        "adviceText": "Préparez un motif clair et un montant cohérent avec votre besoin. Si le montant dépasse 5000€, le taux sera proposé par le directeur après validation.",
+        "indicativeRateLabel": "Taux indicatif",
+        "pending": "En attente",
+        "rateExplanation": "Appliqué automatiquement aux demandes ≤ 5000€. Au-delà, un taux personnalisé sera proposé."
+      },
+      "fields": {
+        "advisorLabel": "Choisir un conseiller",
+        "loadingAdvisors": "Chargement des conseillers...",
+        "amountLabel": "Montant demandé",
+        "amountError": "Veuillez saisir un montant valide et supérieur à 0.",
+        "purposeLabel": "Motif",
+        "purposePlaceholder": "Exemple : Achat d'un véhicule, rénovation de la maison, etc.",
+        "purposeError": "Veuillez préciser le motif de votre demande.",
+        "durationLabel": "Durée de remboursement",
+        "months": "{count} mois",
+        "simulationTitle": "Simulation mensuelle",
+        "rateByDirector": "(taux à définir par le directeur)",
+        "indicativeRate": "(taux indicatif {rate}%)",
+        "rateNotDefined": "(taux indicatif non défini)",
+        "monthlyNotAvailable": "-- €/mois",
+        "monthlyAmount": "{amount} €/mois",
+        "rateProposalNote": "Pour un montant > 5000€, le taux sera proposé par le directeur.",
+        "waitingForRate": "En attente de taux indicatif défini par le directeur.",
+        "rateWillAppear": "Dès qu'un taux indicatif sera publié, une estimation apparaîtra ici.",
+        "submitButton": "Envoyer la demande"
+      },
+      "advisorPage": {
+        "advisorLabel": "Conseiller",
+        "title": "Demandes de crédit",
+        "description": "Suivez, analysez et décidez des demandes de crédit de vos clients dans un espace clair et cohérent.",
+        "errorLoad": "Impossible de charger les demandes",
+        "stats": {
+          "total": "Total",
+          "pending": "En attente",
+          "approved": "Approuvées",
+          "rejected": "Refusées"
+        },
+        "noRequests": "Aucune demande pour le moment",
+        "noRequestsDescription": "Les nouvelles demandes de vos clients apparaîtront ici dès leur création."
+      }
+    },
+    "notification": {
+      "from": "De",
+      "noNotifications": "Aucune Notification"
+    },
+    "rib": {
+      "title": "Relevé d'Identité Bancaire",
+      "holderSection": "Titulaire & coordonnées",
+      "holder": "Titulaire",
+      "address": "Adresse",
+      "addressNotProvided": "Adresse non renseignée",
+      "accountSection": "Références du compte",
+      "accountNumber": "Numéro de compte",
+      "currency": "Devise",
+      "generatedAt": "Généré le"
+    },
+    "savingsAccount": {
+      "info": {
+        "defaultTitle": "Comment fonctionne votre compte épargne ?",
+        "dailyCalculation": {
+          "title": "Calcul quotidien",
+          "description": "Vos intérêts sont calculés chaque jour sur votre solde disponible"
+        },
+        "autoCredit": {
+          "title": "Crédit automatique",
+          "description": "Les intérêts sont automatiquement ajoutés à votre compte"
+        },
+        "compoundEffect": {
+          "title": "Effet cumulatif",
+          "description": "Vos intérêts génèrent eux-mêmes des intérêts (intérêts composés)"
+        }
+      },
+      "createForm": {
+        "title": "Créer un Compte Épargne",
+        "subtitle": "Configurez les paramètres du compte épargne",
+        "error": "Erreur",
+        "successTitle": "Compte créé !",
+        "successMessage": "Le compte épargne a été créé avec succès.",
+        "accountNumberLabel": "Numéro de compte",
+        "accountNumberPlaceholder": "Ex: 123456"
+      }
+    },
+    "media": {
+      "dragDrop": {
+        "dropOrClick": "Glissez-déposez vos fichiers ici ou cliquez pour sélectionner",
+        "acceptedTypes": "Images et vidéos acceptées • Max {maxSize}MB par fichier"
+      },
+      "uploader": {
+        "errorNotMedia": "{fileName} n'est pas une image ou une vidéo",
+        "errorMaxSize": "{fileName} dépasse la taille maximale de {maxSize}MB"
+      },
+      "filePreview": {
+        "video": "Vidéo",
+        "remove": "Supprimer",
+        "uploaded": "Uploadé",
+        "noCaption": "Aucune légende",
+        "editCaption": "Modifier la légende",
+        "addCaption": "Ajouter une légende...",
+        "save": "Enregistrer",
+        "cancel": "Annuler"
+      }
+    }
+  },
+  "notFound": {
+    "title": "Page non trouvée",
+    "description": "Désolé, la page que vous recherchez semble introuvable. Elle a peut-être été déplacée ou supprimée.",
+    "backHome": "Retour à l'accueil",
+    "helpCenter": "Centre d'aide",
+    "needHelp": "Besoin d'aide ?",
+    "contactUs": "Contactez-nous"
+  },
+  "error": {
+    "title": "Erreur serveur",
+    "description": "Oups ! Une erreur inattendue s'est produite. Nos équipes ont été notifiées et travaillent sur le problème.",
+    "retry": "Réessayer",
+    "backHome": "Retour à l'accueil",
+    "errorCode": "Code d'erreur",
+    "persistentProblem": "Le problème persiste ?",
+    "contactSupport": "Contactez notre support"
   }
 }

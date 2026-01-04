@@ -1,10 +1,12 @@
 import { RibData } from "@/types/rib";
+import { useTranslations } from "next-intl";
 
 type Props = {
     rib: RibData;
 };
 
 export function RibDocument({ rib }: Props) {
+    const t = useTranslations("components.rib");
     const generatedAt = new Date().toLocaleString("fr-FR");
     const style = `
         body { margin: 0; background: #f3f4f6; font-family: 'Inter', system-ui, -apple-system, sans-serif; color: #0f172a; }
@@ -34,25 +36,25 @@ export function RibDocument({ rib }: Props) {
                     <div className="header">
                         <div>
                             <h1 className="title">{rib.bankName}</h1>
-                            <p className="subtitle">Relevé d'Identité Bancaire</p>
+                            <p className="subtitle">{t("title")}</p>
                         </div>
                         <span className="badge">RIB</span>
                     </div>
 
                     <hr className="divider" />
-                    <p className="section">Titulaire & coordonnées</p>
+                    <p className="section">{t("holderSection")}</p>
                     <div className="grid">
                         <div className="card">
-                            <p className="label">Titulaire</p>
+                            <p className="label">{t("holder")}</p>
                             <p className="value">{rib.holderName}</p>
                         </div>
                         <div className="card">
-                            <p className="label">Adresse</p>
-                            <p className="value">{rib.holderAddress || "Adresse non renseignée"}</p>
+                            <p className="label">{t("address")}</p>
+                            <p className="value">{rib.holderAddress || t("addressNotProvided")}</p>
                         </div>
                     </div>
 
-                    <p className="section">Références du compte</p>
+                    <p className="section">{t("accountSection")}</p>
                     <div className="grid">
                         <div className="card">
                             <p className="label">IBAN</p>
@@ -63,16 +65,16 @@ export function RibDocument({ rib }: Props) {
                             <p className="value">{rib.bic}</p>
                         </div>
                         <div className="card">
-                            <p className="label">Numéro de compte</p>
+                            <p className="label">{t("accountNumber")}</p>
                             <p className="value">{rib.accountNumberFormatted}</p>
                         </div>
                         <div className="card">
-                            <p className="label">Devise</p>
+                            <p className="label">{t("currency")}</p>
                             <p className="value">{rib.currency}</p>
                         </div>
                     </div>
 
-                    <div className="footer">Généré le {generatedAt}</div>
+                    <div className="footer">{t("generatedAt")} {generatedAt}</div>
                 </div>
             </body>
         </html>

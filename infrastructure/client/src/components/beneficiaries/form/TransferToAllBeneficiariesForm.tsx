@@ -5,6 +5,7 @@ import { Beneficiary } from "@/types/beneficiary";
 import Button from "@/components/ui/Button";
 import { Users, AlertCircle, CheckCircle } from "lucide-react";
 import { Input } from "@/components/ui/Input";
+import { useTranslations } from "next-intl";
 
 interface TransferToAllBeneficiariesFormProps {
   beneficiaries: Beneficiary[];
@@ -17,6 +18,7 @@ interface TransferToAllBeneficiariesFormProps {
 }
 
 export function TransferToAllBeneficiariesForm({beneficiaries,onSubmit,onCancel}: TransferToAllBeneficiariesFormProps) {
+  const t = useTranslations('components.beneficiaries.form.transferToAll');
   const [sourceAccountNumber, setSourceAccountNumber] = useState("");
   const [totalAmount, setTotalAmount] = useState("");
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -30,17 +32,17 @@ export function TransferToAllBeneficiariesForm({beneficiaries,onSubmit,onCancel}
     const newErrors: { [key: string]: string } = {};
 
     if (!sourceAccountNumber) {
-      newErrors.sourceAccountNumber = "Le numéro de compte source est requis";
+      newErrors.sourceAccountNumber = t('errors.accountRequired');
     }
 
     if (!totalAmount) {
-      newErrors.totalAmount = "Le montant total est requis";
+      newErrors.totalAmount = t('errors.amountRequired');
     } else if (parseFloat(totalAmount) <= 0) {
-      newErrors.totalAmount = "Le montant doit être supérieur à 0";
+      newErrors.totalAmount = t('errors.amountPositive');
     }
 
     if (beneficiaryCount === 0) {
-      newErrors.general = "Vous devez avoir au moins un bénéficiaire";
+      newErrors.general = t('errors.minBeneficiaries');
     }
 
     setErrors(newErrors);
@@ -68,10 +70,10 @@ export function TransferToAllBeneficiariesForm({beneficiaries,onSubmit,onCancel}
           <Users className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
           <div className="flex-1">
             <p className="font-semibold text-blue-900">
-              Transfert à tous vos bénéficiaires
+              {t('title')}
             </p>
             <p className="text-sm text-blue-700 mt-1">
-              Le montant total sera réparti équitablement entre {beneficiaryCount} bénéficiaire(s)
+              {t('description', { count: beneficiaryCount })}
             </p>
           </div>
         </div>
@@ -89,7 +91,7 @@ export function TransferToAllBeneficiariesForm({beneficiaries,onSubmit,onCancel}
       <div className="space-y-4">
         <div>
           <Input
-            label="Numéro de compte source"
+            label={t('sourceAccountLabel')}
             type="number"
             value={sourceAccountNumber}
             onChange={(e) => {
@@ -108,7 +110,7 @@ export function TransferToAllBeneficiariesForm({beneficiaries,onSubmit,onCancel}
 
         <div>
           <Input
-            label="Montant total à transférer (€)"
+            label={t('totalAmountLabel')}
             type="number"
             step="0.01"
             min="0.01"
@@ -134,19 +136,19 @@ export function TransferToAllBeneficiariesForm({beneficiaries,onSubmit,onCancel}
             <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
             <div className="flex-1">
               <p className="font-semibold text-green-900">
-                Répartition du montant
+                {t('distribution.title')}
               </p>
               <div className="mt-2 space-y-1 text-sm text-green-800">
                 <p>
-                  <span className="font-medium">Montant total:</span>{" "}
+                  <span className="font-medium">{t('distribution.totalAmount')}:</span>{" "}
                   {parseFloat(totalAmount).toFixed(2)} €
                 </p>
                 <p>
-                  <span className="font-medium">Nombre de bénéficiaires:</span>{" "}
+                  <span className="font-medium">{t('distribution.beneficiariesCount')}:</span>{" "}
                   {beneficiaryCount}
                 </p>
                 <p className="text-base font-semibold mt-2">
-                  Chaque bénéficiaire recevra: {amountPerBeneficiary.toFixed(2)} €
+                  {t('distribution.perBeneficiary', { amount: amountPerBeneficiary.toFixed(2) })}
                 </p>
               </div>
             </div>
@@ -157,7 +159,7 @@ export function TransferToAllBeneficiariesForm({beneficiaries,onSubmit,onCancel}
       {beneficiaries.length > 0 && (
         <div className="border border-gray-200 rounded-lg p-4">
           <h3 className="font-semibold text-gray-900 mb-3">
-            Bénéficiaires concernés ({beneficiaries.length})
+            {t('beneficiariesList', { count: beneficiaries.length })}
           </h3>
           <div className="max-h-48 overflow-y-auto space-y-2">
             {beneficiaries.map((beneficiary) => (
@@ -191,10 +193,10 @@ export function TransferToAllBeneficiariesForm({beneficiaries,onSubmit,onCancel}
           disabled={beneficiaryCount === 0}
           className="flex-1"
         >
-          Confirmer le transfert
+          {t('confirm')}
         </Button>
         <Button type="button" variant="secondary" onClick={onCancel}>
-          Annuler
+          {t('cancel')}
         </Button>
       </div>
     </form>

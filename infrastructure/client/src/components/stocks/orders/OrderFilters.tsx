@@ -1,5 +1,6 @@
 import { OrderStatusEnum, OrderType } from "@/types/order";
 import { Select, SelectOption } from "@/components/ui/Select";
+import { useTranslations } from 'next-intl';
 
 interface OrderFiltersProps {
     statusFilter: OrderStatusEnum | "ALL";
@@ -8,34 +9,35 @@ interface OrderFiltersProps {
     onTypeChange: (type: "ALL" | OrderType) =>  void;
 }
 
-const statusOptions: SelectOption<OrderStatusEnum | "ALL">[] = [
-  { value: "ALL", label: "Tous les statuts" },
-  { value: OrderStatusEnum.PENDING, label: "En attente" },
-  { value: OrderStatusEnum.EXECUTED, label: "Exécuté" },
-  { value: OrderStatusEnum.CANCELLED, label: "Annulé" },
-  { value: OrderStatusEnum.PARTIALLY_EXECUTED, label: "Partiellement exécuté" },
-  { value: OrderStatusEnum.REJECTED, label: "Rejeté" },
-];
-
-const typeOptions: SelectOption<OrderType | "ALL">[] = [
-  { value: "ALL", label: "Tous les types" },
-  { value: OrderType.BUY, label: "Achat" },
-  { value: OrderType.SELL, label: "Vente" },
-];
-
 export function OrderFilters({statusFilter, onStatusFilterChange, typeFilter, onTypeChange} : OrderFiltersProps) {
+    const t = useTranslations('components.stocks.orders.filters');
+
+    const statusOptions: SelectOption<OrderStatusEnum | "ALL">[] = [
+      { value: "ALL", label: t('allStatuses') },
+      { value: OrderStatusEnum.PENDING, label: t('pending') },
+      { value: OrderStatusEnum.EXECUTED, label: t('executed') },
+      { value: OrderStatusEnum.CANCELLED, label: t('cancelled') },
+      { value: OrderStatusEnum.PARTIALLY_EXECUTED, label: t('partiallyExecuted') },
+      { value: OrderStatusEnum.REJECTED, label: t('rejected') },
+    ];
+
+    const typeOptions: SelectOption<OrderType | "ALL">[] = [
+      { value: "ALL", label: t('allTypes') },
+      { value: OrderType.BUY, label: t('buy') },
+      { value: OrderType.SELL, label: t('sell') },
+    ];
     return (
     <div className="bg-white rounded-lg shadow-md p-4 mb-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Select
-          label="Statut"
+          label={t('status')}
           value={statusFilter}
           options={statusOptions}
           onChange={onStatusFilterChange}
         />
 
         <Select
-          label="Type d'ordre"
+          label={t('orderType')}
           value={typeFilter}
           options={typeOptions}
           onChange={onTypeChange}

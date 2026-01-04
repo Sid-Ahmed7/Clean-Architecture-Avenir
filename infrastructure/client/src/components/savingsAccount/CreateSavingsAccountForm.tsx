@@ -72,8 +72,8 @@ export function CreateSavingsAccountForm({ onSuccess, onCancel }: CreateSavingsA
                         <PiggyBank className="w-6 h-6" />
                     </div>
                     <div>
-                        <h2 className="text-2xl font-bold">Créer un Compte Épargne</h2>
-                        <p className="text-white/80 text-sm">Configurez les paramètres du compte épargne</p>
+                        <h2 className="text-2xl font-bold">{t("title")}</h2>
+                        <p className="text-white/80 text-sm">{t("subtitle")}</p>
                     </div>
                 </div>
             </div>
@@ -84,7 +84,7 @@ export function CreateSavingsAccountForm({ onSuccess, onCancel }: CreateSavingsA
                     <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
                         <X className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
                         <div>
-                            <p className="text-sm font-semibold text-red-900">Erreur</p>
+                            <p className="text-sm font-semibold text-red-900">{t("error")}</p>
                             <p className="text-sm text-red-700">{error}</p>
                         </div>
                     </div>
@@ -92,11 +92,11 @@ export function CreateSavingsAccountForm({ onSuccess, onCancel }: CreateSavingsA
 
                 {/* Account Number */}
                 <Input
-                    label="Numéro de compte"
+                    label={t("accountNumberLabel")}
                     type="number"
                     icon={PiggyBank}
                     variant="gradient"
-                    placeholder="Ex: 123456"
+                    placeholder={t("accountNumberPlaceholder")}
                     error={errors.accountNumber?.message}
                     required
                     {...register("accountNumber", { valueAsNumber: true })}

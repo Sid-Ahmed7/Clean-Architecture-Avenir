@@ -5,6 +5,7 @@ import { BeneficiaryGroup } from "@/types/beneficiaryGroup";
 import { Eye, Users, Calendar, FolderOpen } from "lucide-react";
 import { BeneficiaryGroupDetailsSidebar } from "./BeneficiaryGroupDetailsSidebar";
 import { formatDate } from "@/lib/utils/date";
+import { useTranslations } from "next-intl";
 
 interface BeneficiaryGroupsTableProps {
   groups: BeneficiaryGroup[];
@@ -18,6 +19,7 @@ interface BeneficiaryGroupsTableProps {
 }
 
 export function BeneficiaryGroupsTable({groups,onEdit,onDelete,onAddBeneficiary,onRemoveBeneficiary,onViewBeneficiaries,onTransferToGroup,isLoading = false}: BeneficiaryGroupsTableProps) {
+  const t = useTranslations('components.beneficiaries.group.table');
   const [selectedGroup, setSelectedGroup] = useState<BeneficiaryGroup | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -36,14 +38,14 @@ export function BeneficiaryGroupsTable({groups,onEdit,onDelete,onAddBeneficiary,
       {isLoading ? (
         <div className="w-full bg-white rounded-lg shadow-md p-8 text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Chargement des groupes...</p>
+          <p className="mt-4 text-gray-600">{t('loading')}</p>
         </div>
       ) : !groups || groups.length === 0 ? (
         <div className="w-full bg-white rounded-lg shadow-md p-8 text-center">
           <FolderOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <p className="text-gray-600">Aucun groupe trouvé</p>
+          <p className="text-gray-600">{t('noGroups')}</p>
           <p className="text-sm text-gray-500 mt-2">
-            Créez un groupe pour organiser vos bénéficiaires
+            {t('noGroupsDesc')}
           </p>
         </div>
       ) : (
@@ -52,11 +54,11 @@ export function BeneficiaryGroupsTable({groups,onEdit,onDelete,onAddBeneficiary,
             <table className="w-full">
               <thead className="bg-gradient-to-r from-purple-600 to-pink-600 text-white">
                 <tr>
-                  <th className="px-6 py-4 text-left text-sm font-semibold">Nom du groupe</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold">Nombre de membres</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold">Date de création</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold">Dernière modification</th>
-                  <th className="px-6 py-4 text-center text-sm font-semibold">Action</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold">{t('columns.groupName')}</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold">{t('columns.membersCount')}</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold">{t('columns.createdAt')}</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold">{t('columns.updatedAt')}</th>
+                  <th className="px-6 py-4 text-center text-sm font-semibold">{t('columns.action')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
@@ -80,8 +82,7 @@ export function BeneficiaryGroupsTable({groups,onEdit,onDelete,onAddBeneficiary,
                       <div className="flex items-center gap-2 text-gray-700">
                         <Users className="w-4 h-4 text-gray-400" />
                         <span className="text-sm">
-                          {group.beneficiaryIds.length}{" "}
-                          {group.beneficiaryIds.length > 1 ? "membres" : "membre"}
+                          {t('members', { count: group.beneficiaryIds.length })}
                         </span>
                       </div>
                     </td>
@@ -105,7 +106,7 @@ export function BeneficiaryGroupsTable({groups,onEdit,onDelete,onAddBeneficiary,
                             handleRowClick(group);
                           }}
                           className="p-2 hover:bg-purple-100 rounded-lg transition-colors group"
-                          aria-label="Voir les détails"
+                          aria-label={t('viewDetails')}
                         >
                           <Eye className="w-5 h-5 text-gray-600 group-hover:text-purple-600" />
                         </button>

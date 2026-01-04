@@ -6,6 +6,7 @@ import { TableColumn } from "@/components/ui/TableHeader";
 import { Beneficiary } from "@/types/beneficiary";
 import { BeneficiaryGroup } from "@/types/beneficiaryGroup";
 import { X, Users, Send, UserMinus, Eye, Mail, MapPin} from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface GroupMembersTableProps {
   group: BeneficiaryGroup | null;
@@ -18,14 +19,15 @@ interface GroupMembersTableProps {
 }
 
 export function GroupMembersTable({group,members,isOpen,onClose,onTransfer,onRemoveMember,onViewDetails}: GroupMembersTableProps) {
+  const t = useTranslations('components.beneficiaries.group.membersTable');
   if (!isOpen || !group) return null;
 
   const columns: TableColumn[] = [
-    { key: "beneficiary", label: "Bénéficiaire", align: "left" },
-    { key: "iban", label: "IBAN", align: "left" },
-    { key: "contact", label: "Contact", align: "left" },
-    { key: "status", label: "Statut", align: "left" },
-    { key: "actions", label: "Actions", align: "right" },
+    { key: "beneficiary", label: t('columns.beneficiary'), align: "left" },
+    { key: "iban", label: t('columns.iban'), align: "left" },
+    { key: "contact", label: t('columns.contact'), align: "left" },
+    { key: "status", label: t('columns.status'), align: "left" },
+    { key: "actions", label: t('columns.actions'), align: "right" },
   ];
 
   const renderRow = (member: Beneficiary) => (
@@ -64,19 +66,19 @@ export function GroupMembersTable({group,members,isOpen,onClose,onTransfer,onRem
             </span>
           </div>
         ) : (
-          <span className="text-sm text-gray-400 italic">Non renseigné</span>
+          <span className="text-sm text-gray-400 italic">{t('noContact')}</span>
         )}
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
         {member.isVerified ? (
           <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
             <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-            Vérifié
+            {t('verified')}
           </span>
         ) : (
           <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">
             <span className="w-2 h-2 bg-yellow-500 rounded-full mr-2"></span>
-            En attente
+            {t('pending')}
           </span>
         )}
       </td>
@@ -89,7 +91,7 @@ export function GroupMembersTable({group,members,isOpen,onClose,onTransfer,onRem
               icon={Eye}
               onClick={() => onViewDetails(member)}
             >
-              Détails
+              {t('details')}
             </Button>
           )}
           {onTransfer && (
@@ -99,7 +101,7 @@ export function GroupMembersTable({group,members,isOpen,onClose,onTransfer,onRem
               icon={Send}
               onClick={() => onTransfer(member)}
             >
-              Transférer
+              {t('transfer')}
             </Button>
           )}
           {onRemoveMember && (
@@ -109,7 +111,7 @@ export function GroupMembersTable({group,members,isOpen,onClose,onTransfer,onRem
               icon={UserMinus}
               onClick={() => onRemoveMember(member.beneficiaryId)}
             >
-              Retirer
+              {t('remove')}
             </Button>
           )}
         </div>
@@ -140,7 +142,7 @@ export function GroupMembersTable({group,members,isOpen,onClose,onTransfer,onRem
                   {group.groupName}
                 </h2>
                 <p className="text-sm text-gray-600 mt-1">
-                  {members.length} {members.length > 1 ? "membres" : "membre"} dans ce groupe
+                  {t('membersCount', { count: members.length })}
                 </p>
               </div>
             </div>
@@ -160,11 +162,10 @@ export function GroupMembersTable({group,members,isOpen,onClose,onTransfer,onRem
                   <Users className="w-12 h-12 text-gray-400" />
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  Aucun membre
+                  {t('noMembers')}
                 </h3>
                 <p className="text-gray-600 max-w-md">
-                  Ce groupe ne contient aucun bénéficiaire pour le moment.
-                  Ajoutez des membres pour commencer.
+                  {t('noMembersDesc')}
                 </p>
               </div>
             ) : (
@@ -173,9 +174,9 @@ export function GroupMembersTable({group,members,isOpen,onClose,onTransfer,onRem
                 columns={columns}
                 renderRow={renderRow}
                 keyExtractor={(member) => member.beneficiaryId}
-                emptyMessage="Aucun membre dans ce groupe"
+                emptyMessage={t('noMembersInGroup')}
                 initialItemsPerPage={10}
-                itemLabel="membres"
+                itemLabel={t('itemLabel')}
                 showControls={true}
               />
             )}
@@ -185,26 +186,28 @@ export function GroupMembersTable({group,members,isOpen,onClose,onTransfer,onRem
             <div className="flex justify-between items-center">
               <div className="text-sm text-gray-600">
                 <p className="font-medium">
-                  Créé le{" "}
-                  {new Date(group.createdAt).toLocaleDateString("fr-FR", {
-                    day: "2-digit",
-                    month: "long",
-                    year: "numeric",
+                  {t('createdAt', {
+                    date: new Date(group.createdAt).toLocaleDateString("fr-FR", {
+                      day: "2-digit",
+                      month: "long",
+                      year: "numeric",
+                    })
                   })}
                 </p>
                 {group.updatedAt !== group.createdAt && (
                   <p className="text-xs text-gray-500 mt-1">
-                    Dernière modification le{" "}
-                    {new Date(group.updatedAt).toLocaleDateString("fr-FR", {
-                      day: "2-digit",
-                      month: "long",
-                      year: "numeric",
+                    {t('updatedAt', {
+                      date: new Date(group.updatedAt).toLocaleDateString("fr-FR", {
+                        day: "2-digit",
+                        month: "long",
+                        year: "numeric",
+                      })
                     })}
                   </p>
                 )}
               </div>
               <Button variant="secondary" onClick={onClose}>
-                Fermer
+                {t('close')}
               </Button>
             </div>
           </div>

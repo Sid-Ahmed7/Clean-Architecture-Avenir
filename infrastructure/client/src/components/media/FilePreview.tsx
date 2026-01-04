@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import Button from "../ui/Button";
 import { getMediaUrl } from "@/lib/utils/media";
+import { useTranslations } from 'next-intl';
 
 
 interface FilePreviewProps {
@@ -18,7 +19,7 @@ interface FilePreviewProps {
 }
 
 export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlready, caption, onCaptionChange, mediaId}: FilePreviewProps) {
-    
+    const t = useTranslations('components.media.filePreview');
     const [isEditingCaption, setIsEditingCaption] = useState(false);
     const [captionValue, setCaptionValue] = useState(caption || "");
 
@@ -73,7 +74,7 @@ export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlr
             controls
             preload="metadata"
             />                
-            <span className="text-xs text-purple-700 font-medium">Vidéo</span>
+            <span className="text-xs text-purple-700 font-medium">{t('video')}</span>
             </div>
             )}
         </div>
@@ -83,7 +84,7 @@ export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlr
             type="button"
             onClick={onRemove}
             className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1.5 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
-            title="Supprimer"
+            title={t('remove')}
             >
             <X size={14} />
             </button>
@@ -93,7 +94,7 @@ export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlr
             <span className={`px-2 py-1 rounded-full text-xs font-medium inline-flex items-center gap-1 ${
             isUploadAlready ? 'bg-green-500 text-white' : type === "IMAGE" ? 'bg-blue-500 text-white': 'bg-purple-500 text-white'
             }`}>
-            {isUploadAlready ? ('Uploadé') : (
+            {isUploadAlready ? (t('uploaded')) : (
                 <>
                 {type === "IMAGE" ? <ImageIcon size={12} /> : <Video size={12} />}
                 </>
@@ -114,14 +115,14 @@ export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlr
                 <div className="mt-60 ml-50">
                     {!isEditingCaption ? (
                         <div className="flex items-center gap-16">
-                            <p className="text-xs text-gray-600 truncate flex-1" title={caption || "Aucune légende"}>
-                                {caption || "Aucune légende"}
+                            <p className="text-xs text-gray-600 truncate flex-1" title={caption || t('noCaption')}>
+                                {caption || t('noCaption')}
                             </p>
                             <Button
                                 type="button"
                                 onClick={() => setIsEditingCaption(true)}
                                 variant="primary"                        >
-                                <Edit2 size={12} /> Modifier la legende
+                                <Edit2 size={12} /> {t('editCaption')}
                             </Button>
                         </div>
                     ) : (
@@ -134,7 +135,7 @@ export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlr
                                     console.log("Input caption value:", e.target.value);
                                     setCaptionValue(e.target.value);
                                 }}
-                                placeholder="Ajouter une légende..."
+                                placeholder={t('addCaption')}
                                 className="text-xs border rounded px-2 py-1 w-full"
                             />
                             </div>
@@ -143,7 +144,7 @@ export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlr
                                     type="button"
                                     onClick={handleAddCaption}
                                     className="text-green-600 hover:text-green-700 p-1 bg-green-50 rounded w-8 h-8"
-                                    title="Enregistrer"
+                                    title={t('save')}
                                 >
                                     <Save size={12} />
                                 </button>
@@ -154,7 +155,7 @@ export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlr
                                         setIsEditingCaption(false);
                                     }}
                                     className="text-gray-600 hover:text-gray-700 p-1 bg-gray-50 rounded"
-                                    title="Annuler"
+                                    title={t('cancel')}
                                 >
                                     <X size={12} />
                                 </button>

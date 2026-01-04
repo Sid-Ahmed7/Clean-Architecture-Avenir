@@ -1,4 +1,441 @@
 {
+  "common": {
+    "appName": "BankAvenir",
+    "actions": {
+      "save": "Save",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "edit": "Edit",
+      "confirm": "Confirm",
+      "close": "Close",
+      "submit": "Submit",
+      "search": "Search",
+      "filter": "Filter",
+      "download": "Download",
+      "upload": "Upload",
+      "view": "View",
+      "back": "Back",
+      "next": "Next",
+      "previous": "Previous",
+      "loading": "Loading...",
+      "send": "Send"
+    },
+    "currency": "EUR",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "components": {
+    "sidebar": {
+      "menu": {
+        "dashboard": "Dashboard",
+        "accounts": "Accounts",
+        "beneficiaries": "Beneficiaries",
+        "savings": "Savings",
+        "myLoanRequests": "My loan requests",
+        "userManagement": "User Management",
+        "allAccounts": "All Accounts",
+        "savingsProducts": "Savings Products",
+        "stockManagement": "Stock Management",
+        "loanRequests": "Loan Requests",
+        "overdraftRequests": "Overdraft Requests",
+        "pendingConversations": "Pending Conversations",
+        "transfers": "Transfers",
+        "trading": "Trading",
+        "myOrders": "My Orders",
+        "myPositions": "My Positions",
+        "history": "History",
+        "news": "News",
+        "messages": "Messages",
+        "settings": "Settings",
+        "help": "Help"
+      },
+      "logout": "Logout",
+      "login": "Login",
+      "register": "Register",
+      "closeMenu": "Close menu"
+    },
+    "header": {
+      "searchPlaceholder": "Search for a transaction...",
+      "openMenu": "Open menu"
+    },
+    "accountSummary": {
+      "title": "Balance breakdown",
+      "available": "Available",
+      "blocked": "Blocked",
+      "blockedInfo": "are currently blocked in your pending buy orders."
+    },
+    "limitProgressBar": {
+      "nearLimit": "⚠️ Near limit",
+      "attention": "⚡ Attention",
+      "available": "✓ Available",
+      "remaining": "remaining"
+    }
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact",
+    "help": "Help",
+    "legal": "Legal",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "dashboard": "Dashboard",
+    "accounts": "Accounts",
+    "transfers": "Transfers",
+    "beneficiaries": "Beneficiaries",
+    "savings": "Savings",
+    "stock": "Stock",
+    "feed": "News",
+    "settings": "Settings",
+    "logout": "Logout",
+    "login": "Login",
+    "register": "Register"
+  },
+  "meta": {
+    "home": {
+      "title": "Home",
+      "description": "Discover BankAvenir, your online bank. Open an account in minutes.",
+      "ogTitle": "BankAvenir - Tomorrow's bank, today",
+      "ogDescription": "Manage your finances with ease. 100% online, 100% secure."
+    },
+    "about": {
+      "title": "About",
+      "description": "Discover the history and values of BankAvenir, the online bank revolutionizing finance.",
+      "ogTitle": "About BankAvenir",
+      "ogDescription": "Our mission: making banking accessible, transparent, and modern."
+    },
+    "contact": {
+      "title": "Contact",
+      "description": "Contact BankAvenir: support available 24/7 by phone, email, or chat.",
+      "ogTitle": "Contact Us - BankAvenir",
+      "ogDescription": "Our team is available 24/7 to help you."
+    },
+    "help": {
+      "title": "Help Center",
+      "description": "Find answers to your questions in our help center.",
+      "ogTitle": "Help Center - BankAvenir",
+      "ogDescription": "FAQ and guides to help you use our services."
+    },
+    "login": {
+      "title": "Login",
+      "description": "Log in to your BankAvenir client account."
+    },
+    "register": {
+      "title": "Register",
+      "description": "Create your BankAvenir account in minutes."
+    }
+  },
+  "landing": {
+    "header": {
+      "services": "Services",
+      "about": "About",
+      "help": "Help",
+      "contact": "Contact",
+      "login": "Login",
+      "openAccount": "Open an account"
+    },
+    "hero": {
+      "title": "Tomorrow's bank,",
+      "titleHighlight": "today",
+      "description": "Manage your finances with ease using BankAvenir. 100% online, 100% secure, 0% hidden fees.",
+      "createAccount": "Create my account",
+      "learnMore": "Learn more",
+      "demo": {
+        "checkingAccount": "Checking Account",
+        "active": "Active",
+        "availableBalance": "Available balance",
+        "transfer": "Transfer",
+        "savings": "Savings",
+        "stock": "Stock"
+      }
+    },
+    "footer": {
+      "tagline": "The next generation online bank.",
+      "services": {
+        "title": "Services",
+        "accounts": "Accounts",
+        "savings": "Savings",
+        "stock": "Stock",
+        "mortgage": "Credits"
+      },
+      "company": {
+        "title": "Company",
+        "about": "About",
+        "careers": "Careers",
+        "press": "Press",
+        "blog": "Blog"
+      },
+      "help": {
+        "title": "Help",
+        "helpCenter": "Help Center",
+        "security": "Security",
+        "legal": "Legal",
+        "contact": "Contact"
+      },
+      "copyright": "BankAvenir. All rights reserved. | Banking institution approved by ACPR",
+      "legalLinks": {
+        "legal": "Legal",
+        "privacy": "Privacy",
+        "terms": "Terms"
+      }
+    },
+    "services": {
+      "title": "Our services",
+      "subtitle": "Everything you need to manage your money",
+      "learnMore": "Learn more",
+      "items": {
+        "accounts": {
+          "title": "Bank accounts",
+          "description": "Current account with free bank card, French IBAN, and multi-currency management."
+        },
+        "savings": {
+          "title": "Savings",
+          "description": "Savings accounts, life insurance, PEA: grow your money safely."
+        },
+        "stock": {
+          "title": "Stock",
+          "description": "Invest in the stock market easily with our intuitive trading platform."
+        },
+        "mortgage": {
+          "title": "Mortgage",
+          "description": "Make your real estate project a reality with our competitive rates and personalized support."
+        }
+      }
+    },
+    "features": {
+      "title": "Why choose BankAvenir?",
+      "subtitle": "Modern banking services to simplify your daily life",
+      "items": {
+        "security": {
+          "title": "Maximum security",
+          "description": "Your data is protected by bank-level encryption and two-factor authentication."
+        },
+        "mobile": {
+          "title": "100% Mobile",
+          "description": "Manage your accounts anywhere, anytime from your smartphone or tablet."
+        },
+        "noFees": {
+          "title": "0 hidden fees",
+          "description": "Transparent and predictable pricing. No surprise fees, ever."
+        },
+        "support": {
+          "title": "24/7 Support",
+          "description": "Our team is available at any time to answer your questions."
+        },
+        "instantTransfer": {
+          "title": "Instant transfers",
+          "description": "Send and receive money in seconds, 24/7."
+        },
+        "analytics": {
+          "title": "Smart analytics",
+          "description": "Track your spending with detailed graphs and personalized insights."
+        }
+      }
+    },
+    "stats": {
+      "clients": {
+        "value": "500K+",
+        "label": "Satisfied customers"
+      },
+      "transfers": {
+        "value": "15M€",
+        "label": "Transfers per day"
+      },
+      "support": {
+        "value": "24/7",
+        "label": "Available support"
+      },
+      "rating": {
+        "value": "4.9/5",
+        "label": "Average rating"
+      }
+    },
+    "services": {
+      "title": "Our services",
+      "subtitle": "Everything you need to manage your finances",
+      "learnMore": "Learn more",
+      "bankAccounts": {
+        "title": "Bank accounts",
+        "description": "Current account with free bank card, French RIB, and multi-currency management."
+      },
+      "savings": {
+        "title": "Savings",
+        "description": "Savings accounts, life insurance, PEA: grow your money safely."
+      },
+      "trading": {
+        "title": "Trading",
+        "description": "Invest in the stock market easily with our intuitive trading platform."
+      },
+      "mortgage": {
+        "title": "Mortgage",
+        "description": "Realize your real estate project with our competitive rates and personalized support."
+      }
+    },
+    "cta": {
+      "title": "Ready to join the adventure?",
+      "description": "Open your account in less than 5 minutes and enjoy all our banking services for free.",
+      "button": "Create my free account",
+      "benefits": "No income requirements · No hidden fees · No commitment"
+    },
+    "about": {
+      "hero": {
+        "title": "Our mission: reinventing banking",
+        "description": "At BankAvenir, we believe banking should be simple, transparent, and accessible to all. Since 2020, we've been building tomorrow's bank."
+      },
+      "history": {
+        "title": "Our story",
+        "paragraph1": "Founded in 2025, BankAvenir was born from a simple observation: traditional banks no longer meet the needs of modern users.",
+        "paragraph2": "We built a 100% digital platform with the agility and innovation of tech startups.",
+        "paragraph3": "Today, over 500,000 customers trust us to manage their daily finances."
+      },
+      "values": {
+        "title": "Our values",
+        "clientFirst": {
+          "title": "Client first",
+          "description": "Every decision is made with our clients in mind first."
+        },
+        "transparency": {
+          "title": "Transparency",
+          "description": "Zero hidden fees, clear and honest communication."
+        },
+        "responsibility": {
+          "title": "Responsibility",
+          "description": "Commitment to sustainable and ethical finance."
+        },
+        "excellence": {
+          "title": "Excellence",
+          "description": "Constant innovation to offer the best service."
+        }
+      }
+    },
+    "contact": {
+      "hero": {
+        "title": "We're here to help",
+        "description": "Our team is available 24/7 to answer all your questions."
+      },
+      "methods": {
+        "phone": {
+          "title": "Phone",
+          "availability": "Available 24/7",
+          "number": "01 23 45 67 89"
+        },
+        "email": {
+          "title": "Email",
+          "availability": "Reply within 24h",
+          "address": "contact@bankavenir.com"
+        },
+        "address": {
+          "title": "Address",
+          "street": "42 Avenue des Champs-Élysées",
+          "city": "75008 Paris, France"
+        }
+      },
+      "form": {
+        "title": "Send us a message",
+        "name": "Full name",
+        "namePlaceholder": "John Doe",
+        "email": "Email",
+        "emailPlaceholder": "john.doe@example.com",
+        "subject": "Subject",
+        "subjectPlaceholder": "How can I help you?",
+        "message": "Message",
+        "messagePlaceholder": "Describe your request in detail...",
+        "submit": "Send message",
+        "sending": "Sending...",
+        "success": "Your message has been sent successfully! We will reply as soon as possible.",
+        "error": "An error occurred while sending the message. Please try again.",
+        "submitError": "Failed to send the message. Please try again.",
+        "errors": {
+          "nameMin": "Name must be at least 2 characters",
+          "emailInvalid": "Invalid email address",
+          "subjectMin": "Subject must be at least 2 characters",
+          "messageMin": "Message must be at least 10 characters"
+        }
+      }
+    },
+    "help": {
+      "hero": {
+        "title": "How can we help you?",
+        "searchPlaceholder": "Search in help..."
+      },
+      "sections": {
+        "faq": {
+          "title": "Frequently Asked Questions",
+          "description": "Answers to the most common questions",
+          "link": "View FAQ"
+        },
+        "security": {
+          "title": "Security",
+          "description": "Everything about protecting your data",
+          "link": "Learn more"
+        },
+        "support": {
+          "title": "Contact Support",
+          "description": "24/7 support available",
+          "link": "Contact us"
+        }
+      },
+      "faqTitle": "Frequently Asked Questions",
+      "faqs": [
+        {
+          "question": "How do I open an account?",
+          "answer": "Account opening takes less than 5 minutes from our app or website. You just need to provide a valid ID and proof of address."
+        },
+        {
+          "question": "What are the fees?",
+          "answer": "Account opening and maintenance are completely free. SEPA transfers and bank cards are also included at no cost."
+        },
+        {
+          "question": "How do I contact support?",
+          "answer": "Our support is available 24/7 by phone, email, or chat directly in the app."
+        }
+      ]
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Sign in to your account",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Login",
+      "forgotPassword": "Forgot password?",
+      "noAccount": "Don't have an account?",
+      "register": "Register",
+      "errors": {
+        "invalidCredentials": "Invalid email or password",
+        "userNotFound": "User not found",
+        "connectionError": "Connection error"
+      }
+    },
+    "register": {
+      "title": "Create Your Account",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "phoneNumber": "Phone Number",
+      "dateOfBirth": "Date of Birth",
+      "address": "Address",
+      "submit": "Register",
+      "submitting": "Registering...",
+      "hasAccount": "Already have an account?",
+      "login": "Sign in",
+      "passwordHelper": "Min. 8 characters with a special character",
+      "placeholders": {
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "john.doe@example.com",
+        "phone": "+1 234 567 8900",
+        "address": "123 Main Street, New York, NY"
+      },
+      "messages": {
+        "success": "Registration successful! Check your email to confirm your account.",
+        "userExists": "A user with this email already exists.",
+        "error": "An error occurred during registration. Please try again."
+      }
+    }
+  },
   "titles": {
     "register": "Create Your Account",
     "login": "Sign in to your account"
@@ -45,5 +482,846 @@
       "invalid": "Invalid credentials",
       "failure": "Login failed"
     }
+  },
+  "client": {
+    "dashboard": {
+      "loading": "Loading...",
+      "welcome": "Welcome to your client dashboard",
+      "recentTransactions": {
+        "title": "Recent Transactions",
+        "subtitle": "Quick overview of recent movements",
+        "viewAll": "View all",
+        "loading": "Loading transactions…",
+        "ref": "Ref",
+        "unknownUser": "Unknown user",
+        "account": "Account",
+        "unknownAccount": "Unknown account"
+      },
+      "otherAccounts": {
+        "title": "Other Accounts",
+        "addAccount": "Add account",
+        "noMain": "No main account found."
+      },
+      "savings": {
+        "title": "My Savings Accounts",
+        "subtitle": "Savings accounts and investment products",
+        "viewAll": "View all",
+        "loading": "Loading savings accounts...",
+        "account": "Account",
+        "active": "Active",
+        "inactive": "Inactive",
+        "availableBalance": "Available balance",
+        "interestRate": "Interest rate",
+        "earnedInterests": "Earned interests",
+        "noSavings": "No savings account",
+        "startSaving": "Start saving today with our savings products",
+        "discover": "Discover our accounts"
+      }
+    },
+    "accounts": {
+      "title": "Accounts",
+      "inDevelopment": "Bank accounts page - Under development"
+    },
+    "transfers": {
+      "loading": "Loading your accounts…",
+      "noAccounts": "No accounts available",
+      "createAccount": "Create an account to make a transfer.",
+      "form": {
+        "title": "Transfers",
+        "subtitle": "Make a transfer",
+        "description": "Move your funds securely, between your accounts or to an external IBAN.",
+        "fromAccount": "Sender account",
+        "selectDebit": "Choose an account to debit",
+        "toAccount": "Recipient account",
+        "selectCredit": "Choose an account to credit",
+        "account": "Account",
+        "amount": "Transfer amount",
+        "infoTitle": "Important information",
+        "info1": "The transfer will be made between your personal accounts only",
+        "info2": "Both accounts must have the same currency",
+        "info3": "The transfer is instant and secure",
+        "warningTitle": "Transfer impossible",
+        "warningMessage": "You must have at least 2 accounts to make a transfer between your accounts.",
+        "processing": "Processing...",
+        "minAccountsRequired": "2 accounts minimum required",
+        "send": "Send",
+        "reset": "Reset",
+        "successMessage": "Transfer completed successfully",
+        "reference": "Reference",
+        "status": "Status",
+        "completed": "Completed",
+        "pending": "Pending",
+        "date": "Date",
+        "confirmTitle": "Confirm transfer",
+        "confirmMessage": "You are about to transfer",
+        "from": "from IBAN",
+        "to": "to",
+        "confirmButton": "Yes, confirm",
+        "cancel": "Cancel"
+      }
+    },
+    "beneficiaries": {
+      "title": "My Beneficiaries",
+      "subtitle": "Manage your beneficiaries and organize them into groups",
+      "newBeneficiary": "New beneficiary",
+      "newGroup": "New group",
+      "confirmDeleteBeneficiary": "Are you sure you want to delete this beneficiary?",
+      "confirmDeleteGroup": "Are you sure you want to delete this group?",
+      "confirmRemoveFromGroup": "Are you sure you want to remove this beneficiary from the group?"
+    },
+    "beneficiariesManager": {
+      "tabs": {
+        "beneficiaries": "Beneficiaries",
+        "groups": "Groups"
+      },
+      "table": {
+        "columns": {
+          "name": "Name",
+          "iban": "IBAN",
+          "email": "Email",
+          "country": "Country",
+          "status": "Status",
+          "created": "Creation date",
+          "action": "Action"
+        },
+        "status": {
+          "verified": "Verified",
+          "notVerified": "Not verified"
+        },
+        "loading": "Loading beneficiaries...",
+        "empty": "No beneficiaries found",
+        "itemLabel": "beneficiaries",
+        "viewDetails": "View details"
+      },
+      "card": {
+        "verified": "Verified",
+        "transferButton": "Transfer",
+        "editButton": "Edit",
+        "deleteButton": "Delete"
+      },
+      "sidebar": {
+        "title": "Beneficiary details",
+        "close": "Close"
+      },
+      "deleteConfirm": {
+        "title": "Delete beneficiary",
+        "message": "Are you sure you want to delete",
+        "warning": "? This action is irreversible.",
+        "cancel": "Cancel",
+        "confirm": "Delete"
+      },
+      "form": {
+        "transferToBeneficiary": {
+          "beneficiary": "Beneficiary",
+          "sourceAccount": "Source account",
+          "selectAccount": "Select an account",
+          "amount": "Amount (€)",
+          "cancel": "Cancel",
+          "submitTransfer": "Make transfer"
+        },
+        "transferToAll": {
+          "title": "Transfer to all your beneficiaries",
+          "description": "The total amount will be distributed equally among {count} beneficiary(ies)",
+          "errors": {
+            "accountRequired": "Source account number is required",
+            "amountRequired": "Total amount is required",
+            "amountPositive": "Amount must be greater than 0",
+            "minBeneficiaries": "You must have at least one beneficiary"
+          },
+          "sourceAccountLabel": "Source account number",
+          "totalAmountLabel": "Total amount to transfer (€)",
+          "distribution": {
+            "title": "Amount distribution",
+            "totalAmount": "Total amount",
+            "beneficiariesCount": "Number of beneficiaries",
+            "perBeneficiary": "Each beneficiary will receive: {amount} €"
+          },
+          "beneficiariesList": "Concerned beneficiaries ({count})",
+          "confirm": "Confirm transfer",
+          "cancel": "Cancel"
+        },
+        "fields": {
+          "beneficiaryName": "Beneficiary name",
+          "iban": "IBAN",
+          "country": "Country",
+          "email": "Email (optional)",
+          "address": {
+            "title": "Address (optional)",
+            "street": "Street",
+            "city": "City",
+            "postalCode": "Postal code"
+          }
+        }
+      },
+      "group": {
+        "card": {
+          "beneficiariesCount": "{count, plural, =0 {no beneficiaries} =1 {1 beneficiary} other {# beneficiaries}}",
+          "badge": "Group",
+          "createdAt": "Created on {date}",
+          "updatedAt": "Last modified on {date}",
+          "viewMembers": "View members",
+          "transfer": "Transfer to group",
+          "add": "Add",
+          "edit": "Edit",
+          "delete": "Delete"
+        },
+        "sidebar": {
+          "title": "Group details",
+          "close": "Close"
+        },
+        "table": {
+          "loading": "Loading groups...",
+          "noGroups": "No groups found",
+          "noGroupsDesc": "Create a group to organize your beneficiaries",
+          "columns": {
+            "groupName": "Group name",
+            "membersCount": "Number of members",
+            "createdAt": "Creation date",
+            "updatedAt": "Last modified",
+            "action": "Action"
+          },
+          "members": "{count, plural, =0 {no members} =1 {1 member} other {# members}}",
+          "viewDetails": "View details"
+        },
+        "membersTable": {
+          "columns": {
+            "beneficiary": "Beneficiary",
+            "iban": "IBAN",
+            "contact": "Contact",
+            "status": "Status",
+            "actions": "Actions"
+          },
+          "noContact": "Not provided",
+          "verified": "Verified",
+          "pending": "Pending",
+          "details": "Details",
+          "transfer": "Transfer",
+          "remove": "Remove",
+          "membersCount": "{count, plural, =0 {no members} =1 {1 member in this group} other {# members in this group}}",
+          "noMembers": "No members",
+          "noMembersDesc": "This group doesn't contain any beneficiary yet. Add members to get started.",
+          "noMembersInGroup": "No members in this group",
+          "itemLabel": "members",
+          "createdAt": "Created on {date}",
+          "updatedAt": "Last modified on {date}",
+          "close": "Close"
+        },
+        "form": {
+          "groupForm": {
+            "save": "Save"
+          },
+          "fields": {
+            "groupName": "Group name",
+            "selectBeneficiaries": "Select beneficiaries",
+            "noBeneficiaries": "No beneficiaries available",
+            "selectedCount": "{count, plural, =0 {no beneficiaries selected} =1 {1 beneficiary selected} other {# beneficiaries selected}}"
+          },
+          "transferToGroup": {
+            "group": "Group",
+            "beneficiariesCount": "{count, plural, =0 {no beneficiaries} =1 {1 beneficiary} other {# beneficiaries}}",
+            "sourceAccount": "Source account",
+            "loadingAccounts": "Loading accounts...",
+            "selectAccount": "Select an account",
+            "totalAmount": "Total amount to transfer (€)",
+            "distributionTitle": "Distribution per beneficiary",
+            "totalAmountLabel": "Total amount",
+            "distributedAmount": "Distributed amount",
+            "difference": "Difference",
+            "remainingAmount": "{amount} € remaining to distribute",
+            "exceededAmount": "You have exceeded by {amount} €",
+            "cancel": "Cancel",
+            "submit": "Send transfer"
+          }
+        }
+      }
+    },
+    "feed": {
+      "grid": {
+        "noNews": "No news found."
+      },
+      "list": {
+        "loading": "Loading...",
+        "error": "Error: {message}"
+      },
+      "manageList": {
+        "noArticles": "No articles to display.",
+        "category": "Category",
+        "priority": "Priority",
+        "edit": "Edit",
+        "delete": "Delete"
+      },
+      "details": {
+        "noContent": "No content available for this news."
+      },
+      "blocks": {
+        "content": {
+          "deleteBlock": "Delete this block"
+        },
+        "toolbar": {
+          "addBlock": "Add a block:",
+          "text": "Text",
+          "media": "Media"
+        },
+        "editor": {
+          "noBlocks": "No blocks. Add one to get started!",
+          "blocksCount": "{count, plural, =0 {no blocks} =1 {1 block • Drag and drop to rearrange} other {# blocks • Drag and drop to rearrange}}"
+        }
+      },
+      "form": {
+        "fields": {
+          "title": "Title *",
+          "titlePlaceholder": "News title",
+          "category": "Category *",
+          "priority": "Priority *",
+          "tags": "Tags",
+          "tagsPlaceholder": "Tags (comma-separated, e.g.: savings, rates, offer)",
+          "cancel": "Cancel",
+          "saving": "Saving...",
+          "update": "Update",
+          "create": "Create news"
+        }
+      },
+      "structure": {
+        "media": {
+          "videoNotSupported": "Your browser does not support video playback."
+        }
+      },
+      "card": {
+        "media": "media",
+        "moreMedia": "+{count} more media"
+      },
+      "filters": {
+        "category": "Category",
+        "priority": "Priority",
+        "all": "All",
+        "tagsLabel": "Tags (comma-separated)",
+        "tagsPlaceholder": "e.g.: security,savings"
+      },
+      "loadMore": {
+        "loading": "Loading...",
+        "loadMore": "Load more"
+      }
+    },
+    "stocks": {
+      "forms": {
+        "stockForm": {
+          "cancel": "Cancel",
+          "creating": "Creating...",
+          "create": "Create stock"
+        },
+        "editStockForm": {
+          "cancel": "Cancel",
+          "updating": "Updating...",
+          "update": "Update stock"
+        }
+      },
+      "orders": {
+        "filters": {
+          "allStatuses": "All statuses",
+          "pending": "Pending",
+          "executed": "Executed",
+          "cancelled": "Cancelled",
+          "partiallyExecuted": "Partially executed",
+          "rejected": "Rejected",
+          "allTypes": "All types",
+          "buy": "Buy",
+          "sell": "Sell",
+          "status": "Status",
+          "orderType": "Order type"
+        },
+        "card": {
+          "type": "Type",
+          "buy": "Buy",
+          "sell": "Sell",
+          "quantity": "Quantity",
+          "unitPrice": "Unit price",
+          "totalAmount": "Total amount",
+          "fundsBlocked": "{amount}€ blocked",
+          "sharesBlocked": "{count} shares blocked",
+          "fundsWillBeUnlocked": "These funds will be unlocked if you cancel the order",
+          "sharesWillBeUnlocked": "These shares will be unlocked if you cancel the order",
+          "executedAt": "Executed on {date}",
+          "executionPrice": "Execution price: {price}€",
+          "cancelling": "Cancelling...",
+          "cancelOrder": "Cancel order"
+        },
+        "statusBadge": {
+          "pending": "Pending",
+          "executed": "Executed",
+          "cancelled": "Cancelled",
+          "partiallyExecuted": "Partially executed",
+          "rejected": "Rejected",
+          "unknown": "Unknown"
+        },
+        "list": {
+          "noOrders": "You don't have any orders yet",
+          "noMatchingOrders": "No orders match the selected filters"
+        },
+        "blockedResources": {
+          "fundsBlocked": "{amount}€ blocked",
+          "sharesBlocked": "{count} shares blocked",
+          "fundsWillBeUnlocked": "These funds will be unlocked if you cancel the order",
+          "sharesWillBeUnlocked": "These shares will be unlocked if you cancel the order"
+        },
+        "placeOrder": {
+          "buyTitle": "Buy",
+          "sellTitle": "Sell",
+          "error": "Error placing the order",
+          "statusPlacing": "Placing order...",
+          "statusMatching": "Searching for matches...",
+          "statusSuccess": "Order executed successfully!",
+          "quantity": "Quantity",
+          "pricePerShare": "Price per share (€)",
+          "currentMarketPrice": "Current market price",
+          "totalAmount": "Total amount",
+          "transactionFee": "Transaction fee",
+          "totalToPay": "Total to pay",
+          "totalToReceive": "Total to receive",
+          "autoMatchInfo": "Your order will be automatically matched with existing orders for immediate execution.",
+          "cancel": "Cancel",
+          "confirmBuy": "Confirm purchase",
+          "confirmSell": "Confirm sale",
+          "buttonPlacing": "Placing...",
+          "buttonMatching": "Matching...",
+          "buttonExecuted": "✓ Executed"
+        },
+        "directorCard": {
+          "orderDetails": "Order details",
+          "symbol": "Symbol",
+          "type": "Type",
+          "quantity": "Quantity",
+          "pricePerShare": "Price per share",
+          "totalAmount": "Total amount",
+          "status": "Status",
+          "buy": "Buy",
+          "sell": "Sell"
+        },
+        "directorFilters": {
+          "allStatuses": "All statuses",
+          "allTypes": "All types",
+          "pending": "Pending",
+          "executed": "Executed",
+          "cancelled": "Cancelled",
+          "partiallyExecuted": "Partially executed",
+          "rejected": "Rejected",
+          "buy": "Buy",
+          "sell": "Sell",
+          "status": "Status",
+          "orderType": "Order type"
+        },
+        "directorList": {
+          "noOrders": "No director orders available",
+          "noMatchingOrders": "No orders match the selected filters"
+        },
+        "openIPO": {
+          "errorMinShares": "Number of shares must be greater than 0",
+          "errorMaxShares": "Number of shares cannot exceed {max}",
+          "success": "IPO opened successfully for {symbol}",
+          "error": "Error opening IPO",
+          "title": "Open IPO",
+          "ipoTitle": "Initial Public Offering (IPO)",
+          "ipoDescription": "Allow users to buy shares.",
+          "totalShares": "Total shares",
+          "sharesLabel": "Number of shares to make available in IPO",
+          "maxShares": "Maximum: {max} shares (total stock)",
+          "ipoType": "IPO Type",
+          "initialIPO": "Initial IPO",
+          "secondaryIPO": "Secondary IPO",
+          "cancel": "Cancel",
+          "opening": "Opening...",
+          "openIPO": "Open IPO"
+        },
+        "purchaseIPO": {
+          "errorMaxShares": "Only {available} shares available in IPO",
+          "error": "Error purchasing IPO",
+          "title": "Purchase IPO",
+          "ipoTitle": "Initial Public Offering",
+          "ipoDescription": "Direct purchase at initial offering price",
+          "sharesRemaining": "shares remaining",
+          "quantity": "Quantity",
+          "maxAvailable": "Maximum: {max} shares available",
+          "fixedPrice": "Fixed IPO Price (€)",
+          "fixedPriceDescription": "Fixed price of",
+          "totalAmount": "Total amount",
+          "transactionFee": "Transaction fee",
+          "totalToPay": "Total to pay",
+          "instantExecutionInfo": "Your purchase will be executed instantly at the IPO price. Shares will be added directly to your portfolio.",
+          "cancel": "Cancel",
+          "purchasing": "Purchasing...",
+          "buyShares": "Buy {count} IPO share(s)"
+        }
+      },
+      "positions": {
+        "summary": {
+          "title": "Portfolio summary",
+          "totalValue": "Total value",
+          "totalCost": "Total cost",
+          "gainLoss": "Gain/Loss",
+          "performance": "Performance"
+        },
+        "card": {
+          "totalQuantity": "Total quantity",
+          "available": "Available",
+          "blocked": "{count} blocked",
+          "averagePrice": "Average price",
+          "currentPrice": "Current price",
+          "currentValue": "Current value",
+          "totalCost": "Total cost",
+          "allBlocked": "All your shares are blocked in pending orders",
+          "sell": "Sell",
+          "availableCount": "({count} available)"
+        }
+      },
+      "transactions": {
+        "list": {
+          "noTransactions": "You don't have any transactions yet",
+          "noMatchingTransactions": "No transactions match the selected filters"
+        },
+        "filters": {
+          "type": "Type",
+          "allTypes": "All types",
+          "buys": "Buys",
+          "sells": "Sells",
+          "symbol": "Symbol",
+          "symbolPlaceholder": "E.g: AAPL"
+        },
+        "tableHeader": {
+          "symbol": "Symbol",
+          "date": "Date",
+          "type": "Type",
+          "quantity": "Quantity",
+          "unitPrice": "Unit price",
+          "total": "Total"
+        },
+        "row": {
+          "buy": "Buy",
+          "sell": "Sell"
+        }
+      },
+      "structure": {
+        "actions": {
+          "buy": "Buy",
+          "sell": "Sell",
+          "lastUpdated": "Last updated"
+        },
+        "stats": {
+          "open": "Open",
+          "previousClose": "Previous close",
+          "high": "High",
+          "low": "Low"
+        },
+        "price": {
+          "afterClose": "After close"
+        },
+        "fiftyTwoWeek": {
+          "title": "52-week range",
+          "low": "Low",
+          "high": "High"
+        },
+        "header": {
+          "open": "Open",
+          "closed": "Closed"
+        },
+        "volume": {
+          "volume": "Volume",
+          "averageVolume": "Avg. volume"
+        }
+      },
+      "modal": {
+        "createStock": "Create stock"
+      },
+      "table": {
+        "noStocks": "No stocks created",
+        "symbol": "Symbol",
+        "company": "Company",
+        "previousPrice": "Previous price",
+        "currentPrice": "Current price",
+        "variation": "Variation",
+        "status": "Status",
+        "actions": "Actions",
+        "available": "Available",
+        "unavailable": "Unavailable",
+        "ipoActive": "IPO Active",
+        "shares": "shares",
+        "closeIPO": "Close IPO",
+        "openIPO": "Open IPO",
+        "deactivate": "Deactivate",
+        "activate": "Activate",
+        "edit": "Edit",
+        "delete": "Delete",
+        "confirmDelete": "Are you sure you want to delete {symbol}?"
+      }
+    },
+    "chat": {
+      "title": "Chat",
+      "connected": "Connected",
+      "disconnected": "Disconnected",
+      "noMessages": "No messages yet",
+      "typing": "Typing...",
+      "inputPlaceholder": "Write your message...",
+      "inputDisabled": "Connecting...",
+      "sendButton": "Send",
+      "clientConversations": {
+        "title": "My conversations",
+        "newConversation": "New conversation",
+        "creating": "Creating...",
+        "errorFetch": "Unable to fetch your conversations",
+        "errorCreate": "Error creating conversation",
+        "empty": "You don't have any conversations yet.",
+        "notAssigned": "Not assigned"
+      },
+      "advisorConversations": {
+        "loading": "Loading…",
+        "errorTitle": "Error",
+        "reloadPage": "Reload page",
+        "stats": {
+          "pending": "Pending",
+          "assigned": "My conversations"
+        },
+        "searchPlaceholder": "Search by client name...",
+        "pendingTitle": "Pending requests",
+        "pendingEmpty": "No pending requests",
+        "searchEmpty": "No results for this search",
+        "takeOver": "Take over",
+        "continue": "Continue",
+        "transfer": "Transfer",
+        "assignedTitle": "Your conversations",
+        "assignedEmpty": "No assigned conversations"
+      },
+      "selectAdvisorsModal": {
+        "title": "Client File Transfer",
+        "subtitle": "Select a new advisor",
+        "searchPlaceholder": "Search by name or identifier...",
+        "loading": "Loading advisors...",
+        "errorFetch": "Unable to fetch advisors",
+        "retry": "Retry",
+        "noAdvisors": "No advisors found",
+        "noAdvisorsHint": "Try with different criteria",
+        "cancel": "Cancel",
+        "confirm": "Confirm transfer",
+        "transferSuccess": "Conversation transferred!",
+        "transferError": "Transfer error."
+      }
+    },
+    "bankAccount": {
+      "transactionHistory": {
+        "noTransactions": "No transactions at the moment.",
+        "reference": "Ref",
+        "unknownUser": "Unknown user",
+        "sender": "Sender",
+        "recipient": "Recipient"
+      },
+      "summaryCard": {
+        "totalBalance": "Total balance of your accounts"
+      },
+      "subAccountForm": {
+        "title": "Add a sub-account",
+        "accountNameLabel": "Account name *",
+        "accountNamePlaceholder": "Sub-account name",
+        "accountTypeLabel": "Account type *",
+        "currencyLabel": "Currency *",
+        "creating": "Creating...",
+        "createButton": "Create sub-account",
+        "success": "Sub-account created successfully!",
+        "accountTypes": {
+          "savings": "Savings"
+        }
+      },
+      "quickTransfer": {
+        "title": "Quick transfers",
+        "subtitle": "Repeat a transfer in one click",
+        "noTransactions": "No recent transactions available",
+        "unknownUser": "Unknown user",
+        "unknownAccount": "Unknown account",
+        "account": "Account",
+        "repeatButton": "Repeat",
+        "confirmTitle": "Confirm quick transfer",
+        "amountLabel": "Amount",
+        "toLabel": "To:",
+        "originalTransaction": "Original transaction from",
+        "processing": "Processing...",
+        "confirmButton": "Confirm",
+        "cancelButton": "Cancel"
+      },
+      "overdraftRequests": {
+        "title": "Overdraft requests",
+        "requestsCount": "requests",
+        "loading": "Loading...",
+        "noPendingRequests": "No pending requests.",
+        "account": "Account",
+        "current": "Current",
+        "requested": "Requested",
+        "client": "Client",
+        "status": "Status",
+        "viewProfile": "View client profile",
+        "loadingProfile": "Loading...",
+        "reject": "Reject",
+        "approve": "Approve",
+        "close": "Close",
+        "loadingDetails": "Loading profile...",
+        "phoneNA": "N/A",
+        "accounts": "Accounts",
+        "loanRequests": "Loan requests",
+        "noLoanRequests": "No requests",
+        "overdraftRequestLabel": "Overdraft request",
+        "purpose": "Purpose"
+      },
+      "mainAccountCard": {
+        "mainLabel": "Main",
+        "availableBalance": "Available balance",
+        "accountNumber": "Account number",
+        "ribMessage": "Get your RIB to share your bank details.",
+        "downloadRib": "Download my RIB",
+        "generatingRib": "Generating...",
+        "limits": "Limits",
+        "overdraftRequest": "Overdraft request",
+        "currentOverdraft": "Current",
+        "increaseTransferLimit": "Increase transfer limit",
+        "currentLimit": "Current",
+        "overdraftModalTitle": "Request overdraft increase",
+        "overdraftModalSubtitle": "Current overdraft:",
+        "overdraftSuccess": "Request sent to your advisor.",
+        "requestButton": "Request",
+        "sending": "Sending...",
+        "transferModalTitle": "Increase transfer limit",
+        "transferModalSubtitle": "Current limit:",
+        "transferSuccess": "Limit updated.",
+        "updating": "Updating...",
+        "increaseButton": "Increase"
+      },
+      "accountList": {
+        "noAccounts": "No other accounts available"
+      }
+    },
+    "loan": {
+      "form": {
+        "clientLabel": "Client",
+        "title": "Loan Request",
+        "description": "Fill in the essential information. Your advisor will automatically receive the request.",
+        "errorLoadAdvisors": "Unable to load advisors",
+        "successMessage": "Request sent to advisor.",
+        "failureMessage": "Request failed",
+        "errorMessage": "Error submitting request. Please try again or contact your advisor.",
+        "footerNote": "Once submitted, the request will be visible to your advisor.",
+        "adviceLabel": "Advice",
+        "adviceText": "Prepare a clear purpose and an amount consistent with your need. If the amount exceeds 5000€, the rate will be proposed by the director after validation.",
+        "indicativeRateLabel": "Indicative rate",
+        "pending": "Pending",
+        "rateExplanation": "Automatically applied to requests ≤ 5000€. Beyond that, a personalized rate will be proposed."
+      },
+      "fields": {
+        "advisorLabel": "Choose an advisor",
+        "loadingAdvisors": "Loading advisors...",
+        "amountLabel": "Requested amount",
+        "amountError": "Please enter a valid amount greater than 0.",
+        "purposeLabel": "Purpose",
+        "purposePlaceholder": "Example: Buying a vehicle, home renovation, etc.",
+        "purposeError": "Please specify the purpose of your request.",
+        "durationLabel": "Repayment duration",
+        "months": "{count} months",
+        "simulationTitle": "Monthly simulation",
+        "rateByDirector": "(rate to be defined by director)",
+        "indicativeRate": "(indicative rate {rate}%)",
+        "rateNotDefined": "(indicative rate not defined)",
+        "monthlyNotAvailable": "-- €/month",
+        "monthlyAmount": "{amount} €/month",
+        "rateProposalNote": "For amounts > 5000€, the rate will be proposed by the director.",
+        "waitingForRate": "Waiting for indicative rate defined by director.",
+        "rateWillAppear": "As soon as an indicative rate is published, an estimate will appear here.",
+        "submitButton": "Submit request"
+      },
+      "advisorPage": {
+        "advisorLabel": "Advisor",
+        "title": "Loan Requests",
+        "description": "Track, analyze, and decide on your clients' loan requests in a clear and consistent space.",
+        "errorLoad": "Unable to load requests",
+        "stats": {
+          "total": "Total",
+          "pending": "Pending",
+          "approved": "Approved",
+          "rejected": "Rejected"
+        },
+        "noRequests": "No requests at the moment",
+        "noRequestsDescription": "New requests from your clients will appear here as they are created."
+      }
+    },
+    "notification": {
+      "from": "From",
+      "noNotifications": "No Notifications"
+    },
+    "rib": {
+      "title": "Bank Identity Statement",
+      "holderSection": "Holder & contact details",
+      "holder": "Holder",
+      "address": "Address",
+      "addressNotProvided": "Address not provided",
+      "accountSection": "Account references",
+      "accountNumber": "Account number",
+      "currency": "Currency",
+      "generatedAt": "Generated on"
+    },
+    "savingsAccount": {
+      "info": {
+        "defaultTitle": "How does your savings account work?",
+        "dailyCalculation": {
+          "title": "Daily calculation",
+          "description": "Your interest is calculated daily on your available balance"
+        },
+        "autoCredit": {
+          "title": "Automatic credit",
+          "description": "Interest is automatically added to your account"
+        },
+        "compoundEffect": {
+          "title": "Compound effect",
+          "description": "Your interest generates interest itself (compound interest)"
+        }
+      },
+      "createForm": {
+        "title": "Create a Savings Account",
+        "subtitle": "Configure savings account settings",
+        "error": "Error",
+        "successTitle": "Account created!",
+        "successMessage": "The savings account has been successfully created.",
+        "accountNumberLabel": "Account number",
+        "accountNumberPlaceholder": "e.g.: 123456"
+      }
+    },
+    "media": {
+      "dragDrop": {
+        "dropOrClick": "Drag and drop your files here or click to select",
+        "acceptedTypes": "Images and videos accepted • Max {maxSize}MB per file"
+      },
+      "uploader": {
+        "errorNotMedia": "{fileName} is not an image or video",
+        "errorMaxSize": "{fileName} exceeds maximum size of {maxSize}MB"
+      },
+      "filePreview": {
+        "video": "Video",
+        "remove": "Remove",
+        "uploaded": "Uploaded",
+        "noCaption": "No caption",
+        "editCaption": "Edit caption",
+        "addCaption": "Add a caption...",
+        "save": "Save",
+        "cancel": "Cancel"
+      }
+    }
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "Sorry, the page you are looking for could not be found. It may have been moved or deleted.",
+    "backHome": "Back to Home",
+    "helpCenter": "Help Center",
+    "needHelp": "Need help?",
+    "contactUs": "Contact Us"
+  },
+  "error": {
+    "title": "Server Error",
+    "description": "Oops! An unexpected error occurred. Our team has been notified and is working on the problem.",
+    "retry": "Try Again",
+    "backHome": "Back to Home",
+    "errorCode": "Error Code",
+    "persistentProblem": "Problem persists?",
+    "contactSupport": "Contact our support"
   }
 }

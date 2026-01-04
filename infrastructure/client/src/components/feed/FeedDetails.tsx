@@ -1,4 +1,5 @@
 "use client"
+import { useTranslations } from "next-intl";
 import { Content } from "@/types/content";
 import { DisplayBlock } from "@/types/displayBlock";
 import { Media } from "@/types/media";
@@ -15,7 +16,7 @@ interface FeedDetailProps {
 }                             
 
 export function FeedDetail({news, contents, medias} : FeedDetailProps) {
-
+    const t = useTranslations('components.feed.details');
 
     const blocks: DisplayBlock[] = [
         ...contents.map((content) => ({
@@ -59,7 +60,7 @@ export function FeedDetail({news, contents, medias} : FeedDetailProps) {
                 ) : (
                     <div className="text-center py-16">
                         <p className="text-gray-500 text-lg">
-                            Aucun contenu disponible pour cette actualité.
+                            {t('noContent')}
                         </p>
                     </div>
                 )}

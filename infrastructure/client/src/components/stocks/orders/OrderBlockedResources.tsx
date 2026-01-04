@@ -1,4 +1,5 @@
 import { OrderType } from "@/types/order";
+import { useTranslations } from 'next-intl';
 
 interface OrderBlockedResourcesProps {
   orderType: OrderType;
@@ -15,6 +16,7 @@ export function OrderBlockedResources({
   feesPaid,
   fee,
 }: OrderBlockedResourcesProps) {
+  const t = useTranslations('components.stocks.orders.blockedResources');
   const isBuy = orderType === "BUY";
 
   return (
@@ -23,13 +25,13 @@ export function OrderBlockedResources({
         <div className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></div>
         <span className="font-semibold">
           {isBuy
-            ? `${(remainingQuantity * orderPrice + (feesPaid ? 0 : (fee ?? 1))).toFixed(2)}€ bloqués`
-            : `${remainingQuantity} actions bloquées`
+            ? t('fundsBlocked', { amount: (remainingQuantity * orderPrice + (feesPaid ? 0 : (fee ?? 1))).toFixed(2) })
+            : t('sharesBlocked', { count: remainingQuantity })
           }
         </span>
       </div>
       <p className="text-xs text-orange-700">
-        Ces {isBuy ? "fonds" : "actions"} seront débloqué(e)s si vous annulez l&apos;ordre
+        {isBuy ? t('fundsWillBeUnlocked') : t('sharesWillBeUnlocked')}
       </p>
     </div>
   );

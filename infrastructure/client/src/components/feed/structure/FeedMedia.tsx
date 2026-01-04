@@ -1,12 +1,14 @@
 import { getMediaUrl } from "@/lib/utils/media";
 import { Media } from "@/types/media";
 import Image from "next/image";
+import { useTranslations } from 'next-intl';
 
 interface FeedMediaProps {
   media: Media;
 }
 
 export function FeedMedia({ media }: FeedMediaProps) {
+  const t = useTranslations('components.feed.structure.media');
   return (
     <div className="mb-8 animate-fade-in">
     
@@ -31,7 +33,7 @@ export function FeedMedia({ media }: FeedMediaProps) {
             className="w-full"
             preload="metadata"
           >
-            Votre navigateur ne supporte pas la lecture de vidéos.
+            {t('videoNotSupported')}
           </video>
         ) : null}
 

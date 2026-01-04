@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Button from "../ui/Button";
 import { useChat } from "@/hooks/useChat";
 import { Token } from "@/types/Token";
+import { useTranslations } from "next-intl";
 
 interface ChatBoxProps {
   conversationId: string | null;
@@ -11,6 +12,7 @@ interface ChatBoxProps {
 }
 
 export default function Chat({ conversationId, user }: ChatBoxProps) {
+  const t = useTranslations("components.chat");
   const {messages,connected,send,startTyping,stopTyping,markRead,typingUsers} = useChat(user.userId, user.role, conversationId!);
   const [content, setContent] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -61,12 +63,12 @@ export default function Chat({ conversationId, user }: ChatBoxProps) {
     <div className="flex flex-col h-[80vh] w-full max-w-2xl mx-auto border rounded-2xl shadow-md bg-white">
 
       <div className="p-4 border-b bg-gray-100 rounded-t-2xl">
-        <h2 className="text-lg font-semibold text-gray-800">Chat</h2>
+        <h2 className="text-lg font-semibold text-gray-800">{t("title")}</h2>
 
         <div className="flex items-center gap-2 mt-1">
           <div className={`w-2 h-2 rounded-full ${connected ? "bg-green-500" : "bg-red-500"}`} />
           <span className="text-xs text-gray-600">
-            {connected ? "Connecté" : "Déconnecté"}
+            {connected ? t("connected") : t("disconnected")}
           </span>
         </div>
       </div>
@@ -74,7 +76,7 @@ export default function Chat({ conversationId, user }: ChatBoxProps) {
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {messages.length === 0 ? (
           <div className="flex items-center justify-center h-full text-gray-400">
-            <p>Aucun message pour le moment</p>
+            <p>{t("noMessages")}</p>
           </div>
         ) : (
           <>
@@ -111,21 +113,21 @@ export default function Chat({ conversationId, user }: ChatBoxProps) {
       {conversationId &&
         typingUsers.some((u) => u.conversationId === conversationId && u.userId !== user.userId) && (
           <div className="px-4 py-1 text-xs text-gray-500">
-            <span>En train d’écrire...</span>
+            <span>{t("typing")}</span>
           </div>
       )}
 
       <form onSubmit={handleSend} className="p-4 border-t bg-gray-50 rounded-b-2xl flex gap-2">
         <input
           type="text"
-          placeholder={connected ? "Écris ton message..." : "Connexion en cours..."}
+          placeholder={connected ? t("inputPlaceholder") : t("inputDisabled")}
           value={content}
           onChange={handleInputChange}
           className="flex-1 py-3 px-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
           disabled={!connected}
         />
         <Button type="submit" disabled={!content.trim() || !connected}>
-          Envoyer
+          {t("sendButton")}
         </Button>
       </form>
 

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useContext } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useRouter } from "@/i18n/navigation";
 import { BeneficiariesManager } from "@/components/beneficiaries/BeneficiariesManager";
 import { BeneficiaryDetailsSidebar } from "@/components/beneficiaries/BeneficiaryDetailsSidebar";
 import { GroupMembersTable } from "@/components/beneficiaries/group/GroupMembersTable";
@@ -11,11 +11,11 @@ import { Beneficiary } from "@/types/beneficiary";
 import { BeneficiaryGroup } from "@/types/beneficiaryGroup";
 import { Plus } from "lucide-react";
 import Button from "@/components/ui/Button";
-import { LocaleContext } from "@/contexts/LocaleProvider";
+import { useTranslations } from "next-intl";
 
 export default function BeneficiariesPage() {
   const router = useRouter();
-  const { locale } = useContext(LocaleContext);
+  const t = useTranslations("client.beneficiaries");
 
   const { data: beneficiaries, isLoading: isLoadingBeneficiaries } = useBeneficiaries();
   const { data: groups, isLoading: isLoadingGroups } = useBeneficiaryGroups();
@@ -29,25 +29,25 @@ export default function BeneficiariesPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleEditBeneficiary = (beneficiary: Beneficiary) => {
-    router.push(`/${locale}/client/beneficiaries/edit/${beneficiary.beneficiaryId}`);
+    router.push(`/client/beneficiaries/edit/${beneficiary.beneficiaryId}`);
   };
 
   const handleDeleteBeneficiary = (beneficiaryId: string) => {
-    if (confirm("Êtes-vous sûr de vouloir supprimer ce bénéficiaire ?")) {
+    if (confirm(t("confirmDeleteBeneficiary"))) {
       deleteBeneficiary.mutate(beneficiaryId);
     }
   };
 
   const handleTransfer = (beneficiary: Beneficiary) => {
-    router.push(`/${locale}/client/beneficiaries/transfer/${beneficiary.beneficiaryId}`);
+    router.push(`/client/beneficiaries/transfer/${beneficiary.beneficiaryId}`);
   };
 
   const handleEditGroup = (group: BeneficiaryGroup) => {
-    router.push(`/${locale}/client/beneficiaries/groups/edit/${group.groupId}`);
+    router.push(`/client/beneficiaries/groups/edit/${group.groupId}`);
   };
 
   const handleDeleteGroup = (groupId: string) => {
-    if (confirm("Êtes-vous sûr de vouloir supprimer ce groupe ?")) {
+    if (confirm(t("confirmDeleteGroup"))) {
       deleteBeneficiaryGroup.mutate(groupId);
     }
   };
@@ -59,7 +59,7 @@ export default function BeneficiariesPage() {
   };
 
   const handleRemoveBeneficiaryFromGroupModal = (beneficiaryId: string) => {
-    if (selectedGroup && confirm("Êtes-vous sûr de vouloir retirer ce bénéficiaire du groupe ?")) {
+    if (selectedGroup && confirm(t("confirmRemoveFromGroup"))) {
       removeBeneficiaryFromGroup.mutate({
         groupId: selectedGroup.groupId,
         beneficiaryId,
@@ -79,15 +79,15 @@ export default function BeneficiariesPage() {
   };
 
   const handleCreateBeneficiary = () => {
-    router.push(`/${locale}/client/beneficiaries/add`);
+    router.push("/client/beneficiaries/add");
   };
 
   const handleCreateGroup = () => {
-    router.push(`/${locale}/client/beneficiaries/groups/add`);
+    router.push("/client/beneficiaries/groups/add");
   };
 
   const handleTransferToGroup = (group: BeneficiaryGroup) => {
-    router.push(`/${locale}/client/beneficiaries/groups/transfer/${group.groupId}`);
+    router.push(`/client/beneficiaries/groups/transfer/${group.groupId}`);
   };
 
   return (
@@ -95,10 +95,10 @@ export default function BeneficiariesPage() {
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Mes Bénéficiaires
+            {t("title")}
           </h1>
           <p className="text-gray-600">
-            Gérez vos bénéficiaires et organisez-les en groupes
+            {t("subtitle")}
           </p>
         </div>
 
@@ -108,14 +108,14 @@ export default function BeneficiariesPage() {
             icon={Plus}
             onClick={handleCreateBeneficiary}
           >
-            Nouveau bénéficiaire
+            {t("newBeneficiary")}
           </Button>
           <Button
             variant="gradient"
             icon={Plus}
             onClick={handleCreateGroup}
           >
-            Nouveau groupe
+            {t("newGroup")}
           </Button>
         </div>
 

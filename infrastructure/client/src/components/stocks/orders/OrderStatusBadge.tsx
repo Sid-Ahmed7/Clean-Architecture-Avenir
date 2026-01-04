@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/Badge";
 import { OrderStatusEnum } from "@/types/order";
+import { useTranslations } from 'next-intl';
 
 
 interface OrderStatusEnumBadgeProps {
@@ -7,12 +8,14 @@ interface OrderStatusEnumBadgeProps {
 }
 
 export function OrderStatusBadge({ status }: OrderStatusEnumBadgeProps) {
+  const t = useTranslations('components.stocks.orders.statusBadge');
+  
   const statusConfig = {
-    [OrderStatusEnum.PENDING]: { variant: "warning" as const, label: "En attente" },
-    [OrderStatusEnum.EXECUTED]: { variant: "success" as const, label: "Exécuté" },
-    [OrderStatusEnum.CANCELLED]: { variant: "danger" as const, label: "Annulé" },
-    [OrderStatusEnum.PARTIALLY_EXECUTED]: { variant: "info" as const, label: "Partiellement exécuté" },
-    [OrderStatusEnum.REJECTED]: { variant: "danger" as const, label: "Rejeté" }
+    [OrderStatusEnum.PENDING]: { variant: "warning" as const, label: t('pending') },
+    [OrderStatusEnum.EXECUTED]: { variant: "success" as const, label: t('executed') },
+    [OrderStatusEnum.CANCELLED]: { variant: "danger" as const, label: t('cancelled') },
+    [OrderStatusEnum.PARTIALLY_EXECUTED]: { variant: "info" as const, label: t('partiallyExecuted') },
+    [OrderStatusEnum.REJECTED]: { variant: "danger" as const, label: t('rejected') }
   };
 
 const config = statusConfig[status];
@@ -20,7 +23,7 @@ const config = statusConfig[status];
 
 return (
   <Badge variant={config ? config.variant : "warning"}>
-    {config ? config.label : "Inconnu"}
+    {config ? config.label : t('unknown')}
   </Badge>
 );
 

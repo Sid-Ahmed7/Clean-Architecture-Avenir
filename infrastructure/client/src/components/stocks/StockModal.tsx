@@ -4,6 +4,7 @@ import { useState } from "react";
 import { StockForm } from "./forms/StockForm";
 import { useCreateStock } from "@/hooks/useStocks";
 import { CreateStock } from "@/types/createStock";
+import { useTranslations } from 'next-intl';
 
 interface StockModalProps {
   isOpen: boolean;
@@ -11,6 +12,7 @@ interface StockModalProps {
 }
 
 export function CreateStockModal({ isOpen, onClose }: StockModalProps) {
+  const t = useTranslations('components.stocks.modal');
   const createStockMutation = useCreateStock();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -31,7 +33,7 @@ export function CreateStockModal({ isOpen, onClose }: StockModalProps) {
       <div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold text-gray-900">
-            Créer une action
+            {t('createStock')}
           </h2>
           <button
             onClick={onClose}

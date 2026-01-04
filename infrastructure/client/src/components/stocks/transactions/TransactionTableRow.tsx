@@ -1,10 +1,12 @@
 import { UserTransaction } from "@/types/transaction";
+import { useTranslations } from 'next-intl';
 
 interface TransactionTableRowProps {
   transaction: UserTransaction;
 }
 
 export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
+  const t = useTranslations('components.stocks.transactions.row');
   const isBuy = transaction.type === "BUY";
   const total = transaction.quantity * transaction.executionPrice;
 
@@ -26,7 +28,7 @@ export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
               : "bg-red-100 text-red-800"
           }`}
         >
-          {isBuy ? "Achat" : "Vente"}
+          {isBuy ? t('buy') : t('sell')}
         </span>
       </td>
 

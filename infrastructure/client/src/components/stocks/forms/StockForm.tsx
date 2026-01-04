@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useTranslations } from "next-intl";
 
 import Button from "@/components/ui/Button";
 import { CreateStock } from "@/types/createStock";
@@ -11,6 +12,7 @@ interface CreateStockFormProps {
 }
 
 export function StockForm({ onSubmit, onCancel, isSubmitting }: CreateStockFormProps) {
+  const t = useTranslations('components.stocks.forms.stockForm');
   const form = useForm<CreateStock>({
     defaultValues: {
       symbol: "",
@@ -28,7 +30,7 @@ export function StockForm({ onSubmit, onCancel, isSubmitting }: CreateStockFormP
 
       <div className="flex gap-3 pt-4">
         <Button variant="secondary" onClick={onCancel} fullWidth type="button">
-          Annuler
+          {t('cancel')}
         </Button>
         <Button
           type="submit"
@@ -36,7 +38,7 @@ export function StockForm({ onSubmit, onCancel, isSubmitting }: CreateStockFormP
           fullWidth
           disabled={isSubmitting}
         >
-          {isSubmitting ? "Création..." : "Créer l'action"}
+          {isSubmitting ? t('creating') : t('create')}
         </Button>
       </div>
     </form>

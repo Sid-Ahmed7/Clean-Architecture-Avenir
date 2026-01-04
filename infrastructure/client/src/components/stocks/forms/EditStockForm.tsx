@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { EditStockFields } from "./EditStockFields";
 import Button from "@/components/ui/Button";
 import { Stocks } from "@/types/stocks";
+import { useTranslations } from "next-intl";
 
 interface EditStockFormProps {
   stock: Stocks;
@@ -11,6 +12,7 @@ interface EditStockFormProps {
 }
 
 export function EditStockForm({ stock, onSubmit, onCancel, isSubmitting }: EditStockFormProps) {
+  const t = useTranslations('components.stocks.forms.editStockForm');
   const form = useForm<{ id: string; companyName: string; name: string; currency: string; isActionAvailable: boolean }>({
     defaultValues: {
       id: stock.id,
@@ -27,7 +29,7 @@ export function EditStockForm({ stock, onSubmit, onCancel, isSubmitting }: EditS
 
       <div className="flex gap-3 pt-4">
         <Button variant="secondary" onClick={onCancel} fullWidth type="button">
-          Annuler
+          {t('cancel')}
         </Button>
         <Button
           type="submit"
@@ -35,7 +37,7 @@ export function EditStockForm({ stock, onSubmit, onCancel, isSubmitting }: EditS
           fullWidth
           disabled={isSubmitting}
         >
-          {isSubmitting ? "Modification..." : "Modifier l'action"}
+          {isSubmitting ? t('updating') : t('update')}
         </Button>
       </div>
     </form>

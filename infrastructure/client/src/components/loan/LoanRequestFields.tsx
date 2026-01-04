@@ -99,31 +99,31 @@ export function LoanRequestFields({
 
       <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-50 to-blue-50 border border-slate-100">
         <p className="text-sm font-semibold text-slate-800">
-          Simulation mensuelle{" "}
+          {t("simulationTitle")}{" "}
           {amount > rateThreshold
-            ? "(taux à définir par le directeur)"
+            ? t("rateByDirector")
             : indicativeRate
-              ? `(taux indicatif ${(indicativeRate * 100).toFixed(2)}%)`
-              : "(taux indicatif non défini)"}
+              ? t("indicativeRate", { rate: (indicativeRate * 100).toFixed(2) })
+              : t("rateNotDefined")}
         </p>
         <p className="text-2xl font-bold text-slate-900 mt-1">
           {amount > rateThreshold
-            ? "-- €/mois"
+            ? t("monthlyNotAvailable")
             : monthlyPayment > 0
-              ? `${monthlyPayment.toFixed(2)} €/mois`
-              : "-- €/mois"}
+              ? t("monthlyAmount", { amount: monthlyPayment.toFixed(2) })
+              : t("monthlyNotAvailable")}
         </p>
         <p className="text-xs text-slate-600 mt-1">
           {amount > rateThreshold
-            ? "Pour un montant > 5000€, le taux sera proposé par le directeur."
+            ? t("rateProposalNote")
             : indicativeRate
-              ? "En attente de taux indicatif défini par le directeur."
-              : "Dès qu’un taux indicatif sera publié, une estimation apparaîtra ici."}
+              ? t("waitingForRate")
+              : t("rateWillAppear")}
         </p>
       </div>
 
       <Button type="submit" className="w-full" disabled={submitting}>
-        Envoyer la demande
+        {t("submitButton")}
       </Button>
     </>
   );

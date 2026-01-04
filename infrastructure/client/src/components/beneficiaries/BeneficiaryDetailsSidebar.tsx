@@ -3,6 +3,7 @@
 import { Beneficiary } from "@/types/beneficiary";
 import { X } from "lucide-react";
 import { BeneficiaryCard } from "./BeneficiaryCard";
+import { useTranslations } from "next-intl";
 
 interface BeneficiaryDetailsSidebarProps {
   beneficiary: Beneficiary | null;
@@ -14,6 +15,7 @@ interface BeneficiaryDetailsSidebarProps {
 }
 
 export function BeneficiaryDetailsSidebar({beneficiary,isOpen,onClose,onEdit,onDelete,onTransfer,}: BeneficiaryDetailsSidebarProps) {
+  const t = useTranslations("components.beneficiariesManager.sidebar");
   if (!beneficiary) return null;
 
   return (
@@ -33,11 +35,11 @@ export function BeneficiaryDetailsSidebar({beneficiary,isOpen,onClose,onEdit,onD
       >
         <div className="h-full flex flex-col">
           <div className="p-5 border-b border-gray-200 flex justify-between items-center">
-            <h2 className="text-xl font-bold text-gray-900">Détails du bénéficiaire</h2>
+            <h2 className="text-xl font-bold text-gray-900">{t("title")}</h2>
             <button
               onClick={onClose}
               className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-              aria-label="Fermer"
+              aria-label={t("close")}
             >
               <X className="w-6 h-6" />
             </button>

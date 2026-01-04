@@ -1,6 +1,6 @@
 "use client";
 
-
+import { useTranslations } from 'next-intl';
 
 interface LimitProgressBarProps {
     label: string;
@@ -10,6 +10,7 @@ interface LimitProgressBarProps {
 }
 
 export function LimitProgressBar({label, value, max, currency}: LimitProgressBarProps) {
+    const t = useTranslations('components.limitProgressBar');
     const percentage = Math.min((value / max) * 100, 100);
 
     const isNearLimit = percentage > 80;
@@ -51,12 +52,12 @@ export function LimitProgressBar({label, value, max, currency}: LimitProgressBar
                     isMedium ? 'text-orange-600' : 
                     'text-gray-500'
                 }`}>
-                    {isNearLimit && '⚠️ Limite proche'}
-                    {isMedium && '⚡ Attention'}
-                    {isLow && '✓ Disponible'}
+                    {isNearLimit && t('nearLimit')}
+                    {isMedium && t('attention')}
+                    {isLow && t('available')}
                 </span>
                 <span className="text-xs text-gray-500">
-                    {(max - value).toLocaleString()} {currency} restant
+                    {(max - value).toLocaleString()} {currency} {t('remaining')}
                 </span>
             </div>
         </div>

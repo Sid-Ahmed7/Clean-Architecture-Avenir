@@ -18,7 +18,7 @@ interface TransferToBeneficiaryFormProps {
 }
 
 export function TransferToBeneficiaryForm({ beneficiary, onSubmit, onCancel }: TransferToBeneficiaryFormProps) {
-    const t = useTranslations();
+    const t = useTranslations('components.beneficiaries.form.transferToBeneficiary');
     const { accounts, loading: loadingAccounts } = useUserAccounts();
     const {register,handleSubmit,formState: { errors, isSubmitting }} = useForm<TransferToBeneficiaryRequest>({
         resolver: zodResolver(transferToBeneficiarySchema(t)),
@@ -30,14 +30,14 @@ export function TransferToBeneficiaryForm({ beneficiary, onSubmit, onCancel }: T
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div className="bg-gray-50 p-4 rounded-lg">
-        <h3 className="font-semibold text-gray-900 mb-2">Bénéficiaire</h3>
+        <h3 className="font-semibold text-gray-900 mb-2">{t('beneficiary')}</h3>
         <p className="text-gray-700">{beneficiary.beneficiaryName}</p>
         <p className="text-sm text-gray-600">{beneficiary.iban}</p>
       </div>
 
       <div>
         <label htmlFor="sourceAccountNumber" className="block text-sm font-medium text-gray-700 mb-1">
-          Compte source
+          {t('sourceAccount')}
         </label>
         <select
           id="sourceAccountNumber"
@@ -45,7 +45,7 @@ export function TransferToBeneficiaryForm({ beneficiary, onSubmit, onCancel }: T
           className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           disabled={loadingAccounts}
         >
-          <option value="">Sélectionnez un compte</option>
+          <option value="">{t('selectAccount')}</option>
           {accounts.map((account) => (
             <option key={account.accountNumber} value={account.accountNumber}>
               {account.accountType} - {account.accountNumber} ({account.currentBalance.toFixed(2)} €)
@@ -58,7 +58,7 @@ export function TransferToBeneficiaryForm({ beneficiary, onSubmit, onCancel }: T
       </div>
 
       <Input
-        label="Montant (€)"
+        label={t('amount')}
         type="number"
         step="0.01"
         {...register("amount", { valueAsNumber: true })}
@@ -73,7 +73,7 @@ export function TransferToBeneficiaryForm({ beneficiary, onSubmit, onCancel }: T
           onClick={onCancel}
           fullWidth
         >
-          Annuler
+          {t('cancel')}
         </Button>
         <Button
           type="submit"
@@ -82,7 +82,7 @@ export function TransferToBeneficiaryForm({ beneficiary, onSubmit, onCancel }: T
           loading={isSubmitting || loadingAccounts}
           fullWidth
         >
-          Effectuer le transfert
+          {t('submitTransfer')}
         </Button>
       </div>
     </form>

@@ -1,11 +1,14 @@
 import { Order } from "@/types/order";
 import { DirectorOrderCard } from "./DirectorOrderCard";
+import { useTranslations } from 'next-intl';
 
 interface DirectorOrderListProps {
     orders: Order[];
 }
 
 export function DirectorOrderList({ orders }: DirectorOrderListProps) {
+    const t = useTranslations('components.stocks.orders.directorList');
+    
     const ordersBySymbol = orders.reduce((acc, order) => {
         if (!acc[order.stockSymbol]) {
             acc[order.stockSymbol] = [];
@@ -20,10 +23,10 @@ export function DirectorOrderList({ orders }: DirectorOrderListProps) {
                 <div className="text-center py-12">
                     <div className="text-gray-400 text-6xl mb-4">📋</div>
                     <h3 className="text-xl font-semibold text-gray-700 mb-2">
-                        Aucun ordre en attente
+                        {t('noOrders')}
                     </h3>
                     <p className="text-gray-500">
-                        Il n&apos;y a actuellement aucun ordre en attente de traitement.
+                        {t('noOrdersDescription')}
                     </p>
                 </div>
             ) : (

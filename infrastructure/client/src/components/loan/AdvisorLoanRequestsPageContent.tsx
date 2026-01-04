@@ -11,8 +11,10 @@ import {
 import { LoanDecision, LoanRepaymentSchedule, LoanRequest } from "@/types/loan";
 import AdvisorLoanRequestCard from "@/components/loan/AdvisorLoanRequestCard";
 import ClientProfileModal from "@/components/loan/ClientProfileModal";
+import { useTranslations } from "next-intl";
 
 export function AdvisorLoanRequestsPageContent() {
+  const t = useTranslations("components.loan.advisorPage");
   const [requests, setRequests] = useState<LoanRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -27,10 +29,10 @@ export function AdvisorLoanRequestsPageContent() {
       .then((data) => setRequests(data))
       .catch((err) => {
         console.error("Failed to load loan requests:", err);
-        setError(err.response?.data?.error || "Impossible de charger les demandes");
+        setError(err.response?.data?.error || t("errorLoad"));
       })
       .finally(() => setLoading(false));
-  }, []);
+  }, [t]);
 
   const handleDecision = (id: string, decision: LoanDecision) => {
     setSubmitting(id);
@@ -78,29 +80,29 @@ export function AdvisorLoanRequestsPageContent() {
       <div className="max-w-6xl mx-auto px-6 py-10 space-y-6">
         <div className="flex flex-col gap-3">
           <div>
-            <p className="text-sm uppercase tracking-wide text-slate-500">Conseiller</p>
-            <h1 className="text-3xl font-bold text-slate-900">Demandes de crédit</h1>
+            <p className="text-sm uppercase tracking-wide text-slate-500">{t("advisorLabel")}</p>
+            <h1 className="text-3xl font-bold text-slate-900">{t("title")}</h1>
           </div>
           <p className="text-sm text-slate-600">
-            Suivez, analysez et décidez des demandes de crédit de vos clients dans un espace clair et cohérent.
+            {t("description")}
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="rounded-2xl border bg-white shadow-sm px-4 py-3">
-            <p className="text-xs uppercase text-slate-500">Total</p>
+            <p className="text-xs uppercase text-slate-500">{t("stats.total")}</p>
             <p className="text-2xl font-semibold text-slate-900">{stats.total}</p>
           </div>
           <div className="rounded-2xl border bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-sm px-4 py-3">
-            <p className="text-xs uppercase text-white/80">En attente</p>
+            <p className="text-xs uppercase text-white/80">{t("stats.pending")}</p>
             <p className="text-2xl font-semibold">{stats.pending}</p>
           </div>
           <div className="rounded-2xl border bg-white shadow-sm px-4 py-3">
-            <p className="text-xs uppercase text-slate-500">Approuvées</p>
+            <p className="text-xs uppercase text-slate-500">{t("stats.approved")}</p>
             <p className="text-2xl font-semibold text-emerald-700">{stats.approved}</p>
           </div>
           <div className="rounded-2xl border bg-white shadow-sm px-4 py-3">
-            <p className="text-xs uppercase text-slate-500">Refusées</p>
+            <p className="text-xs uppercase text-slate-500">{t("stats.rejected")}</p>
             <p className="text-2xl font-semibold text-rose-600">{stats.rejected}</p>
           </div>
         </div>
@@ -115,9 +117,9 @@ export function AdvisorLoanRequestsPageContent() {
           </div>
         ) : requests.length === 0 ? (
           <div className="rounded-2xl border bg-white shadow-sm px-6 py-10 text-center">
-            <p className="text-lg font-semibold text-slate-900">Aucune demande pour le moment</p>
+            <p className="text-lg font-semibold text-slate-900">{t("noRequests")}</p>
             <p className="text-sm text-slate-600 mt-1">
-              Les nouvelles demandes de vos clients apparaîtront ici dès leur création.
+              {t("noRequestsDescription")}
             </p>
           </div>
         ) : (

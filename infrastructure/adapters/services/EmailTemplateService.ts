@@ -2,7 +2,7 @@ import { EmailService, SendEmailOptions } from "../../../application/ports/servi
 import { EmailComposerService } from "../../../application/ports/services/EmailComposerService";
 
 export class EmailTemplateService implements EmailComposerService {
-  constructor(private emailService: EmailService, private baseUrl: string) {}
+  constructor(private readonly emailService: EmailService, private readonly baseUrl: string) {}
 
   async sendRegistrationConfirmation(
     to: string,

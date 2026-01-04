@@ -8,6 +8,7 @@ import { Link } from "@/i18n/navigation";
 import { usePathname } from "next/navigation";
 import { getRolePrefix } from "@/lib/utils/getRolePrefix";
 import { RoleEnum } from "@/types/RoleEnum";
+import { useTranslations } from 'next-intl';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -15,6 +16,7 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
+  const t = useTranslations('components.sidebar');
   const { isAuthenticated, setIsAuthenticated, hasAnyRole, user } = useContext(AuthContext);
   const pathname = usePathname();
 
@@ -22,32 +24,32 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const rolePrefix = getRolePrefix(user?.role);
 
   const menuItems = [
-    { icon: Home, label: "Dashboard", href: `/${rolePrefix}/dashboard` },
+    { icon: Home, labelKey: "menu.dashboard", href: `/${rolePrefix}/dashboard` },
 
-    { icon: CreditCard, label: "Comptes", href: `/${rolePrefix}/accounts`, roles: [RoleEnum.CLIENT] },
-    { icon: UserPlus, label: "Bénéficiaires", href: `/client/beneficiaries`, roles: [RoleEnum.CLIENT] },
-    { icon: PiggyBank, label: "Épargne", href: `/client/savings`, roles: [RoleEnum.CLIENT] },
-    { icon: FileText, label: "Mes demandes de crédit", href: "/loan/requests", roles: [RoleEnum.CLIENT] },
+    { icon: CreditCard, labelKey: "menu.accounts", href: `/${rolePrefix}/accounts`, roles: [RoleEnum.CLIENT] },
+    { icon: UserPlus, labelKey: "menu.beneficiaries", href: `/client/beneficiaries`, roles: [RoleEnum.CLIENT] },
+    { icon: PiggyBank, labelKey: "menu.savings", href: `/client/savings`, roles: [RoleEnum.CLIENT] },
+    { icon: FileText, labelKey: "menu.myLoanRequests", href: "/loan/requests", roles: [RoleEnum.CLIENT] },
 
-    { icon: Users, label: "Gestion Utilisateurs", href: `/manager/users`, roles: [RoleEnum.BANK_MANAGER] },
-    { icon: Wallet, label: "Tous les Comptes", href: `/manager/accounts`, roles: [RoleEnum.BANK_MANAGER] },
-    { icon: PiggyBank, label: "Produits d'Épargne", href: `/manager/savings-products`, roles: [RoleEnum.BANK_MANAGER] },
-    { icon: Building2, label: "Gestion des Stocks", href: `/manage-stock`, roles: [RoleEnum.BANK_MANAGER] },
-    { icon: FileText, label: "Demandes crédit", href: "/director/loan-requests", roles: [RoleEnum.BANK_MANAGER] },
+    { icon: Users, labelKey: "menu.userManagement", href: `/manager/users`, roles: [RoleEnum.BANK_MANAGER] },
+    { icon: Wallet, labelKey: "menu.allAccounts", href: `/manager/accounts`, roles: [RoleEnum.BANK_MANAGER] },
+    { icon: PiggyBank, labelKey: "menu.savingsProducts", href: `/manager/savings-products`, roles: [RoleEnum.BANK_MANAGER] },
+    { icon: Building2, labelKey: "menu.stockManagement", href: `/manage-stock`, roles: [RoleEnum.BANK_MANAGER] },
+    { icon: FileText, labelKey: "menu.loanRequests", href: "/director/loan-requests", roles: [RoleEnum.BANK_MANAGER] },
 
-    { icon: FileText, label: "Demandes de crédit", href: "/advisor/loan-requests", roles: [RoleEnum.BANK_ADVISOR] },
-    { icon: Briefcase, label: "Demandes de découvert", href: "/advisor/overdraft-requests", roles: [RoleEnum.BANK_ADVISOR] },
-    { icon: MessageCircle, label: "Conversations en attente", href: "/advisor/pending-conversations", roles: [RoleEnum.BANK_ADVISOR] },
+    { icon: FileText, labelKey: "menu.loanRequests", href: "/advisor/loan-requests", roles: [RoleEnum.BANK_ADVISOR] },
+    { icon: Briefcase, labelKey: "menu.overdraftRequests", href: "/advisor/overdraft-requests", roles: [RoleEnum.BANK_ADVISOR] },
+    { icon: MessageCircle, labelKey: "menu.pendingConversations", href: "/advisor/pending-conversations", roles: [RoleEnum.BANK_ADVISOR] },
 
-    { icon: ArrowUpRight, label: "Virements", href: `/${rolePrefix}/transfers` },
-    { icon: LineChart, label: "Trading", href: `/stock` },
-    { icon: ShoppingCart, label: "Mes Ordres", href: `/orders` },
-    { icon: BarChart3, label: "Mes Positions", href: `/position` },
-    { icon: Calendar, label: "Historique", href: `/${rolePrefix}/history` },
-    { icon: Newspaper, label: "Actualités", href: `/feed` },
-    { icon: MessageCircle, label: "Messages", href: `/${rolePrefix}/conversations` },
-    { icon: Settings, label: "Paramètres", href: `/${rolePrefix}/settings` },
-    { icon: HelpCircle, label: "Aide", href: `/${rolePrefix}/help` },
+    { icon: ArrowUpRight, labelKey: "menu.transfers", href: `/${rolePrefix}/transfers` },
+    { icon: LineChart, labelKey: "menu.trading", href: `/stock` },
+    { icon: ShoppingCart, labelKey: "menu.myOrders", href: `/orders` },
+    { icon: BarChart3, labelKey: "menu.myPositions", href: `/position` },
+    { icon: Calendar, labelKey: "menu.history", href: `/${rolePrefix}/history` },
+    { icon: Newspaper, labelKey: "menu.news", href: `/feed` },
+    { icon: MessageCircle, labelKey: "menu.messages", href: `/${rolePrefix}/conversations` },
+    { icon: Settings, labelKey: "menu.settings", href: `/${rolePrefix}/settings` },
+    { icon: HelpCircle, labelKey: "menu.help", href: `/${rolePrefix}/help` },
   ];
 
   const handleLogout = () => {
@@ -87,7 +89,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           <button
             onClick={onClose}
             className="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
-            aria-label="Fermer le menu"
+            aria-label={t('closeMenu')}
           >
             <X className="w-6 h-6" />
           </button>
@@ -101,7 +103,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               const active = isActive(item.href);
               return (
                 <Link
-                  key={item.label}
+                  key={item.labelKey}
                   href={item.href}
                   onClick={onClose}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${active
@@ -110,7 +112,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                     }`}
                 >
                   <ItemIcon className="w-5 h-5" />
-                  <span className="font-medium">{item.label}</span>
+                  <span className="font-medium">{t(item.labelKey)}</span>
                 </Link>
               );
             })}
@@ -124,15 +126,15 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             >
               <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
               <LogOut className="w-5 h-5 relative z-10 group-hover:rotate-12 transition-transform duration-300" />
-              <span className="font-semibold relative z-10">Déconnexion</span>
+              <span className="font-semibold relative z-10">{t('logout')}</span>
             </button>
           ) : (
             <>
               <Link href="/login" className="flex w-full cursor-pointer justify-center px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 font-semibold shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]">
-                <span>Login</span>
+                <span>{t('login')}</span>
               </Link>
               <Link href="/register" className="w-full cursor-pointer text-center px-4 py-3 bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800 rounded-lg hover:from-gray-200 hover:to-gray-300 transition-all duration-300 font-semibold hover:shadow-md hover:scale-[1.02] active:scale-[0.98]">
-                Register
+                {t('register')}
               </Link>
             </>
           )}

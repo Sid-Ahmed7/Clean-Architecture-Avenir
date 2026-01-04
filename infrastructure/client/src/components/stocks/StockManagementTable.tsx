@@ -2,6 +2,7 @@
 
 import { Badge } from "@/components/ui/Badge";
 import { Stocks } from "@/types/stocks";
+import { useTranslations } from "next-intl";
 
 interface StockManagementTableProps {
   stocks: Stocks[];
@@ -13,10 +14,12 @@ interface StockManagementTableProps {
 }
 
 export function StockManagementTable({stocks,onEdit,onDelete,onToggleAvailability,onOpenIPO,onCloseIPO}: StockManagementTableProps) {
+  const t = useTranslations("components.stocks.table");
+  
   if (stocks.length === 0) {
     return (
       <div className="bg-white rounded-lg shadow-md p-8 text-center">
-        <p className="text-gray-500">Aucune action créée</p>
+        <p className="text-gray-500">{t("noStocks")}</p>
       </div>
     );
   }
@@ -29,28 +32,28 @@ return (
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                Symbole
+                {t("symbol")}
               </th>
               <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                Entreprise
+                {t("company")}
               </th>
               <th className="px-6 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                Prix précédent
+                {t("previousPrice")}
               </th>
               <th className="px-6 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                Prix actuel
+                {t("currentPrice")}
               </th>
               <th className="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                Variation
+                {t("variation")}
               </th>
               <th className="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                Statut
+                {t("status")}
               </th>
               <th className="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">
                 IPO
               </th>
               <th className="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                Actions
+                {t("actions")}
               </th>
             </tr>
           </thead>
@@ -98,7 +101,7 @@ return (
 
                 <td className="px-6 py-4 whitespace-nowrap text-center">
                   <Badge variant={stock.isActionAvailable ? "success" : "danger"}>
-                    {stock.isActionAvailable ? "Disponible" : "Indisponible"}
+                    {stock.isActionAvailable ? t('available') : t('unavailable')}
                   </Badge>
                 </td>
 
@@ -106,16 +109,16 @@ return (
                   {stock.ipoActive && stock.availableSharesForIPO > 0 ? (
                     <div className="space-y-1">
                       <Badge variant="warning">
-                        IPO Active
+                        {t('ipoActive')}
                       </Badge>
                       <p className="text-xs text-gray-600">
-                        {stock.availableSharesForIPO} actions
+                        {stock.availableSharesForIPO} {t('shares')}
                       </p>
                       <button
                         onClick={() => onCloseIPO(stock.symbol)}
                         className="text-xs font-medium text-red-600 hover:text-red-800 transition"
                       >
-                        Fermer IPO
+                        {t('closeIPO')}
                       </button>
                     </div>
                   ) : (
@@ -123,7 +126,7 @@ return (
                       onClick={() => onOpenIPO(stock)}
                       className="text-xs font-medium text-blue-600 hover:text-blue-800 transition px-3 py-1 border border-blue-300 rounded-lg hover:bg-blue-50"
                     >
-                      Ouvrir IPO
+                      {t('openIPO')}
                     </button>
                   )}
                 </td>
@@ -139,21 +142,21 @@ return (
                         : "text-emerald-600 hover:text-emerald-800"
                     }`}
                   >
-                    {stock.isActionAvailable ? "Désactiver" : "Activer"}
+                    {stock.isActionAvailable ? t('deactivate') : t('activate')}
                   </button>
 
                   <button
                     onClick={() => onEdit(stock)}
                     className="font-medium text-indigo-600 hover:text-indigo-800 transition"
                   >
-                    Modifier
+                    {t('edit')}
                   </button>
 
                   <button
                     onClick={() => {
                       if (
                         confirm(
-                          `Êtes-vous sûr de vouloir supprimer ${stock.symbol} ?`
+                          t('confirmDelete', { symbol: stock.symbol })
                         )
                       ) {
                         onDelete(stock.id);
@@ -161,7 +164,7 @@ return (
                     }}
                     className="font-medium text-red-600 hover:text-red-800 transition"
                   >
-                    Supprimer
+                    {t('delete')}
                   </button>
                 </td>
               </tr>

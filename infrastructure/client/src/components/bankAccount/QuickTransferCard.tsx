@@ -5,6 +5,7 @@ import { ArrowRight, Clock } from "lucide-react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { useTransferBetweenAccounts } from "@/hooks/useTransferBetweenAccounts";
+import { useTranslations } from "next-intl";
 import { AccountModel } from "@/lib/validation/bankAccount/accountSchema";
 import { BankTransaction } from "@/types/bankTransaction";
 import { quickTransfer } from "@/lib/api/account";
@@ -16,6 +17,7 @@ interface QuickTransferCardProps {
 }
 
 export default function QuickTransferCard({ transactions, accounts, onTransferSuccess }: QuickTransferCardProps) {
+    const t = useTranslations("components.bankAccount.quickTransfer");
     const { transfer, loading } = useTransferBetweenAccounts();
     const [selectedTransaction, setSelectedTransaction] = useState<BankTransaction | null>(null);
     const [amount, setAmount] = useState<string>("");
@@ -50,7 +52,7 @@ export default function QuickTransferCard({ transactions, accounts, onTransferSu
             onTransferSuccess?.();
         } catch (error) {
             console.error("Erreur lors du transfert:", error);
-            alert("Erreur lors du transfert. Veuillez réessayer.");
+            alert(error instanceof Error ? error.message : "Transfer error");
         }
     };
 
@@ -68,12 +70,12 @@ export default function QuickTransferCard({ transactions, accounts, onTransferSu
                         <Clock className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                        <h2 className="text-lg font-semibold text-gray-900">Transferts rapides</h2>
-                        <p className="text-sm text-gray-500">Réeffectuer un transfert en un clic</p>
+                        <h2 className="text-lg font-semibold text-gray-900">{t("title")}</h2>
+                        <p className="text-sm text-gray-500">{t("subtitle")}</p>
                     </div>
                 </div>
                 <div className="text-center py-8 text-gray-500">
-                    Aucune transaction récente disponible
+                    {t("noTransactions")}
                 </div>
             </section>
         );
@@ -87,8 +89,8 @@ export default function QuickTransferCard({ transactions, accounts, onTransferSu
                         <Clock className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                        <h2 className="text-lg font-semibold text-gray-900">Transferts rapides</h2>
-                        <p className="text-sm text-gray-500">Réeffectuer un transfert en un clic</p>
+                        <h2 className="text-lg font-semibold text-gray-900">{t("title")}</h2>
+                        <p className="text-sm text-gray-500">{t("subtitle")}</p>
                     </div>
                 </div>
 
@@ -99,14 +101,14 @@ export default function QuickTransferCard({ transactions, accounts, onTransferSu
                         const counterpartUserName = isDebit ? tx.creditUserName : tx.debitUserName;
                         const counterpartAccount = accounts.find((a) => a.accountNumber === counterpartAccountNumber);
 
-                        const userLabel = counterpartUserName ?? "Utilisateur inconnu";
+                        const userLabel = counterpartUserName ?? t("unknownUser");
                         const accountLabel = counterpartAccount?.customAccountName
                             ? counterpartAccount.customAccountName
                             : counterpartUserName
                             ? `${userLabel}`
                             : counterpartAccountNumber
-                            ? `Compte ${counterpartAccountNumber}`
-                            : "Compte inconnu";
+                            ? `${t("account")} ${counterpartAccountNumber}`
+                            : t("unknownAccount");
 
                         return (
                             <div
@@ -135,7 +137,7 @@ export default function QuickTransferCard({ transactions, accounts, onTransferSu
                                         disabled={loading}
                                         className="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm flex items-center justify-center gap-2 group-hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
-                                        Répéter
+                                        {t("repeatButton")}
                                         <ArrowRight className="w-4 h-4" />
                                     </button>
                                 </div>
@@ -148,10 +150,10 @@ export default function QuickTransferCard({ transactions, accounts, onTransferSu
             {showConfirm && selectedTransaction && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
                     <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
-                        <h3 className="text-xl font-semibold text-gray-900 mb-2">Confirmer le transfert rapide</h3>
+                        <h3 className="text-xl font-semibold text-gray-900 mb-2">{t("confirmTitle")}</h3>
                         <div className="space-y-4 mb-6">
                             <div>
-                                <label className="text-sm font-medium text-gray-700 mb-2 block">Montant</label>
+                                <label className="text-sm font-medium text-gray-700 mb-2 block">{t("amountLabel")}</label>
                                 <input
                                     type="number"
                                     step="0.01"
@@ -162,12 +164,12 @@ export default function QuickTransferCard({ transactions, accounts, onTransferSu
                             </div>
                             <div className="bg-gray-50 rounded-lg p-4 text-sm text-gray-600">
                                 <p className="mb-2">
-                                    <span className="font-semibold">Vers:</span>{" "}
+                                    <span className="font-semibold">{t("toLabel")}</span>{" "}
                                     {mainAccount && selectedTransaction.debitAccount === mainAccount.accountNumber
-                                        ? selectedTransaction.creditUserName ?? `Compte ${selectedTransaction.creditAccount}`
-                                        : selectedTransaction.debitUserName ?? `Compte ${selectedTransaction.debitAccount}`}
+                                        ? selectedTransaction.creditUserName ?? `${t("account")} ${selectedTransaction.creditAccount}`
+                                        : selectedTransaction.debitUserName ?? `${t("account")} ${selectedTransaction.debitAccount}`}
                                 </p>
-                                <p className="text-xs text-gray-500">Transaction originale du {format(new Date(selectedTransaction.createdAt), "dd/MM/yyyy", { locale: fr })}</p>
+                                <p className="text-xs text-gray-500">{t("originalTransaction")} {format(new Date(selectedTransaction.createdAt), "dd/MM/yyyy", { locale: fr })}</p>
                             </div>
                         </div>
                         <div className="flex gap-3">
@@ -177,7 +179,7 @@ export default function QuickTransferCard({ transactions, accounts, onTransferSu
                                 className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                 disabled={loading || !amount || parseFloat(amount) <= 0}
                             >
-                                {loading ? "En cours..." : "Confirmer"}
+                                {loading ? t("processing") : t("confirmButton")}
                             </button>
                             <button
                                 type="button"
@@ -185,7 +187,7 @@ export default function QuickTransferCard({ transactions, accounts, onTransferSu
                                 className="px-4 py-3 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-colors"
                                 disabled={loading}
                             >
-                                Annuler
+                                {t("cancelButton")}
                             </button>
                         </div>
                     </div>
