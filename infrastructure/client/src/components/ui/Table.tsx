@@ -4,6 +4,7 @@ import { ReactNode, useEffect, useMemo, useState } from "react";
 import { Pagination } from "./Pagination";
 import { Select } from "./Select";
 import { TableColumn, TableHeader } from "./TableHeader";
+import { useTranslations } from 'next-intl';
 
 interface TableProps<T> {
   data: T[];
@@ -15,7 +16,7 @@ interface TableProps<T> {
   pageSizeOptions?: number[];
   showControls?: boolean;
   className?: string;
-  itemLabel?: string; 
+  itemLabel?: string;
 }
 
 export function Table<T>({
@@ -23,13 +24,18 @@ export function Table<T>({
   columns,
   renderRow,
   keyExtractor,
-  emptyMessage = "Aucune donnée disponible",
+  emptyMessage,
   initialItemsPerPage = 10,
   pageSizeOptions = [5, 10, 15, 20],
   showControls = true,
   className = "",
-  itemLabel = "éléments",
+  itemLabel,
 }: TableProps<T>) {
+  const t = useTranslations('common.ui.table');
+  const tCommon = useTranslations('common.actions');
+
+  const actualEmptyMessage = emptyMessage || t('empty');
+  const actualItemLabel = itemLabel || t('items');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(initialItemsPerPage);
 
@@ -54,14 +60,14 @@ export function Table<T>({
       {showControls && (
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
           <Select
-            label="Afficher"
+            label={t("show")}
             value={itemsPerPage.toString()}
             onChange={(val) => setItemsPerPage(parseInt(val, 10))}
             options={pageSizeSelectOptions}
             className="w-32"
           />
           <div className="text-sm text-gray-600">
-            {paginatedData.length} sur {data.length} {itemLabel}
+            {paginatedData.length} {t("of")} {data.length} {actualItemLabel}
           </div>
         </div>
       )}
@@ -90,7 +96,7 @@ export function Table<T>({
                         d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
                       />
                     </svg>
-                    <p className="text-sm font-medium">{emptyMessage}</p>
+                    <p className="text-sm font-medium">{actualEmptyMessage}</p>
                   </div>
                 </td>
               </tr>

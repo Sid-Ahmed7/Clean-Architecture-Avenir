@@ -22,7 +22,15 @@
     },
     "currency": "EUR",
     "yes": "Oui",
-    "no": "Non"
+    "no": "Non",
+    "ui": {
+      "table": {
+        "empty": "Aucune donnée disponible",
+        "items": "éléments",
+        "show": "Afficher",
+        "of": "sur"
+      }
+    }
   },
   "components": {
     "sidebar": {
