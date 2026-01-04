@@ -587,6 +587,18 @@
       "title": "Accounts",
       "inDevelopment": "Bank accounts page - Under development"
     },
+    "settings": {
+      "title": "Settings",
+      "inDevelopment": "Settings page - Under development"
+    },
+    "history": {
+      "title": "History",
+      "inDevelopment": "Transaction history page - Under development"
+    },
+    "help": {
+      "title": "Help",
+      "inDevelopment": "Help page - Under development"
+    },
     "transfers": {
       "loading": "Loading your accounts…",
       "noAccounts": "No accounts available",

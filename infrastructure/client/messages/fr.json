@@ -587,6 +587,18 @@
       "title": "Comptes",
       "inDevelopment": "Page des comptes bancaires - En cours de développement"
     },
+    "settings": {
+      "title": "Paramètres",
+      "inDevelopment": "Page des paramètres - En cours de développement"
+    },
+    "history": {
+      "title": "Historique",
+      "inDevelopment": "Page de l'historique des transactions - En cours de développement"
+    },
+    "help": {
+      "title": "Aide",
+      "inDevelopment": "Page d'aide - En cours de développement"
+    },
     "transfers": {
       "loading": "Chargement de tes comptes…",
       "noAccounts": "Aucun compte disponible",
