@@ -134,6 +134,12 @@
         "createButton": "Create Account",
         "success": "Account created successfully!"
       }
+    },
+    "feed": {
+      "blockEditor": {
+        "noBlocks": "No blocks added. Use the toolbar above to add content.",
+        "blocksCount": "{count, plural, =0 {No blocks} =1 {1 block} other {# blocks}}"
+      }
     }
   },
   "nav": {
@@ -242,29 +248,6 @@
         "legal": "Legal",
         "privacy": "Privacy",
         "terms": "Terms"
-      }
-    },
-    "services": {
-      "title": "Our services",
-      "subtitle": "Everything you need to manage your money",
-      "learnMore": "Learn more",
-      "items": {
-        "accounts": {
-          "title": "Bank accounts",
-          "description": "Current account with free bank card, French IBAN, and multi-currency management."
-        },
-        "savings": {
-          "title": "Savings",
-          "description": "Savings accounts, life insurance, PEA: grow your money safely."
-        },
-        "stock": {
-          "title": "Stock",
-          "description": "Invest in the stock market easily with our intuitive trading platform."
-        },
-        "mortgage": {
-          "title": "Mortgage",
-          "description": "Make your real estate project a reality with our competitive rates and personalized support."
-        }
       }
     },
     "features": {

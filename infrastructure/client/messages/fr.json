@@ -134,6 +134,12 @@
         "createButton": "Créer le compte",
         "success": "Compte créé avec succès !"
       }
+    },
+    "feed": {
+      "blockEditor": {
+        "noBlocks": "Aucun bloc ajouté. Utilisez la barre d'outils ci-dessus pour ajouter du contenu.",
+        "blocksCount": "{count, plural, =0 {Aucun bloc} =1 {1 bloc} other {# blocs}}"
+      }
     }
   },
   "nav": {
@@ -242,29 +248,6 @@
         "legal": "Mentions légales",
         "privacy": "Confidentialité",
         "terms": "CGV"
-      }
-    },
-    "services": {
-      "title": "Nos services",
-      "subtitle": "Tout ce dont vous avez besoin pour gérer votre argent",
-      "learnMore": "En savoir plus",
-      "items": {
-        "accounts": {
-          "title": "Comptes bancaires",
-          "description": "Compte courant avec carte bancaire gratuite, RIB français, et gestion multi-devises."
-        },
-        "savings": {
-          "title": "Épargne",
-          "description": "Livrets d'épargne, assurance vie, PEA : faites fructifier votre argent en toute sécurité."
-        },
-        "stock": {
-          "title": "Bourse",
-          "description": "Investissez en bourse facilement avec notre plateforme de trading intuitive."
-        },
-        "mortgage": {
-          "title": "Crédit immobilier",
-          "description": "Réalisez votre projet immobilier avec nos taux compétitifs et notre accompagnement personnalisé."
-        }
       }
     },
     "features": {
