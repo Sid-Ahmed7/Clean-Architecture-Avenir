@@ -1594,5 +1594,25 @@
       },
       "success": "Savings account deleted successfully"
     }
+  },
+  "advisor": {
+    "dashboard": {
+      "title": "Bank Advisor Dashboard",
+      "clientManagement": {
+        "title": "Client Management",
+        "description": "Access your client list and manage their accounts.",
+        "button": "View my clients"
+      },
+      "loanRequests": {
+        "title": "Loan Requests",
+        "description": "Review and process your clients' loan requests.",
+        "button": "View loan requests"
+      },
+      "overdraftRequests": {
+        "title": "Overdraft Requests",
+        "description": "Review and process overdraft increase requests.",
+        "button": "Open overdraft requests"
+      }
+    }
   }
 }
