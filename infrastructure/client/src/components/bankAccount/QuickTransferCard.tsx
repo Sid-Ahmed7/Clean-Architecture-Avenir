@@ -2,10 +2,8 @@
 
 import { useState } from "react";
 import { ArrowRight, Clock } from "lucide-react";
-import { format } from "date-fns";
-import { fr } from "date-fns/locale";
 import { useTransferBetweenAccounts } from "@/hooks/useTransferBetweenAccounts";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale, useFormatter } from "next-intl";
 import { AccountModel } from "@/lib/validation/bankAccount/accountSchema";
 import { BankTransaction } from "@/types/bankTransaction";
 import { quickTransfer } from "@/lib/api/account";
@@ -18,6 +16,7 @@ interface QuickTransferCardProps {
 
 export default function QuickTransferCard({ transactions, accounts, onTransferSuccess }: QuickTransferCardProps) {
     const t = useTranslations("components.bankAccount.quickTransfer");
+    const format = useFormatter();
     const { transfer, loading } = useTransferBetweenAccounts();
     const [selectedTransaction, setSelectedTransaction] = useState<BankTransaction | null>(null);
     const [amount, setAmount] = useState<string>("");
@@ -122,12 +121,16 @@ export default function QuickTransferCard({ transactions, accounts, onTransferSu
                                                 {accountLabel}
                                             </p>
                                             <p className="text-xs text-gray-500">
-                                                {format(new Date(tx.createdAt), "dd MMM yyyy", { locale: fr })}
+                                                {format.dateTime(new Date(tx.createdAt), {
+                                                    year: 'numeric',
+                                                    month: 'long',
+                                                    day: '2-digit'
+                                                })}
                                             </p>
                                         </div>
                                         <div className="text-right">
                                             <p className="text-base font-bold text-gray-900">
-                                                {tx.amount.toFixed(2)} €
+                                                {format.number(tx.amount, { style: 'currency', currency: 'EUR' })}
                                             </p>
                                         </div>
                                     </div>
@@ -169,7 +172,11 @@ export default function QuickTransferCard({ transactions, accounts, onTransferSu
                                         ? selectedTransaction.creditUserName ?? `${t("account")} ${selectedTransaction.creditAccount}`
                                         : selectedTransaction.debitUserName ?? `${t("account")} ${selectedTransaction.debitAccount}`}
                                 </p>
-                                <p className="text-xs text-gray-500">{t("originalTransaction")} {format(new Date(selectedTransaction.createdAt), "dd/MM/yyyy", { locale: fr })}</p>
+                                <p className="text-xs text-gray-500">{t("originalTransaction")} {format.dateTime(new Date(selectedTransaction.createdAt), {
+                                    day: '2-digit',
+                                    month: '2-digit',
+                                    year: 'numeric'
+                                })}</p>
                             </div>
                         </div>
                         <div className="flex gap-3">

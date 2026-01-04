@@ -598,1086 +598,1231 @@
         "subtitle": "Livret A, LDDS et autres produits d'épargne",
         "viewAll": "Voir tout",
         "loading": "Chargement des livrets...",
+        "noAccounts": "Aucun livret d'épargne"
+      },
+      "savingsPage": {
+        "title": "Épargne",
+        "subtitle": "Découvrez nos produits d'épargne et faites fructifier votre argent",
+        "back": "Retour",
+        "myAccounts": "Mes Livrets",
         "account": "Compte",
-        "active": "Actif",
-        "inactive": "Inactif",
-        "availableBalance": "Solde disponible",
-        "interestRate": "Taux d'intérêt",
-        "earnedInterests": "Intérêts gagnés",
-        "noSavings": "Aucun livret d'épargne",
-        "startSaving": "Commencez à épargner dès aujourd'hui avec nos produits d'épargne",
-        "discover": "Découvrir nos livrets"
-      }
+        "balance": "Solde",
+        "rate": "Taux",
+        "interestEarned": "Intérêts gagnés",
+        "deposit": "Déposer",
+        "withdraw": "Retirer",
+        "availableProducts": "Produits Disponibles",
+        "noProducts": "Aucun produit d'épargne disponible pour le moment",
+        "subscribed": "✓ Souscrit",
+        "annualRate": "Taux annuel",
+        "ceiling": "Plafond",
+        "minimum": "Minimum",
+        "subscribe": "Souscrire",
+        "subscribing": "Souscription...",
+        "alreadySubscribed": "Déjà souscrit",
+        "loading": "Chargement...",
+        "depositModal": {
+          "title": "Déposer de l'argent",
+          "placeholder": "Montant (€)",
+          "cancel": "Annuler",
+          "confirm": "Confirmer",
+          "success": "Dépôt de {amount}€ effectué avec succès !",
+          "error": "Erreur lors du dépôt"
+        },
+        "withdrawModal": {
+          "title": "Retirer de l'argent",
+          "placeholder": "Montant (€)",
+          "cancel": "Annuler",
+          "confirm": "Confirmer",
+          "success": "Retrait de {amount}€ effectué avec succès !",
+          "error": "Erreur lors du retrait"
+        },
+        "subscriptionSuccess": "Souscription réussie ! Votre livret d'épargne a été créé.",
+        "subscriptionError": "Erreur lors de la souscription"
+      },
+      "account": "Compte",
+      "active": "Actif",
+      "inactive": "Inactif",
+      "availableBalance": "Solde disponible",
+      "interestRate": "Taux d'intérêt",
+      "earnedInterests": "Intérêts gagnés",
+      "noSavings": "Aucun livret d'épargne",
+      "startSaving": "Commencez à épargner dès aujourd'hui avec nos produits d'épargne",
+      "discover": "Découvrir nos livrets"
+    }
+  },
+  "accounts": {
+    "title": "Comptes",
+    "inDevelopment": "Page des comptes bancaires - En cours de développement"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "inDevelopment": "Page des paramètres - En cours de développement"
+  },
+  "history": {
+    "title": "Historique",
+    "inDevelopment": "Page de l'historique des transactions - En cours de développement"
+  },
+  "help": {
+    "title": "Aide",
+    "inDevelopment": "Page d'aide - En cours de développement"
+  },
+  "transfers": {
+    "loading": "Chargement de tes comptes…",
+    "noAccounts": "Aucun compte disponible",
+    "createAccount": "Crée un compte pour effectuer un virement.",
+    "form": {
+      "title": "Virements",
+      "subtitle": "Effectuer un virement",
+      "description": "Déplace tes fonds en toute sécurité, entre tes comptes ou vers un IBAN externe.",
+      "fromAccount": "Compte émetteur",
+      "selectDebit": "Choisis un compte à débiter",
+      "toAccount": "Compte destinataire",
+      "selectCredit": "Choisis un compte à créditer",
+      "account": "Compte",
+      "amount": "Montant du virement",
+      "infoTitle": "Informations importantes",
+      "info1": "Le transfert sera effectué entre tes comptes personnels uniquement",
+      "info2": "Les deux comptes doivent avoir la même devise",
+      "info3": "Le transfert est instantané et sécurisé",
+      "warningTitle": "Transfert impossible",
+      "warningMessage": "Tu dois avoir au moins 2 comptes pour effectuer un transfert entre tes comptes.",
+      "processing": "Traitement...",
+      "minAccountsRequired": "2 comptes minimum requis",
+      "send": "Envoyer",
+      "reset": "Réinitialiser",
+      "successMessage": "Virement effectué avec succès",
+      "reference": "Référence",
+      "status": "Statut",
+      "completed": "Complété",
+      "pending": "En cours",
+      "date": "Date",
+      "confirmTitle": "Confirmer le virement",
+      "confirmMessage": "Tu t'apprêtes à transférer",
+      "from": "de l'IBAN",
+      "to": "vers",
+      "confirmButton": "Oui, confirmer",
+      "cancel": "Annuler"
+    }
+  },
+  "beneficiaries": {
+    "title": "Mes Bénéficiaires",
+    "subtitle": "Gérez vos bénéficiaires et organisez-les en groupes",
+    "newBeneficiary": "Nouveau bénéficiaire",
+    "newGroup": "Nouveau groupe",
+    "confirmDeleteBeneficiary": "Êtes-vous sûr de vouloir supprimer ce bénéficiaire ?",
+    "confirmDeleteGroup": "Êtes-vous sûr de vouloir supprimer ce groupe ?",
+    "confirmRemoveFromGroup": "Êtes-vous sûr de vouloir retirer ce bénéficiaire du groupe ?"
+  },
+  "beneficiariesManager": {
+    "tabs": {
+      "beneficiaries": "Bénéficiaires",
+      "groups": "Groupes"
     },
-    "accounts": {
-      "title": "Comptes",
-      "inDevelopment": "Page des comptes bancaires - En cours de développement"
-    },
-    "settings": {
-      "title": "Paramètres",
-      "inDevelopment": "Page des paramètres - En cours de développement"
-    },
-    "history": {
-      "title": "Historique",
-      "inDevelopment": "Page de l'historique des transactions - En cours de développement"
-    },
-    "help": {
-      "title": "Aide",
-      "inDevelopment": "Page d'aide - En cours de développement"
-    },
-    "transfers": {
-      "loading": "Chargement de tes comptes…",
-      "noAccounts": "Aucun compte disponible",
-      "createAccount": "Crée un compte pour effectuer un virement.",
-      "form": {
-        "title": "Virements",
-        "subtitle": "Effectuer un virement",
-        "description": "Déplace tes fonds en toute sécurité, entre tes comptes ou vers un IBAN externe.",
-        "fromAccount": "Compte émetteur",
-        "selectDebit": "Choisis un compte à débiter",
-        "toAccount": "Compte destinataire",
-        "selectCredit": "Choisis un compte à créditer",
-        "account": "Compte",
-        "amount": "Montant du virement",
-        "infoTitle": "Informations importantes",
-        "info1": "Le transfert sera effectué entre tes comptes personnels uniquement",
-        "info2": "Les deux comptes doivent avoir la même devise",
-        "info3": "Le transfert est instantané et sécurisé",
-        "warningTitle": "Transfert impossible",
-        "warningMessage": "Tu dois avoir au moins 2 comptes pour effectuer un transfert entre tes comptes.",
-        "processing": "Traitement...",
-        "minAccountsRequired": "2 comptes minimum requis",
-        "send": "Envoyer",
-        "reset": "Réinitialiser",
-        "successMessage": "Virement effectué avec succès",
-        "reference": "Référence",
+    "table": {
+      "columns": {
+        "name": "Nom",
+        "iban": "IBAN",
+        "email": "Email",
+        "country": "Pays",
         "status": "Statut",
-        "completed": "Complété",
-        "pending": "En cours",
-        "date": "Date",
-        "confirmTitle": "Confirmer le virement",
-        "confirmMessage": "Tu t'apprêtes à transférer",
-        "from": "de l'IBAN",
-        "to": "vers",
-        "confirmButton": "Oui, confirmer",
-        "cancel": "Annuler"
-      }
-    },
-    "beneficiaries": {
-      "title": "Mes Bénéficiaires",
-      "subtitle": "Gérez vos bénéficiaires et organisez-les en groupes",
-      "newBeneficiary": "Nouveau bénéficiaire",
-      "newGroup": "Nouveau groupe",
-      "confirmDeleteBeneficiary": "Êtes-vous sûr de vouloir supprimer ce bénéficiaire ?",
-      "confirmDeleteGroup": "Êtes-vous sûr de vouloir supprimer ce groupe ?",
-      "confirmRemoveFromGroup": "Êtes-vous sûr de vouloir retirer ce bénéficiaire du groupe ?"
-    },
-    "beneficiariesManager": {
-      "tabs": {
-        "beneficiaries": "Bénéficiaires",
-        "groups": "Groupes"
+        "created": "Date de création",
+        "action": "Action"
       },
-      "table": {
-        "columns": {
-          "name": "Nom",
-          "iban": "IBAN",
-          "email": "Email",
-          "country": "Pays",
-          "status": "Statut",
-          "created": "Date de création",
-          "action": "Action"
-        },
-        "status": {
-          "verified": "Vérifié",
-          "notVerified": "Non vérifié"
-        },
-        "loading": "Chargement des bénéficiaires...",
-        "empty": "Aucun bénéficiaire trouvé",
-        "itemLabel": "bénéficiaires",
-        "viewDetails": "Voir les détails"
-      },
-      "card": {
+      "status": {
         "verified": "Vérifié",
-        "transferButton": "Transférer",
-        "editButton": "Modifier",
-        "deleteButton": "Supprimer"
+        "notVerified": "Non vérifié"
       },
-      "sidebar": {
-        "title": "Détails du bénéficiaire",
-        "close": "Fermer"
-      },
-      "deleteConfirm": {
-        "title": "Supprimer le bénéficiaire",
-        "message": "Êtes-vous sûr de vouloir supprimer",
-        "warning": "? Cette action est irréversible.",
+      "loading": "Chargement des bénéficiaires...",
+      "empty": "Aucun bénéficiaire trouvé",
+      "itemLabel": "bénéficiaires",
+      "viewDetails": "Voir les détails"
+    },
+    "card": {
+      "verified": "Vérifié",
+      "transferButton": "Transférer",
+      "editButton": "Modifier",
+      "deleteButton": "Supprimer"
+    },
+    "sidebar": {
+      "title": "Détails du bénéficiaire",
+      "close": "Fermer"
+    },
+    "deleteConfirm": {
+      "title": "Supprimer le bénéficiaire",
+      "message": "Êtes-vous sûr de vouloir supprimer",
+      "warning": "? Cette action est irréversible.",
+      "cancel": "Annuler",
+      "confirm": "Supprimer"
+    },
+    "form": {
+      "transferToBeneficiary": {
+        "beneficiary": "Bénéficiaire",
+        "sourceAccount": "Compte source",
+        "selectAccount": "Sélectionnez un compte",
+        "amount": "Montant (€)",
         "cancel": "Annuler",
-        "confirm": "Supprimer"
+        "submitTransfer": "Effectuer le transfert"
       },
-      "form": {
-        "transferToBeneficiary": {
-          "beneficiary": "Bénéficiaire",
-          "sourceAccount": "Compte source",
-          "selectAccount": "Sélectionnez un compte",
-          "amount": "Montant (€)",
-          "cancel": "Annuler",
-          "submitTransfer": "Effectuer le transfert"
+      "transferToAll": {
+        "title": "Transfert à tous vos bénéficiaires",
+        "description": "Le montant total sera réparti équitablement entre {count} bénéficiaire(s)",
+        "errors": {
+          "accountRequired": "Le numéro de compte source est requis",
+          "amountRequired": "Le montant total est requis",
+          "amountPositive": "Le montant doit être supérieur à 0",
+          "minBeneficiaries": "Vous devez avoir au moins un bénéficiaire"
         },
-        "transferToAll": {
-          "title": "Transfert à tous vos bénéficiaires",
-          "description": "Le montant total sera réparti équitablement entre {count} bénéficiaire(s)",
-          "errors": {
-            "accountRequired": "Le numéro de compte source est requis",
-            "amountRequired": "Le montant total est requis",
-            "amountPositive": "Le montant doit être supérieur à 0",
-            "minBeneficiaries": "Vous devez avoir au moins un bénéficiaire"
-          },
-          "sourceAccountLabel": "Numéro de compte source",
-          "totalAmountLabel": "Montant total à transférer (€)",
-          "distribution": {
-            "title": "Répartition du montant",
-            "totalAmount": "Montant total",
-            "beneficiariesCount": "Nombre de bénéficiaires",
-            "perBeneficiary": "Chaque bénéficiaire recevra: {amount} €"
-          },
-          "beneficiariesList": "Bénéficiaires concernés ({count})",
-          "confirm": "Confirmer le transfert",
-          "cancel": "Annuler"
-        },
-        "fields": {
-          "beneficiaryName": "Nom du bénéficiaire",
-          "iban": "IBAN",
-          "country": "Pays",
-          "email": "Email (optionnel)",
-          "address": {
-            "title": "Adresse (optionnel)",
-            "street": "Rue",
-            "city": "Ville",
-            "postalCode": "Code postal"
-          }
-        }
-      },
-      "group": {
-        "card": {
-          "beneficiariesCount": "{count, plural, =0 {aucun bénéficiaire} =1 {1 bénéficiaire} other {# bénéficiaires}}",
-          "badge": "Groupe",
-          "createdAt": "Créé le {date}",
-          "updatedAt": "Dernière modification le {date}",
-          "viewMembers": "Voir les membres",
-          "transfer": "Transférer au groupe",
-          "add": "Ajouter",
-          "edit": "Modifier",
-          "delete": "Supprimer"
-        },
-        "sidebar": {
-          "title": "Détails du groupe",
-          "close": "Fermer"
-        },
-        "table": {
-          "loading": "Chargement des groupes...",
-          "noGroups": "Aucun groupe trouvé",
-          "noGroupsDesc": "Créez un groupe pour organiser vos bénéficiaires",
-          "columns": {
-            "groupName": "Nom du groupe",
-            "membersCount": "Nombre de membres",
-            "createdAt": "Date de création",
-            "updatedAt": "Dernière modification",
-            "action": "Action"
-          },
-          "members": "{count, plural, =0 {aucun membre} =1 {1 membre} other {# membres}}",
-          "viewDetails": "Voir les détails"
-        },
-        "membersTable": {
-          "columns": {
-            "beneficiary": "Bénéficiaire",
-            "iban": "IBAN",
-            "contact": "Contact",
-            "status": "Statut",
-            "actions": "Actions"
-          },
-          "noContact": "Non renseigné",
-          "verified": "Vérifié",
-          "pending": "En attente",
-          "details": "Détails",
-          "transfer": "Transférer",
-          "remove": "Retirer",
-          "membersCount": "{count, plural, =0 {aucun membre} =1 {1 membre dans ce groupe} other {# membres dans ce groupe}}",
-          "noMembers": "Aucun membre",
-          "noMembersDesc": "Ce groupe ne contient aucun bénéficiaire pour le moment. Ajoutez des membres pour commencer.",
-          "noMembersInGroup": "Aucun membre dans ce groupe",
-          "itemLabel": "membres",
-          "createdAt": "Créé le {date}",
-          "updatedAt": "Dernière modification le {date}",
-          "close": "Fermer"
-        },
-        "form": {
-          "groupForm": {
-            "save": "Enregistrer"
-          },
-          "fields": {
-            "groupName": "Nom du groupe",
-            "selectBeneficiaries": "Sélectionner les bénéficiaires",
-            "noBeneficiaries": "Aucun bénéficiaire disponible",
-            "selectedCount": "{count, plural, =0 {aucun bénéficiaire sélectionné} =1 {1 bénéficiaire sélectionné} other {# bénéficiaires sélectionnés}}"
-          },
-          "transferToGroup": {
-            "group": "Groupe",
-            "beneficiariesCount": "{count, plural, =0 {aucun bénéficiaire} =1 {1 bénéficiaire} other {# bénéficiaires}}",
-            "sourceAccount": "Compte source",
-            "loadingAccounts": "Chargement des comptes...",
-            "selectAccount": "Sélectionnez un compte",
-            "totalAmount": "Montant total à transférer (€)",
-            "distributionTitle": "Répartition par bénéficiaire",
-            "totalAmountLabel": "Montant total",
-            "distributedAmount": "Montant distribué",
-            "difference": "Écart",
-            "remainingAmount": "Il reste {amount} € à distribuer",
-            "exceededAmount": "Vous avez dépassé de {amount} €",
-            "cancel": "Annuler",
-            "submit": "Envoyer le transfert"
-          }
-        }
-      }
-    },
-    "feed": {
-      "grid": {
-        "noNews": "Aucune actualité trouvée."
-      },
-      "list": {
-        "loading": "Chargement...",
-        "error": "Erreur : {message}"
-      },
-      "manageList": {
-        "noArticles": "Aucun article à afficher.",
-        "category": "Catégorie",
-        "priority": "Priorité",
-        "edit": "Modifier",
-        "delete": "Supprimer"
-      },
-      "details": {
-        "noContent": "Aucun contenu disponible pour cette actualité."
-      },
-      "blocks": {
-        "content": {
-          "deleteBlock": "Supprimer ce bloc"
-        },
-        "toolbar": {
-          "addBlock": "Ajouter un bloc :",
-          "text": "Texte",
-          "media": "Médias"
-        },
-        "editor": {
-          "noBlocks": "Aucun bloc. Ajoutez-en un pour commencer !",
-          "blocksCount": "{count, plural, =0 {aucun bloc} =1 {1 bloc • Glissez-déposez pour réorganiser} other {# blocs • Glissez-déposez pour réorganiser}}"
-        }
-      },
-      "form": {
-        "fields": {
-          "title": "Titre *",
-          "titlePlaceholder": "Titre de l'actualité",
-          "category": "Catégorie *",
-          "priority": "Priorité *",
-          "tags": "Tags",
-          "tagsPlaceholder": "Tags (séparés par des virgules, ex: épargne, taux, offre)",
-          "cancel": "Annuler",
-          "saving": "Enregistrement...",
-          "update": "Mettre à jour",
-          "create": "Créer l'actualité"
-        }
-      },
-      "structure": {
-        "media": {
-          "videoNotSupported": "Votre navigateur ne supporte pas la lecture de vidéos."
-        }
-      },
-      "card": {
-        "media": "média",
-        "moreMedia": "+{count} autre(s) média(s)"
-      },
-      "filters": {
-        "category": "Catégorie",
-        "priority": "Priorité",
-        "all": "Toutes",
-        "tagsLabel": "Tags (virgule séparés)",
-        "tagsPlaceholder": "ex: security,savings"
-      },
-      "loadMore": {
-        "loading": "Chargement...",
-        "loadMore": "Charger plus"
-      }
-    },
-    "stocks": {
-      "forms": {
-        "stockForm": {
-          "cancel": "Annuler",
-          "creating": "Création...",
-          "create": "Créer l'action"
-        },
-        "editStockForm": {
-          "cancel": "Annuler",
-          "updating": "Modification...",
-          "update": "Modifier l'action"
-        },
-        "fields": {
-          "companyName": "Nom de l'entreprise",
-          "companyNamePlaceholder": "Ex: Apple Inc.",
-          "symbol": "Symbole",
-          "symbolPlaceholder": "Ex: AAPL",
-          "name": "Nom court",
-          "namePlaceholder": "Ex: Apple",
-          "currency": "Devise",
-          "currencyPlaceholder": "Ex: EUR",
-          "currencyHelp": "Code ISO de la devise (USD, EUR, GBP, etc.)",
-          "initialPrice": "Prix initial (€)",
-          "totalShares": "Quantité totale d'actions",
-          "totalSharesPlaceholder": "Ex: 1000000",
-          "totalSharesHelp": "Nombre total d'actions disponibles pour cette entreprise",
-          "isActionAvailable": "Action disponible à l'achat"
-        },
-        "validation": {
-          "companyNameRequired": "Le nom de l'entreprise est requis",
-          "symbolRequired": "Le symbole est requis",
-          "symbolPattern": "Le symbole doit contenir 1-5 lettres majuscules",
-          "nameRequired": "Le nom court est requis",
-          "currencyRequired": "La devise est requise",
-          "currencyLength": "La devise doit contenir exactement 3 caractères",
-          "priceRequired": "Le prix initial est requis",
-          "priceMin": "Le prix doit être supérieur à 0",
-          "totalSharesRequired": "La quantité totale est requise",
-          "totalSharesMin": "La quantité doit être au moins 1"
-        }
-      },
-      "orders": {
-        "filters": {
-          "allStatuses": "Tous les statuts",
-          "pending": "En attente",
-          "executed": "Exécuté",
-          "cancelled": "Annulé",
-          "partiallyExecuted": "Partiellement exécuté",
-          "rejected": "Rejeté",
-          "allTypes": "Tous les types",
-          "buy": "Achat",
-          "sell": "Vente",
-          "status": "Statut",
-          "orderType": "Type d'ordre"
-        },
-        "card": {
-          "type": "Type",
-          "buy": "Achat",
-          "sell": "Vente",
-          "quantity": "Quantité",
-          "unitPrice": "Prix unitaire",
+        "sourceAccountLabel": "Numéro de compte source",
+        "totalAmountLabel": "Montant total à transférer (€)",
+        "distribution": {
+          "title": "Répartition du montant",
           "totalAmount": "Montant total",
-          "fundsBlocked": "{amount}€ bloqués",
-          "sharesBlocked": "{count} actions bloquées",
-          "fundsWillBeUnlocked": "Ces fonds seront débloqués si vous annulez l'ordre",
-          "sharesWillBeUnlocked": "Ces actions seront débloquées si vous annulez l'ordre",
-          "executedAt": "Exécuté le {date}",
-          "executionPrice": "Prix d'exécution: {price}€",
-          "cancelling": "Annulation...",
-          "cancelOrder": "Annuler l'ordre"
+          "beneficiariesCount": "Nombre de bénéficiaires",
+          "perBeneficiary": "Chaque bénéficiaire recevra: {amount} €"
         },
-        "statusBadge": {
-          "pending": "En attente",
-          "executed": "Exécuté",
-          "cancelled": "Annulé",
-          "partiallyExecuted": "Partiellement exécuté",
-          "rejected": "Rejeté",
-          "unknown": "Inconnu"
-        },
-        "list": {
-          "noOrders": "Vous n'avez pas encore d'ordres",
-          "noMatchingOrders": "Aucun ordre ne correspond aux filtres sélectionnés"
-        },
-        "blockedResources": {
-          "fundsBlocked": "{amount}€ bloqués",
-          "sharesBlocked": "{count} actions bloquées",
-          "fundsWillBeUnlocked": "Ces fonds seront débloqués si vous annulez l'ordre",
-          "sharesWillBeUnlocked": "Ces actions seront débloquées si vous annulez l'ordre"
-        },
-        "placeOrder": {
-          "buyTitle": "Acheter",
-          "sellTitle": "Vendre",
-          "error": "Erreur lors du placement de l'ordre",
-          "statusPlacing": "Placement de l'ordre...",
-          "statusMatching": "Recherche de correspondances...",
-          "statusSuccess": "Ordre exécuté avec succès !",
-          "quantity": "Quantité",
-          "pricePerShare": "Prix par action (€)",
-          "currentMarketPrice": "Prix actuel du marché",
-          "totalAmount": "Montant total",
-          "transactionFee": "Frais de transaction",
-          "totalToPay": "Total à payer",
-          "totalToReceive": "Total à recevoir",
-          "autoMatchInfo": "Votre ordre sera automatiquement comparé aux ordres existants pour une exécution immédiate.",
-          "cancel": "Annuler",
-          "confirmBuy": "Confirmer l'achat",
-          "confirmSell": "Confirmer la vente",
-          "buttonPlacing": "Placement...",
-          "buttonMatching": "Matching...",
-          "buttonExecuted": "✓ Exécuté"
-        },
-        "directorCard": {
-          "orderDetails": "Détails de l'ordre",
-          "symbol": "Symbole",
-          "type": "Type",
-          "quantity": "Quantité",
-          "pricePerShare": "Prix par action",
-          "totalAmount": "Montant total",
-          "status": "Statut",
-          "buy": "Achat",
-          "sell": "Vente"
-        },
-        "directorFilters": {
-          "allStatuses": "Tous les statuts",
-          "allTypes": "Tous les types",
-          "pending": "En attente",
-          "executed": "Exécuté",
-          "cancelled": "Annulé",
-          "partiallyExecuted": "Partiellement exécuté",
-          "rejected": "Rejeté",
-          "buy": "Achat",
-          "sell": "Vente",
-          "status": "Statut",
-          "orderType": "Type d'ordre"
-        },
-        "directorList": {
-          "noOrders": "Aucun ordre de directeur disponible",
-          "noMatchingOrders": "Aucun ordre ne correspond aux filtres sélectionnés"
-        },
-        "openIPO": {
-          "errorMinShares": "Le nombre d'actions doit être supérieur à 0",
-          "errorMaxShares": "Le nombre d'actions ne peut pas dépasser {max}",
-          "success": "IPO pour {symbol} ouverte avec succès",
-          "error": "Erreur lors de l'ouverture de l'IPO",
-          "title": "Ouvrir IPO",
-          "ipoTitle": "Configuration de l'IPO",
-          "ipoDescription": "Définissez le nombre d'actions à mettre en vente pour l'IPO.",
-          "totalShares": "Total actions",
-          "sharesLabel": "Actions à vendre",
-          "maxShares": "Max: {max}",
-          "ipoType": "Type d'IPO",
-          "initialIPO": "Primaire (Initiale)",
-          "secondaryIPO": "Secondaire",
-          "cancel": "Annuler",
-          "opening": "Ouverture...",
-          "openIPO": "Ouvrir l'IPO"
-        },
-        "purchaseIPO": {
-          "errorMaxShares": "Seulement {available} actions disponibles en IPO",
-          "error": "Erreur lors de l'achat IPO",
-          "title": "Achat IPO",
-          "ipoTitle": "Introduction en Bourse",
-          "ipoDescription": "Achat direct au prix d'émission initial",
-          "sharesRemaining": "actions restantes",
-          "quantity": "Quantité",
-          "maxAvailable": "Maximum : {max} actions disponibles",
-          "fixedPrice": "Prix IPO fixe (€)",
-          "fixedPriceDescription": "Prix fixe d'",
-          "totalAmount": "Montant total",
-          "transactionFee": "Frais de transaction",
-          "totalToPay": "Total à payer",
-          "instantExecutionInfo": "Votre achat sera exécuté instantanément au prix IPO. Les actions seront ajoutées directement à votre portefeuille.",
-          "cancel": "Annuler",
-          "purchasing": "Achat en cours...",
-          "buyShares": "Acheter {count} action(s) IPO"
-        }
-      },
-      "positions": {
-        "summary": {
-          "title": "Résumé du portefeuille",
-          "totalValue": "Valeur totale",
-          "totalCost": "Coût total",
-          "gainLoss": "Gain/Perte",
-          "performance": "Performance"
-        },
-        "card": {
-          "totalQuantity": "Quantité totale",
-          "available": "Disponible",
-          "blocked": "{count} bloquées",
-          "averagePrice": "Prix moyen",
-          "currentPrice": "Prix actuel",
-          "currentValue": "Valeur actuelle",
-          "totalCost": "Coût total",
-          "allBlocked": "Toutes vos actions sont bloquées dans des ordres en attente",
-          "sell": "Vendre",
-          "availableCount": "({count} disponibles)"
-        }
-      },
-      "transactions": {
-        "list": {
-          "noTransactions": "Vous n'avez pas encore de transactions",
-          "noMatchingTransactions": "Aucune transaction ne correspond aux filtres sélectionnés"
-        },
-        "filters": {
-          "type": "Type",
-          "allTypes": "Tous les types",
-          "buys": "Achats",
-          "sells": "Ventes",
-          "symbol": "Symbole",
-          "symbolPlaceholder": "Ex: AAPL"
-        },
-        "tableHeader": {
-          "symbol": "Symbole",
-          "date": "Date",
-          "type": "Type",
-          "quantity": "Quantité",
-          "unitPrice": "Prix unitaire",
-          "total": "Total"
-        },
-        "row": {
-          "buy": "Achat",
-          "sell": "Vente"
-        },
-        "controls": {
-          "show": "Afficher",
-          "of": "sur",
-          "transactions": "transactions"
-        }
-      },
-      "structure": {
-        "actions": {
-          "buy": "Acheter",
-          "sell": "Vendre",
-          "lastUpdated": "Mis à jour"
-        },
-        "stats": {
-          "open": "Ouverture",
-          "previousClose": "Clôture préc.",
-          "high": "Plus haut",
-          "low": "Plus bas"
-        },
-        "price": {
-          "afterClose": "Après clôture"
-        },
-        "fiftyTwoWeek": {
-          "title": "Sur 52 semaines",
-          "low": "Plus bas",
-          "high": "Plus haut"
-        },
-        "header": {
-          "open": "Ouvert",
-          "closed": "Fermé"
-        },
-        "volume": {
-          "volume": "Volume",
-          "averageVolume": "Volume moy."
-        }
-      },
-      "modal": {
-        "createStock": "Créer une action"
-      },
-      "table": {
-        "noStocks": "Aucune action disponible",
-        "symbol": "Symbole",
-        "company": "Entreprise",
-        "previousPrice": "Prix préc.",
-        "currentPrice": "Prix actuel",
-        "variation": "Var.",
-        "status": "Statut",
-        "actions": "Actions",
-        "available": "Disponible",
-        "unavailable": "Indisponible",
-        "ipoActive": "IPO Active",
-        "shares": "actions",
-        "closeIPO": "Fermer IPO",
-        "openIPO": "Ouvrir IPO",
-        "deactivate": "Désactiver",
-        "activate": "Activer",
-        "edit": "Modifier",
-        "delete": "Supprimer",
-        "confirmDelete": "Êtes-vous sûr de vouloir supprimer {symbol} ?"
-      }
-    },
-    "chat": {
-      "title": "Chat",
-      "connected": "Connecté",
-      "disconnected": "Déconnecté",
-      "noMessages": "Aucun message pour le moment",
-      "typing": "En train d'écrire...",
-      "inputPlaceholder": "Écris ton message...",
-      "inputDisabled": "Connexion en cours...",
-      "sendButton": "Envoyer",
-      "clientConversations": {
-        "title": "Mes conversations",
-        "newConversation": "Nouvelle conversation",
-        "creating": "Création...",
-        "errorFetch": "Impossible de récupérer vos conversations",
-        "errorCreate": "Erreur lors de la création de la conversation",
-        "empty": "Vous n'avez pas encore de conversation.",
-        "notAssigned": "Non assigné"
-      },
-      "advisorConversations": {
-        "loading": "Chargement…",
-        "errorTitle": "Erreur",
-        "reloadPage": "Recharger la page",
-        "stats": {
-          "pending": "En attente",
-          "assigned": "Mes conversations"
-        },
-        "searchPlaceholder": "Rechercher par nom client...",
-        "pendingTitle": "Demandes en attente",
-        "pendingEmpty": "Aucune demande en attente",
-        "searchEmpty": "Aucun résultat pour cette recherche",
-        "takeOver": "Prendre en charge",
-        "continue": "Continuer",
-        "transfer": "Transférer",
-        "assignedTitle": "Vos conversations",
-        "assignedEmpty": "Aucune conversation assignée"
-      },
-      "selectAdvisorsModal": {
-        "title": "Transfert de Dossier Client",
-        "subtitle": "Sélectionnez un nouveau conseiller",
-        "searchPlaceholder": "Rechercher par nom ou identifiant...",
-        "loading": "Chargement des conseillers...",
-        "errorFetch": "Impossible de récupérer les conseillers",
-        "retry": "Réessayer",
-        "noAdvisors": "Aucun conseiller trouvé",
-        "noAdvisorsHint": "Essayez avec d'autres critères",
-        "cancel": "Annuler",
-        "confirm": "Valider le transfert",
-        "transferSuccess": "Conversation transférée !",
-        "transferError": "Erreur lors du transfert."
-      }
-    },
-    "bankAccount": {
-      "transactionHistory": {
-        "noTransactions": "Aucune transaction pour le moment.",
-        "reference": "Ref",
-        "unknownUser": "Utilisateur inconnu",
-        "sender": "Émetteur",
-        "recipient": "Destinataire"
-      },
-      "summaryCard": {
-        "totalBalance": "Solde total de vos comptes"
-      },
-      "subAccountForm": {
-        "title": "Ajouter un sous-compte",
-        "accountNameLabel": "Nom du compte *",
-        "accountNamePlaceholder": "Nom du sous-compte",
-        "accountTypeLabel": "Type de compte *",
-        "currencyLabel": "Devise *",
-        "creating": "Création...",
-        "createButton": "Créer le sous-compte",
-        "success": "Sous-compte créé avec succès !",
-        "accountTypes": {
-          "savings": "Épargne"
-        }
-      },
-      "quickTransfer": {
-        "title": "Transferts rapides",
-        "subtitle": "Réeffectuer un transfert en un clic",
-        "noTransactions": "Aucune transaction récente disponible",
-        "unknownUser": "Utilisateur inconnu",
-        "unknownAccount": "Compte inconnu",
-        "account": "Compte",
-        "repeatButton": "Répéter",
-        "confirmTitle": "Confirmer le transfert rapide",
-        "amountLabel": "Montant",
-        "toLabel": "Vers:",
-        "originalTransaction": "Transaction originale du",
-        "processing": "En cours...",
-        "confirmButton": "Confirmer",
-        "cancelButton": "Annuler"
-      },
-      "overdraftRequests": {
-        "title": "Demandes de découvert",
-        "requestsCount": "demandes",
-        "loading": "Chargement...",
-        "noPendingRequests": "Aucune demande en attente.",
-        "account": "Compte",
-        "current": "Actuel",
-        "requested": "Demande",
-        "client": "Client",
-        "status": "Statut",
-        "viewProfile": "Voir profil client",
-        "loadingProfile": "Chargement...",
-        "reject": "Refuser",
-        "approve": "Approuver",
-        "close": "Fermer",
-        "loadingDetails": "Chargement du profil...",
-        "phoneNA": "N/A",
-        "accounts": "Comptes",
-        "loanRequests": "Demandes de crédit",
-        "noLoanRequests": "Aucune demande",
-        "overdraftRequestLabel": "Demande de découvert",
-        "purpose": "Motif"
-      },
-      "mainAccountCard": {
-        "mainLabel": "Principal",
-        "availableBalance": "Solde disponible",
-        "accountNumber": "Numéro de compte",
-        "ribMessage": "Récupère ton RIB pour partager tes coordonnées bancaires.",
-        "downloadRib": "Télécharger mon RIB",
-        "generatingRib": "Génération...",
-        "limits": "Limites",
-        "overdraftRequest": "Demande de découvert",
-        "currentOverdraft": "Actuel",
-        "increaseTransferLimit": "Augmenter limite de virement",
-        "currentLimit": "Actuelle",
-        "overdraftModalTitle": "Demander une augmentation de découvert",
-        "overdraftModalSubtitle": "Découvert actuel :",
-        "overdraftSuccess": "Demande envoyée à votre conseiller.",
-        "requestButton": "Demander",
-        "sending": "Envoi...",
-        "transferModalTitle": "Augmenter la limite de virement",
-        "transferModalSubtitle": "Limite actuelle :",
-        "transferSuccess": "Limite mise à jour.",
-        "updating": "Mise à jour...",
-        "increaseButton": "Augmenter"
-      },
-      "accountList": {
-        "noAccounts": "Aucun autre compte disponible"
-      }
-    },
-    "loan": {
-      "form": {
-        "clientLabel": "Client",
-        "title": "Demande de crédit",
-        "description": "Renseignez les informations essentielles. Votre conseiller recevra automatiquement la demande.",
-        "errorLoadAdvisors": "Impossible de charger les conseillers",
-        "successMessage": "Demande envoyée au conseiller.",
-        "failureMessage": "Échec de la demande",
-        "errorMessage": "Erreur lors de la demande. Veuillez réessayer ou contacter votre conseiller.",
-        "footerNote": "Une fois envoyée, la demande sera visible par votre conseiller.",
-        "adviceLabel": "Conseil",
-        "adviceText": "Préparez un motif clair et un montant cohérent avec votre besoin. Si le montant dépasse 5000€, le taux sera proposé par le directeur après validation.",
-        "indicativeRateLabel": "Taux indicatif",
-        "pending": "En attente",
-        "rateExplanation": "Appliqué automatiquement aux demandes ≤ 5000€. Au-delà, un taux personnalisé sera proposé."
+        "beneficiariesList": "Bénéficiaires concernés ({count})",
+        "confirm": "Confirmer le transfert",
+        "cancel": "Annuler"
       },
       "fields": {
-        "advisorLabel": "Choisir un conseiller",
-        "loadingAdvisors": "Chargement des conseillers...",
-        "amountLabel": "Montant demandé",
-        "amountError": "Veuillez saisir un montant valide et supérieur à 0.",
-        "purposeLabel": "Motif",
-        "purposePlaceholder": "Exemple : Achat d'un véhicule, rénovation de la maison, etc.",
-        "purposeError": "Veuillez préciser le motif de votre demande.",
-        "durationLabel": "Durée de remboursement",
-        "months": "{count} mois",
-        "simulationTitle": "Simulation mensuelle",
-        "rateByDirector": "(taux à définir par le directeur)",
-        "indicativeRate": "(taux indicatif {rate}%)",
-        "rateNotDefined": "(taux indicatif non défini)",
-        "monthlyNotAvailable": "-- €/mois",
-        "monthlyAmount": "{amount} €/mois",
-        "rateProposalNote": "Pour un montant > 5000€, le taux sera proposé par le directeur.",
-        "waitingForRate": "En attente de taux indicatif défini par le directeur.",
-        "rateWillAppear": "Dès qu'un taux indicatif sera publié, une estimation apparaîtra ici.",
-        "submitButton": "Envoyer la demande"
-      },
-      "advisorPage": {
-        "advisorLabel": "Conseiller",
-        "title": "Demandes de crédit",
-        "description": "Suivez, analysez et décidez des demandes de crédit de vos clients dans un espace clair et cohérent.",
-        "errorLoad": "Impossible de charger les demandes",
-        "stats": {
-          "total": "Total",
-          "pending": "En attente",
-          "approved": "Approuvées",
-          "rejected": "Refusées"
-        },
-        "noRequests": "Aucune demande pour le moment",
-        "noRequestsDescription": "Les nouvelles demandes de vos clients apparaîtront ici dès leur création."
-      }
-    },
-    "notification": {
-      "from": "De",
-      "noNotifications": "Aucune Notification"
-    },
-    "rib": {
-      "title": "Relevé d'Identité Bancaire",
-      "holderSection": "Titulaire & coordonnées",
-      "holder": "Titulaire",
-      "address": "Adresse",
-      "addressNotProvided": "Adresse non renseignée",
-      "accountSection": "Références du compte",
-      "accountNumber": "Numéro de compte",
-      "currency": "Devise",
-      "generatedAt": "Généré le"
-    },
-    "savingsAccount": {
-      "info": {
-        "defaultTitle": "Comment fonctionne votre compte épargne ?",
-        "dailyCalculation": {
-          "title": "Calcul quotidien",
-          "description": "Vos intérêts sont calculés chaque jour sur votre solde disponible"
-        },
-        "autoCredit": {
-          "title": "Crédit automatique",
-          "description": "Les intérêts sont automatiquement ajoutés à votre compte"
-        },
-        "compoundEffect": {
-          "title": "Effet cumulatif",
-          "description": "Vos intérêts génèrent eux-mêmes des intérêts (intérêts composés)"
+        "beneficiaryName": "Nom du bénéficiaire",
+        "iban": "IBAN",
+        "country": "Pays",
+        "email": "Email (optionnel)",
+        "address": {
+          "title": "Adresse (optionnel)",
+          "street": "Rue",
+          "city": "Ville",
+          "postalCode": "Code postal"
         }
-      },
-      "createForm": {
-        "title": "Créer un Compte Épargne",
-        "subtitle": "Configurez les paramètres du compte épargne",
-        "error": "Erreur",
-        "successTitle": "Compte créé !",
-        "successMessage": "Le compte épargne a été créé avec succès.",
-        "accountNumberLabel": "Numéro de compte",
-        "accountNumberPlaceholder": "Ex: 123456"
       }
     },
-    "media": {
-      "dragDrop": {
-        "dropOrClick": "Glissez-déposez vos fichiers ici ou cliquez pour sélectionner",
-        "acceptedTypes": "Images et vidéos acceptées • Max {maxSize}MB par fichier"
-      },
-      "uploader": {
-        "errorNotMedia": "{fileName} n'est pas une image ou une vidéo",
-        "errorMaxSize": "{fileName} dépasse la taille maximale de {maxSize}MB"
-      },
-      "filePreview": {
-        "video": "Vidéo",
-        "remove": "Supprimer",
-        "uploaded": "Uploadé",
-        "noCaption": "Aucune légende",
-        "editCaption": "Modifier la légende",
-        "addCaption": "Ajouter une légende...",
-        "save": "Enregistrer",
-        "cancel": "Annuler"
-      }
-    }
-  },
-  "notFound": {
-    "title": "Page non trouvée",
-    "description": "Désolé, la page que vous recherchez semble introuvable. Elle a peut-être été déplacée ou supprimée.",
-    "backHome": "Retour à l'accueil",
-    "helpCenter": "Centre d'aide",
-    "needHelp": "Besoin d'aide ?",
-    "contactUs": "Contactez-nous"
-  },
-  "error": {
-    "title": "Erreur serveur",
-    "description": "Oups ! Une erreur inattendue s'est produite. Nos équipes ont été notifiées et travaillent sur le problème.",
-    "retry": "Réessayer",
-    "backHome": "Retour à l'accueil",
-    "errorCode": "Code d'erreur",
-    "persistentProblem": "Le problème persiste ?",
-    "contactSupport": "Contactez notre support"
-  },
-  "manager": {
-    "dashboard": {
-      "title": "Gestion de l'Agence",
-      "subtitle": "Administration des conseillers et paramètres de l'agence",
-      "advisorManagement": {
-        "title": "Gestion des Conseillers",
-        "description": "Créez et gérez les conseillers bancaires de votre agence.",
-        "createButton": "Créer un conseiller"
-      },
-      "agencySettings": {
-        "title": "Paramètres de l'Agence",
-        "description": "Configurez les paramètres de votre agence.",
-        "button": "Paramètres agence"
-      }
-    },
-    "users": {
-      "title": "Gestion des Utilisateurs",
-      "subtitle": "Gérez tous les utilisateurs, clients et conseillers",
-      "loading": "Chargement...",
-      "tabs": {
-        "all": "Tous",
-        "clients": "Clients",
-        "advisors": "Conseillers"
-      },
-      "table": {
-        "name": "Nom",
-        "email": "Email",
-        "phone": "Téléphone",
-        "status": "Statut",
-        "roles": "Rôles",
-        "registered": "Inscrit",
-        "actions": "Actions",
-        "noUsers": "Aucun utilisateur trouvé"
-      },
-      "status": {
-        "yes": "Oui",
-        "no": "Non"
-      },
-      "actions": {
+    "group": {
+      "card": {
+        "beneficiariesCount": "{count, plural, =0 {aucun bénéficiaire} =1 {1 bénéficiaire} other {# bénéficiaires}}",
+        "badge": "Groupe",
+        "createdAt": "Créé le {date}",
+        "updatedAt": "Dernière modification le {date}",
+        "viewMembers": "Voir les membres",
+        "transfer": "Transférer au groupe",
+        "add": "Ajouter",
         "edit": "Modifier",
         "delete": "Supprimer"
       },
-      "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cela supprimera également tous ses comptes et données associées.",
-      "editModal": {
-        "title": "Modifier l'utilisateur",
-        "firstName": "Prénom",
-        "lastName": "Nom",
-        "email": "Email",
-        "phone": "Téléphone",
-        "address": "Adresse",
-        "status": "Statut",
-        "statusOptions": {
-          "active": "Actif",
-          "inactive": "Inactif",
-          "suspended": "Suspendu"
+      "sidebar": {
+        "title": "Détails du groupe",
+        "close": "Fermer"
+      },
+      "table": {
+        "loading": "Chargement des groupes...",
+        "noGroups": "Aucun groupe trouvé",
+        "noGroupsDesc": "Créez un groupe pour organiser vos bénéficiaires",
+        "columns": {
+          "groupName": "Nom du groupe",
+          "membersCount": "Nombre de membres",
+          "createdAt": "Date de création",
+          "updatedAt": "Dernière modification",
+          "action": "Action"
         },
-        "cancel": "Annuler",
-        "save": "Enregistrer"
+        "members": "{count, plural, =0 {aucun membre} =1 {1 membre} other {# membres}}",
+        "viewDetails": "Voir les détails"
       },
-      "errors": {
-        "updateFailed": "Erreur lors de la mise à jour de l'utilisateur"
-      }
-    },
-    "accounts": {
-      "title": "Vue d'ensemble des Comptes",
-      "subtitle": "Consultez tous les comptes courants et leurs soldes",
-      "loading": "Chargement...",
-      "stats": {
-        "totalAccounts": "Total Comptes",
-        "totalBalance": "Solde Total",
-        "activeAccounts": "Comptes Actifs"
+      "membersTable": {
+        "columns": {
+          "beneficiary": "Bénéficiaire",
+          "iban": "IBAN",
+          "contact": "Contact",
+          "status": "Statut",
+          "actions": "Actions"
+        },
+        "noContact": "Non renseigné",
+        "verified": "Vérifié",
+        "pending": "En attente",
+        "details": "Détails",
+        "transfer": "Transférer",
+        "remove": "Retirer",
+        "membersCount": "{count, plural, =0 {aucun membre} =1 {1 membre dans ce groupe} other {# membres dans ce groupe}}",
+        "noMembers": "Aucun membre",
+        "noMembersDesc": "Ce groupe ne contient aucun bénéficiaire pour le moment. Ajoutez des membres pour commencer.",
+        "noMembersInGroup": "Aucun membre dans ce groupe",
+        "itemLabel": "membres",
+        "createdAt": "Créé le {date}",
+        "updatedAt": "Dernière modification le {date}",
+        "close": "Fermer"
       },
-      "search": "Rechercher par nom, IBAN ou numéro de compte...",
-      "table": {
-        "number": "Numéro",
-        "iban": "IBAN",
-        "owner": "Propriétaire",
-        "type": "Type",
-        "balance": "Solde",
-        "status": "Statut",
-        "createdAt": "Créé le",
-        "actions": "Actions",
-        "noAccounts": "Aucun compte trouvé"
-      },
-      "deleteConfirm": {
-        "lastCheckingWithBalance": "Impossible de supprimer le dernier compte courant avec un solde positif. Veuillez d'abord transférer les fonds ou vous assurer que le solde est de 0€.",
-        "withBalance": "Êtes-vous sûr de vouloir supprimer ce compte ?\\n\\nLe solde de {amount} sera automatiquement transféré vers un autre compte courant de l'utilisateur.",
-        "withoutBalance": "Êtes-vous sûr de vouloir supprimer ce compte ?"
-      },
-      "errors": {
-        "deleteFailed": "Erreur lors de la suppression du compte",
-        "deleteError": "Erreur lors de la suppression"
-      },
-      "actions": {
-        "delete": "Supprimer"
-      },
-      "success": "Compte supprimé avec succès"
-    },
-    "savingsProducts": {
-      "title": "Produits d'Épargne",
-      "subtitle": "Créez et gérez les produits d'épargne disponibles pour les clients",
-      "backToDashboard": "Retour au dashboard",
-      "newProduct": "Nouveau Produit",
-      "existingProducts": "Produits Existants",
       "form": {
-        "createTitle": "Créer un Nouveau Produit",
-        "editTitle": "Modifier le Produit",
-        "name": "Nom du produit",
-        "namePlaceholder": "Livret A, PEL, etc.",
-        "interestRate": "Taux d'intérêt annuel (%)",
-        "interestRatePlaceholder": "3.5",
-        "maxDeposit": "Plafond de rémunération (€)",
-        "maxDepositPlaceholder": "22950",
-        "minDeposit": "Dépôt minimum (€)",
-        "minDepositPlaceholder": "10",
-        "description": "Description",
-        "descriptionPlaceholder": "Description du produit d'épargne...",
-        "createButton": "Créer",
-        "updateButton": "Mettre à jour",
-        "cancel": "Annuler"
-      },
-      "product": {
-        "active": "Actif",
-        "inactive": "Inactif",
-        "rate": "Taux :",
-        "ceiling": "Plafond :",
-        "edit": "Modifier"
-      },
-      "messages": {
-        "createSuccess": "Produit créé avec succès !",
-        "updateSuccess": "Produit mis à jour ! Tous les comptes liés ont été mis à jour.",
-        "createError": "Erreur lors de la création",
-        "updateError": "Erreur lors de la mise à jour"
-      },
-      "noProducts": "Aucun produit créé. Créez votre premier produit d'épargne !"
-    },
-    "createAdvisor": {
-      "title": "Créer un conseiller bancaire",
-      "firstName": "Prénom",
-      "lastName": "Nom",
-      "email": "Email",
-      "password": "Mot de passe",
-      "phone": "Numéro de téléphone",
-      "dateOfBirth": "Date de naissance",
-      "address": "Adresse",
-      "createButton": "Créer le conseiller",
-      "backToDashboard": "Retour au tableau de bord",
-      "messages": {
-        "success": "Le conseiller bancaire a été créé avec succès. Un email de confirmation a été envoyé.",
-        "userExists": "Un utilisateur avec cet email existe déjà.",
-        "error": "Une erreur est survenue lors de la création du conseiller.",
-        "networkError": "Erreur réseau. Vérifiez que le serveur est démarré."
+        "groupForm": {
+          "save": "Enregistrer"
+        },
+        "fields": {
+          "groupName": "Nom du groupe",
+          "selectBeneficiaries": "Sélectionner les bénéficiaires",
+          "noBeneficiaries": "Aucun bénéficiaire disponible",
+          "selectedCount": "{count, plural, =0 {aucun bénéficiaire sélectionné} =1 {1 bénéficiaire sélectionné} other {# bénéficiaires sélectionnés}}"
+        },
+        "transferToGroup": {
+          "group": "Groupe",
+          "beneficiariesCount": "{count, plural, =0 {aucun bénéficiaire} =1 {1 bénéficiaire} other {# bénéficiaires}}",
+          "sourceAccount": "Compte source",
+          "loadingAccounts": "Chargement des comptes...",
+          "selectAccount": "Sélectionnez un compte",
+          "totalAmount": "Montant total à transférer (€)",
+          "distributionTitle": "Répartition par bénéficiaire",
+          "totalAmountLabel": "Montant total",
+          "distributedAmount": "Montant distribué",
+          "difference": "Écart",
+          "remainingAmount": "Il reste {amount} € à distribuer",
+          "exceededAmount": "Vous avez dépassé de {amount} €",
+          "cancel": "Annuler",
+          "submit": "Envoyer le transfert"
+        }
       }
-    },
-    "savings": {
-      "title": "Vue d'ensemble des Comptes Épargne",
-      "subtitle": "Consultez tous les comptes épargne, taux d'intérêt et gains",
-      "loading": "Chargement...",
-      "stats": {
-        "totalAccounts": "Total Comptes",
-        "totalBalance": "Solde Total",
-        "totalInterest": "Intérêts Totaux",
-        "averageRate": "Taux Moyen"
-      },
-      "search": "Rechercher par nom ou numéro de compte...",
-      "table": {
-        "number": "Numéro",
-        "owner": "Propriétaire",
-        "balance": "Solde",
-        "interestRate": "Taux d'intérêt",
-        "totalInterest": "Intérêts Totaux",
-        "status": "Statut",
-        "lastUpdate": "Dernière MAJ",
-        "actions": "Actions",
-        "noAccounts": "Aucun compte épargne trouvé"
-      },
-      "status": {
-        "active": "Actif",
-        "inactive": "Inactif"
-      },
-      "deleteConfirm": {
-        "withBalance": "Êtes-vous sûr de vouloir supprimer ce compte épargne ?\\n\\nLe solde de {amount} sera automatiquement transféré vers un compte courant de l'utilisateur.",
-        "withoutBalance": "Êtes-vous sûr de vouloir supprimer ce compte épargne ?"
-      },
-      "actions": {
-        "delete": "Supprimer"
-      },
-      "errors": {
-        "deleteFailed": "Erreur lors de la suppression du compte épargne",
-        "deleteError": "Erreur lors de la suppression"
-      },
-      "success": "Compte épargne supprimé avec succès"
     }
   },
-  "advisor": {
-    "dashboard": {
-      "title": "Tableau de bord conseiller bancaire",
-      "clientManagement": {
-        "title": "Gestion des clients",
-        "description": "Accédez à la liste de vos clients et gérez leurs comptes.",
-        "button": "Voir mes clients"
+  "feed": {
+    "grid": {
+      "noNews": "Aucune actualité trouvée."
+    },
+    "list": {
+      "loading": "Chargement...",
+      "error": "Erreur : {message}"
+    },
+    "manageList": {
+      "noArticles": "Aucun article à afficher.",
+      "category": "Catégorie",
+      "priority": "Priorité",
+      "edit": "Modifier",
+      "delete": "Supprimer"
+    },
+    "details": {
+      "noContent": "Aucun contenu disponible pour cette actualité."
+    },
+    "blocks": {
+      "content": {
+        "deleteBlock": "Supprimer ce bloc"
       },
-      "loanRequests": {
-        "title": "Demandes de crédit",
-        "description": "Consultez et traitez les demandes de crédit de vos clients.",
-        "button": "Voir les demandes de crédit"
+      "toolbar": {
+        "addBlock": "Ajouter un bloc :",
+        "text": "Texte",
+        "media": "Médias"
       },
-      "overdraftRequests": {
-        "title": "Demandes de découvert",
-        "description": "Consultez et traitez les demandes d'augmentation de découvert.",
-        "button": "Ouvrir les demandes de découvert"
+      "editor": {
+        "noBlocks": "Aucun bloc. Ajoutez-en un pour commencer !",
+        "blocksCount": "{count, plural, =0 {aucun bloc} =1 {1 bloc • Glissez-déposez pour réorganiser} other {# blocs • Glissez-déposez pour réorganiser}}"
       }
+    },
+    "form": {
+      "fields": {
+        "title": "Titre *",
+        "titlePlaceholder": "Titre de l'actualité",
+        "category": "Catégorie *",
+        "priority": "Priorité *",
+        "tags": "Tags",
+        "tagsPlaceholder": "Tags (séparés par des virgules, ex: épargne, taux, offre)",
+        "cancel": "Annuler",
+        "saving": "Enregistrement...",
+        "update": "Mettre à jour",
+        "create": "Créer l'actualité"
+      }
+    },
+    "structure": {
+      "media": {
+        "videoNotSupported": "Votre navigateur ne supporte pas la lecture de vidéos."
+      }
+    },
+    "card": {
+      "media": "média",
+      "moreMedia": "+{count} autre(s) média(s)"
+    },
+    "filters": {
+      "category": "Catégorie",
+      "priority": "Priorité",
+      "all": "Toutes",
+      "tagsLabel": "Tags (virgule séparés)",
+      "tagsPlaceholder": "ex: security,savings"
+    },
+    "loadMore": {
+      "loading": "Chargement...",
+      "loadMore": "Charger plus"
+    }
+  },
+  "stocks": {
+    "forms": {
+      "stockForm": {
+        "cancel": "Annuler",
+        "creating": "Création...",
+        "create": "Créer l'action"
+      },
+      "editStockForm": {
+        "cancel": "Annuler",
+        "updating": "Modification...",
+        "update": "Modifier l'action"
+      },
+      "fields": {
+        "companyName": "Nom de l'entreprise",
+        "companyNamePlaceholder": "Ex: Apple Inc.",
+        "symbol": "Symbole",
+        "symbolPlaceholder": "Ex: AAPL",
+        "name": "Nom court",
+        "namePlaceholder": "Ex: Apple",
+        "currency": "Devise",
+        "currencyPlaceholder": "Ex: EUR",
+        "currencyHelp": "Code ISO de la devise (USD, EUR, GBP, etc.)",
+        "initialPrice": "Prix initial (€)",
+        "totalShares": "Quantité totale d'actions",
+        "totalSharesPlaceholder": "Ex: 1000000",
+        "totalSharesHelp": "Nombre total d'actions disponibles pour cette entreprise",
+        "isActionAvailable": "Action disponible à l'achat"
+      },
+      "validation": {
+        "companyNameRequired": "Le nom de l'entreprise est requis",
+        "symbolRequired": "Le symbole est requis",
+        "symbolPattern": "Le symbole doit contenir 1-5 lettres majuscules",
+        "nameRequired": "Le nom court est requis",
+        "currencyRequired": "La devise est requise",
+        "currencyLength": "La devise doit contenir exactement 3 caractères",
+        "priceRequired": "Le prix initial est requis",
+        "priceMin": "Le prix doit être supérieur à 0",
+        "totalSharesRequired": "La quantité totale est requise",
+        "totalSharesMin": "La quantité doit être au moins 1"
+      }
+    },
+    "orders": {
+      "filters": {
+        "allStatuses": "Tous les statuts",
+        "pending": "En attente",
+        "executed": "Exécuté",
+        "cancelled": "Annulé",
+        "partiallyExecuted": "Partiellement exécuté",
+        "rejected": "Rejeté",
+        "allTypes": "Tous les types",
+        "buy": "Achat",
+        "sell": "Vente",
+        "status": "Statut",
+        "orderType": "Type d'ordre"
+      },
+      "card": {
+        "type": "Type",
+        "buy": "Achat",
+        "sell": "Vente",
+        "quantity": "Quantité",
+        "unitPrice": "Prix unitaire",
+        "totalAmount": "Montant total",
+        "fundsBlocked": "{amount}€ bloqués",
+        "sharesBlocked": "{count} actions bloquées",
+        "fundsWillBeUnlocked": "Ces fonds seront débloqués si vous annulez l'ordre",
+        "sharesWillBeUnlocked": "Ces actions seront débloquées si vous annulez l'ordre",
+        "executedAt": "Exécuté le {date}",
+        "executionPrice": "Prix d'exécution: {price}€",
+        "cancelling": "Annulation...",
+        "cancelOrder": "Annuler l'ordre"
+      },
+      "statusBadge": {
+        "pending": "En attente",
+        "executed": "Exécuté",
+        "cancelled": "Annulé",
+        "partiallyExecuted": "Partiellement exécuté",
+        "rejected": "Rejeté",
+        "unknown": "Inconnu"
+      },
+      "list": {
+        "noOrders": "Vous n'avez pas encore d'ordres",
+        "noMatchingOrders": "Aucun ordre ne correspond aux filtres sélectionnés"
+      },
+      "blockedResources": {
+        "fundsBlocked": "{amount}€ bloqués",
+        "sharesBlocked": "{count} actions bloquées",
+        "fundsWillBeUnlocked": "Ces fonds seront débloqués si vous annulez l'ordre",
+        "sharesWillBeUnlocked": "Ces actions seront débloquées si vous annulez l'ordre"
+      },
+      "placeOrder": {
+        "buyTitle": "Acheter",
+        "sellTitle": "Vendre",
+        "error": "Erreur lors du placement de l'ordre",
+        "statusPlacing": "Placement de l'ordre...",
+        "statusMatching": "Recherche de correspondances...",
+        "statusSuccess": "Ordre exécuté avec succès !",
+        "quantity": "Quantité",
+        "pricePerShare": "Prix par action (€)",
+        "currentMarketPrice": "Prix actuel du marché",
+        "totalAmount": "Montant total",
+        "transactionFee": "Frais de transaction",
+        "totalToPay": "Total à payer",
+        "totalToReceive": "Total à recevoir",
+        "autoMatchInfo": "Votre ordre sera automatiquement comparé aux ordres existants pour une exécution immédiate.",
+        "cancel": "Annuler",
+        "confirmBuy": "Confirmer l'achat",
+        "confirmSell": "Confirmer la vente",
+        "buttonPlacing": "Placement...",
+        "buttonMatching": "Matching...",
+        "buttonExecuted": "✓ Exécuté"
+      },
+      "hybridDisplay": {
+        "realTimeData": "Données en temps réel",
+        "comparison": "Comparaison de Prix",
+        "marketPrice": "Prix du marché",
+        "tradingPrice": "Prix de trading",
+        "gap": "Écart",
+        "important": "Important :",
+        "importantDesc": "Un écart important de <bold>{gap}%</bold> a été détecté entre le prix actuel du marché et le prix de trading interne."
+      },
+      "directorCard": {
+        "orderDetails": "Détails de l'ordre",
+        "symbol": "Symbole",
+        "type": "Type",
+        "quantity": "Quantité",
+        "pricePerShare": "Prix par action",
+        "totalAmount": "Montant total",
+        "status": "Statut",
+        "buy": "Achat",
+        "sell": "Vente"
+      },
+      "directorFilters": {
+        "allStatuses": "Tous les statuts",
+        "allTypes": "Tous les types",
+        "pending": "En attente",
+        "executed": "Exécuté",
+        "cancelled": "Annulé",
+        "partiallyExecuted": "Partiellement exécuté",
+        "rejected": "Rejeté",
+        "buy": "Achat",
+        "sell": "Vente",
+        "status": "Statut",
+        "orderType": "Type d'ordre"
+      },
+      "directorList": {
+        "noOrders": "Aucun ordre de directeur disponible",
+        "noMatchingOrders": "Aucun ordre ne correspond aux filtres sélectionnés"
+      },
+      "openIPO": {
+        "errorMinShares": "Le nombre d'actions doit être supérieur à 0",
+        "errorMaxShares": "Le nombre d'actions ne peut pas dépasser {max}",
+        "success": "IPO pour {symbol} ouverte avec succès",
+        "error": "Erreur lors de l'ouverture de l'IPO",
+        "title": "Ouvrir IPO",
+        "ipoTitle": "Configuration de l'IPO",
+        "ipoDescription": "Définissez le nombre d'actions à mettre en vente pour l'IPO.",
+        "totalShares": "Total actions",
+        "sharesLabel": "Actions à vendre",
+        "maxShares": "Max: {max}",
+        "ipoType": "Type d'IPO",
+        "initialIPO": "Primaire (Initiale)",
+        "secondaryIPO": "Secondaire",
+        "cancel": "Annuler",
+        "opening": "Ouverture...",
+        "openIPO": "Ouvrir l'IPO"
+      },
+      "purchaseIPO": {
+        "errorMaxShares": "Seulement {available} actions disponibles en IPO",
+        "error": "Erreur lors de l'achat IPO",
+        "title": "Achat IPO",
+        "ipoTitle": "Introduction en Bourse",
+        "ipoDescription": "Achat direct au prix d'émission initial",
+        "sharesRemaining": "actions restantes",
+        "quantity": "Quantité",
+        "maxAvailable": "Maximum : {max} actions disponibles",
+        "fixedPrice": "Prix IPO fixe (€)",
+        "fixedPriceDescription": "Prix fixe d'",
+        "totalAmount": "Montant total",
+        "transactionFee": "Frais de transaction",
+        "totalToPay": "Total à payer",
+        "instantExecutionInfo": "Votre achat sera exécuté instantanément au prix IPO. Les actions seront ajoutées directement à votre portefeuille.",
+        "cancel": "Annuler",
+        "purchasing": "Achat en cours...",
+        "buyShares": "Acheter {count} action(s) IPO"
+      }
+    },
+    "positions": {
+      "summary": {
+        "title": "Résumé du portefeuille",
+        "totalValue": "Valeur totale",
+        "totalCost": "Coût total",
+        "gainLoss": "Gain/Perte",
+        "performance": "Performance"
+      },
+      "card": {
+        "totalQuantity": "Quantité totale",
+        "available": "Disponible",
+        "blocked": "{count} bloquées",
+        "averagePrice": "Prix moyen",
+        "currentPrice": "Prix actuel",
+        "currentValue": "Valeur actuelle",
+        "totalCost": "Coût total",
+        "allBlocked": "Toutes vos actions sont bloquées dans des ordres en attente",
+        "sell": "Vendre",
+        "availableCount": "({count} disponibles)"
+      }
+    },
+    "transactions": {
+      "list": {
+        "noTransactions": "Vous n'avez pas encore de transactions",
+        "noMatchingTransactions": "Aucune transaction ne correspond aux filtres sélectionnés"
+      },
+      "filters": {
+        "type": "Type",
+        "allTypes": "Tous les types",
+        "buys": "Achats",
+        "sells": "Ventes",
+        "symbol": "Symbole",
+        "symbolPlaceholder": "Ex: AAPL"
+      },
+      "tableHeader": {
+        "symbol": "Symbole",
+        "date": "Date",
+        "type": "Type",
+        "quantity": "Quantité",
+        "unitPrice": "Prix unitaire",
+        "total": "Total"
+      },
+      "row": {
+        "buy": "Achat",
+        "sell": "Vente"
+      },
+      "controls": {
+        "show": "Afficher",
+        "of": "sur",
+        "transactions": "transactions"
+      }
+    },
+    "structure": {
+      "actions": {
+        "buy": "Acheter",
+        "sell": "Vendre",
+        "lastUpdated": "Mis à jour"
+      },
+      "stats": {
+        "open": "Ouverture",
+        "previousClose": "Clôture préc.",
+        "high": "Plus haut",
+        "low": "Plus bas"
+      },
+      "price": {
+        "afterClose": "Après clôture"
+      },
+      "fiftyTwoWeek": {
+        "title": "Sur 52 semaines",
+        "low": "Plus bas",
+        "high": "Plus haut"
+      },
+      "header": {
+        "open": "Ouvert",
+        "closed": "Fermé"
+      },
+      "volume": {
+        "volume": "Volume",
+        "averageVolume": "Volume moy."
+      }
+    },
+    "modal": {
+      "createStock": "Créer une action"
+    },
+    "table": {
+      "noStocks": "Aucune action disponible",
+      "symbol": "Symbole",
+      "company": "Entreprise",
+      "previousPrice": "Prix préc.",
+      "currentPrice": "Prix actuel",
+      "variation": "Var.",
+      "status": "Statut",
+      "actions": "Actions",
+      "available": "Disponible",
+      "unavailable": "Indisponible",
+      "ipoActive": "IPO Active",
+      "shares": "actions",
+      "closeIPO": "Fermer IPO",
+      "openIPO": "Ouvrir IPO",
+      "deactivate": "Désactiver",
+      "activate": "Activer",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "confirmDelete": "Êtes-vous sûr de vouloir supprimer {symbol} ?"
     }
   },
   "chat": {
-    "page": {
-      "verifyingAuth": "Vérification de l'authentification...",
-      "loadingUser": "Chargement de l'utilisateur..."
+    "title": "Chat",
+    "connected": "Connecté",
+    "disconnected": "Déconnecté",
+    "noMessages": "Aucun message pour le moment",
+    "typing": "En train d'écrire...",
+    "inputPlaceholder": "Écris ton message...",
+    "inputDisabled": "Connexion en cours...",
+    "sendButton": "Envoyer",
+    "clientConversations": {
+      "title": "Mes conversations",
+      "newConversation": "Nouvelle conversation",
+      "creating": "Création...",
+      "errorFetch": "Impossible de récupérer vos conversations",
+      "errorCreate": "Erreur lors de la création de la conversation",
+      "empty": "Vous n'avez pas encore de conversation.",
+      "notAssigned": "Non assigné"
+    },
+    "advisorConversations": {
+      "loading": "Chargement…",
+      "errorTitle": "Erreur",
+      "reloadPage": "Recharger la page",
+      "stats": {
+        "pending": "En attente",
+        "assigned": "Mes conversations"
+      },
+      "searchPlaceholder": "Rechercher par nom client...",
+      "pendingTitle": "Demandes en attente",
+      "pendingEmpty": "Aucune demande en attente",
+      "searchEmpty": "Aucun résultat pour cette recherche",
+      "takeOver": "Prendre en charge",
+      "continue": "Continuer",
+      "transfer": "Transférer",
+      "assignedTitle": "Vos conversations",
+      "assignedEmpty": "Aucune conversation assignée"
+    },
+    "selectAdvisorsModal": {
+      "title": "Transfert de Dossier Client",
+      "subtitle": "Sélectionnez un nouveau conseiller",
+      "searchPlaceholder": "Rechercher par nom ou identifiant...",
+      "loading": "Chargement des conseillers...",
+      "errorFetch": "Impossible de récupérer les conseillers",
+      "retry": "Réessayer",
+      "noAdvisors": "Aucun conseiller trouvé",
+      "noAdvisorsHint": "Essayez avec d'autres critères",
+      "cancel": "Annuler",
+      "confirm": "Valider le transfert",
+      "transferSuccess": "Conversation transférée !",
+      "transferError": "Erreur lors du transfert."
+    }
+  },
+  "bankAccount": {
+    "transactionHistory": {
+      "noTransactions": "Aucune transaction pour le moment.",
+      "reference": "Ref",
+      "unknownUser": "Utilisateur inconnu",
+      "sender": "Émetteur",
+      "recipient": "Destinataire"
+    },
+    "summaryCard": {
+      "totalBalance": "Solde total de vos comptes"
+    },
+    "subAccountForm": {
+      "title": "Ajouter un sous-compte",
+      "accountNameLabel": "Nom du compte *",
+      "accountNamePlaceholder": "Nom du sous-compte",
+      "accountTypeLabel": "Type de compte *",
+      "currencyLabel": "Devise *",
+      "creating": "Création...",
+      "createButton": "Créer le sous-compte",
+      "success": "Sous-compte créé avec succès !",
+      "accountTypes": {
+        "savings": "Épargne"
+      }
+    },
+    "quickTransfer": {
+      "title": "Transferts rapides",
+      "subtitle": "Réeffectuer un transfert en un clic",
+      "noTransactions": "Aucune transaction récente disponible",
+      "unknownUser": "Utilisateur inconnu",
+      "unknownAccount": "Compte inconnu",
+      "account": "Compte",
+      "repeatButton": "Répéter",
+      "confirmTitle": "Confirmer le transfert rapide",
+      "amountLabel": "Montant",
+      "toLabel": "Vers:",
+      "originalTransaction": "Transaction originale du",
+      "processing": "En cours...",
+      "confirmButton": "Confirmer",
+      "cancelButton": "Annuler"
+    },
+    "overdraftRequests": {
+      "title": "Demandes de découvert",
+      "requestsCount": "demandes",
+      "loading": "Chargement...",
+      "noPendingRequests": "Aucune demande en attente.",
+      "account": "Compte",
+      "current": "Actuel",
+      "requested": "Demande",
+      "client": "Client",
+      "status": "Statut",
+      "viewProfile": "Voir profil client",
+      "loadingProfile": "Chargement...",
+      "reject": "Refuser",
+      "approve": "Approuver",
+      "close": "Fermer",
+      "loadingDetails": "Chargement du profil...",
+      "phoneNA": "N/A",
+      "accounts": "Comptes",
+      "loanRequests": "Demandes de crédit",
+      "noLoanRequests": "Aucune demande",
+      "overdraftRequestLabel": "Demande de découvert",
+      "purpose": "Motif"
+    },
+    "mainAccountCard": {
+      "mainLabel": "Principal",
+      "availableBalance": "Solde disponible",
+      "accountNumber": "Numéro de compte",
+      "ribMessage": "Récupère ton RIB pour partager tes coordonnées bancaires.",
+      "downloadRib": "Télécharger mon RIB",
+      "generatingRib": "Génération...",
+      "limits": "Limites",
+      "overdraftRequest": "Demande de découvert",
+      "currentOverdraft": "Actuel",
+      "increaseTransferLimit": "Augmenter limite de virement",
+      "currentLimit": "Actuelle",
+      "overdraftModalTitle": "Demander une augmentation de découvert",
+      "overdraftModalSubtitle": "Découvert actuel :",
+      "overdraftSuccess": "Demande envoyée à votre conseiller.",
+      "requestButton": "Demander",
+      "sending": "Envoi...",
+      "transferModalTitle": "Augmenter la limite de virement",
+      "transferModalSubtitle": "Limite actuelle :",
+      "transferSuccess": "Limite mise à jour.",
+      "updating": "Mise à jour...",
+      "increaseButton": "Augmenter"
+    },
+    "accountList": {
+      "noAccounts": "Aucun autre compte disponible"
+    }
+  },
+  "loan": {
+    "form": {
+      "clientLabel": "Client",
+      "title": "Demande de crédit",
+      "description": "Renseignez les informations essentielles. Votre conseiller recevra automatiquement la demande.",
+      "errorLoadAdvisors": "Impossible de charger les conseillers",
+      "successMessage": "Demande envoyée au conseiller.",
+      "failureMessage": "Échec de la demande",
+      "errorMessage": "Erreur lors de la demande. Veuillez réessayer ou contacter votre conseiller.",
+      "footerNote": "Une fois envoyée, la demande sera visible par votre conseiller.",
+      "adviceLabel": "Conseil",
+      "adviceText": "Préparez un motif clair et un montant cohérent avec votre besoin. Si le montant dépasse 5000€, le taux sera proposé par le directeur après validation.",
+      "indicativeRateLabel": "Taux indicatif",
+      "pending": "En attente",
+      "rateExplanation": "Appliqué automatiquement aux demandes ≤ 5000€. Au-delà, un taux personnalisé sera proposé."
+    },
+    "fields": {
+      "advisorLabel": "Choisir un conseiller",
+      "loadingAdvisors": "Chargement des conseillers...",
+      "amountLabel": "Montant demandé",
+      "amountError": "Veuillez saisir un montant valide et supérieur à 0.",
+      "purposeLabel": "Motif",
+      "purposePlaceholder": "Exemple : Achat d'un véhicule, rénovation de la maison, etc.",
+      "purposeError": "Veuillez préciser le motif de votre demande.",
+      "durationLabel": "Durée de remboursement",
+      "months": "{count} mois",
+      "simulationTitle": "Simulation mensuelle",
+      "rateByDirector": "(taux à définir par le directeur)",
+      "indicativeRate": "(taux indicatif {rate}%)",
+      "rateNotDefined": "(taux indicatif non défini)",
+      "monthlyNotAvailable": "-- €/mois",
+      "monthlyAmount": "{amount} €/mois",
+      "rateProposalNote": "Pour un montant > 5000€, le taux sera proposé par le directeur.",
+      "waitingForRate": "En attente de taux indicatif défini par le directeur.",
+      "rateWillAppear": "Dès qu'un taux indicatif sera publié, une estimation apparaîtra ici.",
+      "submitButton": "Envoyer la demande"
+    },
+    "advisorPage": {
+      "advisorLabel": "Conseiller",
+      "title": "Demandes de crédit",
+      "description": "Suivez, analysez et décidez des demandes de crédit de vos clients dans un espace clair et cohérent.",
+      "errorLoad": "Impossible de charger les demandes",
+      "stats": {
+        "total": "Total",
+        "pending": "En attente",
+        "approved": "Approuvées",
+        "rejected": "Refusées"
+      },
+      "noRequests": "Aucune demande pour le moment",
+      "noRequestsDescription": "Les nouvelles demandes de vos clients apparaîtront ici dès leur création."
+    }
+  },
+  "notification": {
+    "from": "De",
+    "noNotifications": "Aucune Notification"
+  },
+  "rib": {
+    "title": "Relevé d'Identité Bancaire",
+    "holderSection": "Titulaire & coordonnées",
+    "holder": "Titulaire",
+    "address": "Adresse",
+    "addressNotProvided": "Adresse non renseignée",
+    "accountSection": "Références du compte",
+    "accountNumber": "Numéro de compte",
+    "currency": "Devise",
+    "generatedAt": "Généré le"
+  },
+  "savingsAccount": {
+    "info": {
+      "defaultTitle": "Comment fonctionne votre compte épargne ?",
+      "dailyCalculation": {
+        "title": "Calcul quotidien",
+        "description": "Vos intérêts sont calculés chaque jour sur votre solde disponible"
+      },
+      "autoCredit": {
+        "title": "Crédit automatique",
+        "description": "Les intérêts sont automatiquement ajoutés à votre compte"
+      },
+      "compoundEffect": {
+        "title": "Effet cumulatif",
+        "description": "Vos intérêts génèrent eux-mêmes des intérêts (intérêts composés)"
+      }
+    },
+    "createForm": {
+      "title": "Créer un Compte Épargne",
+      "subtitle": "Configurez les paramètres du compte épargne",
+      "error": "Erreur",
+      "successTitle": "Compte créé !",
+      "successMessage": "Le compte épargne a été créé avec succès.",
+      "accountNumberLabel": "Numéro de compte",
+      "accountNumberPlaceholder": "Ex: 123456",
+      "interestRateLabel": "Taux d'intérêt annuel (%)",
+      "interestRatePlaceholder": "Ex: 3.5",
+      "interestRateHelper": "Taux appliqué quotidiennement (divisé par 365)",
+      "maxDepositAmountLabel": "Plafond de rémunération (€)",
+      "maxDepositAmountPlaceholder": "Ex: 50000 (optionnel)",
+      "maxDepositAmountHelper": "Montant maximum qui génère des intérêts. Laissez vide pour aucune limite.",
+      "maturityLabel": "Date d'échéance",
+      "maturityHelper": "Date de maturité du compte épargne (optionnel)",
+      "interestCalcTitle": "Calcul des intérêts",
+      "cancel": "Annuler",
+      "submit": "Créer le compte épargne"
+    },
+    "manageForm": {
+      "title": "Gérer le Compte Épargne",
+      "subtitle": "Compte #{accountNumber}",
+      "errorTitle": "Erreur",
+      "successTitle": "Modifications enregistrées !",
+      "successMessage": "Le compte épargne a été mis à jour avec succès.",
+      "currentValuesTitle": "Valeurs actuelles",
+      "currentRate": "Taux actuel",
+      "currentCeiling": "Plafond actuel",
+      "currentStatus": "Statut",
+      "none": "Aucun",
+      "active": "Actif",
+      "inactive": "Inactif",
+      "interestEarned": "Intérêts gagnés",
+      "newInterestRateLabel": "Nouveau taux d'intérêt annuel (%)",
+      "newInterestRatePlaceholder": "Ex: 3.5",
+      "newMaxDepositAmountLabel": "Nouveau plafond de rémunération (€)",
+      "newMaxDepositAmountPlaceholder": "Ex: 50000 (laissez vide pour aucune limite)",
+      "newMaxDepositAmountHelper": "Montant maximum qui génère des intérêts",
+      "statusLabel": "Statut du compte",
+      "statusActive": "Actif",
+      "statusInactive": "Inactif",
+      "statusActiveDesc": "Les intérêts sont calculés quotidiennement",
+      "statusInactiveDesc": "Aucun intérêt n'est calculé",
+      "statusOn": "ON",
+      "statusOff": "OFF",
+      "warningTitle": "Attention",
+      "warningMessage": "Les modifications prendront effet immédiatement. Le nouveau taux sera appliqué lors du prochain calcul quotidien des intérêts.",
+      "cancel": "Annuler",
+      "submit": "Enregistrer les modifications",
+      "submitting": "Mise à jour..."
+    },
+    "card": {
+      "title": "Compte Épargne",
+      "statusActive": "Actif",
+      "statusInactive": "Inactif",
+      "availableBalance": "Solde disponible",
+      "interestEarnedTotal": "Intérêts gagnés (total)",
+      "perDay": "Par jour",
+      "perYearProjected": "Par an (projeté)",
+      "detailsTitle": "Détails",
+      "annualInterestRate": "Taux d'intérêt annuel",
+      "remunerationCeiling": "Plafond de rémunération",
+      "lastInterestCalc": "Dernier calcul d'intérêts",
+      "howItWorksTitle": "Comment ça marche ?",
+      "howItWorksMessage": "Vos intérêts sont calculés quotidiennement sur votre solde {ceiling} et ajoutés automatiquement à votre compte.",
+      "ceilingInfo": "(jusqu'à {amount})",
+      "noAccount": "Aucun compte épargne trouvé pour ce compte"
+    }
+  },
+  "media": {
+    "dragDrop": {
+      "dropOrClick": "Glissez-déposez vos fichiers ici ou cliquez pour sélectionner",
+      "acceptedTypes": "Images et vidéos acceptées • Max {maxSize}MB par fichier"
+    },
+    "uploader": {
+      "errorNotMedia": "{fileName} n'est pas une image ou une vidéo",
+      "errorMaxSize": "{fileName} dépasse la taille maximale de {maxSize}MB"
+    },
+    "filePreview": {
+      "video": "Vidéo",
+      "remove": "Supprimer",
+      "uploaded": "Uploadé",
+      "noCaption": "Aucune légende",
+      "editCaption": "Modifier la légende",
+      "addCaption": "Ajouter une légende...",
+      "save": "Enregistrer",
+      "cancel": "Annuler"
     }
   }
+},
+"notFound": {
+  "title": "Page non trouvée",
+  "description": "Désolé, la page que vous recherchez semble introuvable. Elle a peut-être été déplacée ou supprimée.",
+  "backHome": "Retour à l'accueil",
+  "helpCenter": "Centre d'aide",
+  "needHelp": "Besoin d'aide ?",
+  "contactUs": "Contactez-nous"
+},
+"error": {
+  "title": "Erreur serveur",
+  "description": "Oups ! Une erreur inattendue s'est produite. Nos équipes ont été notifiées et travaillent sur le problème.",
+  "retry": "Réessayer",
+  "backHome": "Retour à l'accueil",
+  "errorCode": "Code d'erreur",
+  "persistentProblem": "Le problème persiste ?",
+  "contactSupport": "Contactez notre support"
+},
+"manager": {
+  "dashboard": {
+    "title": "Gestion de l'Agence",
+    "subtitle": "Administration des conseillers et paramètres de l'agence",
+    "advisorManagement": {
+      "title": "Gestion des Conseillers",
+      "description": "Créez et gérez les conseillers bancaires de votre agence.",
+      "createButton": "Créer un conseiller"
+    },
+    "agencySettings": {
+      "title": "Paramètres de l'Agence",
+      "description": "Configurez les paramètres de votre agence.",
+      "button": "Paramètres agence"
+    }
+  },
+  "users": {
+    "title": "Gestion des Utilisateurs",
+    "subtitle": "Gérez tous les utilisateurs, clients et conseillers",
+    "loading": "Chargement...",
+    "tabs": {
+      "all": "Tous",
+      "clients": "Clients",
+      "advisors": "Conseillers"
+    },
+    "table": {
+      "name": "Nom",
+      "email": "Email",
+      "phone": "Téléphone",
+      "status": "Statut",
+      "roles": "Rôles",
+      "registered": "Inscrit",
+      "actions": "Actions",
+      "noUsers": "Aucun utilisateur trouvé"
+    },
+    "status": {
+      "yes": "Oui",
+      "no": "Non"
+    },
+    "actions": {
+      "edit": "Modifier",
+      "delete": "Supprimer"
+    },
+    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cela supprimera également tous ses comptes et données associées.",
+    "editModal": {
+      "title": "Modifier l'utilisateur",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "Email",
+      "phone": "Téléphone",
+      "address": "Adresse",
+      "status": "Statut",
+      "statusOptions": {
+        "active": "Actif",
+        "inactive": "Inactif",
+        "suspended": "Suspendu"
+      },
+      "cancel": "Annuler",
+      "save": "Enregistrer"
+    },
+    "errors": {
+      "updateFailed": "Erreur lors de la mise à jour de l'utilisateur"
+    }
+  },
+  "accounts": {
+    "title": "Vue d'ensemble des Comptes",
+    "subtitle": "Consultez tous les comptes courants et leurs soldes",
+    "loading": "Chargement...",
+    "stats": {
+      "totalAccounts": "Total Comptes",
+      "totalBalance": "Solde Total",
+      "activeAccounts": "Comptes Actifs"
+    },
+    "search": "Rechercher par nom, IBAN ou numéro de compte...",
+    "table": {
+      "number": "Numéro",
+      "iban": "IBAN",
+      "owner": "Propriétaire",
+      "type": "Type",
+      "balance": "Solde",
+      "status": "Statut",
+      "createdAt": "Créé le",
+      "actions": "Actions",
+      "noAccounts": "Aucun compte trouvé"
+    },
+    "deleteConfirm": {
+      "lastCheckingWithBalance": "Impossible de supprimer le dernier compte courant avec un solde positif. Veuillez d'abord transférer les fonds ou vous assurer que le solde est de 0€.",
+      "withBalance": "Êtes-vous sûr de vouloir supprimer ce compte ?\\n\\nLe solde de {amount} sera automatiquement transféré vers un autre compte courant de l'utilisateur.",
+      "withoutBalance": "Êtes-vous sûr de vouloir supprimer ce compte ?"
+    },
+    "errors": {
+      "deleteFailed": "Erreur lors de la suppression du compte",
+      "deleteError": "Erreur lors de la suppression"
+    },
+    "actions": {
+      "delete": "Supprimer"
+    },
+    "success": "Compte supprimé avec succès"
+  },
+  "savingsProducts": {
+    "title": "Produits d'Épargne",
+    "subtitle": "Créez et gérez les produits d'épargne disponibles pour les clients",
+    "backToDashboard": "Retour au dashboard",
+    "newProduct": "Nouveau Produit",
+    "existingProducts": "Produits Existants",
+    "form": {
+      "createTitle": "Créer un Nouveau Produit",
+      "editTitle": "Modifier le Produit",
+      "name": "Nom du produit",
+      "namePlaceholder": "Livret A, PEL, etc.",
+      "interestRate": "Taux d'intérêt annuel (%)",
+      "interestRatePlaceholder": "3.5",
+      "maxDeposit": "Plafond de rémunération (€)",
+      "maxDepositPlaceholder": "22950",
+      "minDeposit": "Dépôt minimum (€)",
+      "minDepositPlaceholder": "10",
+      "description": "Description",
+      "descriptionPlaceholder": "Description du produit d'épargne...",
+      "createButton": "Créer",
+      "updateButton": "Mettre à jour",
+      "cancel": "Annuler"
+    },
+    "product": {
+      "active": "Actif",
+      "inactive": "Inactif",
+      "rate": "Taux :",
+      "ceiling": "Plafond :",
+      "edit": "Modifier"
+    },
+    "messages": {
+      "createSuccess": "Produit créé avec succès !",
+      "updateSuccess": "Produit mis à jour ! Tous les comptes liés ont été mis à jour.",
+      "createError": "Erreur lors de la création",
+      "updateError": "Erreur lors de la mise à jour"
+    },
+    "noProducts": "Aucun produit créé. Créez votre premier produit d'épargne !"
+  },
+  "createAdvisor": {
+    "title": "Créer un conseiller bancaire",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "email": "Email",
+    "password": "Mot de passe",
+    "phone": "Numéro de téléphone",
+    "dateOfBirth": "Date de naissance",
+    "address": "Adresse",
+    "createButton": "Créer le conseiller",
+    "backToDashboard": "Retour au tableau de bord",
+    "messages": {
+      "success": "Le conseiller bancaire a été créé avec succès. Un email de confirmation a été envoyé.",
+      "userExists": "Un utilisateur avec cet email existe déjà.",
+      "error": "Une erreur est survenue lors de la création du conseiller.",
+      "networkError": "Erreur réseau. Vérifiez que le serveur est démarré."
+    }
+  },
+  "savings": {
+    "title": "Vue d'ensemble des Comptes Épargne",
+    "subtitle": "Consultez tous les comptes épargne, taux d'intérêt et gains",
+    "loading": "Chargement...",
+    "stats": {
+      "totalAccounts": "Total Comptes",
+      "totalBalance": "Solde Total",
+      "totalInterest": "Intérêts Totaux",
+      "averageRate": "Taux Moyen"
+    },
+    "search": "Rechercher par nom ou numéro de compte...",
+    "table": {
+      "number": "Numéro",
+      "owner": "Propriétaire",
+      "balance": "Solde",
+      "interestRate": "Taux d'intérêt",
+      "totalInterest": "Intérêts Totaux",
+      "status": "Statut",
+      "lastUpdate": "Dernière MAJ",
+      "actions": "Actions",
+      "noAccounts": "Aucun compte épargne trouvé"
+    },
+    "status": {
+      "active": "Actif",
+      "inactive": "Inactif"
+    },
+    "deleteConfirm": {
+      "withBalance": "Êtes-vous sûr de vouloir supprimer ce compte épargne ?\\n\\nLe solde de {amount} sera automatiquement transféré vers un compte courant de l'utilisateur.",
+      "withoutBalance": "Êtes-vous sûr de vouloir supprimer ce compte épargne ?"
+    },
+    "actions": {
+      "delete": "Supprimer"
+    },
+    "errors": {
+      "deleteFailed": "Erreur lors de la suppression du compte épargne",
+      "deleteError": "Erreur lors de la suppression"
+    },
+    "success": "Compte épargne supprimé avec succès"
+  }
+},
+"advisor": {
+  "dashboard": {
+    "title": "Tableau de bord conseiller bancaire",
+    "clientManagement": {
+      "title": "Gestion des clients",
+      "description": "Accédez à la liste de vos clients et gérez leurs comptes.",
+      "button": "Voir mes clients"
+    },
+    "loanRequests": {
+      "title": "Demandes de crédit",
+      "description": "Consultez et traitez les demandes de crédit de vos clients.",
+      "button": "Voir les demandes de crédit"
+    },
+    "overdraftRequests": {
+      "title": "Demandes de découvert",
+      "description": "Consultez et traitez les demandes d'augmentation de découvert.",
+      "button": "Ouvrir les demandes de découvert"
+    }
+  }
+},
+"chat": {
+  "page": {
+    "verifyingAuth": "Vérification de l'authentification...",
+    "loadingUser": "Chargement de l'utilisateur..."
+  },
+  "limitProgressBar": {
+    "nearLimit": "Critique",
+    "attention": "Attention",
+    "available": "Disponible",
+    "remaining": "restant"
+  },
+  "enums": {
+    "accountStatus": {
+      "ACTIVE": "Actif",
+      "CLOSED": "Fermé",
+      "SUSPENDED": "Suspendu",
+      "PENDING": "En attente",
+      "FROZEN": "Gelé",
+      "BANNED": "Banni"
+    },
+    "transactionType": {
+      "PAYMENT": "Paiement",
+      "WITHDRAWAL": "Retrait",
+      "TRANSFER": "Virement",
+      "FEE": "Frais",
+      "DEPOSIT": "Dépôt"
+    },
+    "overdraftStatus": {
+      "PENDING": "En attente",
+      "APPROVED": "Approuvé",
+      "REJECTED": "Refusé"
+    },
+    "clientStatus": {
+      "ACTIVE": "Actif",
+      "INACTIVE": "Inactif",
+      "PENDING": "En attente",
+      "SUSPENDED": "Suspendu"
+    }
+  }
+}
 }

@@ -135,14 +135,12 @@ export function HybridStockDisplay({
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
               <p className="text-xs text-blue-800">
                 <strong>{t("important")}</strong>{" "}
-                <span
-                  dangerouslySetInnerHTML={{
-                    __html: t.raw("importantDesc", {
-                      price: backendStock.currentPrice.toFixed(2),
-                      currency: backendStock.currency,
-                    }),
-                  }}
-                />
+                {t.rich("importantDesc", {
+                  gap: ((
+                    ((backendStock.currentPrice - apiStock.price) / apiStock.price) * 100
+                  ).toFixed(2)),
+                  bold: (chunks) => <strong>{chunks}</strong>
+                })}
               </p>
             </div>
           </div>

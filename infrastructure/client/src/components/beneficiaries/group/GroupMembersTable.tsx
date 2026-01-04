@@ -5,8 +5,8 @@ import { Table } from "@/components/ui/Table";
 import { TableColumn } from "@/components/ui/TableHeader";
 import { Beneficiary } from "@/types/beneficiary";
 import { BeneficiaryGroup } from "@/types/beneficiaryGroup";
-import { X, Users, Send, UserMinus, Eye, Mail, MapPin} from "lucide-react";
-import { useTranslations } from "next-intl";
+import { X, Users, Send, UserMinus, Eye, Mail, MapPin } from "lucide-react";
+import { useTranslations, useFormatter } from "next-intl";
 
 interface GroupMembersTableProps {
   group: BeneficiaryGroup | null;
@@ -18,8 +18,9 @@ interface GroupMembersTableProps {
   onViewDetails?: (beneficiary: Beneficiary) => void;
 }
 
-export function GroupMembersTable({group,members,isOpen,onClose,onTransfer,onRemoveMember,onViewDetails}: GroupMembersTableProps) {
+export function GroupMembersTable({ group, members, isOpen, onClose, onTransfer, onRemoveMember, onViewDetails }: GroupMembersTableProps) {
   const t = useTranslations('components.beneficiaries.group.membersTable');
+  const format = useFormatter();
   if (!isOpen || !group) return null;
 
   const columns: TableColumn[] = [
@@ -45,8 +46,7 @@ export function GroupMembersTable({group,members,isOpen,onClose,onTransfer,onRem
             </div>
             {member.address && (
               <div className="text-xs text-gray-500 flex items-center gap-1 mt-1">
-                <MapPin className="w-3 h-3" />
-                {member.address.city}, {member.address.country}
+                <MapPin className="w-3 h-3" /> {member.address.street}, {member.address.city}, {member.address.postalCode}
               </div>
             )}
           </div>
@@ -187,7 +187,7 @@ export function GroupMembersTable({group,members,isOpen,onClose,onTransfer,onRem
               <div className="text-sm text-gray-600">
                 <p className="font-medium">
                   {t('createdAt', {
-                    date: new Date(group.createdAt).toLocaleDateString("fr-FR", {
+                    date: format.dateTime(new Date(group.createdAt), {
                       day: "2-digit",
                       month: "long",
                       year: "numeric",
@@ -197,7 +197,7 @@ export function GroupMembersTable({group,members,isOpen,onClose,onTransfer,onRem
                 {group.updatedAt !== group.createdAt && (
                   <p className="text-xs text-gray-500 mt-1">
                     {t('updatedAt', {
-                      date: new Date(group.updatedAt).toLocaleDateString("fr-FR", {
+                      date: format.dateTime(new Date(group.updatedAt), {
                         day: "2-digit",
                         month: "long",
                         year: "numeric",

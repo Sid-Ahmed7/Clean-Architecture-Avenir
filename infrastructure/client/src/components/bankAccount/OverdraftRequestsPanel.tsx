@@ -4,10 +4,12 @@ import { useState } from "react";
 import { useOverdraftRequests } from "@/hooks/useOverdraftRequests";
 import { useRespondOverdraftRequest } from "@/hooks/useRespondOverdraftRequest";
 import { getOverdraftRequestDetails } from "@/lib/api/account";
-import { useTranslations } from "next-intl";
+import { useTranslations, useFormatter } from "next-intl";
 
 export function OverdraftRequestsPanel() {
     const t = useTranslations("components.bankAccount.overdraftRequests");
+    const tEnums = useTranslations("components.enums");
+    const format = useFormatter();
     const { data, loading, error, setData } = useOverdraftRequests();
     const { respond, loading: respondLoading, error: respondError } = useRespondOverdraftRequest();
     const [modalRequestId, setModalRequestId] = useState<string | null>(null);
@@ -18,7 +20,7 @@ export function OverdraftRequestsPanel() {
     const handleRespond = (id: string, action: "APPROVE" | "REJECT") => {
         respond(id, action).then((ok) => {
             if (!ok) return;
-            
+
             setData((prev) => prev.filter((item) => item.id !== id));
             if (modalRequestId === id) {
                 handleCloseModal();
@@ -71,11 +73,11 @@ export function OverdraftRequestsPanel() {
                                     {t("account")} #{item.accountNumber.toString().padStart(11, "0")}
                                 </p>
                                 <p className="text-xs text-gray-600">
-                                    {t("current")} : {item.currentOverdraftLimit.toLocaleString("fr-FR")} | {t("requested")} :{" "}
-                                    {item.requestedOverdraftLimit.toLocaleString("fr-FR")}
+                                    {t("current")} : {format.number(item.currentOverdraftLimit, { style: 'currency', currency: 'EUR' })} | {t("requested")} :{" "}
+                                    {format.number(item.requestedOverdraftLimit, { style: 'currency', currency: 'EUR' })}
                                 </p>
                                 <p className="text-xs text-gray-500">
-                                    {t("client")}: {item.userId} • {t("status")}: {item.status}
+                                    {t("client")}: {item.userId} • {t("status")}: {tEnums(`overdraftStatus.${item.status}`)}
                                 </p>
                             </div>
                             <div className="flex gap-2 flex-wrap">
@@ -127,7 +129,7 @@ export function OverdraftRequestsPanel() {
                                         {modalData.client.firstName} {modalData.client.lastName}
                                     </p>
                                     <p className="text-sm text-gray-600">
-                                        {modalData.client.email} • {modalData.client.phoneNumber ?? t("phoneNA")} • {t("status")} : {modalData.client.status}
+                                        {modalData.client.email} • {modalData.client.phoneNumber ?? t("phoneNA")} • {t("status")} : {tEnums(`clientStatus.${modalData.client.status}`)}
                                     </p>
                                 </div>
 
@@ -138,7 +140,7 @@ export function OverdraftRequestsPanel() {
                                             {modalData.accounts.map((acc: any) => (
                                                 <div key={acc.accountNumber} className="flex justify-between">
                                                     <span>#{acc.accountNumber.toString().padStart(11, "0")} ({acc.accountType})</span>
-                                                    <span>{acc.currentBalance.toLocaleString("fr-FR")} {acc.currency}</span>
+                                                    <span>{format.number(acc.currentBalance, { style: 'currency', currency: acc.currency })}</span>
                                                 </div>
                                             ))}
                                         </div>
@@ -159,8 +161,8 @@ export function OverdraftRequestsPanel() {
 
                                 <div className="p-3 rounded-lg border border-gray-200 bg-gray-50 text-sm text-gray-800">
                                     <p className="font-semibold mb-1">{t("overdraftRequestLabel")}</p>
-                                    <p>{t("current")} : {modalData.request.currentOverdraftLimit} • {t("requested")} : {modalData.request.requestedOverdraftLimit}</p>
-                                    <p>{t("status")} : {modalData.request.status}</p>
+                                    <p>{t("current")} : {format.number(modalData.request.currentOverdraftLimit, { style: 'currency', currency: 'EUR' })} • {t("requested")} : {format.number(modalData.request.requestedOverdraftLimit, { style: 'currency', currency: 'EUR' })}</p>
+                                    <p>{t("status")} : {tEnums(`overdraftStatus.${modalData.request.status}`)}</p>
                                 </div>
                             </div>
                         )}

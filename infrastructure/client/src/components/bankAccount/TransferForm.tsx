@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useTranslations } from "next-intl";
+import { useTranslations, useFormatter } from "next-intl";
 import { AccountModel } from "@/lib/validation/bankAccount/accountSchema";
 import { TransferModel, transferSchema } from "@/lib/validation/bankAccount/transferSchema";
 import { useTransferBetweenAccounts } from "@/hooks/useTransferBetweenAccounts";
@@ -17,6 +17,7 @@ type TransferFormProps = {
 
 export default function TransferForm({ accounts, onSuccess }: TransferFormProps) {
     const t = useTranslations("client.transfers.form");
+    const format = useFormatter();
     const { transfer, loading, error, success, transaction, resetState } = useTransferBetweenAccounts();
     const [showConfirm, setShowConfirm] = useState(false);
     const [pendingTransfer, setPendingTransfer] = useState<TransferModel | null>(null);
@@ -115,11 +116,10 @@ export default function TransferForm({ accounts, onSuccess }: TransferFormProps)
                                     key={account.accountNumber}
                                     type="button"
                                     onClick={() => handleAccountSelect(account.iban)}
-                                    className={`rounded-2xl border p-4 text-left transition-all shadow-sm ${
-                                        selectedIban === account.iban
+                                    className={`rounded-2xl border p-4 text-left transition-all shadow-sm ${selectedIban === account.iban
                                             ? "border-blue-500 bg-blue-50 ring-2 ring-blue-100"
                                             : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
-                                    }`}
+                                        }`}
                                 >
                                     <div className="flex justify-between items-start">
                                         <div className="space-y-1">
@@ -133,8 +133,7 @@ export default function TransferForm({ accounts, onSuccess }: TransferFormProps)
                                         </span>
                                     </div>
                                     <p className="mt-3 text-lg font-semibold text-gray-900">
-                                        {account.currentBalance.toLocaleString("fr-FR")}
-                                        <span className="text-sm ml-1">{account.currency}</span>
+                                        {format.number(account.currentBalance, { style: 'currency', currency: account.currency })}
                                     </p>
                                 </button>
                             ))}
@@ -160,11 +159,10 @@ export default function TransferForm({ accounts, onSuccess }: TransferFormProps)
                                         key={account.accountNumber}
                                         type="button"
                                         onClick={() => handleDestinationAccountSelect(account.iban)}
-                                        className={`rounded-2xl border p-4 text-left transition-all shadow-sm ${
-                                            selectedToIban === account.iban
+                                        className={`rounded-2xl border p-4 text-left transition-all shadow-sm ${selectedToIban === account.iban
                                                 ? "border-emerald-500 bg-emerald-50 ring-2 ring-emerald-100"
                                                 : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
-                                        }`}
+                                            }`}
                                     >
                                         <div className="flex justify-between items-start">
                                             <div className="space-y-1">
@@ -178,8 +176,7 @@ export default function TransferForm({ accounts, onSuccess }: TransferFormProps)
                                             </span>
                                         </div>
                                         <p className="mt-3 text-lg font-semibold text-gray-900">
-                                            {account.currentBalance.toLocaleString("fr-FR")}
-                                            <span className="text-sm ml-1">{account.currency}</span>
+                                            {format.number(account.currentBalance, { style: 'currency', currency: account.currency })}
                                         </p>
                                     </button>
                                 ))}
@@ -266,21 +263,23 @@ export default function TransferForm({ accounts, onSuccess }: TransferFormProps)
                                 </p>
                                 <p className="flex justify-between">
                                     <span className="font-medium">{t("amount")}:</span>
-                                    <span className="font-semibold">{transaction.amount.toFixed(2)} EUR</span>
+                                    <span className="font-semibold">{format.number(transaction.amount, { style: 'currency', currency: 'EUR' })}</span>
                                 </p>
                                 <p className="flex justify-between">
                                     <span className="font-medium">{t("status")}:</span>
-                                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                                        transaction.status === 'COMPLETED'
+                                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${transaction.status === 'COMPLETED'
                                             ? 'bg-emerald-100 text-emerald-700'
                                             : 'bg-yellow-100 text-yellow-700'
-                                    }`}>
+                                        }`}>
                                         {transaction.status === 'COMPLETED' ? t("completed") : t("pending")}
                                     </span>
                                 </p>
                                 <p className="flex justify-between">
                                     <span className="font-medium">{t("date")}:</span>
-                                    <span>{new Date(transaction.createdAt).toLocaleString('fr-FR')}</span>
+                                    <span>{format.dateTime(new Date(transaction.createdAt), {
+                                        dateStyle: 'medium',
+                                        timeStyle: 'medium',
+                                    })}</span>
                                 </p>
                             </div>
                         </div>
@@ -294,7 +293,7 @@ export default function TransferForm({ accounts, onSuccess }: TransferFormProps)
                         <h3 className="text-xl font-semibold text-gray-900 mb-2">{t("confirmTitle")}</h3>
                         <p className="text-sm text-gray-600 mb-4">
                             {t("confirmMessage")}
-                            <span className="font-semibold text-gray-900"> {pendingTransfer.amount.toFixed(2)} EUR </span>
+                            <span className="font-semibold text-gray-900"> {format.number(pendingTransfer.amount, { style: 'currency', currency: 'EUR' })} </span>
                             {t("from")}
                             <span className="font-semibold text-gray-900"> {pendingTransfer.fromIban} </span>
                             {t("to")}

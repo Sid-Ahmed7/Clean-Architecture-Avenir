@@ -4,8 +4,7 @@ import { useState } from "react";
 import { BeneficiaryGroup } from "@/types/beneficiaryGroup";
 import { Eye, Users, Calendar, FolderOpen } from "lucide-react";
 import { BeneficiaryGroupDetailsSidebar } from "./BeneficiaryGroupDetailsSidebar";
-import { formatDate } from "@/lib/utils/date";
-import { useTranslations } from "next-intl";
+import { useTranslations, useFormatter } from "next-intl";
 
 interface BeneficiaryGroupsTableProps {
   groups: BeneficiaryGroup[];
@@ -18,8 +17,9 @@ interface BeneficiaryGroupsTableProps {
   isLoading?: boolean;
 }
 
-export function BeneficiaryGroupsTable({groups,onEdit,onDelete,onAddBeneficiary,onRemoveBeneficiary,onViewBeneficiaries,onTransferToGroup,isLoading = false}: BeneficiaryGroupsTableProps) {
+export function BeneficiaryGroupsTable({ groups, onEdit, onDelete, onAddBeneficiary, onRemoveBeneficiary, onViewBeneficiaries, onTransferToGroup, isLoading = false }: BeneficiaryGroupsTableProps) {
   const t = useTranslations('components.beneficiaries.group.table');
+  const format = useFormatter();
   const [selectedGroup, setSelectedGroup] = useState<BeneficiaryGroup | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -89,13 +89,21 @@ export function BeneficiaryGroupsTable({groups,onEdit,onDelete,onAddBeneficiary,
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2 text-gray-700">
                         <Calendar className="w-4 h-4 text-gray-400" />
-                        <span className="text-sm">{formatDate(group.createdAt)}</span>
+                        <span className="text-sm">{format.dateTime(new Date(group.createdAt), {
+                          year: 'numeric',
+                          month: '2-digit',
+                          day: '2-digit'
+                        })}</span>
                       </div>
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2 text-gray-700">
                         <Calendar className="w-4 h-4 text-gray-400" />
-                        <span className="text-sm">{formatDate(group.updatedAt)}</span>
+                        <span className="text-sm">{format.dateTime(new Date(group.updatedAt), {
+                          year: 'numeric',
+                          month: '2-digit',
+                          day: '2-digit'
+                        })}</span>
                       </div>
                     </td>
                     <td className="px-6 py-4">

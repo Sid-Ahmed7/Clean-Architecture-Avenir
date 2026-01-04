@@ -1,6 +1,5 @@
-"use client";
-
 import { AccountModel } from "@/lib/validation/bankAccount/accountSchema";
+import { useTranslations, useFormatter } from "next-intl";
 
 interface AccountProps {
     accounts: AccountModel[];
@@ -8,6 +7,8 @@ interface AccountProps {
 }
 
 export function AccountCard({ account }: { account: AccountModel }) {
+    const tEnums = useTranslations("components.enums");
+    const format = useFormatter();
     const blockedBalance = account.blockedBalanced ?? 0;
     const availableBalance = account.currentBalance - blockedBalance;
 
@@ -29,7 +30,7 @@ export function AccountCard({ account }: { account: AccountModel }) {
             <div className="mb-2">
                 <p className="text-sm text-gray-500 mb-1">Solde total</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {account.currentBalance.toLocaleString()} {account.currency}
+                    {format.number(account.currentBalance, { style: 'currency', currency: account.currency })}
                 </p>
             </div>
 
@@ -37,7 +38,7 @@ export function AccountCard({ account }: { account: AccountModel }) {
                 <div className="p-3 bg-green-50 rounded-lg">
                     <p className="text-xs text-green-700 mb-1">Disponible</p>
                     <p className="text-lg font-semibold text-green-800">
-                        {availableBalance.toLocaleString()} {account.currency}
+                        {format.number(availableBalance, { style: 'currency', currency: account.currency })}
                     </p>
                 </div>
 
@@ -45,7 +46,7 @@ export function AccountCard({ account }: { account: AccountModel }) {
                     <div className="p-3 bg-orange-50 rounded-lg">
                         <p className="text-xs text-orange-700 mb-1">Bloqué</p>
                         <p className="text-lg font-semibold text-orange-800">
-                            {blockedBalance.toLocaleString()} {account.currency}
+                            {format.number(blockedBalance, { style: 'currency', currency: account.currency })}
                         </p>
                     </div>
                 )}
@@ -58,12 +59,11 @@ export function AccountCard({ account }: { account: AccountModel }) {
 
             <div className="mt-4 flex justify-between items-center">
                 <span className="text-sm text-gray-500">Type: {account.accountType}</span>
-                <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                    account.isActive && account.accountStatus === 'ACTIVE'
-                        ? 'bg-green-100 text-green-700' 
+                <span className={`px-3 py-1 rounded-full text-xs font-medium ${account.isActive && account.accountStatus === 'ACTIVE'
+                        ? 'bg-green-100 text-green-700'
                         : 'bg-red-100 text-red-700'
-                }`}>
-                    {account.accountStatus}
+                    }`}>
+                    {tEnums(`accountStatus.${account.accountStatus}`)}
                 </span>
             </div>
         </div>

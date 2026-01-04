@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/Input";
 import { TextArea } from "@/components/ui/TextArea";
 import { useTranslations } from "next-intl";
 import { LocaleContext } from "@/contexts/LocaleProvider";
-import { BankManagerOnly } from "@/components/auth/RoleBasedAccess";
+import { ManagerOnly } from "@/components/auth/RoleBasedAccess";
 import { User, Mail, Lock, Phone, Calendar, UserCheck } from "lucide-react";
 
 export default function CreateAdvisorPage() {
@@ -44,7 +44,7 @@ export default function CreateAdvisorPage() {
     };
 
     return (
-        <BankManagerOnly>
+        <ManagerOnly>
             <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-green-50 px-4 py-8">
                 {success ? (
                     <div className="bg-white p-8 sm:p-10 rounded-2xl shadow-2xl w-full max-w-md border border-gray-100">
@@ -151,6 +151,6 @@ export default function CreateAdvisorPage() {
                     </form>
                 )}
             </div>
-        </BankManagerOnly>
+        </ManagerOnly>
     );
 }

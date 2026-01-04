@@ -8,6 +8,7 @@ import { createSavingsAccount } from "@/lib/api/savingsAccount";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { PiggyBank, Percent, DollarSign, Calendar, Check, X, Save } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface CreateSavingsAccountFormProps {
     onSuccess?: () => void;
@@ -15,6 +16,7 @@ interface CreateSavingsAccountFormProps {
 }
 
 export function CreateSavingsAccountForm({ onSuccess, onCancel }: CreateSavingsAccountFormProps) {
+    const t = useTranslations("components.savingsAccount.createForm");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
@@ -104,13 +106,13 @@ export function CreateSavingsAccountForm({ onSuccess, onCancel }: CreateSavingsA
 
                 {/* Interest Rate */}
                 <Input
-                    label="Taux d'intérêt annuel (%)"
+                    label={t("interestRateLabel")}
                     type="number"
                     step="0.01"
                     icon={Percent}
                     variant="gradient"
-                    placeholder="Ex: 3.5"
-                    helperText="Taux appliqué quotidiennement (divisé par 365)"
+                    placeholder={t("interestRatePlaceholder")}
+                    helperText={t("interestRateHelper")}
                     error={errors.interestRate?.message}
                     required
                     {...register("interestRate", { valueAsNumber: true })}
@@ -118,13 +120,13 @@ export function CreateSavingsAccountForm({ onSuccess, onCancel }: CreateSavingsA
 
                 {/* Max Deposit Amount */}
                 <Input
-                    label="Plafond de rémunération (€)"
+                    label={t("maxDepositAmountLabel")}
                     type="number"
                     step="0.01"
                     icon={DollarSign}
                     variant="gradient"
-                    placeholder="Ex: 50000 (optionnel)"
-                    helperText="Montant maximum qui génère des intérêts. Laissez vide pour aucune limite."
+                    placeholder={t("maxDepositAmountPlaceholder")}
+                    helperText={t("maxDepositAmountHelper")}
                     error={errors.maxDepositAmount?.message}
                     {...register("maxDepositAmount", {
                         setValueAs: (v) => v === "" ? null : parseFloat(v)
@@ -133,11 +135,11 @@ export function CreateSavingsAccountForm({ onSuccess, onCancel }: CreateSavingsA
 
                 {/* Maturity Date */}
                 <Input
-                    label="Date d'échéance"
+                    label={t("maturityLabel")}
                     type="date"
                     icon={Calendar}
                     variant="gradient"
-                    helperText="Date de maturité du compte épargne (optionnel)"
+                    helperText={t("maturityHelper")}
                     error={errors.maturity?.message}
                     {...register("maturity", {
                         setValueAs: (v) => v ? new Date(v) : undefined
@@ -147,7 +149,7 @@ export function CreateSavingsAccountForm({ onSuccess, onCancel }: CreateSavingsA
                 {/* Info Box */}
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                     <p className="text-xs text-blue-800">
-                        <strong>💡 Calcul des intérêts :</strong> Les intérêts sont calculés quotidiennement selon la formule :
+                        <strong>💡 {t("interestCalcTitle")} :</strong> {t("interestRateHelper")}
                         <br />
                         <code className="bg-blue-100 px-2 py-1 rounded mt-1 inline-block">
                             min(solde, plafond) × (taux / 365 / 100)
@@ -164,7 +166,7 @@ export function CreateSavingsAccountForm({ onSuccess, onCancel }: CreateSavingsA
                             onClick={onCancel}
                             className="flex-1"
                         >
-                            Annuler
+                            {t("cancel")}
                         </Button>
                     )}
                     <Button
@@ -174,7 +176,7 @@ export function CreateSavingsAccountForm({ onSuccess, onCancel }: CreateSavingsA
                         icon={Save}
                         className="flex-1"
                     >
-                        Créer le compte épargne
+                        {t("submit")}
                     </Button>
                 </div>
             </form>

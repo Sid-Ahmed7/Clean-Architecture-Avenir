@@ -10,7 +10,7 @@ import { useRequestOverdraftIncrease } from "@/hooks/useRequestOverdraftIncrease
 import { getRib } from "@/lib/api/account";
 import { RibData } from "@/types/rib";
 import { RibDocument } from "@/components/rib/RibDocument";
-import { useTranslations } from "next-intl";
+import { useTranslations, useFormatter } from "next-intl";
 
 declare global {
     interface Window {
@@ -26,6 +26,8 @@ export function MainAccountCard(props: MainAccountCardProps) {
 
     const { account } = props;
     const t = useTranslations("components.bankAccount.mainAccountCard");
+    const tEnums = useTranslations("components.enums");
+    const format = useFormatter();
     const [currentTransferLimit, setCurrentTransferLimit] = useState(account.transferLimit);
     const [newTransferLimit, setNewTransferLimit] = useState(account.transferLimit);
     const [localError, setLocalError] = useState<string | null>(null);
@@ -144,10 +146,10 @@ export function MainAccountCard(props: MainAccountCardProps) {
                                         {t("mainLabel")}
                                     </span>
                                     <span className={`px-3 py-1 text-xs font-semibold rounded-full ${account.isActive && account.accountStatus === 'ACTIVE'
-                                            ? 'bg-green-400/90 text-green-900'
-                                            : 'bg-red-400/90 text-red-900'
+                                        ? 'bg-green-400/90 text-green-900'
+                                        : 'bg-red-400/90 text-red-900'
                                         }`}>
-                                        {account.accountStatus}
+                                        {tEnums(`accountStatus.${account.accountStatus}`)}
                                     </span>
                                 </div>
                             </div>
@@ -156,9 +158,7 @@ export function MainAccountCard(props: MainAccountCardProps) {
                         <div className="space-y-1">
                             <p className="text-sm text-white/80 font-medium">{t("availableBalance")}</p>
                             <p className="text-4xl font-bold tracking-tight">
-                                {account.currentBalance.toLocaleString('fr-FR')}
-                                <span className="text-2xl">{account.currency}</span>
-
+                                {format.number(account.currentBalance, { style: 'currency', currency: account.currency })}
                             </p>
                         </div>
                     </div>
@@ -207,19 +207,19 @@ export function MainAccountCard(props: MainAccountCardProps) {
                         </div>
 
                         <LimitProgressBar
-                            label="withdrawalLimit"
+                            label={t("withdrawalLimit")}
                             value={0}
                             max={account.withdrawalLimit}
                             currency={account.currency}
                         />
                         <LimitProgressBar
-                            label="transferLimit"
+                            label={t("transferLimit")}
                             value={account.totalTransfered}
                             max={currentTransferLimit}
                             currency={account.currency}
                         />
                         <LimitProgressBar
-                            label="overdraftLimit"
+                            label={t("overdraftLimit")}
                             value={Math.abs(Math.min(0, account.currentBalance))}
                             max={account.overdraftLimit}
                             currency={account.currency}

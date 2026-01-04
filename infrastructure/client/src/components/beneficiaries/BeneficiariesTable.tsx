@@ -6,8 +6,7 @@ import { Eye, Mail, MapPin, Calendar, CheckCircle, XCircle } from "lucide-react"
 import { BeneficiaryDetailsSidebar } from "./BeneficiaryDetailsSidebar";
 import { Table } from "../ui/Table";
 import { TableColumn } from "../ui/TableHeader";
-import { formatDate } from "@/lib/utils/date";
-import { useTranslations } from "next-intl";
+import { useTranslations, useFormatter } from "next-intl";
 
 interface BeneficiariesTableProps {
   beneficiaries: Beneficiary[];
@@ -17,8 +16,9 @@ interface BeneficiariesTableProps {
   isLoading?: boolean;
 }
 
-export function BeneficiariesTable({beneficiaries,onEdit,onDelete,onTransfer,isLoading = false}: BeneficiariesTableProps) {
+export function BeneficiariesTable({ beneficiaries, onEdit, onDelete, onTransfer, isLoading = false }: BeneficiariesTableProps) {
   const t = useTranslations("components.beneficiariesManager.table");
+  const format = useFormatter();
   const [selectedBeneficiary, setSelectedBeneficiary] = useState<Beneficiary | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -96,7 +96,11 @@ export function BeneficiariesTable({beneficiaries,onEdit,onDelete,onTransfer,isL
       <td className="px-6 py-4 cursor-pointer" onClick={() => handleRowClick(beneficiary)}>
         <div className="flex items-center gap-2 text-gray-700">
           <Calendar className="w-4 h-4 text-gray-400" />
-          <span className="text-sm">{formatDate(beneficiary.createdAt)}</span>
+          <span className="text-sm">{format.dateTime(new Date(beneficiary.createdAt), {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+          })}</span>
         </div>
       </td>
       <td className="px-6 py-4">

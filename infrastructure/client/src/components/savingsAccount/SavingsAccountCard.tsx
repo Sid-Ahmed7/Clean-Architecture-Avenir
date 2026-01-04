@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { getInterestSummary } from "@/lib/api/savingsAccount";
 import { PiggyBank, TrendingUp, Calendar, Target } from "lucide-react";
+import { useTranslations, useFormatter } from "next-intl";
 
 interface SavingsAccountCardProps {
     accountNumber: number;
@@ -20,6 +21,8 @@ interface InterestSummary {
 }
 
 export function SavingsAccountCard({ accountNumber }: SavingsAccountCardProps) {
+    const t = useTranslations("components.savingsAccount.card");
+    const format = useFormatter();
     const [summary, setSummary] = useState<InterestSummary | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -57,7 +60,7 @@ export function SavingsAccountCard({ accountNumber }: SavingsAccountCardProps) {
     if (error || !summary) {
         return (
             <div className="bg-white rounded-2xl shadow-xl p-6">
-                <p className="text-red-500">Aucun compte épargne trouvé pour ce compte</p>
+                <p className="text-red-500">{t("noAccount")}</p>
             </div>
         );
     }
@@ -79,14 +82,14 @@ export function SavingsAccountCard({ accountNumber }: SavingsAccountCardProps) {
                         <div className="flex-1">
                             <div className="flex items-center gap-2 mb-2">
                                 <PiggyBank className="w-6 h-6" />
-                                <h3 className="font-bold text-xl">Compte Épargne</h3>
+                                <h3 className="font-bold text-xl">{t("title")}</h3>
                             </div>
                             <div className="flex items-center gap-2">
                                 <span className={`px-3 py-1 text-xs font-semibold rounded-full ${summary.isActive
-                                        ? 'bg-green-400/90 text-green-900'
-                                        : 'bg-gray-400/90 text-gray-900'
+                                    ? 'bg-green-400/90 text-green-900'
+                                    : 'bg-gray-400/90 text-gray-900'
                                     }`}>
-                                    {summary.isActive ? 'Actif' : 'Inactif'}
+                                    {summary.isActive ? t("statusActive") : t("statusInactive")}
                                 </span>
                                 <span className="px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-xs font-semibold rounded-full border border-white/30">
                                     {summary.interestRate}% / an
@@ -96,10 +99,9 @@ export function SavingsAccountCard({ accountNumber }: SavingsAccountCardProps) {
                     </div>
 
                     <div className="space-y-1">
-                        <p className="text-sm text-white/80 font-medium">Solde disponible</p>
+                        <p className="text-sm text-white/80 font-medium">{t("availableBalance")}</p>
                         <p className="text-4xl font-bold tracking-tight">
-                            {summary.currentBalance.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                            <span className="text-2xl ml-1">€</span>
+                            {format.number(summary.currentBalance, { style: 'currency', currency: 'EUR' })}
                         </p>
                     </div>
                 </div>
@@ -114,9 +116,9 @@ export function SavingsAccountCard({ accountNumber }: SavingsAccountCardProps) {
                             <TrendingUp className="w-5 h-5 text-white" />
                         </div>
                         <div className="flex-1">
-                            <p className="text-xs text-gray-600 font-medium">Intérêts gagnés (total)</p>
+                            <p className="text-xs text-gray-600 font-medium">{t("interestEarnedTotal")}</p>
                             <p className="text-2xl font-bold text-emerald-700">
-                                +{summary.totalInterestEarned.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €
+                                +{format.number(summary.totalInterestEarned, { style: 'currency', currency: 'EUR' })}
                             </p>
                         </div>
                     </div>
@@ -127,20 +129,20 @@ export function SavingsAccountCard({ accountNumber }: SavingsAccountCardProps) {
                     <div className="bg-gray-50 rounded-lg p-4">
                         <div className="flex items-center gap-2 mb-2">
                             <Calendar className="w-4 h-4 text-gray-500" />
-                            <p className="text-xs text-gray-600 font-medium">Par jour</p>
+                            <p className="text-xs text-gray-600 font-medium">{t("perDay")}</p>
                         </div>
                         <p className="text-lg font-bold text-gray-900">
-                            +{dailyInterest.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €
+                            +{format.number(dailyInterest, { style: 'currency', currency: 'EUR' })}
                         </p>
                     </div>
 
                     <div className="bg-gray-50 rounded-lg p-4">
                         <div className="flex items-center gap-2 mb-2">
                             <TrendingUp className="w-4 h-4 text-gray-500" />
-                            <p className="text-xs text-gray-600 font-medium">Par an (projeté)</p>
+                            <p className="text-xs text-gray-600 font-medium">{t("perYearProjected")}</p>
                         </div>
                         <p className="text-lg font-bold text-gray-900">
-                            +{summary.projectedAnnualInterest.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €
+                            +{format.number(summary.projectedAnnualInterest, { style: 'currency', currency: 'EUR' })}
                         </p>
                     </div>
                 </div>
@@ -149,12 +151,12 @@ export function SavingsAccountCard({ accountNumber }: SavingsAccountCardProps) {
                 <div className="space-y-3 pt-2">
                     <div className="flex items-center gap-2 mb-2">
                         <div className="w-1 h-4 bg-gradient-to-b from-emerald-500 to-green-500 rounded-full"></div>
-                        <h4 className="text-sm font-bold text-gray-900">Détails</h4>
+                        <h4 className="text-sm font-bold text-gray-900">{t("detailsTitle")}</h4>
                     </div>
 
                     <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                         <div>
-                            <p className="text-xs text-gray-500 font-medium">Taux d'intérêt annuel</p>
+                            <p className="text-xs text-gray-500 font-medium">{t("annualInterestRate")}</p>
                             <p className="text-sm font-semibold text-gray-900">{summary.interestRate}%</p>
                         </div>
                     </div>
@@ -164,10 +166,10 @@ export function SavingsAccountCard({ accountNumber }: SavingsAccountCardProps) {
                             <div className="flex-1">
                                 <div className="flex items-center gap-2 mb-1">
                                     <Target className="w-4 h-4 text-gray-500" />
-                                    <p className="text-xs text-gray-500 font-medium">Plafond de rémunération</p>
+                                    <p className="text-xs text-gray-500 font-medium">{t("remunerationCeiling")}</p>
                                 </div>
                                 <p className="text-sm font-semibold text-gray-900">
-                                    {summary.maxDepositAmount.toLocaleString('fr-FR')} €
+                                    {format.number(summary.maxDepositAmount, { style: 'currency', currency: 'EUR' })}
                                 </p>
                                 <div className="mt-2">
                                     <div className="w-full bg-gray-200 rounded-full h-2">
@@ -177,7 +179,7 @@ export function SavingsAccountCard({ accountNumber }: SavingsAccountCardProps) {
                                         ></div>
                                     </div>
                                     <p className="text-xs text-gray-500 mt-1">
-                                        {effectiveBalance.toLocaleString('fr-FR')} € / {summary.maxDepositAmount.toLocaleString('fr-FR')} €
+                                        {format.number(effectiveBalance, { style: 'currency', currency: 'EUR' })} / {format.number(summary.maxDepositAmount, { style: 'currency', currency: 'EUR' })}
                                     </p>
                                 </div>
                             </div>
@@ -187,14 +189,11 @@ export function SavingsAccountCard({ accountNumber }: SavingsAccountCardProps) {
                     {summary.lastInterestApplied && (
                         <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                             <div>
-                                <p className="text-xs text-gray-500 font-medium">Dernier calcul d'intérêts</p>
+                                <p className="text-xs text-gray-500 font-medium">{t("lastInterestCalc")}</p>
                                 <p className="text-sm font-semibold text-gray-900">
-                                    {new Date(summary.lastInterestApplied).toLocaleDateString('fr-FR', {
-                                        day: 'numeric',
-                                        month: 'long',
-                                        year: 'numeric',
-                                        hour: '2-digit',
-                                        minute: '2-digit'
+                                    {format.dateTime(new Date(summary.lastInterestApplied), {
+                                        dateStyle: 'long',
+                                        timeStyle: 'short'
                                     })}
                                 </p>
                             </div>
@@ -205,9 +204,10 @@ export function SavingsAccountCard({ accountNumber }: SavingsAccountCardProps) {
                 {/* Info message */}
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                     <p className="text-xs text-blue-800">
-                        💡 <strong>Comment ça marche ?</strong> Vos intérêts sont calculés quotidiennement sur votre solde
-                        {summary.maxDepositAmount && ` (jusqu'à ${summary.maxDepositAmount.toLocaleString('fr-FR')} €)`}
-                        {' '}et ajoutés automatiquement à votre compte.
+                        {t.rich("howItWorksMessage", {
+                            strong: (chunks) => <strong>{chunks}</strong>,
+                            ceiling: summary.maxDepositAmount ? t("ceilingInfo", { amount: format.number(summary.maxDepositAmount, { style: 'currency', currency: 'EUR' }) }) : ""
+                        })}
                     </p>
                 </div>
             </div>

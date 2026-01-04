@@ -3,9 +3,9 @@
 import Button from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { BeneficiaryGroup } from "@/types/beneficiaryGroup";
-import { useTranslations } from "next-intl";
+import { useTranslations, useFormatter } from "next-intl";
 
-import { Edit, Trash2, Users, UserPlus, Send} from "lucide-react";
+import { Edit, Trash2, Users, UserPlus, Send } from "lucide-react";
 
 interface BeneficiaryGroupCardProps {
   group: BeneficiaryGroup;
@@ -18,8 +18,9 @@ interface BeneficiaryGroupCardProps {
   onTransferToGroup?: (group: BeneficiaryGroup) => void;
 }
 
-export function BeneficiaryGroupCard({group,beneficiariesCount,onEdit,onDelete,onAddBeneficiary,onViewBeneficiaries,onTransferToGroup}: BeneficiaryGroupCardProps) {
+export function BeneficiaryGroupCard({ group, beneficiariesCount, onEdit, onDelete, onAddBeneficiary, onViewBeneficiaries, onTransferToGroup }: BeneficiaryGroupCardProps) {
   const t = useTranslations('components.beneficiaries.group.card');
+  const format = useFormatter();
   const count = beneficiariesCount ?? group.beneficiaryIds.length;
 
   return (
@@ -46,7 +47,7 @@ export function BeneficiaryGroupCard({group,beneficiariesCount,onEdit,onDelete,o
       <div className="mb-4 text-sm text-gray-600">
         <p>
           {t('createdAt', {
-            date: new Date(group.createdAt).toLocaleDateString("fr-FR", {
+            date: format.dateTime(new Date(group.createdAt), {
               day: "2-digit",
               month: "long",
               year: "numeric",
@@ -56,7 +57,7 @@ export function BeneficiaryGroupCard({group,beneficiariesCount,onEdit,onDelete,o
         {group.updatedAt !== group.createdAt && (
           <p className="text-xs text-gray-500 mt-1">
             {t('updatedAt', {
-              date: new Date(group.updatedAt).toLocaleDateString("fr-FR", {
+              date: format.dateTime(new Date(group.updatedAt), {
                 day: "2-digit",
                 month: "long",
                 year: "numeric",

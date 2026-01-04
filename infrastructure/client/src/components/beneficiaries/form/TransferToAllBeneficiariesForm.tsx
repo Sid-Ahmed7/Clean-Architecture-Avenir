@@ -5,7 +5,7 @@ import { Beneficiary } from "@/types/beneficiary";
 import Button from "@/components/ui/Button";
 import { Users, AlertCircle, CheckCircle } from "lucide-react";
 import { Input } from "@/components/ui/Input";
-import { useTranslations } from "next-intl";
+import { useTranslations, useFormatter } from "next-intl";
 
 interface TransferToAllBeneficiariesFormProps {
   beneficiaries: Beneficiary[];
@@ -17,8 +17,9 @@ interface TransferToAllBeneficiariesFormProps {
   onCancel: () => void;
 }
 
-export function TransferToAllBeneficiariesForm({beneficiaries,onSubmit,onCancel}: TransferToAllBeneficiariesFormProps) {
+export function TransferToAllBeneficiariesForm({ beneficiaries, onSubmit, onCancel }: TransferToAllBeneficiariesFormProps) {
   const t = useTranslations('components.beneficiaries.form.transferToAll');
+  const format = useFormatter();
   const [sourceAccountNumber, setSourceAccountNumber] = useState("");
   const [totalAmount, setTotalAmount] = useState("");
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -141,14 +142,14 @@ export function TransferToAllBeneficiariesForm({beneficiaries,onSubmit,onCancel}
               <div className="mt-2 space-y-1 text-sm text-green-800">
                 <p>
                   <span className="font-medium">{t('distribution.totalAmount')}:</span>{" "}
-                  {parseFloat(totalAmount).toFixed(2)} €
+                  {format.number(parseFloat(totalAmount), { style: 'currency', currency: 'EUR' })}
                 </p>
                 <p>
                   <span className="font-medium">{t('distribution.beneficiariesCount')}:</span>{" "}
                   {beneficiaryCount}
                 </p>
                 <p className="text-base font-semibold mt-2">
-                  {t('distribution.perBeneficiary', { amount: amountPerBeneficiary.toFixed(2) })}
+                  {t('distribution.perBeneficiary', { amount: format.number(amountPerBeneficiary, { style: 'currency', currency: 'EUR' }) })}
                 </p>
               </div>
             </div>
@@ -177,7 +178,7 @@ export function TransferToAllBeneficiariesForm({beneficiaries,onSubmit,onCancel}
                 </div>
                 {amountPerBeneficiary > 0 && (
                   <span className="text-sm font-semibold text-green-600">
-                    +{amountPerBeneficiary.toFixed(2)} €
+                    +{format.number(amountPerBeneficiary, { style: 'currency', currency: 'EUR' })}
                   </span>
                 )}
               </div>

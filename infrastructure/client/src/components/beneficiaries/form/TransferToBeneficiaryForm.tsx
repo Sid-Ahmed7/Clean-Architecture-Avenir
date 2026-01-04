@@ -8,7 +8,7 @@ import { Beneficiary } from "@/types/beneficiary";
 import { Send } from "lucide-react";
 import { TransferToBeneficiaryRequest } from "@/types/transfer";
 import { transferToBeneficiarySchema } from "@/lib/validation/transfer/transferToBeneficiarySchema";
-import { useTranslations } from "next-intl";
+import { useTranslations, useFormatter } from "next-intl";
 import { useUserAccounts } from "@/hooks/useUserAccounts";
 
 interface TransferToBeneficiaryFormProps {
@@ -18,14 +18,15 @@ interface TransferToBeneficiaryFormProps {
 }
 
 export function TransferToBeneficiaryForm({ beneficiary, onSubmit, onCancel }: TransferToBeneficiaryFormProps) {
-    const t = useTranslations('components.beneficiaries.form.transferToBeneficiary');
-    const { accounts, loading: loadingAccounts } = useUserAccounts();
-    const {register,handleSubmit,formState: { errors, isSubmitting }} = useForm<TransferToBeneficiaryRequest>({
-        resolver: zodResolver(transferToBeneficiarySchema(t)),
-        defaultValues: {
-            beneficiaryId: beneficiary.beneficiaryId,
-        },
-    });
+  const t = useTranslations('components.beneficiaries.form.transferToBeneficiary');
+  const format = useFormatter();
+  const { accounts, loading: loadingAccounts } = useUserAccounts();
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<TransferToBeneficiaryRequest>({
+    resolver: zodResolver(transferToBeneficiarySchema(t)),
+    defaultValues: {
+      beneficiaryId: beneficiary.beneficiaryId,
+    },
+  });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -48,7 +49,7 @@ export function TransferToBeneficiaryForm({ beneficiary, onSubmit, onCancel }: T
           <option value="">{t('selectAccount')}</option>
           {accounts.map((account) => (
             <option key={account.accountNumber} value={account.accountNumber}>
-              {account.accountType} - {account.accountNumber} ({account.currentBalance.toFixed(2)} €)
+              {account.accountType} - {account.accountNumber} ({format.number(account.currentBalance, { style: 'currency', currency: account.currency })})
             </option>
           ))}
         </select>
