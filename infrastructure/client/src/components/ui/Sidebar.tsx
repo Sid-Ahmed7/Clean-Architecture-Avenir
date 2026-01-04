@@ -64,6 +64,12 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     return pathname?.includes(href);
   };
 
+  console.log('[Sidebar] Rendering Sidebar');
+  console.log('[Sidebar] isOpen:', isOpen);
+  console.log('[Sidebar] user:', user);
+  console.log('[Sidebar] isAuthenticated:', isAuthenticated);
+  console.log('[Sidebar] rolePrefix:', rolePrefix);
+
   return (
     <>
       {isOpen && (

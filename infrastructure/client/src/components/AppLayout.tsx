@@ -18,6 +18,9 @@ export default function AppLayout({ children }: AppLayoutProps) {
 
   useAuthRedirect();
 
+  console.log('[AppLayout] Rendering AppLayout');
+  console.log('[AppLayout] isSidebarOpen:', isSidebarOpen);
+
   const handleMenuClick = () => setIsSidebarOpen(true);
   const handleSidebarClose = () => setIsSidebarOpen(false);
 
