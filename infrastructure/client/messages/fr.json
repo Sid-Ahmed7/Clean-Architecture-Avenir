@@ -482,6 +482,12 @@
         "userExists": "Un utilisateur avec cet email existe déjà.",
         "error": "Une erreur est survenue lors de l'inscription. Veuillez réessayer."
       }
+    },
+    "confirm": {
+      "title": "Confirmation du compte",
+      "waiting": "En attente de confirmation..",
+      "success": "Confirmation réussie ! Vous allez être redirigé vers la page de login",
+      "error": "Erreur lors de la confirmation"
     }
   },
   "titles": {

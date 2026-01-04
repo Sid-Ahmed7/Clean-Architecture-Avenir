@@ -482,6 +482,12 @@
         "userExists": "A user with this email already exists.",
         "error": "An error occurred during registration. Please try again."
       }
+    },
+    "confirm": {
+      "title": "Account Confirmation",
+      "waiting": "Waiting for confirmation...",
+      "success": "Confirmation successful! You will be redirected to the login page",
+      "error": "Error during confirmation"
     }
   },
   "titles": {
