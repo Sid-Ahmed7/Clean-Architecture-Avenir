@@ -7,8 +7,10 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Users, UserCheck, Briefcase, Trash2, Edit, X } from "lucide-react";
 import { User } from "@/types/user";
+import { useTranslations } from "next-intl";
 
 export default function UsersManagementPage() {
+    const t = useTranslations("manager.users");
     const { user } = useContext(AuthContext);
     const [users, setUsers] = useState<User[]>([]);
     const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
@@ -111,7 +113,7 @@ export default function UsersManagementPage() {
     };
 
     const handleDeleteUser = async (userId: string) => {
-        if (!confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cela supprimera également tous ses comptes et données associées.")) {
+        if (!confirm(t("deleteConfirm"))) {
             return;
         }
 
@@ -145,7 +147,7 @@ export default function UsersManagementPage() {
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-screen bg-white">
-                <p className="text-gray-700">Chargement...</p>
+                <p className="text-gray-700">{t("loading")}</p>
             </div>
         );
     }
@@ -158,9 +160,9 @@ export default function UsersManagementPage() {
                     <div className="p-3 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-xl">
                         <Users className="w-6 h-6 text-white" />
                     </div>
-                    <h1 className="text-2xl font-bold text-gray-900">Gestion des Utilisateurs</h1>
+                    <h1 className="text-2xl font-bold text-gray-900">{t("title")}</h1>
                 </div>
-                <p className="text-gray-700 ml-14">Gérez tous les utilisateurs, clients et conseillers</p>
+                <p className="text-gray-700 ml-14">{t("subtitle")}</p>
             </div>
 
             {/* Tabs */}
@@ -173,7 +175,7 @@ export default function UsersManagementPage() {
                         }`}
                 >
                     <Users className="w-4 h-4" />
-                    Tous ({users.length})
+                    {t("tabs.all")} ({users.length})
                 </button>
                 <button
                     onClick={() => setActiveTab("clients")}
@@ -183,7 +185,7 @@ export default function UsersManagementPage() {
                         }`}
                 >
                     <UserCheck className="w-4 h-4" />
-                    Clients ({users.filter(u => u.roles?.includes("CLIENT")).length})
+                    {t("tabs.clients")} ({users.filter(u => u.roles?.includes("CLIENT")).length})
                 </button>
                 <button
                     onClick={() => setActiveTab("advisors")}
@@ -193,7 +195,7 @@ export default function UsersManagementPage() {
                         }`}
                 >
                     <Briefcase className="w-4 h-4" />
-                    Conseillers ({users.filter(u => u.roles?.includes("BANK_ADVISOR")).length})
+                    {t("tabs.advisors")} ({users.filter(u => u.roles?.includes("BANK_ADVISOR")).length})
                 </button>
             </div>
 
@@ -203,20 +205,20 @@ export default function UsersManagementPage() {
                     <table className="w-full">
                         <thead className="bg-gray-50 border-b border-gray-200">
                             <tr>
-                                <th className="text-left p-4 text-sm font-semibold text-gray-700">Nom</th>
-                                <th className="text-left p-4 text-sm font-semibold text-gray-700">Email</th>
-                                <th className="text-left p-4 text-sm font-semibold text-gray-700">Téléphone</th>
-                                <th className="text-left p-4 text-sm font-semibold text-gray-700">Statut</th>
-                                <th className="text-left p-4 text-sm font-semibold text-gray-700">Rôles</th>
-                                <th className="text-left p-4 text-sm font-semibold text-gray-700">Inscrit</th>
-                                <th className="text-right p-4 text-sm font-semibold text-gray-700">Actions</th>
+                                <th className="text-left p-4 text-sm font-semibold text-gray-700">{t("table.name")}</th>
+                                <th className="text-left p-4 text-sm font-semibold text-gray-700">{t("table.email")}</th>
+                                <th className="text-left p-4 text-sm font-semibold text-gray-700">{t("table.phone")}</th>
+                                <th className="text-left p-4 text-sm font-semibold text-gray-700">{t("table.status")}</th>
+                                <th className="text-left p-4 text-sm font-semibold text-gray-700">{t("table.roles")}</th>
+                                <th className="text-left p-4 text-sm font-semibold text-gray-700">{t("table.registered")}</th>
+                                <th className="text-right p-4 text-sm font-semibold text-gray-700">{t("table.actions")}</th>
                             </tr>
                         </thead>
                         <tbody>
                             {filteredUsers.length === 0 ? (
                                 <tr>
                                     <td colSpan={7} className="text-center p-8 text-gray-500">
-                                        Aucun utilisateur trouvé
+                                        {t("table.noUsers")}
                                     </td>
                                 </tr>
                             ) : (
@@ -239,9 +241,9 @@ export default function UsersManagementPage() {
                                         </td>
                                         <td className="p-4">
                                             {user.isRegistered ? (
-                                                <Badge variant="success">Oui</Badge>
+                                                <Badge variant="success">{t("status.yes")}</Badge>
                                             ) : (
-                                                <Badge variant="neutral">Non</Badge>
+                                                <Badge variant="neutral">{t("status.no")}</Badge>
                                             )}
                                         </td>
                                         <td className="p-4 text-right">
@@ -251,14 +253,14 @@ export default function UsersManagementPage() {
                                                     className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm cursor-pointer"
                                                 >
                                                     <Edit className="w-4 h-4" />
-                                                    Modifier
+                                                    {t("actions.edit")}
                                                 </button>
                                                 <button
                                                     onClick={() => handleDeleteUser(user.id)}
                                                     className="inline-flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors font-medium text-sm cursor-pointer"
                                                 >
                                                     <Trash2 className="w-4 h-4" />
-                                                    Supprimer
+                                                    {t("actions.delete")}
                                                 </button>
                                             </div>
                                         </td>
@@ -281,7 +283,7 @@ export default function UsersManagementPage() {
                                     <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-lg">
                                         <Edit className="w-5 h-5 text-white" />
                                     </div>
-                                    <h2 className="text-xl font-bold text-gray-900">Modifier l'utilisateur</h2>
+                                    <h2 className="text-xl font-bold text-gray-900">{t("editModal.title")}</h2>
                                 </div>
                                 <button
                                     onClick={closeEditModal}
@@ -297,7 +299,7 @@ export default function UsersManagementPage() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                        Prénom
+                                        {t("editModal.firstName")}
                                     </label>
                                     <Input
                                         type="text"
@@ -308,7 +310,7 @@ export default function UsersManagementPage() {
                                 </div>
                                 <div>
                                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                        Nom
+                                        {t("editModal.lastName")}
                                     </label>
                                     <Input
                                         type="text"
@@ -364,9 +366,9 @@ export default function UsersManagementPage() {
                                     onChange={(e) => setEditForm({ ...editForm, status: e.target.value })}
                                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900 font-medium"
                                 >
-                                    <option value="ACTIVE" className="text-gray-900">Actif</option>
-                                    <option value="INACTIVE" className="text-gray-900">Inactif</option>
-                                    <option value="SUSPENDED" className="text-gray-900">Suspendu</option>
+                                    <option value="ACTIVE" className="text-gray-900">{t("editModal.statusOptions.active")}</option>
+                                    <option value="INACTIVE" className="text-gray-900">{t("editModal.statusOptions.inactive")}</option>
+                                    <option value="SUSPENDED" className="text-gray-900">{t("editModal.statusOptions.suspended")}</option>
                                 </select>
                             </div>
 
@@ -377,13 +379,13 @@ export default function UsersManagementPage() {
                                     onClick={closeEditModal}
                                     className="flex-1 px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg font-semibold transition-colors"
                                 >
-                                    Annuler
+                                    {t("editModal.cancel")}
                                 </button>
                                 <button
                                     type="submit"
                                     className="flex-1 px-6 py-3 bg-gradient-to-br from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white rounded-lg font-semibold transition-all shadow-lg"
                                 >
-                                    Enregistrer
+                                    {t("editModal.save")}
                                 </button>
                             </div>
                         </form>

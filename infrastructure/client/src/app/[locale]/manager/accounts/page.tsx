@@ -6,8 +6,10 @@ import { Badge } from "@/components/ui/Badge";
 import { Input } from "@/components/ui/Input";
 import { Wallet, Search, TrendingUp, Trash2 } from "lucide-react";
 import { Account } from "@/types/account";
+import { useTranslations } from "next-intl";
 
 export default function AccountsOverviewPage() {
+    const t = useTranslations("manager.accounts");
     const { user } = useContext(AuthContext);
     const [accounts, setAccounts] = useState<Account[]>([]);
     const [filteredAccounts, setFilteredAccounts] = useState<Account[]>([]);
@@ -56,7 +58,7 @@ export default function AccountsOverviewPage() {
 
             if (userCheckingAccounts.length === 1) {
                 if (balance > 0) {
-                    alert("Impossible de supprimer le dernier compte courant avec un solde positif. Veuillez d'abord transférer les fonds ou vous assurer que le solde est de 0€.");
+                    alert(t("deleteConfirm.lastCheckingWithBalance"));
                     return;
                 }
             }
@@ -77,7 +79,7 @@ export default function AccountsOverviewPage() {
 
             if (!response.ok) {
                 const error = await response.json();
-                alert(error.error || "Erreur lors de la suppression");
+                alert(error.error || t("errors.deleteError"));
                 return;
             }
 
@@ -85,7 +87,7 @@ export default function AccountsOverviewPage() {
             fetchAccounts(); // Rafraîchir la liste
         } catch (error) {
             console.error("Failed to delete account:", error);
-            alert("Erreur lors de la suppression du compte");
+            alert(t("errors.deleteFailed"));
         }
     };
 
@@ -110,7 +112,7 @@ export default function AccountsOverviewPage() {
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-screen bg-white">
-                <p className="text-gray-700">Chargement...</p>
+                <p className="text-gray-700">{t("loading")}</p>
             </div>
         );
     }
@@ -125,26 +127,26 @@ export default function AccountsOverviewPage() {
                     <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl">
                         <Wallet className="w-6 h-6 text-white" />
                     </div>
-                    <h1 className="text-2xl font-bold text-gray-900">Vue d'ensemble des Comptes</h1>
+                    <h1 className="text-2xl font-bold text-gray-900">{t("title")}</h1>
                 </div>
-                <p className="text-gray-700 ml-14">Consultez tous les comptes courants et leurs soldes</p>
+                <p className="text-gray-700 ml-14">{t("subtitle")}</p>
             </div>
 
             {/* Statistics Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
-                    <p className="text-sm text-gray-600 mb-2">Total Comptes</p>
+                    <p className="text-sm text-gray-600 mb-2">{t("stats.totalAccounts")}</p>
                     <p className="text-3xl font-bold text-gray-900">{accounts.length}</p>
                 </div>
                 <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
                     <div className="flex items-center gap-2 mb-2">
                         <TrendingUp className="w-5 h-5 text-green-600" />
-                        <p className="text-sm text-gray-600">Solde Total</p>
+                        <p className="text-sm text-gray-600">{t("stats.totalBalance")}</p>
                     </div>
                     <p className="text-3xl font-bold text-green-600">{formatCurrency(totalBalance)}</p>
                 </div>
                 <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
-                    <p className="text-sm text-gray-600 mb-2">Comptes Actifs</p>
+                    <p className="text-sm text-gray-600 mb-2">{t("stats.activeAccounts")}</p>
                     <p className="text-3xl font-bold text-gray-900">{accounts.filter(a => a.isActive).length}</p>
                 </div>
             </div>
@@ -154,7 +156,7 @@ export default function AccountsOverviewPage() {
                 <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <Input
-                        placeholder="Rechercher par nom, IBAN ou numéro de compte..."
+                        placeholder={t("search")}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="pl-10"
@@ -168,21 +170,21 @@ export default function AccountsOverviewPage() {
                     <table className="w-full">
                         <thead className="bg-gray-50 border-b border-gray-200">
                             <tr>
-                                <th className="text-left p-4 text-sm font-semibold text-gray-700">Numéro</th>
-                                <th className="text-left p-4 text-sm font-semibold text-gray-700">IBAN</th>
-                                <th className="text-left p-4 text-sm font-semibold text-gray-700">Propriétaire</th>
-                                <th className="text-left p-4 text-sm font-semibold text-gray-700">Type</th>
-                                <th className="text-right p-4 text-sm font-semibold text-gray-700">Solde</th>
-                                <th className="text-left p-4 text-sm font-semibold text-gray-700">Statut</th>
-                                <th className="text-left p-4 text-sm font-semibold text-gray-700">Créé le</th>
-                                <th className="text-right p-4 text-sm font-semibold text-gray-700">Actions</th>
+                                <th className="text-left p-4 text-sm font-semibold text-gray-700">{t("table.number")}</th>
+                                <th className="text-left p-4 text-sm font-semibold text-gray-700">{t("table.iban")}</th>
+                                <th className="text-left p-4 text-sm font-semibold text-gray-700">{t("table.owner")}</th>
+                                <th className="text-left p-4 text-sm font-semibold text-gray-700">{t("table.type")}</th>
+                                <th className="text-right p-4 text-sm font-semibold text-gray-700">{t("table.balance")}</th>
+                                <th className="text-left p-4 text-sm font-semibold text-gray-700">{t("table.status")}</th>
+                                <th className="text-left p-4 text-sm font-semibold text-gray-700">{t("table.createdAt")}</th>
+                                <th className="text-right p-4 text-sm font-semibold text-gray-700">{t("table.actions")}</th>
                             </tr>
                         </thead>
                         <tbody>
                             {filteredAccounts.length === 0 ? (
                                 <tr>
                                     <td colSpan={8} className="text-center p-8 text-gray-500">
-                                        Aucun compte trouvé
+                                        {t("table.noAccounts")}
                                     </td>
                                 </tr>
                             ) : (
@@ -207,7 +209,7 @@ export default function AccountsOverviewPage() {
                                                 className="inline-flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors font-medium text-sm cursor-pointer"
                                             >
                                                 <Trash2 className="w-4 h-4" />
-                                                Supprimer
+                                                {t("actions.delete")}
                                             </button>
                                         </td>
                                     </tr>

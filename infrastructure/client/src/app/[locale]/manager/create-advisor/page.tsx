@@ -29,17 +29,17 @@ export default function CreateAdvisorPage() {
         try {
             const res = await apiClient.post("/auth/create-advisor", data);
             if (res.status === 201) {
-                setMessage("Le conseiller bancaire a été créé avec succès. Un email de confirmation a été envoyé.");
+                setMessage(t("manager.createAdvisor.messages.success"));
                 setSuccess(true);
                 reset();
             } else if (res.status === 409) {
-                setMessage("Un utilisateur avec cet email existe déjà.");
+                setMessage(t("manager.createAdvisor.messages.userExists"));
             } else {
-                setMessage("Une erreur est survenue lors de la création du conseiller.");
+                setMessage(t("manager.createAdvisor.messages.error"));
             }
         } catch (error: any) {
             console.error("Error creating advisor:", error);
-            setMessage(error.response?.data?.error || "Erreur réseau. Vérifiez que le serveur est démarré.");
+            setMessage(error.response?.data?.error || t("manager.createAdvisor.messages.networkError"));
         }
     };
 
@@ -56,7 +56,7 @@ export default function CreateAdvisorPage() {
                             variant="primary"
                             fullWidth
                         >
-                            Retour au tableau de bord
+                            {t("manager.createAdvisor.backToDashboard")}
                         </Button>
                     </div>
                 ) : (
@@ -69,13 +69,13 @@ export default function CreateAdvisorPage() {
                                 <UserCheck className="w-8 h-8 text-white" />
                             </div>
                             <h2 className="text-3xl font-bold text-gray-900">
-                                Créer un conseiller bancaire
+                                {t("manager.createAdvisor.title")}
                             </h2>
                         </div>
 
                         <div className="space-y-5">
                             <Input
-                                label="Prénom"
+                                label={t("manager.createAdvisor.firstName")}
                                 icon={User}
                                 variant="gradient"
                                 placeholder="Marie"
@@ -84,7 +84,7 @@ export default function CreateAdvisorPage() {
                             />
 
                             <Input
-                                label="Nom"
+                                label={t("manager.createAdvisor.lastName")}
                                 icon={User}
                                 variant="gradient"
                                 placeholder="Martin"
@@ -93,7 +93,7 @@ export default function CreateAdvisorPage() {
                             />
 
                             <Input
-                                label="Email"
+                                label={t("manager.createAdvisor.email")}
                                 type="email"
                                 icon={Mail}
                                 variant="gradient"
@@ -103,7 +103,7 @@ export default function CreateAdvisorPage() {
                             />
 
                             <Input
-                                label="Mot de passe"
+                                label={t("manager.createAdvisor.password")}
                                 type="password"
                                 icon={Lock}
                                 variant="gradient"
@@ -113,7 +113,7 @@ export default function CreateAdvisorPage() {
                             />
 
                             <Input
-                                label="Numéro de téléphone"
+                                label={t("manager.createAdvisor.phone")}
                                 type="tel"
                                 icon={Phone}
                                 variant="gradient"
@@ -123,7 +123,7 @@ export default function CreateAdvisorPage() {
                             />
 
                             <Input
-                                label="Date de naissance"
+                                label={t("manager.createAdvisor.dateOfBirth")}
                                 type="date"
                                 icon={Calendar}
                                 variant="gradient"
@@ -132,7 +132,7 @@ export default function CreateAdvisorPage() {
                             />
 
                             <TextArea
-                                label="Adresse"
+                                label={t("manager.createAdvisor.address")}
                                 rows={3}
                                 variant="gradient"
                                 placeholder="123 Rue de la Banque, 75001 Paris"
@@ -143,7 +143,7 @@ export default function CreateAdvisorPage() {
 
                         <div className="mt-8">
                             <Button type="submit" variant="primary" fullWidth>
-                                Créer le conseiller
+                                {t("manager.createAdvisor.createButton")}
                             </Button>
                         </div>
 

@@ -3,8 +3,10 @@
 import { UserCog, Settings, Briefcase } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/Button";
+import { useTranslations } from "next-intl";
 
 export default function ManagerDashboard() {
+    const t = useTranslations("manager.dashboard");
     return (
         <div className="min-h-screen bg-white p-6 mx-auto space-y-8">
             {/* Manager specific content */}
@@ -15,9 +17,9 @@ export default function ManagerDashboard() {
                         <div className="p-3 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl">
                             <Briefcase className="w-6 h-6 text-white" />
                         </div>
-                        <h2 className="text-2xl font-bold text-gray-900">Gestion de l'Agence</h2>
+                        <h2 className="text-2xl font-bold text-gray-900">{t("title")}</h2>
                     </div>
-                    <p className="text-gray-700 ml-14">Administration des conseillers et paramètres de l'agence</p>
+                    <p className="text-gray-700 ml-14">{t("subtitle")}</p>
                 </div>
 
                 {/* Manager Actions Grid */}
@@ -28,15 +30,15 @@ export default function ManagerDashboard() {
                             <div className="p-2 bg-blue-100 rounded-lg">
                                 <UserCog className="w-5 h-5 text-blue-600" />
                             </div>
-                            <h3 className="text-lg font-bold text-gray-900">Gestion des Conseillers</h3>
+                            <h3 className="text-lg font-bold text-gray-900">{t("advisorManagement.title")}</h3>
                         </div>
                         <p className="text-sm text-gray-600 mb-4">
-                            Créez et gérez les conseillers bancaires de votre agence.
+                            {t("advisorManagement.description")}
                         </p>
                         <div className="space-y-2">
                             <Link href="/manager/create-advisor">
                                 <Button variant="primary" fullWidth icon={UserCog} size="sm">
-                                    Créer un conseiller
+                                    {t("advisorManagement.createButton")}
                                 </Button>
                             </Link>
                         </div>
@@ -48,15 +50,15 @@ export default function ManagerDashboard() {
                             <div className="p-2 bg-green-100 rounded-lg">
                                 <Settings className="w-5 h-5 text-green-600" />
                             </div>
-                            <h3 className="text-lg font-bold text-gray-900">Paramètres de l'Agence</h3>
+                            <h3 className="text-lg font-bold text-gray-900">{t("agencySettings.title")}</h3>
                         </div>
                         <p className="text-sm text-gray-600 mb-4">
-                            Configurez les paramètres de votre agence.
+                            {t("agencySettings.description")}
                         </p>
                         <div className="space-y-2">
                             <Link href="/manager/agency-settings">
                                 <Button variant="secondary" fullWidth icon={Settings} size="sm">
-                                    Paramètres agence
+                                    {t("agencySettings.button")}
                                 </Button>
                             </Link>
                         </div>

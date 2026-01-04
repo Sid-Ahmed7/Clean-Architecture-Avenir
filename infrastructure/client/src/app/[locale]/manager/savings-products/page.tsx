@@ -6,6 +6,7 @@ import { ArrowLeft, Plus, Edit, TrendingUp, Users } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { Input } from "@/components/ui/Input";
 import { TextArea } from "@/components/ui/TextArea";
+import { useTranslations } from "next-intl";
 
 interface SavingsProduct {
     id: string;
@@ -19,6 +20,7 @@ interface SavingsProduct {
 }
 
 export default function ManagerSavingsProductsPage() {
+    const t = useTranslations("manager.savingsProducts");
     const [products, setProducts] = useState<SavingsProduct[]>([]);
     const [loading, setLoading] = useState(true);
     const [showCreateForm, setShowCreateForm] = useState(false);
@@ -64,7 +66,7 @@ export default function ManagerSavingsProductsPage() {
             resetForm();
             await loadProducts();
         } catch (error: any) {
-            setMessage(error.response?.data?.error || "Erreur lors de la création");
+            setMessage(error.response?.data?.error || t("messages.createError"));
         }
     };
 
@@ -83,7 +85,7 @@ export default function ManagerSavingsProductsPage() {
             resetForm();
             await loadProducts();
         } catch (error: any) {
-            setMessage(error.response?.data?.error || "Erreur lors de la mise à jour");
+            setMessage(error.response?.data?.error || t("messages.updateError"));
         }
     };
 
@@ -139,7 +141,7 @@ export default function ManagerSavingsProductsPage() {
                             className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all flex items-center gap-2"
                         >
                             <Plus className="w-5 h-5" />
-                            Nouveau Produit
+                            {t("newProduct")}
                         </button>
                     </div>
                 </div>
@@ -157,56 +159,56 @@ export default function ManagerSavingsProductsPage() {
                 {(showCreateForm || editingProduct) && (
                     <div className="bg-white rounded-2xl shadow-xl p-8 mb-8 border border-gray-200">
                         <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                            {editingProduct ? "Modifier le Produit" : "Créer un Nouveau Produit"}
+                            {editingProduct ? t("form.editTitle") : t("form.createTitle")}
                         </h2>
                         <form onSubmit={editingProduct ? handleUpdateProduct : handleCreateProduct} className="space-y-4">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <Input
-                                    label="Nom du produit"
+                                    label={t("form.name")}
                                     type="text"
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                     disabled={!!editingProduct}
                                     required
-                                    placeholder="Livret A, PEL, etc."
+                                    placeholder={t("form.namePlaceholder")}
                                 />
 
                                 <Input
-                                    label="Taux d'intérêt annuel (%)"
+                                    label={t("form.interestRate")}
                                     type="number"
                                     step="0.01"
                                     value={formData.interestRate}
                                     onChange={(e) => setFormData({ ...formData, interestRate: e.target.value })}
                                     required
-                                    placeholder="3.5"
+                                    placeholder={t("form.interestRatePlaceholder")}
                                 />
 
                                 <Input
-                                    label="Plafond de rémunération (€)"
+                                    label={t("form.maxDeposit")}
                                     type="number"
                                     step="0.01"
                                     value={formData.maxDepositAmount}
                                     onChange={(e) => setFormData({ ...formData, maxDepositAmount: e.target.value })}
-                                    placeholder="22950"
+                                    placeholder={t("form.maxDepositPlaceholder")}
                                 />
 
                                 <Input
-                                    label="Dépôt minimum (€)"
+                                    label={t("form.minDeposit")}
                                     type="number"
                                     step="0.01"
                                     value={formData.minDepositAmount}
                                     onChange={(e) => setFormData({ ...formData, minDepositAmount: e.target.value })}
-                                    placeholder="10"
+                                    placeholder={t("form.minDepositPlaceholder")}
                                 />
                             </div>
 
                             <TextArea
-                                label="Description"
+                                label={t("form.description")}
                                 value={formData.description}
                                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                                 disabled={!!editingProduct}
                                 rows={3}
-                                placeholder="Description du produit d'épargne..."
+                                placeholder={t("form.descriptionPlaceholder")}
                             />
 
                             <div className="flex gap-3">
@@ -214,7 +216,7 @@ export default function ManagerSavingsProductsPage() {
                                     type="submit"
                                     className="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-colors"
                                 >
-                                    {editingProduct ? "Mettre à jour" : "Créer"}
+                                    {editingProduct ? t("form.updateButton") : t("form.createButton")}
                                 </button>
                                 <button
                                     type="button"
@@ -225,7 +227,7 @@ export default function ManagerSavingsProductsPage() {
                                     }}
                                     className="px-6 py-2 bg-gray-200 text-gray-700 font-semibold rounded-lg hover:bg-gray-300 transition-colors"
                                 >
-                                    Annuler
+                                    {t("form.cancel")}
                                 </button>
                             </div>
                         </form>
@@ -235,7 +237,7 @@ export default function ManagerSavingsProductsPage() {
                 {/* Products List */}
                 <div>
                     <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                        Produits Existants
+                        {t("existingProducts")}
                     </h2>
 
                     {loading ? (
@@ -249,7 +251,7 @@ export default function ManagerSavingsProductsPage() {
                         </div>
                     ) : products.length === 0 ? (
                         <div className="bg-white rounded-xl p-12 text-center">
-                            <p className="text-gray-500">Aucun produit créé. Créez votre premier produit d'épargne !</p>
+                            <p className="text-gray-500">{t("noProducts")}</p>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -267,7 +269,7 @@ export default function ManagerSavingsProductsPage() {
                                             ? "bg-emerald-100 text-emerald-700"
                                             : "bg-gray-100 text-gray-600"
                                             }`}>
-                                            {product.isActive ? "Actif" : "Inactif"}
+                                            {product.isActive ? t("product.active") : t("product.inactive")}
                                         </span>
                                     </div>
 
@@ -278,7 +280,7 @@ export default function ManagerSavingsProductsPage() {
                                     <div className="space-y-2 mb-4">
                                         <div className="flex items-center gap-2">
                                             <TrendingUp className="w-4 h-4 text-indigo-600" />
-                                            <span className="text-sm text-gray-600">Taux :</span>
+                                            <span className="text-sm text-gray-600">{t("product.rate")}</span>
                                             <span className="font-bold text-indigo-600">
                                                 {product.interestRate}%
                                             </span>
@@ -287,7 +289,7 @@ export default function ManagerSavingsProductsPage() {
                                         {product.maxDepositAmount && (
                                             <div className="flex items-center gap-2">
                                                 <Users className="w-4 h-4 text-purple-600" />
-                                                <span className="text-sm text-gray-600">Plafond :</span>
+                                                <span className="text-sm text-gray-600">{t("product.ceiling")}</span>
                                                 <span className="font-semibold text-gray-900">
                                                     {product.maxDepositAmount.toLocaleString('fr-FR')} €
                                                 </span>
@@ -300,7 +302,7 @@ export default function ManagerSavingsProductsPage() {
                                         className="w-full px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all flex items-center justify-center gap-2"
                                     >
                                         <Edit className="w-4 h-4" />
-                                        Modifier
+                                        {t("product.edit")}
                                     </button>
                                 </div>
                             ))}

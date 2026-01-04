@@ -6,8 +6,10 @@ import { Badge } from "@/components/ui/Badge";
 import { Input } from "@/components/ui/Input";
 import { PiggyBank, Search, TrendingUp, DollarSign, Trash2 } from "lucide-react";
 import { SavingsAccount } from "@/types/savingsAccount";
+import { useTranslations } from "next-intl";
 
 export default function SavingsAccountsOverviewPage() {
+    const t = useTranslations("manager.savings");
     const { user } = useContext(AuthContext);
     const [savingsAccounts, setSavingsAccounts] = useState<SavingsAccount[]>([]);
     const [filteredAccounts, setFilteredAccounts] = useState<SavingsAccount[]>([]);
@@ -62,7 +64,7 @@ export default function SavingsAccountsOverviewPage() {
 
             if (!response.ok) {
                 const error = await response.json();
-                alert(error.error || "Erreur lors de la suppression");
+                alert(error.error || t("errors.deleteError"));
                 return;
             }
 
@@ -70,7 +72,7 @@ export default function SavingsAccountsOverviewPage() {
             fetchSavingsAccounts(); // Rafraîchir la liste
         } catch (error) {
             console.error("Failed to delete savings account:", error);
-            alert("Erreur lors de la suppression du compte épargne");
+            alert(t("errors.deleteFailed"));
         }
     };
 
@@ -84,7 +86,7 @@ export default function SavingsAccountsOverviewPage() {
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-screen bg-white">
-                <p className="text-gray-700">Chargement...</p>
+                <p className="text-gray-700">{t("loading")}</p>
             </div>
         );
     }
@@ -103,33 +105,33 @@ export default function SavingsAccountsOverviewPage() {
                     <div className="p-3 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl">
                         <PiggyBank className="w-6 h-6 text-white" />
                     </div>
-                    <h1 className="text-2xl font-bold text-gray-900">Vue d'ensemble des Comptes Épargne</h1>
+                    <h1 className="text-2xl font-bold text-gray-900">{t("title")}</h1>
                 </div>
-                <p className="text-gray-700 ml-14">Consultez tous les comptes épargne, taux d'intérêt et gains</p>
+                <p className="text-gray-700 ml-14">{t("subtitle")}</p>
             </div>
 
             {/* Statistics Cards */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
-                    <p className="text-sm text-gray-600 mb-2">Total Comptes</p>
+                    <p className="text-sm text-gray-600 mb-2">{t("stats.totalAccounts")}</p>
                     <p className="text-3xl font-bold text-gray-900">{savingsAccounts.length}</p>
                 </div>
                 <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
                     <div className="flex items-center gap-2 mb-2">
                         <TrendingUp className="w-5 h-5 text-green-600" />
-                        <p className="text-sm text-gray-600">Solde Total</p>
+                        <p className="text-sm text-gray-600">{t("stats.totalBalance")}</p>
                     </div>
                     <p className="text-3xl font-bold text-green-600">{formatCurrency(totalBalance)}</p>
                 </div>
                 <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
                     <div className="flex items-center gap-2 mb-2">
                         <DollarSign className="w-5 h-5 text-emerald-600" />
-                        <p className="text-sm text-gray-600">Intérêts Totaux</p>
+                        <p className="text-sm text-gray-600">{t("stats.totalInterest")}</p>
                     </div>
                     <p className="text-3xl font-bold text-emerald-600">{formatCurrency(totalInterestEarned)}</p>
                 </div>
                 <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
-                    <p className="text-sm text-gray-600 mb-2">Taux Moyen</p>
+                    <p className="text-sm text-gray-600 mb-2">{t("stats.averageRate")}</p>
                     <p className="text-3xl font-bold text-green-600">{averageInterestRate.toFixed(2)}%</p>
                 </div>
             </div>
@@ -139,7 +141,7 @@ export default function SavingsAccountsOverviewPage() {
                 <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <Input
-                        placeholder="Rechercher par nom ou numéro de compte..."
+                        placeholder={t("search")}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="pl-10"
@@ -153,21 +155,21 @@ export default function SavingsAccountsOverviewPage() {
                     <table className="w-full">
                         <thead className="bg-gray-50 border-b border-gray-200">
                             <tr>
-                                <th className="text-left p-4 text-sm font-semibold text-gray-700">Numéro</th>
-                                <th className="text-left p-4 text-sm font-semibold text-gray-700">Propriétaire</th>
-                                <th className="text-right p-4 text-sm font-semibold text-gray-700">Solde</th>
-                                <th className="text-right p-4 text-sm font-semibold text-gray-700">Taux d'intérêt</th>
-                                <th className="text-right p-4 text-sm font-semibold text-gray-700">Intérêts Totaux</th>
-                                <th className="text-left p-4 text-sm font-semibold text-gray-700">Statut</th>
-                                <th className="text-left p-4 text-sm font-semibold text-gray-700">Dernière MAJ</th>
-                                <th className="text-right p-4 text-sm font-semibold text-gray-700">Actions</th>
+                                <th className="text-left p-4 text-sm font-semibold text-gray-700">{t("table.number")}</th>
+                                <th className="text-left p-4 text-sm font-semibold text-gray-700">{t("table.owner")}</th>
+                                <th className="text-right p-4 text-sm font-semibold text-gray-700">{t("table.balance")}</th>
+                                <th className="text-right p-4 text-sm font-semibold text-gray-700">{t("table.interestRate")}</th>
+                                <th className="text-right p-4 text-sm font-semibold text-gray-700">{t("table.totalInterest")}</th>
+                                <th className="text-left p-4 text-sm font-semibold text-gray-700">{t("table.status")}</th>
+                                <th className="text-left p-4 text-sm font-semibold text-gray-700">{t("table.lastUpdate")}</th>
+                                <th className="text-right p-4 text-sm font-semibold text-gray-700">{t("table.actions")}</th>
                             </tr>
                         </thead>
                         <tbody>
                             {filteredAccounts.length === 0 ? (
                                 <tr>
                                     <td colSpan={8} className="text-center p-8 text-gray-500">
-                                        Aucun compte épargne trouvé
+                                        {t("table.noAccounts")}
                                     </td>
                                 </tr>
                             ) : (
@@ -186,9 +188,9 @@ export default function SavingsAccountsOverviewPage() {
                                         </td>
                                         <td className="p-4">
                                             {account.isActive ? (
-                                                <Badge variant="success">Actif</Badge>
+                                                <Badge variant="success">{t("status.active")}</Badge>
                                             ) : (
-                                                <Badge variant="neutral">Inactif</Badge>
+                                                <Badge variant="neutral">{t("status.inactive")}</Badge>
                                             )}
                                         </td>
                                         <td className="p-4 text-gray-700">
@@ -200,7 +202,7 @@ export default function SavingsAccountsOverviewPage() {
                                                 className="inline-flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors font-medium text-sm cursor-pointer"
                                             >
                                                 <Trash2 className="w-4 h-4" />
-                                                Supprimer
+                                                {t("actions.delete")}
                                             </button>
                                         </td>
                                     </tr>
