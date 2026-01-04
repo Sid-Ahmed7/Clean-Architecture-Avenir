@@ -1,6 +1,27 @@
 import { EmailService, SendEmailOptions } from "../../../application/ports/services/EmailService";
 import { EmailComposerService } from "../../../application/ports/services/EmailComposerService";
 
+type SupportedLocale = "en" | "fr";
+
+const emailTranslations = {
+  en: {
+    registration: {
+      subject: "Confirm your registration to our bank",
+      greeting: (firstName: string) => `Hello ${firstName},`,
+      body: (url: string) => `Please confirm your registration by clicking on this link:\n${url}`,
+      expiry: (expiresAt: Date) => `This link will expire on ${expiresAt.toISOString()}.`,
+    },
+  },
+  fr: {
+    registration: {
+      subject: "Confirmez votre inscription à notre banque",
+      greeting: (firstName: string) => `Bonjour ${firstName},`,
+      body: (url: string) => `Veuillez confirmer votre inscription en cliquant sur ce lien :\n${url}`,
+      expiry: (expiresAt: Date) => `Ce lien expirera le ${expiresAt.toISOString()}.`,
+    },
+  },
+};
+
 export class EmailTemplateService implements EmailComposerService {
   constructor(private readonly emailService: EmailService, private readonly baseUrl: string) {}
 
@@ -12,17 +33,19 @@ export class EmailTemplateService implements EmailComposerService {
     role: "CLIENT" | "BANK_ADVISOR" | "BANK_MANAGER",
     locale: string = "en"
   ) {
-    const url = `${this.baseUrl}/${locale}/confirm?token=${token}`;
+    const validLocale: SupportedLocale = (locale === "fr" || locale === "en") ? locale : "en";
 
-    const text = `Bonjour ${firstName},\n\nVeuillez confirmer votre inscription en cliquant sur ce lien : 
-${url}\n\nCe lien expirera le ${expiresAt.toISOString()}.`;
+    const translations = emailTranslations[validLocale].registration;
+    const url = `${this.baseUrl}/${validLocale}/confirm?token=${token}`;
+
+    const text = `${translations.greeting(firstName)}\n\n${translations.body(url)}\n\n${translations.expiry(expiresAt)}`;
 
     const options: SendEmailOptions = {
       to,
-      subject: "Confirmez votre inscription à notre banque",
+      subject: translations.subject,
       text,
       role,
-      locale
+      locale: validLocale
     };
 
     console.log("Email à envoyer :", JSON.stringify(options, null, 2));

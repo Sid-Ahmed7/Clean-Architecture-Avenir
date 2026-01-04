@@ -1,4 +1,14 @@
 {
+  "metadata": {
+    "title": "BankAvenir - Votre banque en ligne",
+    "titleTemplate": "%s | BankAvenir",
+    "description": "BankAvenir, la banque en ligne nouvelle génération. 100% en ligne, 100% sécurisé, 0% frais cachés.",
+    "keywords": "banque en ligne, compte bancaire, épargne, bourse, crédit immobilier, BankAvenir",
+    "ogTitle": "BankAvenir - Votre banque en ligne",
+    "ogDescription": "BankAvenir, la banque en ligne nouvelle génération.",
+    "twitterTitle": "BankAvenir - Votre banque en ligne",
+    "twitterDescription": "BankAvenir, la banque en ligne nouvelle génération."
+  },
   "common": {
     "appName": "BankAvenir",
     "actions": {
@@ -1552,7 +1562,6 @@
       "save": "Enregistrer",
       "cancel": "Annuler"
     }
-  }
 },
 "notFound": {
   "title": "Page non trouvée",

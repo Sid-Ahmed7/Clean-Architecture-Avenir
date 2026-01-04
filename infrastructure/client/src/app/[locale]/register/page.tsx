@@ -7,12 +7,13 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import Button from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { User, Mail, Lock, CheckCircle, Phone, Calendar, MapPin } from "lucide-react";
 
 export default function RegisterPage() {
   const router = useRouter();
+  const locale = useLocale(); 
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const t = useTranslations();
@@ -25,7 +26,7 @@ export default function RegisterPage() {
     try {
       setIsLoading(true);
       setMessage("");
-      const res = await apiClient.post("/auth/register", data);
+      const res = await apiClient.post("/auth/register", { ...data, locale });
 
       if (res.status === 201) {
         setMessage(t("auth.register.messages.success"));

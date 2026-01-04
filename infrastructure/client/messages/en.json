@@ -1,4 +1,14 @@
 {
+  "metadata": {
+    "title": "BankAvenir - Your online bank",
+    "titleTemplate": "%s | BankAvenir",
+    "description": "BankAvenir, the next generation online bank. 100% online, 100% secure, 0% hidden fees.",
+    "keywords": "online banking, bank account, savings, stock market, mortgage, BankAvenir",
+    "ogTitle": "BankAvenir - Your online bank",
+    "ogDescription": "BankAvenir, the next generation online bank.",
+    "twitterTitle": "BankAvenir - Your online bank",
+    "twitterDescription": "BankAvenir, the next generation online bank."
+  },
   "common": {
     "appName": "BankAvenir",
     "actions": {
@@ -1552,7 +1562,6 @@
       "save": "Save",
       "cancel": "Cancel"
     }
-  }
 },
 "notFound": {
   "title": "Page Not Found",

@@ -59,8 +59,9 @@ export default class AuthController {
 
     try {
       const input = await vine.validate({ schema: registerValidator, data: request.body() })
+      const locale = request.input('locale') || 'en';
 
-      const result = await registerUseCase.execute(input);
+      const result = await registerUseCase.execute(input, locale);
 
       if (result instanceof Error) {
         if (result instanceof UserAlreadyExistsError) {
@@ -91,8 +92,9 @@ export default class AuthController {
     );
 
     const input = await vine.validate({ schema: registerAdvisorValidator, data: request.body() })
+    const locale = request.input('locale') || 'en'; 
 
-    const result = await createBankAdvisorUseCase.execute(input);
+    const result = await createBankAdvisorUseCase.execute(input, locale);
 
     if (result instanceof Error) {
       if (result instanceof UserAlreadyExistsError) {
@@ -307,7 +309,9 @@ export default class AuthController {
     }
 
     const input = await vine.validate({ schema: registerManagerValidator, data: request.body() })
-    const result = await createBankManagerUseCase.execute(input);
+    const locale = request.input('locale') || 'en';
+
+    const result = await createBankManagerUseCase.execute(input, locale);
 
     if (result instanceof Error) {
       if (result instanceof UserAlreadyExistsError) {

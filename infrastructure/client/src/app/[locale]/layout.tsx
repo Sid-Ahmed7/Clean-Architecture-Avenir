@@ -10,41 +10,57 @@ import LocaleProvider from "@/contexts/LocaleProvider";
 import ReactQueryProvider from "@/contexts/ReactQueryProvider";
 import ConditionalLayout from "@/components/ConditionalLayout";
 
-export const metadata: Metadata = {
-  title: {
-    default: 'BankAvenir - Votre banque en ligne',
-    template: '%s | BankAvenir'
-  },
-  description: 'BankAvenir, la banque en ligne nouvelle génération. 100% en ligne, 100% sécurisé, 0% frais cachés.',
-  keywords: ['banque en ligne', 'compte bancaire', 'épargne', 'bourse', 'crédit immobilier', 'BankAvenir'],
-  authors: [{ name: 'BankAvenir' }],
-  openGraph: {
-    type: 'website',
-    locale: 'fr_FR',
-    url: 'https://bankavenir.com',
-    siteName: 'BankAvenir',
-    title: 'BankAvenir - Votre banque en ligne',
-    description: 'BankAvenir, la banque en ligne nouvelle génération.',
-    images: [
-      {
-        url: '/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'BankAvenir'
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const messages = messagesMap[locale as keyof typeof messagesMap];
+  const metadata = messages.metadata;
+
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const localeCode = locale === 'fr' ? 'fr_FR' : 'en_US';
+
+  return {
+    title: {
+      default: metadata.title,
+      template: metadata.titleTemplate
+    },
+    description: metadata.description,
+    keywords: metadata.keywords.split(', '),
+    authors: [{ name: 'Arthur' }, { name: 'Sid-Ahmed' }, { name: 'Sofiane' }],
+    openGraph: {
+      type: 'website',
+      locale: localeCode,
+      url: `${baseUrl}/${locale}`,
+      siteName: 'BankAvenir',
+      title: metadata.ogTitle,
+      description: metadata.ogDescription,
+      images: [
+        {
+          url: '/logo-bank.webp',
+          width: 1200,
+          height: 630,
+          alt: 'BankAvenir'
+        }
+      ]
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: metadata.twitterTitle,
+      description: metadata.twitterDescription,
+      images: ['/logo-bank.webp']
+    },
+    robots: {
+      index: true,
+      follow: true
+    },
+    alternates: {
+      canonical: `${baseUrl}/${locale}`,
+      languages: {
+        'fr': `${baseUrl}/fr`,
+        'en': `${baseUrl}/en`
       }
-    ]
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'BankAvenir - Votre banque en ligne',
-    description: 'BankAvenir, la banque en ligne nouvelle génération.',
-    images: ['/og-image.jpg']
-  },
-  robots: {
-    index: true,
-    follow: true
-  }
-};
+    }
+  };
+}
 
 type Props = {
   children: React.ReactNode;

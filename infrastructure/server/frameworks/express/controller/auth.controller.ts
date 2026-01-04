@@ -67,7 +67,8 @@ export class AuthController {
         if (!parseResult.success) {
           return res.status(400).json({ errors: parseResult.error.message });
         }
-        const result = await registerUseCase.execute(parseResult.data);
+        const locale = req.body.locale || 'en';
+        const result = await registerUseCase.execute(parseResult.data, locale);
         if (result instanceof Error) {
           if (result instanceof UserAlreadyExistsError) {
             return res.status(409).json({ error: result.message });
@@ -95,7 +96,8 @@ export class AuthController {
           return res.status(400).json({ errors: parseResult.error.message });
         }
 
-        const result = await createBankAdvisorUseCase.execute(parseResult.data);
+        const locale = req.body.locale || 'en';
+        const result = await createBankAdvisorUseCase.execute(parseResult.data, locale);
         if (result instanceof Error) {
           if (result instanceof UserAlreadyExistsError) {
             return res.status(409).json({ error: result.message });
@@ -302,7 +304,7 @@ export class AuthController {
         );
 
         const secretCode = req.body.secretCode;
-        
+
         if (!secretCode || secretCode !== process.env.MANAGER_CREATION_PASSWORD) {
             return res.status(403).json({ error: "Invalid secret code. You are not authorized to create a manager." });
         }
@@ -312,7 +314,8 @@ export class AuthController {
           return res.status(400).json({ errors: parseResult.error.message });
         }
 
-        const result = await createBankManagerUseCase.execute(parseResult.data);
+        const locale = req.body.locale || 'en';
+        const result = await createBankManagerUseCase.execute(parseResult.data, locale);
         if (result instanceof Error) {
           if (result instanceof UserAlreadyExistsError) {
             return res.status(409).json({ error: result.message });
