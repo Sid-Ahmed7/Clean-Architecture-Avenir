@@ -69,6 +69,27 @@
       "attention": "⚡ Attention",
       "available": "✓ Available",
       "remaining": "remaining"
+    },
+    "bankAccount": {
+      "summaryCard": {
+        "totalBalance": "Total Balance"
+      },
+      "quickTransfer": {
+        "title": "Quick Transfers",
+        "subtitle": "Repeat your last transactions in one click",
+        "noTransactions": "No recent transactions",
+        "unknownUser": "Unknown user",
+        "account": "Account",
+        "unknownAccount": "Unknown account",
+        "repeatTransfer": "Repeat",
+        "amount": "Amount"
+      },
+      "mainAccountCard": {
+        "title": "Main Account"
+      },
+      "accountList": {
+        "noAccounts": "No accounts available"
+      }
     }
   },
   "nav": {

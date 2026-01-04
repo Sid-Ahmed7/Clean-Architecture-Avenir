@@ -28,12 +28,6 @@ export default function ConditionalLayout({ children }: ConditionalLayoutProps) 
   const isHomePage = pathname === `/${locale}` || pathname === `/${locale}/`;
   const isPublicPage = isHomePage || publicPages.some(page => pathname === page || pathname.startsWith(`${page}/`));
 
-  console.log('[ConditionalLayout] pathname:', pathname);
-  console.log('[ConditionalLayout] locale:', locale);
-  console.log('[ConditionalLayout] isHomePage:', isHomePage);
-  console.log('[ConditionalLayout] isPublicPage:', isPublicPage);
-  console.log('[ConditionalLayout] Should render AppLayout:', !isPublicPage);
-
   if (isPublicPage) {
     return <>{children}</>;
   }
