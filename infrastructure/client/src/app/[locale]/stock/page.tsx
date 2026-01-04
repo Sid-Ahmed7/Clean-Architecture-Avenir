@@ -9,8 +9,10 @@ import { OrderTypeEnum } from "@/types/createOrder";
 import { useState } from "react";
 import { StockCard } from "@/components/stocks/StockCard";
 import { ApiPriceChart } from "@/components/stocks/StockChart";
+import { useTranslations } from "next-intl";
 
 export default function StocksPage() {
+  const t = useTranslations("pages.stock");
   const { data: backendStocks, isLoading: loadingBackend, error: errorBackend } = useStocks();
   const { data: marketData, isLoading: loadingMarket } = useMarketData();
   const [activeTab, setActiveTab] = useState<"info" | "trading">("trading");
@@ -69,10 +71,10 @@ export default function StocksPage() {
     return (
       <div className="p-6">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold text-gray-900 mb-6">📈 Actions</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-6">📈 {t("title")}</h1>
           <div className="bg-white rounded-lg shadow p-12 text-center">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-            <p className="text-gray-500 mt-4">Chargement des actions...</p>
+            <p className="text-gray-500 mt-4">{t("loading")}</p>
           </div>
         </div>
       </div>
@@ -83,11 +85,11 @@ export default function StocksPage() {
     return (
       <div className="p-6">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold text-gray-900 mb-6">📈 Actions</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-6">📈 {t("title")}</h1>
           <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-            <p className="text-red-800 font-semibold">Erreur de chargement</p>
+            <p className="text-red-800 font-semibold">{t("errorTitle")}</p>
             <p className="text-red-600 text-sm mt-2">
-              Impossible de charger les actions. Vérifiez que votre backend est démarré.
+              {t("errorMessage")}
             </p>
           </div>
         </div>
@@ -102,20 +104,19 @@ export default function StocksPage() {
     <div className="p-6">
       <div className="max-w-7xl mx-auto">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">📈 Actions</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">📈 {t("title")}</h1>
 
           {/* Tabs */}
           <div className="border-b border-gray-200">
             <nav className="-mb-px flex space-x-8">
               <button
                 onClick={() => setActiveTab("trading")}
-                className={`${
-                  activeTab === "trading"
+                className={`${activeTab === "trading"
                     ? "border-blue-600 text-blue-600"
                     : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors`}
+                  } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors`}
               >
-                💰 Actions Disponibles
+                💰 {t("tabs.trading")}
                 {hasBackendData && (
                   <span className="ml-2 bg-blue-100 text-blue-600 py-0.5 px-2 rounded-full text-xs">
                     {backendStocks.filter(s => s.isActionAvailable).length}
@@ -124,13 +125,12 @@ export default function StocksPage() {
               </button>
               <button
                 onClick={() => setActiveTab("info")}
-                className={`${
-                  activeTab === "info"
+                className={`${activeTab === "info"
                     ? "border-blue-600 text-blue-600"
                     : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors`}
+                  } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors`}
               >
-                📊 Info Actions (Marché)
+                📊 {t("tabs.info")}
                 {loadingMarket && (
                   <span className="ml-2 inline-block animate-spin rounded-full h-3 w-3 border-b-2 border-blue-600"></span>
                 )}
@@ -149,9 +149,9 @@ export default function StocksPage() {
             <div className="space-y-8">
               {!hasBackendData ? (
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-                  <p className="text-blue-800 font-semibold">ℹ️ Aucune action disponible</p>
+                  <p className="text-blue-800 font-semibold">ℹ️ {t("noActions.title")}</p>
                   <p className="text-blue-600 text-sm mt-2">
-                    Aucune action n&apos;est disponible au trading pour le moment.
+                    {t("noActions.description")}
                   </p>
                 </div>
               ) : (
@@ -181,13 +181,13 @@ export default function StocksPage() {
               {loadingMarket ? (
                 <div className="bg-white rounded-lg shadow p-12 text-center">
                   <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-                  <p className="text-gray-500 mt-4">Chargement des données de marché...</p>
+                  <p className="text-gray-500 mt-4">{t("marketData.loading")}</p>
                 </div>
               ) : !hasMarketData ? (
                 <div className="bg-orange-50 border border-orange-200 rounded-lg p-6">
-                  <p className="text-orange-800 font-semibold">⚠️ Données de marché non disponibles</p>
+                  <p className="text-orange-800 font-semibold">⚠️ {t("marketData.unavailableTitle")}</p>
                   <p className="text-orange-600 text-sm mt-2">
-                    Les données de marché en temps réel ne sont pas disponibles pour le moment.
+                    {t("marketData.unavailableDesc")}
                   </p>
                 </div>
               ) : (
@@ -202,7 +202,7 @@ export default function StocksPage() {
                           </h3>
                         </div>
                         <p className="text-sm text-blue-800">
-                          Données de marché en temps réel - {apiStock.exchange}
+                          {t("marketData.realtime", { exchange: apiStock.exchange })}
                         </p>
                       </div>
 
@@ -217,7 +217,7 @@ export default function StocksPage() {
                           <div className="flex items-center gap-2">
                             <span className="text-xl">ℹ️</span>
                             <p className="text-sm text-orange-800">
-                              Cette action n&apos;est pas encore disponible pour le trading.
+                              {t("marketData.notTradable")}
                             </p>
                           </div>
                         </div>

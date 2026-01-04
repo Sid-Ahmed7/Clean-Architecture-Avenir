@@ -41,9 +41,9 @@ export default function QuickTransferCard({ transactions, accounts, onTransferSu
 
         try {
             if (targetAccount) {
-                await transfer({fromIban: mainAccount.iban,toIban: targetAccount.iban,amount: parseFloat(amount)});
+                await transfer({ fromIban: mainAccount.iban, toIban: targetAccount.iban, amount: parseFloat(amount) });
             } else {
-                await quickTransfer({sourceAccountNumber: mainAccount.accountNumber,destinationAccountNumber: targetAccountNumber,amount: parseFloat(amount)});
+                await quickTransfer({ sourceAccountNumber: mainAccount.accountNumber, destinationAccountNumber: targetAccountNumber, amount: parseFloat(amount) });
             }
 
             setShowConfirm(false);
@@ -52,7 +52,7 @@ export default function QuickTransferCard({ transactions, accounts, onTransferSu
             onTransferSuccess?.();
         } catch (error) {
             console.error("Erreur lors du transfert:", error);
-            alert(error instanceof Error ? error.message : "Transfer error");
+            alert(error instanceof Error ? error.message : t("error"));
         }
     };
 
@@ -105,10 +105,10 @@ export default function QuickTransferCard({ transactions, accounts, onTransferSu
                         const accountLabel = counterpartAccount?.customAccountName
                             ? counterpartAccount.customAccountName
                             : counterpartUserName
-                            ? `${userLabel}`
-                            : counterpartAccountNumber
-                            ? `${t("account")} ${counterpartAccountNumber}`
-                            : t("unknownAccount");
+                                ? `${userLabel}`
+                                : counterpartAccountNumber
+                                    ? `${t("account")} ${counterpartAccountNumber}`
+                                    : t("unknownAccount");
 
                         return (
                             <div

@@ -18,13 +18,13 @@ declare global {
     }
 }
 
-interface  MainAccountCardProps {
-    account : AccountModel;
+interface MainAccountCardProps {
+    account: AccountModel;
 }
 
-export function MainAccountCard(props : MainAccountCardProps) {
+export function MainAccountCard(props: MainAccountCardProps) {
 
-    const {account} = props;
+    const { account } = props;
     const t = useTranslations("components.bankAccount.mainAccountCard");
     const [currentTransferLimit, setCurrentTransferLimit] = useState(account.transferLimit);
     const [newTransferLimit, setNewTransferLimit] = useState(account.transferLimit);
@@ -52,7 +52,7 @@ export function MainAccountCard(props : MainAccountCardProps) {
             script.src = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
             script.async = true;
             script.onload = () => resolve();
-            script.onerror = () => reject(new Error("Impossible de charger le module PDF."));
+            script.onerror = () => reject(new Error(t("errors.html2pdfLoad")));
             document.body.appendChild(script);
         });
 
@@ -65,7 +65,7 @@ export function MainAccountCard(props : MainAccountCardProps) {
 
             await loadHtml2Pdf();
             if (!window.html2pdf) {
-                throw new Error("Générateur PDF indisponible.");
+                throw new Error(t("errors.pdfGeneratorUnavailable"));
             }
 
             const html = "<!DOCTYPE html>" + renderToStaticMarkup(<RibDocument rib={rib} />);
@@ -86,7 +86,7 @@ export function MainAccountCard(props : MainAccountCardProps) {
             const message =
                 err?.response?.data?.error ||
                 err?.message ||
-                "Impossible de générer le RIB en PDF .";
+                t("errors.pdfGenerationFailed");
             setRibError(message);
         } finally {
             setRibLoading(false);
@@ -99,7 +99,7 @@ export function MainAccountCard(props : MainAccountCardProps) {
         setLocalError(null);
 
         if (newTransferLimit <= currentTransferLimit) {
-            setLocalError("The new limit must be greater than the current limit.");
+            setLocalError(t("errors.transferLimit"));
             return;
         }
 
@@ -116,7 +116,7 @@ export function MainAccountCard(props : MainAccountCardProps) {
         setOverdraftLocalError(null);
 
         if (requestedOverdraft <= account.overdraftLimit) {
-            setOverdraftLocalError("The requested overdraft must be greater than your current overdraft.");
+            setOverdraftLocalError(t("errors.overdraftLimit"));
             return;
         }
 
@@ -129,7 +129,7 @@ export function MainAccountCard(props : MainAccountCardProps) {
                 <div className="bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 p-6 text-white relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
                     <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full -ml-12 -mb-12"></div>
-                    
+
                     <div className="relative z-10">
                         <div className="flex justify-between items-start mb-4">
                             <div className="flex-1">
@@ -143,11 +143,10 @@ export function MainAccountCard(props : MainAccountCardProps) {
                                     <span className="px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-xs font-semibold rounded-full border border-white/30">
                                         {t("mainLabel")}
                                     </span>
-                                    <span className={`px-3 py-1 text-xs font-semibold rounded-full ${
-                                        account.isActive && account.accountStatus === 'ACTIVE'
-                                            ? 'bg-green-400/90 text-green-900' 
+                                    <span className={`px-3 py-1 text-xs font-semibold rounded-full ${account.isActive && account.accountStatus === 'ACTIVE'
+                                            ? 'bg-green-400/90 text-green-900'
                                             : 'bg-red-400/90 text-red-900'
-                                    }`}>
+                                        }`}>
                                         {account.accountStatus}
                                     </span>
                                 </div>
@@ -157,8 +156,8 @@ export function MainAccountCard(props : MainAccountCardProps) {
                         <div className="space-y-1">
                             <p className="text-sm text-white/80 font-medium">{t("availableBalance")}</p>
                             <p className="text-4xl font-bold tracking-tight">
-                            {account.currentBalance.toLocaleString('fr-FR')}
-                            <span className="text-2xl">{account.currency}</span>
+                                {account.currentBalance.toLocaleString('fr-FR')}
+                                <span className="text-2xl">{account.currency}</span>
 
                             </p>
                         </div>
@@ -175,7 +174,7 @@ export function MainAccountCard(props : MainAccountCardProps) {
                                 </p>
                             </div>
                         </div>
-                        
+
                         <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg group hover:bg-gray-100 transition-colors cursor-pointer">
                             <div className="flex-1">
                                 <p className="text-xs text-gray-500 font-medium mb-1">IBAN</p>

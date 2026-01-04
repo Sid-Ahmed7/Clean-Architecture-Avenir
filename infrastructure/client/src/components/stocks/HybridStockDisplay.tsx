@@ -5,6 +5,7 @@ import { Stock as ApiStock } from "@/types/stock";
 import { StockCard } from "./StockCard";
 import { ApiPriceChart } from "./StockChart";
 import { StocksCard } from "./StocksCard";
+import { useTranslations } from "next-intl";
 
 interface HybridStockDisplayProps {
   backendStock?: Stocks;
@@ -14,11 +15,21 @@ interface HybridStockDisplayProps {
   onBuyIPO?: (symbol: string) => void;
 }
 
-export function HybridStockDisplay({backendStock,apiStock,onBuy,onSell,onBuyIPO}: HybridStockDisplayProps) {
+export function HybridStockDisplay({
+  backendStock,
+  apiStock,
+  onBuy,
+  onSell,
+  onBuyIPO,
+}: HybridStockDisplayProps) {
+  const t = useTranslations("components.stocks.hybridDisplay");
   const hasApiData = !!apiStock;
-  const hasBackendData = !!backendStock;
 
-  if (!hasBackendData && hasApiData) {
+  // Ensure backendStock is defined if we reach the point where we need it
+  // This simplifies TS checks later
+  const displayBackendData = !!backendStock;
+
+  if (!displayBackendData && hasApiData) {
     return (
       <div className="space-y-4">
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-200">
@@ -27,9 +38,7 @@ export function HybridStockDisplay({backendStock,apiStock,onBuy,onSell,onBuyIPO}
               {apiStock.name} ({apiStock.symbol})
             </h3>
           </div>
-          <p className="text-sm text-blue-800">
-            Données de marché en temps réel
-          </p>
+          <p className="text-sm text-blue-800">{t("realTimeData")}</p>
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-6">
@@ -41,7 +50,7 @@ export function HybridStockDisplay({backendStock,apiStock,onBuy,onSell,onBuyIPO}
     );
   }
 
-  if (!hasBackendData) {
+  if (!backendStock) {
     return null;
   }
 
@@ -53,11 +62,11 @@ export function HybridStockDisplay({backendStock,apiStock,onBuy,onSell,onBuyIPO}
             <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-200">
               <div className="flex items-center gap-2 mb-2">
                 <h3 className="font-bold text-blue-900">
-                  Données de marché réel
+                  {t("marketDataTitle")}
                 </h3>
               </div>
               <p className="text-sm text-blue-800">
-                Prix et graphique en temps réel depuis {apiStock.exchange}
+                {t("marketDataDesc", { exchange: apiStock.exchange })}
               </p>
             </div>
 
@@ -73,12 +82,10 @@ export function HybridStockDisplay({backendStock,apiStock,onBuy,onSell,onBuyIPO}
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-2xl">💰</span>
                 <h3 className="font-bold text-green-900">
-                  Prix de trading
+                  {t("tradingPriceTitle")}
                 </h3>
               </div>
-              <p className="text-sm text-green-800">
-                Prix calculé depuis notre carnet d&apos;ordres
-              </p>
+              <p className="text-sm text-green-800">{t("tradingPriceDesc")}</p>
             </div>
 
             <StocksCard
@@ -91,23 +98,28 @@ export function HybridStockDisplay({backendStock,apiStock,onBuy,onSell,onBuyIPO}
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-xl">⚖️</span>
-                <h4 className="font-semibold text-yellow-900">Comparaison</h4>
+                <h4 className="font-semibold text-yellow-900">
+                  {t("comparison")}
+                </h4>
               </div>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-yellow-700">Prix marché :</span>
+                  <span className="text-yellow-700">{t("marketPrice")}</span>
                   <span className="font-bold text-yellow-900">
                     ${apiStock.price.toFixed(2)}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-yellow-700">Prix trading :</span>
+                  <span className="text-yellow-700">{t("tradingPrice")}</span>
                   <span className="font-bold text-yellow-900">
-                    {backendStock.currentPrice.toFixed(2)} {backendStock.currency}
+                    {backendStock.currentPrice.toFixed(2)}{" "}
+                    {backendStock.currency}
                   </span>
                 </div>
                 <div className="flex justify-between border-t border-yellow-300 pt-2">
-                  <span className="text-yellow-700 font-semibold">Écart :</span>
+                  <span className="text-yellow-700 font-semibold">
+                    {t("gap")}
+                  </span>
                   <span className="font-bold text-yellow-900">
                     {(
                       ((backendStock.currentPrice - apiStock.price) /
@@ -122,16 +134,21 @@ export function HybridStockDisplay({backendStock,apiStock,onBuy,onSell,onBuyIPO}
 
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
               <p className="text-xs text-blue-800">
-                <strong>Important :</strong> Vos transactions s&apos;effectuent au{" "}
-                <strong>prix de trading</strong> ({backendStock.currentPrice.toFixed(2)}{" "}
-                {backendStock.currency}), pas au prix du marché.
+                <strong>{t("important")}</strong>{" "}
+                <span
+                  dangerouslySetInnerHTML={{
+                    __html: t.raw("importantDesc", {
+                      price: backendStock.currentPrice.toFixed(2),
+                      currency: backendStock.currency,
+                    }),
+                  }}
+                />
               </p>
             </div>
           </div>
         </div>
       ) : (
         <div>
-
           <StocksCard
             stock={backendStock}
             onBuy={onBuy}

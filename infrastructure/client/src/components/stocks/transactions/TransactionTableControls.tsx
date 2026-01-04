@@ -1,4 +1,5 @@
 import { Select } from "@/components/ui/Select";
+import { useTranslations } from "next-intl";
 
 interface TransactionTableControlsProps {
   itemsPerPage: number;
@@ -13,6 +14,7 @@ export function TransactionTableControls({
   currentCount,
   totalCount,
 }: TransactionTableControlsProps) {
+  const t = useTranslations("components.stocks.transactions.controls");
   const pageSizeOptions = [
     { label: "5", value: "5" },
     { label: "10", value: "10" },
@@ -23,14 +25,14 @@ export function TransactionTableControls({
   return (
     <div className="flex items-center justify-between p-4 border-b border-gray-200">
       <Select
-        label="Afficher"
+        label={t("show")}
         value={itemsPerPage.toString()}
         onChange={(val) => onItemsPerPageChange(parseInt(val, 10))}
         options={pageSizeOptions}
         className="w-32"
       />
       <div className="text-sm text-gray-600">
-        {currentCount} sur {totalCount} transactions
+        {currentCount} {t("of")} {totalCount} {t("transactions")}
       </div>
     </div>
   );

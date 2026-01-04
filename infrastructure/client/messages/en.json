@@ -98,7 +98,8 @@
         "originalTransaction": "Original transaction from",
         "processing": "Processing...",
         "confirmButton": "Confirm",
-        "cancelButton": "Cancel"
+        "cancelButton": "Cancel",
+        "error": "Transfer error"
       },
       "mainAccountCard": {
         "title": "Main Account",
@@ -124,7 +125,14 @@
         "transferModalSubtitle": "Your current limit is",
         "transferSuccess": "Limit updated successfully",
         "updating": "Updating...",
-        "increaseButton": "Increase Limit"
+        "increaseButton": "Increase Limit",
+        "errors": {
+          "html2pdfLoad": "Unable to load PDF module.",
+          "pdfGeneratorUnavailable": "PDF generator unavailable.",
+          "pdfGenerationFailed": "Unable to generate PDF RIB.",
+          "transferLimit": "The new limit must be greater than the current limit.",
+          "overdraftLimit": "The requested overdraft must be greater than your current overdraft."
+        }
       },
       "accountList": {
         "noAccounts": "No accounts available"
@@ -289,7 +297,28 @@
       }
     },
     "stats": {
-      "clients": {
+      "stock": {
+        "title": "Stocks",
+        "loading": "Loading stocks...",
+        "errorTitle": "Loading Error",
+        "errorMessage": "Unable to load stocks. Please check if your backend is running.",
+        "tabs": {
+          "trading": "Available Stocks",
+          "info": "Stock Info (Market)"
+        },
+        "noActions": {
+          "title": "No stocks available",
+          "description": "No stocks are available for trading at the moment."
+        },
+        "marketData": {
+          "loading": "Loading market data...",
+          "unavailableTitle": "Market data unavailable",
+          "unavailableDesc": "Real-time market data is currently unavailable.",
+          "realtime": "Real-time market data - {exchange}",
+          "notTradable": "This stock is not yet available for trading."
+        }
+      },
+      "client": {
         "value": "500K+",
         "label": "Satisfied customers"
       },
@@ -887,6 +916,34 @@
           "cancel": "Cancel",
           "updating": "Updating...",
           "update": "Update stock"
+        },
+        "fields": {
+          "companyName": "Company name",
+          "companyNamePlaceholder": "e.g.: Apple Inc.",
+          "symbol": "Symbol",
+          "symbolPlaceholder": "e.g.: AAPL",
+          "name": "Short name",
+          "namePlaceholder": "e.g.: Apple",
+          "currency": "Currency",
+          "currencyPlaceholder": "e.g.: EUR",
+          "currencyHelp": "ISO currency code (USD, EUR, GBP, etc.)",
+          "initialPrice": "Initial price (€)",
+          "totalShares": "Total shares",
+          "totalSharesPlaceholder": "e.g.: 1000000",
+          "totalSharesHelp": "Total number of shares available for this company",
+          "isActionAvailable": "Stock available for purchase"
+        },
+        "validation": {
+          "companyNameRequired": "Company name is required",
+          "symbolRequired": "Symbol is required",
+          "symbolPattern": "Symbol must contain 1-5 uppercase letters",
+          "nameRequired": "Short name is required",
+          "currencyRequired": "Currency is required",
+          "currencyLength": "Currency must be exactly 3 characters",
+          "priceRequired": "Initial price is required",
+          "priceMin": "Price must be greater than 0",
+          "totalSharesRequired": "Total shares is required",
+          "totalSharesMin": "Quantity must be at least 1"
         }
       },
       "orders": {
@@ -988,19 +1045,19 @@
           "noMatchingOrders": "No orders match the selected filters"
         },
         "openIPO": {
-          "errorMinShares": "Number of shares must be greater than 0",
-          "errorMaxShares": "Number of shares cannot exceed {max}",
-          "success": "IPO opened successfully for {symbol}",
+          "errorMinShares": "Shares must be greater than 0",
+          "errorMaxShares": "Shares cannot exceed {max}",
+          "success": "IPO for {symbol} opened successfully",
           "error": "Error opening IPO",
           "title": "Open IPO",
-          "ipoTitle": "Initial Public Offering (IPO)",
-          "ipoDescription": "Allow users to buy shares.",
+          "ipoTitle": "IPO Configuration",
+          "ipoDescription": "Set the number of shares to sell for the IPO.",
           "totalShares": "Total shares",
-          "sharesLabel": "Number of shares to make available in IPO",
-          "maxShares": "Maximum: {max} shares (total stock)",
+          "sharesLabel": "Shares to sell",
+          "maxShares": "Max: {max}",
           "ipoType": "IPO Type",
-          "initialIPO": "Initial IPO",
-          "secondaryIPO": "Secondary IPO",
+          "initialIPO": "Primary (Initial)",
+          "secondaryIPO": "Secondary",
           "cancel": "Cancel",
           "opening": "Opening...",
           "openIPO": "Open IPO"
@@ -1070,6 +1127,11 @@
         "row": {
           "buy": "Buy",
           "sell": "Sell"
+        },
+        "controls": {
+          "show": "Show",
+          "of": "of",
+          "transactions": "transactions"
         }
       },
       "structure": {
@@ -1105,12 +1167,12 @@
         "createStock": "Create stock"
       },
       "table": {
-        "noStocks": "No stocks created",
+        "noStocks": "No stocks available",
         "symbol": "Symbol",
         "company": "Company",
-        "previousPrice": "Previous price",
-        "currentPrice": "Current price",
-        "variation": "Variation",
+        "previousPrice": "Prev. Price",
+        "currentPrice": "Current Price",
+        "variation": "Var.",
         "status": "Status",
         "actions": "Actions",
         "available": "Available",
