@@ -17,7 +17,7 @@ export class AssignAdvisorToConversationUseCase {
             return conversation;
         }
 
-        if (conversation.advisorId && conversation.advisorId !== "" && conversation.advisorId !== advisorId) {
+        if (conversation.advisorId && conversation.advisorId !== advisorId) {
             return new AdvisorAlreadyAssignedError("An advisor is already assigned to this conversation");
         }
 

@@ -32,8 +32,8 @@ export class SendMessageUseCase {
         }
 
         if(isAdvisor) {
-            
-           if(!existingConversation.advisorId || existingConversation.advisorId === "") {
+
+           if(!existingConversation.advisorId) {
                return new NoAdvisorAssignedError("No assigned advisor");
             }
 
@@ -41,10 +41,10 @@ export class SendMessageUseCase {
                 return new AdvisorAlreadyAssignedError("This advisor is already assigned to this conversation");
             }
 
-        }   
+        }
                 const id = this.uuidService.generate();
 
-        const message = MessageEntity.from(id ,existingConversation.id, existingConversation.clientId, existingConversation.advisorId || "", userId,  content, ReadStatusEnum.UNREAD, new Date())
+        const message = MessageEntity.from(id ,existingConversation.id, existingConversation.clientId, existingConversation.advisorId || null, userId,  content, ReadStatusEnum.UNREAD, new Date())
         
         if(message instanceof InvalidMessageError || message instanceof InvalidUserIdError) {
             return message;
@@ -56,7 +56,7 @@ export class SendMessageUseCase {
         }
 
         if (this.sendNotificationUseCase) {
-            const recipientId = isAdvisor ? existingConversation.clientId : (existingConversation.advisorId || "");
+            const recipientId = isAdvisor ? existingConversation.clientId : existingConversation.advisorId;
             if (recipientId) {
                 await this.sendNotificationUseCase.execute(
                     recipientId,

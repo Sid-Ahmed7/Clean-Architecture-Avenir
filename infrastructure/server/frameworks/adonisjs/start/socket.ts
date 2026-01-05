@@ -142,8 +142,8 @@ export const socketSetup = async (server: Server) => {
           data.content
         )
 
-        if (!(message instanceof MessageEntity)) {
-          console.error('Serveur: Message non créé')
+        if (message instanceof Error) {
+          console.error('Serveur: Message non créé -', message.message)
           return
         }
 
@@ -273,8 +273,8 @@ export const socketSetup = async (server: Server) => {
           data.content
         )
 
-        if (!(message instanceof MessageEntity)) {
-          console.error('Message non créé par SendMessageUseCase')
+        if (message instanceof Error) {
+          console.error('Message non créé par SendMessageUseCase -', message.message)
           return
         }
 

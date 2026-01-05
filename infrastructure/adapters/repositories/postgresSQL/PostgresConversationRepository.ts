@@ -54,6 +54,27 @@ export class PostgresConversationRepository implements ConversationRepositoryInt
             return new InvalidConversationError("Conversation must have a clientId");
         }
 
+        // Vérifier que le client existe
+        const clientExists = await pgPool.query(
+            'SELECT id FROM bank_users WHERE id = $1',
+            [conversation.clientId]
+        );
+
+        if (clientExists.rows.length === 0) {
+            return new InvalidConversationError(`Client with id ${conversation.clientId} does not exist`);
+        }
+
+        if (conversation.advisorId) {
+            const advisorExists = await pgPool.query(
+                'SELECT id FROM bank_users WHERE id = $1',
+                [conversation.advisorId]
+            );
+
+            if (advisorExists.rows.length === 0) {
+                return new InvalidConversationError(`Advisor with id ${conversation.advisorId} does not exist`);
+            }
+        }
+
         const exists = await pgPool.query(
             'SELECT id FROM conversations WHERE client_id = $1 AND advisor_id = $2',
             [conversation.clientId, conversation.advisorId]
@@ -70,9 +91,20 @@ export class PostgresConversationRepository implements ConversationRepositoryInt
         );
     }
 
-    async update(conversation: ConversationEntity): Promise<void | ConversationNotFoundError> {
+    async update(conversation: ConversationEntity): Promise<void | ConversationNotFoundError | InvalidConversationError> {
+        if (conversation.advisorId) {
+            const advisorExists = await pgPool.query(
+                'SELECT id FROM bank_users WHERE id = $1',
+                [conversation.advisorId]
+            );
+
+            if (advisorExists.rows.length === 0) {
+                return new InvalidConversationError(`Advisor with id ${conversation.advisorId} does not exist`);
+            }
+        }
+
         const result = await pgPool.query(
-            `UPDATE conversations 
+            `UPDATE conversations
              SET advisor_id = $1
              WHERE client_id = $2
              RETURNING *`,
