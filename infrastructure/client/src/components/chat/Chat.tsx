@@ -13,7 +13,7 @@ interface ChatBoxProps {
 
 export default function Chat({ conversationId, user }: ChatBoxProps) {
   const t = useTranslations("components.chat");
-  const {messages,connected,send,startTyping,stopTyping,markRead,typingUsers} = useChat(user.userId, user.role, conversationId!);
+  const { messages, connected, send, startTyping, stopTyping, markRead, typingUsers } = useChat(user.userId, user.role, conversationId!);
   const [content, setContent] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -25,19 +25,19 @@ export default function Chat({ conversationId, user }: ChatBoxProps) {
       return;
     }
 
-    if (value.trim()){
+    if (value.trim()) {
       startTyping(conversationId);
-    } else{
-       stopTyping(conversationId);
+    } else {
+      stopTyping(conversationId);
     }
   };
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
 
-    if (!conversationId){
+    if (!conversationId) {
       return;
-    } 
+    }
     const unreadIds = messages
       .filter((m) => m.authorId !== user.userId && m.readStatus !== "READ")
       .map((m) => m.id);
@@ -51,9 +51,9 @@ export default function Chat({ conversationId, user }: ChatBoxProps) {
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!content.trim() || !conversationId || !user?.userId || !connected){
+    if (!content.trim() || !conversationId || !user?.userId || !connected) {
       return;
-    } 
+    }
     send(content, conversationId);
     setContent("");
     stopTyping(conversationId);
@@ -86,11 +86,10 @@ export default function Chat({ conversationId, user }: ChatBoxProps) {
                 className={`flex ${msg.authorId === user.userId ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`px-4 py-2 rounded-2xl max-w-[75%] ${
-                    msg.authorId === user.userId
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-200 text-gray-800"
-                  }`}
+                  className={`px-4 py-2 rounded-2xl max-w-[75%] ${msg.authorId === user.userId
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200 text-gray-800"
+                    }`}
                 >
                   <p className="text-sm">{msg.content}</p>
 
@@ -115,7 +114,7 @@ export default function Chat({ conversationId, user }: ChatBoxProps) {
           <div className="px-4 py-1 text-xs text-gray-500">
             <span>{t("typing")}</span>
           </div>
-      )}
+        )}
 
       <form onSubmit={handleSend} className="p-4 border-t bg-gray-50 rounded-b-2xl flex gap-2">
         <input
@@ -123,7 +122,7 @@ export default function Chat({ conversationId, user }: ChatBoxProps) {
           placeholder={connected ? t("inputPlaceholder") : t("inputDisabled")}
           value={content}
           onChange={handleInputChange}
-          className="flex-1 py-3 px-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+          className="flex-1 py-3 px-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 text-gray-900"
           disabled={!connected}
         />
         <Button type="submit" disabled={!content.trim() || !connected}>

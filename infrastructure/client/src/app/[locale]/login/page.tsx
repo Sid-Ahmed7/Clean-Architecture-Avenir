@@ -29,13 +29,19 @@ export default function LoginPage() {
       const res = await login(data);
 
       if (res.status === 200) {
-        const decodedToken = decodeJwt(res.data.token);
-        const userRole = decodedToken?.role;
+        const roles = res.data.roles as string[];
+        const userId = res.data.user.id;
+
+        // Determine highest priority role
+        let userRole = 'CLIENT';
+        if (roles.includes('BANK_MANAGER')) userRole = 'BANK_MANAGER';
+        else if (roles.includes('BANK_ADVISOR')) userRole = 'BANK_ADVISOR';
+        else if (roles.includes('CLIENT')) userRole = 'CLIENT';
 
         setIsAuthenticated(true);
         setUser({
-          userId: decodedToken?.userId || '',
-          role: userRole || 'CLIENT'
+          userId: userId,
+          role: userRole
         });
 
         startTokenRefresh();
@@ -46,7 +52,7 @@ export default function LoginPage() {
           'BANK_MANAGER': 'manager'
         };
 
-        const rolePrefix = rolePrefixMap[userRole || 'CLIENT'] || 'client';
+        const rolePrefix = rolePrefixMap[userRole] || 'client';
 
         // Redirect to role-specific dashboard
         router.push(`/${rolePrefix}/dashboard`);

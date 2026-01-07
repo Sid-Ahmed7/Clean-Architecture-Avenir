@@ -26,7 +26,7 @@ export default function ChatPage({ params }: ChatPageProps) {
   }, [isAuthenticated, router]);
 
   return (
-    <div className="flex justify-center items-center h-screen p-4">
+    <div className="flex justify-center items-center h-screen p-4 bg-white">
       {isAuthenticated === undefined ? (
         <p className="text-gray-700 animate-pulse">
           {t("verifyingAuth")}

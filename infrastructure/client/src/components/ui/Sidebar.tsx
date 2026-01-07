@@ -4,7 +4,7 @@ import { AuthContext } from "@/contexts/AuthProvider";
 import { apiClient, stopTokenRefresh } from "@/lib/api/apiClient";
 import { CreditCard, ArrowUpRight, Calendar, Settings, HelpCircle, X, MessageCircle, LogOut, PiggyBank, Home, Users, Wallet, FileText, UserPlus, Newspaper, LineChart, ShoppingCart, BarChart3, Building2, Briefcase } from "lucide-react";
 import { useContext } from "react";
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { usePathname } from "next/navigation";
 import { getRolePrefix } from "@/lib/utils/getRolePrefix";
 import { RoleEnum } from "@/types/RoleEnum";
@@ -19,6 +19,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const t = useTranslations('components.sidebar');
   const { isAuthenticated, setIsAuthenticated, hasAnyRole, user } = useContext(AuthContext);
   const pathname = usePathname();
+  const router = useRouter();
 
   // Get role-based URL prefix
   const rolePrefix = getRolePrefix(user?.role);
@@ -35,7 +36,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     { icon: Wallet, labelKey: "menu.allAccounts", href: `/manager/accounts`, roles: [RoleEnum.BANK_MANAGER] },
     { icon: PiggyBank, labelKey: "menu.savingsProducts", href: `/manager/savings-products`, roles: [RoleEnum.BANK_MANAGER] },
     { icon: Building2, labelKey: "menu.stockManagement", href: `/manage-stock`, roles: [RoleEnum.BANK_MANAGER] },
-    { icon: FileText, labelKey: "menu.loanRequests", href: "/director/loan-requests", roles: [RoleEnum.BANK_MANAGER] },
+    { icon: FileText, labelKey: "menu.loanRequests", href: "/manager/loan-requests", roles: [RoleEnum.BANK_MANAGER] },
 
     { icon: FileText, labelKey: "menu.loanRequests", href: "/advisor/loan-requests", roles: [RoleEnum.BANK_ADVISOR] },
     { icon: Briefcase, labelKey: "menu.overdraftRequests", href: "/advisor/overdraft-requests", roles: [RoleEnum.BANK_ADVISOR] },
@@ -54,6 +55,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
     apiClient.post("/auth/logout").then(() => {
       setIsAuthenticated(false);
+      router.push('/login');
     })
   }
 
