@@ -304,6 +304,9 @@
       },
       "grid": {
         "noNews": "Aucune actualité trouvée."
+      },
+      "notification": {
+        "noNotifications": "Aucune notification"
       }
     },
     "beneficiariesManager": {

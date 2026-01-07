@@ -43,6 +43,9 @@
     }
   },
   "components": {
+    "notification": {
+      "noNotifications": "No notifications"
+    },
     "stocks": {
       "structure": {
         "header": {
