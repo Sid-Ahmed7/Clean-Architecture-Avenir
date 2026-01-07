@@ -331,6 +331,28 @@
       "blockEditor": {
         "noBlocks": "Aucun bloc ajouté. Utilisez la barre d'outils ci-dessus pour ajouter du contenu.",
         "blocksCount": "{count, plural, =0 {Aucun bloc} =1 {1 bloc} other {# blocs}}"
+      },
+      "list": {
+        "loading": "Chargement...",
+        "error": "Erreur : {message}"
+      },
+      "filters": {
+        "category": "Catégorie",
+        "all": "Tout",
+        "priority": "Priorité",
+        "tagsLabel": "Tags",
+        "tagsPlaceholder": "Ex: économie, tech..."
+      },
+      "card": {
+        "media": "médias",
+        "moreMedia": "+ {count} autres"
+      },
+      "loadMore": {
+        "loading": "Chargement...",
+        "loadMore": "Charger plus"
+      },
+      "grid": {
+        "noNews": "Aucune actualité trouvée."
       }
     },
     "beneficiariesManager": {
@@ -2226,6 +2248,9 @@
       "loading": "Chargement...",
       "errorTitle": "Erreur",
       "errorMessage": "Erreur lors du chargement du portefeuille"
+    },
+    "feed": {
+      "title": "Actualités"
     }
   }
 }

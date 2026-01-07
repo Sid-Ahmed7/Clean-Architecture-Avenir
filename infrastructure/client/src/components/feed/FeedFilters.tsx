@@ -6,31 +6,31 @@ import { NewsCategoryEnum, NewsPriorityEnum } from "@/types/news";
 import { useTranslations } from "next-intl";
 
 interface FeedFiltersProps {
-    initialFilters?: NewsFilters;
-    onChange: (filters : NewsFilters) => void;
+  initialFilters?: NewsFilters;
+  onChange: (filters: NewsFilters) => void;
 }
 
-export function FeedFilters({initialFilters, onChange} : FeedFiltersProps) {
-    const t = useTranslations("components.feed.filters");
-    const [category, setCategory] = useState(initialFilters?.category || "");
-    const [priority, setPriority] = useState(initialFilters?.priority ||"");
-    const [tags, setTags] = useState(initialFilters?.tags?.join(",") || "");
+export function FeedFilters({ initialFilters, onChange }: FeedFiltersProps) {
+  const t = useTranslations("components.feed.filters");
+  const [category, setCategory] = useState(initialFilters?.category || "");
+  const [priority, setPriority] = useState(initialFilters?.priority || "");
+  const [tags, setTags] = useState(initialFilters?.tags?.join(",") || "");
 
 
-    const handleFiltersChange = () => {
-        onChange({
-            category: category || undefined,
-            priority: priority || undefined,
-            tags: tags ? tags.split(",").map(t => t.trim()) : undefined,
-        });
-    }
+  const handleFiltersChange = () => {
+    onChange({
+      category: category || undefined,
+      priority: priority || undefined,
+      tags: tags ? tags.split(",").map(t => t.trim()) : undefined,
+    });
+  }
 
-    useEffect(() => {
-      handleFiltersChange();
-    }, [category, priority, tags]);
+  useEffect(() => {
+    handleFiltersChange();
+  }, [category, priority, tags]);
 
 
- return (
+  return (
     <div className="flex flex-wrap gap-4 items-end mb-4">
       <Select
         label={t("category")}
@@ -40,6 +40,7 @@ export function FeedFilters({initialFilters, onChange} : FeedFiltersProps) {
           ...Object.values(NewsCategoryEnum).map(c => ({ label: c, value: c })),
         ]}
         onChange={val => { setCategory(val); handleFiltersChange(); }}
+        className="text-gray-900"
       />
 
       <Select
@@ -50,16 +51,17 @@ export function FeedFilters({initialFilters, onChange} : FeedFiltersProps) {
           ...Object.values(NewsPriorityEnum).map(p => ({ label: p, value: p })),
         ]}
         onChange={val => { setPriority(val); handleFiltersChange(); }}
+        className="text-gray-900"
       />
 
       <div className="flex flex-col">
-        <label className="text-sm font-medium mb-1">{t("tagsLabel")}</label>
+        <label className="text-sm font-medium mb-1 text-gray-900">{t("tagsLabel")}</label>
         <input
           type="text"
           value={tags}
           onChange={e => { setTags(e.target.value); handleFiltersChange(); }}
           placeholder={t("tagsPlaceholder")}
-          className="px-3 py-2 border rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="px-3 py-2 border rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-900"
         />
       </div>
     </div>
