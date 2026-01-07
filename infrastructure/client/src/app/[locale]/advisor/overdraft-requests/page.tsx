@@ -5,7 +5,7 @@ import { OverdraftRequestsPanel } from "@/components/bankAccount/OverdraftReques
 
 function AdvisorOverdraftRequestsPage() {
     return (
-        <div className="p-4">
+        <div className="min-h-screen bg-white p-6">
             <OverdraftRequestsPanel />
         </div>
     );
