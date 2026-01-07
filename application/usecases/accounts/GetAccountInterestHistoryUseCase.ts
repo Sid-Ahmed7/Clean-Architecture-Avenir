@@ -24,6 +24,12 @@ export class GetAccountInterestHistoryUseCase {
             return account;
         }
 
+        // INSANE DEMO MODE: Calculate per SECOND with 1,000,000x multiplier!
+        const secondsSinceLastUpdate = Math.floor(
+            (new Date().getTime() - savingsAccount.lastBalanceUpdate.getTime()) / 1000
+        );
+        const pendingInterest = (savingsAccount.balance * savingsAccount.interestRate * 1000000 * secondsSinceLastUpdate) / (31536000 * 100);
+
         // Calculate projected annual interest
         const projectedAnnualInterest = savingsAccount.getProjectedAnnualInterest(account.currentBalance);
 
@@ -33,6 +39,7 @@ export class GetAccountInterestHistoryUseCase {
             interestRate: savingsAccount.interestRate,
             maxDepositAmount: savingsAccount.maxDepositAmount,
             totalInterestEarned: savingsAccount.totalInterestEarned,
+            pendingInterest: Math.round(pendingInterest * 100) / 100, // Round to 2 decimals
             ...(savingsAccount.lastInterestApplied && { lastInterestApplied: savingsAccount.lastInterestApplied }),
             projectedAnnualInterest,
             isActive: savingsAccount.isActive

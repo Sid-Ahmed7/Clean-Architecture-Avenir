@@ -35,7 +35,11 @@ export class WithdrawFromSavingsAccountUseCase {
         const daysSinceLastUpdate = Math.floor(
             (new Date().getTime() - savingsAccount.lastBalanceUpdate.getTime()) / (1000 * 60 * 60 * 24)
         );
-        const pendingInterest = (savingsAccount.balance * savingsAccount.interestRate * daysSinceLastUpdate) / (365 * 100);
+        // DEMO MODE: Calculate per minute instead of per day
+        const minutesSinceLastUpdate = Math.floor(
+            (new Date().getTime() - savingsAccount.lastBalanceUpdate.getTime()) / (1000 * 60)
+        );
+        const pendingInterest = (savingsAccount.balance * savingsAccount.interestRate * minutesSinceLastUpdate) / (525600 * 100);
 
         // 5. Check sufficient funds (interest not included in available balance)
         if (savingsAccount.balance < dto.amount) {

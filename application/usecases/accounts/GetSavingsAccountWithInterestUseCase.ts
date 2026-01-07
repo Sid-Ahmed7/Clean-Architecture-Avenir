@@ -23,7 +23,11 @@ export class GetSavingsAccountWithInterestUseCase {
         const daysSinceLastUpdate = Math.floor(
             (new Date().getTime() - savingsAccount.lastBalanceUpdate.getTime()) / (1000 * 60 * 60 * 24)
         );
-        const pendingInterest = (savingsAccount.balance * savingsAccount.interestRate * daysSinceLastUpdate) / (365 * 100);
+        // DEMO MODE: Calculate per minute instead of per day
+        const minutesSinceLastUpdate = Math.floor(
+            (new Date().getTime() - savingsAccount.lastBalanceUpdate.getTime()) / (1000 * 60)
+        );
+        const pendingInterest = (savingsAccount.balance * savingsAccount.interestRate * minutesSinceLastUpdate) / (525600 * 100);
 
         // 4. Return account with updated interest (not saved to DB, just calculated for display)
         const accountWithInterest = SavingsAccountsEntity.from(

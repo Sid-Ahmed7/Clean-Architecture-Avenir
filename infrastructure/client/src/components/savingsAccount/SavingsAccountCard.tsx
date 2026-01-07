@@ -15,6 +15,7 @@ interface InterestSummary {
     interestRate: number;
     maxDepositAmount: number | null;
     totalInterestEarned: number;
+    pendingInterest: number; // Interest calculated but not yet credited
     lastInterestApplied?: Date;
     projectedAnnualInterest: number;
     isActive: boolean;
@@ -109,18 +110,34 @@ export function SavingsAccountCard({ accountNumber }: SavingsAccountCardProps) {
 
             {/* Interest Summary */}
             <div className="p-6 space-y-6">
-                {/* Total Interest Earned */}
-                <div className="bg-gradient-to-br from-emerald-50 to-green-50 rounded-xl p-4 border border-emerald-200">
-                    <div className="flex items-center gap-3 mb-2">
-                        <div className="p-2 bg-emerald-500 rounded-lg">
-                            <TrendingUp className="w-5 h-5 text-white" />
-                        </div>
-                        <div className="flex-1">
+                {/* Interest Cards */}
+                <div className="grid grid-cols-2 gap-4">
+                    {/* Total Interest Earned (Credited) */}
+                    <div className="bg-gradient-to-br from-emerald-50 to-green-50 rounded-xl p-4 border border-emerald-200">
+                        <div className="flex items-center gap-2 mb-2">
+                            <div className="p-2 bg-emerald-500 rounded-lg">
+                                <TrendingUp className="w-4 h-4 text-white" />
+                            </div>
                             <p className="text-xs text-gray-600 font-medium">{t("interestEarnedTotal")}</p>
-                            <p className="text-2xl font-bold text-emerald-700">
-                                +{format.number(summary.totalInterestEarned, { style: 'currency', currency: 'EUR' })}
-                            </p>
                         </div>
+                        <p className="text-xl font-bold text-emerald-700">
+                            +{format.number(summary.totalInterestEarned, { style: 'currency', currency: 'EUR' })}
+                        </p>
+                        <p className="text-xs text-gray-500 mt-1">Crédité</p>
+                    </div>
+
+                    {/* Pending Interest (Not yet credited) */}
+                    <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-xl p-4 border border-amber-200">
+                        <div className="flex items-center gap-2 mb-2">
+                            <div className="p-2 bg-amber-500 rounded-lg">
+                                <TrendingUp className="w-4 h-4 text-white" />
+                            </div>
+                            <p className="text-xs text-gray-600 font-medium">Intérêts en attente</p>
+                        </div>
+                        <p className="text-xl font-bold text-amber-700">
+                            +{format.number(summary.pendingInterest, { style: 'currency', currency: 'EUR' })}
+                        </p>
+                        <p className="text-xs text-gray-500 mt-1">Non crédité</p>
                     </div>
                 </div>
 

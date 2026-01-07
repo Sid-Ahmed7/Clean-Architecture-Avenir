@@ -9,13 +9,15 @@ import { AccountRepositoryInterface } from "../../../../../application/ports/rep
 import { CreateSavingsProduct } from "../../../../../application/requests/CreateSavingsProduct";
 import { UpdateSavingsProduct } from "../../../../../application/requests/UpdateSavingsProduct";
 import { CryptoUuidGenerator } from "../../../../adapters/services/CryptoUuidGenerator";
+import { IbanGeneratorService } from "../../../../../application/ports/services/IbanGeneratorService";
 
 export class SavingsProductController {
     constructor(
         private readonly savingsProductRepository: SavingsProductRepositoryInterface,
         private readonly savingsAccountRepository: SavingsAccountRepositoryInterface,
         private readonly accountRepository: AccountRepositoryInterface,
-        private readonly uuidService: CryptoUuidGenerator
+        private readonly uuidService: CryptoUuidGenerator,
+        private readonly ibanGenerator: IbanGeneratorService
     ) {}
 
     async createProduct(req: Request, res: Response) {
@@ -76,7 +78,8 @@ export class SavingsProductController {
         const subscribeUseCase = new SubscribeToSavingsProductUseCase(
             this.savingsAccountRepository,
             this.savingsProductRepository,
-            this.accountRepository
+            this.accountRepository,
+            this.ibanGenerator
         );
 
         const userId = (req as any).user?.userId; // From auth middleware

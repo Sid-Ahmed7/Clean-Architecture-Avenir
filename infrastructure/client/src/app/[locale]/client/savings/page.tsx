@@ -22,6 +22,7 @@ interface MySavingsAccount {
     interestRate: number;
     balance: number;
     totalInterestEarned: number;
+    pendingInterest?: number; // From backend
     isActive: boolean;
     lastBalanceUpdate: string;
 }
@@ -144,59 +145,83 @@ export default function ClientSavingsPage() {
                     <div className="mb-12">
                         <h2 className="text-2xl font-bold text-gray-900 mb-4">{t("myAccounts")}</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {myAccounts.map((account) => (
-                                <div
-                                    key={account.accountNumber}
-                                    className="bg-white rounded-xl shadow-lg p-6 border-2 border-emerald-200"
-                                >
-                                    <div className="flex items-center gap-2 mb-4">
-                                        <CheckCircle className="w-5 h-5 text-emerald-600" />
-                                        <span className="font-bold text-gray-900">
-                                            {t("account")} #{account.accountNumber}
-                                        </span>
-                                    </div>
-                                    <div className="space-y-2 mb-4">
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-600">{t("balance")} :</span>
-                                            <span className="font-bold text-gray-900 text-lg">
-                                                {format.number(account.balance ?? 0, { style: "currency", currency: "EUR" })}
+                            {myAccounts.map((account) => {
+                                // Use pendingInterest from backend if available, otherwise calculate
+                                const pendingInterest = account.pendingInterest ?? (() => {
+                                    const secondsSinceLastUpdate = Math.floor(
+                                        (new Date().getTime() - new Date(account.lastBalanceUpdate).getTime()) / 1000
+                                    );
+                                    return (account.balance * account.interestRate * 1000000 * secondsSinceLastUpdate) / (31536000 * 100);
+                                })();
+
+                                console.log('🔍 Account Data:', {
+                                    accountNumber: account.accountNumber,
+                                    balance: account.balance,
+                                    interestRate: account.interestRate,
+                                    pendingInterestFromBackend: account.pendingInterest,
+                                    pendingInterestUsed: pendingInterest
+                                });
+
+                                return (
+                                    <div
+                                        key={account.accountNumber}
+                                        className="bg-white rounded-xl shadow-lg p-6 border-2 border-emerald-200"
+                                    >
+                                        <div className="flex items-center gap-2 mb-4">
+                                            <CheckCircle className="w-5 h-5 text-emerald-600" />
+                                            <span className="font-bold text-gray-900">
+                                                {t("account")} #{account.accountNumber}
                                             </span>
                                         </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-600">{t("rate")} :</span>
-                                            <span className="font-bold text-emerald-600">
-                                                {format.number(account.interestRate)}%
-                                            </span>
+                                        <div className="space-y-2 mb-4">
+                                            <div className="flex justify-between">
+                                                <span className="text-gray-600">{t("balance")} :</span>
+                                                <span className="font-bold text-gray-900 text-lg">
+                                                    {format.number(account.balance ?? 0, { style: "currency", currency: "EUR" })}
+                                                </span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span className="text-gray-600">{t("rate")} :</span>
+                                                <span className="font-bold text-emerald-600">
+                                                    {format.number(account.interestRate)}%
+                                                </span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span className="text-gray-600">{t("interestEarned")} :</span>
+                                                <span className="font-bold text-emerald-600">
+                                                    +{format.number(account.totalInterestEarned, { style: "currency", currency: "EUR" })}
+                                                </span>
+                                            </div>
+                                            <div className="flex justify-between bg-amber-50 p-2 rounded-lg border border-amber-200">
+                                                <span className="text-gray-600 text-sm">Intérêts en attente :</span>
+                                                <span className="font-bold text-amber-700">
+                                                    +{format.number(pendingInterest, { style: "currency", currency: "EUR" })}
+                                                </span>
+                                            </div>
                                         </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-600">{t("interestEarned")} :</span>
-                                            <span className="font-bold text-emerald-600">
-                                                +{format.number(account.totalInterestEarned, { style: "currency", currency: "EUR" })}
-                                            </span>
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() => {
+                                                    setSelectedAccount(account.accountNumber);
+                                                    setShowDepositModal(true);
+                                                }}
+                                                className="flex-1 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-semibold"
+                                            >
+                                                {t("deposit")}
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    setSelectedAccount(account.accountNumber);
+                                                    setShowWithdrawModal(true);
+                                                }}
+                                                className="flex-1 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors font-semibold"
+                                            >
+                                                {t("withdraw")}
+                                            </button>
                                         </div>
                                     </div>
-                                    <div className="flex gap-2">
-                                        <button
-                                            onClick={() => {
-                                                setSelectedAccount(account.accountNumber);
-                                                setShowDepositModal(true);
-                                            }}
-                                            className="flex-1 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-semibold"
-                                        >
-                                            {t("deposit")}
-                                        </button>
-                                        <button
-                                            onClick={() => {
-                                                setSelectedAccount(account.accountNumber);
-                                                setShowWithdrawModal(true);
-                                            }}
-                                            className="flex-1 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors font-semibold"
-                                        >
-                                            {t("withdraw")}
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
                     </div>
                 )}

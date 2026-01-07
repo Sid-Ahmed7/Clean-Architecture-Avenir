@@ -63,10 +63,11 @@ export class SavingsAccountsEntity {
     ) {}
 
     /**
-     * Calculate daily interest based on current balance
-     * Formula: min(balance, maxDepositAmount ?? balance) * (interestRate / 365 / 100)
+     * Calculate interest per minute (for DEMO purposes - much faster than daily)
+     * Formula: min(balance, maxDepositAmount ?? balance) * (interestRate / 525600 / 100)
+     * Note: 525600 = 365 days * 24 hours * 60 minutes
      * @param currentBalance - Current account balance
-     * @returns Daily interest amount
+     * @returns Interest amount per minute
      */
     public calculateDailyInterest(currentBalance: number): number {
         if (!this.isActive || currentBalance <= 0) {
@@ -77,10 +78,11 @@ export class SavingsAccountsEntity {
             ? Math.min(currentBalance, this.maxDepositAmount)
             : currentBalance;
 
-        const dailyInterest = (effectiveBalance * this.interestRate) / 365 / 100;
+        // DEMO MODE: Calculate per minute instead of per day (525600 = 365*24*60)
+        const minuteInterest = (effectiveBalance * this.interestRate) / 525600 / 100;
         
         // Round to 2 decimal places
-        return Math.round(dailyInterest * 100) / 100;
+        return Math.round(minuteInterest * 100) / 100;
     }
 
     /**

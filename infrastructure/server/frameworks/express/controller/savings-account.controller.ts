@@ -36,7 +36,10 @@ export class SavingsAccountController {
     ) {}
 
     async createSavingsAccount(req: Request, res: Response) {
-        const createSavingsAccountUseCase = new CreateSavingsAccountUseCase(this.savingsAccountRepository);
+        const createSavingsAccountUseCase = new CreateSavingsAccountUseCase(
+            this.savingsAccountRepository,
+            this.accountRepository
+        );
 
         const dto: CreateSavingsAccount = {
             accountNumber: Number(req.body.accountNumber),
@@ -183,16 +186,19 @@ export class SavingsAccountController {
     async getAllSavingsAccounts(req: Request, res: Response) {
         const accounts = await this.savingsAccountRepository.getAllSavingsAccounts();
         
-        // Calculate real-time interest for each account
+        // INSANE DEMO MODE: Calculate per SECOND with 1,000,000x multiplier!
         const accountsWithInterest = accounts.map(account => {
-            const daysSinceLastUpdate = Math.floor(
-                (new Date().getTime() - account.lastBalanceUpdate.getTime()) / (1000 * 60 * 60 * 24)
+            const secondsSinceLastUpdate = Math.floor(
+                (new Date().getTime() - account.lastBalanceUpdate.getTime()) / 1000
             );
-            const pendingInterest = (account.balance * account.interestRate * daysSinceLastUpdate) / (365 * 100);
+            // Formula: (balance * rate * 1000000 * seconds) / (365 * 24 * 60 * 60 * 100)
+            // This is ~1,000,000x faster than normal annual rate
+            const pendingInterest = Math.round((account.balance * account.interestRate * 1000000 * secondsSinceLastUpdate) / (31536000 * 100) * 100) / 100;
             
             return {
                 ...account,
-                totalInterestEarned: account.totalInterestEarned + pendingInterest
+                pendingInterest, // Add as separate field
+                totalInterestEarned: account.totalInterestEarned // Keep original value
             };
         });
         
