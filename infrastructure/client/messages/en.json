@@ -944,7 +944,31 @@
       "title": "My Beneficiaries",
       "subtitle": "Manage your beneficiaries and organize them into groups",
       "newBeneficiary": "New beneficiary",
-      "newGroup": "New group"
+      "newGroup": "New group",
+      "groupAddPage": {
+        "title": "Create a beneficiary group",
+        "subtitle": "Organize your beneficiaries to simplify multi-transfers",
+        "helper": "Group several beneficiaries to speed up repeated transfers.",
+        "back": "Back to beneficiaries",
+        "success": "Group created successfully! Redirecting...",
+        "tips": {
+          "fast": "Under a minute",
+          "secure": "Secure storage of your information",
+          "editable": "You can update group members later"
+        }
+      },
+      "addPage": {
+        "title": "Add a beneficiary",
+        "subtitle": "Create a new beneficiary to simplify your transfers",
+        "helper": "We validate the IBAN format and contact details before saving.",
+        "back": "Back to beneficiaries",
+        "success": "Beneficiary created successfully! Redirecting...",
+        "tips": {
+          "fast": "Takes less than a minute",
+          "secure": "Secure storage of your information",
+          "editable": "You can update this later if needed"
+        }
+      }
     },
     "savingsPage": {
       "title": "Savings",

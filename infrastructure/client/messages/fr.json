@@ -944,7 +944,31 @@
       "title": "Mes Bénéficiaires",
       "subtitle": "Gérez vos bénéficiaires et organisez-les en groupes",
       "newBeneficiary": "Nouveau bénéficiaire",
-      "newGroup": "Nouveau groupe"
+      "newGroup": "Nouveau groupe",
+      "groupAddPage": {
+        "title": "Créer un groupe de bénéficiaires",
+        "subtitle": "Organisez vos bénéficiaires pour faciliter les virements multiples",
+        "helper": "Regroupez plusieurs bénéficiaires pour accélérer vos transferts récurrents.",
+        "back": "Retour aux bénéficiaires",
+        "success": "Groupe créé avec succès ! Redirection...",
+        "tips": {
+          "fast": "Moins d'une minute",
+          "secure": "Stockage sécurisé de vos informations",
+          "editable": "Vous pourrez modifier les membres plus tard"
+        }
+      },
+      "addPage": {
+        "title": "Ajouter un bénéficiaire",
+        "subtitle": "Créez un nouveau bénéficiaire pour faciliter vos virements",
+        "helper": "Nous vérifions l'IBAN et les coordonnées avant l'enregistrement.",
+        "back": "Retour aux bénéficiaires",
+        "success": "Bénéficiaire créé avec succès ! Redirection...",
+        "tips": {
+          "fast": "Moins d'une minute",
+          "secure": "Stockage sécurisé de vos informations",
+          "editable": "Vous pourrez modifier ces infos plus tard"
+        }
+      }
     },
     "savingsPage": {
       "title": "Épargne",
