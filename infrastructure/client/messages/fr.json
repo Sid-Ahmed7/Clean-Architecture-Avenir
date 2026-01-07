@@ -46,7 +46,8 @@
     "stocks": {
       "structure": {
         "header": {
-          "open": "Ouverture"
+          "open": "Ouvert",
+          "closed": "Fermé"
         },
         "price": "Prix",
         "stats": {
@@ -69,8 +70,71 @@
         }
       },
       "orders": {
-          "list": "Liste des ordres"
+        "list": {
+          "title": "Liste des ordres",
+          "noOrders": "Aucun ordre trouvé",
+          "noMatchingOrders": "Aucun ordre ne correspond à votre recherche"
+        },
+        "card": {
+          "type": "Type",
+          "buy": "Achat",
+          "sell": "Vente",
+          "quantity": "Quantité",
+          "unitPrice": "Prix unitaire",
+          "totalAmount": "Montant total",
+          "fundsBlocked": "{amount}€ bloqués",
+          "sharesBlocked": "{count} actions bloquées",
+          "fundsWillBeUnlocked": "Les fonds seront débloqués si l'ordre n'est pas exécuté",
+          "sharesWillBeUnlocked": "Les actions seront débloquées si l'ordre n'est pas exécuté",
+          "executedAt": "Exécuté le {date}",
+          "executionPrice": "Prix d'exécution : {price}€",
+          "cancelling": "Annulation...",
+          "cancelOrder": "Annuler l'ordre"
+        },
+        "filters": {
+          "allStatuses": "Tous les statuts",
+          "pending": "En attente",
+          "executed": "Exécuté",
+          "cancelled": "Annulé",
+          "partiallyExecuted": "Partiellement exécuté",
+          "rejected": "Rejeté",
+          "allTypes": "Tous les types",
+          "buy": "Achat",
+          "sell": "Vente",
+          "status": "Statut",
+          "orderType": "Type d'ordre"
         }
+      },
+      "positions": {
+        "list": {
+          "noPositions": "Aucune position ouverte",
+          "noPositionsDesc": "Vous n'avez pas encore d'actions dans votre portefeuille."
+        },
+        "card": {
+          "quantity": "Quantité",
+          "avgPrice": "Prix de revient",
+          "currentPrice": "Prix actuel",
+          "value": "Valeur totale",
+          "gain": "Plus-value",
+          "loss": "Moins-value",
+          "performance": "Performance",
+          "sell": "Vendre",
+          "shares": "{count} actions",
+          "blocked": "{count} bloqués",
+          "available": "Disponible",
+          "totalQuantity": "Quantité totale",
+          "currentValue": "Valeur actuelle",
+          "totalCost": "Coût total",
+          "allBlocked": "Toutes les actions sont bloquées dans des ordres en attente",
+          "availableCount": "({count} dispo)"
+        },
+        "summary": {
+          "totalValue": "Valeur totale",
+          "totalCost": "Coût total",
+          "totalGain": "Plus-value latente",
+          "performance": "Performance globale"
+        }
+      }
     },
     "sidebar": {
       "menu": {
@@ -2100,6 +2164,19 @@
         "volume": "Volume",
         "actions": "Actions"
       }
+    },
+    "orders": {
+      "title": "Mes ordres",
+      "loading": "Chargement...",
+      "errorTitle": "Erreur",
+      "errorMessage": "Erreur lors du chargement des ordres",
+      "cancelError": "Erreur lors de l'annulation de l'ordre"
+    },
+    "portfolio": {
+      "title": "Mon portefeuille",
+      "loading": "Chargement...",
+      "errorTitle": "Erreur",
+      "errorMessage": "Erreur lors du chargement du portefeuille"
     }
   }
 }

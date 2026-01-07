@@ -1,26 +1,27 @@
 import { Order } from "@/types/order";
 import { OrderStatusBadge } from "./OrderStatusBadge";
 import Button from "@/components/ui/Button";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 
 interface OrderCardProps {
-    order: Order;
-    onCancel: (orderId: string) => void;
-    isLoading: boolean;
+  order: Order;
+  onCancel: (orderId: string) => void;
+  isLoading: boolean;
 }
 
-export function OrderCard({order, onCancel, isLoading}: OrderCardProps) {
-const t = useTranslations('components.stocks.orders.card');
-const isBuy = order.orderType === "BUY";
-const canCancel = order.status === "PENDING";
+export function OrderCard({ order, onCancel, isLoading }: OrderCardProps) {
+  const t = useTranslations('components.stocks.orders.card');
+  const locale = useLocale();
+  const isBuy = order.orderType === "BUY";
+  const canCancel = order.status === "PENDING";
 
-return (
+  return (
     <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
       <div className="flex justify-between items-start mb-4">
         <div>
           <h3 className="text-xl font-bold text-gray-900">{order.stockSymbol}</h3>
           <p className="text-sm text-gray-500">
-            {new Date(order.createdAt).toLocaleString("fr-FR")}
+            {new Date(order.createdAt).toLocaleString(locale)}
           </p>
         </div>
         <OrderStatusBadge status={order.status} />
@@ -69,7 +70,7 @@ return (
       {order.executedAt && (
         <div className="mb-4 p-3 bg-green-50 rounded">
           <p className="text-sm text-green-800">
-            {t('executedAt', { date: new Date(order.executedAt).toLocaleString("fr-FR") })}
+            {t('executedAt', { date: new Date(order.executedAt).toLocaleString(locale) })}
           </p>
           {order.executionPrice && (
             <p className="text-sm text-green-800">

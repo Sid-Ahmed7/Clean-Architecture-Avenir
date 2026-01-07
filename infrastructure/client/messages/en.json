@@ -46,7 +46,8 @@
     "stocks": {
       "structure": {
         "header": {
-          "open": "Open"
+          "open": "Open",
+          "closed": "Closed"
         },
         "price": "Price",
         "stats": {
@@ -69,7 +70,70 @@
         }
       },
       "orders": {
-        "list": "Order List"
+        "list": {
+          "title": "Order List",
+          "noOrders": "No orders found",
+          "noMatchingOrders": "No orders match your search"
+        },
+        "card": {
+          "type": "Type",
+          "buy": "Buy",
+          "sell": "Sell",
+          "quantity": "Quantity",
+          "unitPrice": "Unit Price",
+          "totalAmount": "Total Amount",
+          "fundsBlocked": "{amount}€ blocked",
+          "sharesBlocked": "{count} shares blocked",
+          "fundsWillBeUnlocked": "Funds will be unlocked if order is not executed",
+          "sharesWillBeUnlocked": "Shares will be unlocked if order is not executed",
+          "executedAt": "Executed on {date}",
+          "executionPrice": "Execution price: {price}€",
+          "cancelling": "Cancelling...",
+          "cancelOrder": "Cancel Order"
+        },
+        "filters": {
+          "allStatuses": "All Statuses",
+          "pending": "Pending",
+          "executed": "Executed",
+          "cancelled": "Cancelled",
+          "partiallyExecuted": "Partially Executed",
+          "rejected": "Rejected",
+          "allTypes": "All Types",
+          "buy": "Buy",
+          "sell": "Sell",
+          "status": "Status",
+          "orderType": "Order Type"
+        }
+      },
+      "positions": {
+        "list": {
+          "noPositions": "No open positions",
+          "noPositionsDesc": "You don't have any stocks in your portfolio yet."
+        },
+        "card": {
+          "quantity": "Quantity",
+          "avgPrice": "Average Price",
+          "currentPrice": "Current Price",
+          "value": "Total Value",
+          "gain": "Capital Gain",
+          "loss": "Capital Loss",
+          "performance": "Performance",
+          "sell": "Sell",
+          "shares": "{count} shares",
+          "blocked": "{count} blocked",
+          "available": "Available",
+          "totalQuantity": "Total Quantity",
+          "currentValue": "Current Value",
+          "totalCost": "Total Cost",
+          "allBlocked": "All shares are blocked in pending orders",
+          "availableCount": "({count} avail)"
+        },
+        "summary": {
+          "totalValue": "Total Value",
+          "totalCost": "Total Cost",
+          "totalGain": "Unrealized Gain",
+          "performance": "Overall Performance"
+        }
       }
     },
     "sidebar": {
@@ -2100,6 +2164,19 @@
         "volume": "Volume",
         "actions": "Actions"
       }
+    },
+    "orders": {
+      "title": "My Orders",
+      "loading": "Loading...",
+      "errorTitle": "Error",
+      "errorMessage": "Error loading orders",
+      "cancelError": "Error cancelling order"
+    },
+    "portfolio": {
+      "title": "My Portfolio",
+      "loading": "Loading...",
+      "errorTitle": "Error",
+      "errorMessage": "Error loading portfolio"
     }
   }
 }
