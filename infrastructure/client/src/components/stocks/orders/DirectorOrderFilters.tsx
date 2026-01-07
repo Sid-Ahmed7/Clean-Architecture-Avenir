@@ -19,7 +19,7 @@ export function DirectorOrderFilters({
     onStatusChange,
     orderCounts
 }: DirectorOrderFiltersProps) {
-    const t = useTranslations('components.stocks.orders.directorFilters');
+    const t = useTranslations('stocks.orders.directorFilters');
     
     const statusOptions = [
         { value: "ALL" as const, label: t('all'), count: orderCounts.all, color: "bg-gray-100 text-gray-700 hover:bg-gray-200" },

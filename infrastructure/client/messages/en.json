@@ -1371,6 +1371,20 @@
     }
   },
   "stocks": {
+    "stocksCard": {
+      "available": "Available",
+      "unavailable": "Unavailable",
+      "previousPrice": "Previous price",
+      "variation": "Variation",
+      "ipoTitle": "IPO available",
+      "ipoDesc": "Direct allocation at {price}€ per share while stocks last.",
+      "buyIpo": "Buy IPO ({count} left)",
+      "orderBook": "View order book",
+      "updatedAt": "Updated at",
+      "notAvailable": "This stock is not available for trading.",
+      "buyAt": "Buy at {price}€",
+      "sell": "Sell"
+    },
     "priceComparison": {
       "title": "Price Comparison",
       "marketPrice": "Market Price",
@@ -1566,6 +1580,23 @@
         "instantExecutionInfo": "Your purchase will be executed instantly at the IPO price. Shares will be added directly to your portfolio.",
         "cancel": "Cancel",
         "purchasing": "Purchasing...",
+        "buyShares": "Buy {count} IPO share(s)"
+      }
+    ,
+    "purchaseIPO": {
+      "title": "Purchase IPO",
+      "ipoTitle": "Initial Public Offering",
+      "ipoDescription": "Direct purchase at initial offering price",
+      "sharesRemaining": "shares remaining",
+      "quantity": "Quantity",
+      "maxAvailable": "Maximum: {max} shares available",
+      "fixedPrice": "Fixed IPO Price (€)",
+      "fixedPriceDescription": "Fixed price of",
+      "totalAmount": "Total amount",
+      "transactionFee": "Transaction fee",
+      "totalToPay": "Total to pay",
+      "instantExecutionInfo": "Your purchase will be executed instantly at the IPO price. Shares will be added directly to your portfolio.",
+      "cancel": "Cancel",
         "buyShares": "Buy {count} IPO share(s)"
       }
     },

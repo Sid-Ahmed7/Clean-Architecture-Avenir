@@ -8,12 +8,12 @@ interface CreateStockFieldsProps {
 
 export function StockFields({ form }: CreateStockFieldsProps) {
   const { control, formState: { errors } } = form;
-  const t = useTranslations("components.stocks.forms");
+  const t = useTranslations("stocks.forms");
 
   return (
     <>
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-slate-700 mb-1">
           {t("fields.symbol")} <span className="text-red-500">*</span>
         </label>
         <Controller
@@ -31,7 +31,7 @@ export function StockFields({ form }: CreateStockFieldsProps) {
               type="text"
               {...field}
               placeholder={t("fields.symbolPlaceholder")}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent uppercase"
+              className="w-full px-3 py-2 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-200 uppercase transition"
             />
           )}
         />
@@ -41,7 +41,7 @@ export function StockFields({ form }: CreateStockFieldsProps) {
       </div>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-slate-700 mb-1">
           {t("fields.companyName")} <span className="text-red-500">*</span>
         </label>
         <Controller
@@ -53,7 +53,7 @@ export function StockFields({ form }: CreateStockFieldsProps) {
               type="text"
               {...field}
               placeholder={t("fields.companyNamePlaceholder")}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-200 transition"
             />
           )}
         />
@@ -63,7 +63,7 @@ export function StockFields({ form }: CreateStockFieldsProps) {
       </div>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-slate-700 mb-1">
           {t("fields.name")} <span className="text-red-500">*</span>
         </label>
         <Controller
@@ -75,7 +75,7 @@ export function StockFields({ form }: CreateStockFieldsProps) {
               type="text"
               {...field}
               placeholder={t("fields.namePlaceholder")}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-200 transition"
             />
           )}
         />
@@ -85,7 +85,7 @@ export function StockFields({ form }: CreateStockFieldsProps) {
       </div>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-slate-700 mb-1">
           {t("fields.initialPrice")} <span className="text-red-500">*</span>
         </label>
         <Controller
@@ -104,7 +104,7 @@ export function StockFields({ form }: CreateStockFieldsProps) {
                 const value = parseFloat(e.target.value);
                 field.onChange(isNaN(value) ? 0 : value);
               }}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-200 transition"
             />
           )}
         />
@@ -114,7 +114,7 @@ export function StockFields({ form }: CreateStockFieldsProps) {
       </div>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-slate-700 mb-1">
           {t("fields.currency")} <span className="text-red-500">*</span>
         </label>
         <Controller
@@ -126,7 +126,7 @@ export function StockFields({ form }: CreateStockFieldsProps) {
               type="text"
               {...field}
               placeholder={t("fields.currencyPlaceholder")}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent uppercase"
+              className="w-full px-3 py-2 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-200 uppercase transition"
             />
           )}
         />
@@ -136,7 +136,7 @@ export function StockFields({ form }: CreateStockFieldsProps) {
       </div>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-slate-700 mb-1">
           {t("fields.totalShares")} <span className="text-red-500">*</span>
         </label>
         <Controller
@@ -157,19 +157,19 @@ export function StockFields({ form }: CreateStockFieldsProps) {
                 field.onChange(isNaN(value) ? 0 : value);
               }}
               placeholder={t("fields.totalSharesPlaceholder")}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-200 transition"
             />
           )}
         />
         {errors.totalShares && (
           <p className="text-red-500 text-xs mt-1">{errors.totalShares.message}</p>
         )}
-        <p className="text-xs text-gray-500 mt-1">
+        <p className="text-xs text-slate-500 mt-1">
           {t("fields.totalSharesHelp")}
         </p>
       </div>
 
-      <div className="flex items-center mb-4">
+      <div className="flex items-center gap-2 mb-2 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2">
         <Controller
           name="isActionAvailable"
           control={control}
@@ -181,11 +181,11 @@ export function StockFields({ form }: CreateStockFieldsProps) {
               onBlur={onBlur}
               name={name}
               ref={ref}
-              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500"
             />
           )}
         />
-        <label className="ml-2 text-sm text-gray-700">
+        <label className="text-sm text-slate-700">
           {t("fields.isActionAvailable")}
         </label>
       </div>

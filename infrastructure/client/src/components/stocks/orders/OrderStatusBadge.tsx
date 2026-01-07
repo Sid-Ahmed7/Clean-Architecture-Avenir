@@ -8,7 +8,7 @@ interface OrderStatusEnumBadgeProps {
 }
 
 export function OrderStatusBadge({ status }: OrderStatusEnumBadgeProps) {
-  const t = useTranslations('components.stocks.orders.statusBadge');
+  const t = useTranslations('stocks.orders.statusBadge');
   
   const statusConfig = {
     [OrderStatusEnum.PENDING]: { variant: "warning" as const, label: t('pending') },

@@ -14,7 +14,7 @@ interface StockManagementTableProps {
 }
 
 export function StockManagementTable({stocks,onEdit,onDelete,onToggleAvailability,onOpenIPO,onCloseIPO}: StockManagementTableProps) {
-  const t = useTranslations("components.stocks.table");
+  const t = useTranslations("stocks.table");
   
   if (stocks.length === 0) {
     return (
@@ -50,7 +50,7 @@ return (
                 {t("status")}
               </th>
               <th className="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                IPO
+                {t("ipoActive")}
               </th>
               <th className="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">
                 {t("actions")}

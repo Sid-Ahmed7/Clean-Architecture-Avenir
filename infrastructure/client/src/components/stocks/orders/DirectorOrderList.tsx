@@ -7,7 +7,7 @@ interface DirectorOrderListProps {
 }
 
 export function DirectorOrderList({ orders }: DirectorOrderListProps) {
-    const t = useTranslations('components.stocks.orders.directorList');
+    const t = useTranslations('stocks.orders.directorList');
     
     const ordersBySymbol = orders.reduce((acc, order) => {
         if (!acc[order.stockSymbol]) {

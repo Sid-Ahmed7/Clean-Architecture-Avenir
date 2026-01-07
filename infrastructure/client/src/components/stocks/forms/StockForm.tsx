@@ -12,7 +12,7 @@ interface CreateStockFormProps {
 }
 
 export function StockForm({ onSubmit, onCancel, isSubmitting }: CreateStockFormProps) {
-  const t = useTranslations('components.stocks.forms.stockForm');
+  const t = useTranslations('stocks.forms.stockForm');
   const form = useForm<CreateStock>({
     defaultValues: {
       symbol: "",
@@ -28,7 +28,7 @@ export function StockForm({ onSubmit, onCancel, isSubmitting }: CreateStockFormP
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
       <StockFields form={form} />
 
-      <div className="flex gap-3 pt-4">
+      <div className="flex flex-col gap-3 pt-4">
         <Button variant="secondary" onClick={onCancel} fullWidth type="button">
           {t('cancel')}
         </Button>

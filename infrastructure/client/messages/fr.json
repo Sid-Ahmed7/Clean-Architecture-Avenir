@@ -1371,6 +1371,20 @@
     }
   },
   "stocks": {
+    "stocksCard": {
+      "available": "Disponible",
+      "unavailable": "Indisponible",
+      "previousPrice": "Prix précédent",
+      "variation": "Variation",
+      "ipoTitle": "IPO disponible",
+      "ipoDesc": "Allocation directe à {price}€ par action, dans la limite des parts.",
+      "buyIpo": "Acheter l'IPO ({count} restantes)",
+      "orderBook": "Voir le carnet d'ordres",
+      "updatedAt": "Mis à jour le",
+      "notAvailable": "Cette action n'est pas disponible au trading.",
+      "buyAt": "Acheter à {price}€",
+      "sell": "Vendre"
+    },
     "priceComparison": {
       "title": "Comparaison des prix",
       "marketPrice": "Prix du marché",
@@ -1568,6 +1582,23 @@
         "purchasing": "Achat en cours...",
         "buyShares": "Acheter {count} action(s) IPO"
       }
+    ,
+    "purchaseIPO": {
+      "title": "Achat IPO",
+      "ipoTitle": "Introduction en Bourse",
+      "ipoDescription": "Achat direct au prix d'émission initial",
+      "sharesRemaining": "actions restantes",
+      "quantity": "Quantité",
+      "maxAvailable": "Maximum : {max} actions disponibles",
+      "fixedPrice": "Prix IPO fixe (€)",
+      "fixedPriceDescription": "Prix fixe de",
+      "totalAmount": "Montant total",
+      "transactionFee": "Frais de transaction",
+      "totalToPay": "Total à payer",
+      "instantExecutionInfo": "Votre achat sera exécuté instantanément au prix IPO. Les actions seront ajoutées directement à votre portefeuille.",
+      "cancel": "Annuler",
+      "buyShares": "Acheter {count} action(s) IPO"
+    }
     },
     "positions": {
       "summary": {

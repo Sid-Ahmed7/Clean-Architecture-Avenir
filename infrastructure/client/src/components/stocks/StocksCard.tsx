@@ -16,7 +16,7 @@ interface StocksCardProps {
 export function StocksCard({ stock, onBuy, onSell, onBuyIPO }: StocksCardProps) {
   const isPositive = stock.rateOfChange >= 0;
   const isIPOActive = stock.ipoActive && stock.availableSharesForIPO > 0;
-  const t = useTranslations("components.stocks.stocksCard");
+  const t = useTranslations("stocks.stocksCard");
 
   const { locale } = useContext(LocaleContext);
 

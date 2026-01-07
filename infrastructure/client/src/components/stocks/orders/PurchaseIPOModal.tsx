@@ -15,7 +15,8 @@ interface PurchaseIPOModalProps {
 }
 
 export function PurchaseIPOModal({isOpen,onClose,stockSymbol,stockName,ipoPrice,availableShares,}: PurchaseIPOModalProps) {
-  const t = useTranslations('components.stocks.orders.purchaseIPO');
+  const t = useTranslations('stocks.orders.purchaseIPO');
+  const tf = (key: string, fallback: string) => t(key, { fallback });
   const queryClient = useQueryClient();
   const [quantity, setQuantity] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
