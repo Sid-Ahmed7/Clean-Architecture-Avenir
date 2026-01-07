@@ -42,6 +42,7 @@ export interface LoanRepaymentSchedule {
 export type AdvisorOption = { id: string; fullName: string };
 
 export type LoanRequestFieldsProps = {
+  t: (key: string, values?: Record<string, any>) => string;
   advisors: AdvisorOption[];
   loadingAdvisors: boolean;
   advisorError: string;

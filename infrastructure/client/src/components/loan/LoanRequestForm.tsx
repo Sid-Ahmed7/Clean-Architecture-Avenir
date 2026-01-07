@@ -14,7 +14,7 @@ const DURATIONS = [6, 12, 18];
 const RATE_THRESHOLD = 5000;
 
 export function LoanRequestForm() {
-  const t = useTranslations("components.loan.form");
+  const t = useTranslations("loan.form");
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState<"success" | "error" | "">("");
   const [advisors, setAdvisors] = useState<AdvisorOption[]>([]);
@@ -129,6 +129,7 @@ export function LoanRequestForm() {
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <LoanRequestFields
+                t={t}
                 advisors={advisors}
                 loadingAdvisors={loadingAdvisors}
                 advisorError={advisorError}

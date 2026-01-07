@@ -2,6 +2,7 @@ import { LoanRequestFieldsProps } from "@/types/loan";
 import Button from "@/components/ui/Button";
 
 export function LoanRequestFields({
+  t,
   advisors,
   loadingAdvisors,
   advisorError,
