@@ -69,8 +69,12 @@
         }
       },
       "orders": {
-          "list": "Liste des ordres"
+        "list": {
+          "title": "Liste des ordres",
+          "noOrders": "Aucun ordre trouvé",
+          "noMatchingOrders": "Aucun ordre ne correspond à votre recherche"
         }
+      }
     },
     "sidebar": {
       "menu": {

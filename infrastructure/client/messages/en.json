@@ -69,7 +69,11 @@
         }
       },
       "orders": {
-        "list": "Order List"
+        "list": {
+          "title": "Order List",
+          "noOrders": "No orders found",
+          "noMatchingOrders": "No orders match your search"
+        }
       }
     },
     "sidebar": {
