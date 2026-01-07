@@ -10,7 +10,7 @@ import { useRequestOverdraftIncrease } from "@/hooks/useRequestOverdraftIncrease
 import { getRib } from "@/lib/api/account";
 import { RibData } from "@/types/rib";
 import { RibDocument } from "@/components/rib/RibDocument";
-import { useTranslations, useFormatter } from "next-intl";
+import { useTranslations, useFormatter, useLocale } from "next-intl";
 
 declare global {
     interface Window {
@@ -27,7 +27,9 @@ export function MainAccountCard(props: MainAccountCardProps) {
     const { account } = props;
     const t = useTranslations("components.bankAccount.mainAccountCard");
     const tEnums = useTranslations("components.enums");
+    const tRib = useTranslations("components.rib");
     const format = useFormatter();
+    const locale = useLocale();
     const [currentTransferLimit, setCurrentTransferLimit] = useState(account.transferLimit);
     const [newTransferLimit, setNewTransferLimit] = useState(account.transferLimit);
     const [localError, setLocalError] = useState<string | null>(null);
@@ -70,7 +72,15 @@ export function MainAccountCard(props: MainAccountCardProps) {
                 throw new Error(t("errors.pdfGeneratorUnavailable"));
             }
 
-            const html = "<!DOCTYPE html>" + renderToStaticMarkup(<RibDocument rib={rib} />);
+            const html =
+                "<!DOCTYPE html>" +
+                renderToStaticMarkup(
+                    <RibDocument
+                        rib={rib}
+                        translate={tRib}
+                        locale={locale}
+                    />
+                );
             const container = document.createElement("div");
             container.innerHTML = html;
 
