@@ -43,6 +43,9 @@
     }
   },
   "components": {
+    "notification": {
+      "noNotifications": "Aucune notification"
+    },
     "stocks": {
       "structure": {
         "header": {
@@ -304,9 +307,6 @@
       },
       "grid": {
         "noNews": "Aucune actualité trouvée."
-      },
-      "notification": {
-        "noNotifications": "Aucune notification"
       }
     },
     "beneficiariesManager": {
