@@ -42,10 +42,10 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     { icon: Briefcase, labelKey: "menu.overdraftRequests", href: "/advisor/overdraft-requests", roles: [RoleEnum.BANK_ADVISOR] },
     { icon: MessageCircle, labelKey: "menu.pendingConversations", href: "/advisor/pending-conversations", roles: [RoleEnum.BANK_ADVISOR] },
 
-    { icon: ArrowUpRight, labelKey: "menu.transfers", href: `/${rolePrefix}/transfers`, excludeRoles: [RoleEnum.BANK_MANAGER] },
+    { icon: ArrowUpRight, labelKey: "menu.transfers", href: `/${rolePrefix}/transfers`, excludeRoles: [RoleEnum.BANK_MANAGER, RoleEnum.BANK_ADVISOR] },
     { icon: LineChart, labelKey: "menu.trading", href: `/stock` },
     { icon: ShoppingCart, labelKey: "menu.myOrders", href: `/orders`, excludeRoles: [RoleEnum.BANK_MANAGER] },
-    { icon: BarChart3, labelKey: "menu.myPositions", href: `/position`, excludeRoles: [RoleEnum.BANK_MANAGER] },
+    { icon: BarChart3, labelKey: "menu.myPositions", href: `/position`, excludeRoles: [RoleEnum.BANK_MANAGER, RoleEnum.BANK_ADVISOR] },
     { icon: Newspaper, labelKey: "menu.news", href: `/feed` },
     { icon: MessageCircle, labelKey: "menu.messages", href: `/${rolePrefix}/conversations`, excludeRoles: [RoleEnum.BANK_MANAGER] },
   ];
