@@ -9,7 +9,7 @@ import app from '@adonisjs/core/services/app'
 const getNewsController = (async () => {
   return new NewsController(
     await app.container.make('newsRepository'),
-    await app.container.make('notificationService'),
+    await app.container.make('newsService'),
     await app.container.make('uuidService')
   )
 })()
@@ -46,4 +46,4 @@ router
       .use(authorizeRoles([RoleEnum.BANK_ADVISOR]))
 
   })
-  .prefix('/api/news')
+  .prefix('/api/feed')

@@ -31,18 +31,17 @@ export const MediaTypeEnum = {
 } as const
 
 export const NewsCategoryEnum = {
-  GENERAL: 'GENERAL',
-  FINANCE: 'FINANCE',
-  TECHNOLOGY: 'TECHNOLOGY',
-  BUSINESS: 'BUSINESS',
-  MARKET: 'MARKET',
+  OFFER: 'OFFER',
+  SECURITY: 'SECURITY',
+  SAVINGS: 'SAVINGS',
+  INVESTMENT: 'INVESTMENT',
+  CREDIT: 'CREDIT',
 } as const
 
 export const NewsPriorityEnum = {
   LOW: 'LOW',
   MEDIUM: 'MEDIUM',
   HIGH: 'HIGH',
-  URGENT: 'URGENT',
 } as const
 
 export const OrderTypeEnum = {

@@ -41,15 +41,21 @@ export class PostgresMessageRepository implements MessageRepositoryInterface {
     }
 
     async findByConversationId(conversationId: string): Promise<MessageEntity[] | ConversationNotFoundError> {
+        console.log('🔍 [PostgresMessageRepository] Finding messages for conversation:', conversationId);
+        
         const result = await pgPool.query<PostgresMessageRow>(
             'SELECT * FROM messages WHERE conversation_id = $1 ORDER BY sent_at ASC',
             [conversationId]
         );
 
+        console.log('🔍 [PostgresMessageRepository] Query result rows:', result.rows.length);
+
         if (result.rows.length === 0) {
-            return new ConversationNotFoundError(`Conversation with id ${conversationId} not found`);
+            console.log('⚠️ [PostgresMessageRepository] No messages found for conversation (returning empty array)');
+            return []; // Retourner un tableau vide au lieu d'une erreur
         }
 
+        console.log('✅ [PostgresMessageRepository] Returning', result.rows.length, 'messages');
         return result.rows.map(row => this.mapRowToEntity(row));
     }
 
@@ -109,15 +115,20 @@ export class PostgresMessageRepository implements MessageRepositoryInterface {
     }
 
     private mapRowToEntity(row: PostgresMessageRow): MessageEntity {
-        return {
-            id: row.id,
-            conversationId: row.conversation_id,
-            conversationClientId: row.conversation_client_id,
-            conversationAdvisorId: row.conversation_advisor_id ?? undefined,
-            authorId: row.author_id,
-            content: row.content,
-            readStatus: row.read_status,
-            sentAt: row.sent_at
-        } as MessageEntity;
+        const message = MessageEntity.from(
+            row.id,
+            row.conversation_id,
+            row.conversation_client_id,
+            row.conversation_advisor_id ?? undefined,
+            row.author_id,
+            row.content,
+            row.read_status,
+            row.sent_at
+        );
+        if( message instanceof Error) {
+            return message;
+        }
+        return message;
+
     }
 }

@@ -86,11 +86,15 @@ export class PostgresContentRepository implements ContentRepositoryInterface {
     }
 
     private mapRowToEntity(row: PostgresContentRow): ContentEntity {
-        return {
-            id: row.id,
-            newsId: row.news_id,
-            order: row.order,
-            content: row.content
-        } as ContentEntity;
+        const content = ContentEntity.from(
+            row.id,
+            row.news_id,
+            row.order,
+            row.content
+        );
+        if (content instanceof Error) {
+            return content;
+        }
+        return content;
     }
 }

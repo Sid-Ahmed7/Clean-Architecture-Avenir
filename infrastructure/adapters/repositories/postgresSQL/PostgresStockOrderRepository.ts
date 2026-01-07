@@ -197,9 +197,6 @@ export class PostgresStockOrderRepository implements StockOrderRepositoryInterfa
         return this.mapRowsToEntities(result.rows);
     }
 
-    /* =======================
-       Mapping helpers
-       ======================= */
 
     private mapRowsToEntities(rows: PostgresStockOrderRow[]): StockOrderEntity[] {
         return rows

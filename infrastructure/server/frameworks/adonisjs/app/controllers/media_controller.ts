@@ -29,7 +29,7 @@ export default class MediaController {
   ) {}
 
   async uploadMedia({ request, response }: HttpContext) {
-    const file = request.file('file');
+    const file = request.file('media');
     if (!file) {
       return response.status(400).json({ error: "No file provided" });
     }
@@ -37,10 +37,11 @@ export default class MediaController {
     const uploadMediaUseCase = new UploadMediaUseCase(this.fileStorageService);
     const fs = await import('fs');
     const buffer = fs.readFileSync(file.tmpPath!);
+    const mimeType = `${file.type}/${file.subtype}`;
     const uploadFile = await uploadMediaUseCase.execute(
       buffer,
       file.clientName,
-      file.type || ''
+      mimeType
     );
 
     if (uploadFile instanceof Error) {
@@ -48,7 +49,7 @@ export default class MediaController {
     }
 
     const body = request.body();
-    const mediaType = file.type?.startsWith("image/") ? MediaTypeEnum.IMAGE : MediaTypeEnum.VIDEO;
+    const mediaType = file.type === "image" ? MediaTypeEnum.IMAGE : MediaTypeEnum.VIDEO;
     const mediaEntity = {
       newsId: body.newsId,
       url: uploadFile.url,

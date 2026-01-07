@@ -7,9 +7,9 @@ export const createMediaValidator = vine.object({
   type: vine.enum(Object.values(MediaTypeEnum)),
   order: vine.number(),
   altText: vine.string(),
-  caption: vine.string().optional(),
-  size: vine.number().optional(),
-  mimeType: vine.string().optional()
+  caption: vine.string(),
+  size: vine.number(),
+  mimeType: vine.string()
 })
 
 export const updateMediaValidator = vine.object({

@@ -33,10 +33,10 @@ export class AssignAdvisorToConversationUseCase {
         }
 
         await this.sendNotificationUseCase.execute(
-            advisorId,
+            conversation.clientId,
             `Votre conversation a été prise en charge par un conseiller.`,
             NotificationTypeEnum.ACTION,
-            conversation.clientId
+            advisorId,
         );
 
         return result;

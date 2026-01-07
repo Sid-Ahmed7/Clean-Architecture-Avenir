@@ -12,18 +12,18 @@ import { InvalidNewsError } from "#domain/errors/InvalidNewsError.js";
 import { AuthContext } from '#types/JwtPayload';
 import vine from '@vinejs/vine';
 import * as newsValidator from "#infrastructure/server/frameworks/adonisjs/app/validators/news.js";
-import { NotificationService } from '#infrastructure/adapters/services/notification/NotificationService.js';
+import { NewsService } from '#infrastructure/adapters/services/news/NewsService.js';
 
 @inject()
 export default class NewsController {
   constructor(
     private readonly newsRepository: NewsRepositoryInterface,
-    private readonly notificationService: NotificationService,
+    private readonly newsService: NewsService,
     private readonly uuidService: CryptoUuidGenerator
   ) {}
 
   async create({ request, response }: HttpContext) {
-    const createNewsUseCase = new CreateNewsUseCase(this.newsRepository, this.notificationService,this.uuidService);
+    const createNewsUseCase = new CreateNewsUseCase(this.newsRepository, this.newsService, this.uuidService);
     const input = await vine.validate({schema: newsValidator.createNewsValidator, data: request.body()});
 
     const result = await createNewsUseCase.execute(input);
@@ -38,7 +38,7 @@ export default class NewsController {
   }
 
   async update({ request, response }: HttpContext) {
-    const updateNewsUseCase = new UpdateNewsUseCase(this.newsRepository, this.notificationService);
+    const updateNewsUseCase = new UpdateNewsUseCase(this.newsRepository, this.newsService);
     const input = await vine.validate({schema: newsValidator.updateNewsValidator, data: request.body()});
 
     const result = await updateNewsUseCase.execute(input);
@@ -56,7 +56,7 @@ export default class NewsController {
   }
 
   async delete({ request, response }: HttpContext) {
-    const deleteNewsUseCase = new DeleteNewsUseCase(this.newsRepository, this.notificationService);
+    const deleteNewsUseCase = new DeleteNewsUseCase(this.newsRepository, this.newsService);
     const id = request.param('id');
 
     if (!id) {
@@ -119,10 +119,10 @@ export default class NewsController {
       close: () => response.response.end()
     };
 
-    this.notificationService.subscribe(userId, client);
+    this.newsService.subscribe(client);
 
     request.request.on('close', () => {
-      this.notificationService.unsubscribe(userId, client);
+      this.newsService.unsubscribe(client);
     });
   }
 }

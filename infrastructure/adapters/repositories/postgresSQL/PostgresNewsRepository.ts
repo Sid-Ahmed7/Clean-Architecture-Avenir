@@ -104,14 +104,19 @@ export class PostgresNewsRepository implements NewsRepositoryInterface {
     }
 
     private mapRowToEntity(row: PostgresNewsRow): NewsEntity {
-        return {
-            id: row.id,
-            title: row.title,
-            category: row.category,
-            priority: row.priority,
-            tags: row.tags,
-            createdAt: row.created_at,
-            updatedAt: row.updated_at ?? undefined
-        } as NewsEntity;
+        const news = NewsEntity.from(
+            row.id,
+            row.title,
+            row.category,
+            row.priority,
+            row.tags,
+            row.created_at,
+            row.updated_at ?? undefined
+        );
+        
+        if( news instanceof Error) {
+            return news;
+        }
+        return news;
     }
 }

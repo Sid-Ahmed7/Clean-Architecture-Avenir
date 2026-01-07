@@ -9,20 +9,31 @@ import { PostgresConversationRow } from "./types/PostgresConversationRow";
 export class PostgresConversationRepository implements ConversationRepositoryInterface {
 
     async findByConversationId(conversationId: string): Promise<ConversationEntity | ConversationNotFoundError> {
+        console.log('🔍 [PostgresConversationRepository] Finding conversation:', conversationId);
+        console.log('🔍 [PostgresConversationRepository] Conversation ID type:', typeof conversationId);
+        console.log('🔍 [PostgresConversationRepository] Conversation ID length:', conversationId.length);
+        
         const result = await pgPool.query<PostgresConversationRow>(
             'SELECT * FROM conversations WHERE id = $1',
             [conversationId]
         );
 
+        console.log('🔍 [PostgresConversationRepository] Query result rows:', result.rows.length);
+        console.log('🔍 [PostgresConversationRepository] SQL Query:', 'SELECT * FROM conversations WHERE id = $1, [' + conversationId + ']');
+        
         if (result.rows.length === 0) {
+            console.log('❌ [PostgresConversationRepository] No conversation found');
             return new ConversationNotFoundError(`Conversation with id ${conversationId} not found`);
         }
 
         const row = result.rows[0];
         if (!row) {
+            console.log('❌ [PostgresConversationRepository] Row is null/undefined');
             return new ConversationNotFoundError(`Conversation with id ${conversationId} not found`);
         }
 
+        console.log('✅ [PostgresConversationRepository] Conversation found with ID:', row.id);
+        console.log('✅ [PostgresConversationRepository] IDs match?', row.id === conversationId);
         return this.mapRowToEntity(row);
     }
 
@@ -117,11 +128,17 @@ export class PostgresConversationRepository implements ConversationRepositoryInt
     }
 
     private mapRowToEntity(row: PostgresConversationRow): ConversationEntity {
-        return {
-            id: row.id,
-            clientId: row.client_id,
-            advisorId: row.advisor_id ?? undefined,
-            createdAt: row.created_at
-        } as ConversationEntity;
+    const conversation = ConversationEntity.from(
+        row.id,
+        row.client_id,
+        row.advisor_id ?? undefined,
+        row.created_at
+    );
+
+     if (conversation instanceof Error) {
+            return conversation;
+        }
+        return conversation;
+
     }
 }

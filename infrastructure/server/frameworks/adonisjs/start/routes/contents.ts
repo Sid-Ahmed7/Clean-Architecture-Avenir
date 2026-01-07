@@ -44,4 +44,4 @@ router
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.BANK_ADVISOR]))
   })
-  .prefix('/api/contents')
+  .prefix('/api/content')
