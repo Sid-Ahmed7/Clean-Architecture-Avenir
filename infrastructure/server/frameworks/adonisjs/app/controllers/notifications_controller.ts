@@ -1,6 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import { inject } from '@adonisjs/core'
-import type { InMemoryNotificationRepository } from '#infrastructure/adapters/repositories/InMemoryNotificationRepository.js'
+import type { NotificationRepositoryInterface } from '#application/ports/repositories/notification/NotificationRepositoryInterface.js'
 import type { NotificationPublisher } from '#application/ports/services/notification/NotificationPublisher.js'
 import { SseClient } from '#application/ports/services/notification/NotificationPublisher.js'
 import { CreateNotificationUseCase } from '#application/usecases/notification/CreateNotificationUseCase.js'
@@ -24,7 +24,7 @@ import { AuthContext } from '#types/JwtPayload'
 @inject()
 export default class NotificationsController {
   public constructor(
-    private readonly notificationRepository: InMemoryNotificationRepository,
+    private readonly notificationRepository: NotificationRepositoryInterface,
     private readonly notificationService: NotificationPublisher,
     private readonly uuidService: CryptoUuidGenerator,
     private readonly userRepository: UserRepositoryInterface

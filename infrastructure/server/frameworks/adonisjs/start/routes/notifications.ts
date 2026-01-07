@@ -10,7 +10,8 @@ const getNotificationsController = (async () => {
   return new NotificationsController(
     await app.container.make('notificationRepository'),
     await app.container.make('notificationService'),
-    await app.container.make('uuidService')
+    await app.container.make('uuidService'),
+    await app.container.make('userRepository')
   )
 })()
 

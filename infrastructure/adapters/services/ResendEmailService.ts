@@ -13,7 +13,7 @@ export class ResendEmailService implements EmailService {
     console.log("Role vaut", options.role);
 
     await this.resend.emails.send({
-      from: "Banque Avenir <onboarding@resend.dev>",
+      from: "Banque Avenir <" + process.env.EMAIL_FROM + ">",
       to: options.to,
       subject: options.subject,
       html: textHtml,

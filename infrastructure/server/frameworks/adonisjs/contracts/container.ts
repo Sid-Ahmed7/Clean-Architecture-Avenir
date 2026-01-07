@@ -22,34 +22,36 @@ import type { StockHoldingRepositoryInterface } from '#application/ports/reposit
 import type { StockTransactionRepositoryInterface } from '#application/ports/repositories/stocks/StockTransactionRepositoryInterface.js'
 import type { EventBusInterface } from '#application/ports/event/EventBusInterface.js'
 
-// Service interfaces
-import type { TokenService } from '#application/ports/services/auth/TokenService.js'
-import type { PasswordService } from '#application/ports/services/auth/PasswordService.js'
-import type { EmailService } from '#application/ports/services/EmailService.js'
-import type { EmailComposerService } from '#application/ports/services/EmailComposerService.js'
-import type { RegistrationTokenGeneratorService } from '#application/ports/services/auth/RegistrationTokenGeneratorService.js'
-import type { AccountNumberGeneratorService } from '#application/ports/services/AccountNumberGeneratorService.js'
-import type { IbanGeneratorService } from '#application/ports/services/IbanGeneratorService.js'
-import type { UuidGeneratorService } from '#application/ports/services/UuidGeneratorService.js'
-import type { LoanConfigService } from '#application/ports/services/LoanConfigService.js'
-import type { TransferLimitService } from '#application/ports/services/TransferLimitService.js'
+// Service implementations
+import type { JwtTokenService } from '#infrastructure/adapters/services/auth/JwtTokenService.js'
+import type { PasswordEncryptionService } from '#infrastructure/adapters/services/auth/PasswordEncryptionService.js'
+import type { ResendEmailService } from '#infrastructure/adapters/services/ResendEmailService.js'
+import type { EmailTemplateService } from '#infrastructure/adapters/services/EmailTemplateService.js'
+import type { RegistrationTokenService } from '#infrastructure/adapters/services/auth/RegistrationTokenService.js'
+import type { GenerateAccountNumberService } from '#infrastructure/adapters/services/GenerateAccountNumberService.js'
+import type { GenerateIbanService } from '#infrastructure/adapters/services/GenerateIbanService.js'
+import type { CryptoUuidGenerator } from '#infrastructure/adapters/services/CryptoUuidGenerator.js'
+import type { ManageLoanConfigService } from '#infrastructure/adapters/services/ManageLoanConfigService.js'
+import type { ManageTransferLimitService } from '#infrastructure/adapters/services/ManageTransferLimitService.js'
 import type { ValidateTransferService } from '#infrastructure/adapters/services/ValidateTransferService.js'
-import type { TransactionEnrichmentService } from '#application/ports/services/TransactionEnrichmentService.js'
-import type { NewsPublisher } from '#application/ports/services/news/NewsPublisher.js'
-import type { FileStorageService } from '#application/ports/services/news/FileStorageService.js'
-import type { AltTextService } from '#application/ports/services/news/AltTextService.js'
-import type { OrderService } from '#application/ports/services/news/OrderService.js'
-import type { OrderBookService } from '#application/ports/services/order/OrderBookService.js'
-import type { OrderMatchingService } from '#application/ports/services/order/OrderMatchingService.js'
-import type { AccountService } from '#application/ports/services/AccountService.js'
-import type { StockHoldingService } from '#application/ports/services/stocks/StockHoldingService.js'
-import type { OrderValidationService } from '#application/ports/services/order/OrderValidationService.js'
-import type { LocaleService } from '#application/ports/services/LocaleService.js'
+import type { TransactionEnrichmentServiceImpl } from '#infrastructure/adapters/services/TransactionEnrichmentService.js'
+import type { NewsService } from '#infrastructure/adapters/services/news/NewsService.js'
+import type { LocalFileStorageService } from '#infrastructure/adapters/services/news/LocalFileStorageService.js'
+import type { GenerateAltTextService } from '#infrastructure/adapters/services/news/GenerateAltTextService.js'
+import type { ManageOrderService } from '#infrastructure/adapters/services/news/ManageOrderService.js'
+import type { OrderBookEngineService } from '#infrastructure/adapters/services/order/OrderBookEngineService.js'
+import type { OrderMatchingEngineService } from '#infrastructure/adapters/services/order/OrderMatchingEngineService.js'
+import type { BankAccountService } from '#infrastructure/adapters/services/BankAccountService.js'
+import type { StockHoldingManager } from '#infrastructure/adapters/services/stocks/StockHoldingManager.js'
+import type { OrderValidationEngineService } from '#infrastructure/adapters/services/order/OrderValidationEngineService.js'
+import type { LocaleValidationService } from '#infrastructure/adapters/services/LocaleValidationService.js'
 import type { NotificationService } from '#infrastructure/adapters/services/notification/NotificationService.js'
-import type { StatusMessageService } from '#application/ports/services/StatusMessageService.js'
+import type { StatusMessageService } from '#infrastructure/adapters/services/StatusMessageService.js'
 import type { ManageAllowedAccountStatusService } from '#infrastructure/adapters/services/ManageAllowedAccountStatusService.js'
 import type { EventSubscriberService } from '#infrastructure/adapters/services/EventSubscriberService.js'
 import type { RolePriorityService } from '#infrastructure/adapters/services/RolePriorityService.js'
+import type { LoggerService } from '@adonisjs/core/types'
+
 
 declare module '@adonisjs/core/types' {
   interface ContainerBindings {
@@ -79,28 +81,28 @@ declare module '@adonisjs/core/types' {
     eventBus: EventBusInterface
 
     // Services
-    tokenService: TokenService
-    passwordService: PasswordService
-    emailService: EmailService
-    emailTemplateService: EmailComposerService
-    registrationTokenGeneratorService: RegistrationTokenGeneratorService
-    accountNumberGenerator: AccountNumberGeneratorService
-    ibanGenerator: IbanGeneratorService
-    uuidService: UuidGeneratorService
-    loanConfigService: LoanConfigService
-    transferLimitService: TransferLimitService
+    tokenService: JwtTokenService
+    passwordService: PasswordEncryptionService
+    emailService: ResendEmailService
+    emailTemplateService: EmailTemplateService
+    registrationTokenGeneratorService: RegistrationTokenService
+    accountNumberGenerator: GenerateAccountNumberService
+    ibanGenerator: GenerateIbanService
+    uuidService: CryptoUuidGenerator
+    loanConfigService: ManageLoanConfigService
+    transferLimitService: ManageTransferLimitService
     transferValidationService: ValidateTransferService
-    transactionEnrichmentService: TransactionEnrichmentService
-    newsService: NewsPublisher
-    fileStorageService: FileStorageService
-    altService: AltTextService
-    orderService: OrderService
-    orderBookService: OrderBookService
-    matchingService: OrderMatchingService
-    accountService: AccountService
-    holdingService: StockHoldingService
-    orderValidationService: OrderValidationService
-    localeService: LocaleService
+    transactionEnrichmentService: TransactionEnrichmentServiceImpl
+    newsService: NewsService
+    fileStorageService: LocalFileStorageService
+    altService: GenerateAltTextService
+    orderService: ManageOrderService
+    orderBookService: OrderBookEngineService
+    matchingService: OrderMatchingEngineService
+    accountService: BankAccountService
+    holdingService: StockHoldingManager
+    orderValidationService: OrderValidationEngineService
+    localeService: LocaleValidationService
     notificationService: NotificationService
     statusMessageService: StatusMessageService
     manageAllowedAccountStatusService: ManageAllowedAccountStatusService

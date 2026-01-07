@@ -53,7 +53,5 @@ router
 
     router
       .post('/create-manager', async (ctx) => (await getAuthController).registerManager(ctx))
-      .use(middleware.auth())
-      .use(authorizeRoles([RoleEnum.BANK_MANAGER]))
   })
   .prefix('/api/auth')
