@@ -136,6 +136,55 @@
         }
       }
     },
+    "chat": {
+      "title": "Chat",
+      "connected": "Connecté",
+      "disconnected": "Déconnecté",
+      "noMessages": "Aucun message pour le moment",
+      "typing": "En train d'écrire...",
+      "inputPlaceholder": "Écris ton message...",
+      "inputDisabled": "Connexion en cours...",
+      "sendButton": "Envoyer",
+      "clientConversations": {
+        "title": "Mes conversations",
+        "newConversation": "Nouvelle conversation",
+        "creating": "Création...",
+        "errorFetch": "Impossible de récupérer vos conversations",
+        "errorCreate": "Erreur lors de la création de la conversation",
+        "empty": "Vous n'avez pas encore de conversation.",
+        "notAssigned": "Non assigné"
+      },
+      "advisorConversations": {
+        "loading": "Chargement…",
+        "errorTitle": "Erreur",
+        "reloadPage": "Recharger la page",
+        "stats": {
+          "pending": "En attente",
+          "assigned": "Mes conversations"
+        },
+        "pendingTitle": "Demandes en attente",
+        "pendingEmpty": "Aucune demande en attente",
+        "searchEmpty": "Aucun résultat pour cette recherche",
+        "takeOver": "Prendre en charge",
+        "transfer": "Transférer",
+        "assignedTitle": "Vos conversations",
+        "assignedEmpty": "Aucune conversation assignée",
+        "continue": "Continuer",
+        "searchPlaceholder": "Rechercher par nom client..."
+      },
+      "selectAdvisorsModal": {
+        "title": "Transfert de Dossier Client",
+        "subtitle": "Sélectionnez un nouveau conseiller",
+        "searchPlaceholder": "Rechercher par nom ou identifiant...",
+        "loading": "Chargement des conseillers...",
+        "errorFetch": "Impossible de récupérer les conseillers",
+        "retry": "Réessayer",
+        "noAdvisors": "Aucun conseiller trouvé",
+        "tryOtherCriteria": "Essayez avec d'autres critères",
+        "cancel": "Annuler",
+        "confirm": "Valider le transfert"
+      }
+    },
     "sidebar": {
       "menu": {
         "dashboard": "Dashboard",
