@@ -106,7 +106,6 @@ export default function StocksPage() {
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">📈 {t("title")}</h1>
 
-          {/* Tabs */}
           <div className="border-b border-gray-200">
             <nav className="-mb-px flex space-x-8">
               <button

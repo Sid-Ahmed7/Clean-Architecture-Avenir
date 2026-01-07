@@ -958,6 +958,19 @@
     }
   },
   "stocks": {
+    "priceComparison": {
+        "title": "Comparaison des prix",
+        "marketPrice": "Prix du marché",
+        "convertedPrice": "Prix converti",
+        "tradingPrice": "Prix de trading",
+        "absoluteDiff": "Différence",
+        "percentageDiff": "Écart (%)",
+        "position": "Position",
+        "aboveMarket": "Au-dessus du marché",
+        "belowMarket": "En dessous du marché",
+        "significantGapWarning": "Attention : L'écart de {gap}% est significatif.",
+        "criticalGapWarning": "L'écart de {gap}% est critique ! Le prix de trading est très différent du marché."
+      },
     "forms": {
       "stockForm": {
         "cancel": "Annuler",

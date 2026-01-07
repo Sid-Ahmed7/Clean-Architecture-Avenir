@@ -61,12 +61,10 @@ export default function ClientDashboard() {
 
             {!loading && !error && (
                 <>
-                    {/* Welcome message */}
                     <div className="mb-6">
                         <h1 className="text-2xl font-bold text-gray-900">{t("welcome")}</h1>
                     </div>
 
-                    {/* Summary and charts */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <SummaryCard accounts={accounts} />
                         <ChartAccountManage accounts={accounts} />
@@ -153,14 +151,12 @@ export default function ClientDashboard() {
                         )}
                     </section>
 
-                    {/* Quick Transfer Card */}
                     <QuickTransferCard
                         transactions={lastTransactions}
                         accounts={accounts}
                         onTransferSuccess={refetchLastTransactions}
                     />
 
-                    {/* Main account */}
                     {mainAccount ? (
                         <MainAccountCard account={mainAccount} />
                     ) : (
@@ -185,7 +181,6 @@ export default function ClientDashboard() {
                         </div>
                     </section>
 
-                    {/* Savings Accounts Section */}
                     <section className="mt-8">
                         <div className="flex justify-between items-center mb-6">
                             <div className="flex items-center gap-3">
