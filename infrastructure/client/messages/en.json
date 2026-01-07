@@ -139,6 +139,55 @@
         }
       }
     },
+    "chat": {
+      "title": "Chat",
+      "connected": "Connected",
+      "disconnected": "Disconnected",
+      "noMessages": "No messages yet",
+      "typing": "Typing...",
+      "inputPlaceholder": "Write your message...",
+      "inputDisabled": "Connecting...",
+      "sendButton": "Send",
+      "clientConversations": {
+        "title": "My conversations",
+        "newConversation": "New conversation",
+        "creating": "Creating...",
+        "errorFetch": "Unable to fetch your conversations",
+        "errorCreate": "Error creating conversation",
+        "empty": "You don't have any conversations yet.",
+        "notAssigned": "Not assigned"
+      },
+      "advisorConversations": {
+        "loading": "Loading…",
+        "errorTitle": "Error",
+        "reloadPage": "Reload page",
+        "stats": {
+          "pending": "Pending",
+          "assigned": "My conversations"
+        },
+        "pendingTitle": "Pending requests",
+        "pendingEmpty": "No pending requests",
+        "searchEmpty": "No results for this search",
+        "takeOver": "Take over",
+        "transfer": "Transfer",
+        "assignedTitle": "Your conversations",
+        "assignedEmpty": "No assigned conversations",
+        "continue": "Continue",
+        "searchPlaceholder": "Search by client name..."
+      },
+      "selectAdvisorsModal": {
+        "title": "Client File Transfer",
+        "subtitle": "Select a new advisor",
+        "searchPlaceholder": "Search by name or identifier...",
+        "loading": "Loading advisors...",
+        "errorFetch": "Unable to fetch advisors",
+        "retry": "Retry",
+        "noAdvisors": "No advisors found",
+        "tryOtherCriteria": "Try with different criteria",
+        "cancel": "Cancel",
+        "confirm": "Confirm transfer"
+      }
+    },
     "sidebar": {
       "menu": {
         "dashboard": "Dashboard",
