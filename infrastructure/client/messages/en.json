@@ -889,7 +889,13 @@
         "noAccounts": "No savings accounts",
         "noSavings": "No savings account",
         "startSaving": "Start saving today with our savings products",
-        "discover": "Discover our accounts"
+        "discover": "Discover our accounts",
+        "account": "Account",
+        "active": "Active",
+        "inactive": "Inactive",
+        "availableBalance": "Available balance",
+        "interestRate": "Interest rate",
+        "earnedInterests": "Earned interests"
       },
       "savingsPage": {
         "title": "Savings",

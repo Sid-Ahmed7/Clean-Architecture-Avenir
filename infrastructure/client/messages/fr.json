@@ -889,7 +889,13 @@
         "noAccounts": "Aucun livret d'épargne",
         "noSavings": "Aucun livret d'épargne",
         "startSaving": "Commencez à épargner dès aujourd'hui avec nos produits d'épargne",
-        "discover": "Découvrir nos livrets"
+        "discover": "Découvrir nos livrets",
+        "account": "Compte",
+        "active": "Actif",
+        "inactive": "Inactif",
+        "availableBalance": "Solde disponible",
+        "interestRate": "Taux d'intérêt",
+        "earnedInterests": "Intérêts gagnés"
       },
       "savingsPage": {
         "title": "Épargne",
