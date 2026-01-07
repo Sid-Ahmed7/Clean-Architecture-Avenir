@@ -276,6 +276,24 @@
         "terms": "Terms"
       }
     },
+    "stats": {
+      "clients": {
+        "value": "2M+",
+        "label": "Satisfied Clients"
+      },
+      "transfers": {
+        "value": "10M+",
+        "label": "Safe Transfers"
+      },
+      "support": {
+        "value": "24/7",
+        "label": "Customer Support"
+      },
+      "rating": {
+        "value": "4.8/5",
+        "label": "App Rating"
+      }
+    },
     "features": {
       "title": "Why choose BankAvenir?",
       "subtitle": "Modern banking services to simplify your daily life",
@@ -304,45 +322,6 @@
           "title": "Smart analytics",
           "description": "Track your spending with detailed graphs and personalized insights."
         }
-      }
-    },
-    "stats": {
-      "stock": {
-        "title": "Stocks",
-        "loading": "Loading stocks...",
-        "errorTitle": "Loading Error",
-        "errorMessage": "Unable to load stocks. Please check if your backend is running.",
-        "tabs": {
-          "trading": "Available Stocks",
-          "info": "Stock Info (Market)"
-        },
-        "noActions": {
-          "title": "No stocks available",
-          "description": "No stocks are available for trading at the moment."
-        },
-        "marketData": {
-          "loading": "Loading market data...",
-          "unavailableTitle": "Market data unavailable",
-          "unavailableDesc": "Real-time market data is currently unavailable.",
-          "realtime": "Real-time market data - {exchange}",
-          "notTradable": "This stock is not yet available for trading."
-        }
-      },
-      "client": {
-        "value": "500K+",
-        "label": "Satisfied customers"
-      },
-      "transfers": {
-        "value": "15M€",
-        "label": "Transfers per day"
-      },
-      "support": {
-        "value": "24/7",
-        "label": "Available support"
-      },
-      "rating": {
-        "value": "4.9/5",
-        "label": "Average rating"
       }
     },
     "services": {
@@ -958,7 +937,6 @@
     }
   },
   "stocks": {
-
     "priceComparison": {
       "title": "Price Comparison",
       "marketPrice": "Market Price",
@@ -1576,276 +1554,276 @@
       "save": "Save",
       "cancel": "Cancel"
     }
-},
-"notFound": {
-  "title": "Page Not Found",
-  "description": "Sorry, the page you are looking for could not be found. It may have been moved or deleted.",
-  "backHome": "Back to Home",
-  "helpCenter": "Help Center",
-  "needHelp": "Need help?",
-  "contactUs": "Contact Us"
-},
-"error": {
-  "title": "Server Error",
-  "description": "Oops! An unexpected error occurred. Our team has been notified and is working on the problem.",
-  "retry": "Try Again",
-  "backHome": "Back to Home",
-  "errorCode": "Error Code",
-  "persistentProblem": "Problem persists?",
-  "contactSupport": "Contact our support"
-},
-"manager": {
-  "dashboard": {
-    "title": "Agency Management",
-    "subtitle": "Administration of advisors and agency settings",
-    "advisorManagement": {
-      "title": "Advisor Management",
-      "description": "Create and manage your agency's bank advisors.",
-      "createButton": "Create an advisor"
-    },
-    "agencySettings": {
-      "title": "Agency Settings",
-      "description": "Configure your agency settings.",
-      "button": "Agency settings"
-    }
   },
-  "users": {
-    "title": "User Management",
-    "subtitle": "Manage all users, clients and advisors",
-    "loading": "Loading...",
-    "tabs": {
-      "all": "All",
-      "clients": "Clients",
-      "advisors": "Advisors"
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "Sorry, the page you are looking for could not be found. It may have been moved or deleted.",
+    "backHome": "Back to Home",
+    "helpCenter": "Help Center",
+    "needHelp": "Need help?",
+    "contactUs": "Contact Us"
+  },
+  "error": {
+    "title": "Server Error",
+    "description": "Oops! An unexpected error occurred. Our team has been notified and is working on the problem.",
+    "retry": "Try Again",
+    "backHome": "Back to Home",
+    "errorCode": "Error Code",
+    "persistentProblem": "Problem persists?",
+    "contactSupport": "Contact our support"
+  },
+  "manager": {
+    "dashboard": {
+      "title": "Agency Management",
+      "subtitle": "Administration of advisors and agency settings",
+      "advisorManagement": {
+        "title": "Advisor Management",
+        "description": "Create and manage your agency's bank advisors.",
+        "createButton": "Create an advisor"
+      },
+      "agencySettings": {
+        "title": "Agency Settings",
+        "description": "Configure your agency settings.",
+        "button": "Agency settings"
+      }
     },
-    "table": {
-      "name": "Name",
-      "email": "Email",
-      "phone": "Phone",
-      "status": "Status",
-      "roles": "Roles",
-      "registered": "Registered",
-      "actions": "Actions",
-      "noUsers": "No users found"
+    "users": {
+      "title": "User Management",
+      "subtitle": "Manage all users, clients and advisors",
+      "loading": "Loading...",
+      "tabs": {
+        "all": "All",
+        "clients": "Clients",
+        "advisors": "Advisors"
+      },
+      "table": {
+        "name": "Name",
+        "email": "Email",
+        "phone": "Phone",
+        "status": "Status",
+        "roles": "Roles",
+        "registered": "Registered",
+        "actions": "Actions",
+        "noUsers": "No users found"
+      },
+      "status": {
+        "yes": "Yes",
+        "no": "No"
+      },
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete"
+      },
+      "deleteConfirm": "Are you sure you want to delete this user? This will also delete all their accounts and associated data.",
+      "editModal": {
+        "title": "Edit user",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email",
+        "phone": "Phone",
+        "address": "Address",
+        "status": "Status",
+        "statusOptions": {
+          "active": "Active",
+          "inactive": "Inactive",
+          "suspended": "Suspended"
+        },
+        "cancel": "Cancel",
+        "save": "Save"
+      },
+      "errors": {
+        "updateFailed": "Error updating user"
+      }
     },
-    "status": {
-      "yes": "Yes",
-      "no": "No"
+    "accounts": {
+      "title": "Accounts Overview",
+      "subtitle": "View all checking accounts and their balances",
+      "loading": "Loading...",
+      "stats": {
+        "totalAccounts": "Total Accounts",
+        "totalBalance": "Total Balance",
+        "activeAccounts": "Active Accounts"
+      },
+      "search": "Search by name, IBAN or account number...",
+      "table": {
+        "number": "Number",
+        "iban": "IBAN",
+        "owner": "Owner",
+        "type": "Type",
+        "balance": "Balance",
+        "status": "Status",
+        "createdAt": "Created",
+        "actions": "Actions",
+        "noAccounts": "No accounts found"
+      },
+      "deleteConfirm": {
+        "lastCheckingWithBalance": "Cannot delete the last checking account with a positive balance. Please transfer the funds first or ensure the balance is 0€.",
+        "withBalance": "Are you sure you want to delete this account?\\n\\nThe balance of {amount} will be automatically transferred to another checking account of the user.",
+        "withoutBalance": "Are you sure you want to delete this account?"
+      },
+      "errors": {
+        "deleteFailed": "Error deleting account",
+        "deleteError": "Deletion error"
+      },
+      "actions": {
+        "delete": "Delete"
+      },
+      "success": "Account deleted successfully"
     },
-    "actions": {
-      "edit": "Edit",
-      "delete": "Delete"
+    "savingsProducts": {
+      "title": "Savings Products",
+      "subtitle": "Create and manage savings products available to clients",
+      "backToDashboard": "Back to dashboard",
+      "newProduct": "New Product",
+      "existingProducts": "Existing Products",
+      "form": {
+        "createTitle": "Create a New Product",
+        "editTitle": "Edit Product",
+        "name": "Product name",
+        "namePlaceholder": "Savings Account, etc.",
+        "interestRate": "Annual interest rate (%)",
+        "interestRatePlaceholder": "3.5",
+        "maxDeposit": "Maximum deposit (€)",
+        "maxDepositPlaceholder": "22950",
+        "minDeposit": "Minimum deposit (€)",
+        "minDepositPlaceholder": "10",
+        "description": "Description",
+        "descriptionPlaceholder": "Savings product description...",
+        "createButton": "Create",
+        "updateButton": "Update",
+        "cancel": "Cancel"
+      },
+      "product": {
+        "active": "Active",
+        "inactive": "Inactive",
+        "rate": "Rate:",
+        "ceiling": "Ceiling:",
+        "edit": "Edit"
+      },
+      "messages": {
+        "createSuccess": "Product created successfully!",
+        "updateSuccess": "Product updated! All linked accounts have been updated.",
+        "createError": "Error creating product",
+        "updateError": "Error updating product"
+      },
+      "noProducts": "No products created. Create your first savings product!"
     },
-    "deleteConfirm": "Are you sure you want to delete this user? This will also delete all their accounts and associated data.",
-    "editModal": {
-      "title": "Edit user",
+    "createAdvisor": {
+      "title": "Create a bank advisor",
       "firstName": "First Name",
       "lastName": "Last Name",
       "email": "Email",
-      "phone": "Phone",
+      "password": "Password",
+      "phone": "Phone Number",
+      "dateOfBirth": "Date of Birth",
       "address": "Address",
-      "status": "Status",
-      "statusOptions": {
-        "active": "Active",
-        "inactive": "Inactive",
-        "suspended": "Suspended"
+      "createButton": "Create advisor",
+      "backToDashboard": "Back to dashboard",
+      "messages": {
+        "success": "The bank advisor has been created successfully. A confirmation email has been sent.",
+        "userExists": "A user with this email already exists.",
+        "error": "An error occurred while creating the advisor.",
+        "networkError": "Network error. Check that the server is running."
+      }
+    },
+    "savings": {
+      "title": "Savings Accounts Overview",
+      "subtitle": "View all savings accounts, interest rates and earnings",
+      "loading": "Loading...",
+      "stats": {
+        "totalAccounts": "Total Accounts",
+        "totalBalance": "Total Balance",
+        "totalInterest": "Total Interest",
+        "averageRate": "Average Rate"
       },
-      "cancel": "Cancel",
-      "save": "Save"
-    },
-    "errors": {
-      "updateFailed": "Error updating user"
+      "search": "Search by name or account number...",
+      "table": {
+        "number": "Number",
+        "owner": "Owner",
+        "balance": "Balance",
+        "interestRate": "Interest Rate",
+        "totalInterest": "Total Interest",
+        "status": "Status",
+        "lastUpdate": "Last Update",
+        "actions": "Actions",
+        "noAccounts": "No savings accounts found"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "deleteConfirm": {
+        "withBalance": "Are you sure you want to delete this savings account?\\n\\nThe balance of {amount} will be automatically transferred to a checking account of the user.",
+        "withoutBalance": "Are you sure you want to delete this savings account?"
+      },
+      "actions": {
+        "delete": "Delete"
+      },
+      "errors": {
+        "deleteFailed": "Error deleting savings account",
+        "deleteError": "Deletion error"
+      },
+      "success": "Savings account deleted successfully"
     }
   },
-  "accounts": {
-    "title": "Accounts Overview",
-    "subtitle": "View all checking accounts and their balances",
-    "loading": "Loading...",
-    "stats": {
-      "totalAccounts": "Total Accounts",
-      "totalBalance": "Total Balance",
-      "activeAccounts": "Active Accounts"
-    },
-    "search": "Search by name, IBAN or account number...",
-    "table": {
-      "number": "Number",
-      "iban": "IBAN",
-      "owner": "Owner",
-      "type": "Type",
-      "balance": "Balance",
-      "status": "Status",
-      "createdAt": "Created",
-      "actions": "Actions",
-      "noAccounts": "No accounts found"
-    },
-    "deleteConfirm": {
-      "lastCheckingWithBalance": "Cannot delete the last checking account with a positive balance. Please transfer the funds first or ensure the balance is 0€.",
-      "withBalance": "Are you sure you want to delete this account?\\n\\nThe balance of {amount} will be automatically transferred to another checking account of the user.",
-      "withoutBalance": "Are you sure you want to delete this account?"
-    },
-    "errors": {
-      "deleteFailed": "Error deleting account",
-      "deleteError": "Deletion error"
-    },
-    "actions": {
-      "delete": "Delete"
-    },
-    "success": "Account deleted successfully"
-  },
-  "savingsProducts": {
-    "title": "Savings Products",
-    "subtitle": "Create and manage savings products available to clients",
-    "backToDashboard": "Back to dashboard",
-    "newProduct": "New Product",
-    "existingProducts": "Existing Products",
-    "form": {
-      "createTitle": "Create a New Product",
-      "editTitle": "Edit Product",
-      "name": "Product name",
-      "namePlaceholder": "Savings Account, etc.",
-      "interestRate": "Annual interest rate (%)",
-      "interestRatePlaceholder": "3.5",
-      "maxDeposit": "Maximum deposit (€)",
-      "maxDepositPlaceholder": "22950",
-      "minDeposit": "Minimum deposit (€)",
-      "minDepositPlaceholder": "10",
-      "description": "Description",
-      "descriptionPlaceholder": "Savings product description...",
-      "createButton": "Create",
-      "updateButton": "Update",
-      "cancel": "Cancel"
-    },
-    "product": {
-      "active": "Active",
-      "inactive": "Inactive",
-      "rate": "Rate:",
-      "ceiling": "Ceiling:",
-      "edit": "Edit"
-    },
-    "messages": {
-      "createSuccess": "Product created successfully!",
-      "updateSuccess": "Product updated! All linked accounts have been updated.",
-      "createError": "Error creating product",
-      "updateError": "Error updating product"
-    },
-    "noProducts": "No products created. Create your first savings product!"
-  },
-  "createAdvisor": {
-    "title": "Create a bank advisor",
-    "firstName": "First Name",
-    "lastName": "Last Name",
-    "email": "Email",
-    "password": "Password",
-    "phone": "Phone Number",
-    "dateOfBirth": "Date of Birth",
-    "address": "Address",
-    "createButton": "Create advisor",
-    "backToDashboard": "Back to dashboard",
-    "messages": {
-      "success": "The bank advisor has been created successfully. A confirmation email has been sent.",
-      "userExists": "A user with this email already exists.",
-      "error": "An error occurred while creating the advisor.",
-      "networkError": "Network error. Check that the server is running."
+  "advisor": {
+    "dashboard": {
+      "title": "Bank Advisor Dashboard",
+      "clientManagement": {
+        "title": "Client Management",
+        "description": "Access your client list and manage their accounts.",
+        "button": "View my clients"
+      },
+      "loanRequests": {
+        "title": "Loan Requests",
+        "description": "Review and process your clients' loan requests.",
+        "button": "View loan requests"
+      },
+      "overdraftRequests": {
+        "title": "Overdraft Requests",
+        "description": "Review and process overdraft increase requests.",
+        "button": "Open overdraft requests"
+      }
     }
   },
-  "savings": {
-    "title": "Savings Accounts Overview",
-    "subtitle": "View all savings accounts, interest rates and earnings",
-    "loading": "Loading...",
-    "stats": {
-      "totalAccounts": "Total Accounts",
-      "totalBalance": "Total Balance",
-      "totalInterest": "Total Interest",
-      "averageRate": "Average Rate"
+  "chat": {
+    "page": {
+      "verifyingAuth": "Verifying authentication...",
+      "loadingUser": "Loading user..."
     },
-    "search": "Search by name or account number...",
-    "table": {
-      "number": "Number",
-      "owner": "Owner",
-      "balance": "Balance",
-      "interestRate": "Interest Rate",
-      "totalInterest": "Total Interest",
-      "status": "Status",
-      "lastUpdate": "Last Update",
-      "actions": "Actions",
-      "noAccounts": "No savings accounts found"
+    "limitProgressBar": {
+      "nearLimit": "Critical",
+      "attention": "Warning",
+      "available": "Available",
+      "remaining": "remaining"
     },
-    "status": {
-      "active": "Active",
-      "inactive": "Inactive"
-    },
-    "deleteConfirm": {
-      "withBalance": "Are you sure you want to delete this savings account?\\n\\nThe balance of {amount} will be automatically transferred to a checking account of the user.",
-      "withoutBalance": "Are you sure you want to delete this savings account?"
-    },
-    "actions": {
-      "delete": "Delete"
-    },
-    "errors": {
-      "deleteFailed": "Error deleting savings account",
-      "deleteError": "Deletion error"
-    },
-    "success": "Savings account deleted successfully"
-  }
-},
-"advisor": {
-  "dashboard": {
-    "title": "Bank Advisor Dashboard",
-    "clientManagement": {
-      "title": "Client Management",
-      "description": "Access your client list and manage their accounts.",
-      "button": "View my clients"
-    },
-    "loanRequests": {
-      "title": "Loan Requests",
-      "description": "Review and process your clients' loan requests.",
-      "button": "View loan requests"
-    },
-    "overdraftRequests": {
-      "title": "Overdraft Requests",
-      "description": "Review and process overdraft increase requests.",
-      "button": "Open overdraft requests"
+    "enums": {
+      "accountStatus": {
+        "ACTIVE": "Active",
+        "CLOSED": "Closed",
+        "SUSPENDED": "Suspended",
+        "PENDING": "Pending",
+        "FROZEN": "Frozen",
+        "BANNED": "Banned"
+      },
+      "transactionType": {
+        "PAYMENT": "Payment",
+        "WITHDRAWAL": "Withdrawal",
+        "TRANSFER": "Transfer",
+        "FEE": "Fee",
+        "DEPOSIT": "Deposit"
+      },
+      "overdraftStatus": {
+        "PENDING": "Pending",
+        "APPROVED": "Approved",
+        "REJECTED": "Rejected"
+      },
+      "clientStatus": {
+        "ACTIVE": "Active",
+        "INACTIVE": "Inactive",
+        "PENDING": "Pending",
+        "SUSPENDED": "Suspended"
+      }
     }
   }
-},
-"chat": {
-  "page": {
-    "verifyingAuth": "Verifying authentication...",
-    "loadingUser": "Loading user..."
-  },
-  "limitProgressBar": {
-    "nearLimit": "Critical",
-    "attention": "Warning",
-    "available": "Available",
-    "remaining": "remaining"
-  },
-  "enums": {
-    "accountStatus": {
-      "ACTIVE": "Active",
-      "CLOSED": "Closed",
-      "SUSPENDED": "Suspended",
-      "PENDING": "Pending",
-      "FROZEN": "Frozen",
-      "BANNED": "Banned"
-    },
-    "transactionType": {
-      "PAYMENT": "Payment",
-      "WITHDRAWAL": "Withdrawal",
-      "TRANSFER": "Transfer",
-      "FEE": "Fee",
-      "DEPOSIT": "Deposit"
-    },
-    "overdraftStatus": {
-      "PENDING": "Pending",
-      "APPROVED": "Approved",
-      "REJECTED": "Rejected"
-    },
-    "clientStatus": {
-      "ACTIVE": "Active",
-      "INACTIVE": "Inactive",
-      "PENDING": "Pending",
-      "SUSPENDED": "Suspended"
-    }
-  }
-}
 }

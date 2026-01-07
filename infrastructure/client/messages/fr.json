@@ -276,6 +276,24 @@
         "terms": "CGV"
       }
     },
+    "stats": {
+      "clients": {
+        "value": "2M+",
+        "label": "Clients satisfaits"
+      },
+      "transfers": {
+        "value": "10M+",
+        "label": "Virements sécurisés"
+      },
+      "support": {
+        "value": "24/7",
+        "label": "Support client"
+      },
+      "rating": {
+        "value": "4.8/5",
+        "label": "Note App Store"
+      }
+    },
     "features": {
       "title": "Pourquoi choisir BankAvenir ?",
       "subtitle": "Des services bancaires modernes pour simplifier votre quotidien",
@@ -304,45 +322,6 @@
           "title": "Analyse intelligente",
           "description": "Suivez vos dépenses avec des graphiques détaillés et des insights personnalisés."
         }
-      }
-    },
-    "stats": {
-      "stock": {
-        "title": "Actions",
-        "loading": "Chargement des actions...",
-        "errorTitle": "Erreur de chargement",
-        "errorMessage": "Impossible de charger les actions. Vérifiez que votre backend est démarré.",
-        "tabs": {
-          "trading": "Actions Disponibles",
-          "info": "Info Actions (Marché)"
-        },
-        "noActions": {
-          "title": "Aucune action disponible",
-          "description": "Aucune action n'est disponible au trading pour le moment."
-        },
-        "marketData": {
-          "loading": "Chargement des données de marché...",
-          "unavailableTitle": "Données de marché non disponibles",
-          "unavailableDesc": "Les données de marché en temps réel ne sont pas disponibles pour le moment.",
-          "realtime": "Données de marché en temps réel - {exchange}",
-          "notTradable": "Cette action n'est pas encore disponible pour le trading."
-        }
-      },
-      "clients": {
-        "value": "500K+",
-        "label": "Clients satisfaits"
-      },
-      "transfers": {
-        "value": "15M€",
-        "label": "Virements par jour"
-      },
-      "support": {
-        "value": "24/7",
-        "label": "Support disponible"
-      },
-      "rating": {
-        "value": "4.9/5",
-        "label": "Note moyenne"
       }
     },
     "services": {
@@ -959,18 +938,18 @@
   },
   "stocks": {
     "priceComparison": {
-        "title": "Comparaison des prix",
-        "marketPrice": "Prix du marché",
-        "convertedPrice": "Prix converti",
-        "tradingPrice": "Prix de trading",
-        "absoluteDiff": "Différence",
-        "percentageDiff": "Écart (%)",
-        "position": "Position",
-        "aboveMarket": "Au-dessus du marché",
-        "belowMarket": "En dessous du marché",
-        "significantGapWarning": "Attention : L'écart de {gap}% est significatif.",
-        "criticalGapWarning": "L'écart de {gap}% est critique ! Le prix de trading est très différent du marché."
-      },
+      "title": "Comparaison des prix",
+      "marketPrice": "Prix du marché",
+      "convertedPrice": "Prix converti",
+      "tradingPrice": "Prix de trading",
+      "absoluteDiff": "Différence",
+      "percentageDiff": "Écart (%)",
+      "position": "Position",
+      "aboveMarket": "Au-dessus du marché",
+      "belowMarket": "En dessous du marché",
+      "significantGapWarning": "Attention : L'écart de {gap}% est significatif.",
+      "criticalGapWarning": "L'écart de {gap}% est critique ! Le prix de trading est très différent du marché."
+    },
     "forms": {
       "stockForm": {
         "cancel": "Annuler",
@@ -1575,276 +1554,276 @@
       "save": "Enregistrer",
       "cancel": "Annuler"
     }
-},
-"notFound": {
-  "title": "Page non trouvée",
-  "description": "Désolé, la page que vous recherchez semble introuvable. Elle a peut-être été déplacée ou supprimée.",
-  "backHome": "Retour à l'accueil",
-  "helpCenter": "Centre d'aide",
-  "needHelp": "Besoin d'aide ?",
-  "contactUs": "Contactez-nous"
-},
-"error": {
-  "title": "Erreur serveur",
-  "description": "Oups ! Une erreur inattendue s'est produite. Nos équipes ont été notifiées et travaillent sur le problème.",
-  "retry": "Réessayer",
-  "backHome": "Retour à l'accueil",
-  "errorCode": "Code d'erreur",
-  "persistentProblem": "Le problème persiste ?",
-  "contactSupport": "Contactez notre support"
-},
-"manager": {
-  "dashboard": {
-    "title": "Gestion de l'Agence",
-    "subtitle": "Administration des conseillers et paramètres de l'agence",
-    "advisorManagement": {
-      "title": "Gestion des Conseillers",
-      "description": "Créez et gérez les conseillers bancaires de votre agence.",
-      "createButton": "Créer un conseiller"
-    },
-    "agencySettings": {
-      "title": "Paramètres de l'Agence",
-      "description": "Configurez les paramètres de votre agence.",
-      "button": "Paramètres agence"
-    }
   },
-  "users": {
-    "title": "Gestion des Utilisateurs",
-    "subtitle": "Gérez tous les utilisateurs, clients et conseillers",
-    "loading": "Chargement...",
-    "tabs": {
-      "all": "Tous",
-      "clients": "Clients",
-      "advisors": "Conseillers"
+  "notFound": {
+    "title": "Page non trouvée",
+    "description": "Désolé, la page que vous recherchez semble introuvable. Elle a peut-être été déplacée ou supprimée.",
+    "backHome": "Retour à l'accueil",
+    "helpCenter": "Centre d'aide",
+    "needHelp": "Besoin d'aide ?",
+    "contactUs": "Contactez-nous"
+  },
+  "error": {
+    "title": "Erreur serveur",
+    "description": "Oups ! Une erreur inattendue s'est produite. Nos équipes ont été notifiées et travaillent sur le problème.",
+    "retry": "Réessayer",
+    "backHome": "Retour à l'accueil",
+    "errorCode": "Code d'erreur",
+    "persistentProblem": "Le problème persiste ?",
+    "contactSupport": "Contactez notre support"
+  },
+  "manager": {
+    "dashboard": {
+      "title": "Gestion de l'Agence",
+      "subtitle": "Administration des conseillers et paramètres de l'agence",
+      "advisorManagement": {
+        "title": "Gestion des Conseillers",
+        "description": "Créez et gérez les conseillers bancaires de votre agence.",
+        "createButton": "Créer un conseiller"
+      },
+      "agencySettings": {
+        "title": "Paramètres de l'Agence",
+        "description": "Configurez les paramètres de votre agence.",
+        "button": "Paramètres agence"
+      }
     },
-    "table": {
-      "name": "Nom",
-      "email": "Email",
-      "phone": "Téléphone",
-      "status": "Statut",
-      "roles": "Rôles",
-      "registered": "Inscrit",
-      "actions": "Actions",
-      "noUsers": "Aucun utilisateur trouvé"
+    "users": {
+      "title": "Gestion des Utilisateurs",
+      "subtitle": "Gérez tous les utilisateurs, clients et conseillers",
+      "loading": "Chargement...",
+      "tabs": {
+        "all": "Tous",
+        "clients": "Clients",
+        "advisors": "Conseillers"
+      },
+      "table": {
+        "name": "Nom",
+        "email": "Email",
+        "phone": "Téléphone",
+        "status": "Statut",
+        "roles": "Rôles",
+        "registered": "Inscrit",
+        "actions": "Actions",
+        "noUsers": "Aucun utilisateur trouvé"
+      },
+      "status": {
+        "yes": "Oui",
+        "no": "Non"
+      },
+      "actions": {
+        "edit": "Modifier",
+        "delete": "Supprimer"
+      },
+      "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cela supprimera également tous ses comptes et données associées.",
+      "editModal": {
+        "title": "Modifier l'utilisateur",
+        "firstName": "Prénom",
+        "lastName": "Nom",
+        "email": "Email",
+        "phone": "Téléphone",
+        "address": "Adresse",
+        "status": "Statut",
+        "statusOptions": {
+          "active": "Actif",
+          "inactive": "Inactif",
+          "suspended": "Suspendu"
+        },
+        "cancel": "Annuler",
+        "save": "Enregistrer"
+      },
+      "errors": {
+        "updateFailed": "Erreur lors de la mise à jour de l'utilisateur"
+      }
     },
-    "status": {
-      "yes": "Oui",
-      "no": "Non"
+    "accounts": {
+      "title": "Vue d'ensemble des Comptes",
+      "subtitle": "Consultez tous les comptes courants et leurs soldes",
+      "loading": "Chargement...",
+      "stats": {
+        "totalAccounts": "Total Comptes",
+        "totalBalance": "Solde Total",
+        "activeAccounts": "Comptes Actifs"
+      },
+      "search": "Rechercher par nom, IBAN ou numéro de compte...",
+      "table": {
+        "number": "Numéro",
+        "iban": "IBAN",
+        "owner": "Propriétaire",
+        "type": "Type",
+        "balance": "Solde",
+        "status": "Statut",
+        "createdAt": "Créé le",
+        "actions": "Actions",
+        "noAccounts": "Aucun compte trouvé"
+      },
+      "deleteConfirm": {
+        "lastCheckingWithBalance": "Impossible de supprimer le dernier compte courant avec un solde positif. Veuillez d'abord transférer les fonds ou vous assurer que le solde est de 0€.",
+        "withBalance": "Êtes-vous sûr de vouloir supprimer ce compte ?\\n\\nLe solde de {amount} sera automatiquement transféré vers un autre compte courant de l'utilisateur.",
+        "withoutBalance": "Êtes-vous sûr de vouloir supprimer ce compte ?"
+      },
+      "errors": {
+        "deleteFailed": "Erreur lors de la suppression du compte",
+        "deleteError": "Erreur lors de la suppression"
+      },
+      "actions": {
+        "delete": "Supprimer"
+      },
+      "success": "Compte supprimé avec succès"
     },
-    "actions": {
-      "edit": "Modifier",
-      "delete": "Supprimer"
+    "savingsProducts": {
+      "title": "Produits d'Épargne",
+      "subtitle": "Créez et gérez les produits d'épargne disponibles pour les clients",
+      "backToDashboard": "Retour au dashboard",
+      "newProduct": "Nouveau Produit",
+      "existingProducts": "Produits Existants",
+      "form": {
+        "createTitle": "Créer un Nouveau Produit",
+        "editTitle": "Modifier le Produit",
+        "name": "Nom du produit",
+        "namePlaceholder": "Livret A, PEL, etc.",
+        "interestRate": "Taux d'intérêt annuel (%)",
+        "interestRatePlaceholder": "3.5",
+        "maxDeposit": "Plafond de rémunération (€)",
+        "maxDepositPlaceholder": "22950",
+        "minDeposit": "Dépôt minimum (€)",
+        "minDepositPlaceholder": "10",
+        "description": "Description",
+        "descriptionPlaceholder": "Description du produit d'épargne...",
+        "createButton": "Créer",
+        "updateButton": "Mettre à jour",
+        "cancel": "Annuler"
+      },
+      "product": {
+        "active": "Actif",
+        "inactive": "Inactif",
+        "rate": "Taux :",
+        "ceiling": "Plafond :",
+        "edit": "Modifier"
+      },
+      "messages": {
+        "createSuccess": "Produit créé avec succès !",
+        "updateSuccess": "Produit mis à jour ! Tous les comptes liés ont été mis à jour.",
+        "createError": "Erreur lors de la création",
+        "updateError": "Erreur lors de la mise à jour"
+      },
+      "noProducts": "Aucun produit créé. Créez votre premier produit d'épargne !"
     },
-    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cela supprimera également tous ses comptes et données associées.",
-    "editModal": {
-      "title": "Modifier l'utilisateur",
+    "createAdvisor": {
+      "title": "Créer un conseiller bancaire",
       "firstName": "Prénom",
       "lastName": "Nom",
       "email": "Email",
-      "phone": "Téléphone",
+      "password": "Mot de passe",
+      "phone": "Numéro de téléphone",
+      "dateOfBirth": "Date de naissance",
       "address": "Adresse",
-      "status": "Statut",
-      "statusOptions": {
-        "active": "Actif",
-        "inactive": "Inactif",
-        "suspended": "Suspendu"
+      "createButton": "Créer le conseiller",
+      "backToDashboard": "Retour au tableau de bord",
+      "messages": {
+        "success": "Le conseiller bancaire a été créé avec succès. Un email de confirmation a été envoyé.",
+        "userExists": "Un utilisateur avec cet email existe déjà.",
+        "error": "Une erreur est survenue lors de la création du conseiller.",
+        "networkError": "Erreur réseau. Vérifiez que le serveur est démarré."
+      }
+    },
+    "savings": {
+      "title": "Vue d'ensemble des Comptes Épargne",
+      "subtitle": "Consultez tous les comptes épargne, taux d'intérêt et gains",
+      "loading": "Chargement...",
+      "stats": {
+        "totalAccounts": "Total Comptes",
+        "totalBalance": "Solde Total",
+        "totalInterest": "Intérêts Totaux",
+        "averageRate": "Taux Moyen"
       },
-      "cancel": "Annuler",
-      "save": "Enregistrer"
-    },
-    "errors": {
-      "updateFailed": "Erreur lors de la mise à jour de l'utilisateur"
+      "search": "Rechercher par nom ou numéro de compte...",
+      "table": {
+        "number": "Numéro",
+        "owner": "Propriétaire",
+        "balance": "Solde",
+        "interestRate": "Taux d'intérêt",
+        "totalInterest": "Intérêts Totaux",
+        "status": "Statut",
+        "lastUpdate": "Dernière MAJ",
+        "actions": "Actions",
+        "noAccounts": "Aucun compte épargne trouvé"
+      },
+      "status": {
+        "active": "Actif",
+        "inactive": "Inactif"
+      },
+      "deleteConfirm": {
+        "withBalance": "Êtes-vous sûr de vouloir supprimer ce compte épargne ?\\n\\nLe solde de {amount} sera automatiquement transféré vers un compte courant de l'utilisateur.",
+        "withoutBalance": "Êtes-vous sûr de vouloir supprimer ce compte épargne ?"
+      },
+      "actions": {
+        "delete": "Supprimer"
+      },
+      "errors": {
+        "deleteFailed": "Erreur lors de la suppression du compte épargne",
+        "deleteError": "Erreur lors de la suppression"
+      },
+      "success": "Compte épargne supprimé avec succès"
     }
   },
-  "accounts": {
-    "title": "Vue d'ensemble des Comptes",
-    "subtitle": "Consultez tous les comptes courants et leurs soldes",
-    "loading": "Chargement...",
-    "stats": {
-      "totalAccounts": "Total Comptes",
-      "totalBalance": "Solde Total",
-      "activeAccounts": "Comptes Actifs"
-    },
-    "search": "Rechercher par nom, IBAN ou numéro de compte...",
-    "table": {
-      "number": "Numéro",
-      "iban": "IBAN",
-      "owner": "Propriétaire",
-      "type": "Type",
-      "balance": "Solde",
-      "status": "Statut",
-      "createdAt": "Créé le",
-      "actions": "Actions",
-      "noAccounts": "Aucun compte trouvé"
-    },
-    "deleteConfirm": {
-      "lastCheckingWithBalance": "Impossible de supprimer le dernier compte courant avec un solde positif. Veuillez d'abord transférer les fonds ou vous assurer que le solde est de 0€.",
-      "withBalance": "Êtes-vous sûr de vouloir supprimer ce compte ?\\n\\nLe solde de {amount} sera automatiquement transféré vers un autre compte courant de l'utilisateur.",
-      "withoutBalance": "Êtes-vous sûr de vouloir supprimer ce compte ?"
-    },
-    "errors": {
-      "deleteFailed": "Erreur lors de la suppression du compte",
-      "deleteError": "Erreur lors de la suppression"
-    },
-    "actions": {
-      "delete": "Supprimer"
-    },
-    "success": "Compte supprimé avec succès"
-  },
-  "savingsProducts": {
-    "title": "Produits d'Épargne",
-    "subtitle": "Créez et gérez les produits d'épargne disponibles pour les clients",
-    "backToDashboard": "Retour au dashboard",
-    "newProduct": "Nouveau Produit",
-    "existingProducts": "Produits Existants",
-    "form": {
-      "createTitle": "Créer un Nouveau Produit",
-      "editTitle": "Modifier le Produit",
-      "name": "Nom du produit",
-      "namePlaceholder": "Livret A, PEL, etc.",
-      "interestRate": "Taux d'intérêt annuel (%)",
-      "interestRatePlaceholder": "3.5",
-      "maxDeposit": "Plafond de rémunération (€)",
-      "maxDepositPlaceholder": "22950",
-      "minDeposit": "Dépôt minimum (€)",
-      "minDepositPlaceholder": "10",
-      "description": "Description",
-      "descriptionPlaceholder": "Description du produit d'épargne...",
-      "createButton": "Créer",
-      "updateButton": "Mettre à jour",
-      "cancel": "Annuler"
-    },
-    "product": {
-      "active": "Actif",
-      "inactive": "Inactif",
-      "rate": "Taux :",
-      "ceiling": "Plafond :",
-      "edit": "Modifier"
-    },
-    "messages": {
-      "createSuccess": "Produit créé avec succès !",
-      "updateSuccess": "Produit mis à jour ! Tous les comptes liés ont été mis à jour.",
-      "createError": "Erreur lors de la création",
-      "updateError": "Erreur lors de la mise à jour"
-    },
-    "noProducts": "Aucun produit créé. Créez votre premier produit d'épargne !"
-  },
-  "createAdvisor": {
-    "title": "Créer un conseiller bancaire",
-    "firstName": "Prénom",
-    "lastName": "Nom",
-    "email": "Email",
-    "password": "Mot de passe",
-    "phone": "Numéro de téléphone",
-    "dateOfBirth": "Date de naissance",
-    "address": "Adresse",
-    "createButton": "Créer le conseiller",
-    "backToDashboard": "Retour au tableau de bord",
-    "messages": {
-      "success": "Le conseiller bancaire a été créé avec succès. Un email de confirmation a été envoyé.",
-      "userExists": "Un utilisateur avec cet email existe déjà.",
-      "error": "Une erreur est survenue lors de la création du conseiller.",
-      "networkError": "Erreur réseau. Vérifiez que le serveur est démarré."
+  "advisor": {
+    "dashboard": {
+      "title": "Tableau de bord conseiller bancaire",
+      "clientManagement": {
+        "title": "Gestion des clients",
+        "description": "Accédez à la liste de vos clients et gérez leurs comptes.",
+        "button": "Voir mes clients"
+      },
+      "loanRequests": {
+        "title": "Demandes de crédit",
+        "description": "Consultez et traitez les demandes de crédit de vos clients.",
+        "button": "Voir les demandes de crédit"
+      },
+      "overdraftRequests": {
+        "title": "Demandes de découvert",
+        "description": "Consultez et traitez les demandes d'augmentation de découvert.",
+        "button": "Ouvrir les demandes de découvert"
+      }
     }
   },
-  "savings": {
-    "title": "Vue d'ensemble des Comptes Épargne",
-    "subtitle": "Consultez tous les comptes épargne, taux d'intérêt et gains",
-    "loading": "Chargement...",
-    "stats": {
-      "totalAccounts": "Total Comptes",
-      "totalBalance": "Solde Total",
-      "totalInterest": "Intérêts Totaux",
-      "averageRate": "Taux Moyen"
+  "chat": {
+    "page": {
+      "verifyingAuth": "Vérification de l'authentification...",
+      "loadingUser": "Chargement de l'utilisateur..."
     },
-    "search": "Rechercher par nom ou numéro de compte...",
-    "table": {
-      "number": "Numéro",
-      "owner": "Propriétaire",
-      "balance": "Solde",
-      "interestRate": "Taux d'intérêt",
-      "totalInterest": "Intérêts Totaux",
-      "status": "Statut",
-      "lastUpdate": "Dernière MAJ",
-      "actions": "Actions",
-      "noAccounts": "Aucun compte épargne trouvé"
+    "limitProgressBar": {
+      "nearLimit": "Critique",
+      "attention": "Attention",
+      "available": "Disponible",
+      "remaining": "restant"
     },
-    "status": {
-      "active": "Actif",
-      "inactive": "Inactif"
-    },
-    "deleteConfirm": {
-      "withBalance": "Êtes-vous sûr de vouloir supprimer ce compte épargne ?\\n\\nLe solde de {amount} sera automatiquement transféré vers un compte courant de l'utilisateur.",
-      "withoutBalance": "Êtes-vous sûr de vouloir supprimer ce compte épargne ?"
-    },
-    "actions": {
-      "delete": "Supprimer"
-    },
-    "errors": {
-      "deleteFailed": "Erreur lors de la suppression du compte épargne",
-      "deleteError": "Erreur lors de la suppression"
-    },
-    "success": "Compte épargne supprimé avec succès"
-  }
-},
-"advisor": {
-  "dashboard": {
-    "title": "Tableau de bord conseiller bancaire",
-    "clientManagement": {
-      "title": "Gestion des clients",
-      "description": "Accédez à la liste de vos clients et gérez leurs comptes.",
-      "button": "Voir mes clients"
-    },
-    "loanRequests": {
-      "title": "Demandes de crédit",
-      "description": "Consultez et traitez les demandes de crédit de vos clients.",
-      "button": "Voir les demandes de crédit"
-    },
-    "overdraftRequests": {
-      "title": "Demandes de découvert",
-      "description": "Consultez et traitez les demandes d'augmentation de découvert.",
-      "button": "Ouvrir les demandes de découvert"
+    "enums": {
+      "accountStatus": {
+        "ACTIVE": "Actif",
+        "CLOSED": "Fermé",
+        "SUSPENDED": "Suspendu",
+        "PENDING": "En attente",
+        "FROZEN": "Gelé",
+        "BANNED": "Banni"
+      },
+      "transactionType": {
+        "PAYMENT": "Paiement",
+        "WITHDRAWAL": "Retrait",
+        "TRANSFER": "Virement",
+        "FEE": "Frais",
+        "DEPOSIT": "Dépôt"
+      },
+      "overdraftStatus": {
+        "PENDING": "En attente",
+        "APPROVED": "Approuvé",
+        "REJECTED": "Refusé"
+      },
+      "clientStatus": {
+        "ACTIVE": "Actif",
+        "INACTIVE": "Inactif",
+        "PENDING": "En attente",
+        "SUSPENDED": "Suspendu"
+      }
     }
   }
-},
-"chat": {
-  "page": {
-    "verifyingAuth": "Vérification de l'authentification...",
-    "loadingUser": "Chargement de l'utilisateur..."
-  },
-  "limitProgressBar": {
-    "nearLimit": "Critique",
-    "attention": "Attention",
-    "available": "Disponible",
-    "remaining": "restant"
-  },
-  "enums": {
-    "accountStatus": {
-      "ACTIVE": "Actif",
-      "CLOSED": "Fermé",
-      "SUSPENDED": "Suspendu",
-      "PENDING": "En attente",
-      "FROZEN": "Gelé",
-      "BANNED": "Banni"
-    },
-    "transactionType": {
-      "PAYMENT": "Paiement",
-      "WITHDRAWAL": "Retrait",
-      "TRANSFER": "Virement",
-      "FEE": "Frais",
-      "DEPOSIT": "Dépôt"
-    },
-    "overdraftStatus": {
-      "PENDING": "En attente",
-      "APPROVED": "Approuvé",
-      "REJECTED": "Refusé"
-    },
-    "clientStatus": {
-      "ACTIVE": "Actif",
-      "INACTIVE": "Inactif",
-      "PENDING": "En attente",
-      "SUSPENDED": "Suspendu"
-    }
-  }
-}
 }
