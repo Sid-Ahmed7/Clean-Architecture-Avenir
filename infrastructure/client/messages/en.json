@@ -43,6 +43,35 @@
     }
   },
   "components": {
+    "stocks": {
+      "structure": {
+        "header": {
+          "open": "Open"
+        },
+        "price": "Price",
+        "stats": {
+          "open": "Open",
+          "previousClose": "Previous Close",
+          "high": "High",
+          "low": "Low"
+        },
+        "fiftyTwoWeek": {
+          "title": "52-Week",
+          "low": "52-Week Low",
+          "high": "52-Week High"
+        },
+        "volume": {
+          "volume": "Volume",
+          "averageVolume": "Avg. Volume"
+        },
+        "actions": {
+          "lastUpdated": "Last Updated"
+        }
+      },
+      "orders": {
+        "list": "Order List"
+      }
+    },
     "sidebar": {
       "menu": {
         "dashboard": "Dashboard",
@@ -2040,6 +2069,36 @@
         "INACTIVE": "Inactive",
         "PENDING": "Pending",
         "SUSPENDED": "Suspended"
+      }
+    }
+  },
+  "pages": {
+    "stock": {
+      "title": "Stock Market & Trading",
+      "loading": "Loading stocks...",
+      "errorTitle": "Loading Error",
+      "errorMessage": "Unable to load stock data. Please try again later.",
+      "tabs": {
+        "trading": "Trading",
+        "info": "Market Information"
+      },
+      "noActions": {
+        "title": "No Stocks Available",
+        "description": "There are currently no stocks available for trading."
+      },
+      "marketData": {
+        "loading": "Loading market data...",
+        "unavailableTitle": "Market Data Unavailable",
+        "unavailableDesc": "Real-time market data is currently unavailable.",
+        "realtime": "Real-time data from {exchange}",
+        "notTradable": "This stock is not yet available for trading on our platform."
+      },
+      "structure": {
+        "price": "Price",
+        "stats": "Statistics",
+        "fiftyTwoWeek": "52-Week",
+        "volume": "Volume",
+        "actions": "Actions"
       }
     }
   }

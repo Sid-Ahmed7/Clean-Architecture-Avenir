@@ -43,6 +43,35 @@
     }
   },
   "components": {
+    "stocks": {
+      "structure": {
+        "header": {
+          "open": "Ouverture"
+        },
+        "price": "Prix",
+        "stats": {
+          "open": "Ouverture",
+          "previousClose": "Clôture précédente",
+          "high": "Plus haut",
+          "low": "Plus bas"
+        },
+        "fiftyTwoWeek": {
+          "title": "52 semaines",
+          "low": "Plus bas (52 sem.)",
+          "high": "Plus haut (52 sem.)"
+        },
+        "volume": {
+          "volume": "Volume",
+          "averageVolume": "Volume moyen"
+        },
+        "actions": {
+          "lastUpdated": "Dernière mise à jour"
+        }
+      },
+      "orders": {
+          "list": "Liste des ordres"
+        }
+    },
     "sidebar": {
       "menu": {
         "dashboard": "Dashboard",
@@ -2040,6 +2069,36 @@
         "INACTIVE": "Inactif",
         "PENDING": "En attente",
         "SUSPENDED": "Suspendu"
+      }
+    }
+  },
+  "pages": {
+    "stock": {
+      "title": "Bourse & Trading",
+      "loading": "Chargement des actions...",
+      "errorTitle": "Erreur de chargement",
+      "errorMessage": "Impossible de charger les données boursières. Veuillez réessayer plus tard.",
+      "tabs": {
+        "trading": "Trading",
+        "info": "Informations de marché"
+      },
+      "noActions": {
+        "title": "Aucune action disponible",
+        "description": "Il n'y a actuellement aucune action disponible pour le trading."
+      },
+      "marketData": {
+        "loading": "Chargement des données de marché...",
+        "unavailableTitle": "Données de marché indisponibles",
+        "unavailableDesc": "Les données de marché en temps réel ne sont pas disponibles pour le moment.",
+        "realtime": "Données en temps réel de {exchange}",
+        "notTradable": "Cette action n'est pas encore disponible pour le trading sur notre plateforme."
+      },
+      "structure": {
+        "price": "Prix",
+        "stats": "Statistiques",
+        "fiftyTwoWeek": "52 semaines",
+        "volume": "Volume",
+        "actions": "Actions"
       }
     }
   }
