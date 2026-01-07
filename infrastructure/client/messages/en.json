@@ -203,6 +203,7 @@
         "loanRequests": "Loan Requests",
         "overdraftRequests": "Overdraft Requests",
         "pendingConversations": "Pending Conversations",
+        "addNews": "Add News",
         "transfers": "Transfers",
         "trading": "Trading",
         "myOrders": "My Orders",
@@ -374,6 +375,30 @@
       },
       "grid": {
         "noNews": "No news found."
+      },
+      "form": {
+        "title": "Create a new article",
+        "subtitle": "Compose your article with the block editor",
+        "generalInfo": "General information",
+        "content": "Article content",
+        "fields": {
+          "title": "Title",
+          "titlePlaceholder": "Enter the article title",
+          "category": "Category",
+          "priority": "Priority",
+          "tags": "Tags",
+          "tagsPlaceholder": "Ex: economy, tech...",
+          "cancel": "Cancel",
+          "create": "Create article",
+          "update": "Update"
+        }
+      },
+      "blocks": {
+        "toolbar": {
+          "addBlock": "Add block",
+          "text": "Text",
+          "media": "Media"
+        }
       }
     },
     "beneficiariesManager": {
@@ -1596,22 +1621,21 @@
         "cancel": "Cancel",
         "purchasing": "Purchasing...",
         "buyShares": "Buy {count} IPO share(s)"
-      }
-    ,
-    "purchaseIPO": {
-      "title": "Purchase IPO",
-      "ipoTitle": "Initial Public Offering",
-      "ipoDescription": "Direct purchase at initial offering price",
-      "sharesRemaining": "shares remaining",
-      "quantity": "Quantity",
-      "maxAvailable": "Maximum: {max} shares available",
-      "fixedPrice": "Fixed IPO Price (€)",
-      "fixedPriceDescription": "Fixed price of",
-      "totalAmount": "Total amount",
-      "transactionFee": "Transaction fee",
-      "totalToPay": "Total to pay",
-      "instantExecutionInfo": "Your purchase will be executed instantly at the IPO price. Shares will be added directly to your portfolio.",
-      "cancel": "Cancel",
+      },
+      "purchaseIPO": {
+        "title": "Purchase IPO",
+        "ipoTitle": "Initial Public Offering",
+        "ipoDescription": "Direct purchase at initial offering price",
+        "sharesRemaining": "shares remaining",
+        "quantity": "Quantity",
+        "maxAvailable": "Maximum: {max} shares available",
+        "fixedPrice": "Fixed IPO Price (€)",
+        "fixedPriceDescription": "Fixed price of",
+        "totalAmount": "Total amount",
+        "transactionFee": "Transaction fee",
+        "totalToPay": "Total to pay",
+        "instantExecutionInfo": "Your purchase will be executed instantly at the IPO price. Shares will be added directly to your portfolio.",
+        "cancel": "Cancel",
         "buyShares": "Buy {count} IPO share(s)"
       }
     },

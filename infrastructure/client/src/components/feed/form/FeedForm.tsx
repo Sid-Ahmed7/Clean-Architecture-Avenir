@@ -48,7 +48,7 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
   });
 
   const handleFormSubmit = async (data: CreateNewsModel) => {
-       
+
     clearErrors();
 
     if (blocks.length === 0) {
@@ -61,7 +61,7 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
 
     const textBlocks = blocks.filter((b) => b.type === TypeBlock.TEXT);
     const hasEmptyText = textBlocks.some((b) => !b.content || !b.content.trim());
-    
+
     if (hasEmptyText) {
 
       setError("root.blocksError", {
@@ -78,7 +78,7 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
       let targetNewsId: string;
 
       if (isEditMode && newsId) {
-        
+
         newsResult = await updateNews.mutateAsync({
           id: newsId,
           title: data.title,
@@ -88,7 +88,7 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         });
-        
+
         if (newsResult.error || !newsResult.data) {
           setError("root.serverError", {
             type: "manual",
@@ -96,12 +96,12 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
           });
           return;
         }
-        
+
         targetNewsId = newsId;
-        
+
       } else {
-        
-        
+
+
         newsResult = await createNews.mutateAsync({
           title: data.title,
           category: data.category,
@@ -202,15 +202,15 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
         }
       }
 
-      
+
       await queryClient.invalidateQueries({ queryKey: ["news", targetNewsId] });
       await queryClient.invalidateQueries({ queryKey: ["content", "news", targetNewsId] });
       await queryClient.invalidateQueries({ queryKey: ["media", "news", targetNewsId] });
-      
+
       router.refresh();
-      
+
       router.push(`/${locale}/feed/${targetNewsId}`);
-      
+
     } catch (error: any) {
       console.error("Erreur:", error);
       setError("root.serverError", {
@@ -270,24 +270,24 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
       )}
 
       <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-lg font-semibold mb-4 text-gray-900">Informations générales</h2>
+        <h2 className="text-lg font-semibold mb-4 text-gray-900">{t('components.feed.form.generalInfo')}</h2>
         <FeedFormFields
           register={register}
           control={control}
           errors={errors}
           disabled={isSubmitting}
           isSubmitting={isSubmitting}
-          isEditMode={isEditMode}      
+          isEditMode={isEditMode}
         />
       </div>
 
       <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-lg font-semibold mb-4 text-gray-900">Contenu de l&apos;actualité</h2>
-        <BlockEditor 
-          onChange={setBlocks} 
+        <h2 className="text-lg font-semibold mb-4 text-gray-900">{t('components.feed.form.content')}</h2>
+        <BlockEditor
+          onChange={setBlocks}
           initialBlocks={initialBlocks}
           newsId={newsId}
-          disabled={isSubmitting} 
+          disabled={isSubmitting}
         />
       </div>
     </form>

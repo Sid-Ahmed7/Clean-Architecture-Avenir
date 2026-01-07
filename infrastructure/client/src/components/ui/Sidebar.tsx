@@ -2,7 +2,7 @@
 
 import { AuthContext } from "@/contexts/AuthProvider";
 import { apiClient, stopTokenRefresh } from "@/lib/api/apiClient";
-import { CreditCard, ArrowUpRight, Calendar, Settings, HelpCircle, X, MessageCircle, LogOut, PiggyBank, Home, Users, Wallet, FileText, UserPlus, Newspaper, LineChart, ShoppingCart, BarChart3, Building2, Briefcase } from "lucide-react";
+import { CreditCard, ArrowUpRight, Calendar, Settings, HelpCircle, X, MessageCircle, LogOut, PiggyBank, Home, Users, Wallet, FileText, UserPlus, Newspaper, LineChart, ShoppingCart, BarChart3, Building2, Briefcase, PlusCircle } from "lucide-react";
 import { useContext } from "react";
 import { Link, useRouter } from "@/i18n/navigation";
 import { usePathname } from "next/navigation";
@@ -41,6 +41,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     { icon: FileText, labelKey: "menu.loanRequests", href: "/advisor/loan-requests", roles: [RoleEnum.BANK_ADVISOR] },
     { icon: Briefcase, labelKey: "menu.overdraftRequests", href: "/advisor/overdraft-requests", roles: [RoleEnum.BANK_ADVISOR] },
     { icon: MessageCircle, labelKey: "menu.pendingConversations", href: "/advisor/pending-conversations", roles: [RoleEnum.BANK_ADVISOR] },
+    { icon: PlusCircle, labelKey: "menu.addNews", href: "/feed/create", roles: [RoleEnum.BANK_ADVISOR] },
 
     { icon: ArrowUpRight, labelKey: "menu.transfers", href: `/${rolePrefix}/transfers`, excludeRoles: [RoleEnum.BANK_MANAGER, RoleEnum.BANK_ADVISOR] },
     { icon: LineChart, labelKey: "menu.trading", href: `/stock` },

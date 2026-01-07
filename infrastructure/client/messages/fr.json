@@ -203,6 +203,7 @@
         "loanRequests": "Demandes crédit",
         "overdraftRequests": "Demandes de découvert",
         "pendingConversations": "Conversations en attente",
+        "addNews": "Ajouter une actualité",
         "transfers": "Virements",
         "trading": "Trading",
         "myOrders": "Mes Ordres",
@@ -374,6 +375,30 @@
       },
       "grid": {
         "noNews": "Aucune actualité trouvée."
+      },
+      "form": {
+        "title": "Créer une nouvelle actualité",
+        "subtitle": "Composez votre actualité avec l'éditeur par blocs",
+        "generalInfo": "Informations générales",
+        "content": "Contenu de l'actualité",
+        "fields": {
+          "title": "Titre",
+          "titlePlaceholder": "Entrez le titre de l'actualité",
+          "category": "Catégorie",
+          "priority": "Priorité",
+          "tags": "Tags",
+          "tagsPlaceholder": "Ex: économie, tech...",
+          "cancel": "Annuler",
+          "create": "Créer l'actualité",
+          "update": "Mettre à jour"
+        }
+      },
+      "blocks": {
+        "toolbar": {
+          "addBlock": "Ajouter un bloc",
+          "text": "Texte",
+          "media": "Média"
+        }
       }
     },
     "beneficiariesManager": {
@@ -1596,24 +1621,23 @@
         "cancel": "Annuler",
         "purchasing": "Achat en cours...",
         "buyShares": "Acheter {count} action(s) IPO"
+      },
+      "purchaseIPO": {
+        "title": "Achat IPO",
+        "ipoTitle": "Introduction en Bourse",
+        "ipoDescription": "Achat direct au prix d'émission initial",
+        "sharesRemaining": "actions restantes",
+        "quantity": "Quantité",
+        "maxAvailable": "Maximum : {max} actions disponibles",
+        "fixedPrice": "Prix IPO fixe (€)",
+        "fixedPriceDescription": "Prix fixe de",
+        "totalAmount": "Montant total",
+        "transactionFee": "Frais de transaction",
+        "totalToPay": "Total à payer",
+        "instantExecutionInfo": "Votre achat sera exécuté instantanément au prix IPO. Les actions seront ajoutées directement à votre portefeuille.",
+        "cancel": "Annuler",
+        "buyShares": "Acheter {count} action(s) IPO"
       }
-    ,
-    "purchaseIPO": {
-      "title": "Achat IPO",
-      "ipoTitle": "Introduction en Bourse",
-      "ipoDescription": "Achat direct au prix d'émission initial",
-      "sharesRemaining": "actions restantes",
-      "quantity": "Quantité",
-      "maxAvailable": "Maximum : {max} actions disponibles",
-      "fixedPrice": "Prix IPO fixe (€)",
-      "fixedPriceDescription": "Prix fixe de",
-      "totalAmount": "Montant total",
-      "transactionFee": "Frais de transaction",
-      "totalToPay": "Total à payer",
-      "instantExecutionInfo": "Votre achat sera exécuté instantanément au prix IPO. Les actions seront ajoutées directement à votre portefeuille.",
-      "cancel": "Annuler",
-      "buyShares": "Acheter {count} action(s) IPO"
-    }
     },
     "positions": {
       "summary": {
