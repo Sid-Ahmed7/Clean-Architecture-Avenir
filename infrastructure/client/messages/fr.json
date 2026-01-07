@@ -2194,6 +2194,11 @@
         "title": "Demandes de découvert",
         "description": "Consultez et traitez les demandes d'augmentation de découvert.",
         "button": "Ouvrir les demandes de découvert"
+      },
+      "pendingConversations": {
+        "title": "Conversations en attente",
+        "description": "Répondez aux messages de vos clients.",
+        "button": "Voir les messages"
       }
     }
   },

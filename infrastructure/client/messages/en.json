@@ -2194,6 +2194,11 @@
         "title": "Overdraft Requests",
         "description": "Review and process overdraft increase requests.",
         "button": "Open overdraft requests"
+      },
+      "pendingConversations": {
+        "title": "Pending Conversations",
+        "description": "Reply to your clients' messages.",
+        "button": "View messages"
       }
     }
   },
