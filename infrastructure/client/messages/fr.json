@@ -501,6 +501,7 @@
         "lastName": "Doe",
         "email": "john.doe@example.com",
         "phone": "+33 6 12 34 56 78",
+        "dateOfBirth": "JJ/MM/AAAA",
         "address": "123 Rue de la Paix, 75001 Paris"
       },
       "messages": {

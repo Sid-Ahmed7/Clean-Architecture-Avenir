@@ -501,6 +501,7 @@
         "lastName": "Doe",
         "email": "john.doe@example.com",
         "phone": "+1 234 567 8900",
+        "dateOfBirth": "MM/DD/YYYY",
         "address": "123 Main Street, New York, NY"
       },
       "messages": {
