@@ -120,6 +120,9 @@
         "downloadRib": "Télécharger le RIB",
         "generatingRib": "Génération...",
         "limits": "Limites",
+        "withdrawalLimit": "Limite de retrait",
+        "transferLimit": "Limite de virement",
+        "overdraftLimit": "Limite de découvert",
         "overdraftRequest": "Demande de découvert",
         "currentOverdraft": "Découvert actuel",
         "increaseTransferLimit": "Augmenter la limite de virement",
@@ -159,6 +162,27 @@
         "creating": "Création...",
         "createButton": "Créer le compte",
         "success": "Compte créé avec succès !"
+      }
+    },
+    "rib": {
+      "title": "Relevé d'Identité Bancaire",
+      "holderSection": "Titulaire du compte",
+      "holder": "Titulaire",
+      "address": "Adresse",
+      "addressNotProvided": "Adresse non renseignée",
+      "accountSection": "Coordonnées bancaires",
+      "accountNumber": "Numéro de compte",
+      "currency": "Devise",
+      "generatedAt": "Généré le"
+    },
+    "enums": {
+      "accountStatus": {
+        "ACTIVE": "Actif",
+        "CLOSED": "Fermé",
+        "SUSPENDED": "Suspendu",
+        "PENDING": "En attente",
+        "FROZEN": "Gelé",
+        "BANNED": "Banni"
       }
     },
     "feed": {
@@ -568,6 +592,7 @@
     "dashboard": {
       "loading": "Chargement...",
       "welcome": "Bienvenue sur votre tableau de bord client",
+      "distributionByType": "Répartition par type",
       "recentTransactions": {
         "title": "Dernières opérations",
         "subtitle": "Aperçu rapide des mouvements récents",
@@ -588,7 +613,10 @@
         "subtitle": "Livret A, LDDS et autres produits d'épargne",
         "viewAll": "Voir tout",
         "loading": "Chargement des livrets...",
-        "noAccounts": "Aucun livret d'épargne"
+        "noAccounts": "Aucun livret d'épargne",
+        "noSavings": "Aucun livret d'épargne",
+        "startSaving": "Commencez à épargner dès aujourd'hui avec nos produits d'épargne",
+        "discover": "Découvrir nos livrets"
       },
       "savingsPage": {
         "title": "Épargne",

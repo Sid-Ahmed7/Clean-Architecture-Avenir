@@ -120,6 +120,9 @@
         "downloadRib": "Download RIB",
         "generatingRib": "Generating...",
         "limits": "Limits",
+        "withdrawalLimit": "Withdrawal Limit",
+        "transferLimit": "Transfer Limit",
+        "overdraftLimit": "Overdraft Limit",
         "overdraftRequest": "Overdraft Request",
         "currentOverdraft": "Current overdraft",
         "increaseTransferLimit": "Increase Transfer Limit",
@@ -159,6 +162,27 @@
         "creating": "Creating...",
         "createButton": "Create Account",
         "success": "Account created successfully!"
+      }
+    },
+    "rib": {
+      "title": "Bank Account Details",
+      "holderSection": "Account Holder",
+      "holder": "Holder",
+      "address": "Address",
+      "addressNotProvided": "Address not provided",
+      "accountSection": "Bank Details",
+      "accountNumber": "Account Number",
+      "currency": "Currency",
+      "generatedAt": "Generated on"
+    },
+    "enums": {
+      "accountStatus": {
+        "ACTIVE": "Active",
+        "CLOSED": "Closed",
+        "SUSPENDED": "Suspended",
+        "PENDING": "Pending",
+        "FROZEN": "Frozen",
+        "BANNED": "Banned"
       }
     },
     "feed": {
@@ -568,6 +592,7 @@
     "dashboard": {
       "loading": "Loading...",
       "welcome": "Welcome to your client dashboard",
+      "distributionByType": "Distribution by Type",
       "recentTransactions": {
         "title": "Recent Transactions",
         "subtitle": "Quick overview of recent movements",
@@ -588,7 +613,10 @@
         "subtitle": "Savings accounts and investment products",
         "viewAll": "View all",
         "loading": "Loading savings accounts...",
-        "noAccounts": "No savings accounts"
+        "noAccounts": "No savings accounts",
+        "noSavings": "No savings account",
+        "startSaving": "Start saving today with our savings products",
+        "discover": "Discover our accounts"
       },
       "savingsPage": {
         "title": "Savings",

@@ -26,7 +26,6 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const menuItems = [
     { icon: Home, labelKey: "menu.dashboard", href: `/${rolePrefix}/dashboard` },
 
-    { icon: CreditCard, labelKey: "menu.accounts", href: `/${rolePrefix}/accounts`, roles: [RoleEnum.CLIENT] },
     { icon: UserPlus, labelKey: "menu.beneficiaries", href: `/client/beneficiaries`, roles: [RoleEnum.CLIENT] },
     { icon: PiggyBank, labelKey: "menu.savings", href: `/client/savings`, roles: [RoleEnum.CLIENT] },
     { icon: FileText, labelKey: "menu.myLoanRequests", href: "/loan/requests", roles: [RoleEnum.CLIENT] },
@@ -45,11 +44,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     { icon: LineChart, labelKey: "menu.trading", href: `/stock` },
     { icon: ShoppingCart, labelKey: "menu.myOrders", href: `/orders` },
     { icon: BarChart3, labelKey: "menu.myPositions", href: `/position` },
-    { icon: Calendar, labelKey: "menu.history", href: `/${rolePrefix}/history` },
     { icon: Newspaper, labelKey: "menu.news", href: `/feed` },
     { icon: MessageCircle, labelKey: "menu.messages", href: `/${rolePrefix}/conversations` },
-    { icon: Settings, labelKey: "menu.settings", href: `/${rolePrefix}/settings` },
-    { icon: HelpCircle, labelKey: "menu.help", href: `/${rolePrefix}/help` },
   ];
 
   const handleLogout = () => {
