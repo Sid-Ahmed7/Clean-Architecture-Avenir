@@ -42,12 +42,12 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     { icon: Briefcase, labelKey: "menu.overdraftRequests", href: "/advisor/overdraft-requests", roles: [RoleEnum.BANK_ADVISOR] },
     { icon: MessageCircle, labelKey: "menu.pendingConversations", href: "/advisor/pending-conversations", roles: [RoleEnum.BANK_ADVISOR] },
 
-    { icon: ArrowUpRight, labelKey: "menu.transfers", href: `/${rolePrefix}/transfers` },
+    { icon: ArrowUpRight, labelKey: "menu.transfers", href: `/${rolePrefix}/transfers`, excludeRoles: [RoleEnum.BANK_MANAGER] },
     { icon: LineChart, labelKey: "menu.trading", href: `/stock` },
-    { icon: ShoppingCart, labelKey: "menu.myOrders", href: `/orders` },
-    { icon: BarChart3, labelKey: "menu.myPositions", href: `/position` },
+    { icon: ShoppingCart, labelKey: "menu.myOrders", href: `/orders`, excludeRoles: [RoleEnum.BANK_MANAGER] },
+    { icon: BarChart3, labelKey: "menu.myPositions", href: `/position`, excludeRoles: [RoleEnum.BANK_MANAGER] },
     { icon: Newspaper, labelKey: "menu.news", href: `/feed` },
-    { icon: MessageCircle, labelKey: "menu.messages", href: `/${rolePrefix}/conversations` },
+    { icon: MessageCircle, labelKey: "menu.messages", href: `/${rolePrefix}/conversations`, excludeRoles: [RoleEnum.BANK_MANAGER] },
   ];
 
   const handleLogout = () => {
@@ -96,7 +96,17 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
         <nav className="p-4 space-y-1">
           {menuItems
-            .filter((item) => !item.roles || hasAnyRole(item.roles))
+            .filter((item) => {
+              // Check if item has specific roles requirement
+              if (item.roles && !hasAnyRole(item.roles)) {
+                return false;
+              }
+              // Check if current user role is excluded
+              if (item.excludeRoles && user?.role && item.excludeRoles.includes(user.role as RoleEnum)) {
+                return false;
+              }
+              return true;
+            })
             .map((item) => {
               const ItemIcon = item.icon;
               const active = isActive(item.href);
