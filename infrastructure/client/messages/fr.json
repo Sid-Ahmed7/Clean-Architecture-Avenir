@@ -190,6 +190,111 @@
         "noBlocks": "Aucun bloc ajouté. Utilisez la barre d'outils ci-dessus pour ajouter du contenu.",
         "blocksCount": "{count, plural, =0 {Aucun bloc} =1 {1 bloc} other {# blocs}}"
       }
+    },
+    "beneficiariesManager": {
+      "tabs": {
+        "beneficiaries": "Bénéficiaires",
+        "groups": "Groupes"
+      },
+      "table": {
+        "columns": {
+          "name": "Nom",
+          "iban": "IBAN",
+          "email": "Email",
+          "country": "Pays",
+          "status": "Statut",
+          "created": "Date de création",
+          "action": "Action"
+        },
+        "status": {
+          "verified": "Vérifié",
+          "notVerified": "Non vérifié"
+        },
+        "loading": "Chargement des bénéficiaires...",
+        "empty": "Aucun bénéficiaire trouvé",
+        "itemLabel": "bénéficiaires",
+        "viewDetails": "Voir les détails"
+      },
+      "group": {
+        "table": {
+          "noGroups": "Aucun groupe trouvé",
+          "noGroupsDesc": "Créez un groupe pour organiser vos bénéficiaires"
+        }
+      },
+      "sidebar": {
+        "title": "Détails du bénéficiaire",
+        "close": "Fermer"
+      }
+    },
+    "beneficiaries": {
+      "form": {
+        "fields": {
+          "beneficiaryName": "Nom du bénéficiaire",
+          "iban": "IBAN",
+          "country": "Pays",
+          "email": "Email (optionnel)",
+          "address": {
+            "title": "Adresse (optionnel)",
+            "street": "Rue",
+            "city": "Ville",
+            "postalCode": "Code postal"
+          }
+        }
+      },
+      "group": {
+        "table": {
+          "loading": "Chargement des groupes...",
+          "noGroups": "Aucun groupe trouvé",
+          "noGroupsDesc": "Créez un groupe pour organiser vos bénéficiaires",
+          "columns": {
+            "groupName": "Nom du groupe",
+            "membersCount": "Nombre de membres",
+            "createdAt": "Date de création",
+            "updatedAt": "Dernière modification",
+            "action": "Action"
+          },
+          "members": "{count, plural, =0 {aucun membre} =1 {1 membre} other {# membres}}",
+          "viewDetails": "Voir les détails"
+        },
+        "membersTable": {
+          "columns": {
+            "beneficiary": "Bénéficiaire",
+            "iban": "IBAN",
+            "contact": "Contact",
+            "status": "Statut",
+            "actions": "Actions"
+          },
+          "noContact": "Pas de contact",
+          "verified": "Vérifié",
+          "pending": "En attente",
+          "details": "Détails",
+          "transfer": "Transférer",
+          "remove": "Retirer",
+          "membersCount": "{count, plural, =0 {Aucun membre} =1 {1 membre} other {# membres}}",
+          "noMembers": "Aucun membre dans ce groupe",
+          "noMembersDesc": "Ajoutez des bénéficiaires à ce groupe pour commencer",
+          "noMembersInGroup": "Aucun membre dans ce groupe",
+          "itemLabel": "membres",
+          "createdAt": "Créé le {date}",
+          "updatedAt": "Dernière modification le {date}",
+          "close": "Fermer"
+        },
+        "sidebar": {
+          "title": "Détails du groupe",
+          "close": "Fermer"
+        },
+        "form": {
+          "groupForm": {
+            "save": "Enregistrer"
+          },
+          "fields": {
+            "groupName": "Nom du groupe",
+            "selectBeneficiaries": "Sélectionner les bénéficiaires",
+            "noBeneficiaries": "Aucun bénéficiaire disponible",
+            "selectedCount": "{count, plural, =0 {Aucun bénéficiaire sélectionné} =1 {1 bénéficiaire sélectionné} other {# bénéficiaires sélectionnés}}"
+          }
+        }
+      }
     }
   },
   "nav": {
@@ -667,6 +772,12 @@
       "noSavings": "Aucun livret d'épargne",
       "startSaving": "Commencez à épargner dès aujourd'hui avec nos produits d'épargne",
       "discover": "Découvrir nos livrets"
+    },
+    "beneficiaries": {
+      "title": "Mes Bénéficiaires",
+      "subtitle": "Gérez vos bénéficiaires et organisez-les en groupes",
+      "newBeneficiary": "Nouveau bénéficiaire",
+      "newGroup": "Nouveau groupe"
     }
   },
   "accounts": {

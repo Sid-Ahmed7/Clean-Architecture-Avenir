@@ -190,6 +190,111 @@
         "noBlocks": "No blocks added. Use the toolbar above to add content.",
         "blocksCount": "{count, plural, =0 {No blocks} =1 {1 block} other {# blocks}}"
       }
+    },
+    "beneficiariesManager": {
+      "tabs": {
+        "beneficiaries": "Beneficiaries",
+        "groups": "Groups"
+      },
+      "table": {
+        "columns": {
+          "name": "Name",
+          "iban": "IBAN",
+          "email": "Email",
+          "country": "Country",
+          "status": "Status",
+          "created": "Creation date",
+          "action": "Action"
+        },
+        "status": {
+          "verified": "Verified",
+          "notVerified": "Not verified"
+        },
+        "loading": "Loading beneficiaries...",
+        "empty": "No beneficiaries found",
+        "itemLabel": "beneficiaries",
+        "viewDetails": "View details"
+      },
+      "group": {
+        "table": {
+          "noGroups": "No groups found",
+          "noGroupsDesc": "Create a group to organize your beneficiaries"
+        }
+      },
+      "sidebar": {
+        "title": "Beneficiary Details",
+        "close": "Close"
+      }
+    },
+    "beneficiaries": {
+      "form": {
+        "fields": {
+          "beneficiaryName": "Beneficiary name",
+          "iban": "IBAN",
+          "country": "Country",
+          "email": "Email (optional)",
+          "address": {
+            "title": "Address (optional)",
+            "street": "Street",
+            "city": "City",
+            "postalCode": "Postal code"
+          }
+        }
+      },
+      "group": {
+        "table": {
+          "loading": "Loading groups...",
+          "noGroups": "No groups found",
+          "noGroupsDesc": "Create a group to organize your beneficiaries",
+          "columns": {
+            "groupName": "Group name",
+            "membersCount": "Number of members",
+            "createdAt": "Creation date",
+            "updatedAt": "Last updated",
+            "action": "Action"
+          },
+          "members": "{count, plural, =0 {no members} =1 {1 member} other {# members}}",
+          "viewDetails": "View details"
+        },
+        "membersTable": {
+          "columns": {
+            "beneficiary": "Beneficiary",
+            "iban": "IBAN",
+            "contact": "Contact",
+            "status": "Status",
+            "actions": "Actions"
+          },
+          "noContact": "No contact",
+          "verified": "Verified",
+          "pending": "Pending",
+          "details": "Details",
+          "transfer": "Transfer",
+          "remove": "Remove",
+          "membersCount": "{count, plural, =0 {No members} =1 {1 member} other {# members}}",
+          "noMembers": "No members in this group",
+          "noMembersDesc": "Add beneficiaries to this group to get started",
+          "noMembersInGroup": "No members in this group",
+          "itemLabel": "members",
+          "createdAt": "Created on {date}",
+          "updatedAt": "Last updated on {date}",
+          "close": "Close"
+        },
+        "sidebar": {
+          "title": "Group Details",
+          "close": "Close"
+        },
+        "form": {
+          "groupForm": {
+            "save": "Save"
+          },
+          "fields": {
+            "groupName": "Group name",
+            "selectBeneficiaries": "Select beneficiaries",
+            "noBeneficiaries": "No beneficiaries available",
+            "selectedCount": "{count, plural, =0 {No beneficiaries selected} =1 {1 beneficiary selected} other {# beneficiaries selected}}"
+          }
+        }
+      }
     }
   },
   "nav": {
@@ -667,6 +772,12 @@
       "noSavings": "No savings account",
       "startSaving": "Start saving today with our savings products",
       "discover": "Discover our accounts"
+    },
+    "beneficiaries": {
+      "title": "My Beneficiaries",
+      "subtitle": "Manage your beneficiaries and organize them into groups",
+      "newBeneficiary": "New beneficiary",
+      "newGroup": "New group"
     }
   },
   "accounts": {
