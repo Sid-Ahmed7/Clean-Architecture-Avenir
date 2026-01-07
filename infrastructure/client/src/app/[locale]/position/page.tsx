@@ -6,7 +6,10 @@ import { OrderTypeEnum } from "@/types/createOrder";
 import { PositionList } from "@/components/stocks/positions/PositionList";
 import { PlaceOrderModal } from "@/components/stocks/orders/PlaceOrderModal";
 
+import { useTranslations } from "next-intl";
+
 export default function PortfolioPage() {
+  const t = useTranslations('pages.portfolio');
   const { data: positions, isLoading, error } = useUserPositions();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStock, setSelectedStock] = useState<{
@@ -24,7 +27,7 @@ export default function PortfolioPage() {
     if (position) {
       setSelectedStock({
         symbol: position.stockSymbol,
-        name:  position.stockSymbol,
+        name: position.stockSymbol,
         price: position.averagePurchasePrice
       });
       setIsModalOpen(true);
@@ -35,8 +38,8 @@ export default function PortfolioPage() {
     return (
       <div className="p-6">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold text-gray-900 mb-6">Mon portefeuille</h1>
-          <p className="text-center text-gray-500">Chargement...</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-6">{t('title')}</h1>
+          <p className="text-center text-gray-500">{t('loading')}</p>
         </div>
       </div>
     );
@@ -46,9 +49,9 @@ export default function PortfolioPage() {
     return (
       <div className="p-6">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold text-gray-900 mb-6">Mon portefeuille</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-6">{t('title')}</h1>
           <p className="text-center text-red-500">
-            Erreur lors du chargement du portefeuille
+            {t('errorMessage')}
           </p>
         </div>
       </div>
@@ -58,7 +61,7 @@ export default function PortfolioPage() {
   return (
     <div className="p-6">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900 mb-6">Mon portefeuille</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-6">{t('title')}</h1>
         <PositionList positions={positions || []} onSell={handleSell} />
       </div>
 

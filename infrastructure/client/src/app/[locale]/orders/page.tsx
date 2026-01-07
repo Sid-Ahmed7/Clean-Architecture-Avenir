@@ -4,7 +4,10 @@ import { OrderList } from "@/components/stocks/orders/OrderList";
 import { useCancelOrder, useOrderBook } from "@/hooks/useStocksOrder";
 
 
+import { useTranslations } from "next-intl";
+
 export default function OrdersPage() {
+  const t = useTranslations('pages.orders');
   const { data: orders, isLoading, error } = useOrderBook();
   const cancelOrderMutation = useCancelOrder();
 
@@ -13,7 +16,7 @@ export default function OrdersPage() {
       await cancelOrderMutation.mutateAsync(orderId);
     } catch (err) {
       console.error("Failed to cancel order:", err);
-      alert("Erreur lors de l'annulation de l'ordre");
+      alert(t('cancelError'));
     }
   };
 
@@ -21,8 +24,8 @@ export default function OrdersPage() {
     return (
       <div className="p-6">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold text-gray-900 mb-6">Mes ordres</h1>
-          <p className="text-center text-gray-500">Chargement...</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-6">{t('title')}</h1>
+          <p className="text-center text-gray-500">{t('loading')}</p>
         </div>
       </div>
     );
@@ -32,9 +35,9 @@ export default function OrdersPage() {
     return (
       <div className="p-6">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold text-gray-900 mb-6">Mes ordres</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-6">{t('title')}</h1>
           <p className="text-center text-red-500">
-            Erreur lors du chargement des ordres
+            {t('errorMessage')}
           </p>
         </div>
       </div>
@@ -44,7 +47,7 @@ export default function OrdersPage() {
   return (
     <div className="p-6">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900 mb-6">Mes ordres</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-6">{t('title')}</h1>
         <OrderList
           orders={orders || []}
           onCancel={handleCancelOrder}
