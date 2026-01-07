@@ -1017,7 +1017,9 @@
         "infoTitle": "Important Information",
         "info1": "Transfers between your accounts are instant",
         "info2": "Transfers to external beneficiaries may take 1-2 business days",
-        "info3": "Please verify the beneficiary's IBAN before confirming"
+        "info3": "Please verify the beneficiary's IBAN before confirming",
+        "warningTitle": "Transfer impossible",
+        "warningMessage": "You must have at least 2 accounts to make a transfer between your accounts."
       }
     }
   },

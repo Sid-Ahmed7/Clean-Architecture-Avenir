@@ -1017,7 +1017,9 @@
         "infoTitle": "Informations importantes",
         "info1": "Les virements entre vos comptes sont instantanés",
         "info2": "Les virements vers des bénéficiaires externes peuvent prendre 1-2 jours ouvrables",
-        "info3": "Vérifiez bien l'IBAN du bénéficiaire avant de confirmer"
+        "info3": "Vérifiez bien l'IBAN du bénéficiaire avant de confirmer",
+        "warningTitle": "Transfert impossible",
+        "warningMessage": "Tu dois avoir au moins 2 comptes pour effectuer un transfert entre tes comptes."
       }
     }
   },
