@@ -480,6 +480,21 @@
           }
         }
       }
+    },
+    "loan": {
+      "advisorPage": {
+        "title": "Loan Requests",
+        "description": "Manage your clients' loan requests",
+        "advisorLabel": "Advisor",
+        "stats": {
+          "total": "Total",
+          "pending": "Pending",
+          "approved": "Approved",
+          "rejected": "Rejected"
+        },
+        "noRequests": "No loan requests",
+        "noRequestsDescription": "There are no loan requests at the moment"
+      }
     }
   },
   "nav": {

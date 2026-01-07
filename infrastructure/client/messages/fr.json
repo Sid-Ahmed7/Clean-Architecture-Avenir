@@ -480,6 +480,21 @@
           }
         }
       }
+    },
+    "loan": {
+      "advisorPage": {
+        "title": "Demandes de Crédit",
+        "description": "Gérez les demandes de crédit de vos clients",
+        "advisorLabel": "Conseiller",
+        "stats": {
+          "total": "Total",
+          "pending": "En attente",
+          "approved": "Approuvées",
+          "rejected": "Rejetées"
+        },
+        "noRequests": "Aucune demande de crédit",
+        "noRequestsDescription": "Il n'y a aucune demande de crédit pour le moment"
+      }
     }
   },
   "nav": {
