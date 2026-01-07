@@ -19,15 +19,15 @@ export function FeedCard({ news, media }: FeedCardProps) {
 
     const t = useTranslations("components.feed.card");
     const router = useRouter();
-    const {locale} = useContext(LocaleContext);
+    const { locale } = useContext(LocaleContext);
     const sortedMedia = sortMedia(media);
 
     const handleClick = () => {
         router.push(`/${locale}/feed/${news.id}`);
     }
     return (
-        <article 
-            className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 cursor-pointer border border-gray-100" 
+        <article
+            className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 cursor-pointer border border-gray-100"
             onClick={handleClick}
         >
             {sortedMedia && sortedMedia.length > 0 && (
@@ -35,21 +35,21 @@ export function FeedCard({ news, media }: FeedCardProps) {
                     {sortedMedia.length === 1 ? (
                         <>
                             {sortedMedia[0].type === "IMAGE" ? (
-                                <Image 
-                                    src={getMediaUrl(sortedMedia[0].url)} 
-                                    alt={sortedMedia[0].altText} 
-                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
-                                    width={800} 
-                                    height={288} 
-                                    sizes="(max-width: 768px) 100vw, 50vw" 
-                                    loading="lazy" 
-                                    unoptimized 
+                                <Image
+                                    src={getMediaUrl(sortedMedia[0].url)}
+                                    alt={sortedMedia[0].altText}
+                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                    width={800}
+                                    height={288}
+                                    sizes="(max-width: 768px) 100vw, 50vw"
+                                    loading="lazy"
+                                    unoptimized
                                 />
                             ) : (
                                 <div className="relative w-full h-full">
-                                    <video 
-                                        src={getMediaUrl(sortedMedia[0].url)} 
-                                        className="w-full h-full object-cover" 
+                                    <video
+                                        src={getMediaUrl(sortedMedia[0].url)}
+                                        className="w-full h-full object-cover"
                                         preload="metadata"
                                     />
                                     <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[1px]">
@@ -63,25 +63,25 @@ export function FeedCard({ news, media }: FeedCardProps) {
                     ) : (
                         <div className="grid grid-cols-2 gap-1 p-1 h-full">
                             {sortedMedia.slice(0, 4).map((item) => (
-                                <div 
-                                    key={item.id} 
+                                <div
+                                    key={item.id}
                                     className="relative rounded-lg overflow-hidden bg-gray-100"
                                 >
                                     {item.type === "IMAGE" ? (
-                                        <Image 
-                                            src={getMediaUrl(item.url)} 
-                                            alt={item.altText} 
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
-                                            width={400} 
-                                            height={400} 
-                                            sizes="(max-width: 768px) 50vw, 25vw" 
-                                            loading="lazy" 
-                                            unoptimized 
+                                        <Image
+                                            src={getMediaUrl(item.url)}
+                                            alt={item.altText}
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                            width={400}
+                                            height={400}
+                                            sizes="(max-width: 768px) 50vw, 25vw"
+                                            loading="lazy"
+                                            unoptimized
                                         />
                                     ) : (
                                         <div className="relative w-full h-full">
-                                            <video 
-                                                src={getMediaUrl(item.url)} 
+                                            <video
+                                                src={getMediaUrl(item.url)}
                                                 className="w-full h-full object-cover"
                                                 preload="metadata"
                                             />
@@ -96,12 +96,12 @@ export function FeedCard({ news, media }: FeedCardProps) {
                             ))}
                         </div>
                     )}
-                    
+
                     <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-gray-700 shadow-md flex items-center gap-1.5">
                         <ImageIcon size={12} />
                         {sortedMedia.length} {t("media", { count: sortedMedia.length })}
                     </div>
-                    
+
                     {sortedMedia.length > 4 && (
                         <div className="absolute bottom-2 left-2 right-2 text-center text-sm font-medium text-gray-700 py-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-md">
                             {t("moreMedia", { count: sortedMedia.length - 4 })}
@@ -127,14 +127,14 @@ export function FeedCard({ news, media }: FeedCardProps) {
                 <div className="flex items-center justify-between text-sm text-gray-500 mb-4 pb-4 border-b border-gray-100">
                     <span className="flex items-center gap-1.5 font-medium">
                         <Calendar size={16} />
-                        {new Date(news.createdAt).toLocaleDateString('fr-FR')}
+                        {new Date(news.createdAt).toLocaleDateString(locale)}
                     </span>
                 </div>
 
                 {news.tags && news.tags.length > 0 && (
                     <div className="flex flex-wrap gap-2">
                         {news.tags.slice(0, 3).map((tag) => (
-                            <span 
+                            <span
                                 key={tag}
                                 className="text-xs bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full font-medium hover:bg-gray-200 transition-colors"
                             >

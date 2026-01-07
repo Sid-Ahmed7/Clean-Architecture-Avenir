@@ -282,6 +282,28 @@
       "blockEditor": {
         "noBlocks": "No blocks added. Use the toolbar above to add content.",
         "blocksCount": "{count, plural, =0 {No blocks} =1 {1 block} other {# blocks}}"
+      },
+      "list": {
+        "loading": "Loading...",
+        "error": "Error: {message}"
+      },
+      "filters": {
+        "category": "Category",
+        "all": "All",
+        "priority": "Priority",
+        "tagsLabel": "Tags",
+        "tagsPlaceholder": "Ex: economy, tech..."
+      },
+      "card": {
+        "media": "media",
+        "moreMedia": "+ {count} more"
+      },
+      "loadMore": {
+        "loading": "Loading...",
+        "loadMore": "Load More"
+      },
+      "grid": {
+        "noNews": "No news found."
       }
     },
     "beneficiariesManager": {
@@ -2177,6 +2199,9 @@
       "loading": "Loading...",
       "errorTitle": "Error",
       "errorMessage": "Error loading portfolio"
+    },
+    "feed": {
+      "title": "News Feed"
     }
   }
 }
