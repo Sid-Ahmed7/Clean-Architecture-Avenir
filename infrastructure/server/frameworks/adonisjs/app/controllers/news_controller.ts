@@ -95,7 +95,21 @@ export default class NewsController {
 
   async getAll({ response }: HttpContext) {
     const getAllNewsUseCase = new GetAllNewsUseCase(this.newsRepository);
-    const newsList = await getAllNewsUseCase.execute();
+    const request = arguments[0]?.request;
+    const qs = request ? request.qs() : {};
+    const filters: any = {};
+    if (qs.category) {
+      filters.category = qs.category;
+    }
+    if (qs.tags) {
+      filters.tags = typeof qs.tags === 'string' ? qs.tags.split(',') : qs.tags;
+    }
+    if (qs.priority) {
+      filters.priority = qs.priority;
+    }
+    const page = qs.page ? Number(qs.page) : 1;
+    const limit = qs.limit ? Number(qs.limit) : 10;
+    const newsList = await getAllNewsUseCase.execute(filters, page, limit);
     return response.status(200).json(newsList);
   }
 

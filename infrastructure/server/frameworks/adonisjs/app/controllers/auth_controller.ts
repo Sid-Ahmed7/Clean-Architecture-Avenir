@@ -109,16 +109,18 @@ export default class AuthController {
   async confirmRegistration({ request, response }: HttpContext) {
     const confirmationUseCase = new ConfirmRegistrationUseCase(
       this.userRepository,
-      this.emailService,
+      this.localeService,
+      this.emailTemplateService,
       this.eventBus
     );
     const token = request.qs().token;
+    const locale = request.input('locale') || request.qs().locale;
 
     if (!token || typeof token !== "string") {
       return response.status(400).json({ error: "Token is required" });
     }
 
-    const result = await confirmationUseCase.execute(token);
+    const result = await confirmationUseCase.execute(token, locale);
 
     if (result instanceof Error) {
       if (result instanceof TokenNotFoundError) {

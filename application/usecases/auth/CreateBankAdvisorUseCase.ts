@@ -3,7 +3,6 @@ import { RoleEnum } from "../../../domain/enums/RoleEnum";
 import { UserRepositoryInterface } from "../../ports/repositories/auth/UserRepositoryInterface";
 import { RoleRepositoryInterface } from "../../ports/repositories/auth/RoleRepositoryInterface";
 import { UserRoleRepositoryInterface } from "../../ports/repositories/auth/UserRoleRepositoryInterface";
-import { EmailService } from "../../ports/services/EmailService";
 import { RegistrationTokenGeneratorService } from "../../ports/services/auth/RegistrationTokenGeneratorService";
 import { EmailComposerService } from "../../ports/services/EmailComposerService";
 import { PasswordService } from "../../ports/services/auth/PasswordService";

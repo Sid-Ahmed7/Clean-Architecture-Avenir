@@ -213,7 +213,6 @@ function switchFramework(targetFramework: string): void {
   displayInfo(targetFramework);
 }
 
-// Point d'entrée principal
 function main(): void {
   const args = process.argv.slice(2);
 

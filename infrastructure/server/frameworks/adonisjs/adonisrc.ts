@@ -7,7 +7,7 @@ export default defineConfig({
 
   directories: {
     config: 'config',
-    public: 'public',
+    public: '../public',
     contracts: 'contracts',
     providers: 'providers',
     languageFiles: 'resources/lang',

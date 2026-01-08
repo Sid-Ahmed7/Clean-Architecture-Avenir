@@ -12,7 +12,7 @@ import { MediaTypeEnum } from "../../../../domain/enums/MediaTypeEnum";
 
 
 export class LocalFileStorageService implements FileStorageService {
-    private uploadDir: string;
+    private readonly uploadDir: string;
 
     constructor(uploadDir: string = "public/uploads") {
         this.uploadDir = uploadDir;

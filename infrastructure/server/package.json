@@ -5,8 +5,7 @@
   "private": true,
   "main": "index.ts",
   "scripts": {
-    "dev": "cd frameworks/adonisjs && npm run dev",
-    "start": "tsx index.ts",
+    "dev": "tsx index.ts",
     "switch:express": "tsx switch-framework.ts express",
     "switch:adonisjs": "tsx switch-framework.ts adonisjs",
     "switch": "tsx switch-framework.ts",

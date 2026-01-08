@@ -108,15 +108,18 @@ export class AuthController {
         return res.status(201).json(result);
       }
 
+
       async confirmRegistration(req: Request, res: Response) {
-        const confirmationUseCase = new ConfirmRegistrationUseCase(this.userRepository, this.emailService, this.eventBus);
-        const { token } = req.query;
+        const confirmationUseCase = new ConfirmRegistrationUseCase(this.userRepository, this.localeService, this.emailTemplateService, this.eventBus);
+        const { token, locale } = req.query;
 
         if(!token || typeof token !== "string") {
           return res.status(400).json({error: "Token is required"});
         }
-
-        const result = await confirmationUseCase.execute(token);
+        if(locale && typeof locale !== "string") {
+          return res.status(400).json({error: "Locale must be a string"});
+        }
+        const result = await confirmationUseCase.execute(token, locale);
 
         if(result instanceof Error) {
           if (result instanceof TokenNotFoundError) {
@@ -176,14 +179,14 @@ export class AuthController {
           httpOnly: true,
           secure: false,
           sameSite: "lax",
-          maxAge: 1000 * 60 * 60 * 24 * 7 
+          maxAge: 1000 * 60 * 60 * 24 * 7
         })
 
         res.cookie("refreshToken", result.refreshToken, {
           httpOnly: true,
           secure: false,
           sameSite: "lax",
-          maxAge: 1000 * 60 * 60 * 24 * 7 
+          maxAge: 1000 * 60 * 60 * 24 * 7
         })
 
         return res.status(200).json({
@@ -257,7 +260,7 @@ export class AuthController {
 
 
         const roles = await getUserRolesUseCase.execute(userId);
-        
+
         // Utiliser le service de priorité des rôles
         const roleNames = Array.isArray(roles) ? roles.map(r => r.name) : [];
         const role = this.rolePriorityService.getHighestPriorityRole(roleNames);
@@ -265,7 +268,7 @@ export class AuthController {
         return res.status(200).json({
           user: {
             ...user,
-            role, 
+            role,
           },
         });
       }

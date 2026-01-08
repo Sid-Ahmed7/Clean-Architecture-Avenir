@@ -7,4 +7,10 @@ export interface EmailComposerService {
     role: "CLIENT" | "BANK_ADVISOR" | "BANK_MANAGER",
     locale?: string
   ): Promise<void>;
+
+    sendSuccessfullyRegistrationConfirmation(
+    to: string,
+    firstName: string,
+    locale?: string
+  ): Promise<void>;
 }
