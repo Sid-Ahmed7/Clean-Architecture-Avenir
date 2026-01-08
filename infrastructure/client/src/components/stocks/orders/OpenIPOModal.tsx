@@ -38,7 +38,7 @@ export function OpenIPOModal({isOpen,onClose,stockSymbol,stockName,totalShares,o
       onClose();
     } catch (error: any) {
       console.error("Error opening IPO:", error);
-      alert(`❌ ${error.response?.data?.error || t('error')}`);
+      alert(` ${error.response?.data?.error || t('error')}`);
     } finally {
       setIsLoading(false);
     }

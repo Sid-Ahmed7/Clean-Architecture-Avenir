@@ -154,7 +154,7 @@ export default function ClientSavingsPage() {
                                     return (account.balance * account.interestRate * 1000000 * secondsSinceLastUpdate) / (31536000 * 100);
                                 })();
 
-                                console.log('🔍 Account Data:', {
+                                console.log(' Account Data:', {
                                     accountNumber: account.accountNumber,
                                     balance: account.balance,
                                     interestRate: account.interestRate,

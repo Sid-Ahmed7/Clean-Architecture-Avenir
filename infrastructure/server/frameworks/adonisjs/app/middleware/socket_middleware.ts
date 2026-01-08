@@ -47,7 +47,7 @@ export default class SocketMiddleware {
       console.log('🔌 [SOCKET] Token length:', token?.length)
 
       if (!token) {
-        console.log('❌ [SOCKET] No token')
+        console.log(' [SOCKET] No token')
         return next(new Error('Unauthorized: No token provided'))
       }
 
@@ -58,7 +58,7 @@ export default class SocketMiddleware {
       const payload = decoded as JwtPayload
 
       if (!isJwtPayload(payload)) {
-        console.log('❌ [SOCKET] Invalid payload format')
+        console.log(' [SOCKET] Invalid payload format')
         return next(new Error('Unauthorized: Invalid token format'))
       }
 
@@ -67,10 +67,10 @@ export default class SocketMiddleware {
         roles: payload.roles,
       }
 
-      console.log('✅ [SOCKET] Auth successful for:', payload.sub)
+      console.log('[SOCKET] Auth successful for:', payload.sub)
       next()
     } catch (err) {
-      console.log('❌ [SOCKET] Error:', err)
+      console.log(' [SOCKET] Error:', err)
       if (err instanceof jwt.TokenExpiredError) {
         return next(new Error(`Unauthorized: Token expired after ${env.get('JWT_EXPIRATION')}`))
       }

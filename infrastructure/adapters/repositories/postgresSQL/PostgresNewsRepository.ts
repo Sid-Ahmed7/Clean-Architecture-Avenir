@@ -2,6 +2,7 @@ import { NewsNotFoundError } from "../../../../application/errors/NewsNotFoundEr
 import { NewsRepositoryInterface } from "../../../../application/ports/repositories/news/NewsRepositoryInterface";
 import { NewsFilters } from "../../../../application/requests/NewsFilters";
 import { NewsEntity } from "../../../../domain/entities/NewsEntity";
+import { NewsPriorityEnum } from "../../../../domain/enums/NewsPriorityEnum"; 
 import { pgPool } from "../../config/database/configPostgresSQL";
 import { PostgresNewsRow } from "./types/PostgresNewsRow";
 
@@ -52,7 +53,10 @@ export class PostgresNewsRepository implements NewsRepositoryInterface {
         params.push(limit, (page - 1) * limit);
 
         const result = await pgPool.query<PostgresNewsRow>(query, params);
-        return result.rows.map(row => this.mapRowToEntity(row));
+        const entities = result.rows
+            .map(row => this.mapRowToEntity(row))
+            .filter((entity): entity is NewsEntity => !(entity instanceof Error));
+        return entities;
     }
 
     async create(news: NewsEntity): Promise<NewsEntity | NewsNotFoundError> {
@@ -103,18 +107,18 @@ export class PostgresNewsRepository implements NewsRepositoryInterface {
         }
     }
 
-    private mapRowToEntity(row: PostgresNewsRow): NewsEntity {
+    private mapRowToEntity(row: PostgresNewsRow): NewsEntity | Error{
+        const priority = row.priority ?? NewsPriorityEnum.LOW;
         const news = NewsEntity.from(
             row.id,
             row.title,
             row.category,
-            row.priority,
+            priority,
             row.tags,
             row.created_at,
             row.updated_at ?? undefined
         );
-        
-        if( news instanceof Error) {
+        if (news instanceof Error) {
             return news;
         }
         return news;

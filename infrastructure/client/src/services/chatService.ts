@@ -173,7 +173,7 @@ export const onMessageReceived = (role: string, callback: (msg: Message) => void
 export const onPendingConversation = (callback: (conv: UserChat) => void) => {
   const socket = advisorSocket;
   if (!socket) {
-    console.warn("⚠️ Advisor socket not available for onPendingConversation");
+    console.warn("Advisor socket not available for onPendingConversation");
     return () => {};
   }
   

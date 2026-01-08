@@ -44,7 +44,7 @@ new Ignitor(APP_ROOT, { importer: IMPORTER })
       const nodeServer = server.getNodeServer()
 
       if (!nodeServer) {
-        console.error('❌ HTTP server not available')
+        console.error(' HTTP server not available')
         return
       }
 

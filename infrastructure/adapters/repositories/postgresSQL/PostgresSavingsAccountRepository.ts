@@ -11,7 +11,7 @@ export class PostgresSavingsAccountRepository implements SavingsAccountRepositor
 
     public async createSavingsAccount(savingsAccount: SavingsAccountsEntity): Promise<SavingsAccountsEntity | InvalidAccountError> {
         try {
-            console.log('🔍 [PostgresSavingsAccountRepository] Inserting savings account:', {
+            console.log(' [PostgresSavingsAccountRepository] Inserting savings account:', {
                 accountNumber: savingsAccount.accountNumber,
                 productId: savingsAccount.productId,
                 userId: savingsAccount.userId,
@@ -50,11 +50,11 @@ export class PostgresSavingsAccountRepository implements SavingsAccountRepositor
             const row = result.rows[0];
 
             if (!row) {
-                console.log('❌ [PostgresSavingsAccountRepository] No row returned after insert');
+                console.log(' [PostgresSavingsAccountRepository] No row returned after insert');
                 return new InvalidAccountError('Failed to create savings account');
             }
 
-            console.log('✅ [PostgresSavingsAccountRepository] Savings account inserted successfully');
+            console.log('[PostgresSavingsAccountRepository] Savings account inserted successfully');
             const created = this.mapRowToEntity(row);
             if (created instanceof Error) {
                 return new InvalidAccountError(`Failed to map savings account: ${created.message}`);
@@ -62,7 +62,7 @@ export class PostgresSavingsAccountRepository implements SavingsAccountRepositor
 
             return created;
         } catch (error: any) {
-            console.log('❌ [PostgresSavingsAccountRepository] Database error:', error.message);
+            console.log(' [PostgresSavingsAccountRepository] Database error:', error.message);
             console.log('Error details:', error);
             return new InvalidAccountError(`Failed to create savings account: ${error.message}`);
         }

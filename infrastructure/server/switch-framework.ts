@@ -78,14 +78,12 @@ function createSymlinks(framework: string): void {
 
   console.log(`\n📦 Configuration des liens symboliques pour ${config.name}...`);
 
-  // Lien pour le fichier .env
   const envLink = '.env';
   if (fs.existsSync(envLink)) {
     fs.unlinkSync(envLink);
   }
 
   try {
-    // Sur Windows, on copie le fichier .env au lieu de créer un lien symbolique
     if (process.platform === 'win32') {
       fs.copyFileSync(config.env, envLink);
       console.log(`✅ .env copié depuis ${config.env}`);
@@ -134,7 +132,7 @@ function updatePackageJsonScripts(framework: string): void {
     console.log(`✅ Scripts mis à jour pour ${config.name}`);
   } catch (error) {
     const err = error as Error;
-    console.error(`❌ Erreur lors de la mise à jour du package.json: ${err.message}`);
+    console.error(` Erreur lors de la mise à jour du package.json: ${err.message}`);
   }
 }
 
@@ -158,7 +156,7 @@ function installDependencies(framework: string): void {
     }
   } catch (error) {
     const err = error as Error;
-    console.error(`❌ Erreur lors de l'installation des dépendances: ${err.message}`);
+    console.error(` Erreur lors de l'installation des dépendances: ${err.message}`);
   }
 }
 
@@ -182,7 +180,7 @@ function displayInfo(framework: string): void {
 
 function switchFramework(targetFramework: string): void {
   if (!FRAMEWORKS[targetFramework]) {
-    console.error(`❌ Framework invalide: ${targetFramework}`);
+    console.error(` Framework invalide: ${targetFramework}`);
     console.log(`\n✅ Frameworks disponibles: ${Object.keys(FRAMEWORKS).join(', ')}`);
     process.exit(1);
   }
@@ -199,7 +197,7 @@ function switchFramework(targetFramework: string): void {
 
   // Vérifier que le répertoire du framework existe
   if (!fs.existsSync(FRAMEWORKS[targetFramework].dir)) {
-    console.error(`❌ Le répertoire ${FRAMEWORKS[targetFramework].dir} n'existe pas.`);
+    console.error(` Le répertoire ${FRAMEWORKS[targetFramework].dir} n'existe pas.`);
     process.exit(1);
   }
 

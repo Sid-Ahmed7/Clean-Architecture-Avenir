@@ -68,16 +68,16 @@ const symbols = SYMBOLS.join(',');
 
         for(const symbol of SYMBOLS) {
             const quoteData: TwelveDataQuoteResponse = data[symbol];
-            console.log(`🔍 Processing ${symbol}:`, quoteData ? 'DATA FOUND' : 'NO DATA');
+            console.log(` Processing ${symbol}:`, quoteData ? 'DATA FOUND' : 'NO DATA');
 
             if(quoteData) {
             try {
                 console.log(`📊 Raw quote data for ${symbol}:`, JSON.stringify(quoteData, null, 2));
                 const stock = transformQuoteToStock(quoteData);
-                console.log(`✅ Transformed stock for ${symbol}:`, stock);
+                console.log(`Transformed stock for ${symbol}:`, stock);
                 stocks.push(stock);
             } catch(err) {
-                console.error(`❌ Failed to transform stock ${symbol}:`, err);
+                console.error(` Failed to transform stock ${symbol}:`, err);
                 console.error('Raw data that failed:', JSON.stringify(quoteData, null, 2));
             }
             } else {

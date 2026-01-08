@@ -58,9 +58,9 @@ function updateEnvFile(filePath: string, type: RepositoryType, label: string): v
     const envContent = readEnvFile(filePath);
     const updatedContent = updateRepositoryType(envContent, type);
     writeEnvFile(filePath, updatedContent);
-    console.log(`  ✅ ${label} mis à jour`);
+    console.log(` ${label} mis à jour`);
   } catch (error) {
-    console.error(`  ❌ Erreur lors de la mise à jour de ${label}:`, error);
+    console.error(`   Erreur lors de la mise à jour de ${label}:`, error);
   }
 }
 
@@ -79,15 +79,15 @@ async function switchRepository(type: RepositoryType): Promise<void> {
   updateEnvFile(EXPRESS_ENV_FILE_PATH, type, 'Express .env');
   updateEnvFile(ADONISJS_ENV_FILE_PATH, type, 'AdonisJS .env');
 
-  console.log(`\n✅ Repository type changé avec succès pour tous les frameworks.`);
+  console.log(`\nRepository type changé avec succès pour tous les frameworks.`);
 
   if (type === 'postgres') {
     console.log('\n🔄 Exécution des migrations PostgreSQL...\n');
     try {
       await runMigrations();
-      console.log('\n✅ Migrations PostgreSQL terminées avec succès.');
+      console.log('\n✅Migrations PostgreSQL terminées avec succès.');
     } catch (error) {
-      console.error('\n❌ Erreur lors de l\'exécution des migrations:', error);
+      console.error('\n Erreur lors de l\'exécution des migrations:', error);
       process.exit(1);
     } finally {
       await pgPool.end();

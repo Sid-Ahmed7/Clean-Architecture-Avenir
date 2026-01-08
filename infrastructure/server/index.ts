@@ -23,7 +23,7 @@ function getCurrentFramework(): string | null {
       return config.current;
     }
   } catch (error) {
-    console.error('❌ Erreur lors de la lecture de la configuration:', error);
+    console.error(' Erreur lors de la lecture de la configuration:', error);
   }
   return null;
 }
@@ -32,7 +32,7 @@ function startServer(): void {
   const framework = getCurrentFramework();
 
   if (!framework) {
-    console.error('\n❌ Aucun framework configuré!');
+    console.error('\n Aucun framework configuré!');
     console.log('\n💡 Veuillez d\'abord configurer un framework:');
     console.log('  • npm run switch:express');
     console.log('  • npm run switch:adonisjs\n');
@@ -55,11 +55,11 @@ function startServer(): void {
         stdio: 'inherit'
       });
     } else {
-      console.error(`❌ Framework inconnu: ${framework}`);
+      console.error(` Framework inconnu: ${framework}`);
       process.exit(1);
     }
   } catch (error) {
-    console.error('❌ Erreur lors du démarrage du serveur:', error);
+    console.error(' Erreur lors du démarrage du serveur:', error);
     process.exit(1);
   }
 }

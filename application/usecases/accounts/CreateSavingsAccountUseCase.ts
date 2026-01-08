@@ -12,7 +12,7 @@ export class CreateSavingsAccountUseCase {
     ) {}
 
     public async execute(dto: CreateSavingsAccount): Promise<SavingsAccountsEntity | InvalidAccountError | Error> {
-        console.log('🔍 [CreateSavingsAccountUseCase] Starting execution with dto:', {
+        console.log(' [CreateSavingsAccountUseCase] Starting execution with dto:', {
             accountNumber: dto.accountNumber,
             productId: dto.productId,
             userId: dto.userId,
@@ -21,55 +21,52 @@ export class CreateSavingsAccountUseCase {
             maturity: dto.maturity
         });
 
-        // Verify that the account exists in the accounts table
-        console.log('🔍 [CreateSavingsAccountUseCase] Checking if account exists:', dto.accountNumber);
+        console.log(' [CreateSavingsAccountUseCase] Checking if account exists:', dto.accountNumber);
         const existingAccount = await this.accountRepository.getOneAccountByAccountNumber(dto.accountNumber);
         
         if (existingAccount instanceof AccountNotFoundError) {
-            console.log('❌ [CreateSavingsAccountUseCase] Account not found:', dto.accountNumber);
+            console.log(' [CreateSavingsAccountUseCase] Account not found:', dto.accountNumber);
             return new InvalidAccountError(
                 `Le compte avec le numéro ${dto.accountNumber} n'existe pas. ` +
                 `Veuillez d'abord créer un compte principal avant de créer un compte d'épargne.`
             );
         }
 
-        console.log('✅ [CreateSavingsAccountUseCase] Account found:', {
+        console.log('[CreateSavingsAccountUseCase] Account found:', {
             accountNumber: existingAccount.accountNumber,
             iban: existingAccount.iban,
             userId: existingAccount.userId,
             accountType: existingAccount.accountType
         });
 
-        // Create the savings account linked to the existing account
-        console.log('🔍 [CreateSavingsAccountUseCase] Creating savings account entity...');
         const savingsAccount = SavingsAccountsEntity.from(
             dto.accountNumber,
             dto.productId,
             dto.userId,
             dto.interestRate,
             dto.maxDepositAmount,
-            0, // totalInterestEarned
-            true, // isActive
-            0, // balance
-            new Date(), // lastBalanceUpdate
-            undefined, // lastInterestApplied
+            0, 
+            true, 
+            0, 
+            new Date(), 
+            undefined, 
             dto.maturity
         );
 
         if (savingsAccount instanceof Error) {
-            console.log('❌ [CreateSavingsAccountUseCase] Error creating savings account entity:', savingsAccount.message);
+            console.log(' [CreateSavingsAccountUseCase] Error creating savings account entity:', savingsAccount.message);
             return savingsAccount;
         }
 
-        console.log('✅ [CreateSavingsAccountUseCase] Savings account entity created, saving to database...');
+        console.log('[CreateSavingsAccountUseCase] Savings account entity created, saving to database...');
         const result = await this.savingsAccountRepository.createSavingsAccount(savingsAccount);
         
         if (result instanceof Error) {
-            console.log('❌ [CreateSavingsAccountUseCase] Error saving to database:', result.message);
+            console.log(' [CreateSavingsAccountUseCase] Error saving to database:', result.message);
             return result;
         }
         
-        console.log('✅ [CreateSavingsAccountUseCase] Savings account created successfully!');
+        console.log('[CreateSavingsAccountUseCase] Savings account created successfully!');
         return result;
     }
 }

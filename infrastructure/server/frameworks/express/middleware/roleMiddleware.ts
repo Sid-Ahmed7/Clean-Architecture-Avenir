@@ -18,7 +18,7 @@ export const authorizeRoles = (allowedRoles: RoleEnum[]) => {
       return res.status(401).json({ message: "Authentication required" });
     }
 
-    console.log('🔍 Role Check:', {
+    console.log(' Role Check:', {
       userRoles: req.user.roles,
       allowedRoles: allowedRoles,
       userId: req.user.userId
@@ -27,11 +27,11 @@ export const authorizeRoles = (allowedRoles: RoleEnum[]) => {
     const hasAllowedRole = req.user.roles.some(role => allowedRoles.includes(role));
 
     if (!hasAllowedRole) {
-      console.log('❌ Access denied - User roles:', req.user.roles, 'Required roles:', allowedRoles);
+      console.log(' Access denied - User roles:', req.user.roles, 'Required roles:', allowedRoles);
       return res.status(403).json({ message: "Access forbidden: insufficient permissions" });
     }
 
-    console.log('✅ Access granted');
+    console.log('Access granted');
     next();
   };
 };

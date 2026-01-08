@@ -36,27 +36,28 @@ export class PostgresMessageRepository implements MessageRepositoryInterface {
              AND read_status = $2`,
             [userId, ReadStatusEnum.UNREAD]
         );
-
-        return result.rows.map(row => this.mapRowToEntity(row));
+        const entities = result.rows
+            .map(row => this.mapRowToEntity(row))
+            .filter((entity): entity is MessageEntity => !(entity instanceof Error));
+        return entities;
     }
 
     async findByConversationId(conversationId: string): Promise<MessageEntity[] | ConversationNotFoundError> {
-        console.log('🔍 [PostgresMessageRepository] Finding messages for conversation:', conversationId);
-        
+        console.log(' [PostgresMessageRepository] Finding messages for conversation:', conversationId);
         const result = await pgPool.query<PostgresMessageRow>(
             'SELECT * FROM messages WHERE conversation_id = $1 ORDER BY sent_at ASC',
             [conversationId]
         );
-
-        console.log('🔍 [PostgresMessageRepository] Query result rows:', result.rows.length);
-
+        console.log(' [PostgresMessageRepository] Query result rows:', result.rows.length);
         if (result.rows.length === 0) {
-            console.log('⚠️ [PostgresMessageRepository] No messages found for conversation (returning empty array)');
-            return []; // Retourner un tableau vide au lieu d'une erreur
+            console.log(' [PostgresMessageRepository] No messages found for conversation (returning empty array)');
+            return []; 
         }
-
-        console.log('✅ [PostgresMessageRepository] Returning', result.rows.length, 'messages');
-        return result.rows.map(row => this.mapRowToEntity(row));
+        const entities = result.rows
+            .map(row => this.mapRowToEntity(row))
+            .filter((entity): entity is MessageEntity => !(entity instanceof Error));
+        console.log(' [PostgresMessageRepository] Returning', entities.length, 'messages');
+        return entities;
     }
 
     async save(message: MessageEntity): Promise<MessageEntity | InvalidMessageError> {
@@ -114,12 +115,12 @@ export class PostgresMessageRepository implements MessageRepositoryInterface {
         return this.mapRowToEntity(row);
     }
 
-    private mapRowToEntity(row: PostgresMessageRow): MessageEntity {
+    private mapRowToEntity(row: PostgresMessageRow): MessageEntity | Error {
         const message = MessageEntity.from(
             row.id,
             row.conversation_id,
             row.conversation_client_id,
-            row.conversation_advisor_id ?? undefined,
+            row.conversation_advisor_id ?? null,
             row.author_id,
             row.content,
             row.read_status,

@@ -55,15 +55,15 @@ export class SubscribeToSavingsProductUseCase {
         const suffix = (savingsCount + 1) % 100; // Suffix from 01 to 99
         const savingsAccountNumber = baseNumber * 100 + suffix;
 
-        console.log('🔍 [SubscribeToSavingsProductUseCase] Generated savings account number:', savingsAccountNumber);
+        console.log(' [SubscribeToSavingsProductUseCase] Generated savings account number:', savingsAccountNumber);
 
         // Generate proper IBAN
         const iban = await this.ibanGenerator.generateIban(savingsAccountNumber);
         if (iban instanceof Error) {
-            console.log('❌ [SubscribeToSavingsProductUseCase] Error generating IBAN:', iban.message);
+            console.log(' [SubscribeToSavingsProductUseCase] Error generating IBAN:', iban.message);
             return iban;
         }
-        console.log('✅ [SubscribeToSavingsProductUseCase] Generated IBAN:', iban);
+        console.log(' [SubscribeToSavingsProductUseCase] Generated IBAN:', iban);
 
         // Create base account entry in accounts table first
         const baseAccount = AccountEntity.from(
@@ -86,17 +86,17 @@ export class SubscribeToSavingsProductUseCase {
         );
 
         if (baseAccount instanceof Error) {
-            console.log('❌ [SubscribeToSavingsProductUseCase] Error creating base account entity:', baseAccount.message);
+            console.log(' [SubscribeToSavingsProductUseCase] Error creating base account entity:', baseAccount.message);
             return baseAccount;
         }
 
-        console.log('🔍 [SubscribeToSavingsProductUseCase] Creating base account in accounts table...');
+        console.log(' [SubscribeToSavingsProductUseCase] Creating base account in accounts table...');
         const createdBaseAccount = await this.accountRepository.createOneAccount(baseAccount);
         if (createdBaseAccount instanceof Error) {
-            console.log('❌ [SubscribeToSavingsProductUseCase] Error creating base account:', createdBaseAccount.message);
+            console.log(' [SubscribeToSavingsProductUseCase] Error creating base account:', createdBaseAccount.message);
             return createdBaseAccount;
         }
-        console.log('✅ [SubscribeToSavingsProductUseCase] Base account created successfully');
+        console.log(' [SubscribeToSavingsProductUseCase] Base account created successfully');
 
         // Create savings account linked to product
         const savingsAccount = SavingsAccountsEntity.from(

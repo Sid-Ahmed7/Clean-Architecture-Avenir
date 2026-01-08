@@ -29,8 +29,10 @@ export class PostgresContentRepository implements ContentRepositoryInterface {
             'SELECT * FROM contents WHERE news_id = $1 ORDER BY "order" ASC',
             [newsId]
         );
-
-        return result.rows.map(row => this.mapRowToEntity(row));
+        const entities = result.rows
+            .map(row => this.mapRowToEntity(row))
+            .filter((entity): entity is ContentEntity => !(entity instanceof Error));
+        return entities;
     }
 
     async create(content: ContentEntity): Promise<ContentEntity | InvalidContentError> {
@@ -85,7 +87,7 @@ export class PostgresContentRepository implements ContentRepositoryInterface {
         }
     }
 
-    private mapRowToEntity(row: PostgresContentRow): ContentEntity {
+    private mapRowToEntity(row: PostgresContentRow): ContentEntity | Error {
         const content = ContentEntity.from(
             row.id,
             row.news_id,

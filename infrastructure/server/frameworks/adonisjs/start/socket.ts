@@ -68,7 +68,7 @@ export const socketSetup = async (server: Server) => {
       return socket.disconnect()
     }
 
-    console.log(`✅ Serveur: Client connecté - ${user.userId} (${socket.id})`)
+    console.log(`Serveur: Client connecté - ${user.userId} (${socket.id})`)
 
     socket.on(
       'identification',

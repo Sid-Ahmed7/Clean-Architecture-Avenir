@@ -193,9 +193,9 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
               });
 
               if (updatedMedia.error) {
-                console.error(`❌ Erreur update media ${media.id}:`, updatedMedia.error);
+                console.error(` Erreur update media ${media.id}:`, updatedMedia.error);
               } else {
-                console.log(`✅ Media ${media.id} ordre mis à jour`);
+                console.log(`Media ${media.id} ordre mis à jour`);
               }
             }
           }
