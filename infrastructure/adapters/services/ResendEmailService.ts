@@ -20,6 +20,6 @@ export class ResendEmailService implements EmailService {
     });
     console.log("Contenu du mail :", options.text);
 
-    console.log(`✉️ Email envoyé à ${options.to}`);
+    console.log(`Email envoyé à ${options.to}`);
   }
 }

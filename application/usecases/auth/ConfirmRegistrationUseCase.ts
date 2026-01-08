@@ -1,19 +1,26 @@
 import { BankUserEntity } from "../../../domain/entities/BankUserEntity";
 import { UserStatusEnum } from "../../../domain/enums/UserStatusEnum";
 import { UserRepositoryInterface } from "../../ports/repositories/auth/UserRepositoryInterface";
-import { EmailService } from "../../ports/services/EmailService";
 import {EventBusInterface} from "../../ports/event/EventBusInterface";
 import {UserConfirmedEvent} from "../../ports/event/UserConfirmedEvent";
+import { EmailComposerService } from "../../ports/services/EmailComposerService";
+import { LocaleService } from "../../ports/services/LocaleService";
 export class ConfirmRegistrationUseCase {
 
-    public constructor(private readonly userRepository: UserRepositoryInterface, private readonly emailService: EmailService, private readonly eventBus: EventBusInterface){}
+    public constructor(private readonly userRepository: UserRepositoryInterface, private readonly localeService: LocaleService, private readonly emailService: EmailComposerService, private readonly eventBus: EventBusInterface){}
 
-    public async execute(token: string): Promise<BankUserEntity | Error> {
+    public async execute(token: string, locale?: string): Promise<BankUserEntity | Error> {
 
         const user = await this.userRepository.findConfirmationToken(token);
 
         if(user instanceof Error) {
             return user;
+        }
+
+
+        const validatedLocale = this.localeService.validate(locale);
+        if (validatedLocale instanceof Error) {
+            return validatedLocale;
         }
 
         user.status = UserStatusEnum.ACTIVE;
@@ -27,13 +34,11 @@ export class ConfirmRegistrationUseCase {
             return updatedUser;
         }
 
-        
-
-        await this.emailService.sendEmail({
-            to: updatedUser.email,
-            subject: "Inscription confirmée ! 🎉",
-            text: `Bonjour ${updatedUser.firstName},\n\nVotre compte a été activé avec succès ! Vous pouvez maintenant vous connecter et acceder à vos comptes bancaires.`
-        })
+        await this.emailService.sendSuccessfullyRegistrationConfirmation(
+            updatedUser.email,
+            updatedUser.firstName,
+            validatedLocale
+        );
 
         await this.eventBus.publish(new UserConfirmedEvent(updatedUser));
 

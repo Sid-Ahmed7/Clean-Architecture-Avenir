@@ -32,7 +32,7 @@ export default function ConfirmPage() {
       return
     }
 
-    apiClient.get(`/auth/confirm?token=${token}`).then((res) => {
+    apiClient.get(`/auth/confirm?token=${token}&locale=${locale}`).then((res) => {
       if (res.status === 200) {
         setMessage(t('success'));
         setTimeout(() => router.push(`/${locale}/login`), 3000)
