@@ -99,6 +99,115 @@ The following improvements have been made in the latest update:
 
 These changes should resolve the issues with running the project while maintaining clean code practices and proper TypeScript typing.
 
+## Configuration des Variables d'Environnement
+
+### Serveur Backend (.env)
+
+Créez un fichier `.env` dans le répertoire `infrastructure/server/frameworks/express/` avec les variables suivantes :
+
+```env
+# Port du serveur
+PORT=3000
+
+# Configuration de la base de données PostgreSQL
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=VotreMotDePasse
+DB_NAME=Avenir
+
+# URL de base de l'application
+BASE_URL=http://localhost:3001/
+
+# Secrets JWT pour l'authentification
+JWT_SECRET=VotreSecretJWT
+JWT_SECRET_REFRESH=VotreSecretRefreshJWT
+
+# Durée d'expiration des tokens (en secondes)
+JWT_EXPIRATION=3600
+JWT_EXPIRATION_REFRESH=3600
+
+# Clé API Resend pour l'envoi d'emails
+RESEND_API_KEY=VotreCleAPIResend
+
+# Mot de passe pour la création de managers
+MANAGER_CREATION_PASSWORD=VotreMotDePasseAdmin
+
+# Type de repository (postgres, memory, etc.)
+REPOSITORY_TYPE=postgres
+```
+
+**Explications :**
+
+- `PORT` : Port sur lequel le serveur backend écoute (par défaut 3000)
+- `DB_HOST` : Adresse du serveur PostgreSQL (localhost pour développement local)
+- `DB_PORT` : Port PostgreSQL (5432 par défaut)
+- `DB_USER` : Nom d'utilisateur PostgreSQL
+- `DB_PASSWORD` : Mot de passe de l'utilisateur PostgreSQL
+- `DB_NAME` : Nom de la base de données (créez-la avec `CREATE DATABASE Avenir;`)
+- `BASE_URL` : URL de base de l'application (utilisée pour les liens dans les emails)
+- `JWT_SECRET` : Secret pour signer les tokens d'accès (générez une chaîne aléatoire sécurisée)
+- `JWT_SECRET_REFRESH` : Secret pour signer les refresh tokens (différent du JWT_SECRET)
+- `JWT_EXPIRATION` : Durée de validité du token d'accès en secondes (3600 = 1 heure)
+- `JWT_EXPIRATION_REFRESH` : Durée de validité du refresh token en secondes
+- `RESEND_API_KEY` : Clé API Resend pour l'envoi d'emails (obtenez-la sur resend.com)
+- `MANAGER_CREATION_PASSWORD` : Mot de passe requis pour créer des comptes managers
+- `REPOSITORY_TYPE` : Type de stockage des données (utilisez 'postgres' pour PostgreSQL)
+
+### Client Frontend (.env)
+
+Créez un fichier `.env.local` dans le répertoire `infrastructure/client/` avec les variables suivantes :
+
+```env
+# URL de l'API backend (exposée au navigateur)
+NEXT_PUBLIC_API_URL=http://localhost:3000/api
+
+# URL du serveur WebSocket (exposée au navigateur)
+NEXT_PUBLIC_SOCKET_URL=http://localhost:3000
+
+# URL de l'API backend (côté serveur uniquement)
+API_URL=http://localhost:3000/api
+
+# URL du serveur backend (exposée au navigateur)
+NEXT_PUBLIC_SERVER_URL=http://localhost:3000
+
+# Clé API Twelve Data pour les données boursières
+TWELVE_DATA_API_KEY=VotreCleAPITwelveData
+
+# URL de l'API Twelve Data
+TWELVE_DATA_API_URL=https://api.twelvedata.com
+
+# URL de base du client (exposée au navigateur)
+NEXT_PUBLIC_BASE_URL=http://localhost:3001
+```
+
+**Explications :**
+
+- `NEXT_PUBLIC_API_URL` : URL complète de l'API backend accessible depuis le navigateur (doit correspondre à `http://localhost:PORT/api`)
+- `NEXT_PUBLIC_SOCKET_URL` : URL du serveur WebSocket pour les communications en temps réel (chat, notifications)
+- `API_URL` : URL de l'API utilisée côté serveur Next.js (Server Components, API Routes)
+- `NEXT_PUBLIC_SERVER_URL` : URL du serveur backend accessible depuis le navigateur
+- `TWELVE_DATA_API_KEY` : Clé API Twelve Data pour récupérer les données boursières en temps réel (obtenez-la sur twelvedata.com)
+- `TWELVE_DATA_API_URL` : URL de base de l'API Twelve Data
+- `NEXT_PUBLIC_BASE_URL` : URL de base de l'application frontend (utilisée pour les redirections et liens absolus)
+
+**Note importante :** Les variables préfixées par `NEXT_PUBLIC_` sont exposées au navigateur. Ne mettez jamais de secrets sensibles dans ces variables.
+
+### Génération de Secrets JWT
+
+Pour générer des secrets JWT sécurisés, vous pouvez utiliser :
+
+```bash
+# Sous Linux/Mac
+openssl rand -hex 32
+
+# Sous Windows (PowerShell)
+[Convert]::ToBase64String((1..32 | ForEach-Object { Get-Random -Minimum 0 -Maximum 256 }))
+
+# Ou en Node.js
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
 ### Technologies Used
 
 - TypeScript
