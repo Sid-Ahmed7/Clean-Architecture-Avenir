@@ -90,46 +90,46 @@ export default function LoginPage() {
             <div className="space-y-2">
               <h1 className="text-3xl md:text-4xl font-bold">{t("titles.login")}</h1>
               <p className="text-white/80 text-sm md:text-base">
-                Accédez à votre espace en toute sécurité et retrouvez vos comptes, ordres et portefeuilles en un clin d’œil.
+                {t("auth.login.subtitle")}
               </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div className="bg-white/10 border border-white/20 rounded-2xl p-3">
                 <div className="flex items-center gap-2 text-sm text-white/80">
                   <ShieldCheck className="h-4 w-4" />
-                  Sécurité
+                  {t("auth.login.features.security.label")}
                 </div>
-                <p className="text-lg font-semibold">2FA prêt</p>
+                <p className="text-lg font-semibold">{t("auth.login.features.security.value")}</p>
               </div>
               <div className="bg-white/10 border border-white/20 rounded-2xl p-3">
                 <div className="flex items-center gap-2 text-sm text-white/80">
                   <Zap className="h-4 w-4" />
-                  Rapidité
+                  {t("auth.login.features.speed.label")}
                 </div>
-                <p className="text-lg font-semibold">Connexion immédiate</p>
+                <p className="text-lg font-semibold">{t("auth.login.features.speed.value")}</p>
               </div>
               <div className="bg-white/10 border border-white/20 rounded-2xl p-3">
                 <div className="flex items-center gap-2 text-sm text-white/80">
                   <Clock className="h-4 w-4" />
-                  Support
+                  {t("auth.login.features.support.label")}
                 </div>
-                <p className="text-lg font-semibold">24/7</p>
+                <p className="text-lg font-semibold">{t("auth.login.features.support.value")}</p>
               </div>
             </div>
             <div className="flex items-center gap-3 text-sm text-white/80">
               <div className="h-10 w-10 rounded-full bg-white/15 border border-white/20 flex items-center justify-center">
                 <ArrowRight className="h-5 w-5" />
               </div>
-              <p>Rejoignez un espace fluide, pensé comme une landing premium.</p>
+              <p>{t("auth.login.premium")}</p>
             </div>
             <div className="grid grid-cols-2 gap-3 mt-auto text-sm text-white/80">
               <div className="bg-white/10 border border-white/20 rounded-2xl p-3">
-                <p className="font-semibold text-white">+2M clients</p>
-                <p className="text-xs text-white/70">satisfaits en Europe</p>
+                <p className="font-semibold text-white">{t("auth.login.stats.clients.value")}</p>
+                <p className="text-xs text-white/70">{t("auth.login.stats.clients.label")}</p>
               </div>
               <div className="bg-white/10 border border-white/20 rounded-2xl p-3">
-                <p className="font-semibold text-white">4.8/5</p>
-                <p className="text-xs text-white/70">sur l’App Store</p>
+                <p className="font-semibold text-white">{t("auth.login.stats.rating.value")}</p>
+                <p className="text-xs text-white/70">{t("auth.login.stats.rating.label")}</p>
               </div>
             </div>
           </div>
@@ -140,7 +140,7 @@ export default function LoginPage() {
                 {t("titles.login")}
               </h2>
               <p className="text-center text-sm text-slate-500">
-                Continuez vers votre tableau de bord en quelques secondes.
+                {t("auth.login.formSubtitle")}
               </p>
             </div>
 

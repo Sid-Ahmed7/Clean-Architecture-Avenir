@@ -13,7 +13,7 @@ import { User, Mail, Lock, CheckCircle, Phone, Calendar, MapPin, Sparkles, Shiel
 
 export default function RegisterPage() {
   const router = useRouter();
-  const locale = useLocale(); 
+  const locale = useLocale();
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const t = useTranslations();
@@ -69,40 +69,40 @@ export default function RegisterPage() {
             <div className="space-y-2">
               <h1 className="text-3xl md:text-4xl font-bold">{t("auth.register.title")}</h1>
               <p className="text-white/80 text-sm md:text-base">
-                Ouvrez votre compte en quelques instants : identité, coordonnées, sécurité. Nous préparons tout pour vous.
+                {t("auth.register.subtitle")}
               </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div className="bg-white/10 border border-white/20 rounded-2xl p-3">
                 <div className="flex items-center gap-2 text-sm text-white/80">
                   <ShieldCheck className="h-4 w-4" />
-                  Sécurité
+                  {t("auth.register.features.security.label")}
                 </div>
-                <p className="text-lg font-semibold">KYC simplifié</p>
+                <p className="text-lg font-semibold">{t("auth.register.features.security.value")}</p>
               </div>
               <div className="bg-white/10 border border-white/20 rounded-2xl p-3">
                 <div className="flex items-center gap-2 text-sm text-white/80">
                   <Zap className="h-4 w-4" />
-                  Rapidité
+                  {t("auth.register.features.speed.label")}
                 </div>
-                <p className="text-lg font-semibold"><span className="align-middle">≈</span>5 min</p>
+                <p className="text-lg font-semibold">{t("auth.register.features.speed.value")}</p>
               </div>
               <div className="bg-white/10 border border-white/20 rounded-2xl p-3">
                 <div className="flex items-center gap-2 text-sm text-white/80">
                   <ArrowRight className="h-4 w-4" />
-                  Accès
+                  {t("auth.register.features.access.label")}
                 </div>
-                <p className="text-lg font-semibold">Dashboard direct</p>
+                <p className="text-lg font-semibold">{t("auth.register.features.access.value")}</p>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3 mt-auto text-sm text-white/80">
               <div className="bg-white/10 border border-white/20 rounded-2xl p-3">
-                <p className="font-semibold text-white">+2M clients</p>
-                <p className="text-xs text-white/70">satisfaits en Europe</p>
+                <p className="font-semibold text-white">{t("auth.register.stats.clients.value")}</p>
+                <p className="text-xs text-white/70">{t("auth.register.stats.clients.label")}</p>
               </div>
               <div className="bg-white/10 border border-white/20 rounded-2xl p-3">
-                <p className="font-semibold text-white">4.8/5</p>
-                <p className="text-xs text-white/70">sur l’App Store</p>
+                <p className="font-semibold text-white">{t("auth.register.stats.rating.value")}</p>
+                <p className="text-xs text-white/70">{t("auth.register.stats.rating.label")}</p>
               </div>
             </div>
           </div>
@@ -113,7 +113,7 @@ export default function RegisterPage() {
                 {t("auth.register.title")}
               </h2>
               <p className="text-center text-sm text-slate-500">
-                Créez votre espace et bénéficiez de tous nos services en ligne.
+                {t("auth.register.formSubtitle")}
               </p>
             </div>
 
@@ -199,27 +199,27 @@ export default function RegisterPage() {
                 />
               </div>
 
-            <div className="pt-2 space-y-3">
-              <Button type="submit" variant="primary" fullWidth disabled={isLoading}>
-                {isLoading ? t("auth.register.submitting") : t("auth.register.submit")}
-              </Button>
-              <div className="flex flex-col sm:flex-row sm:justify-center sm:items-center gap-2 text-sm text-slate-600">
-                <span>{t("auth.login.noAccount")}</span>
-                <div className="flex gap-3"><Link href="/login" className="text-blue-700 hover:underline font-semibold">
+              <div className="pt-2 space-y-3">
+                <Button type="submit" variant="primary" fullWidth disabled={isLoading}>
+                  {isLoading ? t("auth.register.submitting") : t("auth.register.submit")}
+                </Button>
+                <div className="flex flex-col sm:flex-row sm:justify-center sm:items-center gap-2 text-sm text-slate-600">
+                  <span>{t("auth.login.noAccount")}</span>
+                  <div className="flex gap-3"><Link href="/login" className="text-blue-700 hover:underline font-semibold">
                     {t("nav.login")}
                   </Link>
-                  <Link href="/" className="text-blue-700 hover:underline font-semibold">
-                    {t("nav.home")}
-                  </Link>
-                  
+                    <Link href="/" className="text-blue-700 hover:underline font-semibold">
+                      {t("nav.home")}
+                    </Link>
+
+                  </div>
                 </div>
               </div>
-            </div>
 
               {message && (
                 <div className={`p-3 rounded-lg text-center text-sm ${message.includes(t("auth.register.messages.success").substring(0, 10))
-                    ? "bg-green-50 text-green-800 border border-green-200"
-                    : "bg-red-50 text-red-800 border border-red-200"
+                  ? "bg-green-50 text-green-800 border border-green-200"
+                  : "bg-red-50 text-red-800 border border-red-200"
                   }`}>
                   {message}
                 </div>

@@ -1,5 +1,4 @@
 {
-
   "metadata": {
     "title": "BankAvenir - Your online bank",
     "titleTemplate": "%s | BankAvenir",
@@ -192,16 +191,15 @@
         "transferError": "Transfer error."
       },
       "page": {
-      "verifyingAuth": "Verifying authentication...",
-      "loadingUser": "Loading user..."
-    },
-    "limitProgressBar": {
-      "nearLimit": "Critical",
-      "attention": "Warning",
-      "available": "Available",
-      "remaining": "remaining"
-    }
-
+        "verifyingAuth": "Verifying authentication...",
+        "loadingUser": "Loading user..."
+      },
+      "limitProgressBar": {
+        "nearLimit": "Critical",
+        "attention": "Warning",
+        "available": "Available",
+        "remaining": "remaining"
+      }
     },
     "enums": {
       "accountStatus": {
@@ -418,7 +416,7 @@
       "card": {
         "media": "media",
         "moreMedia": "+{count} more"
-            },
+      },
       "loadMore": {
         "loading": "Loading...",
         "loadMore": "Load More"
@@ -879,12 +877,39 @@
   "auth": {
     "login": {
       "title": "Sign in to your account",
+      "subtitle": "Access your space securely and find your accounts, orders and portfolios in a flash.",
+      "formSubtitle": "Continue to your dashboard in seconds.",
       "email": "Email",
       "password": "Password",
       "submit": "Login",
       "forgotPassword": "Forgot password?",
       "noAccount": "Don't have an account?",
       "register": "Register",
+      "features": {
+        "security": {
+          "label": "Security",
+          "value": "2FA ready"
+        },
+        "speed": {
+          "label": "Speed",
+          "value": "Instant connection"
+        },
+        "support": {
+          "label": "Support",
+          "value": "24/7"
+        }
+      },
+      "premium": "Join a fluid space, designed like a premium landing.",
+      "stats": {
+        "clients": {
+          "value": "+2M clients",
+          "label": "satisfied in Europe"
+        },
+        "rating": {
+          "value": "4.8/5",
+          "label": "on the App Store"
+        }
+      },
       "errors": {
         "invalidCredentials": "Invalid email or password",
         "userNotFound": "User not found",
@@ -893,6 +918,8 @@
     },
     "register": {
       "title": "Create Your Account",
+      "subtitle": "Open your account in moments: identity, contact details, security. We prepare everything for you.",
+      "formSubtitle": "Create your space and benefit from all our online services.",
       "firstName": "First Name",
       "lastName": "Last Name",
       "email": "Email",
@@ -906,6 +933,30 @@
       "hasAccount": "Already have an account?",
       "login": "Sign in",
       "passwordHelper": "Min. 8 characters with a special character",
+      "features": {
+        "security": {
+          "label": "Security",
+          "value": "Simplified KYC"
+        },
+        "speed": {
+          "label": "Speed",
+          "value": "≈5 min"
+        },
+        "access": {
+          "label": "Access",
+          "value": "Direct dashboard"
+        }
+      },
+      "stats": {
+        "clients": {
+          "value": "+2M clients",
+          "label": "satisfied in Europe"
+        },
+        "rating": {
+          "value": "4.8/5",
+          "label": "on the App Store"
+        }
+      },
       "placeholders": {
         "firstName": "John",
         "lastName": "Doe",
@@ -1415,11 +1466,11 @@
       "notFound": "Post not found",
       "title": "Edit post",
       "subtitle": "Edit the information and content of your post",
-        "media": {
-          "fileGrid": {
-            "clearAll": "Clear all"
-          }
+      "media": {
+        "fileGrid": {
+          "clearAll": "Clear all"
         }
+      }
     },
     "manageList": {
       "noArticles": "No articles to display.",
@@ -1539,18 +1590,18 @@
         "isActionAvailable": "Stock available for purchase"
       },
       "validation": {
-            "iban": {
-              "required": "IBAN is required."
-            },
-            "beneficiaryName": {
-              "required": "Beneficiary name is required."
-            },
-            "country": {
-              "required": "Country is required."
-            },
-            "address": {
-              "fieldsRequired": "If you provide an address, all fields (street, city, postal code) are required."
-            },
+        "iban": {
+          "required": "IBAN is required."
+        },
+        "beneficiaryName": {
+          "required": "Beneficiary name is required."
+        },
+        "country": {
+          "required": "Country is required."
+        },
+        "address": {
+          "fieldsRequired": "If you provide an address, all fields (street, city, postal code) are required."
+        },
         "companyNameRequired": "Company name is required",
         "symbolRequired": "Symbol is required",
         "symbolPattern": "Symbol must contain 1-5 uppercase letters",
@@ -2310,20 +2361,19 @@
         "title": "Pending Conversations",
         "description": "Reply to your clients' messages.",
         "button": "View messages"
-        },
-        "manageFeeds": {
-          "title": "Manage Feeds",
-          "description": "Publish, edit, or delete news visible to clients.",
-          "button": "Manage feeds"
-        },
-        "createNews": {
-          "title": "Create News",
-          "description": "Publish a new news article for your clients.",
-          "button": "Create news"
-        }
+      },
+      "manageFeeds": {
+        "title": "Manage Feeds",
+        "description": "Publish, edit, or delete news visible to clients.",
+        "button": "Manage feeds"
+      },
+      "createNews": {
+        "title": "Create News",
+        "description": "Publish a new news article for your clients.",
+        "button": "Create news"
+      }
     }
   },
- 
   "pages": {
     "stock": {
       "title": "Stock Market & Trading",
@@ -2419,7 +2469,7 @@
   "notifications": {
     "clientAssigned": "Your conversation has been assigned to advisor {advisorName}."
   },
-    "validation": {
+  "validation": {
     "accountNumber": {
       "length": "Account number must be exactly 11 digits.",
       "positive": "Account number must be a positive integer."
@@ -2486,5 +2536,4 @@
       "descriptionMax": "Description must be at most 100 characters"
     }
   }
-  
 }

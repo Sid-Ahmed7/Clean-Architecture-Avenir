@@ -1,5 +1,4 @@
 {
-
   "metadata": {
     "title": "BankAvenir - Votre banque en ligne",
     "titleTemplate": "%s | BankAvenir",
@@ -45,7 +44,7 @@
   },
   "components": {
     "notification": {
-       "from": "De",
+      "from": "De",
       "noNotifications": "Aucune notification"
     },
     "stocks": {
@@ -878,12 +877,39 @@
   "auth": {
     "login": {
       "title": "Connectez-vous à votre compte",
+      "subtitle": "Accédez à votre espace en toute sécurité et retrouvez vos comptes, ordres et portefeuilles en un clin d'œil.",
+      "formSubtitle": "Continuez vers votre tableau de bord en quelques secondes.",
       "email": "Email",
       "password": "Mot de passe",
       "submit": "Connexion",
       "forgotPassword": "Mot de passe oublié ?",
       "noAccount": "Pas encore de compte ?",
       "register": "S'inscrire",
+      "features": {
+        "security": {
+          "label": "Sécurité",
+          "value": "2FA prêt"
+        },
+        "speed": {
+          "label": "Rapidité",
+          "value": "Connexion immédiate"
+        },
+        "support": {
+          "label": "Support",
+          "value": "24/7"
+        }
+      },
+      "premium": "Rejoignez un espace fluide, pensé comme une landing premium.",
+      "stats": {
+        "clients": {
+          "value": "+2M clients",
+          "label": "satisfaits en Europe"
+        },
+        "rating": {
+          "value": "4.8/5",
+          "label": "sur l'App Store"
+        }
+      },
       "errors": {
         "invalidCredentials": "Email ou mot de passe incorrect",
         "userNotFound": "Utilisateur non trouvé",
@@ -892,6 +918,8 @@
     },
     "register": {
       "title": "Créer votre compte",
+      "subtitle": "Ouvrez votre compte en quelques instants : identité, coordonnées, sécurité. Nous préparons tout pour vous.",
+      "formSubtitle": "Créez votre espace et bénéficiez de tous nos services en ligne.",
       "firstName": "Prénom",
       "lastName": "Nom",
       "email": "Email",
@@ -905,6 +933,30 @@
       "hasAccount": "Déjà un compte ?",
       "login": "Se connecter",
       "passwordHelper": "Min. 8 caractères avec un caractère spécial",
+      "features": {
+        "security": {
+          "label": "Sécurité",
+          "value": "KYC simplifié"
+        },
+        "speed": {
+          "label": "Rapidité",
+          "value": "≈5 min"
+        },
+        "access": {
+          "label": "Accès",
+          "value": "Dashboard direct"
+        }
+      },
+      "stats": {
+        "clients": {
+          "value": "+2M clients",
+          "label": "satisfaits en Europe"
+        },
+        "rating": {
+          "value": "4.8/5",
+          "label": "sur l'App Store"
+        }
+      },
       "placeholders": {
         "firstName": "John",
         "lastName": "Doe",
@@ -1414,11 +1466,11 @@
       "notFound": "Actualité introuvable",
       "title": "Modifier l'actualité",
       "subtitle": "Modifiez les informations et le contenu de votre actualité",
-        "media": {
-          "fileGrid": {
-            "clearAll": "Tout supprimer"
-          }
+      "media": {
+        "fileGrid": {
+          "clearAll": "Tout supprimer"
         }
+      }
     },
     "manageList": {
       "noArticles": "Aucun article à afficher.",
@@ -1469,7 +1521,7 @@
     "card": {
       "media": "média",
       "moreMedia": "+{count} autre(s) média(s)"
-      },
+    },
     "filters": {
       "category": "Catégorie",
       "priority": "Priorité",
@@ -1538,18 +1590,18 @@
         "isActionAvailable": "Action disponible à l'achat"
       },
       "validation": {
-            "iban": {
-              "required": "L'IBAN est requis."
-            },
-            "beneficiaryName": {
-              "required": "Nom du bénéficiaire est requis."
-            },
-            "country": {
-              "required": "Pays est requis."
-            },
-            "address": {
-              "fieldsRequired": "Si vous fournissez une adresse, tous les champs (rue, ville, code postal) sont obligatoires."
-            },
+        "iban": {
+          "required": "L'IBAN est requis."
+        },
+        "beneficiaryName": {
+          "required": "Nom du bénéficiaire est requis."
+        },
+        "country": {
+          "required": "Pays est requis."
+        },
+        "address": {
+          "fieldsRequired": "Si vous fournissez une adresse, tous les champs (rue, ville, code postal) sont obligatoires."
+        },
         "companyNameRequired": "Le nom de l'entreprise est requis",
         "symbolRequired": "Le symbole est requis",
         "symbolPattern": "Le symbole doit contenir 1-5 lettres majuscules",
@@ -2308,11 +2360,11 @@
         "title": "Conversations en attente",
         "description": "Répondez aux messages de vos clients.",
         "button": "Voir les messages"
-        },
-        "manageFeeds": {
-          "title": "Gérer les actualités",
-          "description": "Publiez, modifiez ou supprimez les actualités visibles par les clients.",
-          "button": "Gérer les actualités"
+      },
+      "manageFeeds": {
+        "title": "Gérer les actualités",
+        "description": "Publiez, modifiez ou supprimez les actualités visibles par les clients.",
+        "button": "Gérer les actualités"
       }
     }
   },
@@ -2410,8 +2462,7 @@
   },
   "notifications": {
     "clientAssigned": "Votre conversation a été prise en charge par le conseiller {advisorName}."
-  }
-  ,
+  },
   "validation": {
     "accountNumber": {
       "length": "Le numéro de compte doit contenir exactement 11 chiffres.",
@@ -2453,8 +2504,7 @@
     "maxDepositAmount": {
       "positive": "Le montant maximal du dépôt doit être positif.",
       "max": "Le montant maximal du dépôt ne peut pas dépasser 10 000 000."
-    }
-    ,
+    },
     "transfer": {
       "iban": {
         "minLength": "L'IBAN doit contenir au moins 15 caractères.",
