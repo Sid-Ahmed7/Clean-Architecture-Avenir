@@ -208,6 +208,218 @@ openssl rand -hex 32
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
+## Documentation des Routes API
+
+Cette section documente toutes les routes API disponibles dans l'application, organisées par catégorie avec leurs méthodes HTTP et les rôles requis pour y accéder.
+
+### Légende des Rôles
+
+- 🔓 **Public** : Accessible sans authentification
+- 👤 **CLIENT** : Accessible aux clients
+- 👔 **BANK_ADVISOR** : Accessible aux conseillers bancaires
+- 🏦 **BANK_MANAGER** : Accessible aux directeurs de banque
+- 🔐 **Authentifié** : Accessible à tous les utilisateurs authentifiés
+
+---
+
+### 🔐 Authentification (`/api/auth`)
+
+| Méthode | Route | Rôles | Description |
+|---------|-------|-------|-------------|
+| POST | `/register` | 🔓 Public | Inscription d'un nouveau client |
+| GET | `/confirm` | 🔓 Public | Confirmation de l'inscription par email |
+| POST | `/login` | 🔓 Public | Connexion (client, conseiller, directeur) |
+| POST | `/refresh-token` | 🔓 Public | Rafraîchissement du token d'accès |
+| GET | `/profile` | 👤 CLIENT, 👔 BANK_ADVISOR, 🏦 BANK_MANAGER | Récupération du profil utilisateur |
+| POST | `/logout` | 👤 CLIENT, 👔 BANK_ADVISOR, 🏦 BANK_MANAGER | Déconnexion |
+| GET | `/getAdvisors` | 👤 CLIENT, 👔 BANK_ADVISOR, 🏦 BANK_MANAGER | Liste des conseillers disponibles |
+| POST | `/create-advisor` | 🏦 BANK_MANAGER | Création d'un compte conseiller |
+| POST | `/create-manager` | 🔓 Public | Création d'un compte directeur |
+
+---
+
+### 💳 Comptes Bancaires (`/api/account`)
+
+| Méthode | Route | Rôles | Description |
+|---------|-------|-------|-------------|
+| GET | `/my-accounts` | 👤 CLIENT, 🏦 BANK_MANAGER | Récupération des comptes de l'utilisateur |
+| POST | `/create` | 👤 CLIENT, 🏦 BANK_MANAGER | Création d'un nouveau compte |
+| POST | `/create/sub` | 👤 CLIENT, 🏦 BANK_MANAGER | Création d'un sous-compte |
+| PUT | `/update` | 🏦 BANK_MANAGER | Mise à jour d'un compte |
+| GET | `/` | 🏦 BANK_MANAGER | Liste de tous les comptes |
+| GET | `/:accountNumber` | 👤 CLIENT, 🏦 BANK_MANAGER | Détails d'un compte spécifique |
+| DELETE | `/:accountNumber` | 🏦 BANK_MANAGER | Suppression d'un compte |
+| GET | `/iban/:iban` | 👤 CLIENT, 🏦 BANK_MANAGER | Recherche de compte par IBAN |
+| GET | `/:accountNumber/rib` | 👤 CLIENT, 👔 BANK_ADVISOR, 🏦 BANK_MANAGER | Téléchargement du RIB |
+| PUT | `/:accountNumber/status` | 🏦 BANK_MANAGER | Changement du statut du compte |
+| PUT | `/:accountNumber/name` | 👤 CLIENT, 🏦 BANK_MANAGER | Modification du nom du compte |
+| PUT | `/:accountNumber/withdrawal-limit` | 🏦 BANK_MANAGER | Modification de la limite de retrait |
+| PUT | `/:accountNumber/transfer-limit` | 👤 CLIENT, 🏦 BANK_MANAGER | Modification de la limite de virement |
+| PUT | `/:accountNumber/overdraft-limit` | 🏦 BANK_MANAGER | Modification de la limite de découvert |
+| PUT | `/:accountNumber/active` | 🏦 BANK_MANAGER | Activation/désactivation du compte |
+| POST | `/transfer` | 👤 CLIENT, 🏦 BANK_MANAGER | Virement entre comptes |
+| POST | `/quick-transfer` | 👤 CLIENT, 🏦 BANK_MANAGER | Virement rapide |
+| GET | `/transactions/history` | 👤 CLIENT, 🏦 BANK_MANAGER | Historique des transactions |
+| GET | `/transactions/last` | 👤 CLIENT, 🏦 BANK_MANAGER | Dernières transactions |
+
+#### Demandes de Découvert
+
+| Méthode | Route | Rôles | Description |
+|---------|-------|-------|-------------|
+| POST | `/:accountNumber/overdraft-limit/request` | 👤 CLIENT, 🏦 BANK_MANAGER | Demande d'augmentation de découvert |
+| GET | `/overdraft-requests` | 👔 BANK_ADVISOR, 🏦 BANK_MANAGER | Liste des demandes en attente |
+| PUT | `/overdraft-requests/:requestId/response` | 👔 BANK_ADVISOR, 🏦 BANK_MANAGER | Réponse à une demande |
+| GET | `/overdraft-requests/:requestId/details` | 👔 BANK_ADVISOR, 🏦 BANK_MANAGER | Détails d'une demande |
+
+---
+
+### 💰 Comptes d'Épargne (`/api/savings-account`)
+
+| Méthode | Route | Rôles | Description |
+|---------|-------|-------|-------------|
+| GET | `/` | 👤 CLIENT, 🏦 BANK_MANAGER | Liste des comptes d'épargne |
+| POST | `/` | 🏦 BANK_MANAGER | Création d'un compte d'épargne |
+| GET | `/:accountNumber` | 👤 CLIENT, 🏦 BANK_MANAGER | Détails d'un compte d'épargne |
+| PUT | `/:accountNumber` | 🏦 BANK_MANAGER | Mise à jour de la configuration |
+| PUT | `/:accountNumber/interest-rate` | 🏦 BANK_MANAGER | Modification du taux d'intérêt |
+| PUT | `/:accountNumber/max-deposit` | 🏦 BANK_MANAGER | Modification du dépôt maximum |
+| POST | `/calculate-interest` | 🏦 BANK_MANAGER | Calcul des intérêts journaliers |
+| GET | `/:accountNumber/interest-summary` | 👤 CLIENT, 🏦 BANK_MANAGER | Résumé des intérêts |
+| POST | `/:accountNumber/deposit` | 👤 CLIENT | Dépôt sur le compte d'épargne |
+| POST | `/:accountNumber/withdraw` | 👤 CLIENT | Retrait du compte d'épargne |
+| DELETE | `/:accountNumber` | 🏦 BANK_MANAGER | Suppression du compte d'épargne |
+
+---
+
+### 📦 Produits d'Épargne (`/api/savings-product`)
+
+| Méthode | Route | Rôles | Description |
+|---------|-------|-------|-------------|
+| GET | `/` | 🔓 Public | Liste de tous les produits d'épargne |
+| POST | `/` | 🏦 BANK_MANAGER | Création d'un produit d'épargne |
+| PUT | `/:productId` | 🏦 BANK_MANAGER | Mise à jour d'un produit |
+| POST | `/subscribe` | 👤 CLIENT | Souscription à un produit |
+
+---
+
+### 💸 Prêts (`/api/loan`)
+
+| Méthode | Route | Rôles | Description |
+|---------|-------|-------|-------------|
+| POST | `/request` | 👤 CLIENT | Création d'une demande de prêt |
+| GET | `/client/requests` | 👤 CLIENT | Demandes de prêt du client |
+| GET | `/client/repayments` | 👤 CLIENT | Échéanciers de remboursement du client |
+| POST | `/client/requests/:id/respond` | 👤 CLIENT | Réponse à une proposition de taux |
+| GET | `/advisor/requests` | 👔 BANK_ADVISOR, 🏦 BANK_MANAGER | Demandes pour le conseiller |
+| POST | `/advisor/requests/:id/decision` | 👔 BANK_ADVISOR | Décision du conseiller |
+| GET | `/director/requests` | 🏦 BANK_MANAGER | Demandes pour le directeur |
+| POST | `/director/requests/:id/decision` | 🏦 BANK_MANAGER | Décision du directeur |
+| POST | `/director/requests/:id/propose-rate` | 🏦 BANK_MANAGER | Proposition de taux |
+| POST | `/director/rate` | 🏦 BANK_MANAGER | Définition du taux indicatif |
+| GET | `/rate` | 🔐 Authentifié | Récupération du taux indicatif |
+| GET | `/client/:id/requests` | 👔 BANK_ADVISOR, 🏦 BANK_MANAGER | Historique des demandes d'un client |
+| GET | `/client/:id/repayments` | 👔 BANK_ADVISOR, 🏦 BANK_MANAGER | Remboursements d'un client |
+| GET | `/client/:id/info` | 👔 BANK_ADVISOR, 🏦 BANK_MANAGER | Informations d'un client |
+
+---
+
+### 👥 Bénéficiaires (`/api/beneficiary`)
+
+| Méthode | Route | Rôles | Description |
+|---------|-------|-------|-------------|
+| POST | `/` | 👤 CLIENT, 🏦 BANK_MANAGER | Création d'un bénéficiaire |
+| GET | `/` | 👤 CLIENT, 🏦 BANK_MANAGER | Liste des bénéficiaires |
+| PUT | `/:beneficiaryId` | 👤 CLIENT, 🏦 BANK_MANAGER | Mise à jour d'un bénéficiaire |
+| DELETE | `/:beneficiaryId` | 👤 CLIENT, 🏦 BANK_MANAGER | Suppression d'un bénéficiaire |
+| POST | `/transfer` | 👤 CLIENT, 🏦 BANK_MANAGER | Virement vers un bénéficiaire |
+
+---
+
+### 📈 Actions Boursières (`/api/stock`)
+
+| Méthode | Route | Rôles | Description |
+|---------|-------|-------|-------------|
+| POST | `/create` | 🏦 BANK_MANAGER | Création d'une action |
+| GET | `/` | 🔐 Authentifié | Liste de toutes les actions |
+| GET | `/available` | 🔐 Authentifié | Actions disponibles |
+| GET | `/symbol/:symbol` | 🔐 Authentifié | Action par symbole |
+| GET | `/:id` | 🔐 Authentifié | Action par ID |
+| PUT | `/update` | 🏦 BANK_MANAGER | Mise à jour d'une action |
+| DELETE | `/:id` | 🏦 BANK_MANAGER | Suppression d'une action |
+| PATCH | `/:id/availability` | 🏦 BANK_MANAGER | Modification de la disponibilité |
+| POST | `/:symbol/update-price` | 🏦 BANK_MANAGER | Mise à jour du prix |
+| POST | `/ipo/purchase` | 🔐 Authentifié | Achat d'actions IPO |
+| POST | `/:symbol/ipo/close` | 🏦 BANK_MANAGER | Clôture d'une IPO |
+| POST | `/:symbol/ipo/open` | 🏦 BANK_MANAGER | Ouverture d'une IPO |
+
+---
+
+### 📊 Ordres Boursiers (`/api/stock-order`)
+
+| Méthode | Route | Rôles | Description |
+|---------|-------|-------|-------------|
+| POST | `/create` | 🔐 Authentifié | Placement d'un ordre |
+| GET | `/` | 🔐 Authentifié | Ordres de l'utilisateur |
+| GET | `/all` | 🏦 BANK_MANAGER | Tous les ordres |
+| GET | `/book/:symbol` | 🔐 Authentifié | Carnet d'ordres par symbole |
+| POST | `/match/:symbol` | 🔐 Authentifié | Appariement des ordres |
+| PATCH | `/:id/cancel` | 🔐 Authentifié | Annulation d'un ordre |
+
+---
+
+### 🔔 Notifications (`/api/notification`)
+
+| Méthode | Route | Rôles | Description |
+|---------|-------|-------|-------------|
+| GET | `/subscribe` | 🔐 Authentifié | Souscription aux notifications SSE |
+| POST | `/create` | 🔐 Authentifié | Création d'une notification |
+| POST | `/send-notification` | 👔 BANK_ADVISOR | Envoi d'une notification à un client |
+| GET | `/` | 🔐 Authentifié | Notifications de l'utilisateur |
+| PUT | `/read` | 🔐 Authentifié | Marquer comme lue |
+| DELETE | `/:id` | 🔐 Authentifié | Suppression d'une notification |
+
+---
+
+### 📰 Actualités (`/api/news`)
+
+| Méthode | Route | Rôles | Description |
+|---------|-------|-------|-------------|
+| GET | `/stream` | 🔐 Authentifié | Flux SSE des actualités |
+| POST | `/create` | 👔 BANK_ADVISOR | Création d'une actualité |
+| GET | `/` | 🔐 Authentifié | Liste des actualités |
+| GET | `/:id` | 🔐 Authentifié | Détails d'une actualité |
+| PUT | `/update` | 👔 BANK_ADVISOR | Mise à jour d'une actualité |
+| DELETE | `/delete/:id` | 👔 BANK_ADVISOR | Suppression d'une actualité |
+
+---
+
+### 💬 Chat (`/api/chat`)
+
+| Méthode | Route | Rôles | Description |
+|---------|-------|-------|-------------|
+| POST | `/conversation/create` | 👤 CLIENT | Création d'une conversation |
+| GET | `/conversations` | 👔 BANK_ADVISOR | Conversations en attente |
+| GET | `/conversations/assigned` | 👔 BANK_ADVISOR | Conversations assignées au conseiller |
+| GET | `/conversations/client` | 👤 CLIENT | Conversations du client |
+| GET | `/:conversationId/messages` | 👤 CLIENT, 👔 BANK_ADVISOR | Messages d'une conversation |
+| POST | `/send` | 👤 CLIENT, 👔 BANK_ADVISOR | Envoi d'un message |
+| POST | `/mark-read` | 👔 BANK_ADVISOR | Marquer comme lu |
+| POST | `/transfer` | 👔 BANK_ADVISOR | Transfert de conversation |
+
+---
+
+### 👨‍💼 Gestion des Utilisateurs (`/api/user-management`)
+
+| Méthode | Route | Rôles | Description |
+|---------|-------|-------|-------------|
+| GET | `/` | 🏦 BANK_MANAGER | Liste de tous les utilisateurs |
+| GET | `/clients` | 🏦 BANK_MANAGER | Liste des clients |
+| GET | `/advisors` | 🏦 BANK_MANAGER | Liste des conseillers |
+| PUT | `/:id` | 🏦 BANK_MANAGER | Mise à jour d'un utilisateur |
+| DELETE | `/:id` | 🏦 BANK_MANAGER | Suppression d'un utilisateur |
+
+---
+
 ### Technologies Used
 
 - TypeScript
