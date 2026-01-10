@@ -42,4 +42,5 @@ router.get(
 );
 router.post("/create-advisor", verifyTokenAccess, authorizeRoles([RoleEnum.BANK_MANAGER]), (req, res) => authController.registerAdvisor(req, res))
 router.post("/create-manager", (req, res) => authController.registerManager(req, res))
+router.post("/create-client", verifyTokenAccess, authorizeRoles([RoleEnum.BANK_MANAGER, RoleEnum.BANK_ADVISOR]), (req, res) => authController.createClientAccount(req, res))
 export default router;

@@ -235,6 +235,21 @@ Cette section documente toutes les routes API disponibles dans l'application, or
 | GET | `/getAdvisors` | 👤 CLIENT, 👔 BANK_ADVISOR, 🏦 BANK_MANAGER | Liste des conseillers disponibles |
 | POST | `/create-advisor` | 🏦 BANK_MANAGER | Création d'un compte conseiller |
 | POST | `/create-manager` | 🔓 Public | Création d'un compte directeur |
+| POST | `/create-client` | 👔 BANK_ADVISOR, 🏦 BANK_MANAGER | Création d'un compte client |
+
+---
+
+### 👥 Gestion des Utilisateurs (`/api/user-management`)
+
+| Méthode | Route | Rôles | Description |
+|---------|-------|-------|-------------|
+| GET | `/` | 🏦 BANK_MANAGER | Liste de tous les utilisateurs |
+| GET | `/clients` | 🏦 BANK_MANAGER | Liste des clients |
+| GET | `/advisors` | 🏦 BANK_MANAGER | Liste des conseillers |
+| PUT | `/:id` | 🏦 BANK_MANAGER | Mise à jour d'un utilisateur |
+| DELETE | `/:id` | 🏦 BANK_MANAGER | Suppression d'un utilisateur |
+| PUT | `/:id/ban` | 🏦 BANK_MANAGER | Bannir un utilisateur |
+| PUT | `/:id/unban` | 🏦 BANK_MANAGER | Débannir un utilisateur |
 
 ---
 

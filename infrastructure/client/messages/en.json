@@ -976,6 +976,33 @@
       "waiting": "Waiting for confirmation...",
       "success": "Confirmation successful! You will be redirected to the login page",
       "error": "Error during confirmation"
+    },
+    "userManagement": {
+      "title": "User Management",
+      "subtitle": "Manage platform users",
+      "banUser": "Ban",
+      "unbanUser": "Unban",
+      "createClient": "Create client",
+      "confirmBan": "Are you sure you want to ban this user?",
+      "confirmUnban": "Are you sure you want to unban this user?",
+      "userBanned": "User banned successfully",
+      "userUnbanned": "User unbanned successfully",
+      "error": "An error occurred",
+      "status": {
+        "active": "Active",
+        "banned": "Banned",
+        "pending": "Pending",
+        "inactive": "Inactive"
+      }
+    },
+    "createClient": {
+      "title": "Create Client Account",
+      "subtitle": "Client account creation form",
+      "success": "Client account created successfully. A confirmation email has been sent.",
+      "error": "An error occurred during creation",
+      "userExists": "A user with this email already exists",
+      "submit": "Create client account",
+      "submitting": "Creating..."
     }
   },
   "titles": {

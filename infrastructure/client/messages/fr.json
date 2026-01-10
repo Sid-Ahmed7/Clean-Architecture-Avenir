@@ -976,6 +976,33 @@
       "waiting": "En attente de confirmation..",
       "success": "Confirmation réussie ! Vous allez être redirigé vers la page de login",
       "error": "Erreur lors de la confirmation"
+    },
+    "userManagement": {
+      "title": "Gestion des Utilisateurs",
+      "subtitle": "Gérez les utilisateurs de la plateforme",
+      "banUser": "Bannir",
+      "unbanUser": "Débannir",
+      "createClient": "Créer un client",
+      "confirmBan": "Êtes-vous sûr de vouloir bannir cet utilisateur ?",
+      "confirmUnban": "Êtes-vous sûr de vouloir débannir cet utilisateur ?",
+      "userBanned": "Utilisateur banni avec succès",
+      "userUnbanned": "Utilisateur débanni avec succès",
+      "error": "Une erreur est survenue",
+      "status": {
+        "active": "Actif",
+        "banned": "Banni",
+        "pending": "En attente",
+        "inactive": "Inactif"
+      }
+    },
+    "createClient": {
+      "title": "Créer un Compte Client",
+      "subtitle": "Formulaire de création de compte client",
+      "success": "Le compte client a été créé avec succès. Un email de confirmation a été envoyé.",
+      "error": "Une erreur est survenue lors de la création",
+      "userExists": "Un utilisateur avec cet email existe déjà",
+      "submit": "Créer le compte client",
+      "submitting": "Création en cours..."
     }
   },
   "titles": {

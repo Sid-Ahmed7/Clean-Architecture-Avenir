@@ -328,4 +328,34 @@ export class AuthController {
 
         return res.status(201).json(result);
       }
+
+      async createClientAccount(req: Request, res: Response) {
+        const { CreateClientAccountUseCase } = await import("../../../../../application/usecases/auth/CreateClientAccountUseCase");
+        const createClientAccountUseCase = new CreateClientAccountUseCase(
+          this.userRepository,
+          this.roleRepository,
+          this.userRoleRepository,
+          this.passwordService,
+          this.emailTemplateService,
+          this.registrationTokenGeneratorService,
+          this.localeService,
+          this.uuidService
+        );
+
+        const parseResult = registerSchema.safeParse(req.body);
+        if (!parseResult.success) {
+          return res.status(400).json({ errors: parseResult.error.message });
+        }
+
+        const locale = req.body.locale || 'en';
+        const result = await createClientAccountUseCase.execute(parseResult.data, locale);
+        if (result instanceof Error) {
+          if (result instanceof UserAlreadyExistsError) {
+            return res.status(409).json({ error: result.message });
+          }
+          return res.status(500).json({ error: result.message });
+        }
+
+        return res.status(201).json(result);
+      }
 }

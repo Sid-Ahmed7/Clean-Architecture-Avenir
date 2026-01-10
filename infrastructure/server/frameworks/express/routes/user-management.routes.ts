@@ -64,4 +64,18 @@ router.delete(
     (req, res) => userManagementController.deleteUser(req, res)
 );
 
+router.put(
+    "/:id/ban",
+    verifyTokenAccess,
+    authorizeRoles([RoleEnum.BANK_MANAGER]),
+    (req, res) => userManagementController.banUser(req, res)
+);
+
+router.put(
+    "/:id/unban",
+    verifyTokenAccess,
+    authorizeRoles([RoleEnum.BANK_MANAGER]),
+    (req, res) => userManagementController.unbanUser(req, res)
+);
+
 export default router;

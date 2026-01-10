@@ -154,7 +154,7 @@ export default function CreateManagerPage() {
                 icon={Shield}
                 variant="gradient"
                 placeholder="••••••••"
-                helperText="Code secret requis pour créer un gestionnaire (défini dans .env)"
+                helperText="Mot de passe manager requis pour créer un gestionnaire"
                 error={errors.secretCode?.message}
                 {...register("secretCode")}
               />

@@ -190,4 +190,52 @@ export class UserManagementController {
 
         return res.status(200).json(result);
     }
+
+    async banUser(req: Request, res: Response) {
+        const { id } = req.params;
+
+        if (!id) {
+            return res.status(400).json({ error: "User ID is required" });
+        }
+
+        const { BanUserUseCase } = await import("../../../../../application/use-cases/user-management/BanUserUseCase");
+        const banUserUseCase = new BanUserUseCase(this.userRepository);
+
+        try {
+            await banUserUseCase.execute(id);
+            return res.status(200).json({ message: "User banned successfully" });
+        } catch (error: any) {
+            if (error.message === 'Utilisateur non trouvé') {
+                return res.status(404).json({ error: error.message });
+            }
+            if (error.message === 'Cet utilisateur est déjà banni') {
+                return res.status(400).json({ error: error.message });
+            }
+            return res.status(500).json({ error: error.message });
+        }
+    }
+
+    async unbanUser(req: Request, res: Response) {
+        const { id } = req.params;
+
+        if (!id) {
+            return res.status(400).json({ error: "User ID is required" });
+        }
+
+        const { UnbanUserUseCase } = await import("../../../../../application/use-cases/user-management/UnbanUserUseCase");
+        const unbanUserUseCase = new UnbanUserUseCase(this.userRepository);
+
+        try {
+            await unbanUserUseCase.execute(id);
+            return res.status(200).json({ message: "User unbanned successfully" });
+        } catch (error: any) {
+            if (error.message === 'Utilisateur non trouvé') {
+                return res.status(404).json({ error: error.message });
+            }
+            if (error.message === 'Cet utilisateur n\'est pas banni') {
+                return res.status(400).json({ error: error.message });
+            }
+            return res.status(500).json({ error: error.message });
+        }
+    }
 }
