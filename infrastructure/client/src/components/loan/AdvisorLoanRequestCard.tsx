@@ -1,5 +1,11 @@
-import { AdvisorLoanRequestCardProps } from "@/types/loan";
+import { LoanDecision, LoanRequest } from "@/types/loan";
 
+interface AdvisorLoanRequestCardProps  {
+  request: LoanRequest;
+  submittingId: string | null;
+  onDecision: (id: string, decision: LoanDecision) => void;
+  onViewProfile: (clientId: string) => void;
+};
 export function AdvisorLoanRequestCard({
   request,
   submittingId,

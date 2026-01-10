@@ -1,7 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import * as beneficiaryApi from "@/lib/api/beneficiary";
-import { Beneficiary } from "@/types/beneficiary";
-import { CreateBeneficiaryRequest, UpdateBeneficiaryRequest } from "@/types/beneficiary";
+import { CreateBeneficiaryRequest, UpdateBeneficiaryRequest, Beneficiary } from "@/types/beneficiary";
 import { TransferToBeneficiaryRequest, TransferResponse } from "@/types/transfer";
 import { useTranslations } from "next-intl";
 import { createBeneficiarySchema } from "@/lib/validation/beneficiary/createBeneficiarySchema";

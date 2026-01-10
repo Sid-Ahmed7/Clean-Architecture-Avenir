@@ -288,9 +288,6 @@ export default class AccountsController {
     }
 
     const result = await getUserAccountsUseCase.execute(userId);
-    console.log('result type:', typeof result);
-    console.log('result instanceof Error:', result instanceof Error);
-    console.log('result:', result);
 
     if (result instanceof Error) {
       if (result instanceof UserNotFoundError) {

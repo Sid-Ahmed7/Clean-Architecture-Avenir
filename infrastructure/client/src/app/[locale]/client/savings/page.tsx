@@ -114,7 +114,6 @@ export default function ClientSavingsPage() {
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-6">
             <div className="max-w-7xl mx-auto">
-                {/* Header */}
                 <div className="mb-8">
                     <button
                         onClick={() => router.back()}
@@ -146,7 +145,6 @@ export default function ClientSavingsPage() {
                         <h2 className="text-2xl font-bold text-gray-900 mb-4">{t("myAccounts")}</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {myAccounts.map((account) => {
-                                // Use pendingInterest from backend if available, otherwise calculate
                                 const pendingInterest = account.pendingInterest ?? (() => {
                                     const secondsSinceLastUpdate = Math.floor(
                                         (new Date().getTime() - new Date(account.lastBalanceUpdate).getTime()) / 1000

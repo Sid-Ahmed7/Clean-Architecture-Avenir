@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getInterestSummary } from "@/lib/api/savingsAccount";
 import { PiggyBank, TrendingUp, Calendar, Target } from "lucide-react";
 import { useTranslations, useFormatter } from "next-intl";
+import { getErrorMessage } from "@/lib/utils/error";
 
 interface SavingsAccountCardProps {
     accountNumber: number;
@@ -15,7 +16,7 @@ interface InterestSummary {
     interestRate: number;
     maxDepositAmount: number | null;
     totalInterestEarned: number;
-    pendingInterest: number; // Interest calculated but not yet credited
+    pendingInterest: number; 
     lastInterestApplied?: Date;
     projectedAnnualInterest: number;
     isActive: boolean;
@@ -35,7 +36,8 @@ export function SavingsAccountCard({ accountNumber }: SavingsAccountCardProps) {
                 const data = await getInterestSummary(accountNumber);
                 setSummary(data);
             } catch (err) {
-                setError(err instanceof Error ? err.message : "Erreur lors du chargement");
+                const messsage = getErrorMessage(err as Error, t("noAccount"));
+                setError(messsage);
             } finally {
                 setLoading(false);
             }
@@ -73,7 +75,6 @@ export function SavingsAccountCard({ accountNumber }: SavingsAccountCardProps) {
 
     return (
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden transform hover:scale-[1.01] transition-all duration-300">
-            {/* Header with gradient */}
             <div className="bg-gradient-to-br from-emerald-600 via-green-600 to-teal-600 p-6 text-white relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
                 <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full -ml-12 -mb-12"></div>
@@ -108,11 +109,8 @@ export function SavingsAccountCard({ accountNumber }: SavingsAccountCardProps) {
                 </div>
             </div>
 
-            {/* Interest Summary */}
             <div className="p-6 space-y-6">
-                {/* Interest Cards */}
                 <div className="grid grid-cols-2 gap-4">
-                    {/* Total Interest Earned (Credited) */}
                     <div className="bg-gradient-to-br from-emerald-50 to-green-50 rounded-xl p-4 border border-emerald-200">
                         <div className="flex items-center gap-2 mb-2">
                             <div className="p-2 bg-emerald-500 rounded-lg">
@@ -126,7 +124,6 @@ export function SavingsAccountCard({ accountNumber }: SavingsAccountCardProps) {
                         <p className="text-xs text-gray-500 mt-1">Crédité</p>
                     </div>
 
-                    {/* Pending Interest (Not yet credited) */}
                     <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-xl p-4 border border-amber-200">
                         <div className="flex items-center gap-2 mb-2">
                             <div className="p-2 bg-amber-500 rounded-lg">
@@ -141,7 +138,6 @@ export function SavingsAccountCard({ accountNumber }: SavingsAccountCardProps) {
                     </div>
                 </div>
 
-                {/* Projections */}
                 <div className="grid grid-cols-2 gap-4">
                     <div className="bg-gray-50 rounded-lg p-4">
                         <div className="flex items-center gap-2 mb-2">
@@ -164,7 +160,6 @@ export function SavingsAccountCard({ accountNumber }: SavingsAccountCardProps) {
                     </div>
                 </div>
 
-                {/* Details */}
                 <div className="space-y-3 pt-2">
                     <div className="flex items-center gap-2 mb-2">
                         <div className="w-1 h-4 bg-gradient-to-b from-emerald-500 to-green-500 rounded-full"></div>
@@ -218,7 +213,6 @@ export function SavingsAccountCard({ accountNumber }: SavingsAccountCardProps) {
                     )}
                 </div>
 
-                {/* Info message */}
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                     <p className="text-xs text-blue-800">
                         {t.rich("howItWorksMessage", {

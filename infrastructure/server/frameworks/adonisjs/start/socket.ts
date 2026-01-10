@@ -82,7 +82,6 @@ export const socketSetup = async (server: Server) => {
           onlineUsers[data.userId] = { isOnline: true, role }
           broadCastToAll(data.userId, true, role)
 
-          console.log(`Identification réussie pour client - ${data.userId}, role: ${role}`)
 
           const clientConversation = await conversationRepository.findByClientId(data.userId)
           if (Array.isArray(clientConversation)) {

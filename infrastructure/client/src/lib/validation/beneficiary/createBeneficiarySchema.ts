@@ -2,9 +2,9 @@ import { z } from "zod";
 
 export const createBeneficiarySchema = (t: (key: string) => string) =>
   z.object({
-    iban: z.string().min(1, "IBAN est requis"),
-    beneficiaryName: z.string().min(1, "Nom du bénéficiaire est requis"),
-    country: z.string().min(1, "Pays est requis"),
+    iban: z.string().min(1, t("validation.iban.required")),
+    beneficiaryName: z.string().min(1, t("validation.beneficiaryName.required")),
+    country: z.string().min(1, t("validation.country.required")),
     email: z.string().optional(),
     address: z.object({
       street: z.string(),
@@ -18,10 +18,10 @@ export const createBeneficiarySchema = (t: (key: string) => string) =>
       }
       return true;
     },
-    {
-      message: "Si vous fournissez une adresse, tous les champs (rue, ville, code postal) sont obligatoires",
-      path: ["address"],
-    }
-  );
+      {
+        message: t("validation.address.fieldsRequired"),
+        path: ["address"],
+      }
+    );
 
 export type CreateBeneficiaryModel = z.infer<ReturnType<typeof createBeneficiarySchema>>;

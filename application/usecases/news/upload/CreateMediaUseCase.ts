@@ -41,11 +41,9 @@ export class CreateMediaUseCase {
         );
 
         if (mediaEntity instanceof Error) {
-            console.error(" MediaEntity creation error:", mediaEntity.message);
             return mediaEntity;
         }
 
-        console.log("MediaEntity created:", mediaEntity);
 
         const savedMedia = await this.mediaRepository.create(mediaEntity);
         if (savedMedia instanceof Error) {
@@ -53,7 +51,6 @@ export class CreateMediaUseCase {
             return savedMedia;
         }
 
-        console.log(" Media saved:", savedMedia);
         return savedMedia;
     }
 }

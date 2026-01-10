@@ -48,7 +48,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     { icon: ShoppingCart, labelKey: "menu.myOrders", href: `/orders`, excludeRoles: [RoleEnum.BANK_MANAGER] },
     { icon: BarChart3, labelKey: "menu.myPositions", href: `/position`, excludeRoles: [RoleEnum.BANK_MANAGER, RoleEnum.BANK_ADVISOR] },
     { icon: Newspaper, labelKey: "menu.news", href: `/feed` },
-    { icon: MessageCircle, labelKey: "menu.messages", href: `/${rolePrefix}/conversations`, excludeRoles: [RoleEnum.BANK_MANAGER] },
+    { icon: MessageCircle, labelKey: "menu.messages", href: `/${rolePrefix}/conversations`, excludeRoles: [RoleEnum.BANK_MANAGER], roles: [RoleEnum.CLIENT] },
   ];
 
   const handleLogout = () => {
@@ -121,8 +121,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                     : "text-gray-700 hover:bg-gray-50"
                     }`}
                 >
-                  <ItemIcon className="w-5 h-5" />
-                  <span className="font-medium">{t(item.labelKey)}</span>
+                  <ItemIcon className="w-4 h-4" />
+                  <span className="text-sm font-medium">{t(item.labelKey)}</span>
                 </Link>
               );
             })}

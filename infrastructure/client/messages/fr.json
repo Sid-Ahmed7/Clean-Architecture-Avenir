@@ -1,4 +1,5 @@
 {
+
   "metadata": {
     "title": "BankAvenir - Votre banque en ligne",
     "titleTemplate": "%s | BankAvenir",
@@ -44,6 +45,7 @@
   },
   "components": {
     "notification": {
+       "from": "De",
       "noNotifications": "Aucune notification"
     },
     "stocks": {
@@ -185,7 +187,47 @@
         "noAdvisors": "Aucun conseiller trouvé",
         "tryOtherCriteria": "Essayez avec d'autres critères",
         "cancel": "Annuler",
-        "confirm": "Valider le transfert"
+        "confirm": "Valider le transfert",
+        "transferSuccess": "Conversation transférée !",
+        "transferError": "Erreur lors du transfert."
+      },
+      "page": {
+        "verifyingAuth": "Vérification de l'authentification...",
+        "loadingUser": "Chargement de l'utilisateur..."
+      },
+      "limitProgressBar": {
+        "nearLimit": "Critique",
+        "attention": "Attention",
+        "available": "Disponible",
+        "remaining": "restant"
+      },
+      "enums": {
+        "accountStatus": {
+          "ACTIVE": "Actif",
+          "CLOSED": "Fermé",
+          "SUSPENDED": "Suspendu",
+          "PENDING": "En attente",
+          "FROZEN": "Gelé",
+          "BANNED": "Banni"
+        },
+        "transactionType": {
+          "PAYMENT": "Paiement",
+          "WITHDRAWAL": "Retrait",
+          "TRANSFER": "Virement",
+          "FEE": "Frais",
+          "DEPOSIT": "Dépôt"
+        },
+        "overdraftStatus": {
+          "PENDING": "En attente",
+          "APPROVED": "Approuvé",
+          "REJECTED": "Refusé"
+        },
+        "clientStatus": {
+          "ACTIVE": "Actif",
+          "INACTIVE": "Inactif",
+          "PENDING": "En attente",
+          "SUSPENDED": "Suspendu"
+        }
       }
     },
     "sidebar": {
@@ -365,6 +407,13 @@
         "tagsLabel": "Tags",
         "tagsPlaceholder": "Ex: économie, tech..."
       },
+      "manageList": {
+        "noArticles": "Aucun article à afficher.",
+        "category": "Catégorie",
+        "priority": "Priorité",
+        "edit": "Modifier",
+        "delete": "Supprimer"
+      },
       "card": {
         "media": "médias",
         "moreMedia": "+ {count} autres"
@@ -379,6 +428,12 @@
       "form": {
         "title": "Créer une nouvelle actualité",
         "subtitle": "Composez votre actualité avec l'éditeur par blocs",
+        "newTitle": "Nouvelle actualité",
+        "newSubtitle": "Créez une nouvelle actualité pour informer vos clients.",
+        "highlight": "Mise en avant",
+        "highlightValue": "Landing-like",
+        "writing": "Rédaction",
+        "writingValue": "Guidée & claire",
         "generalInfo": "Informations générales",
         "content": "Contenu de l'actualité",
         "fields": {
@@ -1349,7 +1404,21 @@
     },
     "list": {
       "loading": "Chargement...",
-      "error": "Erreur : {message}"
+      "error": "Erreur : {message}",
+      "manageTitle": "Gestion des Actualités",
+      "manageSubtitle": "Gérez vos actualités et consultez les statistiques",
+      "filters": "Filtres",
+      "manageLoading": "Chargement...",
+      "manageError": "Erreur:",
+      "manageSectionTitle": "Gérer les actualités",
+      "notFound": "Actualité introuvable",
+      "title": "Modifier l'actualité",
+      "subtitle": "Modifiez les informations et le contenu de votre actualité",
+        "media": {
+          "fileGrid": {
+            "clearAll": "Tout supprimer"
+          }
+        }
     },
     "manageList": {
       "noArticles": "Aucun article à afficher.",
@@ -1363,7 +1432,10 @@
     },
     "blocks": {
       "content": {
-        "deleteBlock": "Supprimer ce bloc"
+        "deleteBlock": "Supprimer ce bloc",
+        "editBlock": "Modifier le bloc",
+        "addMedia": "Ajouter un média",
+        "addText": "Ajouter du texte"
       },
       "toolbar": {
         "addBlock": "Ajouter un bloc :",
@@ -1397,7 +1469,7 @@
     "card": {
       "media": "média",
       "moreMedia": "+{count} autre(s) média(s)"
-    },
+      },
     "filters": {
       "category": "Catégorie",
       "priority": "Priorité",
@@ -1466,6 +1538,18 @@
         "isActionAvailable": "Action disponible à l'achat"
       },
       "validation": {
+            "iban": {
+              "required": "L'IBAN est requis."
+            },
+            "beneficiaryName": {
+              "required": "Nom du bénéficiaire est requis."
+            },
+            "country": {
+              "required": "Pays est requis."
+            },
+            "address": {
+              "fieldsRequired": "Si vous fournissez une adresse, tous les champs (rue, ville, code postal) sont obligatoires."
+            },
         "companyNameRequired": "Le nom de l'entreprise est requis",
         "symbolRequired": "Le symbole est requis",
         "symbolPattern": "Le symbole doit contenir 1-5 lettres majuscules",
@@ -1613,23 +1697,6 @@
         "quantity": "Quantité",
         "maxAvailable": "Maximum : {max} actions disponibles",
         "fixedPrice": "Prix IPO fixe (€)",
-        "fixedPriceDescription": "Prix fixe d'",
-        "totalAmount": "Montant total",
-        "transactionFee": "Frais de transaction",
-        "totalToPay": "Total à payer",
-        "instantExecutionInfo": "Votre achat sera exécuté instantanément au prix IPO. Les actions seront ajoutées directement à votre portefeuille.",
-        "cancel": "Annuler",
-        "purchasing": "Achat en cours...",
-        "buyShares": "Acheter {count} action(s) IPO"
-      },
-      "purchaseIPO": {
-        "title": "Achat IPO",
-        "ipoTitle": "Introduction en Bourse",
-        "ipoDescription": "Achat direct au prix d'émission initial",
-        "sharesRemaining": "actions restantes",
-        "quantity": "Quantité",
-        "maxAvailable": "Maximum : {max} actions disponibles",
-        "fixedPrice": "Prix IPO fixe (€)",
         "fixedPriceDescription": "Prix fixe de",
         "totalAmount": "Montant total",
         "transactionFee": "Frais de transaction",
@@ -1743,57 +1810,6 @@
       "edit": "Modifier",
       "delete": "Supprimer",
       "confirmDelete": "Êtes-vous sûr de vouloir supprimer {symbol} ?"
-    }
-  },
-  "chat": {
-    "title": "Chat",
-    "connected": "Connecté",
-    "disconnected": "Déconnecté",
-    "noMessages": "Aucun message pour le moment",
-    "typing": "En train d'écrire...",
-    "inputPlaceholder": "Écris ton message...",
-    "inputDisabled": "Connexion en cours...",
-    "sendButton": "Envoyer",
-    "clientConversations": {
-      "title": "Mes conversations",
-      "newConversation": "Nouvelle conversation",
-      "creating": "Création...",
-      "errorFetch": "Impossible de récupérer vos conversations",
-      "errorCreate": "Erreur lors de la création de la conversation",
-      "empty": "Vous n'avez pas encore de conversation.",
-      "notAssigned": "Non assigné"
-    },
-    "advisorConversations": {
-      "loading": "Chargement…",
-      "errorTitle": "Erreur",
-      "reloadPage": "Recharger la page",
-      "stats": {
-        "pending": "En attente",
-        "assigned": "Mes conversations"
-      },
-      "searchPlaceholder": "Rechercher par nom client...",
-      "pendingTitle": "Demandes en attente",
-      "pendingEmpty": "Aucune demande en attente",
-      "searchEmpty": "Aucun résultat pour cette recherche",
-      "takeOver": "Prendre en charge",
-      "continue": "Continuer",
-      "transfer": "Transférer",
-      "assignedTitle": "Vos conversations",
-      "assignedEmpty": "Aucune conversation assignée"
-    },
-    "selectAdvisorsModal": {
-      "title": "Transfert de Dossier Client",
-      "subtitle": "Sélectionnez un nouveau conseiller",
-      "searchPlaceholder": "Rechercher par nom ou identifiant...",
-      "loading": "Chargement des conseillers...",
-      "errorFetch": "Impossible de récupérer les conseillers",
-      "retry": "Réessayer",
-      "noAdvisors": "Aucun conseiller trouvé",
-      "noAdvisorsHint": "Essayez avec d'autres critères",
-      "cancel": "Annuler",
-      "confirm": "Valider le transfert",
-      "transferSuccess": "Conversation transférée !",
-      "transferError": "Erreur lors du transfert."
     }
   },
   "bankAccount": {
@@ -2292,46 +2308,11 @@
         "title": "Conversations en attente",
         "description": "Répondez aux messages de vos clients.",
         "button": "Voir les messages"
-      }
-    }
-  },
-  "chat": {
-    "page": {
-      "verifyingAuth": "Vérification de l'authentification...",
-      "loadingUser": "Chargement de l'utilisateur..."
-    },
-    "limitProgressBar": {
-      "nearLimit": "Critique",
-      "attention": "Attention",
-      "available": "Disponible",
-      "remaining": "restant"
-    },
-    "enums": {
-      "accountStatus": {
-        "ACTIVE": "Actif",
-        "CLOSED": "Fermé",
-        "SUSPENDED": "Suspendu",
-        "PENDING": "En attente",
-        "FROZEN": "Gelé",
-        "BANNED": "Banni"
-      },
-      "transactionType": {
-        "PAYMENT": "Paiement",
-        "WITHDRAWAL": "Retrait",
-        "TRANSFER": "Virement",
-        "FEE": "Frais",
-        "DEPOSIT": "Dépôt"
-      },
-      "overdraftStatus": {
-        "PENDING": "En attente",
-        "APPROVED": "Approuvé",
-        "REJECTED": "Refusé"
-      },
-      "clientStatus": {
-        "ACTIVE": "Actif",
-        "INACTIVE": "Inactif",
-        "PENDING": "En attente",
-        "SUSPENDED": "Suspendu"
+        },
+        "manageFeeds": {
+          "title": "Gérer les actualités",
+          "description": "Publiez, modifiez ou supprimez les actualités visibles par les clients.",
+          "button": "Gérer les actualités"
       }
     }
   },
@@ -2379,6 +2360,117 @@
     },
     "feed": {
       "title": "Actualités"
+    }
+  },
+  "generalErrors": {
+    "emailErrors": {
+      "resend": "Erreur Resend",
+      "send": "Erreur lors de l'envoi de l'email",
+      "unexpected": "Erreur inattendue lors de l'envoi",
+      "unknown": "Erreur inconnue"
+    },
+    "userAccounts": {
+      "account": "Erreur compte"
+    },
+    "notificationSSE": {
+      "receive": "Erreur lors de la réception d'une notification",
+      "connect": "Erreur de connexion SSE"
+    },
+    "notifications": {
+      "validation": "Erreur de validation des données reçus",
+      "unknown": "Une erreur inconnue est survenue"
+    },
+    "news": {
+      "validation": "Erreur de validation des news",
+      "unknown": "Erreur inconnue",
+      "create": "Erreur lors de la création"
+    },
+    "media": {
+      "load": "Erreur lors du chargement des médias",
+      "upload": "Erreur lors de l'upload"
+    },
+    "lastTransactions": {
+      "fetch": "Erreur lors de la récupération des transactions"
+    },
+    "beneficiaryGroups": {
+      "notFound": "Groupe de bénéficiaires introuvable",
+      "create": "Erreur lors de la création du groupe",
+      "update": "Erreur lors de la mise à jour du groupe",
+      "delete": "Erreur lors de la suppression du groupe"
+    },
+    "content": {
+      "notFound": "Contenu introuvable",
+      "create": "Erreur lors de la création du contenu",
+      "update": "Erreur lors de la mise à jour du contenu",
+      "delete": "Erreur lors de la suppression du contenu"
+    },
+    "notificationService": {
+      "send": "Erreur lors de l'envoi de la notification au client"
+    }
+  },
+  "notifications": {
+    "clientAssigned": "Votre conversation a été prise en charge par le conseiller {advisorName}."
+  }
+  ,
+  "validation": {
+    "accountNumber": {
+      "length": "Le numéro de compte doit contenir exactement 11 chiffres.",
+      "positive": "Le numéro de compte doit être un entier positif."
+    },
+    "iban": {
+      "length": "L'IBAN doit contenir exactement 27 caractères.",
+      "required": "L'IBAN est requis."
+    },
+    "currency": {
+      "length": "La devise doit contenir exactement 3 caractères."
+    },
+    "beneficiaryName": {
+      "required": "Nom du bénéficiaire est requis."
+    },
+    "country": {
+      "required": "Pays est requis."
+    },
+    "address": {
+      "fieldsRequired": "Si vous fournissez une adresse, tous les champs (rue, ville, code postal) sont obligatoires."
+    },
+    "advisorId": {
+      "required": "Le conseiller est requis."
+    },
+    "amount": {
+      "number": "Le montant doit être un nombre.",
+      "positive": "Le montant doit être positif."
+    },
+    "purpose": {
+      "required": "Le motif est requis (min 3 caractères)."
+    },
+    "durationMonths": {
+      "invalid": "Durée invalide."
+    },
+    "interestRate": {
+      "min": "Le taux d'intérêt doit être au moins 0.",
+      "max": "Le taux d'intérêt ne peut pas dépasser 100."
+    },
+    "maxDepositAmount": {
+      "positive": "Le montant maximal du dépôt doit être positif.",
+      "max": "Le montant maximal du dépôt ne peut pas dépasser 10 000 000."
+    }
+    ,
+    "transfer": {
+      "iban": {
+        "minLength": "L'IBAN doit contenir au moins 15 caractères.",
+        "maxLength": "L'IBAN ne doit pas dépasser 34 caractères."
+      },
+      "fromIban": {
+        "invalid": "L'IBAN source est invalide."
+      },
+      "toIban": {
+        "invalid": "L'IBAN destinataire est invalide."
+      },
+      "amount": {
+        "positive": "Le montant doit être positif.",
+        "minimum": "Le montant minimum est 0,01 €."
+      },
+      "sameAccount": "Les IBAN source et destinataire doivent être différents."
     }
   }
 }

@@ -52,7 +52,6 @@ export default function RegisterPage() {
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 flex items-center overflow-hidden">
-      {/* décor doux */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-blue-100 blur-3xl opacity-70" />
         <div className="absolute left-[-10rem] bottom-[-4rem] h-80 w-80 rounded-full bg-indigo-100 blur-3xl opacity-60" />
@@ -62,7 +61,6 @@ export default function RegisterPage() {
       <div className="w-full max-w-6xl mx-auto px-4 py-12 md:py-16 relative">
         <div className="grid md:grid-cols-2 gap-8 items-center">
 
-          {/* Bloc Hero */}
           <div className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 text-white rounded-3xl shadow-2xl border border-blue-800/40 p-8 space-y-6 min-h-[560px] flex flex-col">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 border border-white/20 text-xs uppercase tracking-wide">
               <Sparkles className="h-4 w-4" />
@@ -109,7 +107,6 @@ export default function RegisterPage() {
             </div>
           </div>
 
-          {/* Formulaire */}
           <div className="bg-white rounded-3xl shadow-2xl border border-slate-100 p-8 sm:p-10 min-h-[560px] flex flex-col justify-center">
             <div className="mb-6 space-y-2">
               <h2 className="text-2xl font-bold text-slate-900 text-center">

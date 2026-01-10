@@ -3,10 +3,11 @@
 import { useState } from "react";
 import { ArrowRight, Clock } from "lucide-react";
 import { useTransferBetweenAccounts } from "@/hooks/useTransferBetweenAccounts";
-import { useTranslations, useLocale, useFormatter } from "next-intl";
+import { useTranslations, useFormatter } from "next-intl";
 import { AccountModel } from "@/lib/validation/bankAccount/accountSchema";
 import { BankTransaction } from "@/types/bankTransaction";
 import { quickTransfer } from "@/lib/api/account";
+import { getErrorMessage } from "@/lib/utils/error";
 
 interface QuickTransferCardProps {
     transactions: BankTransaction[];
@@ -18,7 +19,7 @@ export default function QuickTransferCard({ transactions, accounts, onTransferSu
     const t = useTranslations("components.bankAccount.quickTransfer");
     const format = useFormatter();
     const { transfer, loading } = useTransferBetweenAccounts();
-    const [selectedTransaction, setSelectedTransaction] = useState<BankTransaction | null>(null);
+        const [selectedTransaction, setSelectedTransaction] = useState<BankTransaction | null>(null);
     const [amount, setAmount] = useState<string>("");
     const [showConfirm, setShowConfirm] = useState(false);
 
@@ -50,7 +51,6 @@ export default function QuickTransferCard({ transactions, accounts, onTransferSu
             setAmount("");
             onTransferSuccess?.();
         } catch (error) {
-            console.error("Erreur lors du transfert:", error);
             alert(error instanceof Error ? error.message : t("error"));
         }
     };

@@ -99,7 +99,6 @@ export default function SavingsAccountsOverviewPage() {
 
     return (
         <div className="min-h-screen bg-white p-6 mx-auto space-y-6">
-            {/* Header */}
             <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 border border-green-100">
                 <div className="flex items-center gap-3 mb-2">
                     <div className="p-3 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl">

@@ -9,6 +9,7 @@ import { CreateNewsModel, createNewsSchema } from "@/lib/validation/news/createN
 import { useRouter } from "next/navigation";
 import { AlertCircle, X } from "lucide-react";
 import { useNewsMutation } from "@/hooks/useNews";
+import { getErrorMessage } from "@/lib/utils/error";
 import { useMediaMutations } from "@/hooks/useMedia";
 import { useContentMutations } from "@/hooks/useContent";
 import { FeedFormFields } from "./FeedFormFields";
@@ -212,10 +213,9 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
       router.push(`/${locale}/feed/${targetNewsId}`);
 
     } catch (error: any) {
-      console.error("Erreur:", error);
       setError("root.serverError", {
         type: "manual",
-        message: error.message || "Une erreur est survenue",
+        message: getErrorMessage(error, "Une erreur est survenue"),
       });
     } finally {
       setIsSubmitting(false);

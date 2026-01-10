@@ -33,13 +33,13 @@ function startServer(): void {
 
   if (!framework) {
     console.error('\n Aucun framework configuré!');
-    console.log('\n💡 Veuillez d\'abord configurer un framework:');
+    console.log('\n Veuillez d\'abord configurer un framework:');
     console.log('  • npm run switch:express');
     console.log('  • npm run switch:adonisjs\n');
     process.exit(1);
   }
 
-  console.log(`\n🚀 Démarrage du serveur avec ${framework.toUpperCase()}...\n`);
+  console.log(`\n Démarrage du serveur avec ${framework.toUpperCase()}...\n`);
 
   try {
     if (framework === 'express') {

@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { useTranslations } from 'next-intl';
+import { getErrorMessage } from "@/lib/utils/error";
+import { NotificationEnum } from "@/types/Notification";
+import { useNotification } from "@/hooks/useNotifications";
 
 interface OpenIPOModalProps {
   isOpen: boolean;
@@ -17,6 +20,8 @@ export function OpenIPOModal({isOpen,onClose,stockSymbol,stockName,totalShares,o
   const [sharesToMakeAvailable, setSharesToMakeAvailable] = useState(totalShares);
   const [ipoType, setIpoType] = useState<'INITIAL' | 'SECONDARY'>('INITIAL');
   const [isLoading, setIsLoading] = useState(false);
+  const { addNotification } = useNotification();
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,9 +41,9 @@ export function OpenIPOModal({isOpen,onClose,stockSymbol,stockName,totalShares,o
       await onConfirm(sharesToMakeAvailable, ipoType);
       alert(t('success', { symbol: stockSymbol }));
       onClose();
-    } catch (error: any) {
-      console.error("Error opening IPO:", error);
-      alert(` ${error.response?.data?.error || t('error')}`);
+    } catch (error) {
+        const message = getErrorMessage(error as Error, t('error'));
+        alert(message);
     } finally {
       setIsLoading(false);
     }

@@ -8,6 +8,8 @@ import { getSavingsAccount, updateSavingsAccountConfig } from "@/lib/api/savings
 import { Input } from "@/components/ui/Input";
 import { Percent, DollarSign, Check, X, Settings, ToggleLeft, ToggleRight } from "lucide-react";
 import { useTranslations, useFormatter } from "next-intl";
+import { getErrorMessage } from "@/lib/utils/error";
+import { SavingsAccount } from "@/types/savingsAccount";
 
 interface ManageSavingsAccountFormProps {
     accountNumber: number;
@@ -22,7 +24,7 @@ export function ManageSavingsAccountForm({ accountNumber, onSuccess, onCancel }:
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
-    const [currentData, setCurrentData] = useState<any>(null);
+    const [currentData, setCurrentData] = useState<SavingsAccount | null>(null);
 
     const {
         register,
@@ -49,7 +51,8 @@ export function ManageSavingsAccountForm({ accountNumber, onSuccess, onCancel }:
                 setValue("maxDepositAmount", data.maxDepositAmount);
                 setValue("isActive", data.isActive);
             } catch (err) {
-                setError(t("errorTitle"));
+                const message = getErrorMessage(err as Error, t("errorTitle"));
+                setError(message);
             } finally {
                 setLoading(false);
             }
@@ -71,8 +74,9 @@ export function ManageSavingsAccountForm({ accountNumber, onSuccess, onCancel }:
                 setSuccess(false);
                 onSuccess?.();
             }, 2000);
-        } catch (err: any) {
-            setError(err.response?.data?.error || t("errorTitle"));
+        } catch (err) {
+            const message = getErrorMessage(err as Error, t("errorTitle"));
+            setError(message);
         } finally {
             setIsSubmitting(false);
         }

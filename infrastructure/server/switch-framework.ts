@@ -172,7 +172,7 @@ function displayInfo(framework: string): void {
   console.log(`  • npm run dev   → Démarrer le serveur en mode développement`);
   console.log(`  • npm run build → Compiler le projet`);
   console.log(`  • npm start     → Démarrer le serveur en production`);
-  console.log(`\n💡 Pour basculer vers l'autre framework:`);
+  console.log(`\n  Pour basculer vers l'autre framework:`);
   console.log(`  npm run switch:${framework === 'express' ? 'adonisjs' : 'express'}`);
   console.log(`  ou: tsx switch-framework.ts ${framework === 'express' ? 'adonisjs' : 'express'}`);
   console.log(`${'='.repeat(60)}\n`);
@@ -195,13 +195,11 @@ function switchFramework(targetFramework: string): void {
 
   console.log(`\n🔄 Basculement vers ${FRAMEWORKS[targetFramework].name}...`);
 
-  // Vérifier que le répertoire du framework existe
   if (!fs.existsSync(FRAMEWORKS[targetFramework].dir)) {
     console.error(` Le répertoire ${FRAMEWORKS[targetFramework].dir} n'existe pas.`);
     process.exit(1);
   }
 
-  // Mettre à jour la configuration
   createSymlinks(targetFramework);
   updatePackageJsonScripts(targetFramework);
   installDependencies(targetFramework);
@@ -217,18 +215,18 @@ function main(): void {
   if (args.length === 0) {
     const current = getCurrentFramework();
 
-    console.log('\n📋 Usage: tsx switch-framework.ts <express|adonisjs>\n');
+    console.log('\n Usage: tsx switch-framework.ts <express|adonisjs>\n');
     console.log('Frameworks disponibles:');
     console.log('  • express   → Express.js + Socket.IO');
     console.log('  • adonisjs  → AdonisJS 6 + Lucid ORM\n');
 
     if (current) {
-      console.log(`Framework actuel: ${FRAMEWORKS[current].name} ✅\n`);
+      console.log(`Framework actuel: ${FRAMEWORKS[current].name} \n`);
     } else {
       console.log('Aucun framework configuré.\n');
     }
 
-    console.log('💡 Raccourcis NPM:');
+    console.log(' Raccourcis NPM:');
     console.log('  • npm run switch:express');
     console.log('  • npm run switch:adonisjs\n');
 

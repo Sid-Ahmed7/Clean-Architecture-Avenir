@@ -1,12 +1,13 @@
-import { ClientProfileModalProps } from "@/types/loan";
+import { LoanRepaymentSchedule, LoanRequest, ClientDetails } from "@/types/loan";
 
-export function ClientProfileModal({
-  clientId,
-  details,
-  history,
-  repayments,
-  onClose,
-}: ClientProfileModalProps) {
+interface ClientProfileModalProps  {
+  clientId: string;
+  details: ClientDetails;
+  history: LoanRequest[];
+  repayments: LoanRepaymentSchedule[];
+  onClose: () => void;
+};
+export function ClientProfileModal({clientId,details,history,repayments,onClose,}: ClientProfileModalProps) {
   const getRepayment = (loanId: string) => repayments.find((r) => r.loanRequestId === loanId);
 
   return (
@@ -37,7 +38,7 @@ export function ClientProfileModal({
           <div className="p-4 rounded-xl border border-gray-100 bg-gray-50">
             <p className="text-xs uppercase text-gray-500 mb-2">Comptes</p>
             <div className="space-y-2">
-              {(details.accounts ?? []).map((acc: any) => (
+              {(details.accounts ?? []).map((acc) => (
                 <div
                   key={acc.accountNumber}
                   className="flex items-center justify-between rounded-lg border border-gray-200 px-3 py-2 bg-white"

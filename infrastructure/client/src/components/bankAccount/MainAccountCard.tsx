@@ -11,10 +11,17 @@ import { getRib } from "@/lib/api/account";
 import { RibData } from "@/types/rib";
 import { RibDocument } from "@/components/rib/RibDocument";
 import { useTranslations, useFormatter, useLocale } from "next-intl";
+import { getErrorMessage } from "@/lib/utils/error";
 
+interface Html2Pdf {
+  (): Html2Pdf;
+  set: (options: object) => Html2Pdf;
+  from: (element: HTMLElement) => Html2Pdf;
+  save: () => Promise<void>;
+}
 declare global {
     interface Window {
-        html2pdf?: any;
+        html2pdf?: Html2Pdf;
     }
 }
 
@@ -94,11 +101,8 @@ export function MainAccountCard(props: MainAccountCardProps) {
                 })
                 .from(container)
                 .save();
-        } catch (err: any) {
-            const message =
-                err?.response?.data?.error ||
-                err?.message ||
-                t("errors.pdfGenerationFailed");
+        } catch (err) {
+            const message = getErrorMessage(err as Error, t("errors.pdfGenerationFailed"));
             setRibError(message);
         } finally {
             setRibLoading(false);

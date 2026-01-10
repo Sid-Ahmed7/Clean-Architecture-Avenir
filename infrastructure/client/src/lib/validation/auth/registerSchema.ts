@@ -9,8 +9,8 @@ export const registerSchema = (t: (key: string) => string) =>
         .max(50, { message: t("errors.firstName") }),
       lastName: z
         .string()
-        .min(1, "Last name is required")
-        .max(50, "Last name is too long"),
+        .min(1, { message: t('errors.lastName.required') })
+        .max(50, { message: t('errors.lastName.tooLong') }),
       email: z.string().email({ message: t("errors.email.required") }),
       password: z
         .string()
@@ -20,9 +20,9 @@ export const registerSchema = (t: (key: string) => string) =>
       confirmPassword: z
         .string()
         .min(8, { message: t("errors.password.minLength") }),
-      phoneNumber: z.string().min(1, "Phone number is required"),
-      dateOfBirth: z.string().min(1, "Date of birth is required"),
-      address: z.string().min(1, "Address is required"),
+      phoneNumber: z.string().min(1, { message: t('errors.phoneNumber.required') }),
+      dateOfBirth: z.string().min(1, { message: t('errors.dateOfBirth.required') }),
+      address: z.string().min(1, { message: t('errors.address.required') }),
     })
     .refine((data) => data.password === data.confirmPassword, {
       message: t("errors.confirmPassword.mismatch"),

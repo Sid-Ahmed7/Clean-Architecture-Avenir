@@ -2,7 +2,7 @@
 
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
-import { FileText, Briefcase, MessageCircle, ArrowRight } from "lucide-react";
+import { FileText, Briefcase, MessageCircle, Newspaper, ArrowRight } from "lucide-react";
 
 export default function AdvisorDashboard() {
     const t = useTranslations("advisor.dashboard");
@@ -22,6 +22,11 @@ export default function AdvisorDashboard() {
             bg: "bg-blue-100",
             icon: "text-blue-600",
             button: "bg-blue-600 hover:bg-blue-700"
+        },
+        orange: {
+            bg: "bg-orange-100",
+            icon: "text-orange-600",
+            button: "bg-orange-600 hover:bg-orange-700"
         }
     };
 
@@ -49,19 +54,33 @@ export default function AdvisorDashboard() {
             variant: "blue" as const,
             href: "/advisor/pending-conversations",
             buttonText: t("pendingConversations.button")
+        },
+        {
+            title: t("manageFeeds.title"),
+            description: t("manageFeeds.description"),
+            icon: Newspaper,
+            variant: "orange" as const,
+            href: "/feed/manage",
+            buttonText: t("manageFeeds.button")
+        },
+        {
+            title: t("createNews.title"),
+            description: t("createNews.description"),
+            icon: Newspaper,
+            variant: "orange" as const,
+            href: "/feed/create",
+            buttonText: t("createNews.button")
         }
     ];
 
     return (
         <div className="min-h-screen bg-gray-50 p-8">
             <div className="max-w-7xl mx-auto space-y-8">
-                {/* Header */}
                 <div className="flex flex-col gap-2">
                     <h1 className="text-3xl font-bold text-gray-900">{t("title")}</h1>
                     <div className="h-1 w-20 bg-blue-600 rounded-full"></div>
                 </div>
 
-                {/* Cards Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {cards.map((card, index) => {
                         const colors = colorVariants[card.variant];

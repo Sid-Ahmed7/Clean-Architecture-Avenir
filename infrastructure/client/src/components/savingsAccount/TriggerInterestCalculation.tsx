@@ -3,10 +3,21 @@
 import { useState } from "react";
 import { triggerInterestCalculation } from "@/lib/api/savingsAccount";
 import { Calculator, TrendingUp, Check, X, AlertCircle } from "lucide-react";
+import { getErrorMessage } from "@/lib/utils/error";
+
+type InterestCalculationResult = {
+  message: string;
+  results?: {
+    accountNumber: number;
+    interestCredited: number;
+    newBalance: number;
+    totalInterestEarned: number;
+  }[];
+};
 
 export function TriggerInterestCalculation() {
     const [isCalculating, setIsCalculating] = useState(false);
-    const [results, setResults] = useState<any>(null);
+    const [results, setResults] = useState<InterestCalculationResult | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     const handleCalculate = async () => {
@@ -17,8 +28,9 @@ export function TriggerInterestCalculation() {
 
             const data = await triggerInterestCalculation();
             setResults(data);
-        } catch (err: any) {
-            setError(err.response?.data?.error || "Erreur lors du calcul des intérêts");
+        } catch (err) {
+            const message = getErrorMessage(err as Error, "Erreur lors du calcul des intérêts");
+            setError(message);
         } finally {
             setIsCalculating(false);
         }
@@ -26,7 +38,6 @@ export function TriggerInterestCalculation() {
 
     return (
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-            {/* Header */}
             <div className="bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 p-6 text-white">
                 <div className="flex items-center gap-3">
                     <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl">
@@ -40,7 +51,6 @@ export function TriggerInterestCalculation() {
             </div>
 
             <div className="p-6 space-y-6">
-                {/* Info Box */}
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start gap-3">
                     <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
                     <div>
@@ -54,7 +64,6 @@ export function TriggerInterestCalculation() {
                     </div>
                 </div>
 
-                {/* Error Display */}
                 {error && (
                     <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
                         <X className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
@@ -65,7 +74,6 @@ export function TriggerInterestCalculation() {
                     </div>
                 )}
 
-                {/* Success Results */}
                 {results && (
                     <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                         <div className="flex items-center gap-2 mb-3">
@@ -81,7 +89,7 @@ export function TriggerInterestCalculation() {
                                     {results.results.length} compte(s) traité(s) :
                                 </p>
                                 <div className="space-y-2 max-h-64 overflow-y-auto">
-                                    {results.results.map((result: any, index: number) => (
+                                    {results.results.map((result, index: number) => (
                                         <div
                                             key={index}
                                             className="bg-white rounded-lg p-3 border border-green-200"
@@ -112,14 +120,13 @@ export function TriggerInterestCalculation() {
                                     ))}
                                 </div>
 
-                                {/* Summary */}
                                 <div className="bg-green-100 rounded-lg p-3 mt-3">
                                     <div className="flex items-center justify-between">
                                         <span className="text-sm font-semibold text-green-900">
                                             Total des intérêts crédités
                                         </span>
                                         <span className="text-lg font-bold text-green-700">
-                                            +{results.results.reduce((sum: number, r: any) => sum + r.interestCredited, 0).toLocaleString('fr-FR', { minimumFractionDigits: 2 })} €
+                                            +{results.results.reduce((sum: number, r) => sum + r.interestCredited, 0).toLocaleString('fr-FR', { minimumFractionDigits: 2 })} €
                                         </span>
                                     </div>
                                 </div>
@@ -132,7 +139,6 @@ export function TriggerInterestCalculation() {
                     </div>
                 )}
 
-                {/* Calculate Button */}
                 <button
                     onClick={handleCalculate}
                     disabled={isCalculating}
@@ -154,11 +160,9 @@ export function TriggerInterestCalculation() {
                     )}
                 </button>
 
-                {/* Warning */}
                 <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
                     <p className="text-xs text-amber-800">
-                        <strong>⚠️ Attention :</strong> Cette action modifie les soldes des comptes en ajoutant les intérêts calculés.
-                        Utilisez cette fonction avec précaution.
+                        <strong>Attention :</strong> Cette action modifie les soldes des comptes en ajoutant les intérêts calculés.
                     </p>
                 </div>
             </div>

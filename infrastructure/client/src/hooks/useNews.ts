@@ -19,7 +19,7 @@ export const useNewsInfinite =(filters: NewsFilters = {}, limit: number = 10) =>
         const fetchedAllNews = await newsApi.getAllNews({ ...filters, page: pageParam, limit });
         const parsed = z.array(newsSchema(t)).safeParse(fetchedAllNews);
         if(!parsed.success) {
-          return { data: [], nextPage: undefined, error: "Erreur de validation des news"}
+          return { data: [], nextPage: undefined, error: t('generalErrors.news.validation')}
         }
         return {
           data: parsed.data,
@@ -30,7 +30,7 @@ export const useNewsInfinite =(filters: NewsFilters = {}, limit: number = 10) =>
           return {
             data: [],
             nextPage: undefined,
-            error: err.response?.data?.error || err.message || "Erreur inconnue"
+            error: err.response?.data?.error || err.message || t('generalErrors.news.unknown')
           };
       }
     },
@@ -101,7 +101,7 @@ export const useNewsMutation = () => {
       } catch (err: any) {
         return {
           data: null,
-          error: err.response?.data?.error || err.message || "Erreur lors de la création"
+          error: err.response?.data?.error || err.message || t('generalErrors.news.create')
         };
       }
     },

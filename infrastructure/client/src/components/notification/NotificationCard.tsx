@@ -2,6 +2,7 @@
 
 import { NotificationModel } from "@/lib/validation/notification/notificationSchema";
 import { notificationStyles } from "./notificationsStyles";
+import { formatDate } from "@/lib/utils/formatDate";
 import Button from "../ui/Button";
 import { X } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -38,7 +39,7 @@ export const NotificationCard =({notification, onMarkRead, onDelete} : Notificat
                     <p className="text-xs font-medium text-gray-600 mb-1">{t("from")}: {notification.senderName}</p>
                 )}
                 <p className={`text-sm ${notification.readStatus === "UNREAD" ? "font-semibold" : "font-normal"} text-gray-700`}>{notification.message}</p>
-                <p className="text-sm text-gray-500">{notification.createdAt}</p>
+                <p className="text-sm text-gray-500">{formatDate(notification.createdAt)}</p>
             </div>
             <Button variant="danger" onClick={handleDelete}>
                 <X className="w-4 h-4"></X>

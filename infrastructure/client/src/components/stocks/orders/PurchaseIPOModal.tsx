@@ -4,6 +4,7 @@ import { purchaseIPOShares } from "@/lib/api/ipo";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from 'next-intl';
+import { getErrorMessage } from "@/lib/utils/error";
 
 interface PurchaseIPOModalProps {
   isOpen: boolean;
@@ -29,9 +30,7 @@ export function PurchaseIPOModal({isOpen,onClose,stockSymbol,stockName,ipoPrice,
     e.preventDefault();
 
     if (quantity > availableShares) {
-      alert(
-        t('errorMaxShares', { available: availableShares })
-      );
+      alert(t('errorMaxShares', { available: availableShares }));
       return;
     }
 
@@ -42,15 +41,15 @@ export function PurchaseIPOModal({isOpen,onClose,stockSymbol,stockName,ipoPrice,
         quantity,
       });
 
-      alert(`${result.message}`);
+      alert(result.message);
 
       queryClient.invalidateQueries({ queryKey: ["stocks"] });
       queryClient.invalidateQueries({ queryKey: ["positions"] });
 
       onClose();
-    } catch (error: any) {
-      console.error("Error purchasing IPO shares:", error);
-      alert(` ${error.message || t('error')}`);
+    } catch (error) {
+      const message = getErrorMessage(error as Error, t('error'));
+      alert(message);
     } finally {
       setIsLoading(false);
     }

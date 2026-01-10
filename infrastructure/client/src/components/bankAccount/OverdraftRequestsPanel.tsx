@@ -5,6 +5,7 @@ import { useOverdraftRequests } from "@/hooks/useOverdraftRequests";
 import { useRespondOverdraftRequest } from "@/hooks/useRespondOverdraftRequest";
 import { getOverdraftRequestDetails } from "@/lib/api/account";
 import { useTranslations, useFormatter } from "next-intl";
+import { getErrorMessage } from "@/lib/utils/error";
 
 export function OverdraftRequestsPanel() {
     const t = useTranslations("components.bankAccount.overdraftRequests");
@@ -38,7 +39,7 @@ export function OverdraftRequestsPanel() {
                 setModalData(res.data);
             })
             .catch((err) => {
-                const message = err?.response?.data?.error ?? "Failed to load client profile";
+                const message = getErrorMessage(err as Error, "Failed to load client profile");
                 setDetailsError(message);
             })
             .finally(() => setDetailsLoading(false));

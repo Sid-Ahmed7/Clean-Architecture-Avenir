@@ -10,7 +10,6 @@ export class ResendEmailService implements EmailService {
 
   async sendEmail(options: SendEmailOptions): Promise<void> {
     const textHtml = `<p>${options.text?.replace(/\n/g, "<br>")}</p>`;
-    console.log("Role vaut", options.role);
 
     await this.resend.emails.send({
       from: "Banque Avenir <" + process.env.EMAIL_FROM + ">",
@@ -18,8 +17,6 @@ export class ResendEmailService implements EmailService {
       subject: options.subject,
       html: textHtml,
     });
-    console.log("Contenu du mail :", options.text);
 
-    console.log(`Email envoyé à ${options.to}`);
   }
 }

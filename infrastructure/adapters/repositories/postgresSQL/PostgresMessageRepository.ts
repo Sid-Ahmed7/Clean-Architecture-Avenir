@@ -43,20 +43,16 @@ export class PostgresMessageRepository implements MessageRepositoryInterface {
     }
 
     async findByConversationId(conversationId: string): Promise<MessageEntity[] | ConversationNotFoundError> {
-        console.log(' [PostgresMessageRepository] Finding messages for conversation:', conversationId);
         const result = await pgPool.query<PostgresMessageRow>(
             'SELECT * FROM messages WHERE conversation_id = $1 ORDER BY sent_at ASC',
             [conversationId]
         );
-        console.log(' [PostgresMessageRepository] Query result rows:', result.rows.length);
         if (result.rows.length === 0) {
-            console.log(' [PostgresMessageRepository] No messages found for conversation (returning empty array)');
             return []; 
         }
         const entities = result.rows
             .map(row => this.mapRowToEntity(row))
             .filter((entity): entity is MessageEntity => !(entity instanceof Error));
-        console.log(' [PostgresMessageRepository] Returning', entities.length, 'messages');
         return entities;
     }
 

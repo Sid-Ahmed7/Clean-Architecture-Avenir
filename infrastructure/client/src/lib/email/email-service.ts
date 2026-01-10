@@ -1,10 +1,13 @@
+
 import { ContactEmailData, EmailResponse } from "@/types/email";
 import { resend, EMAIL_CONFIG } from "./resend";
 import { generateContactEmailHTML } from "./templates/contact-email";
+import { getTranslations } from "next-intl/server";
 
 export class EmailService {
 
   static async sendContactEmail(data: ContactEmailData): Promise<EmailResponse> {
+    const t = await getTranslations("generalErrors.emailErrors");
     try {
       const html = generateContactEmailHTML(data);
 
@@ -17,10 +20,10 @@ export class EmailService {
       });
 
       if (error) {
-        console.error("Erreur Resend:", error);
+        console.error(t("resend"), error);
         return {
           success: false,
-          error: error.message || "Erreur lors de l'envoi de l'email",
+          error: error.message || t("send"),
         };
       }
 
@@ -29,10 +32,10 @@ export class EmailService {
         id: emailData?.id,
       };
     } catch (error) {
-      console.error("Erreur inattendue lors de l'envoi:", error);
+      console.error(t("unexpected"), error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Erreur inconnue",
+        error: error instanceof Error ? error.message : t("unknown"),
       };
     }
   }

@@ -96,7 +96,7 @@ async function switchRepository(type: RepositoryType): Promise<void> {
 }
 
 function showStatus(): void {
-  console.log('\n📊 Type de repository actuel:\n');
+  console.log('\n Type de repository actuel:\n');
 
   const serverEnvContent = readEnvFile(SERVER_ENV_FILE_PATH);
   const serverType = getCurrentRepositoryType(serverEnvContent);

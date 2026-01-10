@@ -8,7 +8,7 @@ import {
   getClientLoanHistory,
   getClientRepaymentsFor,
 } from "@/lib/api/loan";
-import { LoanDecision, LoanRepaymentSchedule, LoanRequest } from "@/types/loan";
+import { LoanDecision, LoanRepaymentSchedule, LoanRequest, ClientDetails } from "@/types/loan";
 import AdvisorLoanRequestCard from "@/components/loan/AdvisorLoanRequestCard";
 import ClientProfileModal from "@/components/loan/ClientProfileModal";
 import { useTranslations } from "next-intl";
@@ -19,9 +19,9 @@ export function AdvisorLoanRequestsPageContent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState<string | null>(null);
-  const [clientDetails, setClientDetails] = useState<Record<string, any>>({});
-  const [clientHistories, setClientHistories] = useState<Record<string, any[]>>({});
-  const [clientRepayments, setClientRepayments] = useState<Record<string, any[]>>({});
+  const [clientDetails, setClientDetails] = useState<Record<string, ClientDetails>>({});
+  const [clientHistories, setClientHistories] = useState<Record<string, LoanRequest[]>>({});
+  const [clientRepayments, setClientRepayments] = useState<Record<string, LoanRepaymentSchedule[]>>({});
   const [profileClientId, setProfileClientId] = useState<string | null>(null);
 
   useEffect(() => {

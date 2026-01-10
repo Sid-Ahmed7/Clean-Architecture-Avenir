@@ -56,7 +56,6 @@ export class EmailTemplateService implements EmailComposerService {
       locale: validLocale
     };
 
-    console.log("Email à envoyer :", JSON.stringify(options, null, 2));
 
     await this.emailService.sendEmail(options);
   }
@@ -71,7 +70,6 @@ export class EmailTemplateService implements EmailComposerService {
       text,
       locale: validLocale
     };
-    console.log("Email à envoyer :", JSON.stringify(options, null, 2));
     await this.emailService.sendEmail(options);
   }
 }

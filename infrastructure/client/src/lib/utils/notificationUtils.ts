@@ -1,16 +1,19 @@
+
 import { NotificationEnum } from "@/types/Notification";
 import { sendNotificationToClient } from "../api/notification";
+import { getTranslations } from 'next-intl/server';
 
-export const notifyClientAssigned = async (clientId: string, advisorName?: string, senderId?: string) => {
-    
+
+export const notifyClientAssigned = async (clientId: string, advisorName?: string, senderId?: string, locale: string = 'fr') => {
+    const t = await getTranslations({ locale });
     try {
         await sendNotificationToClient(
-            clientId, 
-            `Votre conversation a été prise en charge par le conseiller ${advisorName}.`,
-            NotificationEnum.ACTION, 
+            clientId,
+            t('notifications.clientAssigned', { advisorName }),
+            NotificationEnum.ACTION,
             senderId
         );
     } catch (err) {
-        console.error("Erreur lors de l'envoi de la notification au client :", err);
+        console.error(t('generalErrors.notificationService.send'), err);
     }
 }

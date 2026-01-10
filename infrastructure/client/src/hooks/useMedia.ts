@@ -21,7 +21,7 @@ export const useMediaByNewsId = (newsId: string) => {
         }
         return parsed.data;        
       } catch (err: any) {
-        console.error("Erreur lors du chargement des médias:", err);
+        console.error(t('generalErrors.media.load'), err);
         return [];
       }
     },
@@ -51,7 +51,7 @@ export const useMediaMutations = () => {
       } catch (err: any) {
         return {
           data: null,
-          error: err.response?.data?.error || err.message || "Erreur lors de l'upload"
+          error: err.response?.data?.error || err.message || t('generalErrors.media.upload')
         };
       }
     },

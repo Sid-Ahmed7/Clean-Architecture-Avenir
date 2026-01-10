@@ -121,7 +121,6 @@ export default function AccountsOverviewPage() {
 
     return (
         <div className="min-h-screen bg-white p-6 mx-auto space-y-6">
-            {/* Header */}
             <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-100">
                 <div className="flex items-center gap-3 mb-2">
                     <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl">

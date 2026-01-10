@@ -54,7 +54,7 @@ export const socketSetup = (server: Server) => {
     });
   };
 
-  // ---------------- CLIENT NAMESPACE ----------------
+  // ---------------- CLIENT ----------------
   clientIo.on("connection", (socket) => {
     const user = socket.data.user;
     if (!user?.userId) {
@@ -147,7 +147,7 @@ export const socketSetup = (server: Server) => {
     });
   });
 
-  // ---------------- ADVISOR NAMESPACE ----------------
+  // ---------------- ADVISOR ----------------
   advisorIo.on("connection", (socket) => {
     const user = socket.data.user;
     if (!user?.userId) return socket.disconnect();
@@ -253,7 +253,7 @@ export const socketSetup = (server: Server) => {
     });
   });
 
-  // ---------------- SYSTEM NAMESPACE ----------------
+  // ---------------- SYSTEM ----------------
   systemIo.on("connection", (socket) => {
     const user = socket.data.user;
     if (!user?.userId){

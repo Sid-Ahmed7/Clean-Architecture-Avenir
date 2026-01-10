@@ -1,4 +1,5 @@
 {
+
   "metadata": {
     "title": "BankAvenir - Your online bank",
     "titleTemplate": "%s | BankAvenir",
@@ -44,7 +45,8 @@
   },
   "components": {
     "notification": {
-      "noNotifications": "No notifications"
+      "noNotifications": "No notifications",
+      "from": "From"
     },
     "stocks": {
       "structure": {
@@ -185,7 +187,48 @@
         "noAdvisors": "No advisors found",
         "tryOtherCriteria": "Try with different criteria",
         "cancel": "Cancel",
-        "confirm": "Confirm transfer"
+        "confirm": "Confirm transfer",
+        "transferSuccess": "Conversation transferred!",
+        "transferError": "Transfer error."
+      },
+      "page": {
+      "verifyingAuth": "Verifying authentication...",
+      "loadingUser": "Loading user..."
+    },
+    "limitProgressBar": {
+      "nearLimit": "Critical",
+      "attention": "Warning",
+      "available": "Available",
+      "remaining": "remaining"
+    }
+
+    },
+    "enums": {
+      "accountStatus": {
+        "ACTIVE": "Active",
+        "CLOSED": "Closed",
+        "SUSPENDED": "Suspended",
+        "PENDING": "Pending",
+        "FROZEN": "Frozen",
+        "BANNED": "Banned"
+      },
+      "transactionType": {
+        "PAYMENT": "Payment",
+        "WITHDRAWAL": "Withdrawal",
+        "TRANSFER": "Transfer",
+        "FEE": "Fee",
+        "DEPOSIT": "Deposit"
+      },
+      "overdraftStatus": {
+        "PENDING": "Pending",
+        "APPROVED": "Approved",
+        "REJECTED": "Rejected"
+      },
+      "clientStatus": {
+        "ACTIVE": "Active",
+        "INACTIVE": "Inactive",
+        "PENDING": "Pending",
+        "SUSPENDED": "Suspended"
       }
     },
     "sidebar": {
@@ -365,10 +408,17 @@
         "tagsLabel": "Tags",
         "tagsPlaceholder": "Ex: economy, tech..."
       },
+      "manageList": {
+        "noArticles": "No articles to display.",
+        "category": "Category",
+        "priority": "Priority",
+        "edit": "Edit",
+        "delete": "Delete"
+      },
       "card": {
         "media": "media",
-        "moreMedia": "+ {count} more"
-      },
+        "moreMedia": "+{count} more"
+            },
       "loadMore": {
         "loading": "Loading...",
         "loadMore": "Load More"
@@ -379,6 +429,12 @@
       "form": {
         "title": "Create a new article",
         "subtitle": "Compose your article with the block editor",
+        "newTitle": "New post",
+        "newSubtitle": "Create a new post to inform your clients.",
+        "highlight": "Highlight",
+        "highlightValue": "Landing-like",
+        "writing": "Writing",
+        "writingValue": "Guided & clear",
         "generalInfo": "General information",
         "content": "Article content",
         "fields": {
@@ -1349,7 +1405,21 @@
     },
     "list": {
       "loading": "Loading...",
-      "error": "Error: {message}"
+      "error": "Error: {message}",
+      "manageTitle": "Manage News",
+      "manageSubtitle": "Manage your posts and view statistics",
+      "filters": "Filters",
+      "manageLoading": "Loading...",
+      "manageError": "Error:",
+      "manageSectionTitle": "Manage posts",
+      "notFound": "Post not found",
+      "title": "Edit post",
+      "subtitle": "Edit the information and content of your post",
+        "media": {
+          "fileGrid": {
+            "clearAll": "Clear all"
+          }
+        }
     },
     "manageList": {
       "noArticles": "No articles to display.",
@@ -1363,7 +1433,10 @@
     },
     "blocks": {
       "content": {
-        "deleteBlock": "Delete this block"
+        "deleteBlock": "Delete this block",
+        "editBlock": "Edit block",
+        "addMedia": "Add media",
+        "addText": "Add text"
       },
       "toolbar": {
         "addBlock": "Add a block:",
@@ -1466,6 +1539,18 @@
         "isActionAvailable": "Stock available for purchase"
       },
       "validation": {
+            "iban": {
+              "required": "IBAN is required."
+            },
+            "beneficiaryName": {
+              "required": "Beneficiary name is required."
+            },
+            "country": {
+              "required": "Country is required."
+            },
+            "address": {
+              "fieldsRequired": "If you provide an address, all fields (street, city, postal code) are required."
+            },
         "companyNameRequired": "Company name is required",
         "symbolRequired": "Symbol is required",
         "symbolPattern": "Symbol must contain 1-5 uppercase letters",
@@ -1621,22 +1706,6 @@
         "cancel": "Cancel",
         "purchasing": "Purchasing...",
         "buyShares": "Buy {count} IPO share(s)"
-      },
-      "purchaseIPO": {
-        "title": "Purchase IPO",
-        "ipoTitle": "Initial Public Offering",
-        "ipoDescription": "Direct purchase at initial offering price",
-        "sharesRemaining": "shares remaining",
-        "quantity": "Quantity",
-        "maxAvailable": "Maximum: {max} shares available",
-        "fixedPrice": "Fixed IPO Price (€)",
-        "fixedPriceDescription": "Fixed price of",
-        "totalAmount": "Total amount",
-        "transactionFee": "Transaction fee",
-        "totalToPay": "Total to pay",
-        "instantExecutionInfo": "Your purchase will be executed instantly at the IPO price. Shares will be added directly to your portfolio.",
-        "cancel": "Cancel",
-        "buyShares": "Buy {count} IPO share(s)"
       }
     },
     "positions": {
@@ -1743,57 +1812,6 @@
       "edit": "Edit",
       "delete": "Delete",
       "confirmDelete": "Are you sure you want to delete {symbol}?"
-    }
-  },
-  "chat": {
-    "title": "Chat",
-    "connected": "Connected",
-    "disconnected": "Disconnected",
-    "noMessages": "No messages yet",
-    "typing": "Typing...",
-    "inputPlaceholder": "Write your message...",
-    "inputDisabled": "Connecting...",
-    "sendButton": "Send",
-    "clientConversations": {
-      "title": "My conversations",
-      "newConversation": "New conversation",
-      "creating": "Creating...",
-      "errorFetch": "Unable to fetch your conversations",
-      "errorCreate": "Error creating conversation",
-      "empty": "You don't have any conversations yet.",
-      "notAssigned": "Not assigned"
-    },
-    "advisorConversations": {
-      "loading": "Loading…",
-      "errorTitle": "Error",
-      "reloadPage": "Reload page",
-      "stats": {
-        "pending": "Pending",
-        "assigned": "My conversations"
-      },
-      "searchPlaceholder": "Search by client name...",
-      "pendingTitle": "Pending requests",
-      "pendingEmpty": "No pending requests",
-      "searchEmpty": "No results for this search",
-      "takeOver": "Take over",
-      "continue": "Continue",
-      "transfer": "Transfer",
-      "assignedTitle": "Your conversations",
-      "assignedEmpty": "No assigned conversations"
-    },
-    "selectAdvisorsModal": {
-      "title": "Client File Transfer",
-      "subtitle": "Select a new advisor",
-      "searchPlaceholder": "Search by name or identifier...",
-      "loading": "Loading advisors...",
-      "errorFetch": "Unable to fetch advisors",
-      "retry": "Retry",
-      "noAdvisors": "No advisors found",
-      "noAdvisorsHint": "Try with different criteria",
-      "cancel": "Cancel",
-      "confirm": "Confirm transfer",
-      "transferSuccess": "Conversation transferred!",
-      "transferError": "Transfer error."
     }
   },
   "bankAccount": {
@@ -2292,49 +2310,20 @@
         "title": "Pending Conversations",
         "description": "Reply to your clients' messages.",
         "button": "View messages"
-      }
+        },
+        "manageFeeds": {
+          "title": "Manage Feeds",
+          "description": "Publish, edit, or delete news visible to clients.",
+          "button": "Manage feeds"
+        },
+        "createNews": {
+          "title": "Create News",
+          "description": "Publish a new news article for your clients.",
+          "button": "Create news"
+        }
     }
   },
-  "chat": {
-    "page": {
-      "verifyingAuth": "Verifying authentication...",
-      "loadingUser": "Loading user..."
-    },
-    "limitProgressBar": {
-      "nearLimit": "Critical",
-      "attention": "Warning",
-      "available": "Available",
-      "remaining": "remaining"
-    },
-    "enums": {
-      "accountStatus": {
-        "ACTIVE": "Active",
-        "CLOSED": "Closed",
-        "SUSPENDED": "Suspended",
-        "PENDING": "Pending",
-        "FROZEN": "Frozen",
-        "BANNED": "Banned"
-      },
-      "transactionType": {
-        "PAYMENT": "Payment",
-        "WITHDRAWAL": "Withdrawal",
-        "TRANSFER": "Transfer",
-        "FEE": "Fee",
-        "DEPOSIT": "Deposit"
-      },
-      "overdraftStatus": {
-        "PENDING": "Pending",
-        "APPROVED": "Approved",
-        "REJECTED": "Rejected"
-      },
-      "clientStatus": {
-        "ACTIVE": "Active",
-        "INACTIVE": "Inactive",
-        "PENDING": "Pending",
-        "SUSPENDED": "Suspended"
-      }
-    }
-  },
+ 
   "pages": {
     "stock": {
       "title": "Stock Market & Trading",
@@ -2380,5 +2369,122 @@
     "feed": {
       "title": "News Feed"
     }
+  },
+  "generalErrors": {
+    "emailErrors": {
+      "resend": "Resend error",
+      "send": "Error while sending email",
+      "unexpected": "Unexpected error while sending",
+      "unknown": "Unknown error"
+    },
+    "userAccounts": {
+      "account": "Account error"
+    },
+    "notificationSSE": {
+      "receive": "Error receiving notification",
+      "connect": "SSE connection error"
+    },
+    "notifications": {
+      "validation": "Error validating received data",
+      "unknown": "An unknown error occurred"
+    },
+    "news": {
+      "validation": "Error validating news",
+      "unknown": "Unknown error",
+      "create": "Error while creating"
+    },
+    "media": {
+      "load": "Error loading media",
+      "upload": "Error during upload"
+    },
+    "lastTransactions": {
+      "fetch": "Error fetching transactions"
+    },
+    "beneficiaryGroups": {
+      "notFound": "Beneficiary group not found",
+      "create": "Error creating group",
+      "update": "Error updating group",
+      "delete": "Error deleting group"
+    },
+    "content": {
+      "notFound": "Content not found",
+      "create": "Error creating content",
+      "update": "Error updating content",
+      "delete": "Error deleting content"
+    },
+    "notificationService": {
+      "send": "Error sending notification to client"
+    }
+  },
+  "notifications": {
+    "clientAssigned": "Your conversation has been assigned to advisor {advisorName}."
+  },
+    "validation": {
+    "accountNumber": {
+      "length": "Account number must be exactly 11 digits.",
+      "positive": "Account number must be a positive integer."
+    },
+    "iban": {
+      "length": "IBAN must be exactly 27 characters.",
+      "required": "IBAN is required."
+    },
+    "currency": {
+      "length": "Currency must be exactly 3 characters."
+    },
+    "beneficiaryName": {
+      "required": "Beneficiary name is required."
+    },
+    "country": {
+      "required": "Country is required."
+    },
+    "address": {
+      "fieldsRequired": "If you provide an address, all fields (street, city, postal code) are required."
+    },
+    "advisorId": {
+      "required": "Advisor is required."
+    },
+    "amount": {
+      "number": "Amount must be a number.",
+      "positive": "Amount must be positive."
+    },
+    "purpose": {
+      "required": "Purpose is required (min 3 characters)."
+    },
+    "durationMonths": {
+      "invalid": "Invalid duration."
+    },
+    "interestRate": {
+      "min": "Interest rate must be at least 0.",
+      "max": "Interest rate cannot exceed 100."
+    },
+    "maxDepositAmount": {
+      "positive": "Maximum deposit amount must be positive.",
+      "max": "Maximum deposit amount cannot exceed 10,000,000."
+    },
+    "transfer": {
+      "iban": {
+        "minLength": "IBAN must be at least 15 characters.",
+        "maxLength": "IBAN must not exceed 34 characters."
+      },
+      "fromIban": {
+        "invalid": "Source IBAN is invalid."
+      },
+      "toIban": {
+        "invalid": "Destination IBAN is invalid."
+      },
+      "amount": {
+        "positive": "Amount must be positive.",
+        "minimum": "Minimum amount is €0.01."
+      },
+      "sameAccount": "Source and destination IBANs must be different.",
+      "fromAccountRequired": "Source account is required",
+      "toAccountRequired": "Destination account is required",
+      "differentAccounts": "Source and destination accounts must be different",
+      "amountRequired": "Amount is required",
+      "amountPositive": "Amount must be greater than 0",
+      "amountMax": "Amount exceeds available balance",
+      "descriptionMax": "Description must be at most 100 characters"
+    }
   }
+  
 }

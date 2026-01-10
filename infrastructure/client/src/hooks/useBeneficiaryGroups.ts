@@ -17,7 +17,7 @@ export const useBeneficiaryGroups = () => {
         const fetchGroups = await beneficiaryGroupApi.getBeneficiaryGroups();
         return Array.isArray(fetchGroups) ? fetchGroups : [];
       } catch (err) {
-        console.error("Erreur lors du chargement des groupes:", err);
+        console.error(t('generalErrors.beneficiaryGroups.notFound'), err);
         return [];
       }
     },
@@ -41,7 +41,7 @@ export const useBeneficiaryGroupMutations = () => {
         if (!parsed.success) {
           return {
             data: null,
-            error: "Erreur de validation lors de la création",
+            error: t('generalErrors.beneficiaryGroups.create'),
           };
         }
 
@@ -50,7 +50,7 @@ export const useBeneficiaryGroupMutations = () => {
         const error = err as { response?: { data?: { error?: string } }; message?: string };
         return {
           data: null,
-          error: error.response?.data?.error || error.message || "Erreur lors de la création",
+          error: error.response?.data?.error || error.message || t('generalErrors.beneficiaryGroups.create'),
         };
       }
     },
@@ -77,7 +77,7 @@ export const useBeneficiaryGroupMutations = () => {
         const error = err as { response?: { data?: { error?: string } }; message?: string };
         return {
           data: null,
-          error: error.response?.data?.error || error.message || "Erreur lors de la mise à jour",
+          error: error.response?.data?.error || error.message || t('generalErrors.beneficiaryGroups.update'),
         };
       }
     },
@@ -104,7 +104,7 @@ export const useBeneficiaryGroupMutations = () => {
         const error = err as { response?: { data?: { error?: string } }; message?: string };
         return {
           success: false,
-          error: error.response?.data?.error || error.message || "Erreur lors de la suppression",
+          error: error.response?.data?.error || error.message || t('generalErrors.beneficiaryGroups.delete'),
         };
       }
     },
@@ -130,7 +130,7 @@ export const useBeneficiaryGroupMutations = () => {
         const error = err as { response?: { data?: { error?: string } }; message?: string };
         return {
           data: null,
-          error: error.response?.data?.error || error.message || "Erreur lors de l'ajout",
+          error: error.response?.data?.error || error.message || t('generalErrors.beneficiaryGroups.create'),
         };
       }
     },
@@ -184,7 +184,7 @@ export const useBeneficiaryGroupMutations = () => {
         const error = err as { response?: { data?: { error?: string } }; message?: string };
         return {
           data: null,
-          error: error.response?.data?.error || error.message || "Erreur lors du transfert",
+          error: error.response?.data?.error || error.message || t('generalErrors.beneficiaryGroups.create'),
         };
       }
     },

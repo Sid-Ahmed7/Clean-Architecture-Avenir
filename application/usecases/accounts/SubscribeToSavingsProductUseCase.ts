@@ -17,7 +17,6 @@ export class SubscribeToSavingsProductUseCase {
     ) {}
 
     public async execute(dto: SubscribeToSavingsProduct): Promise<SavingsAccountsEntity | Error> {
-        // Get the product
         const product = await this.savingsProductRepository.getProductById(dto.productId);
         if (product instanceof Error) {
             return product;
@@ -74,15 +73,15 @@ export class SubscribeToSavingsProductUseCase {
             "EUR",
             AccountStatusEnum.ACTIVE,
             true,
-            0, // Initial balance
+            0, 
             new Date(),
-            3000, // withdrawal_limit
-            3000, // transfer_limit
-            1000, // overdraft_limit
+            3000,
+            3000, 
+            1000, 
             `Savings Account - ${product.name}`,
-            0, // total_transfered
-            new Date(), // last_transfer_reset_date
-            mainAccount.accountNumber // parent_account_id - link to main account
+            0, 
+            new Date(),
+            mainAccount.accountNumber 
         );
 
         if (baseAccount instanceof Error) {

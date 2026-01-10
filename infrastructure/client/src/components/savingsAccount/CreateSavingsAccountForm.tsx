@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { PiggyBank, Percent, DollarSign, Calendar, Check, X, Save } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { getErrorMessage } from "@/lib/utils/error";
 
 interface CreateSavingsAccountFormProps {
     onSuccess?: () => void;
@@ -44,8 +45,9 @@ export function CreateSavingsAccountForm({ onSuccess, onCancel }: CreateSavingsA
                 setSuccess(false);
                 onSuccess?.();
             }, 2000);
-        } catch (err: any) {
-            setError(err.response?.data?.error || "Erreur lors de la création du compte épargne");
+        } catch (err) {
+            const message = getErrorMessage(err as Error, "Erreur lors de la création du compte épargne");
+            setError(message);
         } finally {
             setIsSubmitting(false);
         }
@@ -67,7 +69,6 @@ export function CreateSavingsAccountForm({ onSuccess, onCancel }: CreateSavingsA
 
     return (
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-            {/* Header */}
             <div className="bg-gradient-to-br from-emerald-600 via-green-600 to-teal-600 p-6 text-white">
                 <div className="flex items-center gap-3">
                     <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl">

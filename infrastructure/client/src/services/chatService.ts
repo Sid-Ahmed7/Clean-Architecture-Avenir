@@ -57,7 +57,6 @@ export const connectSocket = (role: string) => {
   } 
 
   newSocket.on("connect", async () => {
-    console.log(`Connected to ${namespace} (${newSocket.id})`);
 
     if (authenticatedUserId && authenticatedUserRole && !isIdentified[role]) {
       try {
@@ -75,7 +74,6 @@ export const connectSocket = (role: string) => {
   });
 
   newSocket.on("disconnect", (reason) => {
-    console.log(`Disconnected from ${namespace}:`, reason);
     isIdentified[role] = false;
   });
 };
@@ -85,7 +83,6 @@ export const identifyUser = (userId: string, role: string) => {
 
   const socket = getSocket(role);
   if (!socket) {
-    console.log(`Socket not connected for ${role}, connecting...`);
     connectSocket(role);
     return;
   }

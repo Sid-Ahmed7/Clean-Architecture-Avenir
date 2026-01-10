@@ -6,8 +6,6 @@ export class NotificationService implements NotificationPublisher {
     private clients: Map<string, SseClient[]> = new Map();
 
     public sendNotification(userId: string, notification: NotificationEntity): void {
-                console.log(`[NotificationService] sendNotification called for userId: ${userId}`);
-        console.log("[NotificationService] Notification payload:", notification);
         const userClients = this.clients.get(userId);
         
         if(!userClients) {
@@ -20,7 +18,6 @@ export class NotificationService implements NotificationPublisher {
     }
 
     public subscribe(userId: string, client: SseClient): void {
-                console.log(`[NotificationService] subscribe called for userId: ${userId}`);
 
         const userClients = this.clients.get(userId) ?? [];
         userClients.push(client);
@@ -28,7 +25,6 @@ export class NotificationService implements NotificationPublisher {
     }
 
     public unsubscribe(userId: string, client: SseClient): void {
-                console.log(`[NotificationService] unsubscribe called for userId: ${userId}`);
 
         const userClients = this.clients.get(userId) ?? [];
         const filteredClients = userClients.filter(c=> c !== client);

@@ -1,5 +1,25 @@
-import { LoanRequestFieldsProps } from "@/types/loan";
+import { FieldErrors, UseFormRegister } from "react-hook-form";
 import Button from "@/components/ui/Button";
+import { AdvisorOption, CreateLoanRequestInput } from "@/types/loan";
+
+
+
+interface  LoanRequestFieldsProps {
+  t: (key: string, values?: Record<string, string | number>) => string;
+  advisors: AdvisorOption[];
+  loadingAdvisors: boolean;
+  advisorError: string;
+  register: UseFormRegister<CreateLoanRequestInput>;
+  errors: FieldErrors<CreateLoanRequestInput>;
+  duration?: number;
+  onSelectDuration: (duration: number) => void;
+  amount: number;
+  indicativeRate: number | null;
+  monthlyPayment: number;
+  submitting: boolean;
+  durations: number[];
+  rateThreshold: number;
+};
 
 export function LoanRequestFields({
   t,

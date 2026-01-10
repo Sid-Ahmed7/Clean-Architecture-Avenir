@@ -21,7 +21,7 @@ export function useNotification() {
             const data = await getUserNotifications();
             const parsed =  notificationSchema(t).array().safeParse(data);
             if(!parsed.success) {
-                setError("Erreur de validation des données reçus");
+                setError(t('generalErrors.notifications.validation'));
                 return;
             }
             setNotifications(parsed.data)
@@ -32,7 +32,7 @@ export function useNotification() {
             } else if (err instanceof Error) {
                 setError(err.message);
             } else {
-                setError("Une erreur inconnue est survenue");
+                setError(t('generalErrors.notifications.unknown'));
             }
         } finally {
             setLoading(false)
@@ -44,7 +44,7 @@ export function useNotification() {
                 const data = await createNotification(message, type);
                 const parsed =  notificationSchema(t).safeParse(data);
                 if(!parsed.success) {
-                    setError("Erreur de validation des données reçus");
+                    setError(t('generalErrors.notifications.validation'));
                     return;
                 }    
                 setNotifications(prev => [parsed.data, ...prev]);
@@ -61,7 +61,7 @@ export function useNotification() {
             const data = await sendNotificationToClient(targetUserId, message,type);
                const parsed =  notificationSchema(t).safeParse(data);
             if(!parsed.success) {
-                setError("Erreur de validation des données reçus");
+                setError(t('generalErrors.notifications.validation'));
                 return;
             }    
             setNotifications(prev => [parsed.data, ...prev])
@@ -71,7 +71,7 @@ export function useNotification() {
             } else if (err instanceof Error) {
                 setError(err.message);
             } else {
-                setError("Une erreur inconnue est survenue");
+                setError(t('generalErrors.notifications.unknown'));
             }
         }
     
@@ -89,7 +89,7 @@ export function useNotification() {
             } else if (err instanceof Error) {
                 setError(err.message);
             } else {
-                setError("Une erreur inconnue est survenue");
+                setError(t('generalErrors.notifications.unknown'));
             }
         }
     };
@@ -106,7 +106,7 @@ export function useNotification() {
             } else if (err instanceof Error) {
                 setError(err.message);
             } else {
-                setError("Une erreur inconnue est survenue");
+                setError(t('generalErrors.notifications.unknown'));
             }
         }
     }

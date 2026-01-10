@@ -120,7 +120,6 @@ export const useChat = (userId: string, role: string, conversationId: string) =>
             ...(msgs.messages.advisor || [])
           ].sort((a, b) => new Date(a.sentAt).getTime() - new Date(b.sentAt).getTime());
           dispatch({ type: "SET_MESSAGES", payload: sortedMessages });
-          console.log(`📚 ${sortedMessages.length} messages chargés`);
         });
       }
     };
