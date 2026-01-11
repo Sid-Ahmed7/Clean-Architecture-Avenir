@@ -46,4 +46,14 @@ router
       .use(middleware.auth())
       .use(authorizeRoles([RoleEnum.BANK_MANAGER]))
   })
+    router
+      .put('/:id/ban', async (ctx) => (await getUserManagementsController).banUser(ctx))
+      .use(middleware.auth())
+      .use(authorizeRoles([RoleEnum.BANK_MANAGER]))
+
+
+    router
+      .put('/:id/unban', async (ctx) => (await getUserManagementsController).unbanUser(ctx))
+      .use(middleware.auth())
+      .use(authorizeRoles([RoleEnum.BANK_MANAGER]))
   .prefix('/api/user-management')

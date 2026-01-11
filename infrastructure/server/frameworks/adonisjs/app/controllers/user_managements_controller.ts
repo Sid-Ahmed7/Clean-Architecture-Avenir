@@ -20,6 +20,10 @@ import { UserStatusEnum } from "#domain/enums/UserStatusEnum.js";
 import { AuthContext } from '#types/JwtPayload.js';
 import vine from '@vinejs/vine';
 import * as userManagementValidator from "#validators/user_management.js";
+import { BanUserUseCase } from '#application/usecases/user-management/BanUserUseCase.js';
+import { UserAlreadyBanError } from '#application/errors/UserAlreadyBanError.js';
+import { UserNoBanError } from '#application/errors/UserNoBanError.js';
+import { UnbanUserUseCase } from '#application/usecases/user-management/UnbanUserUseCase.js';
 
 @inject()
 export default class UserManagementsController {
@@ -190,7 +194,49 @@ export default class UserManagementsController {
 
     return response.status(200).json(result);
   }
+  async banUser({ params, response }: HttpContext) {
+    const { id } = params;
+
+    if (!id) {
+      return response.status(400).json({ error: "User ID is required" });
+    }
+
+    const banUserUseCase = new BanUserUseCase(this.userRepository);
+    const result = await banUserUseCase.execute(id);
+    if (result instanceof Error) {
+      if (result instanceof UserNotFoundError) {
+        return response.status(404).json({ error: result.message });
+      }
+      if (result instanceof UserAlreadyBanError) {
+        return response.status(409).json({ error: result.message });
+      }
+      return response.status(500).json({ error: result.message });
+    }
+    return response.status(200).json({ message: "User banned successfully" });
+  }
+
+  async unbanUser({ params, response }: HttpContext) {
+    const { id } = params;
+
+    if (!id) {
+      return response.status(400).json({ error: "User ID is required" });
+    }
+
+    const unbanUserUseCase = new UnbanUserUseCase(this.userRepository);
+    const result = await unbanUserUseCase.execute(id);
+    if (result instanceof Error) {
+      if (result instanceof UserNotFoundError) {
+        return response.status(404).json({ error: result.message });
+      }
+      if (result instanceof UserNoBanError) {
+        return response.status(409).json({ error: result.message });
+      }
+      return response.status(500).json({ error: result.message });
+    }
+    return response.status(200).json({ message: "User unbanned successfully" });
+  }
 }
+
 
 declare module '@adonisjs/core/http' {
   interface HttpContext {
