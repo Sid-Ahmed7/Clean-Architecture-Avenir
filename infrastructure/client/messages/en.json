@@ -1171,7 +1171,10 @@
   },
   "errors": {
     "firstName": "First name is required",
-    "lastName": "Last name is required",
+    "lastName": {
+      "required": "Last name is required",
+      "tooLong": "Last name is too long"
+    },
     "email": {
       "required": "Email is required",
       "invalid": "Invalid email address"
@@ -1185,6 +1188,15 @@
     "confirmPassword": {
       "required": "Please confirm your password",
       "mismatch": "Passwords do not match"
+    },
+    "phoneNumber": {
+      "required": "Phone number is required"
+    },
+    "dateOfBirth": {
+      "required": "Date of birth is required"
+    },
+    "address": {
+      "required": "Address is required"
     },
     "accountLoad": "Failed to load accounts"
   },
@@ -2435,6 +2447,7 @@
       "title": "Accounts Overview",
       "subtitle": "View all checking accounts and their balances",
       "loading": "Loading...",
+      "accountLoad": "Failed to load accounts",
       "stats": {
         "totalAccounts": "Total Accounts",
         "totalBalance": "Total Balance",

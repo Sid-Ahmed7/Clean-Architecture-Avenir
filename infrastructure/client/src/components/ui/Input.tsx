@@ -46,14 +46,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             props.onChange?.(e);
         };
 
-        // Size classes
         const sizeClasses = {
             sm: 'py-2 px-3 text-sm',
             md: 'py-3 px-4 text-base',
             lg: 'py-4 px-5 text-lg'
         };
 
-        // Variant classes
         const variantClasses = {
             default: `
                 bg-white border-2 
@@ -107,7 +105,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
         return (
             <div className={`${fullWidth ? 'w-full' : ''} ${className}`}>
-                {/* Label */}
                 {label && (
                     <label className="block mb-2 group">
                         <span className={`
@@ -125,9 +122,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                     </label>
                 )}
 
-                {/* Input Container */}
                 <div className="relative group">
-                    {/* Icon */}
                     {Icon && (
                         <div
                             className={`
@@ -148,7 +143,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                         </div>
                     )}
 
-                    {/* Input Field */}
                     <input
                         ref={ref}
                         {...props}
@@ -179,12 +173,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                     />
 
 
-                    {/* Animated underline for gradient variant */}
                     {variant === 'gradient' && isFocused && (
                         <div className="absolute bottom-0 left-0 right-0 h-0.5 mx-2 self-center bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 animate-pulse" />
                     )}
 
-                    {/* Character count */}
                     {showCharCount && maxLength && (
                         <div className={`
                             absolute bottom-0 right-3 transform translate-y-6
@@ -199,7 +191,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                     )}
                 </div>
 
-                {/* Helper Text or Error */}
                 {(error || helperText) && (
                     <div className="mt-2 flex items-start gap-1.5">
                         {error ? (

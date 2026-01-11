@@ -1,6 +1,5 @@
 import { apiClient } from "./apiClient";
 
-// Savings Products
 export const getAllSavingsProducts = async (activeOnly: boolean = true) => {
     const { data } = await apiClient.get(`/savings-products?activeOnly=${activeOnly}`);
     return data;
@@ -24,7 +23,6 @@ export const subscribeToSavingsProduct = async (productId: string, initialDeposi
     return data;
 };
 
-// Get user's savings accounts
 export const getMySavingsAccounts = async () => {
     const { data } = await apiClient.get("/savings-accounts");
     return data;

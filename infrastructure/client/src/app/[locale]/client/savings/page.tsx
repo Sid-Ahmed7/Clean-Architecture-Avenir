@@ -215,7 +215,6 @@ export default function ClientSavingsPage() {
                     </div>
                 )}
 
-                {/* Available Products */}
                 <div>
                     <h2 className="text-2xl font-bold text-gray-900 mb-4">
                         {t("availableProducts")}
@@ -319,7 +318,6 @@ export default function ClientSavingsPage() {
                     )}
                 </div>
 
-                {/* Deposit Modal */}
                 {showDepositModal && (
                     <div className="fixed inset-0 bg-slate-900/30 backdrop-blur-sm flex items-center justify-center z-50">
                         <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
@@ -357,7 +355,6 @@ export default function ClientSavingsPage() {
                     </div>
                 )}
 
-                {/* Withdraw Modal */}
                 {showWithdrawModal && (
                     <div className="fixed inset-0 bg-slate-900/30 backdrop-blur-sm flex items-center justify-center z-50">
                         <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4">

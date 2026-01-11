@@ -32,7 +32,6 @@ export class PostgresMediaRepository implements MediaRepositoryInterface {
             [newsId]
         );
         if (result.rows.length === 0) {
-            // Return empty array if no media found, matching interface
             return [];
         }
         const entities = result.rows
@@ -47,7 +46,6 @@ export class PostgresMediaRepository implements MediaRepositoryInterface {
             [mediaIds]
         );
         if (result.rows.length === 0) {
-            // Return empty array if no media found, matching interface
             return [];
         }
         const entities = result.rows

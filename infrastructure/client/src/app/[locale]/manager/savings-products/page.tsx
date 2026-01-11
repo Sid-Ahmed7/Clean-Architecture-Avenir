@@ -154,7 +154,6 @@ export default function ManagerSavingsProductsPage() {
                     </div>
                 )}
 
-                {/* Create/Edit Form */}
                 {(showCreateForm || editingProduct) && (
                     <div className="bg-white rounded-2xl shadow-xl p-8 mb-8 border border-gray-200">
                         <h2 className="text-2xl font-bold text-gray-900 mb-6">
@@ -233,7 +232,6 @@ export default function ManagerSavingsProductsPage() {
                     </div>
                 )}
 
-                {/* Products List */}
                 <div>
                     <h2 className="text-2xl font-bold text-gray-900 mb-4">
                         {t("existingProducts")}

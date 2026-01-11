@@ -82,7 +82,6 @@ export function CreateSavingsAccountForm({ onSuccess, onCancel }: CreateSavingsA
                 </div>
             </div>
 
-            {/* Form */}
             <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6">
                 {error && (
                     <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
@@ -94,7 +93,6 @@ export function CreateSavingsAccountForm({ onSuccess, onCancel }: CreateSavingsA
                     </div>
                 )}
 
-                {/* Account Number */}
                 <Input
                     label={t("accountNumberLabel")}
                     type="number"
@@ -106,7 +104,6 @@ export function CreateSavingsAccountForm({ onSuccess, onCancel }: CreateSavingsA
                     {...register("accountNumber", { valueAsNumber: true })}
                 />
 
-                {/* Interest Rate */}
                 <Input
                     label={t("interestRateLabel")}
                     type="number"
@@ -120,7 +117,6 @@ export function CreateSavingsAccountForm({ onSuccess, onCancel }: CreateSavingsA
                     {...register("interestRate", { valueAsNumber: true })}
                 />
 
-                {/* Max Deposit Amount */}
                 <Input
                     label={t("maxDepositAmountLabel")}
                     type="number"
@@ -135,7 +131,6 @@ export function CreateSavingsAccountForm({ onSuccess, onCancel }: CreateSavingsA
                     })}
                 />
 
-                {/* Maturity Date */}
                 <Input
                     label={t("maturityLabel")}
                     type="date"
@@ -148,7 +143,6 @@ export function CreateSavingsAccountForm({ onSuccess, onCancel }: CreateSavingsA
                     })}
                 />
 
-                {/* Info Box */}
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                     <p className="text-xs text-blue-800">
                         <strong>💡 {t("interestCalcTitle")} :</strong> {t("interestRateHelper")}
@@ -159,7 +153,6 @@ export function CreateSavingsAccountForm({ onSuccess, onCancel }: CreateSavingsA
                     </p>
                 </div>
 
-                {/* Buttons */}
                 <div className="flex gap-3 pt-4">
                     {onCancel && (
                         <Button

@@ -39,7 +39,6 @@ export function FeedMedia({ media }: FeedMediaProps) {
         ) : null}
       </div>
 
-      {/* Caption avec meilleur style */}
       {media.caption && (
         <figcaption className="mt-3 text-center">
           <p className="text-sm text-gray-600 italic leading-relaxed">

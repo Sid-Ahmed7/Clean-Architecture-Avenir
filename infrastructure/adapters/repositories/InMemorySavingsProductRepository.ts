@@ -6,7 +6,6 @@ export class InMemorySavingsProductRepository implements SavingsProductRepositor
     private products: Array<SavingsProductEntity>;
 
     public constructor() {
-        // Initialize with some default products for testing
         const livretA = SavingsProductEntity.create(
             "livret-a-001",
             "Livret A",

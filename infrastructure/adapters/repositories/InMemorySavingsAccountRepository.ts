@@ -16,7 +16,6 @@ export class InMemorySavingsAccountRepository implements SavingsAccountRepositor
             return new InvalidAccountError("Savings account data is invalid");
         }
 
-        // Check if savings account already exists
         const existing = this.savingsAccounts.find(acc => acc.accountNumber === savingsAccount.accountNumber);
         if (existing) {
             return new InvalidAccountError(`Savings account with number ${savingsAccount.accountNumber} already exists`);

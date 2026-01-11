@@ -10,7 +10,6 @@ export class GetAccountInterestHistoryUseCase {
     ) {}
 
     public async execute(accountNumber: number): Promise<InterestSummary | AccountNotFoundError | Error> {
-        // Get the savings account
         const savingsAccount = await this.savingsAccountRepository.getSavingsAccountByNumber(accountNumber);
         
         if (savingsAccount instanceof AccountNotFoundError) {
@@ -24,7 +23,7 @@ export class GetAccountInterestHistoryUseCase {
             return account;
         }
 
-        // INSANE DEMO MODE: Calculate per SECOND with 1,000,000x multiplier!
+        // Calculate per SECOND with 1,000,000x multiplier!
         const secondsSinceLastUpdate = Math.floor(
             (new Date().getTime() - savingsAccount.lastBalanceUpdate.getTime()) / 1000
         );
@@ -39,7 +38,7 @@ export class GetAccountInterestHistoryUseCase {
             interestRate: savingsAccount.interestRate,
             maxDepositAmount: savingsAccount.maxDepositAmount,
             totalInterestEarned: savingsAccount.totalInterestEarned,
-            pendingInterest: Math.round(pendingInterest * 100) / 100, // Round to 2 decimals
+            pendingInterest: Math.round(pendingInterest * 100) / 100,
             ...(savingsAccount.lastInterestApplied && { lastInterestApplied: savingsAccount.lastInterestApplied }),
             projectedAnnualInterest,
             isActive: savingsAccount.isActive

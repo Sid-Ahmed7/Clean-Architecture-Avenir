@@ -31,7 +31,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    // Size classes
     const sizeClasses = {
       sm: 'py-2 px-4 text-sm',
       md: 'py-3 px-6 text-base',
@@ -39,7 +38,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       xl: 'py-5 px-10 text-xl'
     };
 
-    // Variant classes
     const variantClasses = {
       primary: `
                 bg-gradient-to-r from-blue-600 to-indigo-600 
@@ -84,14 +82,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             `
     };
 
-    // Rounded classes
     const roundedClasses = {
       default: 'rounded-xl',
       full: 'rounded-full',
       none: 'rounded-none'
     };
 
-    // Icon size classes
     const iconSizeClasses = {
       sm: 'w-4 h-4',
       md: 'w-5 h-5',
@@ -159,5 +155,4 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
 Button.displayName = 'Button';
 
-// Export as default for backward compatibility
 export default Button;

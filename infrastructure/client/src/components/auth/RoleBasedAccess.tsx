@@ -32,11 +32,7 @@ export const RoleBasedAccess = ({
   return <>{fallback}</>;
 };
 
-/**
- * Higher-order component that creates a RoleBasedAccess component for a specific role
- * @param role - The role to check for
- * @returns A component that only renders its children if the user has the specified role
- */
+
 export const createRoleBasedComponent = (role: RoleEnum | string) => {
   return ({ children, fallback }: Omit<RoleBasedAccessProps, "allowedRoles">) => (
     <RoleBasedAccess allowedRoles={[role]} fallback={fallback}>

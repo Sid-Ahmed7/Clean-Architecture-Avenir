@@ -8,7 +8,6 @@ export class ConversationEntity {
             return validatedClientId;
         }
 
-        // Validate advisorId only if provided
         if (advisorId) {
             const validatedAdvisorId = UserIdValue.from(advisorId);
             if(validatedAdvisorId instanceof Error) {

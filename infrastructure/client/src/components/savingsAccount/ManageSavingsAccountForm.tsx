@@ -111,7 +111,6 @@ export function ManageSavingsAccountForm({ accountNumber, onSuccess, onCancel }:
 
     return (
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-            {/* Header */}
             <div className="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-6 text-white">
                 <div className="flex items-center gap-3">
                     <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl">
@@ -124,7 +123,6 @@ export function ManageSavingsAccountForm({ accountNumber, onSuccess, onCancel }:
                 </div>
             </div>
 
-            {/* Form */}
             <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6">
                 {error && (
                     <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
@@ -136,7 +134,6 @@ export function ManageSavingsAccountForm({ accountNumber, onSuccess, onCancel }:
                     </div>
                 )}
 
-                {/* Current Values Display */}
                 {currentData && (
                     <div className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl p-5 border border-blue-100 space-y-2">
                         <h3 className="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
@@ -175,7 +172,6 @@ export function ManageSavingsAccountForm({ accountNumber, onSuccess, onCancel }:
                     </div>
                 )}
 
-                {/* Interest Rate */}
                 <Input
                     label={t("newInterestRateLabel")}
                     type="number"
@@ -187,7 +183,6 @@ export function ManageSavingsAccountForm({ accountNumber, onSuccess, onCancel }:
                     {...register("interestRate", { valueAsNumber: true })}
                 />
 
-                {/* Max Deposit Amount */}
                 <Input
                     label={t("newMaxDepositAmountLabel")}
                     type="number"
@@ -202,7 +197,6 @@ export function ManageSavingsAccountForm({ accountNumber, onSuccess, onCancel }:
                     })}
                 />
 
-                {/* Active Status Toggle */}
                 <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-3">
                         {t("statusLabel")}
@@ -241,14 +235,12 @@ export function ManageSavingsAccountForm({ accountNumber, onSuccess, onCancel }:
                     </button>
                 </div>
 
-                {/* Warning Box */}
                 <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
                     <p className="text-xs text-amber-800">
                         <strong>⚠️ {t("warningTitle")} :</strong> {t("warningMessage")}
                     </p>
                 </div>
 
-                {/* Buttons */}
                 <div className="flex gap-3 pt-4">
                     {onCancel && (
                         <button

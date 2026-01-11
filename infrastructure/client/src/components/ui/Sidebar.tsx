@@ -21,7 +21,6 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
 
-  // Get role-based URL prefix
   const rolePrefix = getRolePrefix(user?.role);
 
   const menuItems = [

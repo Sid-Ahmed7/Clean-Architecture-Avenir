@@ -45,7 +45,6 @@ export default class AppProvider {
     this.app.container.bind('stockTransactionRepository', async () => (await getRepositories()).stockTransactionRepository)
     this.app.container.bind('eventBus', async () => (await getRepositories()).eventBus)
 
-    // Services
     this.app.container.bind('tokenService', async () => (await getServices()).tokenService)
     this.app.container.bind('passwordService', async () => (await getRepositories()).passwordService)
     this.app.container.bind('emailService', async () => (await getServices()).emailService)

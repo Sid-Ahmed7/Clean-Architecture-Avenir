@@ -24,19 +24,16 @@ export class CreateClientAccountUseCase {
   ) {}
 
   public async execute(user: Register, locale?: string): Promise<BankUserEntity | Error> {
-    // Vérifier si l'utilisateur existe déjà
     const existingUser = await this.userRepository.findByEmail(user.email);
     if (existingUser instanceof Error) {
       return existingUser;
     }
 
-    // Valider la locale
     const validatedLocale = this.localeService.validate(locale);
     if (validatedLocale instanceof Error) {
       return validatedLocale;
     }
 
-    // Créer l'entité utilisateur
     const id = this.uuidService.generate();
     const userEntity = BankUserEntity.from(
       id,
@@ -54,19 +51,16 @@ export class CreateClientAccountUseCase {
       return userEntity;
     }
 
-    // Hasher le mot de passe
     const hashedPassword = await this.passwordService.hash(userEntity.password);
     userEntity.password = hashedPassword;
     userEntity.status = UserStatusEnum.PENDING;
     userEntity.isRegistered = false;
 
-    // Sauvegarder l'utilisateur
     const savedUser = await this.userRepository.createUser(userEntity);
     if (savedUser instanceof Error) {
       return savedUser;
     }
 
-    // Attribuer le rôle CLIENT
     const clientRole = await this.roleRepository.findByName(RoleEnum.CLIENT);
     if (clientRole instanceof Error) {
       return clientRole;
@@ -77,7 +71,6 @@ export class CreateClientAccountUseCase {
       return userRole;
     }
 
-    // Générer le token de confirmation
     const { token, expiresAt } = this.registrationTokenGeneratorService.generateToken(24);
 
     savedUser.confirmationToken = token;
@@ -88,7 +81,6 @@ export class CreateClientAccountUseCase {
       return updatedUser;
     }
 
-    // Envoyer l'email de confirmation
     await this.emailComposerService.sendRegistrationConfirmation(
       updatedUser.email,
       updatedUser.firstName,

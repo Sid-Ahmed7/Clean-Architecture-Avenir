@@ -48,13 +48,7 @@ export const withRoleProtection = <P extends object>(
   };
 };
 
-/**
- * Creates a higher-order component that protects a page for a specific role
- * @param role - The role to check for
- * @param redirectPath - Path to redirect to if user doesn't have the role
- * @param fallbackComponent - Optional component to render instead of redirecting
- * @returns A higher-order component that protects a page for the specified role
- */
+
 export const createRoleProtection = (
   role: RoleEnum | string,
   redirectPath?: string,

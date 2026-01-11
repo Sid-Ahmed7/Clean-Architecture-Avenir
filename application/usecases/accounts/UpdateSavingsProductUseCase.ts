@@ -10,7 +10,6 @@ export class UpdateSavingsProductUseCase {
     ) {}
 
     public async execute(dto: UpdateSavingsProduct): Promise<SavingsProductEntity | Error> {
-        // Get the product
         const product = await this.savingsProductRepository.getProductById(dto.productId);
         if (product instanceof Error) {
             return product;
@@ -62,7 +61,6 @@ export class UpdateSavingsProductUseCase {
             updatedProduct = updatedProduct.updateStatus(dto.isActive);
         }
 
-        // Save updated product
         const result = await this.savingsProductRepository.updateProduct(updatedProduct);
         
         if (result instanceof Error) {

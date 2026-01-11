@@ -1179,7 +1179,10 @@
   },
   "errors": {
     "firstName": "Le prénom est requis",
-    "lastName": "Le nom est requis",
+    "lastName": {
+      "required": "Le nom est requis",
+      "tooLong": "Le nom est trop long"
+    },
     "email": {
       "required": "L'email est requis",
       "invalid": "Adresse email invalide"
@@ -1193,6 +1196,15 @@
     "confirmPassword": {
       "required": "Veuillez confirmer votre mot de passe",
       "mismatch": "Les mots de passe ne correspondent pas"
+    },
+    "phoneNumber": {
+      "required": "Le numéro de téléphone est requis"
+    },
+    "dateOfBirth": {
+      "required": "La date de naissance est requise"
+    },
+    "address": {
+      "required": "L'adresse est requise"
     },
     "accountLoad": "Échec du chargement des comptes"
   },
@@ -2440,6 +2452,7 @@
       "title": "Vue d'ensemble des Comptes",
       "subtitle": "Consultez tous les comptes courants et leurs soldes",
       "loading": "Chargement...",
+      "accountLoad": "Échec du chargement des comptes",
       "stats": {
         "totalAccounts": "Total Comptes",
         "totalBalance": "Solde Total",

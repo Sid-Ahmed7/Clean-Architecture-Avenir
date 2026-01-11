@@ -20,7 +20,6 @@ export default function UsersManagementPage() {
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState("all");
 
-    // Edit modal state
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [editingUser, setEditingUser] = useState<User | null>(null);
     const [editForm, setEditForm] = useState({
@@ -154,7 +153,6 @@ export default function UsersManagementPage() {
 
     return (
         <div className="min-h-screen bg-white p-6 mx-auto space-y-6">
-            {/* Header */}
             <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl p-6 border border-purple-100">
                 <div className="flex items-center gap-3 mb-2">
                     <div className="p-3 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-xl">
@@ -165,7 +163,6 @@ export default function UsersManagementPage() {
                 <p className="text-gray-700 ml-14">{t("subtitle")}</p>
             </div>
 
-            {/* Tabs */}
             <div className="flex gap-3">
                 <button
                     onClick={() => setActiveTab("all")}
@@ -199,7 +196,6 @@ export default function UsersManagementPage() {
                 </button>
             </div>
 
-            {/* Users Table */}
             <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full">
@@ -272,11 +268,9 @@ export default function UsersManagementPage() {
                 </div>
             </div>
 
-            {/* Edit Modal */}
             {isEditModalOpen && editingUser && (
                 <div className="fixed inset-0 bg-slate-900/30 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-y-auto">
                     <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full my-8">
-                        {/* Modal Header */}
                         <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 border-b border-blue-100 rounded-t-2xl">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-3">
@@ -294,7 +288,6 @@ export default function UsersManagementPage() {
                             </div>
                         </div>
 
-                        {/* Modal Body */}
                         <form onSubmit={handleEditSubmit} className="p-6 space-y-4">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
@@ -372,7 +365,6 @@ export default function UsersManagementPage() {
                                 </select>
                             </div>
 
-                            {/* Modal Footer */}
                             <div className="flex gap-3 pt-4 border-t border-gray-200">
                                 <button
                                     type="button"
