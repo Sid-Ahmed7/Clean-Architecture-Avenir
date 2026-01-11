@@ -1004,7 +1004,24 @@
       "error": "An error occurred during creation",
       "userExists": "A user with this email already exists",
       "submit": "Create client account",
-      "submitting": "Creating..."
+      "submitting": "Creating...",
+      "backToUsers": "Back to user management",
+      "placeholders": {
+        "password": "••••••••"
+      }
+    },
+    "createManager": {
+      "title": "Create a bank manager",
+      "subtitle": "Manager account creation form",
+      "success": "The manager has been created successfully. A confirmation email has been sent.",
+      "invalidSecretCode": "Invalid secret code. You are not authorized to create a manager.",
+      "error": "An error occurred during creation",
+      "userExists": "A user with this email already exists",
+      "secretCodeLabel": "Secret Code",
+      "secretCodeHelper": "Manager password required to create a manager",
+      "submit": "Create manager",
+      "submitting": "Creating...",
+      "loginButton": "Log in"
     }
   },
   "titles": {
@@ -2293,9 +2310,82 @@
         "button": "View my clients"
       },
       "loanRequests": {
+        "header": {
+          "director": "Director",
+          "title": "Loan Validation",
+          "subtitle": "Decide on files approved by advisors and propose rates for amounts over €5000."
+        },
+        "stats": {
+          "total": "Total",
+          "pending": "Pending",
+          "needsRate": "> €5000 to rate",
+          "approved": "Approved"
+        },
+        "indicativeRate": {
+          "title": "Indicative rate",
+          "subtitle": "Automatically applied for requests ≤ €5000",
+          "current": "Current: {rate}%"
+        },
+        "cardBank": {
+          "months": "months",
+          "toPropose": "To propose",
+          "iban": "IBAN:",
+          "ibanNA": "N/A"
+        },
         "title": "Loan Requests",
         "description": "Review and process your clients' loan requests.",
-        "button": "View loan requests"
+        "button": "View loan requests",
+        "errors": {
+          "loadRequests": "Unable to load requests",
+          "invalidRate": "Please enter a valid rate",
+          "saveRate": "Unable to save rate",
+          "saveDecision": "Unable to save decision",
+          "loadClientProfile": "Unable to load client profile",
+          "invalidIndicativeRate": "Please enter a valid indicative rate"
+        },
+        "actions": {
+          "save": "Save",
+          "propose": "Propose",
+          "approve": "Approve",
+          "reject": "Reject",
+          "viewProfile": "View profile",
+          "close": "Close"
+        },
+        "filter": {
+          "label": "Filter:",
+          "all": "All",
+          "pending": "Pending",
+          "needsRate": "> 5000€ (rate)",
+          "ready": "≤ 5000€ (approve)"
+        },
+        "empty": {
+          "title": "No requests to approve",
+          "subtitle": "Files validated by advisors will appear here."
+        },
+        "card": {
+          "client": "Client",
+          "advisor": "Advisor",
+          "amount": "Amount",
+          "duration": "Duration",
+          "rate": "Rate",
+          "createdAt": "Created on",
+          "purpose": "Purpose",
+          "ratePlaceholder": "Rate %"
+        },
+        "profile": {
+          "title": "Client file",
+          "identity": "Identity",
+          "email": "Email:",
+          "accounts": "Accounts",
+          "noAccounts": "No accounts found.",
+          "loanHistory": "Loan history",
+          "createdAt": "Created on",
+          "monthlyPayment": "Monthly payment",
+          "remainingPrincipal": "Remaining principal",
+          "remainingTerms": "{count} term(s) remaining",
+          "nextDueDate": "Next due date",
+          "noLoans": "No loan requests for this client."
+        }
       },
       "overdraftRequests": {
         "title": "Overdraft Requests",

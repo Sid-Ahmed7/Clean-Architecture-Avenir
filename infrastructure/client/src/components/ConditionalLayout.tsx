@@ -24,7 +24,6 @@ export default function ConditionalLayout({ children }: ConditionalLayoutProps) 
     `/${locale}/legal`,
   ];
 
-  // Check if current path is the home page or a public page
   const isHomePage = pathname === `/${locale}` || pathname === `/${locale}/`;
   const isPublicPage = isHomePage || publicPages.some(page => pathname === page || pathname.startsWith(`${page}/`));
 

@@ -60,7 +60,7 @@ export default function CreateClientPage() {
                         variant="primary"
                         fullWidth
                     >
-                        Retour à la gestion des utilisateurs
+                        {t("auth.createClient.backToUsers")}
                     </Button>
                 </div>
             ) : (
@@ -133,7 +133,7 @@ export default function CreateClientPage() {
                             type="password"
                             icon={Lock}
                             variant="gradient"
-                            placeholder="••••••••"
+                            placeholder={t("auth.createClient.placeholders.password")}
                             helperText={t("auth.register.passwordHelper")}
                             error={errors.password?.message}
                             {...register("password")}

@@ -9,9 +9,7 @@ export default function ManagerDashboard() {
     const t = useTranslations("manager.dashboard");
     return (
         <div className="min-h-screen bg-white p-6 mx-auto space-y-8">
-            {/* Manager specific content */}
             <section className="space-y-6">
-                {/* Manager Header */}
                 <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 border border-green-100">
                     <div className="flex items-center gap-3 mb-2">
                         <div className="p-3 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl">
@@ -22,9 +20,7 @@ export default function ManagerDashboard() {
                     <p className="text-gray-700 ml-14">{t("subtitle")}</p>
                 </div>
 
-                {/* Manager Actions Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Advisor Management */}
                     <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
                         <div className="flex items-center gap-3 mb-4">
                             <div className="p-2 bg-blue-100 rounded-lg">
@@ -44,7 +40,6 @@ export default function ManagerDashboard() {
                         </div>
                     </div>
 
-                    {/* Agency Settings */}
                     <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
                         <div className="flex items-center gap-3 mb-4">
                             <div className="p-2 bg-green-100 rounded-lg">

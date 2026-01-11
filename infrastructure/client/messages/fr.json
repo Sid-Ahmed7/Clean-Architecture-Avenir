@@ -1004,7 +1004,32 @@
       "error": "Une erreur est survenue lors de la création",
       "userExists": "Un utilisateur avec cet email existe déjà",
       "submit": "Créer le compte client",
-      "submitting": "Création en cours..."
+      "submitting": "Création en cours...",
+      "backToUsers": "Retour à la gestion des utilisateurs",
+      "placeholders": {
+        "password": "••••••••"
+      }
+    },
+    "createManager": {
+      "title": "Créer un gestionnaire bancaire",
+      "subtitle": "Formulaire de création de compte gestionnaire",
+      "success": "Le gestionnaire a été créé avec succès. Un email de confirmation a été envoyé.",
+      "invalidSecretCode": "Code secret invalide. Vous n'êtes pas autorisé à créer un gestionnaire.",
+      "error": "Une erreur est survenue lors de la création",
+      "userExists": "Un utilisateur avec cet email existe déjà",
+      "secretCodeLabel": "Code Secret",
+      "secretCodeHelper": "Mot de passe manager requis pour créer un gestionnaire",
+      "submit": "Créer le gestionnaire",
+      "submitting": "Création en cours...",
+      "loginButton": "Se connecter"
+    },
+    "createAdmin": {
+      "title": "Créer un administrateur",
+      "subtitle": "Formulaire de création de compte administrateur",
+      "invalidPassword": "Mot de passe de création d'administrateur invalide",
+      "adminPasswordLabel": "Mot de passe de création d'administrateur",
+      "adminPasswordHelper": "Mot de passe spécial requis pour créer des comptes administrateurs",
+      "networkError": "Erreur réseau : {error}. Assurez-vous que le serveur fonctionne sur le port 3000."
     }
   },
   "titles": {
@@ -2290,9 +2315,82 @@
         "button": "Voir mes clients"
       },
       "loanRequests": {
+        "header": {
+          "director": "Directeur",
+          "title": "Validation des crédits",
+          "subtitle": "Décidez des dossiers approuvés par les conseillers et proposez des taux pour les montants supérieurs à 5000€."
+        },
+        "stats": {
+          "total": "Total",
+          "pending": "En attente",
+          "needsRate": "> 5000€ à taux",
+          "approved": "Validées"
+        },
+        "indicativeRate": {
+          "title": "Taux indicatif",
+          "subtitle": "Appliqué automatiquement pour les demandes ≤ 5000€",
+          "current": "Actuel : {rate}%"
+        },
+        "cardBank": {
+          "months": "mois",
+          "toPropose": "À proposer",
+          "iban": "IBAN :",
+          "ibanNA": "N/A"
+        },
         "title": "Demandes de crédit",
         "description": "Consultez et traitez les demandes de crédit de vos clients.",
-        "button": "Voir les demandes de crédit"
+        "button": "Voir les demandes de crédit",
+        "errors": {
+          "loadRequests": "Impossible de charger les demandes",
+          "invalidRate": "Veuillez saisir un taux valide",
+          "saveRate": "Impossible d'enregistrer le taux",
+          "saveDecision": "Impossible d'enregistrer la décision",
+          "loadClientProfile": "Impossible de charger le profil client",
+          "invalidIndicativeRate": "Veuillez saisir un taux indicatif valide"
+        },
+        "actions": {
+          "save": "Sauvegarder",
+          "proposer": "Proposer",
+          "approve": "Valider",
+          "reject": "Refuser",
+          "viewProfile": "Voir profil",
+          "close": "Fermer"
+        },
+        "filter": {
+          "label": "Filtrer :",
+          "all": "Toutes",
+          "pending": "En attente",
+          "needsRate": "> 5000€ (taux)",
+          "ready": "≤ 5000€ (valider)"
+        },
+        "empty": {
+          "title": "Aucune demande à valider",
+          "subtitle": "Les dossiers validés par les conseillers apparaîtront ici."
+        },
+        "card": {
+          "client": "Client",
+          "advisor": "Conseiller",
+          "amount": "Montant",
+          "duration": "Durée",
+          "rate": "Taux",
+          "createdAt": "Créée le",
+          "purpose": "Motif",
+          "ratePlaceholder": "Taux %"
+        },
+        "profile": {
+          "title": "Fiche client",
+          "identity": "Identité",
+          "email": "Email :",
+          "accounts": "Comptes",
+          "noAccounts": "Aucun compte trouvé.",
+          "loanHistory": "Historique crédits",
+          "createdAt": "Créée le",
+          "monthlyPayment": "Mensualité",
+          "remainingPrincipal": "Reste à rembourser",
+          "remainingTerms": "{count} échéance(s) restante(s)",
+          "nextDueDate": "Prochaine échéance",
+          "noLoans": "Aucune demande de crédit pour ce client."
+        }
       },
       "overdraftRequests": {
         "title": "Demandes de découvert",

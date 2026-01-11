@@ -28,21 +28,21 @@ export default function CreateManagerPage() {
     try {
       const res = await apiClient.post("/auth/create-manager", data);
       if (res.status === 201) {
-        setMessage("Le gestionnaire a été créé avec succès. Un email de confirmation a été envoyé.");
+        setMessage(t("auth.createManager.success"));
         setSuccess(true);
         reset();
       } else if (res.status === 409) {
-        setMessage("Un utilisateur avec cet email existe déjà.");
+        setMessage(t("auth.createManager.userExists"));
       } else if (res.status === 403) {
-        setMessage("Code secret invalide. Vous n'êtes pas autorisé à créer un gestionnaire.");
+        setMessage(t("auth.createManager.invalidSecretCode"));
       } else {
-        setMessage("Une erreur est survenue lors de la création du gestionnaire.");
+        setMessage(t("auth.createManager.error"));
       }
     } catch (error: any) {
       if (error.response?.status === 403) {
-        setMessage("Code secret invalide. Vous n'êtes pas autorisé à créer un gestionnaire.");
+        setMessage(t("auth.createManager.invalidSecretCode"));
       } else {
-        setMessage(error.response?.data?.error || "Erreur réseau. Vérifiez que le serveur est démarré.");
+        setMessage(error.response?.data?.error || t("auth.createManager.error"));
       }
     }
   };
@@ -59,7 +59,7 @@ export default function CreateManagerPage() {
             variant="primary"
             fullWidth
           >
-            Se connecter
+            {t("auth.createManager.loginButton")}
           </Button>
         </div>
       ) : (
@@ -72,44 +72,44 @@ export default function CreateManagerPage() {
               <Briefcase className="w-8 h-8 text-white" />
             </div>
             <h2 className="text-3xl font-bold text-gray-900">
-              Créer un gestionnaire bancaire
+              {t("auth.createManager.title")}
             </h2>
             <p className="text-sm text-gray-600 mt-2">
-              Formulaire de création de compte gestionnaire
+              {t("auth.createManager.subtitle")}
             </p>
           </div>
 
           <div className="gap-5 grid grid-cols-2">
             <Input
-              label="Prénom"
+              label={t("auth.register.firstName")}
               icon={User}
               variant="gradient"
-              placeholder="Jean"
+              placeholder={t("auth.register.placeholders.firstName")}
               error={errors.firstName?.message}
               {...register("firstName")}
             />
 
             <Input
-              label="Nom"
+              label={t("auth.register.lastName")}
               icon={User}
               variant="gradient"
-              placeholder="Dupont"
+              placeholder={t("auth.register.placeholders.lastName")}
               error={errors.lastName?.message}
               {...register("lastName")}
             />
 
             <Input
-              label="Email"
+              label={t("auth.register.email")}
               type="email"
               icon={Mail}
               variant="gradient"
-              placeholder="jean.dupont@banque.fr"
+              placeholder={t("auth.register.placeholders.email")}
               error={errors.email?.message}
               {...register("email")}
             />
 
             <Input
-              label="Mot de passe"
+             label={t("auth.register.password")}
               type="password"
               icon={Lock}
               variant="gradient"
@@ -119,17 +119,17 @@ export default function CreateManagerPage() {
             />
 
             <Input
-              label="Numéro de téléphone"
+              label={t("auth.register.phoneNumber")}
               type="tel"
               icon={Phone}
               variant="gradient"
-              placeholder="+33 6 12 34 56 78"
+              placeholder={t("auth.register.placeholders.phone")}
               error={errors.phoneNumber?.message}
               {...register("phoneNumber")}
             />
 
             <Input
-              label="Date de naissance"
+              label={t("auth.register.dateOfBirth")}
               type="date"
               icon={Calendar}
               variant="gradient"
@@ -138,22 +138,22 @@ export default function CreateManagerPage() {
             />
 
             <TextArea
-              label="Adresse"
+              label={t("auth.register.address")}
               rows={3}
               variant="gradient"
-              placeholder="123 Rue de la Banque, 75001 Paris"
+              placeholder={t("auth.register.placeholders.address")}
               error={errors.address?.message}
               {...register("address")}
             />
 
             <div className="pt-2">
               <Input
-                label="Code Secret"
+                label={t("auth.createManager.secretCodeLabel")}
                 type="password"
                 icon={Shield}
                 variant="gradient"
                 placeholder="••••••••"
-                helperText="Mot de passe manager requis pour créer un gestionnaire"
+                helperText={t("auth.createManager.secretCodeHelper")}
                 error={errors.secretCode?.message}
                 {...register("secretCode")}
               />
@@ -162,7 +162,7 @@ export default function CreateManagerPage() {
 
           <div className="mt-8">
             <Button type="submit" variant="primary" fullWidth>
-              Créer le gestionnaire
+              {t("auth.createManager.submit")}
             </Button>
           </div>
 

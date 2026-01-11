@@ -36,14 +36,14 @@ export default function AccountsOverviewPage() {
             });
 
             if (!response.ok) {
-                throw new Error("Failed to fetch accounts");
+                throw new Error(t("accountLoad"));
             }
 
             const data = await response.json();
             setAccounts(data);
             setFilteredAccounts(data);
         } catch (error) {
-            console.error("Failed to load accounts:", error);
+            console.error(t("accountLoad"), error);
         } finally {
             setLoading(false);
         }
@@ -63,9 +63,10 @@ export default function AccountsOverviewPage() {
             }
         }
 
+
         const confirmMessage = balance > 0
-            ? `Êtes-vous sûr de vouloir supprimer ce compte ?\n\nLe solde de ${formatCurrency(balance)} sera automatiquement transféré vers un autre compte courant de l'utilisateur.`
-            : "Êtes-vous sûr de vouloir supprimer ce compte ?";
+            ? t("deleteConfirm.withBalance", { amount: formatCurrency(balance) })
+            : t("deleteConfirm.withoutBalance");
 
         if (!confirm(confirmMessage)) return;
 
@@ -127,7 +128,6 @@ export default function AccountsOverviewPage() {
                 <p className="text-gray-700 ml-14">{t("subtitle")}</p>
             </div>
 
-            {/* Statistics Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
                     <p className="text-sm text-gray-600 mb-2">{t("stats.totalAccounts")}</p>
@@ -146,7 +146,6 @@ export default function AccountsOverviewPage() {
                 </div>
             </div>
 
-            {/* Search */}
             <div className="bg-white rounded-2xl shadow-xl p-4 border border-gray-100">
                 <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -159,7 +158,6 @@ export default function AccountsOverviewPage() {
                 </div>
             </div>
 
-            {/* Accounts Table */}
             <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full">
