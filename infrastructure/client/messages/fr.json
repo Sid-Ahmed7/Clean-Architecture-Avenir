@@ -2406,6 +2406,11 @@
         "title": "Gérer les actualités",
         "description": "Publiez, modifiez ou supprimez les actualités visibles par les clients.",
         "button": "Gérer les actualités"
+      },
+      "createNews": {
+        "title": "Créer une actualité",
+        "description": "Publiez un nouvel article pour vos clients.",
+        "button": "Créer une actualité"
       }
     }
   },

@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { Landmark, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { useTranslations } from 'next-intl';
+import LanguageSwitcher from './LanguageSwitcher';
 
 export default function Header() {
   const t = useTranslations('landing.header');
@@ -38,6 +39,7 @@ export default function Header() {
           </div>
 
           <div className="hidden md:flex items-center gap-4">
+            <LanguageSwitcher />
             <Link href="/login" className="px-6 py-2 text-blue-600 hover:text-blue-700 font-medium transition">
               {t('login')}
             </Link>
@@ -68,6 +70,7 @@ export default function Header() {
             <Link href="/contact" className="block text-gray-600 hover:text-blue-600 transition font-medium">
               {t('contact')}
             </Link>
+            <LanguageSwitcher />
             <div className="flex flex-col gap-2 pt-4">
               <Link href="/login" className="px-6 py-2 text-center text-blue-600 hover:text-blue-700 font-medium transition border border-blue-600 rounded-xl">
                 {t('login')}

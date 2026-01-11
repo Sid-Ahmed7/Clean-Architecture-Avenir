@@ -4,6 +4,7 @@ import { User, Menu, Search } from "lucide-react";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { NotificationMenu } from "@/components/notification/NotificationMenu";
 import { useTranslations } from 'next-intl';
+import LanguageSwitcher from '../landing/LanguageSwitcher';
 
 interface HeaderProps {
   searchQuery: string;
@@ -51,7 +52,7 @@ export default function Header({ searchQuery, setSearchQuery, onMenuClick }: Hea
 
         <div className="flex items-center gap-3">
           <NotificationMenu />
-
+          <LanguageSwitcher />
           <button className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-lg">
             <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
               <User className="w-5 h-5 text-white" />
