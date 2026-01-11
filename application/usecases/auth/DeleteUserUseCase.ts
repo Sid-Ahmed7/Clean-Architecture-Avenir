@@ -11,13 +11,11 @@ export class DeleteUserUseCase {
     ) {}
 
     public async execute(userId: string) {
-        // Verify user exists
         const user = await this.userRepository.findById(userId);
         if (user instanceof Error) {
             return user;
         }
 
-        // Delete all user's accounts (checking accounts)
         const userAccounts = await this.accountRepository.getAccountsByUserId(userId);
         if (!(userAccounts instanceof Error)) {
             for (const account of userAccounts) {
@@ -25,7 +23,6 @@ export class DeleteUserUseCase {
             }
         }
 
-        // Delete all user's savings accounts
         const userSavingsAccounts = await this.savingsAccountRepository.getSavingsAccountsByUserId(userId);
         if (!(userSavingsAccounts instanceof Error)) {
             for (const savingsAccount of userSavingsAccounts) {
@@ -33,7 +30,6 @@ export class DeleteUserUseCase {
             }
         }
 
-        // Finally, delete the user
         const result = await this.userRepository.deleteUser(userId);
         if (result instanceof Error) {
             return result;

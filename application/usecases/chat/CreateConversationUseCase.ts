@@ -11,7 +11,7 @@ export class CreateConversationUseCase {
     public async execute(clientId: string) {
 
         const id = this.uuidService.generate();
-        const conversation = ConversationEntity.from(id, clientId, "", new Date());
+        const conversation = ConversationEntity.from(id, clientId, undefined, new Date());
         
         if(conversation instanceof Error) {
             return conversation;

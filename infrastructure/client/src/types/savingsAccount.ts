@@ -8,7 +8,7 @@ export interface SavingsAccount {
     totalInterestEarned: number;
     isActive: boolean;
     balance: number;
-    lastBalanceUpdate: string; // ISO date string
-    lastInterestApplied?: string; // ISO date string
-    maturity?: string; // ISO date string
+    lastBalanceUpdate: string; 
+    lastInterestApplied?: string;
+    maturity?: string; 
 }

@@ -7,6 +7,7 @@ import Button from "@/components/ui/Button";
 import { AlertCircle, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { parseTags } from "@/lib/utils/tagsUtils";
+import { useTranslations } from "next-intl";
 
 interface FeedFormFieldsProps {
   register: UseFormRegister<CreateNewsModel>;
@@ -20,17 +21,18 @@ interface FeedFormFieldsProps {
 
 
 export function FeedFormFields({register,control,errors,existingMedia,disabled,isSubmitting,isEditMode}: FeedFormFieldsProps) {
+  const t = useTranslations('feed.form.fields');
   const router = useRouter();
 
   return (
     <div className="space-y-6">
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Titre *
+          {t('title')}
         </label>
         <input
           {...register("title")}
-          placeholder="Titre de l'actualité"
+          placeholder={t('titlePlaceholder')}
           className={`w-full border px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
             errors.title ? "border-red-500" : "border-gray-300"
           } ${disabled ? "bg-gray-100 cursor-not-allowed" : ""}`}
@@ -51,7 +53,7 @@ export function FeedFormFields({register,control,errors,existingMedia,disabled,i
           render={({ field }) => (
             <div>
               <Select
-                label="Catégorie *"
+                label={t('category')}
                 value={field.value || ""}
                 onChange={field.onChange}
                 options={Object.values(NewsCategoryEnum).map((c) => ({
@@ -75,7 +77,7 @@ export function FeedFormFields({register,control,errors,existingMedia,disabled,i
           render={({ field }) => (
             <div>
               <Select
-                label="Priorité *"
+                label={t('priority')}
                 value={field.value || ""}
                 onChange={field.onChange}
                 options={Object.values(NewsPriorityEnum).map((p) => ({
@@ -97,13 +99,13 @@ export function FeedFormFields({register,control,errors,existingMedia,disabled,i
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Tags
+          {t('tags')}
         </label>
         <input
           {...register("tags", {
             setValueAs: (val) => parseTags(val),
           })}
-          placeholder="Tags (séparés par des virgules, ex: épargne, taux, offre)"
+          placeholder={t('tagsPlaceholder')}
           className={`w-full border px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
             errors.tags ? "border-red-500" : "border-gray-300"
           } ${disabled ? "bg-gray-100 cursor-not-allowed" : ""}`}
@@ -123,19 +125,19 @@ export function FeedFormFields({register,control,errors,existingMedia,disabled,i
           variant="secondary"
           onClick={() => router.back()}
         >
-          Annuler
+          {t('cancel')}
         </Button>
 
         <Button type="submit" variant="primary" >
           {isSubmitting ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Enregistrement...
+              {t('saving')}
             </>
           ) : isEditMode ? (
-            "Mettre à jour"
+            t('update')
           ) : (
-            "Créer l'actualité"
+            t('create')
           )}
         </Button>
       </div>

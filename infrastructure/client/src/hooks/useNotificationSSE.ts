@@ -13,17 +13,15 @@ export function useNotificationSSE(
     const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
     const handleNewNotification = useCallback((e: MessageEvent) => {
-        console.log("SSE Message received:", e.data);
         try {
              const newNotification =  notificationSchema(t).parse(JSON.parse(e.data));
-             console.log("Parsed notification:", newNotification);
              setNotifications(prev => [newNotification, ...prev]);
              if(newNotification.readStatus === "UNREAD") {
                 setUnreadCount(prev => prev + 1);
              }
         } catch(err) {
             console.error("Error parsing notification:", err);
-            setError("Erreur lors de la réception d'une notification");
+            setError(t('generalErrors.notificationSSE.receive'));
         }
     }, [t, setNotifications, setUnreadCount, setError]);
     
@@ -32,12 +30,10 @@ export function useNotificationSSE(
         eventSource.addEventListener("new_notification", handleNewNotification);
 
         eventSource.onerror = (err) => {
-            console.error("SSE Error:", err);
-            setError("Erreur de connexion SSE");
+            setError(t('generalErrors.notificationSSE.connect'));
         };
 
         return () => {
-            console.log("Closing SSE connection");
             eventSource.close();
         };
     }, [baseURL, handleNewNotification, setError])

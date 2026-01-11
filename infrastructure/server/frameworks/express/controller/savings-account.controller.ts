@@ -12,16 +12,34 @@ import { CreateSavingsAccount } from "../../../../../application/requests/Create
 import { UpdateSavingsAccountConfig } from "../../../../../application/requests/UpdateSavingsAccountConfig";
 import { DeleteSavingsAccountUseCase } from "../../../../../application/usecases/accounts/DeleteSavingsAccountUseCase";
 import { NoCheckingAccountForTransferError } from "../../../../../application/errors/NoCheckingAccountForTransferError";
+import { DepositToSavingsAccountUseCase } from "../../../../../application/usecases/accounts/DepositToSavingsAccountUseCase";
+import { WithdrawFromSavingsAccountUseCase } from "../../../../../application/usecases/accounts/WithdrawFromSavingsAccountUseCase";
+import { SendNotificationToClientUseCase } from "../../../../../application/usecases/notification/SendNotificationToClientUseCase";
+import { NotificationService } from "../../../../adapters/services/notification/NotificationService";
+import { CryptoUuidGenerator } from "../../../../adapters/services/CryptoUuidGenerator";
+import { NotificationRepositoryInterface } from "../../../../../application/ports/repositories/notification/NotificationRepositoryInterface";
+import { UserRepositoryInterface } from "../../../../../application/ports/repositories/auth/UserRepositoryInterface";
+import { SavingsProductRepositoryInterface } from "../../../../../application/ports/repositories/SavingsProductRepositoryInterface";
+import { TransactionRepositoryInterface } from "../../../../../application/ports/repositories/TransactionRepositoryInterface";
 
 export class SavingsAccountController {
 
     constructor(
         private readonly savingsAccountRepository: SavingsAccountRepositoryInterface,
-        private readonly accountRepository: AccountRepositoryInterface
+        private readonly accountRepository: AccountRepositoryInterface,
+        private readonly notificationRepository: NotificationRepositoryInterface,
+        private readonly notificationService: NotificationService,
+        private readonly uuidService: CryptoUuidGenerator,
+        private readonly userRepository: UserRepositoryInterface,
+        private readonly savingsProductRepository: SavingsProductRepositoryInterface,
+        private readonly transactionRepository: TransactionRepositoryInterface
     ) {}
 
     async createSavingsAccount(req: Request, res: Response) {
-        const createSavingsAccountUseCase = new CreateSavingsAccountUseCase(this.savingsAccountRepository);
+        const createSavingsAccountUseCase = new CreateSavingsAccountUseCase(
+            this.savingsAccountRepository,
+            this.accountRepository
+        );
 
         const dto: CreateSavingsAccount = {
             accountNumber: Number(req.body.accountNumber),
@@ -168,16 +186,19 @@ export class SavingsAccountController {
     async getAllSavingsAccounts(req: Request, res: Response) {
         const accounts = await this.savingsAccountRepository.getAllSavingsAccounts();
         
-        // Calculate real-time interest for each account
+        // INSANE DEMO MODE: Calculate per SECOND with 1,000,000x multiplier!
         const accountsWithInterest = accounts.map(account => {
-            const daysSinceLastUpdate = Math.floor(
-                (new Date().getTime() - account.lastBalanceUpdate.getTime()) / (1000 * 60 * 60 * 24)
+            const secondsSinceLastUpdate = Math.floor(
+                (new Date().getTime() - account.lastBalanceUpdate.getTime()) / 1000
             );
-            const pendingInterest = (account.balance * account.interestRate * daysSinceLastUpdate) / (365 * 100);
+            // Formula: (balance * rate * 1000000 * seconds) / (365 * 24 * 60 * 60 * 100)
+            // This is ~1,000,000x faster than normal annual rate
+            const pendingInterest = Math.round((account.balance * account.interestRate * 1000000 * secondsSinceLastUpdate) / (31536000 * 100) * 100) / 100;
             
             return {
                 ...account,
-                totalInterestEarned: account.totalInterestEarned + pendingInterest
+                pendingInterest, // Add as separate field
+                totalInterestEarned: account.totalInterestEarned // Keep original value
             };
         });
         
@@ -193,21 +214,16 @@ export class SavingsAccountController {
     }
 
     async depositToSavingsAccount(req: Request, res: Response) {
-        const { DepositToSavingsAccountUseCase } = require("../../../../../application/usecases/accounts/DepositToSavingsAccountUseCase");
-        const { savingsProductRepository } = require("../../../../adapters/config/repositories");
-        const { SendNotificationToClientUseCase } = require("../../../../../application/usecases/notification/SendNotificationToClientUseCase");
-        const { notificationRepository, notificationPublisher, uuidService, userRepository } = require("../../../../adapters/config/repositories");
-        
         const sendNotificationUseCase = new SendNotificationToClientUseCase(
-            notificationRepository,
-            notificationPublisher,
-            uuidService,
-            userRepository
+            this.notificationRepository,
+            this.notificationService,
+            this.uuidService,
+            this.userRepository
         );
-        
+
         const depositUseCase = new DepositToSavingsAccountUseCase(
             this.savingsAccountRepository,
-            savingsProductRepository,
+            this.savingsProductRepository,
             this.accountRepository,
             sendNotificationUseCase
         );
@@ -233,22 +249,17 @@ export class SavingsAccountController {
     }
 
     async withdrawFromSavingsAccount(req: Request, res: Response) {
-        const { WithdrawFromSavingsAccountUseCase } = require("../../../../../application/usecases/accounts/WithdrawFromSavingsAccountUseCase");
-        const { transactionRepository } = require("../../../../adapters/config/repositories");
-        const { SendNotificationToClientUseCase } = require("../../../../../application/usecases/notification/SendNotificationToClientUseCase");
-        const { notificationRepository, notificationPublisher, uuidService, userRepository } = require("../../../../adapters/config/repositories");
-        
         const sendNotificationUseCase = new SendNotificationToClientUseCase(
-            notificationRepository,
-            notificationPublisher,
-            uuidService,
-            userRepository
+            this.notificationRepository,
+            this.notificationService,
+            this.uuidService,
+            this.userRepository
         );
-        
+
         const withdrawUseCase = new WithdrawFromSavingsAccountUseCase(
             this.savingsAccountRepository,
             this.accountRepository,
-            transactionRepository,
+            this.transactionRepository,
             sendNotificationUseCase
         );
 

@@ -5,6 +5,7 @@ import { getNameAdvisor } from "@/lib/utils/chatUtils";
 import { Advisor } from "@/types/advisor";
 import { ArrowRight, Building2, CheckCircle2, Search, User, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 
 interface TransferModalProps {
@@ -17,6 +18,7 @@ interface TransferModalProps {
 
 export default function SelectAdvisorsModal({isOpen, onClose, onTransfer, currentAdvisorId}: TransferModalProps) {
 
+    const t = useTranslations("components.chat.selectAdvisorsModal");
     const [advisors, setAdvisors] = useState<Advisor[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string| null>(null);
@@ -31,7 +33,7 @@ export default function SelectAdvisorsModal({isOpen, onClose, onTransfer, curren
             const filterAdvisor = data.filter((advisor: Advisor) => advisor.id !== currentAdvisorId);
             setAdvisors(filterAdvisor);
         } catch (err) {
-            setError("Impossible de récuperer les conseillers")
+            setError(t("errorFetch"))
         } finally {
             setLoading(false)
         }
@@ -87,10 +89,10 @@ export default function SelectAdvisorsModal({isOpen, onClose, onTransfer, curren
               </div>
               <div>
                 <h2 className="text-xl font-semibold text-white">
-                  Transfert de Dossier Client
+                  {t("title")}
                 </h2>
                 <p className="text-slate-300 text-sm mt-0.5">
-                  Sélectionnez un nouveau conseiller
+                  {t("subtitle")}
                 </p>
               </div>
             </div>
@@ -108,7 +110,7 @@ export default function SelectAdvisorsModal({isOpen, onClose, onTransfer, curren
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
             <input
               type="text"
-              placeholder="Rechercher par nom ou identifiant..."
+              placeholder={t("searchPlaceholder")}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-12 pr-4 py-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-slate-600 focus:border-transparent outline-none transition-all text-slate-700 placeholder:text-slate-400"
@@ -120,7 +122,7 @@ export default function SelectAdvisorsModal({isOpen, onClose, onTransfer, curren
           {loading ? (
             <div className="text-center py-12">
               <div className="animate-spin w-10 h-10 border-4 border-slate-200 border-t-slate-600 rounded-full mx-auto mb-4"></div>
-              <p className="text-slate-600 font-medium">Chargement des conseillers...</p>
+              <p className="text-slate-600 font-medium">{t("loading")}</p>
             </div>
           ) : error ? (
             <div className="text-center py-12">
@@ -132,7 +134,7 @@ export default function SelectAdvisorsModal({isOpen, onClose, onTransfer, curren
                 onClick={fetchAdvisors}
                 className="px-6 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 font-medium transition-colors"
               >
-                Réessayer
+                {t("retry")}
               </button>
             </div>
           ) : filteredAdvisors.length === 0 ? (
@@ -140,8 +142,8 @@ export default function SelectAdvisorsModal({isOpen, onClose, onTransfer, curren
               <div className="bg-slate-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <User className="w-8 h-8 text-slate-400" />
               </div>
-              <p className="text-slate-600 font-medium">Aucun conseiller trouvé</p>
-              <p className="text-slate-400 text-sm mt-1">Essayez avec d&apos;autres critères</p>
+              <p className="text-slate-600 font-medium">{t("noAdvisors")}</p>
+              <p className="text-slate-400 text-sm mt-1">{t("tryOtherCriteria")}</p>
             </div>
           ) : (
             <div className="space-y-3 max-h-96 overflow-y-auto pr-2">
@@ -196,14 +198,14 @@ export default function SelectAdvisorsModal({isOpen, onClose, onTransfer, curren
             onClick={onClose}
             className="flex-1 px-6 py-3 bg-white border-2 border-slate-300 rounded-xl font-semibold text-slate-700 hover:bg-slate-100 hover:border-slate-400 transition-all"
           >
-            Annuler
+            {t("cancel")}
           </button>
           <button
           onClick={handleConfirmTransfer}
             disabled={!selectedAdvisor}
             className="flex-1 px-6 py-3 bg-slate-800 text-white rounded-xl font-semibold hover:bg-slate-900 disabled:bg-slate-300 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 shadow-lg shadow-slate-900/20 disabled:shadow-none"
           >
-            <span>Valider le transfert</span>
+            <span>{t("confirm")}</span>
             <ArrowRight className="w-5 h-5" />
           </button>
         </div>

@@ -1,4 +1,5 @@
 import { Upload } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 
 interface DragAndDropZoneProps {
@@ -12,6 +13,7 @@ interface DragAndDropZoneProps {
 }
 
 export function DragAndDropZone({onFilesSelect, isDragging, onDragOver, onDragLeave, onDrop, disabled, maxSize} : DragAndDropZoneProps) {
+    const t = useTranslations("media.dragDrop");
     
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if(! e.target.files) {
@@ -33,10 +35,10 @@ export function DragAndDropZone({onFilesSelect, isDragging, onDragOver, onDragLe
           size={40} 
         />
         <span className="text-sm text-gray-600 font-medium mb-1">
-          Glissez-déposez vos fichiers ici ou cliquez pour sélectionner
+          {t("dropOrClick")}
         </span>
         <span className="text-xs text-gray-500">
-          Images et vidéos acceptées • Max {maxSize}MB par fichier
+          {t("acceptedTypes", { maxSize })}
         </span>
         <input
           type="file"

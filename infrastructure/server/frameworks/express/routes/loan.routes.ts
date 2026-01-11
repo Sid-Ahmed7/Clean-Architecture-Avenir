@@ -3,7 +3,8 @@ import { verifyTokenAccess } from "../middleware/authMiddleware";
 import { authorizeRoles } from "../middleware/roleMiddleware";
 import { RoleEnum } from "../../../../../domain/enums/RoleEnum";
 import { LoanController } from "../controller/loan.controller";
-import { loanRequestRepository,userRepository,userRoleRepository,uuidService,accountRepository,loanConfigService,loanRepaymentScheduleRepository, notificationRepository, notificationService} from "../../../../adapters/config/repositories";
+import { loanRequestRepository,userRepository,userRoleRepository,accountRepository,loanRepaymentScheduleRepository, notificationRepository} from "../../../../adapters/config/repositories";
+import { uuidService, loanConfigService, notificationService} from "../../../../adapters/config/services";
 
 const router = express.Router();
 

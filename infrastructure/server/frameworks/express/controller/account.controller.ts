@@ -85,6 +85,8 @@ export class AccountController {
     private readonly transactionEnrichmentService: TransactionEnrichmentServiceImpl,
     private readonly notificationRepository: NotificationRepositoryInterface,
     private readonly notificationPublisher: NotificationService,
+    private readonly manageAllowedAccountStatusService: ManageAllowedAccountStatusService,
+    private readonly statusMessageService: StatusMessageService,
   ) {}
 
 
@@ -339,21 +341,32 @@ async updateAccount(req: Request, res: Response) {
             this.accountRepository,
             sendNotificationUseCase);
         const accountNumber = Number(req.params.accountNumber);
+
+        if (req.user?.roles.includes(RoleEnum.CLIENT)) {
+            const account = await this.accountRepository.getOneAccountByAccountNumber(accountNumber);
+            if (account instanceof Error) {
+                return res.status(404).json({error: "Account not found"});
+            }
+            if (account.userId !== req.user.userId) {
+                return res.status(403).json({error: "You can only delete your own accounts"});
+            }
+        }
+
         const result = await deleteAccountUseCase.execute(accountNumber);
-        
+
         if(result instanceof Error) {
             if(result instanceof AccountNotFoundError) {
                 return res.status(404).json({error: result.message})
             }
-            
+
             if(result instanceof CannotDeleteLastCheckingAccountError) {
                 return res.status(400).json({error: result.message})
             }
-            
+
             if(result instanceof NoCheckingAccountForTransferError) {
                 return res.status(400).json({error: result.message})
             }
-        
+
             return res.status(500).json({error : result.message})
         }
 
@@ -370,8 +383,8 @@ async updateAccount(req: Request, res: Response) {
         );
         const changeStatusAccountUseCase = new ChangeAccountStatusUseCase(
             this.accountRepository,
-            new ManageAllowedAccountStatusService(),
-            new StatusMessageService(),
+            this.manageAllowedAccountStatusService,
+            this.statusMessageService,
             sendNotificationUseCase);
         const accountNumber = Number(req.params.accountNumber);
         const parseResult = changeAccountStatusSchema.safeParse(req.body);

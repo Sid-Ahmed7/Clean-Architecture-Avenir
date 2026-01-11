@@ -1,10 +1,15 @@
 import { UserTransaction } from "@/types/transaction";
+import { useTranslations } from 'next-intl';
+import { useContext } from "react";
+import { LocaleContext } from "@/contexts/LocaleProvider";
 
 interface TransactionTableRowProps {
   transaction: UserTransaction;
 }
 
 export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
+  const t = useTranslations('components.stocks.transactions.row');
+  const { locale } = useContext(LocaleContext);
   const isBuy = transaction.type === "BUY";
   const total = transaction.quantity * transaction.executionPrice;
 
@@ -15,18 +20,17 @@ export function TransactionTableRow({ transaction }: TransactionTableRowProps) {
       </td>
 
       <td className="px-6 py-4 text-sm text-gray-500">
-        {new Date(transaction.executedAt).toLocaleString("fr-FR")}
+        {new Date(transaction.executedAt).toLocaleString(locale)}
       </td>
 
       <td className="px-6 py-4 text-center">
         <span
-          className={`px-3 py-1 rounded-full text-xs font-bold ${
-            isBuy
+          className={`px-3 py-1 rounded-full text-xs font-bold ${isBuy
               ? "bg-blue-100 text-blue-800"
               : "bg-red-100 text-red-800"
-          }`}
+            }`}
         >
-          {isBuy ? "Achat" : "Vente"}
+          {isBuy ? t('buy') : t('sell')}
         </span>
       </td>
 

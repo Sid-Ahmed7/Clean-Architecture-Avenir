@@ -15,34 +15,36 @@ export class WithdrawFromSavingsAccountUseCase {
     ) {}
 
     public async execute(dto: WithdrawFromSavingsAccount): Promise<SavingsAccountsEntity | Error> {
-        // 1. Get savings account
         const savingsAccount = await this.savingsAccountRepository.getSavingsAccountByNumber(dto.savingsAccountNumber);
         if (savingsAccount instanceof Error) {
             return savingsAccount;
         }
 
-        // 2. Verify ownership
+        // Verify ownership
         if (savingsAccount.userId !== dto.userId) {
             return new Error("You do not own this savings account");
         }
 
-        // 3. Verify account is active
+        // Verify account is active
         if (!savingsAccount.isActive) {
             return new Error("This savings account is not active");
         }
 
-        // 4. Calculate pending interest before balance change
+        // Calculate pending interest before balance change
         const daysSinceLastUpdate = Math.floor(
             (new Date().getTime() - savingsAccount.lastBalanceUpdate.getTime()) / (1000 * 60 * 60 * 24)
         );
-        const pendingInterest = (savingsAccount.balance * savingsAccount.interestRate * daysSinceLastUpdate) / (365 * 100);
+        // Calculate per minute instead of per day
+        const minutesSinceLastUpdate = Math.floor(
+            (new Date().getTime() - savingsAccount.lastBalanceUpdate.getTime()) / (1000 * 60)
+        );
+        const pendingInterest = (savingsAccount.balance * savingsAccount.interestRate * minutesSinceLastUpdate) / (525600 * 100);
 
-        // 5. Check sufficient funds (interest not included in available balance)
+        // Check sufficient funds (interest not included in available balance)
         if (savingsAccount.balance < dto.amount) {
             return new Error(`Insufficient funds. Available: ${savingsAccount.balance}€`);
         }
 
-        // 6. Get user's main account
         const userAccounts = await this.accountRepository.getAccountsByUserId(dto.userId);
         if (userAccounts instanceof Error) {
             return userAccounts;
@@ -53,7 +55,6 @@ export class WithdrawFromSavingsAccountUseCase {
             return new Error("No main account found");
         }
 
-        // 7. Update savings account balance
         const newBalance = savingsAccount.balance - dto.amount;
         const updatedSavingsAccount = SavingsAccountsEntity.from(
             savingsAccount.accountNumber,
@@ -64,7 +65,7 @@ export class WithdrawFromSavingsAccountUseCase {
             savingsAccount.totalInterestEarned + pendingInterest,
             savingsAccount.isActive,
             newBalance,
-            new Date(), // Update lastBalanceUpdate
+            new Date(),
             savingsAccount.lastInterestApplied,
             savingsAccount.maturity
         );
@@ -73,14 +74,13 @@ export class WithdrawFromSavingsAccountUseCase {
             return updatedSavingsAccount;
         }
 
-        // 8. Credit main account
+        // Credit main account
         mainAccount.currentBalance += dto.amount;
         const mainAccountUpdate = await this.accountRepository.updateOneAccount(mainAccount);
         if (mainAccountUpdate instanceof Error) {
             return mainAccountUpdate;
         }
 
-        // 9. Save updated savings account
         const result = await this.savingsAccountRepository.updateSavingsAccount(updatedSavingsAccount);
         if (result instanceof Error) {
             // Rollback main account

@@ -1,18 +1,20 @@
 import { FilePreview } from "./FilePreview";
 import Button from "../ui/Button";
+import { useTranslations } from 'next-intl';
 import { Files } from "@/types/files";
 import { getMediaUrl } from "@/lib/utils/media";
 
 interface FileGridProps {
   title: string;
-  files: Array<Files>
+  files: Array<Files>;
   onRemove?: (index: number) => void;
   onClearAll?: () => void;
   isUploadAlready?: boolean;
   onCaptionChange?: (mediaId: string, caption: string) => void;
 }
 
-export function FileGrid({title,files,onRemove,onClearAll,isUploadAlready = false, onCaptionChange}: FileGridProps) {
+export function FileGrid({title,files,onRemove,onClearAll,isUploadAlready,onCaptionChange}: FileGridProps) {
+  const t = useTranslations('feed.list.media.fileGrid');
   if (files.length === 0) {
     return null;
   }
@@ -29,7 +31,7 @@ export function FileGrid({title,files,onRemove,onClearAll,isUploadAlready = fals
             variant="secondary" 
             onClick={onClearAll}
           >
-            Tout supprimer
+            {t('clearAll')}
           </Button>
         )}
       </div>
@@ -51,8 +53,6 @@ export function FileGrid({title,files,onRemove,onClearAll,isUploadAlready = fals
                 }
               : undefined
             }
-
-
             mediaId={file.mediaId}
           />
         ))}

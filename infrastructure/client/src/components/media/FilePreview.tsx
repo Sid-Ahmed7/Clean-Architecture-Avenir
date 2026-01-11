@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import Button from "../ui/Button";
 import { getMediaUrl } from "@/lib/utils/media";
+import { useTranslations } from 'next-intl';
 
 
 interface FilePreviewProps {
@@ -18,17 +19,16 @@ interface FilePreviewProps {
 }
 
 export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlready, caption, onCaptionChange, mediaId}: FilePreviewProps) {
-    
+    const t = useTranslations('media.filePreview');
     const [isEditingCaption, setIsEditingCaption] = useState(false);
     const [captionValue, setCaptionValue] = useState(caption || "");
 
     useEffect(() => {
-            setCaptionValue(caption || "");  
-            console.log("catopn", caption)
+            setCaptionValue(caption || "");
         }, [caption])
 
     const formatFileSize = (fileSize : number) : string => {
-        
+
         if (fileSize === 0) {
             return '0 B'
         }
@@ -50,12 +50,11 @@ export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlr
     }
 
      return (
-        <div className="relative group">
-        <div className={`aspect-square rounded-lg overflow-hidden bg-gray-100 border-2 ${isUploadAlready ? 'border-green-200' : 'border-gray-200'}`}>
+        <div className="flex flex-col">
+        <div className={`relative aspect-square rounded-lg overflow-hidden bg-gray-100 border-2 ${isUploadAlready ? 'border-green-200' : 'border-gray-200'} group`}>
             {type === "IMAGE" ? (
-                
+
   <>
-    {console.log("FilePreview src:", getMediaUrl(preview))}
     <Image
       src={getMediaUrl(preview)}
       alt={fileName}
@@ -67,13 +66,13 @@ export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlr
     />
   </>            ) : (
             <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-purple-100 to-blue-100">
-            <video 
-            src={getMediaUrl(preview)} 
+            <video
+            src={getMediaUrl(preview)}
             className="w-full h-full object-cover"
             controls
             preload="metadata"
-            />                
-            <span className="text-xs text-purple-700 font-medium">Vidéo</span>
+            />
+            <span className="text-xs text-purple-700 font-medium">{t('video')}</span>
             </div>
             )}
         </div>
@@ -83,7 +82,7 @@ export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlr
             type="button"
             onClick={onRemove}
             className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1.5 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
-            title="Supprimer"
+            title={t('remove')}
             >
             <X size={14} />
             </button>
@@ -93,7 +92,7 @@ export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlr
             <span className={`px-2 py-1 rounded-full text-xs font-medium inline-flex items-center gap-1 ${
             isUploadAlready ? 'bg-green-500 text-white' : type === "IMAGE" ? 'bg-blue-500 text-white': 'bg-purple-500 text-white'
             }`}>
-            {isUploadAlready ? ('Uploadé') : (
+            {isUploadAlready ? (t('uploaded')) : (
                 <>
                 {type === "IMAGE" ? <ImageIcon size={12} /> : <Video size={12} />}
                 </>
@@ -102,50 +101,50 @@ export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlr
         </div>
 
 
-        <div className="mt-2 space-y-0.5">
+        <div className="mt-2 space-y-1">
             <p className="text-xs text-gray-700 font-medium truncate" title={fileName}>
             {fileName}
             </p>
             <p className="text-xs text-gray-500">
             {formatFileSize(size)}
             </p>
-            
+
             {isUploadAlready && onCaptionChange && (
-                <div className="mt-60 ml-50">
+                <div className="mt-2 space-y-1">
                     {!isEditingCaption ? (
-                        <div className="flex items-center gap-16">
-                            <p className="text-xs text-gray-600 truncate flex-1" title={caption || "Aucune légende"}>
-                                {caption || "Aucune légende"}
+                        <>
+                            <p className="text-xs text-gray-600 italic truncate" title={caption || t('noCaption')}>
+                                {caption || t('noCaption')}
                             </p>
                             <Button
                                 type="button"
                                 onClick={() => setIsEditingCaption(true)}
-                                variant="primary"                        >
-                                <Edit2 size={12} /> Modifier la legende
+                                variant="primary"
+                                size="sm"
+                                fullWidth
+                            >
+                                <Edit2 size={12} /> {t('editCaption')}
                             </Button>
-                        </div>
+                        </>
                     ) : (
-                        <div className="flex flex-col gap-1">
-                            <div>
+                        <div className="flex flex-col gap-1.5">
                             <input
                                 type="text"
                                 value={captionValue}
                                 onChange={(e) => {
-                                    console.log("Input caption value:", e.target.value);
                                     setCaptionValue(e.target.value);
                                 }}
-                                placeholder="Ajouter une légende..."
-                                className="text-xs border rounded px-2 py-1 w-full"
+                                placeholder={t('addCaption')}
+                                className="text-xs border rounded px-2 py-1.5 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
-                            </div>
-                            <div className="flex gap-1">
+                            <div className="flex gap-1.5">
                                 <button
                                     type="button"
                                     onClick={handleAddCaption}
-                                    className="text-green-600 hover:text-green-700 p-1 bg-green-50 rounded w-8 h-8"
-                                    title="Enregistrer"
+                                    className="flex-1 text-xs text-white bg-green-500 hover:bg-green-600 px-2 py-1.5 rounded flex items-center gap-1 justify-center transition-colors"
+                                    title={t('save')}
                                 >
-                                    <Save size={12} />
+                                    <Save size={12} /> {t('save')}
                                 </button>
                                 <button
                                     type="button"
@@ -153,10 +152,10 @@ export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlr
                                         setCaptionValue(caption || "");
                                         setIsEditingCaption(false);
                                     }}
-                                    className="text-gray-600 hover:text-gray-700 p-1 bg-gray-50 rounded"
-                                    title="Annuler"
+                                    className="flex-1 text-xs text-gray-700 bg-gray-200 hover:bg-gray-300 px-2 py-1.5 rounded flex items-center gap-1 justify-center transition-colors"
+                                    title={t('cancel')}
                                 >
-                                    <X size={12} />
+                                    <X size={12} /> {t('cancel')}
                                 </button>
                             </div>
                         </div>

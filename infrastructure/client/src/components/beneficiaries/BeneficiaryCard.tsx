@@ -2,6 +2,7 @@ import { Beneficiary } from "@/types/beneficiary";
 import { Card } from "../ui/Card";
 import Button from "../ui/Button";
 import { Edit, Send, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface BeneficiaryCardProps {
     beneficiary: Beneficiary;
@@ -12,6 +13,7 @@ interface BeneficiaryCardProps {
 
 
 export function BeneficiaryCard({beneficiary, onEdit, onDelete, onTransfer} : BeneficiaryCardProps){
+  const t = useTranslations("components.beneficiariesManager.card");
 
   return (    
     <Card className="hover:shadow-lg transition-shadow">
@@ -25,7 +27,7 @@ export function BeneficiaryCard({beneficiary, onEdit, onDelete, onTransfer} : Be
         </div>
         {beneficiary.isVerified && (
           <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
-            Vérifié
+            {t("verified")}
           </span>
         )}
       </div>
@@ -45,7 +47,7 @@ export function BeneficiaryCard({beneficiary, onEdit, onDelete, onTransfer} : Be
           icon={Send}
           onClick={() => onTransfer(beneficiary)}
         >
-          Transférer
+          {t("transferButton")}
         </Button>
         <Button
           variant="secondary"
@@ -53,7 +55,7 @@ export function BeneficiaryCard({beneficiary, onEdit, onDelete, onTransfer} : Be
           icon={Edit}
           onClick={() => onEdit(beneficiary)}
         >
-          Modifier
+          {t("editButton")}
         </Button>
         <Button
           variant="danger"
@@ -61,7 +63,7 @@ export function BeneficiaryCard({beneficiary, onEdit, onDelete, onTransfer} : Be
           icon={Trash2}
           onClick={() => onDelete(beneficiary.beneficiaryId)}
         >
-          Supprimer
+          {t("deleteButton")}
         </Button>
       </div>
     </Card>

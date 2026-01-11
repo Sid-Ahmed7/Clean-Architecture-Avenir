@@ -4,7 +4,8 @@ import { verifyTokenAccess } from '../middleware/authMiddleware';
 import { authorizeRoles } from '../middleware/roleMiddleware';
 import { RoleEnum } from '../../../../../domain/enums/RoleEnum';
 import {io, clients, onlineUsers } from "../sockets/socket";
-import {conversationRepository, messageRepository,notificationRepository,notificationService,userRepository, uuidService} from "../../../../adapters/config/repositories";
+import {conversationRepository, messageRepository,notificationRepository,userRepository} from "../../../../adapters/config/repositories";
+import {notificationService, uuidService} from "../../../../adapters/config/services";
 const router = express.Router();
 
 const chatController = new ChatController(conversationRepository, messageRepository, userRepository,uuidService,notificationRepository, notificationService,io,clients,onlineUsers);

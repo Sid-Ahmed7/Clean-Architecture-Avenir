@@ -2,7 +2,6 @@ import { SavingsAccountsEntity } from "../../../domain/entities/SavingsAccountEn
 import { SavingsAccountRepositoryInterface } from "../../ports/repositories/SavingsAccountRepositoryInterface";
 import { SavingsProductRepositoryInterface } from "../../ports/repositories/SavingsProductRepositoryInterface";
 import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
-import { TransactionRepositoryInterface } from "../../ports/repositories/TransactionRepositoryInterface";
 import { DepositToSavingsAccount } from "../../requests/DepositToSavingsAccount";
 import { SendNotificationToClientUseCase } from "../notification/SendNotificationToClientUseCase";
 import { NotificationTypeEnum } from "../../../domain/enums/NotificationTypeEnum";
@@ -60,7 +59,11 @@ export class DepositToSavingsAccountUseCase {
         const daysSinceLastUpdate = Math.floor(
             (new Date().getTime() - savingsAccount.lastBalanceUpdate.getTime()) / (1000 * 60 * 60 * 24)
         );
-        const pendingInterest = (savingsAccount.balance * savingsAccount.interestRate * daysSinceLastUpdate) / (365 * 100);
+        // Calculate per minute instead of per day
+        const minutesSinceLastUpdate = Math.floor(
+            (new Date().getTime() - savingsAccount.lastBalanceUpdate.getTime()) / (1000 * 60)
+        );
+        const pendingInterest = (savingsAccount.balance * savingsAccount.interestRate * minutesSinceLastUpdate) / (525600 * 100);
 
         const updatedSavingsAccount = SavingsAccountsEntity.from(
             savingsAccount.accountNumber,

@@ -42,3 +42,15 @@ export const getOverdraftRequestDetails = (requestId: string) => {
 export const getRib = (accountNumber: number) => {
     return apiClient.get(`/accounts/${accountNumber}/rib`);
 }
+
+export const createAccount = (data: { customAccountName?: string; accountType?: string; currency?: string }) => {
+    return apiClient.post("/accounts", data);
+}
+
+export const renameAccount = (accountNumber: number, customAccountName: string) => {
+    return apiClient.patch(`/accounts/${accountNumber}/rename`, { customAccountName });
+}
+
+export const deleteAccount = (accountNumber: number) => {
+    return apiClient.delete(`/accounts/${accountNumber}`);
+}

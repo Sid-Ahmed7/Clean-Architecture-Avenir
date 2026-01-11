@@ -3,6 +3,7 @@
 import { BeneficiaryGroup } from "@/types/beneficiaryGroup";
 import { X } from "lucide-react";
 import { BeneficiaryGroupCard } from "./BeneficiaryGroupCard";
+import { useTranslations } from "next-intl";
 
 interface BeneficiaryGroupDetailsSidebarProps {
   group: BeneficiaryGroup | null;
@@ -17,6 +18,7 @@ interface BeneficiaryGroupDetailsSidebarProps {
 }
 
 export function BeneficiaryGroupDetailsSidebar({group,isOpen,onClose,onEdit,onDelete,onAddBeneficiary,onRemoveBeneficiary,onViewBeneficiaries,onTransferToGroup}: BeneficiaryGroupDetailsSidebarProps) {
+  const t = useTranslations('components.beneficiaries.group.sidebar');
   if (!group) return null;
 
   return (
@@ -36,11 +38,11 @@ export function BeneficiaryGroupDetailsSidebar({group,isOpen,onClose,onEdit,onDe
       >
         <div className="h-full flex flex-col">
           <div className="p-5 border-b border-gray-200 flex justify-between items-center">
-            <h2 className="text-xl font-bold text-gray-900">Détails du groupe</h2>
+            <h2 className="text-xl font-bold text-gray-900">{t('title')}</h2>
             <button
               onClick={onClose}
               className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-              aria-label="Fermer"
+              aria-label={t('close')}
             >
               <X className="w-6 h-6" />
             </button>

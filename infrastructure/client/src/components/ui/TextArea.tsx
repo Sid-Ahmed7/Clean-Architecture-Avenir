@@ -40,7 +40,6 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
             props.onChange?.(e);
         };
 
-        // Variant classes
         const variantClasses = {
             default: `
                 bg-white border-2 
@@ -93,7 +92,6 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 
         return (
             <div className={`${fullWidth ? 'w-full' : ''} ${className}`}>
-                {/* Label */}
                 {label && (
                     <label className="block mb-2">
                         <span className={`
@@ -111,9 +109,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
                     </label>
                 )}
 
-                {/* TextArea Container */}
                 <div className="relative">
-                    {/* TextArea Field */}
                     <textarea
                         ref={ref}
                         {...props}
@@ -143,12 +139,10 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
                         `}
                     />
 
-                    {/* Animated underline for gradient variant */}
                     {variant === 'gradient' && isFocused && (
                         <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 animate-pulse" />
                     )}
 
-                    {/* Character count */}
                     {showCharCount && maxLength && (
                         <div className={`
                             absolute bottom-2 right-3
@@ -163,7 +157,6 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
                     )}
                 </div>
 
-                {/* Helper Text or Error */}
                 {(error || helperText) && (
                     <div className="mt-2 flex items-start gap-1.5">
                         {error ? (

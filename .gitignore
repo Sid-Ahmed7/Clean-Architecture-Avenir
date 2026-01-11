@@ -2,12 +2,18 @@
 node_modules/
 
 # Fichiers d'environnement
-infrastructure/server/.env
+infrastructure/server/frameworks/express/.env
+infrastructure/server/frameworks/adonisjs/.env
 .env.local
 .env.*
+.env
 
 # Fichiers de compilation TypeScript
 dist/
+build/
+infrastructure/server/frameworks/express/dist/
+infrastructure/server/frameworks/adonisjs/build/
+*.tsbuildinfo
 
 # Fichiers de logs et de cache
 *.log

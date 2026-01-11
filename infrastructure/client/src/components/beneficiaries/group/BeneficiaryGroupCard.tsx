@@ -3,8 +3,9 @@
 import Button from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { BeneficiaryGroup } from "@/types/beneficiaryGroup";
+import { useTranslations, useFormatter } from "next-intl";
 
-import { Edit, Trash2, Users, UserPlus, Send} from "lucide-react";
+import { Edit, Trash2, Users, UserPlus, Send } from "lucide-react";
 
 interface BeneficiaryGroupCardProps {
   group: BeneficiaryGroup;
@@ -17,7 +18,9 @@ interface BeneficiaryGroupCardProps {
   onTransferToGroup?: (group: BeneficiaryGroup) => void;
 }
 
-export function BeneficiaryGroupCard({group,beneficiariesCount,onEdit,onDelete,onAddBeneficiary,onViewBeneficiaries,onTransferToGroup}: BeneficiaryGroupCardProps) {
+export function BeneficiaryGroupCard({ group, beneficiariesCount, onEdit, onDelete, onAddBeneficiary, onViewBeneficiaries, onTransferToGroup }: BeneficiaryGroupCardProps) {
+  const t = useTranslations('components.beneficiaries.group.card');
+  const format = useFormatter();
   const count = beneficiariesCount ?? group.beneficiaryIds.length;
 
   return (
@@ -31,32 +34,34 @@ export function BeneficiaryGroupCard({group,beneficiariesCount,onEdit,onDelete,o
             <div>
               <h3 className="text-lg font-semibold text-gray-900">{group.groupName}</h3>
               <p className="text-sm text-gray-600">
-                {count} {count > 1 ? "bénéficiaires" : "bénéficiaire"}
+                {t('beneficiariesCount', { count })}
               </p>
             </div>
           </div>
         </div>
         <span className="px-3 py-1 bg-purple-100 text-purple-800 text-xs font-medium rounded-full">
-          Groupe
+          {t('badge')}
         </span>
       </div>
 
       <div className="mb-4 text-sm text-gray-600">
         <p>
-          Créé le{" "}
-          {new Date(group.createdAt).toLocaleDateString("fr-FR", {
-            day: "2-digit",
-            month: "long",
-            year: "numeric",
+          {t('createdAt', {
+            date: format.dateTime(new Date(group.createdAt), {
+              day: "2-digit",
+              month: "long",
+              year: "numeric",
+            })
           })}
         </p>
         {group.updatedAt !== group.createdAt && (
           <p className="text-xs text-gray-500 mt-1">
-            Dernière modification le{" "}
-            {new Date(group.updatedAt).toLocaleDateString("fr-FR", {
-              day: "2-digit",
-              month: "long",
-              year: "numeric",
+            {t('updatedAt', {
+              date: format.dateTime(new Date(group.updatedAt), {
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+              })
             })}
           </p>
         )}
@@ -70,7 +75,7 @@ export function BeneficiaryGroupCard({group,beneficiariesCount,onEdit,onDelete,o
             icon={Users}
             onClick={() => onViewBeneficiaries(group)}
           >
-            Voir les membres
+            {t('viewMembers')}
           </Button>
         )}
         {onTransferToGroup && count > 0 && (
@@ -80,7 +85,7 @@ export function BeneficiaryGroupCard({group,beneficiariesCount,onEdit,onDelete,o
             icon={Send}
             onClick={() => onTransferToGroup(group)}
           >
-            Transférer au groupe
+            {t('transfer')}
           </Button>
         )}
         {onAddBeneficiary && (
@@ -90,7 +95,7 @@ export function BeneficiaryGroupCard({group,beneficiariesCount,onEdit,onDelete,o
             icon={UserPlus}
             onClick={() => onAddBeneficiary(group.groupId)}
           >
-            Ajouter
+            {t('add')}
           </Button>
         )}
         <Button
@@ -99,7 +104,7 @@ export function BeneficiaryGroupCard({group,beneficiariesCount,onEdit,onDelete,o
           icon={Edit}
           onClick={() => onEdit(group)}
         >
-          Modifier
+          {t('edit')}
         </Button>
         <Button
           variant="danger"
@@ -107,7 +112,7 @@ export function BeneficiaryGroupCard({group,beneficiariesCount,onEdit,onDelete,o
           icon={Trash2}
           onClick={() => onDelete(group.groupId)}
         >
-          Supprimer
+          {t('delete')}
         </Button>
       </div>
     </Card>

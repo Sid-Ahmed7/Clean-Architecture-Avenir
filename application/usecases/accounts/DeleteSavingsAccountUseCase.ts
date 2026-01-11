@@ -11,11 +11,9 @@ export class DeleteSavingsAccountUseCase {
     ) {}
     
     public async execute(accountNumber: number): Promise<void | Error> {
-        // 1. Récupérer le compte d'épargne
         const savingsAccount = await this.savingsAccountRepository.getSavingsAccountByNumber(accountNumber);
         if (savingsAccount instanceof Error) return savingsAccount;
 
-        // 2. Si balance > 0, transférer vers un compte CHECKING
         if (savingsAccount.balance > 0) {
             const userAccounts = await this.accountRepository.getAccountsByUserId(savingsAccount.userId);
             if (userAccounts instanceof Error) return userAccounts;
@@ -28,18 +26,15 @@ export class DeleteSavingsAccountUseCase {
                 );
             }
 
-            // Transférer le solde
             const creditResult = checkingAccount.credit(savingsAccount.balance);
             if (creditResult instanceof Error) return creditResult;
 
             await this.accountRepository.updateOneAccount(checkingAccount);
             
-            // Mettre le solde du compte épargne à 0
             savingsAccount.balance = 0;
             await this.savingsAccountRepository.updateSavingsAccount(savingsAccount);
         }
 
-        // 3. Supprimer le compte d'épargne
         return await this.savingsAccountRepository.deleteSavingsAccount(accountNumber);
     }
 }

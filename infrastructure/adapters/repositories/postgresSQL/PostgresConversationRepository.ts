@@ -9,11 +9,15 @@ import { PostgresConversationRow } from "./types/PostgresConversationRow";
 export class PostgresConversationRepository implements ConversationRepositoryInterface {
 
     async findByConversationId(conversationId: string): Promise<ConversationEntity | ConversationNotFoundError> {
+
+        
         const result = await pgPool.query<PostgresConversationRow>(
             'SELECT * FROM conversations WHERE id = $1',
             [conversationId]
         );
 
+     
+        
         if (result.rows.length === 0) {
             return new ConversationNotFoundError(`Conversation with id ${conversationId} not found`);
         }
@@ -23,6 +27,7 @@ export class PostgresConversationRepository implements ConversationRepositoryInt
             return new ConversationNotFoundError(`Conversation with id ${conversationId} not found`);
         }
 
+
         return this.mapRowToEntity(row);
     }
 
@@ -31,8 +36,10 @@ export class PostgresConversationRepository implements ConversationRepositoryInt
             'SELECT * FROM conversations WHERE advisor_id = $1',
             [advisorId]
         );
-
-        return result.rows.map(row => this.mapRowToEntity(row));
+        const entities = result.rows
+            .map(row => this.mapRowToEntity(row))
+            .filter((entity): entity is ConversationEntity => !(entity instanceof Error));
+        return entities;
     }
 
     async findByClientId(clientId: string): Promise<Array<ConversationEntity> | UserNotFoundError> {
@@ -40,18 +47,43 @@ export class PostgresConversationRepository implements ConversationRepositoryInt
             'SELECT * FROM conversations WHERE client_id = $1',
             [clientId]
         );
-
-        return result.rows.map(row => this.mapRowToEntity(row));
+        const entities = result.rows
+            .map(row => this.mapRowToEntity(row))
+            .filter((entity): entity is ConversationEntity => !(entity instanceof Error));
+        return entities;
     }
 
     async findAll(): Promise<Array<ConversationEntity>> {
         const result = await pgPool.query<PostgresConversationRow>('SELECT * FROM conversations');
-        return result.rows.map(row => this.mapRowToEntity(row));
+        const entities = result.rows
+            .map(row => this.mapRowToEntity(row))
+            .filter((entity): entity is ConversationEntity => !(entity instanceof Error));
+        return entities;
     }
 
     async save(conversation: ConversationEntity): Promise<void | InvalidConversationError> {
         if (!conversation.clientId) {
             return new InvalidConversationError("Conversation must have a clientId");
+        }
+
+        const clientExists = await pgPool.query(
+            'SELECT id FROM bank_users WHERE id = $1',
+            [conversation.clientId]
+        );
+
+        if (clientExists.rows.length === 0) {
+            return new InvalidConversationError(`Client with id ${conversation.clientId} does not exist`);
+        }
+
+        if (conversation.advisorId) {
+            const advisorExists = await pgPool.query(
+                'SELECT id FROM bank_users WHERE id = $1',
+                [conversation.advisorId]
+            );
+
+            if (advisorExists.rows.length === 0) {
+                return new InvalidConversationError(`Advisor with id ${conversation.advisorId} does not exist`);
+            }
         }
 
         const exists = await pgPool.query(
@@ -70,9 +102,20 @@ export class PostgresConversationRepository implements ConversationRepositoryInt
         );
     }
 
-    async update(conversation: ConversationEntity): Promise<void | ConversationNotFoundError> {
+    async update(conversation: ConversationEntity): Promise<void | ConversationNotFoundError | InvalidConversationError> {
+        if (conversation.advisorId) {
+            const advisorExists = await pgPool.query(
+                'SELECT id FROM bank_users WHERE id = $1',
+                [conversation.advisorId]
+            );
+
+            if (advisorExists.rows.length === 0) {
+                return new InvalidConversationError(`Advisor with id ${conversation.advisorId} does not exist`);
+            }
+        }
+
         const result = await pgPool.query(
-            `UPDATE conversations 
+            `UPDATE conversations
              SET advisor_id = $1
              WHERE client_id = $2
              RETURNING *`,
@@ -84,12 +127,13 @@ export class PostgresConversationRepository implements ConversationRepositoryInt
         }
     }
 
-    private mapRowToEntity(row: PostgresConversationRow): ConversationEntity {
-        return {
-            id: row.id,
-            clientId: row.client_id,
-            advisorId: row.advisor_id ?? undefined,
-            createdAt: row.created_at
-        } as ConversationEntity;
+    private mapRowToEntity(row: PostgresConversationRow): ConversationEntity | Error {
+    const conversation = ConversationEntity.from(
+        row.id,
+        row.client_id,
+        row.advisor_id ?? undefined,
+        row.created_at
+    );
+    return conversation;
     }
 }

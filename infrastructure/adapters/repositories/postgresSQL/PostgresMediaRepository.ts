@@ -1,6 +1,7 @@
 import { MediaNotFoundError } from "../../../../application/errors/MediaNotFoundError";
 import { MediaRepositoryInterface } from "../../../../application/ports/repositories/news/MediaRepositoryInterface";
 import { MediaEntity } from "../../../../domain/entities/MediaEntity";
+import { MediaTypeEnum } from "../../../../domain/enums/MediaTypeEnum";
 import { pgPool } from "../../config/database/configPostgresSQL";
 import { PostgresMediaRow } from "./types/PostgresMediaRow";
 import { InvalidUrlMediaError } from "../../../../domain/errors/InvalidUrlMediaError";
@@ -25,26 +26,32 @@ export class PostgresMediaRepository implements MediaRepositoryInterface {
         return this.mapRowToEntity(row);
     }
 
-    async findByNewsId(newsId: string): Promise<Array<MediaEntity>> {
+    async findByNewsId(newsId: string): Promise<MediaEntity[]> {
         const result = await pgPool.query<PostgresMediaRow>(
             'SELECT * FROM media WHERE news_id = $1 ORDER BY "order" ASC',
             [newsId]
         );
-
-        return result.rows.map(row => this.mapRowToEntity(row));
+        if (result.rows.length === 0) {
+            return [];
+        }
+        const entities = result.rows
+            .map(row => this.mapRowToEntity(row))
+            .filter((e): e is MediaEntity => !(e instanceof Error));
+        return entities;
     }
 
-    async findByIds(mediaIds: string[]): Promise<MediaEntity[] | MediaNotFoundError> {
+    async findByIds(mediaIds: string[]): Promise<MediaEntity[]> {
         const result = await pgPool.query<PostgresMediaRow>(
             'SELECT * FROM media WHERE id = ANY($1)',
             [mediaIds]
         );
-
         if (result.rows.length === 0) {
-            return new MediaNotFoundError(`No media found for given IDs`);
+            return [];
         }
-
-        return result.rows.map(row => this.mapRowToEntity(row));
+        const entities = result.rows
+            .map(row => this.mapRowToEntity(row))
+            .filter((e): e is MediaEntity => !(e instanceof Error));
+        return entities;
     }
 
     async create(media: MediaEntity): Promise<MediaEntity | InvalidUrlMediaError> {
@@ -63,9 +70,10 @@ export class PostgresMediaRepository implements MediaRepositoryInterface {
                 media.type,
                 media.order,
                 media.altText,
-                media.caption,
-                media.size,
-                media.mimeType,
+                media.caption ?? null,
+                media.size ?? null,
+                media.mimeType ?? null,
+                new Date()
             ]
         );
 
@@ -124,18 +132,30 @@ export class PostgresMediaRepository implements MediaRepositoryInterface {
         }
     }
 
-    private mapRowToEntity(row: PostgresMediaRow): MediaEntity {
-        return {
-            id: row.id,
-            newsId: row.news_id,
-            url: row.url,
-            type: row.type,
-            order: row.order,
-            altText: row.alt_text,
-            caption: row.caption ?? undefined,
-            size: row.size ?? undefined,
-            mimeType: row.mime_type ?? undefined,
-            createdAt: row.created_at
-        } as MediaEntity;
+    private mapRowToEntity(row: PostgresMediaRow): MediaEntity | InvalidUrlMediaError  {
+        let domainType: MediaTypeEnum;
+        if (row.type === MediaTypeEnum.VIDEO) {
+            domainType = MediaTypeEnum.VIDEO;
+        } else if (row.type === MediaTypeEnum.IMAGE) {
+            domainType = MediaTypeEnum.IMAGE;
+        } else {
+            return new InvalidUrlMediaError(`Unsupported media type: ${row.type}`);
+        }
+
+        const media = MediaEntity.from(
+            row.id,
+            row.news_id,
+            row.url,
+            domainType,
+            row.order,
+            row.alt_text,
+            row.caption ?? undefined,
+            row.size ?? undefined,
+            row.mime_type ?? undefined
+        );
+        if (media instanceof Error) {
+            return media;
+        }
+        return media;
     }
 }

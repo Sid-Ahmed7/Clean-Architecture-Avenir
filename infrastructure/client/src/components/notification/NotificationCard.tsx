@@ -2,8 +2,10 @@
 
 import { NotificationModel } from "@/lib/validation/notification/notificationSchema";
 import { notificationStyles } from "./notificationsStyles";
+import { formatDate } from "@/lib/utils/formatDate";
 import Button from "../ui/Button";
 import { X } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface NotificationCardProps  {
     notification: NotificationModel;
@@ -12,6 +14,7 @@ interface NotificationCardProps  {
 }
 
 export const NotificationCard =({notification, onMarkRead, onDelete} : NotificationCardProps) => {
+    const t = useTranslations("components.notification");
     const style = notificationStyles[notification.type];
     const Icon = style.icon;
 
@@ -33,10 +36,10 @@ export const NotificationCard =({notification, onMarkRead, onDelete} : Notificat
             <Icon className="w-5 h-5 mt-1" />
             <div className="flex-1 cursor-pointer" onClick={handleMarkRead}>
                 {notification.senderName && (
-                    <p className="text-xs font-medium text-gray-600 mb-1">De: {notification.senderName}</p>
+                    <p className="text-xs font-medium text-gray-600 mb-1">{t("from")}: {notification.senderName}</p>
                 )}
                 <p className={`text-sm ${notification.readStatus === "UNREAD" ? "font-semibold" : "font-normal"} text-gray-700`}>{notification.message}</p>
-                <p className="text-sm text-gray-500">{notification.createdAt}</p>
+                <p className="text-sm text-gray-500">{formatDate(notification.createdAt)}</p>
             </div>
             <Button variant="danger" onClick={handleDelete}>
                 <X className="w-4 h-4"></X>

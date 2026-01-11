@@ -1,5 +1,6 @@
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 interface PageHeaderProps {
     title: string;
@@ -8,6 +9,7 @@ interface PageHeaderProps {
 }
 
 export function PageHeader({ title, subtitle, showBackButton = true }: PageHeaderProps) {
+    const t = useTranslations("components.savingsAccount.pageHeader");
     const router = useRouter();
 
     return (
@@ -18,7 +20,7 @@ export function PageHeader({ title, subtitle, showBackButton = true }: PageHeade
                     className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors mb-4"
                 >
                     <ArrowLeft className="w-5 h-5" />
-                    <span className="font-medium">Retour</span>
+                    <span className="font-medium">{t("back")}</span>
                 </button>
             )}
             <h1 className="text-3xl font-bold text-gray-900 mb-2">

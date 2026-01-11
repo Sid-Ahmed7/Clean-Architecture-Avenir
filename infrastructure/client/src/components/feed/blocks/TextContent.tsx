@@ -1,4 +1,5 @@
 import { AlertCircle } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface TextContentProps {
     content: string;
@@ -8,12 +9,14 @@ interface TextContentProps {
 }
 
 export function TextContent({content, onChange,disabled,error} : TextContentProps) {
+      const t = useTranslations('feed.blocks.content');
+  
     return (
         <div className="flex-1">
         <textarea
             value={content}
             onChange={(e) => onChange(e.target.value)}
-            placeholder="Tapez votre texte ici..."
+            placeholder={t('textPlaceholder')}
             disabled={disabled}
             rows={6}
             className={`w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical transition-colors ${

@@ -3,8 +3,8 @@ import {
   accountRepository,
   loanRepaymentScheduleRepository,
   transactionRepository,
-  uuidService,
 } from "../../../../adapters/config/repositories";
+import { uuidService } from "../../../../adapters/config/services";
 
 export function processRepaymentsUseCaseFactory() {
   return new ProcessRepaymentsUseCase(

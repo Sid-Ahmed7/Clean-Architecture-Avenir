@@ -13,8 +13,15 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  experimental: {
+    staleTimes: {
+      dynamic: 0,
+      static: 180
+    }
+  }
 };
-  const withNextIntl = createNextIntlPlugin();
+
+const withNextIntl = createNextIntlPlugin();
 
 
 export default withNextIntl(nextConfig);

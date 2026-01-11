@@ -9,7 +9,8 @@ import { CreateNewsModel, createNewsSchema } from "@/lib/validation/news/createN
 import { useRouter } from "next/navigation";
 import { AlertCircle, X } from "lucide-react";
 import { useNewsMutation } from "@/hooks/useNews";
-import { useMediaMutations } from "@/hooks/useMedia";
+import { getErrorMessage } from "@/lib/utils/error";
+import { useMediaMutations, useMediaByNewsId } from "@/hooks/useMedia";
 import { useContentMutations } from "@/hooks/useContent";
 import { FeedFormFields } from "./FeedFormFields";
 import { BlockEditor } from "../blocks/BlockEditor";
@@ -35,6 +36,8 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
   const { uploadMedia, updateMedia } = useMediaMutations();
   const { createContent, updateContent } = useContentMutations();
 
+  const { data: freshMedias } = useMediaByNewsId(newsId || '');
+
   const isEditMode = !!newsId;
 
   const { register, handleSubmit, control, setError, clearErrors, formState: { errors }, reset } = useForm<CreateNewsModel>({
@@ -48,7 +51,7 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
   });
 
   const handleFormSubmit = async (data: CreateNewsModel) => {
-       
+
     clearErrors();
 
     if (blocks.length === 0) {
@@ -61,7 +64,7 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
 
     const textBlocks = blocks.filter((b) => b.type === TypeBlock.TEXT);
     const hasEmptyText = textBlocks.some((b) => !b.content || !b.content.trim());
-    
+
     if (hasEmptyText) {
 
       setError("root.blocksError", {
@@ -78,7 +81,7 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
       let targetNewsId: string;
 
       if (isEditMode && newsId) {
-        
+
         newsResult = await updateNews.mutateAsync({
           id: newsId,
           title: data.title,
@@ -88,20 +91,20 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         });
-        
+
         if (newsResult.error || !newsResult.data) {
           setError("root.serverError", {
             type: "manual",
-            message: newsResult.error || "Erreur lors de la mise à jour",
+            message: newsResult.error || t('generalErrors.feed.updateError'),
           });
           return;
         }
-        
+
         targetNewsId = newsId;
-        
+
       } else {
-        
-        
+
+
         newsResult = await createNews.mutateAsync({
           title: data.title,
           category: data.category,
@@ -112,7 +115,7 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
         if (newsResult.error || !newsResult.data) {
           setError("root.serverError", {
             type: "manual",
-            message: newsResult.error || "Erreur lors de la création",
+            message: newsResult.error || t('generalErrors.feed.createError'),
           });
           return;
         }
@@ -123,11 +126,6 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
       for (const block of blocks) {
         if (block.type === TypeBlock.TEXT) {
           if (block.id.startsWith("temp-")) {
-            console.log(`Création content:`, {
-              newsId: targetNewsId,
-              content: block.content.substring(0, 50) + "...",
-              order: block.order
-            });
 
             const contentResult = await createContent.mutateAsync({
               newsId: targetNewsId,
@@ -135,15 +133,13 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
               order: block.order
             });
 
-            if (contentResult.error) {
-              setError("root.serverError", {
-                type: "manual",
-                message: `Erreur bloc texte ${block.order + 1}: ${contentResult.error}`,
-              });
-              return;
-            } else {
-              console.log(`Content créé avec order ${block.order}`);
-            }
+              if (contentResult.error) {
+                setError("root.serverError", {
+                  type: "manual",
+                  message: `Erreur bloc texte ${block.order + 1}: ${contentResult.error}`,
+                });
+                return;
+              } 
           } else {
             const updatedContent = await updateContent.mutateAsync({
               id: block.id,
@@ -151,19 +147,11 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
               content: block.content,
               order: block.order
             });
-
-            if (updatedContent.error) {
-              console.error(`Erreur update content ${block.id}:`, updatedContent.error);
-            } else {
-              console.log(`Content ${block.id} mis à jour`);
-            }
           }
         }
 
         if (block.type === TypeBlock.MEDIA) {
           if (block.files && block.files.length > 0) {
-            console.log(`Upload de ${block.files.length} fichier(s) pour le bloc ${block.id}`);
-
             for (const file of block.files) {
               const mediaResult = await uploadMedia.mutateAsync({
                 file,
@@ -171,19 +159,22 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
               });
 
               if (mediaResult.error) {
-                console.error(`Erreur upload:`, mediaResult.error);
                 setError("root.serverError", {
                   type: "manual",
                   message: `Erreur upload média: ${mediaResult.error}`,
                 });
-              } else {
-                console.log(`Média uploadé:`, mediaResult.data);
-              }
+              } 
             }
           }
 
           if (block.existingMedias && block.existingMedias.length > 0) {
-            for (const media of block.existingMedias) {
+            const mediasToUpdate = freshMedias?.filter(m =>
+              block.existingMedias?.some(em => em.id === m.id)
+            ) ?? block.existingMedias;
+
+
+            for (const media of mediasToUpdate) {
+
               const updatedMedia = await updateMedia.mutateAsync({
                 media: {
                   ...media,
@@ -191,31 +182,24 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
                 },
                 newsId: targetNewsId
               });
-
-              if (updatedMedia.error) {
-                console.error(`❌ Erreur update media ${media.id}:`, updatedMedia.error);
-              } else {
-                console.log(`✅ Media ${media.id} ordre mis à jour`);
-              }
             }
           }
         }
       }
 
-      
+
       await queryClient.invalidateQueries({ queryKey: ["news", targetNewsId] });
       await queryClient.invalidateQueries({ queryKey: ["content", "news", targetNewsId] });
       await queryClient.invalidateQueries({ queryKey: ["media", "news", targetNewsId] });
-      
+
       router.refresh();
-      
+
       router.push(`/${locale}/feed/${targetNewsId}`);
-      
+
     } catch (error: any) {
-      console.error("Erreur:", error);
       setError("root.serverError", {
         type: "manual",
-        message: error.message || "Une erreur est survenue",
+        message: getErrorMessage(error, "Une erreur est survenue"),
       });
     } finally {
       setIsSubmitting(false);
@@ -270,24 +254,24 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
       )}
 
       <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-lg font-semibold mb-4 text-gray-900">Informations générales</h2>
+        <h2 className="text-lg font-semibold mb-4 text-gray-900">{t('components.feed.form.generalInfo')}</h2>
         <FeedFormFields
           register={register}
           control={control}
           errors={errors}
           disabled={isSubmitting}
           isSubmitting={isSubmitting}
-          isEditMode={isEditMode}      
+          isEditMode={isEditMode}
         />
       </div>
 
       <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-lg font-semibold mb-4 text-gray-900">Contenu de l&apos;actualité</h2>
-        <BlockEditor 
-          onChange={setBlocks} 
+        <h2 className="text-lg font-semibold mb-4 text-gray-900">{t('components.feed.form.content')}</h2>
+        <BlockEditor
+          onChange={setBlocks}
           initialBlocks={initialBlocks}
           newsId={newsId}
-          disabled={isSubmitting} 
+          disabled={isSubmitting}
         />
       </div>
     </form>

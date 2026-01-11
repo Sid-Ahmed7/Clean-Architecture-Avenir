@@ -19,12 +19,12 @@ export const useContentsByNewsId = (newsId: string) => {
         const fetchContents = await contentApi.getContentsByNewsId(newsId);
         const parsed = z.array(contentSchema(t)).safeParse(fetchContents);
         if (!parsed.success) {
-          console.error("Erreur de validation des contenus:", parsed.error);
+          console.error(t('generalErrors.content.notFound'), parsed.error);
           return [];
         }
         return parsed.data;
       } catch (err: any) {
-        console.error("Erreur lors du chargement des contenus:", err);
+        console.error(t('generalErrors.content.notFound'), err);
         return [];
       }
     },
@@ -43,12 +43,12 @@ export const useContentById = (contentId: string) => {
         const fetchContents = await contentApi.getContentsId(contentId);
         const parsed = contentSchema(t).safeParse(fetchContents);
         if (!parsed.success) {
-          console.error("Erreur de validation du contenu:", parsed.error);
+          console.error(t('generalErrors.content.notFound'), parsed.error);
           return null;
         }
         return parsed.data;
       } catch (err: any) {
-        console.error("Erreur lors du chargement du contenu:", err);
+        console.error(t('generalErrors.content.notFound'), err);
         return null;
       }
     },
@@ -69,7 +69,7 @@ export const useContentMutations = () => {
         if (!parsed.success) {
           return {
             data: null,
-            error: "Erreur de validation lors de la création"
+            error: t('generalErrors.content.create')
           };
         }
         
@@ -77,7 +77,7 @@ export const useContentMutations = () => {
       } catch (err: any) {
         return {
           data: null,
-          error: err.response?.data?.error || err.message || "Erreur lors de la création"
+          error: err.response?.data?.error || err.message || t('generalErrors.content.create')
         };
       }
     },
@@ -96,14 +96,14 @@ export const useContentMutations = () => {
          if (!parsed.success) {
           return {
             data: null,
-            error: "Erreur de validation lors de la mise à jour"
+            error: t('generalErrors.content.update')
           };
         }
         return { data: updatedContents, error: null };
       } catch (err: any) {
         return {
           data: null,
-          error: err.response?.data?.error || err.message || "Erreur lors de la mise à jour"
+          error: err.response?.data?.error || err.message || t('generalErrors.content.update')
         };
       }
     },
@@ -126,7 +126,7 @@ export const useContentMutations = () => {
       } catch (err: any) {
         return {
           success: false,
-          error: err.response?.data?.error || err.message || "Erreur lors de la suppression"
+          error: err.response?.data?.error || err.message || t('generalErrors.content.delete')
         };
       }
     },
@@ -148,7 +148,7 @@ export const useContentMutations = () => {
       } catch (err: any) {
         return {
           data: null,
-          error: err.response?.data?.error || err.message || "Erreur lors de la réorganisation"
+          error: err.response?.data?.error || err.message || t('generalErrors.content.update')
         };
       }
     },

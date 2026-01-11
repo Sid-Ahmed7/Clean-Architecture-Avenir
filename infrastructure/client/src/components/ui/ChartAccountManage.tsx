@@ -1,5 +1,6 @@
 import { AccountModel } from "@/lib/validation/bankAccount/accountSchema";
 import { Cell, Pie, PieChart, PieLabelRenderProps, ResponsiveContainer, Tooltip } from "recharts";
+import { useTranslations } from "next-intl";
 
 interface ChartAccountManageProps {
     accounts: AccountModel[];
@@ -20,8 +21,9 @@ interface CustomTooltipProps {
     }>;
 }
 
-export default function ChartAccountManage({accounts}: ChartAccountManageProps) {
-    
+export default function ChartAccountManage({ accounts }: ChartAccountManageProps) {
+    const t = useTranslations("client.dashboard");
+
     const accountColors: Record<string, string> = {
         CHECKING: "#3b82f6",
         SAVINGS: "#10b981",
@@ -31,7 +33,7 @@ export default function ChartAccountManage({accounts}: ChartAccountManageProps) 
         const total = accounts
             .filter((acc) => acc.accountType === type)
             .reduce((sum, acc) => sum + acc.currentBalance, 0);
-        return {name: type, value: total, color: accountColors[type]};
+        return { name: type, value: total, color: accountColors[type] };
     }).filter(item => item.value > 0);
 
     const totalBalance = accounts.reduce((sum, acc) => sum + acc.currentBalance, 0);
@@ -59,7 +61,7 @@ export default function ChartAccountManage({accounts}: ChartAccountManageProps) 
 
     return (
         <div className="bg-white rounded-2xl shadow-xl p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Répartition par type</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">{t("distributionByType")}</h2>
             <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                     <Pie

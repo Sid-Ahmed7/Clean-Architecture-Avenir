@@ -14,7 +14,6 @@ export const useUserAccounts = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        // Wait for authentication to be determined
         if (isAuthenticated === undefined) {
             return;
         }
@@ -26,7 +25,7 @@ export const useUserAccounts = () => {
                 const parsed = z.array(accountSchema(t)).safeParse(res.data);
 
                 if (!parsed.success) {
-                    setError("Erreur compte");
+                    setError(t('generalErrors.userAccounts.account'));
                     return;
                 }
 

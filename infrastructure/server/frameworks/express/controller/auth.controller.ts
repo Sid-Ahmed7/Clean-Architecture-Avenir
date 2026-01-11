@@ -11,18 +11,18 @@ import { UserRepositoryInterface } from "../../../../../application/ports/reposi
 import { RoleRepositoryInterface } from "../../../../../application/ports/repositories/auth/RoleRepositoryInterface";
 import { UserRoleRepositoryInterface } from "../../../../../application/ports/repositories/auth/UserRoleRepositoryInterface";
 import { UserAlreadyExistsError } from "../../../../../application/errors/UserAlreadyExistsError";
-import { TokenService } from "../../../../../application/ports/services/auth/TokenService";
-import { PasswordService } from "../../../../../application/ports/services/auth/PasswordService";
 import { UserNotFoundError } from "../../../../../application/errors/UserNotFoundError";
 import { InvalidEmailOrPasswordError } from "../../../../../application/errors/InvalidEmailOrPasswordError";
 import { RoleNotFoundError } from "../../../../../application/errors/RoleNotFoundError";
-import { EmailService } from "../../../../../application/ports/services/EmailService";
-import { RegistrationTokenGeneratorService } from "../../../../../application/ports/services/auth/RegistrationTokenGeneratorService";
-import { EventBusInterface } from "../../../../../application/ports/event/EventBusInterface";
 import { TokenNotFoundError } from "../../../../../application/errors/TokenNotFoundError";
 import { ExpiredTokenError } from "../../../../../application/errors/ExpiredTokenError";
-import { EmailTemplateService } from "../../../../adapters/services/EmailTemplateService";
+import { EventBusInterface } from "../../../../../application/ports/event/EventBusInterface";
 import { GetAllAdvisorUseCase } from "../../../../../application/usecases/auth/GetAllAdvisorUseCase";
+import { JwtTokenService } from "../../../../adapters/services/auth/JwtTokenService";
+import { PasswordEncryptionService } from "../../../../adapters/services/auth/PasswordEncryptionService";
+import { ResendEmailService } from "../../../../adapters/services/ResendEmailService";
+import { EmailTemplateService } from "../../../../adapters/services/EmailTemplateService";
+import { RegistrationTokenService } from "../../../../adapters/services/auth/RegistrationTokenService";
 import { CryptoUuidGenerator } from "../../../../adapters/services/CryptoUuidGenerator";
 import { LocaleValidationService } from "../../../../adapters/services/LocaleValidationService";
 import { registerSchema } from "../schemas/auth/registerSchema";
@@ -30,9 +30,9 @@ import { registerAdvisorSchema } from "../schemas/auth/registerAdvisorSchema";
 import { loginSchema } from "../schemas/auth/loginSchema";
 import { registerManagerSchema } from "../schemas/auth/registerManagerSchema";
 import { SendNotificationToClientUseCase } from "../../../../../application/usecases/notification/SendNotificationToClientUseCase";
+import { NotificationRepositoryInterface } from "../../../../../application/ports/repositories/notification/NotificationRepositoryInterface";
 import { NotificationService } from "../../../../adapters/services/notification/NotificationService";
 import { RolePriorityService } from "../../../../adapters/services/RolePriorityService";
-import { NotificationRepositoryInterface } from "../../../../../application/ports/repositories/notification/NotificationRepositoryInterface";
 
 export class AuthController {
 
@@ -40,11 +40,11 @@ export class AuthController {
         private readonly userRepository: UserRepositoryInterface,
         private readonly roleRepository: RoleRepositoryInterface,
         private readonly userRoleRepository: UserRoleRepositoryInterface,
-        private readonly tokenService: TokenService,
-        private readonly passwordService: PasswordService,
-        private readonly emailService: EmailService,
+        private readonly tokenService: JwtTokenService,
+        private readonly passwordService: PasswordEncryptionService,
+        private readonly emailService: ResendEmailService,
         private readonly emailTemplateService: EmailTemplateService,
-        private readonly registrationTokenGeneratorService: RegistrationTokenGeneratorService,
+        private readonly registrationTokenGeneratorService: RegistrationTokenService,
         private readonly localeService: LocaleValidationService,
         private readonly uuidService: CryptoUuidGenerator,
         private readonly eventBus: EventBusInterface,
@@ -67,7 +67,8 @@ export class AuthController {
         if (!parseResult.success) {
           return res.status(400).json({ errors: parseResult.error.message });
         }
-        const result = await registerUseCase.execute(parseResult.data);
+        const locale = req.body.locale || 'en';
+        const result = await registerUseCase.execute(parseResult.data, locale);
         if (result instanceof Error) {
           if (result instanceof UserAlreadyExistsError) {
             return res.status(409).json({ error: result.message });
@@ -95,7 +96,8 @@ export class AuthController {
           return res.status(400).json({ errors: parseResult.error.message });
         }
 
-        const result = await createBankAdvisorUseCase.execute(parseResult.data);
+        const locale = req.body.locale || 'en';
+        const result = await createBankAdvisorUseCase.execute(parseResult.data, locale);
         if (result instanceof Error) {
           if (result instanceof UserAlreadyExistsError) {
             return res.status(409).json({ error: result.message });
@@ -106,15 +108,18 @@ export class AuthController {
         return res.status(201).json(result);
       }
 
+
       async confirmRegistration(req: Request, res: Response) {
-        const confirmationUseCase = new ConfirmRegistrationUseCase(this.userRepository, this.emailService, this.eventBus);
-        const { token } = req.query;
+        const confirmationUseCase = new ConfirmRegistrationUseCase(this.userRepository, this.localeService, this.emailTemplateService, this.eventBus);
+        const { token, locale } = req.query;
 
         if(!token || typeof token !== "string") {
           return res.status(400).json({error: "Token is required"});
         }
-
-        const result = await confirmationUseCase.execute(token);
+        if(locale && typeof locale !== "string") {
+          return res.status(400).json({error: "Locale must be a string"});
+        }
+        const result = await confirmationUseCase.execute(token, locale);
 
         if(result instanceof Error) {
           if (result instanceof TokenNotFoundError) {
@@ -174,14 +179,14 @@ export class AuthController {
           httpOnly: true,
           secure: false,
           sameSite: "lax",
-          maxAge: 1000 * 60 * 60 * 24 * 7 
+          maxAge: 1000 * 60 * 60 * 24 * 7
         })
 
         res.cookie("refreshToken", result.refreshToken, {
           httpOnly: true,
           secure: false,
           sameSite: "lax",
-          maxAge: 1000 * 60 * 60 * 24 * 7 
+          maxAge: 1000 * 60 * 60 * 24 * 7
         })
 
         return res.status(200).json({
@@ -255,7 +260,7 @@ export class AuthController {
 
 
         const roles = await getUserRolesUseCase.execute(userId);
-        
+
         // Utiliser le service de priorité des rôles
         const roleNames = Array.isArray(roles) ? roles.map(r => r.name) : [];
         const role = this.rolePriorityService.getHighestPriorityRole(roleNames);
@@ -263,7 +268,7 @@ export class AuthController {
         return res.status(200).json({
           user: {
             ...user,
-            role, 
+            role,
           },
         });
       }
@@ -302,7 +307,7 @@ export class AuthController {
         );
 
         const secretCode = req.body.secretCode;
-        
+
         if (!secretCode || secretCode !== process.env.MANAGER_CREATION_PASSWORD) {
             return res.status(403).json({ error: "Invalid secret code. You are not authorized to create a manager." });
         }
@@ -312,7 +317,38 @@ export class AuthController {
           return res.status(400).json({ errors: parseResult.error.message });
         }
 
-        const result = await createBankManagerUseCase.execute(parseResult.data);
+        const locale = req.body.locale || 'en';
+        const result = await createBankManagerUseCase.execute(parseResult.data, locale);
+        if (result instanceof Error) {
+          if (result instanceof UserAlreadyExistsError) {
+            return res.status(409).json({ error: result.message });
+          }
+          return res.status(500).json({ error: result.message });
+        }
+
+        return res.status(201).json(result);
+      }
+
+      async createClientAccount(req: Request, res: Response) {
+        const { CreateClientAccountUseCase } = await import("../../../../../application/usecases/auth/CreateClientAccountUseCase");
+        const createClientAccountUseCase = new CreateClientAccountUseCase(
+          this.userRepository,
+          this.roleRepository,
+          this.userRoleRepository,
+          this.passwordService,
+          this.emailTemplateService,
+          this.registrationTokenGeneratorService,
+          this.localeService,
+          this.uuidService
+        );
+
+        const parseResult = registerSchema.safeParse(req.body);
+        if (!parseResult.success) {
+          return res.status(400).json({ errors: parseResult.error.message });
+        }
+
+        const locale = req.body.locale || 'en';
+        const result = await createClientAccountUseCase.execute(parseResult.data, locale);
         if (result instanceof Error) {
           if (result instanceof UserAlreadyExistsError) {
             return res.status(409).json({ error: result.message });

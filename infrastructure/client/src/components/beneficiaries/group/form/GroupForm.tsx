@@ -22,7 +22,7 @@ interface GroupFormProps {
 
 export function GroupForm({initialData,beneficiaries,onSubmit,isLoading,}: GroupFormProps) {
   const [selectedBeneficiaries, setSelectedBeneficiaries] = useState<string[]>(initialData?.beneficiaryIds || []);
-  const t = useTranslations();
+  const t = useTranslations('components.beneficiaries.group.form.groupForm');
 
   const {register,handleSubmit,formState: { errors }} = useForm<CreateBeneficiaryGroupRequest>({
     resolver: zodResolver(createBeneficiaryGroupSchema(t)),
@@ -62,7 +62,7 @@ export function GroupForm({initialData,beneficiaries,onSubmit,isLoading,}: Group
           loading={isLoading}
           fullWidth
         >
-            Enregistrer
+            {t('save')}
         </Button>
       </div>
     </form>

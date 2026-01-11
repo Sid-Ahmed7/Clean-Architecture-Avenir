@@ -36,8 +36,10 @@ export class PostgresMessageRepository implements MessageRepositoryInterface {
              AND read_status = $2`,
             [userId, ReadStatusEnum.UNREAD]
         );
-
-        return result.rows.map(row => this.mapRowToEntity(row));
+        const entities = result.rows
+            .map(row => this.mapRowToEntity(row))
+            .filter((entity): entity is MessageEntity => !(entity instanceof Error));
+        return entities;
     }
 
     async findByConversationId(conversationId: string): Promise<MessageEntity[] | ConversationNotFoundError> {
@@ -45,12 +47,13 @@ export class PostgresMessageRepository implements MessageRepositoryInterface {
             'SELECT * FROM messages WHERE conversation_id = $1 ORDER BY sent_at ASC',
             [conversationId]
         );
-
         if (result.rows.length === 0) {
-            return new ConversationNotFoundError(`Conversation with id ${conversationId} not found`);
+            return []; 
         }
-
-        return result.rows.map(row => this.mapRowToEntity(row));
+        const entities = result.rows
+            .map(row => this.mapRowToEntity(row))
+            .filter((entity): entity is MessageEntity => !(entity instanceof Error));
+        return entities;
     }
 
     async save(message: MessageEntity): Promise<MessageEntity | InvalidMessageError> {
@@ -108,16 +111,21 @@ export class PostgresMessageRepository implements MessageRepositoryInterface {
         return this.mapRowToEntity(row);
     }
 
-    private mapRowToEntity(row: PostgresMessageRow): MessageEntity {
-        return {
-            id: row.id,
-            conversationId: row.conversation_id,
-            conversationClientId: row.conversation_client_id,
-            conversationAdvisorId: row.conversation_advisor_id ?? undefined,
-            authorId: row.author_id,
-            content: row.content,
-            readStatus: row.read_status,
-            sentAt: row.sent_at
-        } as MessageEntity;
+    private mapRowToEntity(row: PostgresMessageRow): MessageEntity | Error {
+        const message = MessageEntity.from(
+            row.id,
+            row.conversation_id,
+            row.conversation_client_id,
+            row.conversation_advisor_id ?? null,
+            row.author_id,
+            row.content,
+            row.read_status,
+            row.sent_at
+        );
+        if( message instanceof Error) {
+            return message;
+        }
+        return message;
+
     }
 }

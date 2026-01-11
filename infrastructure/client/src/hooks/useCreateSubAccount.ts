@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { CreateSubAccountModel } from "../lib/validation/bankAccount/createSubAccountSchema";
 import { responseSubAccountSchema } from "../lib/validation/bankAccount/responseSubAccountSchema";
-import z from "zod";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { addSubAccount } from "../lib/api/account";
@@ -23,7 +22,7 @@ export function useCreateSubAccount() {
       .then((res) => {
         const parsed =  responseSubAccountSchema(t).safeParse(res.data);
         if(!parsed.success) {
-            setError("Erreur compte");
+            setError(t("generalErrors.userAccounts.validation"));
             return;
         }
         setSuccess(true);

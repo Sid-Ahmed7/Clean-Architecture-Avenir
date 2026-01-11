@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import * as jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { RoleEnum } from "../../../../../domain/enums/RoleEnum";
 
 const JWT_SECRET = process.env.JWT_SECRET!;
@@ -22,7 +22,7 @@ function isJwtPayload(obj: any): obj is { sub: string; roles: RoleEnum[] } {
 }
 
 export const verifyTokenAccess = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.cookies.accessToken; 
+  const token = req.cookies.accessToken;
 
   if (!token) {
     return res.status(401).json({ message: "Access token is missing" });
@@ -40,8 +40,8 @@ export const verifyTokenAccess = (req: Request, res: Response, next: NextFunctio
       roles: decoded.roles
     };
     next();
-  } catch (error) {
-    if (error instanceof jwt.TokenExpiredError) {
+  } catch (error: any) {
+    if (error.name === 'TokenExpiredError') {
       return res.status(401).json({ message: `Token expired after ${JWT_EXPIRATION}` });
     }
     return res.status(401).json({ message: "Invalid token" });
@@ -70,8 +70,8 @@ export const verifyRefreshTokenCookie = (req: Request, res: Response, next: Next
     };
 
     next();
-  } catch (error) {
-    if (error instanceof jwt.TokenExpiredError) {
+  } catch (error: any) {
+    if (error.name === 'TokenExpiredError') {
       return res.status(401).json({ message: `Refresh token expired after ${JWT_EXPIRATION_REFRESH}` });
     }
     return res.status(401).json({ message: "Invalid refresh token" });

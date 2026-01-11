@@ -1,7 +1,6 @@
 import { SavingsAccountRepositoryInterface } from "../../ports/repositories/SavingsAccountRepositoryInterface";
 import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
 import { AccountNotFoundError } from "../../errors/AccountNotFoundError";
-import { InvalidAccountError } from "../../../domain/errors/InvalidAccountError";
 import { InterestCalculationResult } from "../../responses/InterestCalculationResult";
 
 export class CalculateDailyInterestUseCase {

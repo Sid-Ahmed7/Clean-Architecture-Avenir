@@ -12,7 +12,14 @@ export class PostgresTransactionRepository implements TransactionRepositoryInter
                 transaction_type, executed_by, status, description, category,
                 created_at, beneficiary_id, group_id, debit_user_id, credit_user_id, debit_user_name, credit_user_name
             )
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)`,
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
+            ON CONFLICT (transaction_reference) 
+            DO UPDATE SET 
+                status = EXCLUDED.status,
+                debit_user_id = EXCLUDED.debit_user_id,
+                credit_user_id = EXCLUDED.credit_user_id,
+                debit_user_name = EXCLUDED.debit_user_name,
+                credit_user_name = EXCLUDED.credit_user_name`,
             [
                 transaction.transactionReference,
                 transaction.debitAccount,

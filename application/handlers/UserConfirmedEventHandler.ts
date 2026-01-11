@@ -3,7 +3,7 @@ import { UserConfirmedEvent } from "../ports/event/UserConfirmedEvent";
 import { CreateAccountUseCase } from "../usecases/accounts/CreateAccountUseCase";
 
 export class UserConfirmedEventHandler {
-  constructor(private createAccountUseCase: CreateAccountUseCase) {}
+  constructor(private readonly createAccountUseCase: CreateAccountUseCase) {}
 
   async handler(event: UserConfirmedEvent) {
     const user = event.user;

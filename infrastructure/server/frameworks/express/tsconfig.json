@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ES2020",
+    "moduleResolution": "Node",
+    "lib": ["ES2020"],
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "rootDir": "../../../../",
+    "baseUrl": "../../../../",
+    "outDir": "./dist",
+    "paths": {
+      "#domain/*": ["domain/*"],
+      "#application/*": ["application/*"],
+      "#infrastructure/*": ["infrastructure/*"]
+    }
+  },
+  "include": [
+    "./**/*",
+    "../../../../domain/**/*",
+    "../../../../application/**/*",
+    "../../../../infrastructure/adapters/**/*",
+    "../../../../infrastructure/subscribers/**/*"
+  ],
+  "exclude": ["node_modules", "dist", "infrastructure/server/frameworks/adonisjs"],
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node",
+    "transpileOnly": true
+  }
+}
+

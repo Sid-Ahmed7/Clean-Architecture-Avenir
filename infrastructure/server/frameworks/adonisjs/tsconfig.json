@@ -1,0 +1,43 @@
+{
+  "extends": "@adonisjs/tsconfig/tsconfig.app.json",
+  "compilerOptions": {
+    "rootDir": "../../../../",
+    "baseUrl": "../../../../",
+    "outDir": "./build",
+    "types": [
+      "@adonisjs/core",
+      "@adonisjs/cors",
+      "@adonisjs/static"
+    ],
+    "paths": {
+      "#config/*": ["infrastructure/server/frameworks/adonisjs/config/*"],
+      "#controllers/*": ["infrastructure/server/frameworks/adonisjs/app/controllers/*"],
+      "#middleware/*": ["infrastructure/server/frameworks/adonisjs/app/middleware/*"],
+      "#validators/*": ["infrastructure/server/frameworks/adonisjs/app/validators/*"],
+      "#sockets/*": ["infrastructure/server/frameworks/adonisjs/app/sockets/*"],
+      "#exceptions/*": ["infrastructure/server/frameworks/adonisjs/app/exceptions/*"],
+      "#start/*": ["infrastructure/server/frameworks/adonisjs/start/*"],
+      "#providers/*": ["infrastructure/server/frameworks/adonisjs/providers/*"],
+      "#types/*": ["infrastructure/server/frameworks/adonisjs/types/*"],
+      "#bin/*": ["infrastructure/server/frameworks/adonisjs/bin/*"],
+
+
+      "#domain/*": ["domain/*"],
+      "#application/*": ["application/*"],
+      "#infrastructure/*": ["infrastructure/*"],
+      "~/*": ["infrastructure/*"]
+    }
+  },
+  "include": [
+    "./**/*",
+    "../../../../domain/**/*",
+    "../../../../application/**/*",
+    "../../../../infrastructure/adapters/**/*",
+    "../../../../infrastructure/subscribers/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "build",
+    "infrastructure/server/frameworks/express"
+  ]
+}

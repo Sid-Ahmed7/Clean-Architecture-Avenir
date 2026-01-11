@@ -1,6 +1,7 @@
 import express from "express";
 import { NotificationController } from "../controller/notification.controlller";
-import {notificationRepository, notificationService, uuidService} from "../../../../adapters/config/repositories";
+import {notificationRepository} from "../../../../adapters/config/repositories";
+import {notificationService, uuidService} from "../../../../adapters/config/services";
 import { verifyTokenAccess } from "../middleware/authMiddleware";
 import { authorizeRoles } from "../middleware/roleMiddleware";
 import { RoleEnum } from "../../../../../domain/enums/RoleEnum";

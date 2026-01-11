@@ -15,22 +15,12 @@ interface AppLayoutProps {
 export default function AppLayout({ children }: AppLayoutProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const pathname = usePathname();
-  const { locale } = useContext(LocaleContext);
 
   useAuthRedirect();
-
-  const hideLayout = pathname === `/${locale}/login` || pathname === `/${locale}/register` || pathname === `/${locale}/create-manager` || pathname === `/${locale}/confirm`;
-
-
-
 
   const handleMenuClick = () => setIsSidebarOpen(true);
   const handleSidebarClose = () => setIsSidebarOpen(false);
 
-  if (hideLayout) {
-    return <>{children}</>
-  }
   return (
     <div className="flex h-screen">
       <Sidebar isOpen={isSidebarOpen} onClose={handleSidebarClose} />

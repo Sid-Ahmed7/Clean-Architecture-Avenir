@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { BeneficiaryGroup } from "@/types/beneficiaryGroup";
 import { Beneficiary } from "@/types/beneficiary";
-import { Send, User,  } from "lucide-react";
+import { Send, User, } from "lucide-react";
 import { useUserAccounts } from "@/hooks/useUserAccounts";
+import { useTranslations, useFormatter } from "next-intl";
 
 interface TransferToGroupFormProps {
   group: BeneficiaryGroup;
@@ -17,6 +18,8 @@ interface TransferToGroupFormProps {
 }
 
 export function TransferToGroupForm({ group, beneficiaries, onSubmit, onCancel }: TransferToGroupFormProps) {
+  const t = useTranslations('components.beneficiaries.group.form.transferToGroup');
+  const format = useFormatter();
   const { accounts, loading: loadingAccounts } = useUserAccounts();
   const [totalAmount, setTotalAmount] = useState<number>(0);
   const [individualAmounts, setIndividualAmounts] = useState<Record<string, number>>({});
@@ -38,7 +41,7 @@ export function TransferToGroupForm({ group, beneficiaries, onSubmit, onCancel }
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      await onSubmit({sourceAccountNumber,totalAmount,individualAmounts});
+      await onSubmit({ sourceAccountNumber, totalAmount, individualAmounts });
     } finally {
       setIsSubmitting(false);
     }
@@ -47,20 +50,20 @@ export function TransferToGroupForm({ group, beneficiaries, onSubmit, onCancel }
   return (
     <form onSubmit={handleSubmitForm} className="space-y-6">
       <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg border border-purple-200">
-        <h3 className="font-semibold text-gray-900 mb-2">Groupe: {group.groupName}</h3>
+        <h3 className="font-semibold text-gray-900 mb-2">{t('group')}: {group.groupName}</h3>
         <p className="text-sm text-gray-600">
-          {beneficiaries.length} bénéficiaire{beneficiaries.length > 1 ? 's' : ''}
+          {t('beneficiariesCount', { count: beneficiaries.length })}
         </p>
       </div>
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Compte source
+          {t('sourceAccount')}
         </label>
         {loadingAccounts ? (
           <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg border border-gray-300">
             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
-            <span className="text-sm text-gray-600">Chargement des comptes...</span>
+            <span className="text-sm text-gray-600">{t('loadingAccounts')}</span>
           </div>
         ) : (
           <select
@@ -69,10 +72,10 @@ export function TransferToGroupForm({ group, beneficiaries, onSubmit, onCancel }
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
             required
           >
-            <option value="">Sélectionnez un compte</option>
+            <option value="">{t('selectAccount')}</option>
             {accounts.map((account) => (
               <option key={account.accountNumber} value={account.accountNumber}>
-                {account.accountType} - {account.accountNumber} ({account.currentBalance.toFixed(2)} €)
+                {account.accountType} - {account.accountNumber} ({format.number(account.currentBalance, { style: 'currency', currency: account.currency })})
               </option>
             ))}
           </select>
@@ -80,7 +83,7 @@ export function TransferToGroupForm({ group, beneficiaries, onSubmit, onCancel }
       </div>
 
       <Input
-        label="Montant total à transférer (€)"
+        label={t('totalAmount')}
         type="number"
         step="0.01"
         value={totalAmount || ''}
@@ -91,7 +94,7 @@ export function TransferToGroupForm({ group, beneficiaries, onSubmit, onCancel }
 
       <div className="border-t pt-6">
         <h3 className="font-semibold text-gray-900 mb-4">
-          Répartition par bénéficiaire
+          {t('distributionTitle')}
         </h3>
         <div className="space-y-4 max-h-96 overflow-y-auto">
           {beneficiaries.map((beneficiary) => (
@@ -122,38 +125,36 @@ export function TransferToGroupForm({ group, beneficiaries, onSubmit, onCancel }
         </div>
       </div>
 
-      <div className={`p-4 rounded-lg border-2 ${
-        remainingAmount === 0
+      <div className={`p-4 rounded-lg border-2 ${remainingAmount === 0
           ? 'bg-green-50 border-green-300'
           : remainingAmount > 0
-          ? 'bg-yellow-50 border-yellow-300'
-          : 'bg-red-50 border-red-300'
-      }`}>
+            ? 'bg-yellow-50 border-yellow-300'
+            : 'bg-red-50 border-red-300'
+        }`}>
         <div className="flex justify-between items-center mb-2">
-          <span className="font-semibold text-gray-900">Montant total:</span>
-          <span className="text-lg font-bold">{totalAmount.toFixed(2)} €</span>
+          <span className="font-semibold text-gray-900">{t('totalAmountLabel')}:</span>
+          <span className="text-lg font-bold">{format.number(totalAmount, { style: 'currency', currency: 'EUR' })}</span>
         </div>
         <div className="flex justify-between items-center mb-2">
-          <span className="font-semibold text-gray-900">Montant distribué:</span>
-          <span className="text-lg font-bold">{distributedAmount.toFixed(2)} €</span>
+          <span className="font-semibold text-gray-900">{t('distributedAmount')}:</span>
+          <span className="text-lg font-bold">{format.number(distributedAmount, { style: 'currency', currency: 'EUR' })}</span>
         </div>
         <div className="flex justify-between items-center pt-2 border-t border-gray-300">
-          <span className="font-semibold text-gray-900">Écart:</span>
-          <span className={`text-xl font-bold ${
-            remainingAmount === 0
+          <span className="font-semibold text-gray-900">{t('difference')}:</span>
+          <span className={`text-xl font-bold ${remainingAmount === 0
               ? 'text-green-600'
               : remainingAmount > 0
-              ? 'text-yellow-600'
-              : 'text-red-600'
-          }`}>
-            {remainingAmount.toFixed(2)} €
+                ? 'text-yellow-600'
+                : 'text-red-600'
+            }`}>
+            {format.number(remainingAmount, { style: 'currency', currency: 'EUR' })}
           </span>
         </div>
         {remainingAmount !== 0 && (
           <p className="mt-2 text-sm text-gray-600">
             {remainingAmount > 0
-              ? `Il reste ${remainingAmount.toFixed(2)} € à distribuer`
-              : `Vous avez dépassé de ${Math.abs(remainingAmount).toFixed(2)} €`
+              ? t('remainingAmount', { amount: format.number(remainingAmount, { style: 'currency', currency: 'EUR' }) })
+              : t('exceededAmount', { amount: format.number(Math.abs(remainingAmount), { style: 'currency', currency: 'EUR' }) })
             }
           </p>
         )}
@@ -166,7 +167,7 @@ export function TransferToGroupForm({ group, beneficiaries, onSubmit, onCancel }
           onClick={onCancel}
           fullWidth
         >
-          Annuler
+          {t('cancel')}
         </Button>
         <Button
           type="submit"
@@ -176,7 +177,7 @@ export function TransferToGroupForm({ group, beneficiaries, onSubmit, onCancel }
           disabled={remainingAmount !== 0 || totalAmount === 0}
           fullWidth
         >
-          Envoyer le transfert
+          {t('submit')}
         </Button>
       </div>
     </form>

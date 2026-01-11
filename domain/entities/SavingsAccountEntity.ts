@@ -62,12 +62,6 @@ export class SavingsAccountsEntity {
         public maturity?: Date
     ) {}
 
-    /**
-     * Calculate daily interest based on current balance
-     * Formula: min(balance, maxDepositAmount ?? balance) * (interestRate / 365 / 100)
-     * @param currentBalance - Current account balance
-     * @returns Daily interest amount
-     */
     public calculateDailyInterest(currentBalance: number): number {
         if (!this.isActive || currentBalance <= 0) {
             return 0;
@@ -77,25 +71,20 @@ export class SavingsAccountsEntity {
             ? Math.min(currentBalance, this.maxDepositAmount)
             : currentBalance;
 
-        const dailyInterest = (effectiveBalance * this.interestRate) / 365 / 100;
+        // Calculate per minute instead of per day (525600 = 365*24*60)
+        const minuteInterest = (effectiveBalance * this.interestRate) / 525600 / 100;
         
         // Round to 2 decimal places
-        return Math.round(dailyInterest * 100) / 100;
+        return Math.round(minuteInterest * 100) / 100;
     }
 
-    /**
-     * Credit interest to the account and update tracking
-     * @param interestAmount - Amount of interest to credit
-     */
+
     public creditInterest(interestAmount: number): void {
         this.totalInterestEarned += interestAmount;
         this.lastInterestApplied = new Date();
     }
 
-    /**
-     * Update the interest rate
-     * @param newRate - New interest rate (0-100)
-     */
+
     public updateInterestRate(newRate: number): Error | void {
         const validatedRate = InterestRateValue.from(newRate);
         if(validatedRate instanceof Error) {
@@ -104,10 +93,7 @@ export class SavingsAccountsEntity {
         this.interestRate = validatedRate.value;
     }
 
-    /**
-     * Update the maximum deposit amount
-     * @param newMaxDeposit - New max deposit amount (null for no limit)
-     */
+  
     public updateMaxDeposit(newMaxDeposit: number | null): Error | void {
         const validatedMaxDeposit = MaxDepositAmountValue.from(newMaxDeposit);
         if(validatedMaxDeposit instanceof Error) {
@@ -116,24 +102,16 @@ export class SavingsAccountsEntity {
         this.maxDepositAmount = validatedMaxDeposit.value;
     }
 
-    /**
-     * Activate interest calculation for this account
-     */
+  
     public activateInterest(): void {
         this.isActive = true;
     }
 
-    /**
-     * Deactivate interest calculation for this account
-     */
+ 
     public deactivateInterest(): void {
         this.isActive = false;
     }
 
-    /**
-     * Get projected annual interest based on current balance
-     * @param currentBalance - Current account balance
-     */
     public getProjectedAnnualInterest(currentBalance: number): number {
         const dailyInterest = this.calculateDailyInterest(currentBalance);
         return Math.round(dailyInterest * 365 * 100) / 100;

@@ -1,5 +1,6 @@
 
 CREATE TYPE transaction_type_enum AS ENUM ('TRANSFER', 'WITHDRAWAL', 'DEPOSIT', 'PAYMENT', 'FEE', 'INTEREST');
+CREATE TYPE transfer_status_enum AS ENUM ('PENDING', 'COMPLETED', 'FAILED');
 CREATE TYPE order_status_enum AS ENUM ('PENDING', 'EXECUTED', 'CANCELLED', 'FAILED', 'PARTIALLY_EXECUTED');
 
 CREATE TABLE IF NOT EXISTS transactions (
@@ -9,7 +10,7 @@ CREATE TABLE IF NOT EXISTS transactions (
     amount DECIMAL(15,2) NOT NULL CHECK (amount > 0),
     transaction_type transaction_type_enum NOT NULL,
     executed_by VARCHAR(255) NOT NULL,
-    status order_status_enum DEFAULT 'PENDING' NOT NULL,
+    status transfer_status_enum DEFAULT 'PENDING' NOT NULL,
     description TEXT,
     category VARCHAR(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,

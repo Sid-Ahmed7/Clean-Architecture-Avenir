@@ -10,12 +10,7 @@ interface RoleBasedAccessProps {
   fallback?: ReactNode;
 }
 
-/**
- * Component that conditionally renders content based on user roles
- * @param allowedRoles - Array of roles that are allowed to access the content
- * @param children - Content to render if user has the required role
- * @param fallback - Optional content to render if user doesn't have the required role
- */
+
 export const RoleBasedAccess = ({
   allowedRoles,
   children,
@@ -37,11 +32,7 @@ export const RoleBasedAccess = ({
   return <>{fallback}</>;
 };
 
-/**
- * Higher-order component that creates a RoleBasedAccess component for a specific role
- * @param role - The role to check for
- * @returns A component that only renders its children if the user has the specified role
- */
+
 export const createRoleBasedComponent = (role: RoleEnum | string) => {
   return ({ children, fallback }: Omit<RoleBasedAccessProps, "allowedRoles">) => (
     <RoleBasedAccess allowedRoles={[role]} fallback={fallback}>

@@ -4,7 +4,7 @@ export const accountSchema = (t:(key: string) => string) =>
 
 z.object({
       accountNumber: z.number().int().refine(num => num.toString().length === 11, {
-      message: "Le numéro de compte doit comporter exactement 11 chiffres",
+      message: t('validation.accountNumber.length'),
     }),
     iban: z.string().length(27),
     userId: z.string(),

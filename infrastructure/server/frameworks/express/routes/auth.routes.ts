@@ -1,16 +1,14 @@
 import express from 'express'
 import { AuthController } from '../controller/auth.controller';
-import {registerUserConfirmedSubscriber} from '../../../../subscribers/UserConfirmedSuscriber';
-import {accountRepository, userRepository, roleRepository, userRoleRepository,tokenService, passwordService,emailService, emailTemplateService,registrationTokenGeneratorService, localeService, uuidService,eventBus, notificationRepository, notificationService} from '../../../../adapters/config/repositories';
+import {accountRepository, userRepository, roleRepository, userRoleRepository, notificationRepository, eventBus, passwordService} from '../../../../adapters/config/repositories';
+import {tokenService, emailService, emailTemplateService, registrationTokenGeneratorService, localeService, uuidService, notificationService, rolePriorityService, eventSubscriberService} from '../../../../adapters/config/services';
 import { verifyTokenAccess } from '../middleware/authMiddleware';
 import { authorizeRoles } from '../middleware/roleMiddleware';
 import { RoleEnum } from '../../../../../domain/enums/RoleEnum';
-import { RolePriorityService } from '../../../../adapters/services/RolePriorityService';
 const router = express.Router();
 
 
-registerUserConfirmedSubscriber(eventBus,accountRepository);
-const rolePriorityService = new RolePriorityService();
+eventSubscriberService.registerUserConfirmedSubscriber(eventBus, accountRepository);
 const authController = new AuthController(
   userRepository,
   roleRepository,
@@ -22,7 +20,8 @@ const authController = new AuthController(
   registrationTokenGeneratorService,
   localeService,
   uuidService,
-  eventBus, rolePriorityService,
+  eventBus,
+  rolePriorityService,
   notificationRepository,
   notificationService,
 );
@@ -43,4 +42,5 @@ router.get(
 );
 router.post("/create-advisor", verifyTokenAccess, authorizeRoles([RoleEnum.BANK_MANAGER]), (req, res) => authController.registerAdvisor(req, res))
 router.post("/create-manager", (req, res) => authController.registerManager(req, res))
+router.post("/create-client", verifyTokenAccess, authorizeRoles([RoleEnum.BANK_MANAGER, RoleEnum.BANK_ADVISOR]), (req, res) => authController.createClientAccount(req, res))
 export default router;

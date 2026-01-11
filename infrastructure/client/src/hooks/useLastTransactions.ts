@@ -27,7 +27,7 @@ export const useLastTransactions = (limit: number = 10) => {
                 const response = await getLastTransactions(limit);
                 setTransactions(response.data);
             } catch (err: any) {
-                setError(err.response?.data?.error || "Erreur lors de la récupération des transactions");
+                setError(err.response?.data?.error || t('generalErrors.lastTransactions.fetch'));
             } finally {
                 setLoading(false);
             }
@@ -43,7 +43,7 @@ export const useLastTransactions = (limit: number = 10) => {
             const response = await getLastTransactions(limit);
             setTransactions(response.data);
         } catch (err: any) {
-            setError(err.response?.data?.error || "Erreur lors de la récupération des transactions");
+            setError(err.response?.data?.error || t('generalErrors.lastTransactions.fetch'));
         } finally {
             setLoading(false);
         }

@@ -2,6 +2,7 @@
 
 import { AccountModel } from "@/lib/validation/bankAccount/accountSchema";
 import { AccountCard } from "../ui/AccountCard";
+import { useTranslations } from "next-intl";
 
 interface AccountProps {
   accounts: AccountModel[];
@@ -10,6 +11,7 @@ interface AccountProps {
 
 export function AccountList(props: AccountProps) {
   const { accounts, mainAccountId } = props;
+  const t = useTranslations("components.bankAccount.accountList");
 
   const filteredAccounts = mainAccountId
     ? accounts.filter((acc) => acc.accountNumber !== mainAccountId)
@@ -19,7 +21,7 @@ export function AccountList(props: AccountProps) {
     <div>
       {filteredAccounts.length === 0 ? (
         <div className="text-center py-8">
-          <p className="text-gray-500">Aucun autre compte disponible</p>
+          <p className="text-gray-500">{t("noAccounts")}</p>
         </div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-2 gap-4">

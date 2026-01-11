@@ -1,13 +1,33 @@
 import { Router } from "express";
 import { SavingsAccountController } from "../controller/savings-account.controller";
-import { savingsAccountRepository, accountRepository } from "../../../../adapters/config/repositories";
+import {
+    savingsAccountRepository,
+    accountRepository,
+    notificationRepository,
+    userRepository,
+    savingsProductRepository,
+    transactionRepository
+} from "../../../../adapters/config/repositories";
+import {
+    notificationService,
+    uuidService
+} from "../../../../adapters/config/services";
 import { verifyTokenAccess } from "../middleware/authMiddleware";
 import { authorizeRoles } from '../middleware/roleMiddleware';
 import { RoleEnum } from "../../../../../domain/enums/RoleEnum";
 
 const router = Router();
 
-const savingsAccountController = new SavingsAccountController(savingsAccountRepository,accountRepository);
+const savingsAccountController = new SavingsAccountController(
+    savingsAccountRepository,
+    accountRepository,
+    notificationRepository,
+    notificationService,
+    uuidService,
+    userRepository,
+    savingsProductRepository,
+    transactionRepository
+);
 
 router.get(
     "/",

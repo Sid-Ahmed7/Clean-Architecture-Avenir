@@ -1,5 +1,6 @@
 import express from 'express'
-import { stockRepository, stockOrderRepository, orderBookService, stockTransactionRepository, holdingRepository, orderService, matchingService, orderValidationService, accountService, uuidService} from '../../../../adapters/config/repositories';
+import { stockRepository, stockOrderRepository, stockTransactionRepository, holdingRepository} from '../../../../adapters/config/repositories';
+import { orderBookService, orderService, matchingService, orderValidationService, accountService, uuidService} from '../../../../adapters/config/services';
 import { verifyTokenAccess } from '../middleware/authMiddleware';
 import { authorizeRoles } from '../middleware/roleMiddleware';
 import { RoleEnum } from '../../../../../domain/enums/RoleEnum';

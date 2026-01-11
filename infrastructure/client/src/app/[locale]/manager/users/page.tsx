@@ -7,15 +7,19 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Users, UserCheck, Briefcase, Trash2, Edit, X } from "lucide-react";
 import { User } from "@/types/user";
+import { useTranslations } from "next-intl";
+import { useNotification } from "@/hooks/useNotifications";
+import { NotificationEnum } from "@/types/Notification";
 
 export default function UsersManagementPage() {
+    const t = useTranslations("manager.users");
+    const { addNotification } = useNotification();
     const { user } = useContext(AuthContext);
     const [users, setUsers] = useState<User[]>([]);
     const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState("all");
 
-    // Edit modal state
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [editingUser, setEditingUser] = useState<User | null>(null);
     const [editForm, setEditForm] = useState({
@@ -101,17 +105,15 @@ export default function UsersManagementPage() {
                 throw new Error("Failed to update user");
             }
 
-            console.log("User updated successfully");
             closeEditModal();
             fetchUsers();
         } catch (error) {
-            console.error("Failed to update user:", error);
-            alert("Erreur lors de la mise à jour de l'utilisateur");
+            addNotification(NotificationEnum.ALERT, t("errors.updateFailed"));
         }
     };
 
     const handleDeleteUser = async (userId: string) => {
-        if (!confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cela supprimera également tous ses comptes et données associées.")) {
+        if (!confirm(t("deleteConfirm"))) {
             return;
         }
 
@@ -125,7 +127,6 @@ export default function UsersManagementPage() {
                 throw new Error("Failed to delete user");
             }
 
-            console.log("User deleted successfully");
             fetchUsers();
         } catch (error) {
             console.error("Failed to delete user:", error);
@@ -145,25 +146,23 @@ export default function UsersManagementPage() {
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-screen bg-white">
-                <p className="text-gray-700">Chargement...</p>
+                <p className="text-gray-700">{t("loading")}</p>
             </div>
         );
     }
 
     return (
         <div className="min-h-screen bg-white p-6 mx-auto space-y-6">
-            {/* Header */}
             <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl p-6 border border-purple-100">
                 <div className="flex items-center gap-3 mb-2">
                     <div className="p-3 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-xl">
                         <Users className="w-6 h-6 text-white" />
                     </div>
-                    <h1 className="text-2xl font-bold text-gray-900">Gestion des Utilisateurs</h1>
+                    <h1 className="text-2xl font-bold text-gray-900">{t("title")}</h1>
                 </div>
-                <p className="text-gray-700 ml-14">Gérez tous les utilisateurs, clients et conseillers</p>
+                <p className="text-gray-700 ml-14">{t("subtitle")}</p>
             </div>
 
-            {/* Tabs */}
             <div className="flex gap-3">
                 <button
                     onClick={() => setActiveTab("all")}
@@ -173,7 +172,7 @@ export default function UsersManagementPage() {
                         }`}
                 >
                     <Users className="w-4 h-4" />
-                    Tous ({users.length})
+                    {t("tabs.all")} ({users.length})
                 </button>
                 <button
                     onClick={() => setActiveTab("clients")}
@@ -183,7 +182,7 @@ export default function UsersManagementPage() {
                         }`}
                 >
                     <UserCheck className="w-4 h-4" />
-                    Clients ({users.filter(u => u.roles?.includes("CLIENT")).length})
+                    {t("tabs.clients")} ({users.filter(u => u.roles?.includes("CLIENT")).length})
                 </button>
                 <button
                     onClick={() => setActiveTab("advisors")}
@@ -193,30 +192,29 @@ export default function UsersManagementPage() {
                         }`}
                 >
                     <Briefcase className="w-4 h-4" />
-                    Conseillers ({users.filter(u => u.roles?.includes("BANK_ADVISOR")).length})
+                    {t("tabs.advisors")} ({users.filter(u => u.roles?.includes("BANK_ADVISOR")).length})
                 </button>
             </div>
 
-            {/* Users Table */}
             <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full">
                         <thead className="bg-gray-50 border-b border-gray-200">
                             <tr>
-                                <th className="text-left p-4 text-sm font-semibold text-gray-700">Nom</th>
-                                <th className="text-left p-4 text-sm font-semibold text-gray-700">Email</th>
-                                <th className="text-left p-4 text-sm font-semibold text-gray-700">Téléphone</th>
-                                <th className="text-left p-4 text-sm font-semibold text-gray-700">Statut</th>
-                                <th className="text-left p-4 text-sm font-semibold text-gray-700">Rôles</th>
-                                <th className="text-left p-4 text-sm font-semibold text-gray-700">Inscrit</th>
-                                <th className="text-right p-4 text-sm font-semibold text-gray-700">Actions</th>
+                                <th className="text-left p-4 text-sm font-semibold text-gray-700">{t("table.name")}</th>
+                                <th className="text-left p-4 text-sm font-semibold text-gray-700">{t("table.email")}</th>
+                                <th className="text-left p-4 text-sm font-semibold text-gray-700">{t("table.phone")}</th>
+                                <th className="text-left p-4 text-sm font-semibold text-gray-700">{t("table.status")}</th>
+                                <th className="text-left p-4 text-sm font-semibold text-gray-700">{t("table.roles")}</th>
+                                <th className="text-left p-4 text-sm font-semibold text-gray-700">{t("table.registered")}</th>
+                                <th className="text-right p-4 text-sm font-semibold text-gray-700">{t("table.actions")}</th>
                             </tr>
                         </thead>
                         <tbody>
                             {filteredUsers.length === 0 ? (
                                 <tr>
                                     <td colSpan={7} className="text-center p-8 text-gray-500">
-                                        Aucun utilisateur trouvé
+                                        {t("table.noUsers")}
                                     </td>
                                 </tr>
                             ) : (
@@ -239,9 +237,9 @@ export default function UsersManagementPage() {
                                         </td>
                                         <td className="p-4">
                                             {user.isRegistered ? (
-                                                <Badge variant="success">Oui</Badge>
+                                                <Badge variant="success">{t("status.yes")}</Badge>
                                             ) : (
-                                                <Badge variant="neutral">Non</Badge>
+                                                <Badge variant="neutral">{t("status.no")}</Badge>
                                             )}
                                         </td>
                                         <td className="p-4 text-right">
@@ -251,14 +249,14 @@ export default function UsersManagementPage() {
                                                     className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium text-sm cursor-pointer"
                                                 >
                                                     <Edit className="w-4 h-4" />
-                                                    Modifier
+                                                    {t("actions.edit")}
                                                 </button>
                                                 <button
                                                     onClick={() => handleDeleteUser(user.id)}
                                                     className="inline-flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors font-medium text-sm cursor-pointer"
                                                 >
                                                     <Trash2 className="w-4 h-4" />
-                                                    Supprimer
+                                                    {t("actions.delete")}
                                                 </button>
                                             </div>
                                         </td>
@@ -270,18 +268,16 @@ export default function UsersManagementPage() {
                 </div>
             </div>
 
-            {/* Edit Modal */}
             {isEditModalOpen && editingUser && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+                <div className="fixed inset-0 bg-slate-900/30 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-y-auto">
                     <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full my-8">
-                        {/* Modal Header */}
                         <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 border-b border-blue-100 rounded-t-2xl">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-3">
                                     <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-lg">
                                         <Edit className="w-5 h-5 text-white" />
                                     </div>
-                                    <h2 className="text-xl font-bold text-gray-900">Modifier l'utilisateur</h2>
+                                    <h2 className="text-xl font-bold text-gray-900">{t("editModal.title")}</h2>
                                 </div>
                                 <button
                                     onClick={closeEditModal}
@@ -292,12 +288,11 @@ export default function UsersManagementPage() {
                             </div>
                         </div>
 
-                        {/* Modal Body */}
                         <form onSubmit={handleEditSubmit} className="p-6 space-y-4">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                        Prénom
+                                        {t("editModal.firstName")}
                                     </label>
                                     <Input
                                         type="text"
@@ -308,7 +303,7 @@ export default function UsersManagementPage() {
                                 </div>
                                 <div>
                                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                        Nom
+                                        {t("editModal.lastName")}
                                     </label>
                                     <Input
                                         type="text"
@@ -321,7 +316,7 @@ export default function UsersManagementPage() {
 
                             <div>
                                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                    Email
+                                    {t("editModal.email")}
                                 </label>
                                 <Input
                                     type="email"
@@ -333,7 +328,7 @@ export default function UsersManagementPage() {
 
                             <div>
                                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                    Téléphone
+                                    {t("editModal.phone")}
                                 </label>
                                 <Input
                                     type="tel"
@@ -345,7 +340,7 @@ export default function UsersManagementPage() {
 
                             <div>
                                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                    Adresse
+                                    {t("editModal.address")}
                                 </label>
                                 <Input
                                     type="text"
@@ -357,33 +352,32 @@ export default function UsersManagementPage() {
 
                             <div>
                                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                    Statut
+                                    {t("editModal.status")}
                                 </label>
                                 <select
                                     value={editForm.status}
                                     onChange={(e) => setEditForm({ ...editForm, status: e.target.value })}
                                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900 font-medium"
                                 >
-                                    <option value="ACTIVE" className="text-gray-900">Actif</option>
-                                    <option value="INACTIVE" className="text-gray-900">Inactif</option>
-                                    <option value="SUSPENDED" className="text-gray-900">Suspendu</option>
+                                    <option value="ACTIVE" className="text-gray-900">{t("editModal.statusOptions.active")}</option>
+                                    <option value="INACTIVE" className="text-gray-900">{t("editModal.statusOptions.inactive")}</option>
+                                    <option value="SUSPENDED" className="text-gray-900">{t("editModal.statusOptions.suspended")}</option>
                                 </select>
                             </div>
 
-                            {/* Modal Footer */}
                             <div className="flex gap-3 pt-4 border-t border-gray-200">
                                 <button
                                     type="button"
                                     onClick={closeEditModal}
                                     className="flex-1 px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg font-semibold transition-colors"
                                 >
-                                    Annuler
+                                    {t("editModal.cancel")}
                                 </button>
                                 <button
                                     type="submit"
                                     className="flex-1 px-6 py-3 bg-gradient-to-br from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white rounded-lg font-semibold transition-all shadow-lg"
                                 >
-                                    Enregistrer
+                                    {t("editModal.save")}
                                 </button>
                             </div>
                         </form>

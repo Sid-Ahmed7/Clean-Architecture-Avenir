@@ -2,7 +2,7 @@ import { EventBusInterface } from "../../../../application/ports/event/EventBusI
 import { pgPool } from '../../config/database/configPostgresSQL';
 
 export class PostgresEventBus implements EventBusInterface {
-  private handlers: Map<string, ((event: any) => Promise<void>)[]> = new Map();
+  private readonly handlers: Map<string, ((event: any) => Promise<void>)[]> = new Map();
 
   async publish<T extends { eventName: string }>(event: T): Promise<void> {
     const eventName = event.eventName;

@@ -8,24 +8,27 @@ export class GetSavingsAccountWithInterestUseCase {
     ) {}
 
     public async execute(dto: SavingsAccountWithInterest): Promise<SavingsAccountsEntity | Error> {
-        // 1. Get savings account
         const savingsAccount = await this.savingsAccountRepository.getSavingsAccountByNumber(dto.accountNumber);
         if (savingsAccount instanceof Error) {
             return savingsAccount;
         }
 
-        // 2. Verify ownership if userId provided
+        // Verify ownership if userId provided
         if (dto.userId && savingsAccount.userId !== dto.userId) {
             return new Error("You do not own this savings account");
         }
 
-        // 3. Calculate pending interest since last update
+        // Calculate pending interest since last update
         const daysSinceLastUpdate = Math.floor(
             (new Date().getTime() - savingsAccount.lastBalanceUpdate.getTime()) / (1000 * 60 * 60 * 24)
         );
-        const pendingInterest = (savingsAccount.balance * savingsAccount.interestRate * daysSinceLastUpdate) / (365 * 100);
+        //Calculate per minute instead of per day
+        const minutesSinceLastUpdate = Math.floor(
+            (new Date().getTime() - savingsAccount.lastBalanceUpdate.getTime()) / (1000 * 60)
+        );
+        const pendingInterest = (savingsAccount.balance * savingsAccount.interestRate * minutesSinceLastUpdate) / (525600 * 100);
 
-        // 4. Return account with updated interest (not saved to DB, just calculated for display)
+        // Return account with updated interest 
         const accountWithInterest = SavingsAccountsEntity.from(
             savingsAccount.accountNumber,
             savingsAccount.productId,

@@ -5,6 +5,11 @@ import cookieParser from "cookie-parser";
 import routes from "./routes/index";
 import path from "path";
 import { runMigrations } from "../../../adapters/config/database/runMigrations";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 config();
 const app = express();
@@ -18,7 +23,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
-app.use("/uploads", express.static(path.join(__dirname, "../../public/uploads")));
+app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
 app.use("/api", routes)
 
 if (process.env.REPOSITORY_TYPE === 'postgres') {

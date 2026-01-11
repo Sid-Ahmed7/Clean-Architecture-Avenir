@@ -1,3 +1,5 @@
+import { useTranslations } from "next-intl";
+
 interface PaginationProps {
   currentPage: number;
   hasMore: boolean;
@@ -6,9 +8,10 @@ interface PaginationProps {
 }
 
 export function Pagination({ currentPage, hasMore, onNext, onPrev }: PaginationProps) {
+  const t = useTranslations('common.actions');
   return (
     <div className="flex justify-center items-center gap-4 py-6">
-      
+
       <button
         onClick={onPrev}
         disabled={currentPage === 1}
@@ -17,7 +20,7 @@ export function Pagination({ currentPage, hasMore, onNext, onPrev }: PaginationP
           hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed
         `}
       >
-        ◀ {currentPage > 1 ? currentPage - 1 : "Précédent"}
+        ◀ {currentPage > 1 ? currentPage - 1 : t("previous")}
       </button>
 
       <span className="px-5 py-2 rounded-lg bg-blue-500 text-white font-semibold shadow-md">
@@ -32,7 +35,7 @@ export function Pagination({ currentPage, hasMore, onNext, onPrev }: PaginationP
           hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed
         `}
       >
-        {hasMore ? currentPage + 1 : "Suivant"} ▶
+        {hasMore ? currentPage + 1 : t("next")} ▶
       </button>
     </div>
   );

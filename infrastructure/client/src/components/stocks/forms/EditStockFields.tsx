@@ -1,4 +1,5 @@
 import { Controller, UseFormReturn } from "react-hook-form";
+import { useTranslations } from "next-intl";
 
 interface EditStockFieldsProps {
   form: UseFormReturn<{ id: string; companyName: string; name: string; currency: string; isActionAvailable: boolean }>;
@@ -6,23 +7,23 @@ interface EditStockFieldsProps {
 
 export function EditStockFields({ form }: EditStockFieldsProps) {
   const { control, formState: { errors } } = form;
+  const t = useTranslations("components.stocks.forms");
 
   return (
     <>
-
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Nom de l&apos;entreprise <span className="text-red-500">*</span>
+          {t("fields.companyName")} <span className="text-red-500">*</span>
         </label>
         <Controller
           name="companyName"
           control={control}
-          rules={{ required: "Le nom de l'entreprise est requis" }}
+          rules={{ required: t("validation.companyNameRequired") }}
           render={({ field }) => (
             <input
               type="text"
               {...field}
-              placeholder="Ex: Apple Inc."
+              placeholder={t("fields.companyNamePlaceholder")}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           )}
@@ -34,17 +35,17 @@ export function EditStockFields({ form }: EditStockFieldsProps) {
 
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Nom court <span className="text-red-500">*</span>
+          {t("fields.name")} <span className="text-red-500">*</span>
         </label>
         <Controller
           name="name"
           control={control}
-          rules={{ required: "Le nom court est requis" }}
+          rules={{ required: t("validation.nameRequired") }}
           render={({ field }) => (
             <input
               type="text"
               {...field}
-              placeholder="Ex: Apple"
+              placeholder={t("fields.namePlaceholder")}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           )}
@@ -56,21 +57,21 @@ export function EditStockFields({ form }: EditStockFieldsProps) {
 
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Devise <span className="text-red-500">*</span>
+          {t("fields.currency")} <span className="text-red-500">*</span>
         </label>
         <Controller
           name="currency"
           control={control}
           rules={{
-            required: "La devise est requise",
-            minLength: { value: 3, message: "La devise doit contenir exactement 3 caractères" },
-            maxLength: { value: 3, message: "La devise doit contenir exactement 3 caractères" }
+            required: t("validation.currencyRequired"),
+            minLength: { value: 3, message: t("validation.currencyLength") },
+            maxLength: { value: 3, message: t("validation.currencyLength") }
           }}
           render={({ field }) => (
             <input
               type="text"
               {...field}
-              placeholder="Ex: EUR"
+              placeholder={t("fields.currencyPlaceholder")}
               maxLength={3}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent uppercase"
             />
@@ -79,7 +80,7 @@ export function EditStockFields({ form }: EditStockFieldsProps) {
         {errors.currency && (
           <p className="text-red-500 text-xs mt-1">{errors.currency.message}</p>
         )}
-        <p className="text-xs text-gray-500 mt-1">Code ISO de la devise (USD, EUR, GBP, etc.)</p>
+        <p className="text-xs text-gray-500 mt-1">{t("fields.currencyHelp")}</p>
       </div>
 
       <div className="flex items-center mb-4">
@@ -96,7 +97,7 @@ export function EditStockFields({ form }: EditStockFieldsProps) {
           )}
         />
         <label className="ml-2 text-sm text-gray-700">
-          Action disponible à l&apos;achat
+          {t("fields.isActionAvailable")}
         </label>
       </div>
     </>

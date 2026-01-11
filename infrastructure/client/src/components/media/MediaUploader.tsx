@@ -4,6 +4,7 @@ import { useState } from "react";
 import { DragAndDropZone } from "./DragAndDropZone";
 import { X } from "lucide-react";
 import { FileGrid } from "./FileGrid";
+import { useTranslations } from "next-intl";
 
 interface MediaUploaderProps {
     onFilesSelected: (files: File[]) => void;
@@ -14,6 +15,7 @@ interface MediaUploaderProps {
 }
 
 export function MediaUploader({onFilesSelected, existingFiles = [],maxSize = 10, disabled =false, onCaptionUpdate} : MediaUploaderProps){
+    const t = useTranslations("media.uploader");
     const [selectedFiles, setSelectedFiles] = useState<MediaFile[]>([]);
     const [isDragging, setDragging] =  useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -23,13 +25,13 @@ export function MediaUploader({onFilesSelected, existingFiles = [],maxSize = 10,
         const video = file.type.startsWith('video/');
 
         if(!image && !video) {
-            setError(`${file.name} is not a image or a video`);
+            setError(t("errorNotMedia", { fileName: file.name }));
             return false; 
         }
 
         const size = maxSize * 1024 * 1024;
         if(file.size > size) {
-            setError(`${file.name} exceeds maximum size of  ${maxSize}MB`);
+            setError(t("errorMaxSize", { fileName: file.name, maxSize }));
             return false;
         }
 
@@ -181,14 +183,14 @@ export function MediaUploader({onFilesSelected, existingFiles = [],maxSize = 10,
       )}
 
       <FileGrid
-        title="Fichiers existants"
+        title={t("existingFiles")}
         files={existingFilesForGrid}
         isUploadAlready={true}
         onCaptionChange={handleCaptionChange}
       />
 
       <FileGrid
-        title="Nouveaux fichiers"
+        title={t("newFiles")}
         files={newFilesForGrid}
         onRemove={removeFile}
         onClearAll={clearAll}

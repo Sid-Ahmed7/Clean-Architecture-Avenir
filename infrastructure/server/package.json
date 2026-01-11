@@ -1,43 +1,29 @@
 {
-  "name": "clean-architecture-avenir",
+  "name": "server",
   "version": "1.0.0",
-  "devDependencies": {
-    "@types/bcrypt": "^5.0.2",
-    "@types/body-parser": "^1.19.6",
-    "@types/cookie": "^0.6.0",
-    "@types/cookie-parser": "^1.4.6",
-    "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.3",
-    "@types/jsonwebtoken": "^9.0.5",
-    "@types/multer": "^2.0.0",
-    "@types/node": "^24.4.0",
-    "@types/pg": "^8.16.0",
-    "ts-node": "^10.9.2",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.9.2"
+  "description": "Server infrastructure with Express and AdonisJS frameworks",
+  "private": true,
+  "main": "index.ts",
+  "scripts": {
+    "dev": "tsx index.ts",
+    "switch:express": "tsx switch-framework.ts express",
+    "switch:adonisjs": "tsx switch-framework.ts adonisjs",
+    "switch": "tsx switch-framework.ts",
+    "switch:postgres": "tsx scripts/switch-repository.ts postgres",
+    "switch:inmemory": "tsx scripts/switch-repository.ts inmemory",
+    "repo:status": "tsx scripts/switch-repository.ts --status",
+    "migrate": "tsx scripts/run-migrations.ts",
+    "express:dev": "cd frameworks/express && npm run dev",
+    "adonisjs:dev": "cd frameworks/adonisjs && npm run dev"
   },
   "dependencies": {
-    "bcrypt": "^5.1.1",
-    "body-parser": "^2.2.1",
-    "cookie": "^0.7.2",
-    "cookie-parser": "^1.4.6",
-    "cors": "^2.8.5",
     "dotenv": "^17.2.2",
-    "express": "^5.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "multer": "^2.0.2",
-    "pg": "^8.16.3",
-    "resend": "^6.1.2",
-    "socket.io": "^4.8.1",
-    "zod": "^4.1.13"
+    "pg": "^8.16.3"
   },
-  "scripts": {
-    "dev": "ts-node frameworks/express/server.ts",
-    "build": "tsc -b ../..",
-    "start": "node ../../dist/frameworks/express/server.js",
-    "switch:postgres": "ts-node scripts/switch-repository.ts postgres",
-    "switch:inmemory": "ts-node scripts/switch-repository.ts inmemory",
-    "repo:status": "ts-node scripts/switch-repository.ts --status",
-    "migrate": "ts-node scripts/run-migrations.ts"
+  "devDependencies": {
+    "@types/node": "^24.4.0",
+    "@types/pg": "^8.16.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.9.2"
   }
 }

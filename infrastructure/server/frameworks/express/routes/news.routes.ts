@@ -1,6 +1,7 @@
 import express from 'express'
 import { NewsController } from '../controller/news.controller';
-import { newsRepository, newsService, uuidService } from '../../../../adapters/config/repositories';
+import { newsRepository } from '../../../../adapters/config/repositories';
+import { newsService, uuidService } from '../../../../adapters/config/services';
 import { verifyTokenAccess } from '../middleware/authMiddleware';
 import { authorizeRoles } from '../middleware/roleMiddleware';
 import { RoleEnum } from '../../../../../domain/enums/RoleEnum';

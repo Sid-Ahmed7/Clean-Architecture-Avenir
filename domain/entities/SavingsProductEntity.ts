@@ -15,7 +15,6 @@ export class SavingsProductEntity {
         minDepositAmount: number | null = null,
         isActive: boolean = true
     ): SavingsProductEntity | Error {
-        // Validate all fields using Value Objects
         const validatedId = ProductIdValue.from(id);
         if (validatedId instanceof Error) {
             return validatedId;
@@ -46,7 +45,6 @@ export class SavingsProductEntity {
             return validatedMinDeposit;
         }
 
-        // Validate that min is not greater than max
         if (validatedMinDeposit.value !== null && 
             validatedMaxDeposit.value !== null && 
             validatedMinDeposit.value > validatedMaxDeposit.value) {
@@ -125,7 +123,6 @@ export class SavingsProductEntity {
             return validatedMinDeposit;
         }
 
-        // Validate that min is not greater than max
         if (validatedMinDeposit.value !== null && 
             validatedMaxDeposit.value !== null && 
             validatedMinDeposit.value > validatedMaxDeposit.value) {

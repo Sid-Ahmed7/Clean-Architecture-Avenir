@@ -14,7 +14,7 @@ const DURATIONS = [6, 12, 18];
 const RATE_THRESHOLD = 5000;
 
 export function LoanRequestForm() {
-  const t = useTranslations();
+  const t = useTranslations("loan.form");
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState<"success" | "error" | "">("");
   const [advisors, setAdvisors] = useState<AdvisorOption[]>([]);
@@ -53,17 +53,14 @@ export function LoanRequestForm() {
         }
       })
       .catch((err) => {
-        console.error("Failed to load advisors", err);
-        setAdvisorError(err.response?.data?.error || "Impossible de charger les conseillers");
+        setAdvisorError(err.response?.data?.error || t("errorLoadAdvisors"));
       })
       .finally(() => setLoadingAdvisors(false));
 
     getIndicativeRate()
       .then((rate) => setIndicativeRate(rate))
-      .catch((err) => {
-        console.error("Failed to load indicative rate", err);
-      });
-  }, [setValue]);
+      .catch(() => {});
+  }, [setValue, t]);
 
   const amount = watch("amount");
   const duration = watch("durationMonths");
@@ -83,19 +80,18 @@ export function LoanRequestForm() {
     createLoanRequest(data)
       .then((res) => {
         if (res.status === 201) {
-          setMessage("Demande envoyée au conseiller.");
+          setMessage(t("successMessage"));
           setMessageType("success");
           reset();
           return;
         }
-        setMessage("Échec de la demande");
+        setMessage(t("failureMessage"));
         setMessageType("error");
       })
       .catch((error) => {
-        console.error("Loan request error:", error);
         const msg =
           error.response?.data?.error ||
-          "Erreur lors de la demande. Veuillez réessayer ou contacter votre conseiller.";
+          t("errorMessage");
         setMessage(msg);
         setMessageType("error");
       })
@@ -108,10 +104,10 @@ export function LoanRequestForm() {
         <div className="lg:col-span-2">
           <div className="bg-white border border-slate-100 shadow-sm rounded-2xl p-6 sm:p-8 space-y-6">
             <div className="space-y-2">
-              <p className="text-xs uppercase tracking-wide text-slate-500">Client</p>
-              <h2 className="text-3xl font-bold text-slate-900">Demande de crédit</h2>
+              <p className="text-xs uppercase tracking-wide text-slate-500">{t("clientLabel")}</p>
+              <h2 className="text-3xl font-bold text-slate-900">{t("title")}</h2>
               <p className="text-sm text-slate-600">
-                Renseignez les informations essentielles. Votre conseiller recevra automatiquement la demande.
+                {t("description")}
               </p>
             </div>
 
@@ -129,6 +125,7 @@ export function LoanRequestForm() {
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <LoanRequestFields
+                t={t}
                 advisors={advisors}
                 loadingAdvisors={loadingAdvisors}
                 advisorError={advisorError}
@@ -145,7 +142,7 @@ export function LoanRequestForm() {
               />
 
               <p className="text-xs text-slate-500 text-center">
-                Une fois envoyée, la demande sera visible par votre conseiller.
+                {t("footerNote")}
               </p>
             </form>
           </div>
@@ -153,19 +150,18 @@ export function LoanRequestForm() {
 
         <div className="space-y-4">
           <div className="bg-white border border-slate-100 shadow-sm rounded-2xl p-5">
-            <p className="text-xs uppercase text-slate-500 mb-1">Conseil</p>
+            <p className="text-xs uppercase text-slate-500 mb-1">{t("adviceLabel")}</p>
             <p className="text-sm text-slate-700">
-              Préparez un motif clair et un montant cohérent avec votre besoin. Si le montant dépasse 5000€, le taux sera
-              proposé par le directeur après validation.
+              {t("adviceText")}
             </p>
           </div>
           <div className="bg-gradient-to-br from-blue-600 to-blue-500 rounded-2xl text-white p-5 shadow-sm space-y-2">
-            <p className="text-xs uppercase text-white/80">Taux indicatif</p>
+            <p className="text-xs uppercase text-white/80">{t("indicativeRateLabel")}</p>
             <p className="text-2xl font-semibold">
-              {indicativeRate ? `${(indicativeRate * 100).toFixed(2)}%` : "En attente"}
+              {indicativeRate ? `${(indicativeRate * 100).toFixed(2)}%` : t("pending")}
             </p>
             <p className="text-sm text-white/80">
-              Appliqué automatiquement aux demandes ≤ 5000€. Au-delà, un taux personnalisé sera proposé.
+              {t("rateExplanation")}
             </p>
           </div>
         </div>

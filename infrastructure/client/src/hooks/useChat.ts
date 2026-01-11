@@ -87,7 +87,6 @@ export const useChat = (userId: string, role: string, conversationId: string) =>
     const systemSocket = chatService.getSocket("SYSTEM");
 
     if (!socket || !systemSocket) {
-      console.error("Impossible de créer les sockets");
       return;
     }
 
@@ -120,7 +119,6 @@ export const useChat = (userId: string, role: string, conversationId: string) =>
             ...(msgs.messages.advisor || [])
           ].sort((a, b) => new Date(a.sentAt).getTime() - new Date(b.sentAt).getTime());
           dispatch({ type: "SET_MESSAGES", payload: sortedMessages });
-          console.log(`📚 ${sortedMessages.length} messages chargés`);
         });
       }
     };

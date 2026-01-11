@@ -1,4 +1,5 @@
 import { ExtendHours } from "@/types/stock";
+import { useTranslations } from 'next-intl';
 
 interface StockPriceProps {
   price: number;
@@ -10,6 +11,7 @@ interface StockPriceProps {
 }
 
 export function StockPrice({price, currency,change,changePercent, extendedHours,isMarketOpen}: StockPriceProps) {
+    const t = useTranslations('components.stocks.structure.price');
     return (
     <div className="mb-4">
       <div className="text-3xl font-bold text-gray-900">
@@ -40,7 +42,7 @@ export function StockPrice({price, currency,change,changePercent, extendedHours,
 
       {extendedHours && !isMarketOpen && (
         <div className="mt-2 p-2 bg-gray-50 rounded text-xs">
-          <div className="text-gray-600 mb-1">Après clôture</div>
+          <div className="text-gray-600 mb-1">{t('afterClose')}</div>
           <div className="flex items-center gap-2">
             <span className="font-semibold text-gray-900">
               ${extendedHours.price.toFixed(2)}

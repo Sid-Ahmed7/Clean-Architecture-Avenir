@@ -10,7 +10,6 @@ export class UpdateSavingsAccountConfigUseCase {
     ) {}
 
     public async execute(dto: UpdateSavingsAccountConfig): Promise<SavingsAccountsEntity | AccountNotFoundError | InvalidAccountError | Error> {
-        // Get the existing savings account
         const existingAccount = await this.savingsAccountRepository.getSavingsAccountByNumber(dto.accountNumber);
         
         if (existingAccount instanceof AccountNotFoundError) {
@@ -42,7 +41,6 @@ export class UpdateSavingsAccountConfigUseCase {
             }
         }
 
-        // Save the updated account
         const result = await this.savingsAccountRepository.updateSavingsAccount(existingAccount);
         
         if (result instanceof Error) {

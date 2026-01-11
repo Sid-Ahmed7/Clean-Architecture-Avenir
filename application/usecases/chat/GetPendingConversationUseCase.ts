@@ -12,7 +12,7 @@ export class GetPendingConversationUseCase {
          public async execute (): Promise<Array<ConversationEntity>> {
 
             const conversations = await this.conversationRepository.findAll();
-            const pendingConversation = conversations.filter((conversation) => !conversation.advisorId || conversation.advisorId === "");
+            const pendingConversation = conversations.filter((conversation) => !conversation.advisorId);
     
             return pendingConversation;
         }

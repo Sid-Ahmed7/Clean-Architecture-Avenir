@@ -1,5 +1,3 @@
-import { FieldErrors, UseFormRegister } from "react-hook-form";
-
 export interface LoanRequest {
   id: string;
   clientId: string;
@@ -41,37 +39,26 @@ export interface LoanRepaymentSchedule {
 
 export type AdvisorOption = { id: string; fullName: string };
 
-export type LoanRequestFieldsProps = {
-  advisors: AdvisorOption[];
-  loadingAdvisors: boolean;
-  advisorError: string;
-  register: UseFormRegister<CreateLoanRequestInput>;
-  errors: FieldErrors<CreateLoanRequestInput>;
-  duration?: number;
-  onSelectDuration: (duration: number) => void;
-  amount: number;
-  indicativeRate: number | null;
-  monthlyPayment: number;
-  submitting: boolean;
-  durations: number[];
-  rateThreshold: number;
-};
+export interface ClientUser {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+}
 
-export type AdvisorLoanRequestCardProps = {
-  request: LoanRequest;
-  submittingId: string | null;
-  onDecision: (id: string, decision: LoanDecision) => void;
-  onViewProfile: (clientId: string) => void;
-};
+export interface ClientAccount {
+  accountNumber: string;
+  accountType: string;
+  iban?: string;
+  currentBalance: number;
+  currency: string;
+}
 
-export type ClientProfileModalProps = {
-  clientId: string;
-  details: {
-    user?: any;
-    accounts?: any[];
-  };
-  history: LoanRequest[];
-  repayments: LoanRepaymentSchedule[];
-  onClose: () => void;
-};
+export interface ClientDetails {
+  user?: ClientUser;
+  accounts?: ClientAccount[];
+}
+
+
+
+
 

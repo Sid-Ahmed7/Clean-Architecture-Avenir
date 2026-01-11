@@ -7,8 +7,8 @@
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "module": "commonjs",
-    "target": "es2016",
+    "module": "ES2020",
+    "target": "ES2020",
     // For nodejs:
     "lib": ["esnext"],
     "types": ["node"],
@@ -20,6 +20,7 @@
     "declarationMap": true,
 
     // Module Resolution
+    "moduleResolution": "Node",
     "esModuleInterop": true,
 
     // Stricter Typechecking Options

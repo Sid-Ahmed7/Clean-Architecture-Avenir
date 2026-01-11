@@ -35,7 +35,6 @@ export default function CreateAdminPage() {
                 setMessage(t("messages.register.failure"));
             }
         }).catch((error) => {
-            console.error("Error creating admin:", error);
             setMessage(`Network error: ${error.message}. Make sure the server is running on port 3000.`);
         });
     };

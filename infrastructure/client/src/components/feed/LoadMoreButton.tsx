@@ -1,6 +1,7 @@
 
 import Button from "../ui/Button";
 import { Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface LoadMoreButtonProps {
     hasNextPage: boolean;
@@ -9,6 +10,7 @@ interface LoadMoreButtonProps {
 }
 
 export function LoadMoreButton({hasNextPage, isFetchingNextPage, fetchNextPage,}: LoadMoreButtonProps) {
+    const t = useTranslations("components.feed.loadMore");
     if (!hasNextPage){
         return null;
     }
@@ -23,10 +25,10 @@ export function LoadMoreButton({hasNextPage, isFetchingNextPage, fetchNextPage,}
                 {isFetchingNextPage ? (
                     <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Chargement...
+                        {t("loading")}
                     </>
                 ) : (
-                    "Charger plus"
+                    t("loadMore")
                 )}
             </Button>
         </div>

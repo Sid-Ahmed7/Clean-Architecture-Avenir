@@ -56,7 +56,9 @@ export class PostgresAccountRepository implements AccountRepositoryInterface {
 
     public async getAccountsByUserId(userId: string): Promise<Array<AccountEntity> | UserNotFoundError> {
         const result = await pgPool.query<PostgresAccountRow>(
-            'SELECT * FROM accounts WHERE user_id = $1',
+            `SELECT * FROM accounts
+             WHERE user_id = $1
+             AND account_status != 'CLOSED'`,
             [userId]
         );
 
@@ -74,7 +76,9 @@ export class PostgresAccountRepository implements AccountRepositoryInterface {
         
     public async getSubAccountByParentAccountId(parentAccountId: number): Promise<Array<AccountEntity>> {
         const result = await pgPool.query<PostgresAccountRow>(
-            'SELECT * FROM accounts WHERE parent_account_id = $1',
+            `SELECT * FROM accounts
+             WHERE parent_account_id = $1
+             AND account_status != 'CLOSED'`,
             [parentAccountId]
         );
 
@@ -87,7 +91,10 @@ export class PostgresAccountRepository implements AccountRepositoryInterface {
 
     public async findByUserId(userId: string): Promise<AccountEntity | AccountNotFoundError> {
         const result = await pgPool.query<PostgresAccountRow>(
-            'SELECT * FROM accounts WHERE user_id = $1 LIMIT 1',
+            `SELECT * FROM accounts
+             WHERE user_id = $1
+             AND account_status != 'CLOSED'
+             LIMIT 1`,
             [userId]
         );
 
@@ -114,7 +121,10 @@ export class PostgresAccountRepository implements AccountRepositoryInterface {
 
     public async findByUserIdAndType(userId: string, accountType: AccountTypeEnum): Promise<null | CheckingAccountAlreadyExistError> {
         const result = await pgPool.query<PostgresAccountRow>(
-            'SELECT * FROM accounts WHERE user_id = $1 AND account_type = $2',
+            `SELECT * FROM accounts
+             WHERE user_id = $1
+             AND account_type = $2
+             AND account_status != 'CLOSED'`,
             [userId, accountType]
         );
 
@@ -221,7 +231,12 @@ export class PostgresAccountRepository implements AccountRepositoryInterface {
 
     public async deleteAccount(accountNumber: number): Promise<void | AccountNotFoundError> {
         const result = await pgPool.query(
-            'DELETE FROM accounts WHERE account_number = $1',
+            `UPDATE accounts
+             SET account_status = 'CLOSED',
+                 is_active = false,
+                 closed_at = CURRENT_TIMESTAMP,
+                 current_balance = 0
+             WHERE account_number = $1`,
             [accountNumber]
         );
 
