@@ -18,6 +18,7 @@ interface CreateSavingsAccountFormProps {
 
 export function CreateSavingsAccountForm({ onSuccess, onCancel }: CreateSavingsAccountFormProps) {
     const t = useTranslations("components.savingsAccount.createForm");
+    const tErrors = useTranslations("generalErrors.savingsAccount");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
@@ -46,7 +47,7 @@ export function CreateSavingsAccountForm({ onSuccess, onCancel }: CreateSavingsA
                 onSuccess?.();
             }, 2000);
         } catch (err) {
-            const message = getErrorMessage(err as Error, "Erreur lors de la création du compte épargne");
+            const message = getErrorMessage(err as Error, tErrors("create"));
             setError(message);
         } finally {
             setIsSubmitting(false);

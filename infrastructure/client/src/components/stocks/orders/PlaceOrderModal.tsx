@@ -19,6 +19,7 @@ interface PlaceOrderModalProps {
 
 export function PlaceOrderModal({isOpen,onClose,stockSymbol,stockName,currentPrice,orderType,}: PlaceOrderModalProps) {
   const t = useTranslations('stocks.orders.placeOrder');
+  const tModal = useTranslations('generalErrors.placeOrderModal');
   const { addNotification } = useNotification();
   const placeOrderMutation = usePlaceOrder();
   const matchOrdersMutation = useMatchOrders();
@@ -85,7 +86,7 @@ export function PlaceOrderModal({isOpen,onClose,stockSymbol,stockName,currentPri
             onClick={onClose}
             disabled={isProcessing}
             className="p-2 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition disabled:opacity-50 disabled:cursor-not-allowed"
-            aria-label="Fermer"
+            aria-label={tModal("close")}
           >
             <X className="h-5 w-5" />
           </button>

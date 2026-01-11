@@ -136,7 +136,7 @@ router
     router
       .delete('/:accountNumber', async (ctx) => getAccountsController.deleteAccount(ctx))
       .use(middleware.auth())
-      .use(authorizeRoles([RoleEnum.BANK_MANAGER]))
+      .use(authorizeRoles([RoleEnum.CLIENT, RoleEnum.BANK_MANAGER]))
 
     router
       .get('/', async (ctx) => getAccountsController.getAllAccount(ctx))

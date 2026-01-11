@@ -309,7 +309,7 @@ export default class AccountsController {
     return response.status(200).json(result);
   }
 
-  async deleteAccount({ request, response }: HttpContext) {
+  async deleteAccount({ request, response, auth }: HttpContext) {
     const sendNotificationUseCase = new SendNotificationToClientUseCase(
       this.notificationRepository,
       this.notificationService,
@@ -323,6 +323,17 @@ export default class AccountsController {
     );
 
     const accountNumber = Number(request.param('accountNumber'));
+
+    if (auth?.roles?.includes(RoleEnum.CLIENT)) {
+      const account = await this.accountRepository.getOneAccountByAccountNumber(accountNumber);
+      if (account instanceof Error) {
+        return response.status(404).json({ error: "Account not found" });
+      }
+      if (account.userId !== auth.userId) {
+        return response.status(403).json({ error: "You can only delete your own accounts" });
+      }
+    }
+
     const result = await deleteAccountUseCase.execute(accountNumber);
 
     if (result instanceof Error) {

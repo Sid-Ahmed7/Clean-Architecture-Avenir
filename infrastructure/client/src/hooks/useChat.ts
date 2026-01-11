@@ -87,7 +87,6 @@ export const useChat = (userId: string, role: string, conversationId: string) =>
     const systemSocket = chatService.getSocket("SYSTEM");
 
     if (!socket || !systemSocket) {
-      console.error("Impossible de créer les sockets");
       return;
     }
 

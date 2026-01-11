@@ -44,7 +44,7 @@ export const useMediaMutations = () => {
         if (!parsed.success) {
           return {
             data: null,
-            error: "Validation Zod échouée",
+            error: t('generalErrors.media.validation'),
          };
         }
         return {data: parsed.data, error: null};
@@ -69,13 +69,13 @@ export const useMediaMutations = () => {
         const updated = await mediaApi.updateMedia(media);
         const parsed = mediaSchema(t).safeParse(updated);
         if (!parsed.success) {
-          return { data: null, error: "Erreur de validation lors de la modification" };
+          return { data: null, error: t('generalErrors.media.validation') };
         }
         return { data: parsed.data, error: null };
       } catch (err: any) {
         return {
           data: null,
-          error: err.response?.data?.error || err.message || "Erreur lors de la modification",
+          error: err.response?.data?.error || err.message || t('generalErrors.media.update'),
         };
       }
     },
@@ -98,7 +98,7 @@ export const useMediaMutations = () => {
       } catch (err: any) {
         return {
           success: false,
-          error: err.response?.data?.error || err.message || "Erreur lors de la suppression"
+          error: err.response?.data?.error || err.message || t('generalErrors.media.delete')
         };
       }
     },

@@ -9,7 +9,6 @@ import { createBeneficiaryGroupSchema } from "@/lib/validation/beneficiary/creat
 export const BENEFICIARY_GROUP_QUERY_KEY = "beneficiaryGroups";
 
 export const useBeneficiaryGroups = () => {
-
   return useQuery<BeneficiaryGroup[]>({
     queryKey: [BENEFICIARY_GROUP_QUERY_KEY],
     queryFn: async () => {
@@ -17,7 +16,6 @@ export const useBeneficiaryGroups = () => {
         const fetchGroups = await beneficiaryGroupApi.getBeneficiaryGroups();
         return Array.isArray(fetchGroups) ? fetchGroups : [];
       } catch (err) {
-        console.error(t('generalErrors.beneficiaryGroups.notFound'), err);
         return [];
       }
     },
@@ -157,7 +155,7 @@ export const useBeneficiaryGroupMutations = () => {
         const error = err as { response?: { data?: { error?: string } }; message?: string };
         return {
           data: null,
-          error: error.response?.data?.error || error.message || "Erreur lors de la suppression",
+          error: error.response?.data?.error || error.message || t('generalErrors.beneficiaryGroups.removeBeneficiary'),
         };
       }
     },

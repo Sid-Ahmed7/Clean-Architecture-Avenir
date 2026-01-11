@@ -50,7 +50,7 @@ export function useNotification() {
                 setNotifications(prev => [parsed.data, ...prev]);
                 setUnreadCount(prev => prev + 1);
             }catch (err: any) {
-                setError(err?.message || "Impossible de créer la notification");
+                setError(err?.message || t('generalErrors.notificationsHook.create'));
             }
         }
 

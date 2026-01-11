@@ -13,18 +13,6 @@ import { RibDocument } from "@/components/rib/RibDocument";
 import { useTranslations, useFormatter, useLocale } from "next-intl";
 import { getErrorMessage } from "@/lib/utils/error";
 
-interface Html2Pdf {
-  (): Html2Pdf;
-  set: (options: object) => Html2Pdf;
-  from: (element: HTMLElement) => Html2Pdf;
-  save: () => Promise<void>;
-}
-declare global {
-    interface Window {
-        html2pdf?: Html2Pdf;
-    }
-}
-
 interface MainAccountCardProps {
     account: AccountModel;
 }

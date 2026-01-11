@@ -1,5 +1,5 @@
-import axios, { AxiosInstance, AxiosRequestHeaders } from "axios";
-import { CookieValueTypes, getCookie, setCookie } from "cookies-next";
+import axios, { AxiosInstance } from "axios";
+import { CookieValueTypes,  setCookie } from "cookies-next";
 import { refreshToken } from "./auth";
 
 let refreshPromise: Promise<{ success: boolean; error?: string }> | null = null;

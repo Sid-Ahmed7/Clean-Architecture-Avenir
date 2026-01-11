@@ -237,6 +237,7 @@
         "savings": "Savings",
         "myLoanRequests": "My loan requests",
         "loanRequestNew": "New loan request",
+        "accountSettings": "Account Settings",
         "userManagement": "User Management",
         "allAccounts": "All Accounts",
         "savingsProducts": "Savings Products",
@@ -364,6 +365,13 @@
         "approve": "Approve",
         "loading": "Loading...",
         "noPendingRequests": "No pending requests"
+      },
+      "transactionHistory": {
+        "noTransactions": "No transactions",
+        "reference": "Reference",
+        "sender": "Sender",
+        "recipient": "Recipient",
+        "unknownUser": "Unknown user"
       }
     },
     "rib": {
@@ -1265,6 +1273,52 @@
         "warningTitle": "Transfer impossible",
         "warningMessage": "You must have at least 2 accounts to make a transfer between your accounts."
       }
+    },
+    "accountSettings": {
+      "title": "Account Settings",
+      "subtitle": "Manage your account name and options",
+      "back": "Back",
+      "loading": "Loading...",
+      "error": "Error loading accounts",
+      "noAccounts": "No accounts found",
+      "selectAccount": {
+        "title": "Select an account",
+        "unnamed": "Unnamed account"
+      },
+      "accountInfo": {
+        "title": "Account Information",
+        "accountNumber": "Account number",
+        "iban": "IBAN",
+        "type": "Type",
+        "balance": "Balance"
+      },
+      "updateName": {
+        "title": "Change Account Name",
+        "label": "Custom account name",
+        "placeholder": "E.g.: Main Account, Vacation Savings...",
+        "button": "Update name",
+        "success": "Account name updated successfully"
+      },
+      "dangerZone": {
+        "title": "Deletion",
+        "description": "Deleting an account is irreversible. All associated data will be lost.",
+        "button": "Delete this account"
+      },
+      "deleteModal": {
+        "title": "Delete Account",
+        "warning": "This action is irreversible!",
+        "description": "You are about to permanently delete the account",
+        "confirmLabel": "To confirm, type the account number",
+        "placeholder": "Account number",
+        "cancel": "Cancel",
+        "confirm": "Permanently delete",
+        "success": "Account successfully deleted",
+        "checkingAccountWarning": "Main account cannot be deleted",
+        "checkingAccountDescription": "Your main account (CHECKING) is the base account of your profile and cannot be deleted. You can only delete your sub-accounts.",
+        "balanceTransferInfo": "Automatic balance transfer",
+        "balanceTransferDescription": "The balance of {amount} {currency} will be automatically transferred to your main account before deletion.",
+        "understood": "Understood"
+      }
     }
   },
   "accounts": {
@@ -1911,6 +1965,13 @@
       "edit": "Edit",
       "delete": "Delete",
       "confirmDelete": "Are you sure you want to delete {symbol}?"
+    },
+    "chart": {
+      "priceEvolution": "Price evolution (24h)",
+      "open": "Open",
+      "high": "High",
+      "low": "Low",
+      "close": "Close"
     }
   },
 
@@ -2065,6 +2126,24 @@
       "howItWorksMessage": "Your interests are calculated daily on your balance {ceiling} and automatically added to your account.",
       "ceilingInfo": "(up to {amount})",
       "noAccount": "No savings account found for this account"
+    },
+    "triggerCalculation": {
+      "title": "Interest Calculation",
+      "subtitle": "Trigger manual daily calculation",
+      "infoTitle": "Manual interest calculation",
+      "infoDescription": "This action will calculate and credit daily interest for all active savings accounts. In production, this calculation should be automated via a scheduled job (cron).",
+      "errorTitle": "Error",
+      "errorDefault": "Error calculating interest",
+      "accountsProcessed": "{count} account(s) processed:",
+      "accountLabel": "Account #{number}",
+      "newBalance": "New balance:",
+      "totalEarned": "Total earned:",
+      "totalInterestCredited": "Total interest credited",
+      "noActiveAccounts": "No active savings account found or no interest to calculate.",
+      "calculating": "Calculating...",
+      "calculate": "Calculate interest now",
+      "warningTitle": "Warning:",
+      "warningMessage": "This action modifies account balances by adding calculated interest."
     }
   },
   "media": {
@@ -2453,6 +2532,17 @@
     },
     "feed": {
       "title": "News Feed"
+    },
+    "transactions": {
+      "title": "Transaction History",
+      "subtitle": "My Operations",
+      "description": "View all your transfers, payments, and refunds at a glance.",
+      "downloadButton": "Download my statement (PDF)",
+      "loading": "Loading history…",
+      "error": {
+        "title": "Error",
+        "pdfGeneration": "An error occurred while generating the PDF"
+      }
     }
   },
   "generalErrors": {
@@ -2463,7 +2553,8 @@
       "unknown": "Unknown error"
     },
     "userAccounts": {
-      "account": "Account error"
+      "account": "Account error",
+      "validation": "Account validation error"
     },
     "notificationSSE": {
       "receive": "Error receiving notification",
@@ -2476,20 +2567,34 @@
     "news": {
       "validation": "Error validating news",
       "unknown": "Unknown error",
-      "create": "Error while creating"
+      "create": "Error while creating",
+      "update": "Error while updating",
+      "delete": "Error while deleting"
     },
     "media": {
       "load": "Error loading media",
-      "upload": "Error during upload"
+      "upload": "Error during upload",
+      "validation": "Zod validation failed",
+      "update": "Error while updating",
+      "delete": "Error while deleting"
     },
     "lastTransactions": {
       "fetch": "Error fetching transactions"
+    },
+    "beneficiaries": {
+      "load": "Error loading beneficiaries",
+      "create": "Error while creating",
+      "update": "Error while updating",
+      "delete": "Error while deleting",
+      "transfer": "Error during transfer",
+      "validation": "Validation error during creation"
     },
     "beneficiaryGroups": {
       "notFound": "Beneficiary group not found",
       "create": "Error creating group",
       "update": "Error updating group",
-      "delete": "Error deleting group"
+      "delete": "Error deleting group",
+      "removeBeneficiary": "Error while removing"
     },
     "content": {
       "notFound": "Content not found",
@@ -2499,6 +2604,53 @@
     },
     "notificationService": {
       "send": "Error sending notification to client"
+    },
+    "chat": {
+      "socketError": "Unable to create sockets"
+    },
+    "notificationsHook": {
+      "create": "Unable to create notification"
+    },
+    "overdraft": {
+      "load": "Failed to load overdraft requests",
+      "failed": "Response impossible"
+    },
+    "transfer": {
+      "failed": "Transfer impossible"
+    },
+    "transactionHistory": {
+      "load": "Unable to load history"
+    },
+    "savingsAccount": {
+      "create": "Error creating savings account"
+    },
+    "conversationsList": {
+      "load": "Error loading conversations"
+    },
+    "feed": {
+      "updateError": "Error while updating",
+      "createError": "Error while creating"
+    },
+    "loanRequests": {
+      "loadError": "Failed to load loan requests",
+      "saveDecisionError": "Unable to save decision",
+      "loadClientError": "Unable to load client profile"
+    },
+    "mediaContent": {
+      "notFound": "Media not found"
+    },
+    "stockChart": {
+      "priceEvolution": "Price evolution (24h)"
+    },
+    "accountCard": {
+      "totalBalance": "Total balance",
+      "available": "Available",
+      "blocked": "Blocked",
+      "iban": "IBAN",
+      "type": "Type"
+    },
+    "placeOrderModal": {
+      "close": "Close"
     }
   },
   "notifications": {

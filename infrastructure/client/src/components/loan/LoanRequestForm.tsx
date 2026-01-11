@@ -53,16 +53,13 @@ export function LoanRequestForm() {
         }
       })
       .catch((err) => {
-        console.error("Failed to load advisors", err);
         setAdvisorError(err.response?.data?.error || t("errorLoadAdvisors"));
       })
       .finally(() => setLoadingAdvisors(false));
 
     getIndicativeRate()
       .then((rate) => setIndicativeRate(rate))
-      .catch((err) => {
-        console.error("Failed to load indicative rate", err);
-      });
+      .catch(() => {});
   }, [setValue, t]);
 
   const amount = watch("amount");
@@ -92,7 +89,6 @@ export function LoanRequestForm() {
         setMessageType("error");
       })
       .catch((error) => {
-        console.error("Loan request error:", error);
         const msg =
           error.response?.data?.error ||
           t("errorMessage");

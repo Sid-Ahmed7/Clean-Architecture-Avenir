@@ -5,16 +5,9 @@ import { withClientProtection } from "@/components/auth/withRoleProtection";
 import { useTransactionHistory } from "@/hooks/useTransactionHistory";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { renderToStaticMarkup } from "react-dom/server";
+import { useTranslations } from "next-intl";
 
-const StatementDocument = ({
-    ownerName,
-    ownerAddress,
-    ownerEmail,
-    transactions,
-    bankName,
-    debitTypes,
-    generatedAt,
-}: {
+const StatementDocument = ({ownerName,ownerAddress,ownerEmail,transactions,bankName,debitTypes,generatedAt}: {
     ownerName: string;
     ownerAddress?: string;
     ownerEmail?: string;
@@ -147,51 +140,82 @@ const StatementDocument = ({
 function TransactionsPage() {
     const { transactions, loading, error } = useTransactionHistory();
     const { user: profile } = useUserProfile();
+    const t = useTranslations("pages.transactions");
     const BANK_NAME = "Avenir Bank";
     const DEBIT_TYPES = ["PAYMENT", "WITHDRAWAL", "TRANSFER", "FEE"];
 
-    const downloadPdf = () => {
+    const loadHtml2Pdf = (): Promise<void> => {
+        return new Promise((resolve, reject) => {
+            if (window.html2pdf) {
+                resolve();
+                return;
+            }
+            const script = document.createElement("script");
+            script.src = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
+            script.onload = () => resolve();
+            script.onerror = () => reject(new Error("Failed to load html2pdf library"));
+            document.head.appendChild(script);
+        });
+    };
+
+    const downloadPdf = async () => {
         if (!transactions.length) return;
 
-        const generatedAt = new Date().toLocaleString();
-        const ownerName =
-            [profile?.firstName, profile?.lastName].filter(Boolean).join(" ").trim() ||
-            profile?.name ||
-            transactions[0]?.debitUserName ||
-            transactions[0]?.creditUserName ||
-            "Titulaire du compte";
+        try {
+            const generatedAt = new Date().toLocaleString();
+            const ownerName =
+                [profile?.firstName, profile?.lastName].filter(Boolean).join(" ").trim() ||
+                profile?.name ||
+                transactions[0]?.debitUserName ||
+                transactions[0]?.creditUserName ||
+                "Titulaire du compte";
 
-        const html = "<!DOCTYPE html>" +
-            renderToStaticMarkup(
-                <StatementDocument
-                    ownerName={ownerName}
-                    ownerAddress={profile?.address}
-                    ownerEmail={profile?.email}
-                    transactions={transactions}
-                    bankName={BANK_NAME}
-                    debitTypes={DEBIT_TYPES}
-                    generatedAt={generatedAt}
-                />,
-            );
+            await loadHtml2Pdf();
+            if (!window.html2pdf) {
+                throw new Error("PDF generator unavailable");
+            }
 
-        const win = window.open("", "_blank");
-        if (!win) return;
-        win.document.write(html);
-        win.document.close();
-        win.focus();
-        win.print();
-        setTimeout(() => win.close(), 300);
+            const html = "<!DOCTYPE html>" +
+                renderToStaticMarkup(
+                    <StatementDocument
+                        ownerName={ownerName}
+                        ownerAddress={profile?.address}
+                        ownerEmail={profile?.email}
+                        transactions={transactions}
+                        bankName={BANK_NAME}
+                        debitTypes={DEBIT_TYPES}
+                        generatedAt={generatedAt}
+                    />,
+                );
+
+            const container = document.createElement("div");
+            container.innerHTML = html;
+
+            await window.html2pdf()
+                .set({
+                    margin: 10,
+                    filename: `releve-transactions-${new Date().toISOString().split('T')[0]}.pdf`,
+                    image: { type: "jpeg", quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true },
+                    jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+                })
+                .from(container)
+                .save();
+        } catch (err) {
+            console.error("Error generating PDF:", err);
+            alert(t("error.pdfGeneration"));
+        }
     };
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-gray-100 py-8 px-4 sm:px-6 lg:px-10 space-y-8">
             <div className="flex flex-col gap-2">
-                <p className="text-sm font-semibold text-blue-600 tracking-wide uppercase">Mes opérations</p>
+                <p className="text-sm font-semibold text-blue-600 tracking-wide uppercase">{t("subtitle")}</p>
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                     <div className="flex flex-col gap-2">
-                        <h1 className="text-3xl font-bold text-gray-900">Historique des transactions</h1>
+                        <h1 className="text-3xl font-bold text-gray-900">{t("title")}</h1>
                         <p className="text-gray-600">
-                            Retrouve l’ensemble de tes virements, paiements et remboursements en un coup d’œil.
+                            {t("description")}
                         </p>
                     </div>
                     <button
@@ -200,14 +224,14 @@ function TransactionsPage() {
                         disabled={!transactions.length}
                         className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-300"
                     >
-                        Télécharger mon relevé (PDF)
+                        {t("downloadButton")}
                     </button>
                 </div>
             </div>
 
             {loading && (
                 <div className="rounded-2xl border border-dashed border-gray-300 bg-white/60 backdrop-blur p-8 text-center text-gray-500 shadow-sm">
-                    Chargement de l'historique…
+                    {t("loading")}
                 </div>
             )}
 

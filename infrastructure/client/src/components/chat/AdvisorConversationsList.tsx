@@ -17,6 +17,7 @@ import { NotificationEnum } from "@/types/Notification";
 export default function AdvisorConversationsDashboard() {
   const t = useTranslations("components.chat.advisorConversations");
   const tModal = useTranslations("components.chat.selectAdvisorsModal");
+  const tErrors = useTranslations("generalErrors.conversationsList");
   const { addNotification } = useNotification();
   const { user } = useContext(AuthContext);
   const { locale } = useContext(LocaleContext);
@@ -63,7 +64,7 @@ export default function AdvisorConversationsDashboard() {
         setAssignedConversations(assigned);
         setError(null);
       } catch {
-        if (isMounted) setError("Erreur lors du chargement des conversations");
+        if (isMounted) setError(tErrors("load"));
       } finally {
         if (isMounted) setLoading(false);
       }

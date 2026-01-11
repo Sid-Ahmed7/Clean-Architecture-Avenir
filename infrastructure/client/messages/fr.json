@@ -237,6 +237,7 @@
         "savings": "Épargne",
         "myLoanRequests": "Mes demandes de crédit",
         "loanRequestNew": "Demande de crédit",
+        "accountSettings": "Paramètres du compte",
         "userManagement": "Gestion Utilisateurs",
         "allAccounts": "Tous les Comptes",
         "savingsProducts": "Produits d'Épargne",
@@ -364,6 +365,13 @@
         "approve": "Approuver",
         "loading": "Chargement...",
         "noPendingRequests": "Aucune demande en attente"
+      },
+      "transactionHistory": {
+        "noTransactions": "Aucune transaction",
+        "reference": "Référence",
+        "sender": "Émetteur",
+        "recipient": "Destinataire",
+        "unknownUser": "Utilisateur inconnu"
       }
     },
     "rib": {
@@ -1273,6 +1281,52 @@
         "warningTitle": "Transfert impossible",
         "warningMessage": "Tu dois avoir au moins 2 comptes pour effectuer un transfert entre tes comptes."
       }
+    },
+    "accountSettings": {
+      "title": "Paramètres du compte",
+      "subtitle": "Gérez le nom et les options de votre compte",
+      "back": "Retour",
+      "loading": "Chargement...",
+      "error": "Erreur lors du chargement des comptes",
+      "noAccounts": "Aucun compte trouvé",
+      "selectAccount": {
+        "title": "Sélectionner un compte",
+        "unnamed": "Compte sans nom"
+      },
+      "accountInfo": {
+        "title": "Informations du compte",
+        "accountNumber": "Numéro de compte",
+        "iban": "IBAN",
+        "type": "Type",
+        "balance": "Solde"
+      },
+      "updateName": {
+        "title": "Modifier le nom du compte",
+        "label": "Nom personnalisé du compte",
+        "placeholder": "Ex: Compte Principal, Épargne Vacances...",
+        "button": "Mettre à jour le nom",
+        "success": "Nom du compte mis à jour avec succès"
+      },
+      "dangerZone": {
+        "title": "Suppression",
+        "description": "La suppression d'un compte est irréversible. Toutes les données associées seront perdues.",
+        "button": "Supprimer ce compte"
+      },
+      "deleteModal": {
+        "title": "Supprimer le compte",
+        "warning": "Cette action est irréversible !",
+        "description": "Vous êtes sur le point de supprimer définitivement le compte",
+        "confirmLabel": "Pour confirmer, tapez le numéro du compte",
+        "placeholder": "Numéro du compte",
+        "cancel": "Annuler",
+        "confirm": "Supprimer définitivement",
+        "success": "Compte supprimé avec succès",
+        "checkingAccountWarning": "Le compte principal ne peut pas être supprimé",
+        "checkingAccountDescription": "Votre compte principal (CHECKING) est le compte de base de votre profil et ne peut pas être supprimé. Vous pouvez uniquement supprimer vos sous-comptes.",
+        "balanceTransferInfo": "Transfert automatique du solde",
+        "balanceTransferDescription": "Le solde de {amount} {currency} sera automatiquement transféré vers votre compte principal avant la suppression.",
+        "understood": "J'ai compris"
+      }
     }
   },
   "accounts": {
@@ -1917,6 +1971,13 @@
       "edit": "Modifier",
       "delete": "Supprimer",
       "confirmDelete": "Êtes-vous sûr de vouloir supprimer {symbol} ?"
+    },
+    "chart": {
+      "priceEvolution": "Évolution du prix (24h)",
+      "open": "Open",
+      "high": "High",
+      "low": "Low",
+      "close": "Close"
     }
   },
   "loan": {
@@ -2070,6 +2131,24 @@
       "howItWorksMessage": "Vos intérêts sont calculés quotidiennement sur votre solde {ceiling} et ajoutés automatiquement à votre compte.",
       "ceilingInfo": "(jusqu'à {amount})",
       "noAccount": "Aucun compte épargne trouvé pour ce compte"
+    },
+    "triggerCalculation": {
+      "title": "Calcul des Intérêts",
+      "subtitle": "Déclencher le calcul quotidien manuel",
+      "infoTitle": "Calcul manuel des intérêts",
+      "infoDescription": "Cette action calculera et créditera les intérêts quotidiens pour tous les comptes épargne actifs. En production, ce calcul devrait être automatisé via un job planifié (cron).",
+      "errorTitle": "Erreur",
+      "errorDefault": "Erreur lors du calcul des intérêts",
+      "accountsProcessed": "{count} compte(s) traité(s) :",
+      "accountLabel": "Compte #{number}",
+      "newBalance": "Nouveau solde:",
+      "totalEarned": "Total gagné:",
+      "totalInterestCredited": "Total des intérêts crédités",
+      "noActiveAccounts": "Aucun compte épargne actif trouvé ou aucun intérêt à calculer.",
+      "calculating": "Calcul en cours...",
+      "calculate": "Calculer les intérêts maintenant",
+      "warningTitle": "Attention :",
+      "warningMessage": "Cette action modifie les soldes des comptes en ajoutant les intérêts calculés."
     }
   },
   "media": {
@@ -2458,6 +2537,17 @@
     },
     "feed": {
       "title": "Actualités"
+    },
+    "transactions": {
+      "title": "Historique des transactions",
+      "subtitle": "Mes opérations",
+      "description": "Retrouve l'ensemble de tes virements, paiements et remboursements en un coup d'œil.",
+      "downloadButton": "Télécharger mon relevé (PDF)",
+      "loading": "Chargement de l'historique…",
+      "error": {
+        "title": "Erreur",
+        "pdfGeneration": "Une erreur est survenue lors de la génération du PDF"
+      }
     }
   },
   "generalErrors": {
@@ -2468,7 +2558,8 @@
       "unknown": "Erreur inconnue"
     },
     "userAccounts": {
-      "account": "Erreur compte"
+      "account": "Erreur compte",
+      "validation": "Erreur de validation du compte"
     },
     "notificationSSE": {
       "receive": "Erreur lors de la réception d'une notification",
@@ -2481,20 +2572,34 @@
     "news": {
       "validation": "Erreur de validation des news",
       "unknown": "Erreur inconnue",
-      "create": "Erreur lors de la création"
+      "create": "Erreur lors de la création",
+      "update": "Erreur lors de la modification",
+      "delete": "Erreur lors de la suppression"
     },
     "media": {
       "load": "Erreur lors du chargement des médias",
-      "upload": "Erreur lors de l'upload"
+      "upload": "Erreur lors de l'upload",
+      "validation": "Validation Zod échouée",
+      "update": "Erreur lors de la modification",
+      "delete": "Erreur lors de la suppression"
     },
     "lastTransactions": {
       "fetch": "Erreur lors de la récupération des transactions"
+    },
+    "beneficiaries": {
+      "load": "Erreur lors du chargement des bénéficiaires",
+      "create": "Erreur lors de la création",
+      "update": "Erreur lors de la mise à jour",
+      "delete": "Erreur lors de la suppression",
+      "transfer": "Erreur lors du transfert",
+      "validation": "Erreur de validation lors de la création"
     },
     "beneficiaryGroups": {
       "notFound": "Groupe de bénéficiaires introuvable",
       "create": "Erreur lors de la création du groupe",
       "update": "Erreur lors de la mise à jour du groupe",
-      "delete": "Erreur lors de la suppression du groupe"
+      "delete": "Erreur lors de la suppression du groupe",
+      "removeBeneficiary": "Erreur lors de la suppression"
     },
     "content": {
       "notFound": "Contenu introuvable",
@@ -2504,6 +2609,53 @@
     },
     "notificationService": {
       "send": "Erreur lors de l'envoi de la notification au client"
+    },
+    "chat": {
+      "socketError": "Impossible de créer les sockets"
+    },
+    "notificationsHook": {
+      "create": "Impossible de créer la notification"
+    },
+    "overdraft": {
+      "load": "Échec du chargement des demandes de découvert",
+      "failed": "Réponse impossible"
+    },
+    "transfer": {
+      "failed": "Virement impossible"
+    },
+    "transactionHistory": {
+      "load": "Impossible de charger l'historique"
+    },
+    "savingsAccount": {
+      "create": "Erreur lors de la création du compte épargne"
+    },
+    "conversationsList": {
+      "load": "Erreur lors du chargement des conversations"
+    },
+    "feed": {
+      "updateError": "Erreur lors de la mise à jour",
+      "createError": "Erreur lors de la création"
+    },
+    "loanRequests": {
+      "loadError": "Failed to load loan requests",
+      "saveDecisionError": "Impossible d'enregistrer la décision",
+      "loadClientError": "Impossible de charger le profil client"
+    },
+    "mediaContent": {
+      "notFound": "Média non trouvé"
+    },
+    "stockChart": {
+      "priceEvolution": "Évolution du prix (24h)"
+    },
+    "accountCard": {
+      "totalBalance": "Solde total",
+      "available": "Disponible",
+      "blocked": "Bloqué",
+      "iban": "IBAN",
+      "type": "Type"
+    },
+    "placeOrderModal": {
+      "close": "Fermer"
     }
   },
   "notifications": {

@@ -31,6 +31,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     { icon: PiggyBank, labelKey: "menu.savings", href: `/client/savings`, roles: [RoleEnum.CLIENT] },
     { icon: FileText, labelKey: "menu.myLoanRequests", href: "/loan/requests", roles: [RoleEnum.CLIENT] },
     { icon: FileText, labelKey: "menu.loanRequestNew", href: "/loan/request", roles: [RoleEnum.CLIENT] },
+    { icon: Settings, labelKey: "menu.accountSettings", href: `/client/account-settings`, roles: [RoleEnum.CLIENT] },
 
     { icon: Users, labelKey: "menu.userManagement", href: `/manager/users`, roles: [RoleEnum.BANK_MANAGER] },
     { icon: Wallet, labelKey: "menu.allAccounts", href: `/manager/accounts`, roles: [RoleEnum.BANK_MANAGER] },
@@ -56,7 +57,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
     apiClient.post("/auth/logout").then(() => {
       setIsAuthenticated(false);
-      router.push('/login');
+      router.push('/login' as any);
     })
   }
 

@@ -95,7 +95,7 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
         if (newsResult.error || !newsResult.data) {
           setError("root.serverError", {
             type: "manual",
-            message: newsResult.error || "Erreur lors de la mise à jour",
+            message: newsResult.error || t('generalErrors.feed.updateError'),
           });
           return;
         }
@@ -115,7 +115,7 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
         if (newsResult.error || !newsResult.data) {
           setError("root.serverError", {
             type: "manual",
-            message: newsResult.error || "Erreur lors de la création",
+            message: newsResult.error || t('generalErrors.feed.createError'),
           });
           return;
         }

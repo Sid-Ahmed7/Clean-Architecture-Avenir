@@ -17,7 +17,6 @@ export const useBeneficiaries = () => {
         const fetchBeneficiaries = await beneficiaryApi.getBeneficiaries();
         return Array.isArray(fetchBeneficiaries) ? fetchBeneficiaries : [];
       } catch (err) {
-        console.error("Erreur lors du chargement des bénéficiaires:", err);
         return [];
       }
     },
@@ -41,7 +40,7 @@ export const useBeneficiaryMutations = () => {
         if (!parsed.success) {
           return {
             data: null,
-            error: "Erreur de validation lors de la création",
+            error: t('generalErrors.beneficiaries.validation'),
           };
         }
 
@@ -51,7 +50,7 @@ export const useBeneficiaryMutations = () => {
 
         return {
           data: null,
-          error: error.response?.data?.error || error.message || "Erreur lors de la création",
+          error: error.response?.data?.error || error.message || t('generalErrors.beneficiaries.create'),
         };
       }
     },
@@ -80,7 +79,7 @@ export const useBeneficiaryMutations = () => {
         if (!parsed.success) {
           return {
             data: null,
-            error: "Erreur de validation lors de la mise à jour",
+            error: t('generalErrors.beneficiaries.validation'),
           };
         }
         return { data: updatedBeneficiary, error: null };
@@ -88,7 +87,7 @@ export const useBeneficiaryMutations = () => {
         const error = err as { response?: { data?: { error?: string } }; message?: string };
         return {
           data: null,
-          error: error.response?.data?.error || error.message || "Erreur lors de la mise à jour",
+          error: error.response?.data?.error || error.message || t('generalErrors.beneficiaries.update'),
         };
       }
     },
@@ -115,7 +114,7 @@ export const useBeneficiaryMutations = () => {
         const error = err as { response?: { data?: { error?: string } }; message?: string };
         return {
           success: false,
-          error: error.response?.data?.error || error.message || "Erreur lors de la suppression",
+          error: error.response?.data?.error || error.message || t('generalErrors.beneficiaries.delete'),
         };
       }
     },
@@ -141,7 +140,7 @@ export const useBeneficiaryMutations = () => {
         const error = err as { response?: { data?: { error?: string } }; message?: string };
         return {
           data: null,
-          error: error.response?.data?.error || error.message || "Erreur lors du transfert",
+          error: error.response?.data?.error || error.message || t('generalErrors.beneficiaries.transfer'),
         };
       }
     },

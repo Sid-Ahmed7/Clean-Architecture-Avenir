@@ -1,6 +1,6 @@
-import { UserNoBanError } from "#application/errors/UserNoBanError.js";
-import { UserRepositoryInterface } from "#application/ports/repositories/auth/UserRepositoryInterface.js";
-import { UserStatusEnum } from "#config/enums.js";
+import { UserNoBanError } from "../../errors/UserNoBanError";
+import { UserRepositoryInterface } from "../../ports/repositories/auth/UserRepositoryInterface";
+import { UserStatusEnum } from "../../../domain/enums/UserStatusEnum";
 
 export class UnbanUserUseCase {
   constructor(private readonly userRepository: UserRepositoryInterface) {}

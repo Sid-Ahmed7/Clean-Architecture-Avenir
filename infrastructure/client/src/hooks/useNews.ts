@@ -91,7 +91,7 @@ export const useNewsMutation = () => {
          if (!parsed.success) {
           return {
             data: null,
-            error: "Erreur de validation lors de la création"
+            error: t('generalErrors.news.validation')
           }
       }
         return {
@@ -123,7 +123,7 @@ export const useNewsMutation = () => {
          if (!parsed.success) {
           return {
             data: null,
-            error: "Erreur de validation lors de la modification"
+            error: t('generalErrors.news.validation')
           }
       }
         return {
@@ -133,7 +133,7 @@ export const useNewsMutation = () => {
       } catch (err: any) {
         return {
           data: null,
-          error: err.response?.data?.error || err.message || "Erreur lors de la modification"
+          error: err.response?.data?.error || err.message || t('generalErrors.news.update')
         };
       }
     },
@@ -155,7 +155,7 @@ export const useNewsMutation = () => {
       } catch (err: any) {
         return {
           success: false,
-          error: err.response?.data?.error || err.message || "Erreur lors de la suppression"
+          error: err.response?.data?.error || err.message || t('generalErrors.news.delete')
         };
       }
     },

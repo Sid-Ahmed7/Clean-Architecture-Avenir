@@ -15,6 +15,7 @@ import { useTranslations } from "next-intl";
 
 export function AdvisorLoanRequestsPageContent() {
   const t = useTranslations("components.loan.advisorPage");
+  const tErrors = useTranslations("generalErrors.loanRequests");
   const [requests, setRequests] = useState<LoanRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -28,7 +29,6 @@ export function AdvisorLoanRequestsPageContent() {
     getAdvisorLoanRequests()
       .then((data) => setRequests(data))
       .catch((err) => {
-        console.error("Failed to load loan requests:", err);
         setError(err.response?.data?.error || t("errorLoad"));
       })
       .finally(() => setLoading(false));
@@ -43,8 +43,7 @@ export function AdvisorLoanRequestsPageContent() {
         );
       })
       .catch((err) => {
-        console.error("Decision error:", err);
-        setError(err.response?.data?.error || "Impossible d'enregistrer la décision");
+        setError(err.response?.data?.error || tErrors("saveDecisionError"));
       })
       .finally(() => setSubmitting(null));
   };
@@ -62,8 +61,7 @@ export function AdvisorLoanRequestsPageContent() {
         setProfileClientId(clientId);
       })
       .catch((err) => {
-        console.error("Failed to load client info:", err);
-        setError(err.response?.data?.error || "Impossible de charger le profil client");
+        setError(err.response?.data?.error || tErrors("loadClientError"));
       });
   };
 

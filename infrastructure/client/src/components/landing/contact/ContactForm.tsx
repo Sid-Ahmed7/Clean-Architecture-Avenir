@@ -47,9 +47,8 @@ export default function ContactForm() {
         setSubmitStatus('idle');
       }, 5000);
     } catch (error) {
-      console.error('Error submitting form:', error);
       setSubmitStatus('error');
-    } finally {
+    } finally{
       setIsSubmitting(false);
     }
   };

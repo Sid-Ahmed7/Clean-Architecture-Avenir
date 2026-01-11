@@ -13,33 +13,21 @@ export class DeleteAccountUseCase {
     ){}
     
     public async execute(accountNumber: number): Promise<void | Error> {
-        // 1. Récupérer le compte à supprimer
         const account = await this.accountRepository.getOneAccountByAccountNumber(accountNumber);
         if (account instanceof Error) return account;
 
-        // 2. Récupérer tous les comptes de l'utilisateur
         const userAccounts = await this.accountRepository.getAccountsByUserId(account.userId);
         if (userAccounts instanceof Error) return userAccounts;
-        
+
         const checkingAccounts = userAccounts.filter(acc => acc.accountType === AccountTypeEnum.CHECKING);
 
-        // 3. Si CHECKING, vérifier qu'il n'est pas le dernier OU que son solde est 0
         if (account.accountType === AccountTypeEnum.CHECKING) {
-            if (checkingAccounts.length === 1) {
-                // Exception : autoriser si le solde est 0€
-                if (account.currentBalance > 0) {
-                    return new CannotDeleteLastCheckingAccountError(
-                        "Cannot delete the last checking account with a positive balance. Please transfer funds first or ensure balance is 0€."
-                    );
-                }
-                // Si balance === 0, on peut supprimer (pas besoin de transfert)
-                return await this.accountRepository.deleteAccount(accountNumber);
-            }
+            return new CannotDeleteLastCheckingAccountError(
+                "Cannot delete a checking account. Only sub-accounts can be deleted."
+            );
         }
 
-        // 4. Transférer le solde si > 0
         if (account.currentBalance > 0) {
-            // Trouver un compte CHECKING de destination (différent du compte à supprimer)
             const destinationAccount = checkingAccounts.find(acc => acc.accountNumber !== accountNumber);
             
             if (!destinationAccount) {
@@ -48,15 +36,12 @@ export class DeleteAccountUseCase {
                 );
             }
 
-            // Créditer le compte de destination
             const creditResult = destinationAccount.credit(account.currentBalance);
             if (creditResult instanceof Error) return creditResult;
 
-            // Débiter le compte à supprimer
             const debitResult = account.debit(account.currentBalance);
             if (debitResult instanceof Error) return debitResult;
 
-            // Mettre à jour les deux comptes
             await this.accountRepository.updateOneAccount(destinationAccount);
             await this.accountRepository.updateOneAccount(account);
         }
@@ -69,7 +54,6 @@ export class DeleteAccountUseCase {
             );
         }
 
-        // 5. Supprimer le compte (maintenant avec solde = 0)
         return await this.accountRepository.deleteAccount(accountNumber);
     }
 }

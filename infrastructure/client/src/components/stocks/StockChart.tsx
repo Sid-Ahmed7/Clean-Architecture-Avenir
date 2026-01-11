@@ -3,12 +3,14 @@
 import { useMemo } from 'react';
 import { Stock } from '@/types/stock';
 import {XAxis,YAxis,CartesianGrid,Tooltip,ResponsiveContainer,ReferenceLine,Area,AreaChart} from 'recharts';
+import { useTranslations } from 'next-intl';
 
 interface ApiPriceChartProps {
   stock: Stock;
 }
 
 export function ApiPriceChart({ stock }: ApiPriceChartProps) {
+  const t = useTranslations('stocks.chart');
   const isPositive = stock.change >= 0;
 
   const chartData = useMemo(() => {
@@ -40,7 +42,7 @@ export function ApiPriceChart({ stock }: ApiPriceChartProps) {
   return (
     <div className="mb-4">
       <div className="flex justify-between items-center mb-2">
-        <h4 className="text-sm font-semibold text-gray-700">Évolution du prix (24h)</h4>
+        <h4 className="text-sm font-semibold text-gray-700">{t('priceEvolution')}</h4>
         <span className={`text-xs font-medium ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
           {isPositive ? '↑' : '↓'} {stock.changePercent.toFixed(2)}%
         </span>
@@ -91,36 +93,36 @@ export function ApiPriceChart({ stock }: ApiPriceChartProps) {
             
             <Tooltip content={<CustomTooltip />} />
             
-            <ReferenceLine 
-              y={stock.open} 
-              stroke="#9ca3af" 
+            <ReferenceLine
+              y={stock.open}
+              stroke="#9ca3af"
               strokeDasharray="5 5"
-              label={{ 
-                value: `Open: $${stock.open.toFixed(2)}`, 
+              label={{
+                value: `${t('open')}: $${stock.open.toFixed(2)}`,
                 position: 'insideTopLeft',
                 fill: '#6b7280',
                 fontSize: 10
               }}
             />
-            
-            <ReferenceLine 
-              y={stock.high} 
-              stroke="#10b981" 
+
+            <ReferenceLine
+              y={stock.high}
+              stroke="#10b981"
               strokeDasharray="3 3"
-              label={{ 
-                value: `High: $${stock.high.toFixed(2)}`, 
+              label={{
+                value: `${t('high')}: $${stock.high.toFixed(2)}`,
                 position: 'insideTopLeft',
                 fill: '#10b981',
                 fontSize: 10
               }}
             />
-            
-            <ReferenceLine 
-              y={stock.low} 
-              stroke="#ef4444" 
+
+            <ReferenceLine
+              y={stock.low}
+              stroke="#ef4444"
               strokeDasharray="3 3"
-              label={{ 
-                value: `Low: $${stock.low.toFixed(2)}`, 
+              label={{
+                value: `${t('low')}: $${stock.low.toFixed(2)}`,
                 position: 'insideBottomLeft',
                 fill: '#ef4444',
                 fontSize: 10
@@ -143,19 +145,19 @@ export function ApiPriceChart({ stock }: ApiPriceChartProps) {
       
       <div className="grid grid-cols-4 gap-2 mt-3 text-xs">
         <div className="text-center p-2 bg-gray-50 rounded">
-          <div className="text-gray-500">Open</div>
+          <div className="text-gray-500">{t('open')}</div>
           <div className="font-semibold text-gray-900">${stock.open.toFixed(2)}</div>
         </div>
         <div className="text-center p-2 bg-green-50 rounded">
-          <div className="text-green-600">High</div>
+          <div className="text-green-600">{t('high')}</div>
           <div className="font-semibold text-green-700">${stock.high.toFixed(2)}</div>
         </div>
         <div className="text-center p-2 bg-red-50 rounded">
-          <div className="text-red-600">Low</div>
+          <div className="text-red-600">{t('low')}</div>
           <div className="font-semibold text-red-700">${stock.low.toFixed(2)}</div>
         </div>
         <div className="text-center p-2 bg-blue-50 rounded">
-          <div className="text-blue-600">Close</div>
+          <div className="text-blue-600">{t('close')}</div>
           <div className={`font-semibold ${isPositive ? 'text-green-700' : 'text-red-700'}`}>
             ${stock.price.toFixed(2)}
           </div>

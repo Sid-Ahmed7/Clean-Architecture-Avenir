@@ -15,10 +15,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const messages = messagesMap[locale as keyof typeof messagesMap];
   const metadata = messages.metadata;
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
   const localeCode = locale === 'fr' ? 'fr_FR' : 'en_US';
 
   return {
+    metadataBase: new URL(baseUrl),
     title: {
       default: metadata.title,
       template: metadata.titleTemplate

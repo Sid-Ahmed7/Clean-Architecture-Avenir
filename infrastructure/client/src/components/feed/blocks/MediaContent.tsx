@@ -3,6 +3,7 @@ import { useMediaMutations, useMediaByNewsId } from "@/hooks/useMedia";
 import { Media } from "@/types/media";
 import { UploadedFile } from "@/types/uploadedFile";
 import { AlertCircle } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface MediaContentProps {
     files: File[];
@@ -14,7 +15,7 @@ interface MediaContentProps {
 }
 
 export function MediaContent({files, existingMedias = [], newsId, onChange, disabled, error} : MediaContentProps) {
-
+    const tErrors = useTranslations("generalErrors.mediaContent");
     const {updateMedia} = useMediaMutations();
     const { data: mediasFromCache } = useMediaByNewsId(newsId);
 
@@ -36,8 +37,6 @@ export function MediaContent({files, existingMedias = [], newsId, onChange, disa
                 media: { ...mediaToUpdate, caption },
                 newsId
             });
-        }else {
-            console.error("Média non trouvé:", mediaId);
         }
     }
   
