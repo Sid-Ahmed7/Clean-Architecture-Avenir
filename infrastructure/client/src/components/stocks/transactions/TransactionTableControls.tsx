@@ -8,12 +8,7 @@ interface TransactionTableControlsProps {
   totalCount: number;
 }
 
-export function TransactionTableControls({
-  itemsPerPage,
-  onItemsPerPageChange,
-  currentCount,
-  totalCount,
-}: TransactionTableControlsProps) {
+export function TransactionTableControls({itemsPerPage,onItemsPerPageChange,currentCount,totalCount}: TransactionTableControlsProps) {
   const t = useTranslations("components.stocks.transactions.controls");
   const pageSizeOptions = [
     { label: "5", value: "5" },

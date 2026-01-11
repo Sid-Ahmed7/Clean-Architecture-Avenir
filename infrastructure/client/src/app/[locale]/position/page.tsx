@@ -90,23 +90,23 @@ export default function PortfolioPage() {
                 <Wallet className="h-6 w-6" />
                 {t('title')}
               </h1>
-              <p className="text-sm text-white/80">Suivez vos positions et vendez en un clic.</p>
+              <p className="text-sm text-white/80">{t('subtitle')}</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full md:w-auto">
               <div className="bg-white/10 border border-white/20 rounded-2xl px-4 py-3">
-                <p className="text-xs uppercase tracking-wide text-white/70">Positions</p>
+                <p className="text-xs uppercase tracking-wide text-white/70">{t('stats.positions')}</p>
                 <p className="text-2xl font-semibold">{totalPositions}</p>
-                <p className="text-xs text-white/60">actives</p>
+                <p className="text-xs text-white/60">{t('stats.active')}</p>
               </div>
               <div className="bg-white/10 border border-white/20 rounded-2xl px-4 py-3">
-                <p className="text-xs uppercase tracking-wide text-white/70">Quantité</p>
+                <p className="text-xs uppercase tracking-wide text-white/70">{t('stats.quantity')}</p>
                 <p className="text-2xl font-semibold">{totalQuantity}</p>
-                <p className="text-xs text-white/60">actions</p>
+                <p className="text-xs text-white/60">{t('stats.shares')}</p>
               </div>
               <div className="bg-white/10 border border-white/20 rounded-2xl px-4 py-3">
-                <p className="text-xs uppercase tracking-wide text-white/70">Valeur</p>
+                <p className="text-xs uppercase tracking-wide text-white/70">{t('stats.value')}</p>
                 <p className="text-2xl font-semibold">{totalValue.toFixed(2)} €</p>
-                <p className="text-xs text-white/60">estimée</p>
+                <p className="text-xs text-white/60">{t('stats.estimated')}</p>
               </div>
             </div>
           </div>
@@ -119,8 +119,8 @@ export default function PortfolioPage() {
                 <BarChart3 className="h-5 w-5" />
               </span>
               <div>
-                <p className="text-xs uppercase tracking-wide text-slate-500">Portfolio</p>
-                <p className="text-sm text-slate-600">Détail de vos positions en temps réel.</p>
+                <p className="text-xs uppercase tracking-wide text-slate-500">{t('portfolio')}</p>
+                <p className="text-sm text-slate-600">{t('details')}</p>
               </div>
             </div>
             <div className="text-sm text-slate-500 flex items-center gap-2">

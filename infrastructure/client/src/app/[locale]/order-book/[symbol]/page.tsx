@@ -5,8 +5,10 @@ import { useOrderBook } from "@/hooks/useOrderBook";
 import { useStocks } from "@/hooks/useStocks";
 import { ArrowLeft, Info, RefreshCcw, TrendingDown, TrendingUp } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 export default function OrderBookPage() {
+  const t = useTranslations("stocks.orders.orderBookPage");
   const params = useParams();
   const symbol = params.symbol as string;
   const { data: orderBook, isLoading, error } = useOrderBook(symbol);
@@ -24,16 +26,16 @@ export default function OrderBookPage() {
       <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 p-6">
         <div className="max-w-7xl mx-auto space-y-6">
           <div className="bg-gradient-to-r from-blue-900 via-blue-800 to-blue-700 text-white rounded-3xl shadow-xl border border-blue-800/40 p-8">
-            <p className="text-sm text-white/70">Carnet d&apos;ordres</p>
+            <p className="text-sm text-white/70">{t("title")}</p>
             <h1 className="text-3xl font-bold mt-2 flex items-center gap-2">
               <RefreshCcw className="h-6 w-6" />
               {symbol.toUpperCase()}
             </h1>
-            <p className="text-sm text-white/70 mt-2">Chargement...</p>
+            <p className="text-sm text-white/70 mt-2">{t("loading")}</p>
           </div>
           <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-12 text-center">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-            <p className="text-slate-600 mt-4">Chargement du carnet...</p>
+            <p className="text-slate-600 mt-4">{t("loadingBook")}</p>
           </div>
         </div>
       </div>
@@ -45,15 +47,15 @@ export default function OrderBookPage() {
       <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 p-6">
         <div className="max-w-7xl mx-auto space-y-6">
           <div className="bg-gradient-to-r from-blue-900 via-blue-800 to-blue-700 text-white rounded-3xl shadow-xl border border-blue-800/40 p-8">
-            <p className="text-sm text-white/70">Carnet d&apos;ordres</p>
+            <p className="text-sm text-white/70">{t("title")}</p>
             <h1 className="text-3xl font-bold mt-2 flex items-center gap-2">
               <RefreshCcw className="h-6 w-6" />
               {symbol.toUpperCase()}
             </h1>
-            <p className="text-sm text-white/70 mt-2">Erreur de chargement</p>
+            <p className="text-sm text-white/70 mt-2">{t("loadingError")}</p>
           </div>
           <div className="bg-red-50 border border-red-200 rounded-2xl shadow-sm p-8 text-center">
-            <p className="text-red-800 font-semibold">Erreur lors du chargement du carnet d&apos;ordres</p>
+            <p className="text-red-800 font-semibold">{t("errorMessage")}</p>
           </div>
         </div>
       </div>
@@ -66,7 +68,7 @@ export default function OrderBookPage() {
         <div className="bg-gradient-to-r from-blue-900 via-blue-800 to-blue-700 text-white rounded-3xl shadow-xl border border-blue-800/40 p-8">
           <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div className="space-y-2">
-              <p className="text-sm text-white/70">Carnet d&apos;ordres</p>
+              <p className="text-sm text-white/70">{t("title")}</p>
               <h1 className="text-3xl font-bold flex items-center gap-2">
                 <RefreshCcw className="h-6 w-6" />
                 {symbol.toUpperCase()}
@@ -79,19 +81,19 @@ export default function OrderBookPage() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full md:w-auto">
               <div className="bg-white/10 border border-white/20 rounded-2xl px-4 py-3">
-                <p className="text-xs uppercase tracking-wide text-white/70">Ventes</p>
+                <p className="text-xs uppercase tracking-wide text-white/70">{t("sales")}</p>
                 <p className="text-2xl font-semibold">{sellOrders.length}</p>
-                <p className="text-xs text-white/60">Ordres</p>
+                <p className="text-xs text-white/60">{t("orders")}</p>
               </div>
               <div className="bg-white/10 border border-white/20 rounded-2xl px-4 py-3">
-                <p className="text-xs uppercase tracking-wide text-white/70">Achats</p>
+                <p className="text-xs uppercase tracking-wide text-white/70">{t("purchases")}</p>
                 <p className="text-2xl font-semibold">{buyOrders.length}</p>
-                <p className="text-xs text-white/60">Ordres</p>
+                <p className="text-xs text-white/60">{t("orders")}</p>
               </div>
               <div className="bg-white/10 border border-white/20 rounded-2xl px-4 py-3">
-                <p className="text-xs uppercase tracking-wide text-white/70">Total</p>
+                <p className="text-xs uppercase tracking-wide text-white/70">{t("total")}</p>
                 <p className="text-2xl font-semibold">{buyOrders.length + sellOrders.length}</p>
-                <p className="text-xs text-white/60">Ordres</p>
+                <p className="text-xs text-white/60">{t("orders")}</p>
               </div>
             </div>
           </div>
@@ -101,19 +103,19 @@ export default function OrderBookPage() {
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
               <Link href="/manage-stock/order-book" className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-2">
-                <ArrowLeft className="h-4 w-4" /> Retour
+                <ArrowLeft className="h-4 w-4" /> {t("back")}
               </Link>
               <div className="h-10 w-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center shadow-inner">
                 <Info className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-xs uppercase tracking-wide text-slate-500">Carnet live</p>
-                <p className="text-sm text-slate-600">Ventes et achats en attente d&apos;exécution</p>
+                <p className="text-xs uppercase tracking-wide text-slate-500">{t("liveBook")}</p>
+                <p className="text-sm text-slate-600">{t("liveDescription")}</p>
               </div>
             </div>
             {stock && (
               <div className="text-right">
-                <p className="text-xs text-slate-500">Dernier prix</p>
+                <p className="text-xs text-slate-500">{t("lastPrice")}</p>
                 <p className="text-xl font-semibold text-slate-900">{formatCurrency(stock.currentPrice, stock.currency)}</p>
               </div>
             )}
@@ -127,7 +129,7 @@ export default function OrderBookPage() {
                     <TrendingDown className="h-5 w-5" />
                   </div>
                   <h2 className="text-lg font-bold text-red-700">
-                    Ordres de VENTE ({sellOrders.length})
+                    {t("sellOrders")} ({sellOrders.length})
                   </h2>
                 </div>
               </div>
@@ -144,11 +146,11 @@ export default function OrderBookPage() {
                           {formatCurrency(order.price)}
                         </p>
                         <p className="text-sm text-gray-600">
-                          {order.quantity} actions
+                          {order.quantity} {t("shares")}
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="text-xs text-gray-500">Total</p>
+                        <p className="text-xs text-gray-500">{t("totalLabel")}</p>
                         <p className="text-sm font-semibold text-red-800">
                           {formatCurrency(order.price * order.quantity)}
                         </p>
@@ -158,7 +160,7 @@ export default function OrderBookPage() {
                 </div>
               ) : (
                 <p className="text-gray-500 text-center py-6 bg-red-50 border border-red-100 rounded-xl">
-                  Aucun ordre de vente
+                  {t("noSellOrders")}
                 </p>
               )}
             </div>
@@ -170,7 +172,7 @@ export default function OrderBookPage() {
                     <TrendingUp className="h-5 w-5" />
                   </div>
                   <h2 className="text-lg font-bold text-green-700">
-                    Ordres d&apos;ACHAT ({buyOrders.length})
+                    {t("buyOrders")} ({buyOrders.length})
                   </h2>
                 </div>
               </div>
@@ -187,11 +189,11 @@ export default function OrderBookPage() {
                           {formatCurrency(order.price)}
                         </p>
                         <p className="text-sm text-gray-600">
-                          {order.quantity} actions
+                          {order.quantity} {t("shares")}
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="text-xs text-gray-500">Total</p>
+                        <p className="text-xs text-gray-500">{t("totalLabel")}</p>
                         <p className="text-sm font-semibold text-green-800">
                           {formatCurrency(order.price * order.quantity)}
                         </p>
@@ -201,7 +203,7 @@ export default function OrderBookPage() {
                 </div>
               ) : (
                 <p className="text-gray-500 text-center py-6 bg-green-50 border border-green-100 rounded-xl">
-                  Aucun ordre d&apos;achat
+                  {t("noBuyOrders")}
                 </p>
               )}
             </div>
@@ -212,9 +214,7 @@ export default function OrderBookPage() {
               💡
             </div>
             <p className="text-sm text-blue-800 leading-relaxed">
-              <strong>Comment ça marche ?</strong> Les ordres sont automatiquement matchés
-              lorsqu&apos;un prix d&apos;achat est supérieur ou égal à un prix de vente.
-              Le prix d&apos;exécution est la moyenne des deux prix.
+              <strong>{t("howItWorks")}</strong> {t("howItWorksDescription")}
             </p>
           </div>
         </div>

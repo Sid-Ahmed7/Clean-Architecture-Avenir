@@ -21,22 +21,9 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-white font-semibold mb-4">{t('services.title')}</h4>
-            <ul className="space-y-2 text-sm">
-              <li><Link href="/services/comptes" className="hover:text-white transition">{t('services.accounts')}</Link></li>
-              <li><Link href="/services/epargne" className="hover:text-white transition">{t('services.savings')}</Link></li>
-              <li><Link href="/services/bourse" className="hover:text-white transition">{t('services.stock')}</Link></li>
-              <li><Link href="/services/credit-immobilier" className="hover:text-white transition">{t('services.mortgage')}</Link></li>
-            </ul>
-          </div>
-
-          <div>
             <h4 className="text-white font-semibold mb-4">{t('company.title')}</h4>
             <ul className="space-y-2 text-sm">
               <li><Link href="/about" className="hover:text-white transition">{t('company.about')}</Link></li>
-              <li><Link href="/about#careers" className="hover:text-white transition">{t('company.careers')}</Link></li>
-              <li><Link href="/about#press" className="hover:text-white transition">{t('company.press')}</Link></li>
-              <li><Link href="/about#blog" className="hover:text-white transition">{t('company.blog')}</Link></li>
             </ul>
           </div>
 
@@ -44,7 +31,6 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-4">{t('help.title')}</h4>
             <ul className="space-y-2 text-sm">
               <li><Link href="/help" className="hover:text-white transition">{t('help.helpCenter')}</Link></li>
-              <li><Link href="/help#security" className="hover:text-white transition">{t('help.security')}</Link></li>
               <li><Link href="/legal/mentions-legales" className="hover:text-white transition">{t('help.legal')}</Link></li>
               <li><Link href="/contact" className="hover:text-white transition">{t('help.contact')}</Link></li>
             </ul>

@@ -111,7 +111,7 @@ function DirectorLoanRequestsPage() {
     setSavingRate(true);
     setIndicativeRate(indicativeRate)
       .catch((err) => {
-        setError(err.response?.data?.error || "Impossible d'enregistrer le taux indicatif");
+        setError(err.response?.data?.error || t("errors.saveRate"));
       })
       .finally(() => setSavingRate(false));
   };
@@ -121,29 +121,29 @@ function DirectorLoanRequestsPage() {
       <div className="max-w-6xl mx-auto px-6 py-10 space-y-6">
         <div className="flex flex-col gap-3">
           <div>
-            <p className="text-sm uppercase tracking-wide text-slate-500">Directeur</p>
-            <h1 className="text-3xl font-bold text-slate-900">Validation des crédits</h1>
+            <p className="text-sm uppercase tracking-wide text-slate-500">{t("header.director")}</p>
+            <h1 className="text-3xl font-bold text-slate-900">{t("header.title")}</h1>
           </div>
           <p className="text-sm text-slate-600">
-            Décidez des dossiers approuvés par les conseillers et proposez des taux pour les montants supérieurs à 5000€.
+            {t("header.subtitle")}
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="rounded-2xl border bg-white shadow-sm px-4 py-3">
-            <p className="text-xs uppercase text-slate-500">Total</p>
+            <p className="text-xs uppercase text-slate-500">{t("stats.total")}</p>
             <p className="text-2xl font-semibold text-slate-900">{stats.total}</p>
           </div>
           <div className="rounded-2xl border bg-gradient-to-r from-blue-700 to-blue-500 text-white shadow-sm px-4 py-3">
-            <p className="text-xs uppercase text-white/80">En attente</p>
+            <p className="text-xs uppercase text-white/80">{t("stats.pending")}</p>
             <p className="text-2xl font-semibold">{stats.pending}</p>
           </div>
           <div className="rounded-2xl border bg-white shadow-sm px-4 py-3">
-            <p className="text-xs uppercase text-slate-500">&gt; 5000€ à taux</p>
+            <p className="text-xs uppercase text-slate-500">{t("stats.needsRate")}</p>
             <p className="text-2xl font-semibold text-amber-700">{stats.needsRate}</p>
           </div>
           <div className="rounded-2xl border bg-white shadow-sm px-4 py-3">
-            <p className="text-xs uppercase text-slate-500">Validées</p>
+            <p className="text-xs uppercase text-slate-500">{t("stats.approved")}</p>
             <p className="text-2xl font-semibold text-emerald-700">{stats.approved}</p>
           </div>
         </div>
@@ -151,11 +151,11 @@ function DirectorLoanRequestsPage() {
         <div className="rounded-2xl border border-slate-100 bg-white shadow-sm p-5 space-y-3">
           <div className="flex items-center justify-between gap-3 flex-wrap">
             <div>
-              <p className="text-xs uppercase text-slate-500">Taux indicatif</p>
-              <p className="text-sm text-slate-700">Appliqué automatiquement pour les demandes ≤ 5000€</p>
+              <p className="text-xs uppercase text-slate-500">{t("indicativeRate.title")}</p>
+              <p className="text-sm text-slate-700">{t("indicativeRate.subtitle")}</p>
             </div>
             {indicativeRate !== null && (
-              <span className="text-sm font-semibold text-slate-900">Actuel : {indicativeRate}%</span>
+              <span className="text-sm font-semibold text-slate-900">{t("indicativeRate.current", { rate: indicativeRate })}</span>
             )}
           </div>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
@@ -230,20 +230,20 @@ function DirectorLoanRequestsPage() {
                     DIRECTOR_APPROVED: "bg-emerald-50 text-emerald-700 border border-emerald-200",
                     REJECTED: "bg-rose-50 text-rose-700 border border-rose-200",
                   }[req.status] || "bg-slate-50 text-slate-700 border border-slate-200";
-                const duration = req.durationMonths ? `${req.durationMonths} mois` : "—";
+                const duration = req.durationMonths ? `${req.durationMonths} ${t("cardBank.months")}` : "—";
                 const rateValue =
                   req.proposedRate !== undefined
                     ? `${req.proposedRate}%`
                     : needsRate
-                      ? "À proposer"
+                      ? t("cardBank.toPropose")
                       : "—";
                 return (
                   <div key={req.id} className="bg-white border border-slate-100 rounded-2xl shadow-sm p-5 flex flex-col gap-4">
                     <div className="flex items-start justify-between gap-3">
                       <div className="space-y-1">
-                        <p className="text-xs uppercase tracking-wide text-slate-500">{t("cardBank.client")}</p>
+                        <p className="text-xs uppercase tracking-wide text-slate-500">{t("card.client")}</p>
                         <p className="text-lg font-semibold text-slate-900">{req.clientName ?? req.clientId}</p>
-                        <p className="text-xs text-slate-500">{t("cardBank.advisor")} : {req.advisorName ?? req.advisorId}</p>
+                        <p className="text-xs text-slate-500">{t("card.advisor")} : {req.advisorName ?? req.advisorId}</p>
                       </div>
                       <span className={`px-3 py-1 rounded-full text-xs font-semibold ${statusStyle}`}>
                         {req.status}
@@ -252,19 +252,19 @@ function DirectorLoanRequestsPage() {
 
                     <div className="grid grid-cols-2 gap-3 text-sm">
                       <div className="p-3 rounded-lg bg-slate-50 border border-slate-100">
-                        <p className="text-xs uppercase text-slate-500">{t("cardBank.amount")}</p>
+                        <p className="text-xs uppercase text-slate-500">{t("card.amount")}</p>
                         <p className="font-semibold text-slate-900">{req.amount.toLocaleString("fr-FR")} €</p>
                       </div>
                       <div className="p-3 rounded-lg bg-slate-50 border border-slate-100">
-                        <p className="text-xs uppercase text-slate-500">{t("cardBank.duration")}</p>
+                        <p className="text-xs uppercase text-slate-500">{t("card.duration")}</p>
                         <p className="font-semibold text-slate-900">{duration}</p>
                       </div>
                       <div className="p-3 rounded-lg bg-slate-50 border border-slate-100">
-                        <p className="text-xs uppercase text-slate-500">{t("cardBank.rate")}</p>
+                        <p className="text-xs uppercase text-slate-500">{t("card.rate")}</p>
                         <p className="font-semibold text-slate-900">{rateValue}</p>
                       </div>
                       <div className="p-3 rounded-lg bg-slate-50 border border-slate-100">
-                        <p className="text-xs uppercase text-slate-500">{t("cardBank.createdAt")}</p>
+                        <p className="text-xs uppercase text-slate-500">{t("card.createdAt")}</p>
                         <p className="font-semibold text-slate-900">
                           {req.createdAt ? new Date(req.createdAt).toLocaleDateString("fr-FR") : "—"}
                         </p>
@@ -272,7 +272,7 @@ function DirectorLoanRequestsPage() {
                     </div>
 
                     <div className="p-4 rounded-xl bg-gradient-to-r from-slate-50 to-blue-50 border border-slate-100">
-                      <p className="text-xs uppercase text-slate-500 mb-1">{t("cardBank.purpose")}</p>
+                      <p className="text-xs uppercase text-slate-500 mb-1">{t("card.purpose")}</p>
                       <p className="font-medium text-slate-900 leading-relaxed">{req.purpose}</p>
                     </div>
 
@@ -282,7 +282,7 @@ function DirectorLoanRequestsPage() {
                           <input
                             type="number"
                             step="0.01"
-                            placeholder={t("cardBank.ratePlaceholder")}
+                            placeholder={t("card.ratePlaceholder")}
                             className="w-full sm:w-28 px-3 py-2 border rounded-lg text-sm border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-100"
                             value={rates[req.id] ?? ""}
                             onChange={(e) => setRates((prev) => ({ ...prev, [req.id]: Number(e.target.value) }))}
@@ -329,7 +329,7 @@ function DirectorLoanRequestsPage() {
       </div>
 
       {profileClientId && clientDetails[profileClientId] && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 px-4">
+        <div className="fixed inset-0 bg-slate-900/30 backdrop-blur-sm flex items-center justify-center z-50 px-4">
           <div className="bg-white rounded-2xl shadow-2xl max-w-xl w-full p-6">
             <div className="flex justify-between items-center mb-4">
               <div>
@@ -370,7 +370,7 @@ function DirectorLoanRequestsPage() {
                         <p className="text-sm font-semibold text-gray-900">
                           {acc.accountType} — {acc.accountNumber}
                         </p>
-                        <p className="text-xs text-gray-600">IBAN : {acc.iban ?? "N/A"}</p>
+                        <p className="text-xs text-gray-600">{t("cardBank.iban")} {acc.iban ?? t("cardBank.ibanNA")}</p>
                       </div>
                       <div className="text-sm font-semibold text-gray-900">
                         {acc.currentBalance} {acc.currency}

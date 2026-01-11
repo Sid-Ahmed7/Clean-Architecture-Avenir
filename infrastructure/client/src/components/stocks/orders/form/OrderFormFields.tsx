@@ -2,6 +2,7 @@
 
 import { OrderFields } from "@/types/orderFields";
 import { Controller, UseFormReturn } from "react-hook-form";
+import { useTranslations } from "next-intl";
 
 interface OrderFormFieldsProps {
   form: UseFormReturn<OrderFields>;
@@ -9,6 +10,7 @@ interface OrderFormFieldsProps {
 }
 
 export function OrderFormFields({form,currentPrice }: OrderFormFieldsProps) {
+  const t = useTranslations("components.stocks.orderFormFields");
   const {control, formState: {errors}} = form;
   
   
@@ -16,14 +18,14 @@ export function OrderFormFields({form,currentPrice }: OrderFormFieldsProps) {
     <>
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Quantité
+          {t("quantity")}
         </label>
         <Controller
           name="quantity"
           control={control}
           rules={{
-            required: "La quantité est requise",
-            min: { value: 1, message: "La quantité doit être au moins 1" },
+            required: t("validation.quantityRequired"),
+            min: { value: 1, message: t("validation.quantityMin") },
           }}
           render={({ field }) => (
             <input
@@ -43,14 +45,14 @@ export function OrderFormFields({form,currentPrice }: OrderFormFieldsProps) {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Prix par action (€)
+          {t("pricePerShare")}
         </label>
         <Controller
           name="orderPrice"
           control={control}
           rules={{
-            required: "Le prix est requis",
-            min: { value: 0.01, message: "Le prix doit être supérieur à 0" },
+            required: t("validation.priceRequired"),
+            min: { value: 0.01, message: t("validation.priceMin") },
           }}
           render={({ field }) => (
             <input
@@ -65,7 +67,7 @@ export function OrderFormFields({form,currentPrice }: OrderFormFieldsProps) {
           <p className="text-red-500 text-xs mt-1">{errors.orderPrice.message}</p>
         )}
         <p className="text-xs text-gray-500 mt-1">
-          Prix actuel du marché : {currentPrice.toFixed(2)}€
+          {t("currentMarketPrice")}: {currentPrice.toFixed(2)}€
         </p>
       </div>
     </>

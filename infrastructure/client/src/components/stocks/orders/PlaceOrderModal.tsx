@@ -70,7 +70,7 @@ export function PlaceOrderModal({isOpen,onClose,stockSymbol,stockName,currentPri
   const isProcessing = status !== 'idle';
 
   return (
-    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 px-4">
+    <div className="fixed inset-0 bg-slate-900/30 backdrop-blur-sm flex items-center justify-center z-50 px-4">
       <div className="bg-white border border-slate-200 rounded-2xl shadow-2xl w-full max-w-xl">
         <div className={`rounded-t-2xl px-6 py-4 text-white flex items-center justify-between ${isBuy ? "bg-gradient-to-r from-blue-900 via-blue-800 to-blue-700" : "bg-gradient-to-r from-blue-900 via-blue-800 to-blue-700"}`}>
           <div className="flex items-center gap-3">

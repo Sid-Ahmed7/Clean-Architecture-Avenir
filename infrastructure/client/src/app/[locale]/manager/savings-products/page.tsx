@@ -61,7 +61,7 @@ export default function ManagerSavingsProductsPage() {
                 maxDepositAmount: formData.maxDepositAmount ? parseFloat(formData.maxDepositAmount) : null,
                 minDepositAmount: formData.minDepositAmount ? parseFloat(formData.minDepositAmount) : null
             });
-            setMessage("Produit créé avec succès !");
+            setMessage(t("messages.createSuccess"));
             setShowCreateForm(false);
             resetForm();
             await loadProducts();
@@ -80,7 +80,7 @@ export default function ManagerSavingsProductsPage() {
                 maxDepositAmount: formData.maxDepositAmount ? parseFloat(formData.maxDepositAmount) : null,
                 minDepositAmount: formData.minDepositAmount ? parseFloat(formData.minDepositAmount) : null
             });
-            setMessage("Produit mis à jour ! Tous les comptes liés ont été mis à jour.");
+            setMessage(t("messages.updateSuccess"));
             setEditingProduct(null);
             resetForm();
             await loadProducts();
@@ -120,15 +120,15 @@ export default function ManagerSavingsProductsPage() {
                         className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors mb-4 inline-flex"
                     >
                         <ArrowLeft className="w-5 h-5" />
-                        <span className="font-medium">Retour au dashboard</span>
+                        <span className="font-medium">{t("backToDashboard")}</span>
                     </Link>
                     <div className="flex items-center justify-between">
                         <div>
                             <h1 className="text-4xl font-bold text-gray-900 mb-2">
-                                Produits d'Épargne
+                                {t("title")}
                             </h1>
                             <p className="text-gray-600">
-                                Créez et gérez les produits d'épargne disponibles pour les clients
+                                {t("subtitle")}
                             </p>
                         </div>
                         <button

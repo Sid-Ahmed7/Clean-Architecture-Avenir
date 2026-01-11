@@ -6,8 +6,10 @@ import { DirectorOrderFilters } from "@/components/stocks/orders/DirectorOrderFi
 import { useAllOrders } from "@/hooks/useStocksOrder";
 import { OrderStatusEnum } from "@/types/order";
 import { BarChart3, ClipboardList, Loader2, XCircle } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function DirectorOrdersPage() {
+  const t = useTranslations("pages.manageStock.orderBook");
   const { data: orders, isLoading, error } = useAllOrders();
   const [selectedStatus, setSelectedStatus] = useState<OrderStatusEnum | "ALL">("ALL");
 
@@ -16,16 +18,16 @@ export default function DirectorOrdersPage() {
       <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 p-6">
         <div className="max-w-7xl mx-auto space-y-6">
           <div className="bg-gradient-to-r from-blue-900 via-blue-800 to-blue-700 text-white rounded-3xl shadow-xl border border-blue-800/40 p-8">
-            <p className="text-sm text-white/70">Suivi des ordres</p>
+            <p className="text-sm text-white/70">{t("subtitle")}</p>
             <h1 className="text-3xl font-bold mt-2 flex items-center gap-2">
               <ClipboardList className="h-6 w-6" />
-              Gestion des ordres
+              {t("title")}
             </h1>
-            <p className="text-sm text-white/70 mt-2">Chargement des données...</p>
+            <p className="text-sm text-white/70 mt-2">{t("loadingData")}</p>
           </div>
           <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-12 text-center">
             <Loader2 className="h-10 w-10 text-blue-600 animate-spin mx-auto" />
-            <p className="text-slate-600 mt-4">Chargement...</p>
+            <p className="text-slate-600 mt-4">{t("loading")}</p>
           </div>
         </div>
       </div>
@@ -37,16 +39,16 @@ export default function DirectorOrdersPage() {
       <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 p-6">
         <div className="max-w-7xl mx-auto space-y-6">
           <div className="bg-gradient-to-r from-blue-900 via-blue-800 to-blue-700 text-white rounded-3xl shadow-xl border border-blue-800/40 p-8">
-            <p className="text-sm text-white/70">Suivi des ordres</p>
+            <p className="text-sm text-white/70">{t("subtitle")}</p>
             <h1 className="text-3xl font-bold mt-2 flex items-center gap-2">
               <ClipboardList className="h-6 w-6" />
-              Gestion des ordres
+              {t("title")}
             </h1>
-            <p className="text-sm text-white/70 mt-2">Erreur de chargement</p>
+            <p className="text-sm text-white/70 mt-2">{t("loadingError")}</p>
           </div>
           <div className="bg-red-50 border border-red-200 rounded-2xl shadow-sm p-8 text-center">
             <XCircle className="h-10 w-10 text-red-600 mx-auto mb-3" />
-            <p className="text-red-800 font-semibold">Erreur lors du chargement des ordres</p>
+            <p className="text-red-800 font-semibold">{t("errorLoadingOrders")}</p>
           </div>
         </div>
       </div>
@@ -76,26 +78,26 @@ export default function DirectorOrdersPage() {
         <div className="bg-gradient-to-r from-blue-900 via-blue-800 to-blue-700 text-white rounded-3xl shadow-xl border border-blue-800/40 p-8">
           <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div className="space-y-2">
-              <p className="text-sm text-white/70">Suivi des ordres</p>
+              <p className="text-sm text-white/70">{t("subtitle")}</p>
               <h1 className="text-3xl font-bold flex items-center gap-2">
                 <ClipboardList className="h-6 w-6" />
-                Gestion des ordres
+                {t("title")}
               </h1>
-              <p className="text-sm text-white/80">Visualisez et filtrez tous les ordres d&apos;achat et de vente.</p>
+              <p className="text-sm text-white/80">{t("description")}</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full md:w-auto">
               <div className="bg-white/10 border border-white/20 rounded-2xl px-4 py-3">
-                <p className="text-xs uppercase tracking-wide text-white/70">Total</p>
+                <p className="text-xs uppercase tracking-wide text-white/70">{t("stats.total")}</p>
                 <p className="text-2xl font-semibold">{totalFiltered}</p>
-                <p className="text-xs text-white/60">ordre{totalFiltered > 1 ? "s" : ""}</p>
+                <p className="text-xs text-white/60">{t("stats.orders", { count: totalFiltered })}</p>
               </div>
               <div className="bg-white/10 border border-white/20 rounded-2xl px-4 py-3">
-                <p className="text-xs uppercase tracking-wide text-white/70">Achat</p>
+                <p className="text-xs uppercase tracking-wide text-white/70">{t("stats.buy")}</p>
                 <p className="text-2xl font-semibold">{totalBuy}</p>
                 <p className="text-xs text-white/60">BUY</p>
               </div>
               <div className="bg-white/10 border border-white/20 rounded-2xl px-4 py-3">
-                <p className="text-xs uppercase tracking-wide text-white/70">Vente</p>
+                <p className="text-xs uppercase tracking-wide text-white/70">{t("stats.sell")}</p>
                 <p className="text-2xl font-semibold">{totalSell}</p>
                 <p className="text-xs text-white/60">SELL</p>
               </div>
@@ -110,12 +112,12 @@ export default function DirectorOrdersPage() {
                 <BarChart3 className="h-5 w-5" />
               </span>
               <div>
-                <p className="text-xs uppercase tracking-wide text-slate-500">Filtres</p>
-                <p className="text-sm text-slate-600">Filtrez par statut pour cibler les ordres prioritaires.</p>
+                <p className="text-xs uppercase tracking-wide text-slate-500">{t("filters.title")}</p>
+                <p className="text-sm text-slate-600">{t("filters.description")}</p>
               </div>
             </div>
             <div className="text-sm text-slate-500">
-              {orders?.length ?? 0} ordres totaux
+              {t("filters.totalOrders", { count: orders?.length ?? 0 })}
             </div>
           </div>
 

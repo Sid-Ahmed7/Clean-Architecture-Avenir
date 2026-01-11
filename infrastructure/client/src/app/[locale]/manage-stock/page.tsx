@@ -7,8 +7,10 @@ import { Link } from "@/i18n/navigation";
 import { Order } from "@/types/order";
 import { useMemo } from "react";
 import { ArrowRight, BarChart3, Building2, ClipboardList, LayoutDashboard, ShieldCheck, ShoppingBag } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function AdminDashboardPage() {
+  const t = useTranslations("pages.manageStock.dashboard");
   const { data: stocks } = useStocks();
   const { data: orders } = useOrderBook();
   const { data: transactions } = useUserTransactions();
@@ -35,12 +37,12 @@ export default function AdminDashboardPage() {
         <div className="bg-gradient-to-r from-blue-900 via-blue-800 to-blue-700 text-white rounded-3xl shadow-xl border border-blue-800/50 p-8">
           <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div className="space-y-2">
-              <p className="text-sm text-white/70">Gestion des stocks</p>
+              <p className="text-sm text-white/70">{t("subtitle")}</p>
               <h1 className="text-3xl font-bold flex items-center gap-2">
                 <LayoutDashboard className="h-6 w-6" />
-                Tableau de bord marché
+                {t("title")}
               </h1>
-              <p className="text-sm text-white/80">Suivi des actions, carnet d&apos;ordres et activité globale.</p>
+              <p className="text-sm text-white/80">{t("description")}</p>
             </div>
             <div className="flex flex-wrap gap-3">
               <Link
@@ -48,7 +50,7 @@ export default function AdminDashboardPage() {
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white text-blue-800 font-semibold shadow-sm hover:-translate-y-0.5 transition"
               >
                 <Building2 className="h-4 w-4" />
-                Gérer les actions
+                {t("buttons.manageStocks")}
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
@@ -56,7 +58,7 @@ export default function AdminDashboardPage() {
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-100/20 text-white border border-white/20 font-semibold hover:-translate-y-0.5 transition"
               >
                 <ClipboardList className="h-4 w-4" />
-                Carnet d&apos;ordres
+                {t("buttons.orderBook")}
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
@@ -74,7 +76,7 @@ export default function AdminDashboardPage() {
                   <ShoppingBag className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-500">Actions totales</p>
+                  <p className="text-sm text-slate-500">{t("cards.totalStocks")}</p>
                   <p className="text-3xl font-bold text-slate-900">{stats.totalStocks}</p>
                 </div>
               </div>
@@ -92,7 +94,7 @@ export default function AdminDashboardPage() {
                   <ShieldCheck className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-500">Actions disponibles</p>
+                  <p className="text-sm text-slate-500">{t("cards.availableStocks")}</p>
                   <p className="text-3xl font-bold text-emerald-700">{stats.availableStocks}</p>
                 </div>
               </div>
@@ -110,7 +112,7 @@ export default function AdminDashboardPage() {
                   <ClipboardList className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-500">Ordres en attente</p>
+                  <p className="text-sm text-slate-500">{t("cards.pendingOrders")}</p>
                   <p className="text-3xl font-bold text-amber-700">{stats.pendingOrders}</p>
                 </div>
               </div>
@@ -124,19 +126,19 @@ export default function AdminDashboardPage() {
                 <BarChart3 className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-sm text-slate-500">Transactions totales</p>
+                <p className="text-sm text-slate-500">{t("cards.totalTransactions")}</p>
                 <p className="text-3xl font-bold text-indigo-700">{stats.totalTransactions}</p>
               </div>
             </div>
-            <p className="text-xs text-slate-500">Historique complet des exécutions.</p>
+            <p className="text-xs text-slate-500">{t("cards.transactionsDesc")}</p>
           </div>
         </div>
 
         <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
           <div className="flex items-center justify-between mb-3">
             <div>
-              <p className="text-xs uppercase tracking-wide text-slate-500">Performance</p>
-              <h2 className="text-xl font-bold text-slate-900">Volume total des transactions</h2>
+              <p className="text-xs uppercase tracking-wide text-slate-500">{t("performance.label")}</p>
+              <h2 className="text-xl font-bold text-slate-900">{t("performance.totalVolume")}</h2>
             </div>
           </div>
           <p className="text-4xl font-bold text-slate-900">{stats.totalVolume.toFixed(2)}€</p>
@@ -145,7 +147,7 @@ export default function AdminDashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-slate-900">Actions rapides</h2>
+              <h2 className="text-xl font-bold text-slate-900">{t("quickActions.title")}</h2>
             </div>
             <div className="grid grid-cols-1 gap-3">
               <Link
@@ -154,7 +156,7 @@ export default function AdminDashboardPage() {
               >
                 <div className="flex items-center gap-2">
                   <Building2 className="h-4 w-4 text-blue-600" />
-                  <span className="text-slate-900 font-medium">Gérer les actions</span>
+                  <span className="text-slate-900 font-medium">{t("quickActions.manageStocks")}</span>
                 </div>
                 <ArrowRight className="h-4 w-4 text-blue-600" />
               </Link>
@@ -164,7 +166,7 @@ export default function AdminDashboardPage() {
               >
                 <div className="flex items-center gap-2">
                   <ClipboardList className="h-4 w-4 text-purple-600" />
-                  <span className="text-slate-900 font-medium">Voir le carnet d&apos;ordres</span>
+                  <span className="text-slate-900 font-medium">{t("quickActions.viewOrderBook")}</span>
                 </div>
                 <ArrowRight className="h-4 w-4 text-purple-600" />
               </Link>
@@ -174,7 +176,7 @@ export default function AdminDashboardPage() {
               >
                 <div className="flex items-center gap-2">
                   <LayoutDashboard className="h-4 w-4 text-emerald-600" />
-                  <span className="text-slate-900 font-medium">Place de marché</span>
+                  <span className="text-slate-900 font-medium">{t("quickActions.marketplace")}</span>
                 </div>
                 <ArrowRight className="h-4 w-4 text-emerald-600" />
               </Link>
@@ -184,7 +186,7 @@ export default function AdminDashboardPage() {
               >
                 <div className="flex items-center gap-2">
                   <ShieldCheck className="h-4 w-4 text-orange-600" />
-                  <span className="text-slate-900 font-medium">Mes positions</span>
+                  <span className="text-slate-900 font-medium">{t("quickActions.myPositions")}</span>
                 </div>
                 <ArrowRight className="h-4 w-4 text-orange-600" />
               </Link>
@@ -193,9 +195,9 @@ export default function AdminDashboardPage() {
 
           <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-slate-900">Actions récentes</h2>
+              <h2 className="text-xl font-bold text-slate-900">{t("recentStocks.title")}</h2>
               <Link href="/manage-stock/stocks" className="text-sm text-blue-600 hover:text-blue-700">
-                Voir tout
+                {t("recentStocks.viewAll")}
               </Link>
             </div>
             <div className="space-y-4">
@@ -208,7 +210,7 @@ export default function AdminDashboardPage() {
                   <div className="text-right">
                     <p className="font-semibold text-slate-900">{stock.currentPrice.toFixed(2)}€</p>
                     <p className={`text-sm ${stock.isActionAvailable ? "text-emerald-600" : "text-red-600"}`}>
-                      {stock.isActionAvailable ? "Disponible" : "Indisponible"}
+                      {stock.isActionAvailable ? t("recentStocks.available") : t("recentStocks.unavailable")}
                     </p>
                   </div>
                 </div>

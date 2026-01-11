@@ -26,9 +26,6 @@ export default function ServiceCard({icon: Icon,title,description,gradient,bgGra
         <div>
           <h3 className="text-2xl font-bold text-gray-900 mb-3">{title}</h3>
           <p className="text-gray-600 mb-4">{description}</p>
-          <Link href={href} className={`${linkColor} font-medium flex items-center gap-2`}>
-            {t('learnMore')} <ArrowRight size={16} />
-          </Link>
         </div>
       </div>
     </div>

@@ -30,7 +30,7 @@ export function CreateStockModal({ isOpen, onClose }: StockModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 px-4">
+    <div className="fixed inset-0 bg-slate-900/30 backdrop-blur-sm flex items-center justify-center z-50 px-4">
       <div className="bg-white border border-slate-200 rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto">
         <div className="bg-gradient-to-r from-blue-900 via-blue-800 to-blue-700 text-white rounded-t-2xl px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -39,13 +39,13 @@ export function CreateStockModal({ isOpen, onClose }: StockModalProps) {
             </div>
             <div>
               <p className="text-xs uppercase tracking-wide text-white/70">{t('create')}</p>
-              <h2 className="text-xl font-semibold leading-tight">Nouvelle action</h2>
+              <h2 className="text-xl font-semibold leading-tight">{t('newStock')}</h2>
             </div>
           </div>
           <button
             onClick={onClose}
             className="p-2 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition"
-            aria-label="Fermer"
+            aria-label={t('close')}
           >
             <X className="h-5 w-5" />
           </button>

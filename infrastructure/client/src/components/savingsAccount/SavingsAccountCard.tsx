@@ -121,7 +121,7 @@ export function SavingsAccountCard({ accountNumber }: SavingsAccountCardProps) {
                         <p className="text-xl font-bold text-emerald-700">
                             +{format.number(summary.totalInterestEarned, { style: 'currency', currency: 'EUR' })}
                         </p>
-                        <p className="text-xs text-gray-500 mt-1">Crédité</p>
+                        <p className="text-xs text-gray-500 mt-1">{t("credited")}</p>
                     </div>
 
                     <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-xl p-4 border border-amber-200">
@@ -129,12 +129,12 @@ export function SavingsAccountCard({ accountNumber }: SavingsAccountCardProps) {
                             <div className="p-2 bg-amber-500 rounded-lg">
                                 <TrendingUp className="w-4 h-4 text-white" />
                             </div>
-                            <p className="text-xs text-gray-600 font-medium">Intérêts en attente</p>
+                            <p className="text-xs text-gray-600 font-medium">{t("pendingInterest")}</p>
                         </div>
                         <p className="text-xl font-bold text-amber-700">
                             +{format.number(summary.pendingInterest, { style: 'currency', currency: 'EUR' })}
                         </p>
-                        <p className="text-xs text-gray-500 mt-1">Non crédité</p>
+                        <p className="text-xs text-gray-500 mt-1">{t("notCredited")}</p>
                     </div>
                 </div>
 

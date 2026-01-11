@@ -321,7 +321,7 @@ export default function ClientSavingsPage() {
 
                 {/* Deposit Modal */}
                 {showDepositModal && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="fixed inset-0 bg-slate-900/30 backdrop-blur-sm flex items-center justify-center z-50">
                         <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
                             <h3 className="text-2xl font-bold text-gray-900 mb-4">{t("depositModal.title")}</h3>
                             <p className="text-gray-600 mb-4">
@@ -359,7 +359,7 @@ export default function ClientSavingsPage() {
 
                 {/* Withdraw Modal */}
                 {showWithdrawModal && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="fixed inset-0 bg-slate-900/30 backdrop-blur-sm flex items-center justify-center z-50">
                         <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
                             <h3 className="text-2xl font-bold text-gray-900 mb-4">{t("withdrawModal.title")}</h3>
                             <p className="text-gray-600 mb-4">

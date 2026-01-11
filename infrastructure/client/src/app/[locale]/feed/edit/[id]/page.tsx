@@ -9,8 +9,10 @@ import { useNewsById } from "@/hooks/useNews";
 import { useContentsByNewsId } from "@/hooks/useContent";
 import { FeedForm } from "@/components/feed/form/FeedForm";
 import { useMediaByNewsId } from "@/hooks/useMedia";
+import { useTranslations } from "next-intl";
 
 export default function EditFeedPage() {
+  const t = useTranslations("pages.feed.edit");
   const { id } = useParams();
   const newsId = id as string;
 
@@ -74,7 +76,7 @@ return (
       <main className="container mx-auto p-6">
         <div className="flex items-center justify-center min-h-[400px]">
           <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
-          <span className="ml-3 text-gray-600">Chargement...</span>
+          <span className="ml-3 text-gray-600">{t("loading")}</span>
         </div>
       </main>
     )}
@@ -82,7 +84,7 @@ return (
     {!news && !newsLoading && (
       <main className="container mx-auto p-6">
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-red-700">Actualité introuvable</p>
+          <p className="text-red-700">{t("notFound")}</p>
         </div>
       </main>
     )}
@@ -90,8 +92,8 @@ return (
     {news && !newsLoading && !contentsLoading && !mediaLoading && (
       <main className="container mx-auto p-6">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Modifier l&apos;actualité</h1>
-          <p className="text-gray-600 mt-2">Modifiez les informations et le contenu de votre actualité</p>
+          <h1 className="text-3xl font-bold text-gray-900">{t("title")}</h1>
+          <p className="text-gray-600 mt-2">{t("subtitle")}</p>
         </div>
 
         <FeedForm

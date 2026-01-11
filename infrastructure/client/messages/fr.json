@@ -138,6 +138,35 @@
           "totalGain": "Plus-value latente",
           "performance": "Performance globale"
         }
+      },
+      "placeOrderForm": {
+        "totalAmount": "Montant total",
+        "transactionFee": "Frais de transaction",
+        "totalToPay": "Total à payer",
+        "totalToReceive": "Total à recevoir",
+        "availableBalance": "Solde disponible :",
+        "blockedInOrders": "bloqués dans vos ordres",
+        "availableShares": "Actions disponibles :",
+        "blockedSharesInOrders": "bloquées dans vos ordres",
+        "insufficientBalance": "Solde insuffisant",
+        "insufficientShares": "Actions insuffisantes",
+        "available": "Disponible",
+        "required": "Requis",
+        "cancel": "Annuler",
+        "processing": "Traitement...",
+        "confirmBuy": "Confirmer l'achat",
+        "confirmSell": "Confirmer la vente"
+      },
+      "orderFormFields": {
+        "quantity": "Quantité",
+        "pricePerShare": "Prix par action (€)",
+        "currentMarketPrice": "Prix actuel du marché",
+        "validation": {
+          "quantityRequired": "La quantité est requise",
+          "quantityMin": "La quantité doit être au moins 1",
+          "priceRequired": "Le prix est requis",
+          "priceMin": "Le prix doit être supérieur à 0"
+        }
       }
     },
     "chat": {
@@ -570,6 +599,30 @@
         }
       }
     },
+    "savingsAccount": {
+      "pageHeader": {
+        "back": "Retour"
+      },
+      "card": {
+        "noAccount": "Compte d'épargne non trouvé",
+        "title": "Compte Épargne",
+        "statusActive": "Actif",
+        "statusInactive": "Inactif",
+        "availableBalance": "Solde disponible",
+        "interestEarnedTotal": "Intérêts gagnés",
+        "credited": "Crédité",
+        "pendingInterest": "Intérêts en attente",
+        "notCredited": "Non crédité",
+        "perDay": "Par jour",
+        "perYearProjected": "Par an (projeté)",
+        "detailsTitle": "Détails",
+        "annualInterestRate": "Taux d'intérêt annuel",
+        "remunerationCeiling": "Plafond de rémunération",
+        "lastInterestCalc": "Dernier calcul d'intérêts",
+        "howItWorksMessage": "Vos intérêts sont calculés quotidiennement sur votre solde disponible{ceiling}",
+        "ceilingInfo": " dans la limite de {amount}"
+      }
+    },
     "loan": {
       "advisorPage": {
         "title": "Demandes de Crédit",
@@ -583,6 +636,60 @@
         },
         "noRequests": "Aucune demande de crédit",
         "noRequestsDescription": "Il n'y a aucune demande de crédit pour le moment"
+      },
+      "advisorCard": {
+        "client": "Client",
+        "createdOn": "Créée le {date}",
+        "status": {
+          "PENDING": "EN ATTENTE",
+          "APPROVED": "APPROUVÉ",
+          "REJECTED": "REJETÉ"
+        },
+        "amount": "Montant",
+        "duration": "Durée",
+        "proposedRate": "Taux proposé",
+        "monthlyPayment": "Mensualité",
+        "purpose": "Motif",
+        "approve": "Accepter",
+        "reject": "Refuser",
+        "viewProfile": "Voir profil",
+        "month": "mois",
+        "months": "mois"
+      },
+      "clientModal": {
+        "title": "Fiche client",
+        "close": "Fermer",
+        "identity": "Identité",
+        "email": "Email",
+        "accounts": "Comptes",
+        "iban": "IBAN",
+        "noAccountsFound": "Aucun compte trouvé.",
+        "loanHistory": "Historique crédits",
+        "createdOn": "Créée le {date}",
+        "monthlyPayment": "Mensualité",
+        "remainingPrincipal": "Reste à rembourser",
+        "remainingInstallments": "échéance{count, plural, one {} other {s}} restantes",
+        "nextDueDate": "Prochaine échéance",
+        "noLoansFound": "Aucune demande de crédit pour ce client.",
+        "status": {
+          "PENDING": "EN ATTENTE",
+          "APPROVED": "APPROUVÉ",
+          "REJECTED": "REJETÉ",
+          "ADVISOR_APPROVED": "APPROUVÉ CONSEILLER",
+          "RATE_PROPOSED": "TAUX PROPOSÉ",
+          "DIRECTOR_APPROVED": "APPROUVÉ DIRECTEUR"
+        }
+      },
+      "fields": {
+        "chooseAdvisor": "Choisir un conseiller",
+        "loadingAdvisors": "Chargement des conseillers...",
+        "requestedAmount": "Montant demandé",
+        "amountError": "Veuillez saisir un montant valide et supérieur à 0.",
+        "purpose": "Motif",
+        "purposePlaceholder": "Exemple : Achat d'un véhicule, rénovation de la maison, etc.",
+        "purposeError": "Veuillez préciser le motif de votre demande.",
+        "repaymentDuration": "Durée de remboursement",
+        "months": "{count} mois"
       }
     }
   },
@@ -638,6 +745,20 @@
     "register": {
       "title": "Inscription",
       "description": "Créez votre compte BankAvenir en quelques minutes."
+    },
+    "legal": {
+      "privacy": {
+        "title": "Politique de confidentialité",
+        "description": "Politique de confidentialité et protection des données de BankAvenir."
+      },
+      "cgv": {
+        "title": "Conditions générales de vente",
+        "description": "Conditions générales de vente et d'utilisation de BankAvenir."
+      },
+      "mentions": {
+        "title": "Mentions légales",
+        "description": "Mentions légales de BankAvenir."
+      }
     }
   },
   "landing": {
@@ -1566,7 +1687,7 @@
       "loading": "Chargement...",
       "error": "Erreur : {message}",
       "manageTitle": "Gestion des Actualités",
-      "manageSubtitle": "Gérez vos actualités et consultez les statistiques",
+      "manageSubtitle": "Gérez vos actualités",
       "filters": "Filtres",
       "manageLoading": "Chargement...",
       "manageError": "Erreur:",
@@ -1656,7 +1777,8 @@
       "updatedAt": "Mis à jour le",
       "notAvailable": "Cette action n'est pas disponible au trading.",
       "buyAt": "Acheter à {price}€",
-      "sell": "Vendre"
+      "sell": "Vendre",
+      "ipoActive": "IPO Active"
     },
     "priceComparison": {
       "title": "Comparaison des prix",
@@ -1675,7 +1797,9 @@
       "stockForm": {
         "cancel": "Annuler",
         "creating": "Création...",
-        "create": "Créer l'action"
+        "create": "Créer l'action",
+        "newStock": "Nouvelle action",
+        "close": "Fermer"
       },
       "editStockForm": {
         "cancel": "Annuler",
@@ -1814,21 +1938,28 @@
         "sell": "Vente"
       },
       "directorFilters": {
+        "filterByStatus": "Filtrer par statut",
+        "all": "Tous",
         "allStatuses": "Tous les statuts",
         "allTypes": "Tous les types",
         "pending": "En attente",
-        "executed": "Exécuté",
-        "cancelled": "Annulé",
-        "partiallyExecuted": "Partiellement exécuté",
-        "rejected": "Rejeté",
+        "executed": "Exécutés",
+        "cancelled": "Annulés",
+        "partiallyExecuted": "Partiellement exécutés",
+        "rejected": "Rejetés",
         "buy": "Achat",
         "sell": "Vente",
         "status": "Statut",
         "orderType": "Type d'ordre"
       },
       "directorList": {
-        "noOrders": "Aucun ordre de directeur disponible",
-        "noMatchingOrders": "Aucun ordre ne correspond aux filtres sélectionnés"
+        "noOrders": "Aucun ordre",
+        "noOrdersDescription": "Les ordres apparaîtront ici une fois placés.",
+        "noMatchingOrders": "Aucun ordre ne correspond aux filtres sélectionnés",
+        "buyOrders": "Achat",
+        "buyOrdersPlural": "Achats",
+        "sellOrders": "Vente",
+        "sellOrdersPlural": "Ventes"
       },
       "openIPO": {
         "errorMinShares": "Le nombre d'actions doit être supérieur à 0",
@@ -1865,6 +1996,29 @@
         "instantExecutionInfo": "Votre achat sera exécuté instantanément au prix IPO. Les actions seront ajoutées directement à votre portefeuille.",
         "cancel": "Annuler",
         "buyShares": "Acheter {count} action(s) IPO"
+      },
+      "orderBookPage": {
+        "title": "Carnet d'ordres",
+        "loading": "Chargement...",
+        "loadingBook": "Chargement du carnet...",
+        "loadingError": "Erreur de chargement",
+        "errorMessage": "Erreur lors du chargement du carnet d'ordres",
+        "sales": "Ventes",
+        "purchases": "Achats",
+        "orders": "Ordres",
+        "total": "Total",
+        "back": "Retour",
+        "liveBook": "Carnet live",
+        "liveDescription": "Ventes et achats en attente d'exécution",
+        "lastPrice": "Dernier prix",
+        "sellOrders": "Ordres de VENTE",
+        "buyOrders": "Ordres d'ACHAT",
+        "shares": "actions",
+        "totalLabel": "Total",
+        "noSellOrders": "Aucun ordre de vente",
+        "noBuyOrders": "Aucun ordre d'achat",
+        "howItWorks": "Comment ça marche ?",
+        "howItWorksDescription": "Les ordres sont automatiquement matchés lorsqu'un prix d'achat est supérieur ou égal à un prix de vente. Le prix d'exécution est la moyenne des deux prix."
       }
     },
     "positions": {
@@ -1985,6 +2139,31 @@
       "clientLabel": "Client",
       "title": "Demande de crédit",
       "description": "Renseignez les informations essentielles. Votre conseiller recevra automatiquement la demande.",
+      "chooseAdvisor": "Choisir un conseiller",
+      "loadingAdvisors": "Chargement des conseillers...",
+      "requestedAmount": "Montant demandé",
+      "amountError": "Veuillez saisir un montant valide et supérieur à 0.",
+      "purpose": "Motif",
+      "purposePlaceholder": "Exemple : Achat d'un véhicule, rénovation de la maison, etc.",
+      "purposeError": "Veuillez préciser le motif de votre demande.",
+      "repaymentDuration": "Durée de remboursement",
+      "months": "{count} mois",
+      "simulationTitle": "Simulation mensuelle",
+      "rateByDirector": "(taux à définir par le directeur)",
+      "indicativeRate": "(taux indicatif {rate}%)",
+      "rateNotDefined": "(taux indicatif non défini)",
+      "monthlyNotAvailable": "-- €/mois",
+      "monthlyAmount": "{amount} €/mois",
+      "rateProposalNote": "Pour un montant > 5000€, le taux sera proposé par le directeur.",
+      "waitingForRate": "En attente de taux indicatif défini par le directeur.",
+      "rateWillAppear": "Dès qu'un taux indicatif sera publié, une estimation apparaîtra ici.",
+      "submitButton": "Envoyer la demande",
+      "errors": {
+        "advisorRequired": "Veuillez sélectionner un conseiller",
+        "amountNumber": "Le montant doit être un nombre",
+        "amountPositive": "Le montant doit être positif",
+        "purposeRequired": "Veuillez préciser le motif de votre demande"
+      },
       "errorLoadAdvisors": "Impossible de charger les conseillers",
       "successMessage": "Demande envoyée au conseiller.",
       "failureMessage": "Échec de la demande",
@@ -2121,6 +2300,9 @@
       "statusInactive": "Inactif",
       "availableBalance": "Solde disponible",
       "interestEarnedTotal": "Intérêts gagnés (total)",
+      "credited": "Crédité",
+      "pendingInterest": "Intérêts en attente",
+      "notCredited": "Non crédité",
       "perDay": "Par jour",
       "perYearProjected": "Par an (projeté)",
       "detailsTitle": "Détails",
@@ -2345,6 +2527,84 @@
         "networkError": "Erreur réseau. Vérifiez que le serveur est démarré."
       }
     },
+    "loanRequests": {
+      "header": {
+        "director": "Directeur",
+        "title": "Validation des crédits",
+        "subtitle": "Décidez des dossiers approuvés par les conseillers et proposez des taux pour les montants supérieurs à 5000€."
+      },
+      "stats": {
+        "total": "Total",
+        "pending": "En attente",
+        "needsRate": "> 5000€ à taux",
+        "approved": "Validées"
+      },
+      "indicativeRate": {
+        "title": "Taux indicatif",
+        "subtitle": "Appliqué automatiquement pour les demandes ≤ 5000€",
+        "current": "Actuel : {rate}%"
+      },
+      "cardBank": {
+        "months": "mois",
+        "toPropose": "À proposer",
+        "iban": "IBAN :",
+        "ibanNA": "N/A"
+      },
+      "title": "Demandes de crédit",
+      "description": "Consultez et traitez les demandes de crédit de vos clients.",
+      "button": "Voir les demandes de crédit",
+      "errors": {
+        "loadRequests": "Impossible de charger les demandes",
+        "invalidRate": "Veuillez saisir un taux valide",
+        "saveRate": "Impossible d'enregistrer le taux",
+        "saveDecision": "Impossible d'enregistrer la décision",
+        "loadClientProfile": "Impossible de charger le profil client",
+        "invalidIndicativeRate": "Veuillez saisir un taux indicatif valide"
+      },
+      "actions": {
+        "save": "Sauvegarder",
+        "propose": "Proposer",
+        "approve": "Valider",
+        "reject": "Refuser",
+        "viewProfile": "Voir profil",
+        "close": "Fermer"
+      },
+      "filter": {
+        "label": "Filtrer :",
+        "all": "Toutes",
+        "pending": "En attente",
+        "needsRate": "> 5000€ (taux)",
+        "ready": "≤ 5000€ (valider)"
+      },
+      "empty": {
+        "title": "Aucune demande à valider",
+        "subtitle": "Les dossiers validés par les conseillers apparaîtront ici."
+      },
+      "card": {
+        "client": "Client",
+        "advisor": "Conseiller",
+        "amount": "Montant",
+        "duration": "Durée",
+        "rate": "Taux",
+        "createdAt": "Créée le",
+        "purpose": "Motif",
+        "ratePlaceholder": "Taux %"
+      },
+      "profile": {
+        "title": "Fiche client",
+        "identity": "Identité",
+        "email": "Email :",
+        "accounts": "Comptes",
+        "noAccounts": "Aucun compte trouvé.",
+        "loanHistory": "Historique crédits",
+        "createdAt": "Créée le",
+        "monthlyPayment": "Mensualité",
+        "remainingPrincipal": "Reste à rembourser",
+        "remainingTerms": "{count} échéance(s) restante(s)",
+        "nextDueDate": "Prochaine échéance",
+        "noLoans": "Aucune demande de crédit pour ce client."
+      }
+    },
     "savings": {
       "title": "Vue d'ensemble des Comptes Épargne",
       "subtitle": "Consultez tous les comptes épargne, taux d'intérêt et gains",
@@ -2429,7 +2689,7 @@
         },
         "actions": {
           "save": "Sauvegarder",
-          "proposer": "Proposer",
+          "propose": "Proposer",
           "approve": "Valider",
           "reject": "Refuser",
           "viewProfile": "Voir profil",
@@ -2494,6 +2754,16 @@
     }
   },
   "pages": {
+    "client": {
+      "savingsAccount": {
+        "title": "Mon Compte Épargne",
+        "subtitle": "Consultez vos intérêts et suivez l'évolution de votre épargne"
+      },
+      "addSubAccount": {
+        "loading": "Chargement...",
+        "noMainAccountFound": "Aucun compte principal trouvé."
+      }
+    },
     "stock": {
       "title": "Bourse & Trading",
       "loading": "Chargement des actions...",
@@ -2520,6 +2790,11 @@
         "fiftyTwoWeek": "52 semaines",
         "volume": "Volume",
         "actions": "Actions"
+      },
+      "transactions": {
+        "title": "Mes transactions",
+        "loading": "Chargement...",
+        "errorLoading": "Erreur lors du chargement des transactions"
       }
     },
     "orders": {
@@ -2531,12 +2806,37 @@
     },
     "portfolio": {
       "title": "Mon portefeuille",
+      "subtitle": "Suivez vos positions et vendez en un clic.",
       "loading": "Chargement...",
       "errorTitle": "Erreur",
-      "errorMessage": "Erreur lors du chargement du portefeuille"
+      "errorMessage": "Erreur lors du chargement du portefeuille",
+      "stats": {
+        "positions": "Positions",
+        "active": "actives",
+        "quantity": "Quantité",
+        "shares": "actions",
+        "value": "Valeur",
+        "estimated": "estimée"
+      },
+      "portfolio": "Portfolio",
+      "details": "Détail de vos positions en temps réel."
     },
     "feed": {
-      "title": "Actualités"
+      "title": "Actualités",
+      "manage": {
+        "title": "Gestion des Actualités",
+        "subtitle": "Gérez vos actualités",
+        "filtersTitle": "Filtres",
+        "loading": "Chargement...",
+        "error": "Erreur: {message}",
+        "manageNewsTitle": "Gérer les actualités"
+      },
+      "edit": {
+        "loading": "Chargement...",
+        "notFound": "Actualité introuvable",
+        "title": "Modifier l'actualité",
+        "subtitle": "Modifiez les informations et le contenu de votre actualité"
+      }
     },
     "transactions": {
       "title": "Historique des transactions",
@@ -2547,6 +2847,228 @@
       "error": {
         "title": "Erreur",
         "pdfGeneration": "Une erreur est survenue lors de la génération du PDF"
+      }
+    },
+    "loan": {
+      "requests": {
+        "clientLabel": "Client",
+        "title": "Mes demandes de crédit",
+        "subtitle": "Suivez vos demandes, les propositions de taux et l'état de vos remboursements.",
+        "stats": {
+          "total": "Total",
+          "pending": "En cours",
+          "approved": "Validées",
+          "rejected": "Refusées"
+        },
+        "loadError": "Impossible de charger vos demandes",
+        "decisionError": "Impossible d'enregistrer la décision",
+        "monthlyAmount": "{amount} €/mois",
+        "monthlyAmountProposed": "{amount} €/mois (proposé)",
+        "noRequests": "Aucune demande pour l'instant",
+        "noRequestsSubtitle": "Vos prochaines demandes apparaîtront ici.",
+        "durationMonths": "{months} mois",
+        "byDirector": "par {name}",
+        "proposedByDirector": "proposé par {name}",
+        "advisor": "Conseiller",
+        "createdOn": "Créée le {date}",
+        "amount": "Montant",
+        "duration": "Durée",
+        "rate": "Taux",
+        "monthly": "Mensualité",
+        "remainingToPay": "Reste à payer",
+        "remainingAmount": "{amount} €{installments}",
+        "installments": "échéance{count, plural, one {} other {s}}",
+        "nextDueDate": "Prochaine échéance",
+        "purpose": "Motif",
+        "acceptRate": "Accepter le taux",
+        "reject": "Refuser",
+        "status": {
+          "PENDING": "EN ATTENTE",
+          "ADVISOR_APPROVED": "APPROUVÉ CONSEILLER",
+          "RATE_PROPOSED": "TAUX PROPOSÉ",
+          "DIRECTOR_APPROVED": "APPROUVÉ DIRECTEUR",
+          "APPROVED": "APPROUVÉ",
+          "REJECTED": "REJETÉ"
+        }
+      }
+    },
+    "manageStock": {
+      "orderBook": {
+        "subtitle": "Gestion des ordres",
+        "title": "Carnet d'ordres",
+        "loadingData": "Chargement des données...",
+        "loading": "Chargement...",
+        "loadingError": "Erreur de chargement",
+        "errorLoadingOrders": "Erreur lors du chargement des ordres",
+        "description": "Consultez et gérez tous les ordres de bourse en temps réel",
+        "stats": {
+          "total": "Total",
+          "buy": "Achat",
+          "sell": "Vente",
+          "orders": "{count, plural, one {ordre} other {ordres}}"
+        },
+        "filters": {
+          "title": "Filtres",
+          "description": "Filtrez les ordres par statut",
+          "totalOrders": "{count, plural, one {# ordre au total} other {# ordres au total}}"
+        }
+      },
+      "dashboard": {
+        "subtitle": "Administration",
+        "title": "Gestion de la Bourse",
+        "description": "Vue d'ensemble de l'activité boursière et des ordres",
+        "buttons": {
+          "manageStocks": "Gérer les actions",
+          "orderBook": "Carnet d'ordres"
+        },
+        "cards": {
+          "totalStocks": "Actions totales",
+          "availableStocks": "Actions disponibles",
+          "pendingOrders": "Ordres en attente",
+          "totalTransactions": "Transactions totales",
+          "transactionsDesc": "Volume total d'activité"
+        },
+        "performance": {
+          "label": "Performance",
+          "totalVolume": "Volume total traité"
+        },
+        "quickActions": {
+          "title": "Actions rapides",
+          "manageStocks": "Gérer les actions",
+          "viewOrderBook": "Voir le carnet d'ordres",
+          "marketplace": "Place de marché",
+          "myPositions": "Mes positions"
+        },
+        "recentStocks": {
+          "title": "Actions récentes",
+          "viewAll": "Voir tout",
+          "available": "Disponible",
+          "unavailable": "Indisponible"
+        }
+      },
+      "stocks": {
+        "subtitle": "Administration des actions",
+        "title": "Gestion des Actions",
+        "loading": "Chargement...",
+        "description": "Créez, modifiez et gérez les actions disponibles sur la plateforme",
+        "createButton": "Créer une action",
+        "stats": {
+          "totalStocks": "Actions totales",
+          "available": "Disponibles",
+          "openIPO": "IPO ouvertes"
+        },
+        "table": {
+          "label": "Catalogue",
+          "title": "Toutes les actions"
+        },
+        "modal": {
+          "editLabel": "Modifier",
+          "editTitle": "Éditer {symbol}"
+        },
+        "notifications": {
+          "deleteSuccess": "Action supprimée avec succès",
+          "deleteError": "Erreur lors de la suppression de l'action",
+          "toggleSuccess": "Action {status} avec succès",
+          "toggleError": "Erreur lors du changement de disponibilité",
+          "activated": "activée",
+          "deactivated": "désactivée",
+          "updateSuccess": "Action mise à jour avec succès",
+          "updateError": "Erreur lors de la mise à jour de l'action",
+          "ipoOpenSuccess": "IPO {type} ouverte avec succès",
+          "ipoOpenError": "Erreur lors de l'ouverture de l'IPO",
+          "initial": "initiale",
+          "secondary": "secondaire",
+          "confirmCloseIPO": "Êtes-vous sûr de vouloir clôturer l'IPO pour {symbol} ?",
+          "ipoCloseSuccess": "IPO clôturée avec succès",
+          "ipoCloseError": "Erreur lors de la clôture de l'IPO"
+        }
+      }
+    },
+    "legal": {
+      "privacy": {
+        "title": "Politique de Confidentialité",
+        "lastUpdate": "Dernière mise à jour : {date}",
+        "sections": {
+          "dataCollection": {
+            "title": "Collecte des données",
+            "intro": "Nous collectons les données suivantes :",
+            "items": {
+              "identity": "Données d'identité (nom, prénom, date de naissance)",
+              "contact": "Données de contact (email, téléphone, adresse)",
+              "financial": "Données financières (comptes bancaires, transactions)",
+              "connection": "Données de connexion (adresse IP, logs)"
+            }
+          },
+          "dataUsage": {
+            "title": "Utilisation des données",
+            "intro": "Vos données sont utilisées pour :",
+            "items": {
+              "accountManagement": "Gérer votre compte et vos opérations bancaires",
+              "legalObligations": "Respecter nos obligations légales et réglementaires",
+              "serviceImprovement": "Améliorer nos services et votre expérience",
+              "fraudPrevention": "Prévenir la fraude et garantir la sécurité"
+            }
+          },
+          "rights": {
+            "title": "Vos droits",
+            "intro": "Conformément au RGPD, vous disposez des droits suivants :",
+            "items": {
+              "access": "Droit d'accès à vos données personnelles",
+              "rectification": "Droit de rectification de vos données",
+              "erasure": "Droit à l'effacement de vos données",
+              "portability": "Droit à la portabilité de vos données",
+              "opposition": "Droit d'opposition au traitement"
+            }
+          }
+        },
+        "contact": {
+          "text": "Pour exercer vos droits, contactez notre DPO à :",
+          "email": "dpo@bankavenir.com"
+        }
+      },
+      "cgv": {
+        "title": "Conditions générales de vente",
+        "effectiveDate": "Version en vigueur au {date}",
+        "sections": {
+          "purpose": {
+            "title": "Article 1 - Objet",
+            "content": "Les présentes Conditions Générales de Vente (CGV) régissent la relation contractuelle entre BankAvenir et ses clients pour l'utilisation des services bancaires proposés."
+          },
+          "accountOpening": {
+            "title": "Article 2 - Ouverture de compte",
+            "content": "L'ouverture d'un compte est soumise à l'acceptation de votre dossier par BankAvenir. Vous devez être majeur et résider fiscalement en France."
+          },
+          "pricing": {
+            "title": "Article 3 - Tarification",
+            "content": "Les tarifs en vigueur sont disponibles sur notre site et dans votre espace client. Toute modification tarifaire vous sera notifiée 2 mois avant son application."
+          },
+          "termination": {
+            "title": "Article 4 - Résiliation",
+            "content": "Vous pouvez résilier votre compte à tout moment, sans frais. BankAvenir se réserve le droit de clôturer votre compte en cas de manquement grave aux présentes conditions."
+          }
+        }
+      },
+      "mentions": {
+        "title": "Mentions légales",
+        "sections": {
+          "editor": {
+            "title": "Éditeur du site",
+            "company": "BankAvenir SAS",
+            "capital": "Capital social : 10 000 000 €",
+            "headquarters": "Siège social : 42 Avenue des Champs-Élysées, 75008 Paris",
+            "rcs": "RCS Paris : 123 456 789",
+            "siret": "SIRET : 123 456 789 00012",
+            "ape": "APE : 6419Z"
+          },
+          "director": {
+            "title": "Directeur de publication",
+            "name": "Jean Dupont, Président"
+          },
+          "banking": {
+            "title": "Agrément bancaire",
+            "content": "BankAvenir est agréée en tant qu'établissement de crédit par l'Autorité de Contrôle Prudentiel et de Résolution (ACPR), 4 Place de Budapest, CS 92459, 75436 Paris Cedex 09."
+          }
+        }
       }
     }
   },

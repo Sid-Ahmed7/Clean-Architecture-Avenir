@@ -9,13 +9,7 @@ interface OrderBlockedResourcesProps {
   fee?: number;
 }
 
-export function OrderBlockedResources({
-  orderType,
-  remainingQuantity,
-  orderPrice,
-  feesPaid,
-  fee,
-}: OrderBlockedResourcesProps) {
+export function OrderBlockedResources({orderType,remainingQuantity,orderPrice,feesPaid,fee}: OrderBlockedResourcesProps) {
   const t = useTranslations('components.stocks.orders.blockedResources');
   const isBuy = orderType === "BUY";
 

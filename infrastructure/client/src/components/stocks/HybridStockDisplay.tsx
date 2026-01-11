@@ -17,13 +17,7 @@ interface HybridStockDisplayProps {
   onBuyIPO?: (symbol: string) => void;
 }
 
-export function HybridStockDisplay({
-  backendStock,
-  apiStock,
-  onBuy,
-  onSell,
-  onBuyIPO,
-}: HybridStockDisplayProps) {
+export function HybridStockDisplay({backendStock,apiStock,onBuy,onSell,onBuyIPO}: HybridStockDisplayProps) {
   const t = useTranslations("components.stocks.hybridDisplay");
   const hasApiData = !!apiStock;
 

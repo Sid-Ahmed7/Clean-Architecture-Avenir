@@ -41,10 +41,10 @@ export function LoanRequestFields({
     <>
       <div className="space-y-1">
         <label className="text-sm font-semibold text-slate-800" htmlFor="advisorId">
-          Choisir un conseiller
+          {t("chooseAdvisor")}
         </label>
         {loadingAdvisors ? (
-          <p className="text-sm text-slate-600">Chargement des conseillers...</p>
+          <p className="text-sm text-slate-600">{t("loadingAdvisors")}</p>
         ) : advisorError ? (
           <p className="text-sm text-rose-600">{advisorError}</p>
         ) : (
@@ -65,7 +65,7 @@ export function LoanRequestFields({
 
       <div className="space-y-1">
         <label className="text-sm font-semibold text-slate-800" htmlFor="amount">
-          Montant demandé
+          {t("requestedAmount")}
         </label>
         <input
           id="amount"
@@ -75,28 +75,28 @@ export function LoanRequestFields({
           className="w-full px-3 py-3 rounded-lg border border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-100"
         />
         {errors.amount && (
-          <p className="text-rose-600 text-sm">Veuillez saisir un montant valide et supérieur à 0.</p>
+          <p className="text-rose-600 text-sm">{t("amountError")}</p>
         )}
       </div>
 
       <div className="space-y-1">
         <label className="text-sm font-semibold text-slate-800" htmlFor="purpose">
-          Motif
+          {t("purpose")}
         </label>
         <textarea
           id="purpose"
           {...register("purpose")}
           className="w-full px-3 py-3 rounded-lg border border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-100"
           rows={3}
-          placeholder="Exemple : Achat d'un véhicule, rénovation de la maison, etc."
+          placeholder={t("purposePlaceholder")}
         />
         {errors.purpose && (
-          <p className="text-rose-600 text-sm">Veuillez préciser le motif de votre demande.</p>
+          <p className="text-rose-600 text-sm">{t("purposeError")}</p>
         )}
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-semibold text-slate-800">Durée de remboursement</label>
+        <label className="text-sm font-semibold text-slate-800">{t("repaymentDuration")}</label>
         <div className="flex gap-2 flex-wrap">
           {durations.map((d) => (
             <button
@@ -109,7 +109,7 @@ export function LoanRequestFields({
                   : "bg-white text-slate-800 border-slate-200 hover:bg-slate-50"
               }`}
             >
-              {d} mois
+              {t("months", { count: d })}
             </button>
           ))}
         </div>

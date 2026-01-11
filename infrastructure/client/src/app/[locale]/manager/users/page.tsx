@@ -109,7 +109,7 @@ export default function UsersManagementPage() {
             closeEditModal();
             fetchUsers();
         } catch (error) {
-            addNotification(NotificationEnum.ALERT, "Erreur lors de la mise à jour de l'utilisateur");
+            addNotification(NotificationEnum.ALERT, t("errors.updateFailed"));
         }
     };
 
@@ -274,7 +274,7 @@ export default function UsersManagementPage() {
 
             {/* Edit Modal */}
             {isEditModalOpen && editingUser && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+                <div className="fixed inset-0 bg-slate-900/30 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-y-auto">
                     <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full my-8">
                         {/* Modal Header */}
                         <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 border-b border-blue-100 rounded-t-2xl">
@@ -323,7 +323,7 @@ export default function UsersManagementPage() {
 
                             <div>
                                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                    Email
+                                    {t("editModal.email")}
                                 </label>
                                 <Input
                                     type="email"
@@ -335,7 +335,7 @@ export default function UsersManagementPage() {
 
                             <div>
                                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                    Téléphone
+                                    {t("editModal.phone")}
                                 </label>
                                 <Input
                                     type="tel"
@@ -347,7 +347,7 @@ export default function UsersManagementPage() {
 
                             <div>
                                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                    Adresse
+                                    {t("editModal.address")}
                                 </label>
                                 <Input
                                     type="text"
@@ -359,7 +359,7 @@ export default function UsersManagementPage() {
 
                             <div>
                                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                    Statut
+                                    {t("editModal.status")}
                                 </label>
                                 <select
                                     value={editForm.status}
