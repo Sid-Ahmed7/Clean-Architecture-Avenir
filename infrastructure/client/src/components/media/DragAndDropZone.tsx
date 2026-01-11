@@ -13,7 +13,7 @@ interface DragAndDropZoneProps {
 }
 
 export function DragAndDropZone({onFilesSelect, isDragging, onDragOver, onDragLeave, onDrop, disabled, maxSize} : DragAndDropZoneProps) {
-    const t = useTranslations("components.media.dragDrop");
+    const t = useTranslations("media.dragDrop");
     
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if(! e.target.files) {

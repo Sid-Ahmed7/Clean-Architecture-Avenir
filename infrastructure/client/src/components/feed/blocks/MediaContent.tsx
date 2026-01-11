@@ -1,8 +1,7 @@
 import { MediaUploader } from "@/components/media/MediaUploader";
-import { useMediaMutations } from "@/hooks/useMedia";
+import { useMediaMutations, useMediaByNewsId } from "@/hooks/useMedia";
 import { Media } from "@/types/media";
 import { UploadedFile } from "@/types/uploadedFile";
-import { url } from "inspector";
 import { AlertCircle } from "lucide-react";
 
 interface MediaContentProps {
@@ -15,11 +14,13 @@ interface MediaContentProps {
 }
 
 export function MediaContent({files, existingMedias = [], newsId, onChange, disabled, error} : MediaContentProps) {
-    
+
     const {updateMedia} = useMediaMutations();
-    
-    
-    const getExistingMedias : UploadedFile[]= existingMedias?.map(media => ({
+    const { data: mediasFromCache } = useMediaByNewsId(newsId);
+
+    const mediasToDisplay = mediasFromCache && mediasFromCache.length > 0 ? mediasFromCache : existingMedias;
+
+    const getExistingMedias : UploadedFile[]= mediasToDisplay?.map(media => ({
         id: media.id,
         url: media.url,
         filename: media.altText,
@@ -29,8 +30,9 @@ export function MediaContent({files, existingMedias = [], newsId, onChange, disa
         caption: media.caption
     })) ?? [] 
       const handleCaptionUpdate = (mediaId: string, caption: string) => {
-        const mediaToUpdate = existingMedias.find(m => m.id === mediaId);
+        const mediaToUpdate = mediasToDisplay.find(m => m.id === mediaId);
         if (mediaToUpdate) {
+            console.log("🔄 Mise à jour du caption:", { mediaId, oldCaption: mediaToUpdate.caption, newCaption: caption, fullMedia: { ...mediaToUpdate, caption } });
             updateMedia.mutate({
                 media: { ...mediaToUpdate, caption },
                 newsId

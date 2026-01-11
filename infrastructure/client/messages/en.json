@@ -361,7 +361,9 @@
         "status": "Status",
         "viewProfile": "View Profile",
         "reject": "Reject",
-        "approve": "Approve"
+        "approve": "Approve",
+        "loading": "Loading...",
+        "noPendingRequests": "No pending requests"
       }
     },
     "rib": {
@@ -1514,7 +1516,9 @@
         "deleteBlock": "Delete this block",
         "editBlock": "Edit block",
         "addMedia": "Add media",
-        "addText": "Add text"
+        "addText": "Add text",
+        "textPlaceholder": "Write your text here... "
+
       },
       "toolbar": {
         "addBlock": "Add a block:",
@@ -1892,96 +1896,7 @@
       "confirmDelete": "Are you sure you want to delete {symbol}?"
     }
   },
-  "bankAccount": {
-    "transactionHistory": {
-      "noTransactions": "No transactions at the moment.",
-      "reference": "Ref",
-      "unknownUser": "Unknown user",
-      "sender": "Sender",
-      "recipient": "Recipient"
-    },
-    "summaryCard": {
-      "totalBalance": "Total balance of your accounts"
-    },
-    "subAccountForm": {
-      "title": "Add a sub-account",
-      "accountNameLabel": "Account name *",
-      "accountNamePlaceholder": "Sub-account name",
-      "accountTypeLabel": "Account type *",
-      "currencyLabel": "Currency *",
-      "creating": "Creating...",
-      "createButton": "Create sub-account",
-      "success": "Sub-account created successfully!",
-      "accountTypes": {
-        "savings": "Savings"
-      }
-    },
-    "quickTransfer": {
-      "title": "Quick transfers",
-      "subtitle": "Repeat a transfer in one click",
-      "noTransactions": "No recent transactions available",
-      "unknownUser": "Unknown user",
-      "unknownAccount": "Unknown account",
-      "account": "Account",
-      "repeatButton": "Repeat",
-      "confirmTitle": "Confirm quick transfer",
-      "amountLabel": "Amount",
-      "toLabel": "To:",
-      "originalTransaction": "Original transaction from",
-      "processing": "Processing...",
-      "confirmButton": "Confirm",
-      "cancelButton": "Cancel"
-    },
-    "overdraftRequests": {
-      "title": "Overdraft requests",
-      "requestsCount": "requests",
-      "loading": "Loading...",
-      "noPendingRequests": "No pending requests.",
-      "account": "Account",
-      "current": "Current",
-      "requested": "Requested",
-      "client": "Client",
-      "status": "Status",
-      "viewProfile": "View client profile",
-      "loadingProfile": "Loading...",
-      "reject": "Reject",
-      "approve": "Approve",
-      "close": "Close",
-      "loadingDetails": "Loading profile...",
-      "phoneNA": "N/A",
-      "accounts": "Accounts",
-      "loanRequests": "Loan requests",
-      "noLoanRequests": "No requests",
-      "overdraftRequestLabel": "Overdraft request",
-      "purpose": "Purpose"
-    },
-    "mainAccountCard": {
-      "mainLabel": "Main",
-      "availableBalance": "Available balance",
-      "accountNumber": "Account number",
-      "ribMessage": "Get your RIB to share your bank details.",
-      "downloadRib": "Download my RIB",
-      "generatingRib": "Generating...",
-      "limits": "Limits",
-      "overdraftRequest": "Overdraft request",
-      "currentOverdraft": "Current",
-      "increaseTransferLimit": "Increase transfer limit",
-      "currentLimit": "Current",
-      "overdraftModalTitle": "Request overdraft increase",
-      "overdraftModalSubtitle": "Current overdraft:",
-      "overdraftSuccess": "Request sent to your advisor.",
-      "requestButton": "Request",
-      "sending": "Sending...",
-      "transferModalTitle": "Increase transfer limit",
-      "transferModalSubtitle": "Current limit:",
-      "transferSuccess": "Limit updated.",
-      "updating": "Updating...",
-      "increaseButton": "Increase"
-    },
-    "accountList": {
-      "noAccounts": "No other accounts available"
-    }
-  },
+
   "loan": {
     "form": {
       "clientLabel": "Client",
@@ -2142,7 +2057,10 @@
     },
     "uploader": {
       "errorNotMedia": "{fileName} is not an image or video",
-      "errorMaxSize": "{fileName} exceeds maximum size of {maxSize}MB"
+      "errorMaxSize": "{fileName} exceeds maximum size of {maxSize}MB",
+      "existingFiles": "Existing files",
+      "newFiles": "New files",
+      "totalFiles": "Total: {{count}} file(s)"
     },
     "filePreview": {
       "video": "Video",

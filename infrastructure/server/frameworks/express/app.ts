@@ -23,7 +23,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
-app.use("/uploads", express.static(path.join(__dirname, "../../public/uploads")));
+app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
 app.use("/api", routes)
 
 if (process.env.REPOSITORY_TYPE === 'postgres') {

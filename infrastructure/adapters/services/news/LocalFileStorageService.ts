@@ -40,7 +40,8 @@ export class LocalFileStorageService implements FileStorageService {
         const type = mimeType.startsWith('image/') ? MediaTypeEnum.IMAGE : MediaTypeEnum.VIDEO;
 
         const folder = options?.folder || type + 's';
-        const folderPath = path.join(process.cwd(), this.uploadDir, folder);
+        const serverRoot = path.join(process.cwd(), '..', '..');
+        const folderPath = path.join(serverRoot, this.uploadDir, folder);
 
         if (!existsSync(folderPath)) {
             const mkdirResult = await mkdir(folderPath, { recursive: true })

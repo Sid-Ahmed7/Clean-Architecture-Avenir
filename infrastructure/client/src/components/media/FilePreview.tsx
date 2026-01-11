@@ -19,17 +19,16 @@ interface FilePreviewProps {
 }
 
 export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlready, caption, onCaptionChange, mediaId}: FilePreviewProps) {
-    const t = useTranslations('components.media.filePreview');
+    const t = useTranslations('media.filePreview');
     const [isEditingCaption, setIsEditingCaption] = useState(false);
     const [captionValue, setCaptionValue] = useState(caption || "");
 
     useEffect(() => {
-            setCaptionValue(caption || "");  
-            console.log("catopn", caption)
+            setCaptionValue(caption || "");
         }, [caption])
 
     const formatFileSize = (fileSize : number) : string => {
-        
+
         if (fileSize === 0) {
             return '0 B'
         }
@@ -51,10 +50,10 @@ export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlr
     }
 
      return (
-        <div className="relative group">
-        <div className={`aspect-square rounded-lg overflow-hidden bg-gray-100 border-2 ${isUploadAlready ? 'border-green-200' : 'border-gray-200'}`}>
+        <div className="flex flex-col">
+        <div className={`relative aspect-square rounded-lg overflow-hidden bg-gray-100 border-2 ${isUploadAlready ? 'border-green-200' : 'border-gray-200'} group`}>
             {type === "IMAGE" ? (
-                
+
   <>
     {console.log("FilePreview src:", getMediaUrl(preview))}
     <Image
@@ -68,12 +67,12 @@ export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlr
     />
   </>            ) : (
             <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-purple-100 to-blue-100">
-            <video 
-            src={getMediaUrl(preview)} 
+            <video
+            src={getMediaUrl(preview)}
             className="w-full h-full object-cover"
             controls
             preload="metadata"
-            />                
+            />
             <span className="text-xs text-purple-700 font-medium">{t('video')}</span>
             </div>
             )}
@@ -103,31 +102,33 @@ export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlr
         </div>
 
 
-        <div className="mt-2 space-y-0.5">
+        <div className="mt-2 space-y-1">
             <p className="text-xs text-gray-700 font-medium truncate" title={fileName}>
             {fileName}
             </p>
             <p className="text-xs text-gray-500">
             {formatFileSize(size)}
             </p>
-            
+
             {isUploadAlready && onCaptionChange && (
-                <div className="mt-60 ml-50">
+                <div className="mt-2 space-y-1">
                     {!isEditingCaption ? (
-                        <div className="flex items-center gap-16">
-                            <p className="text-xs text-gray-600 truncate flex-1" title={caption || t('noCaption')}>
+                        <>
+                            <p className="text-xs text-gray-600 italic truncate" title={caption || t('noCaption')}>
                                 {caption || t('noCaption')}
                             </p>
                             <Button
                                 type="button"
                                 onClick={() => setIsEditingCaption(true)}
-                                variant="primary"                        >
+                                variant="primary"
+                                size="sm"
+                                fullWidth
+                            >
                                 <Edit2 size={12} /> {t('editCaption')}
                             </Button>
-                        </div>
+                        </>
                     ) : (
-                        <div className="flex flex-col gap-1">
-                            <div>
+                        <div className="flex flex-col gap-1.5">
                             <input
                                 type="text"
                                 value={captionValue}
@@ -136,17 +137,16 @@ export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlr
                                     setCaptionValue(e.target.value);
                                 }}
                                 placeholder={t('addCaption')}
-                                className="text-xs border rounded px-2 py-1 w-full"
+                                className="text-xs border rounded px-2 py-1.5 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
-                            </div>
-                            <div className="flex gap-1">
+                            <div className="flex gap-1.5">
                                 <button
                                     type="button"
                                     onClick={handleAddCaption}
-                                    className="text-green-600 hover:text-green-700 p-1 bg-green-50 rounded w-8 h-8"
+                                    className="flex-1 text-xs text-white bg-green-500 hover:bg-green-600 px-2 py-1.5 rounded flex items-center gap-1 justify-center transition-colors"
                                     title={t('save')}
                                 >
-                                    <Save size={12} />
+                                    <Save size={12} /> {t('save')}
                                 </button>
                                 <button
                                     type="button"
@@ -154,10 +154,10 @@ export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlr
                                         setCaptionValue(caption || "");
                                         setIsEditingCaption(false);
                                     }}
-                                    className="text-gray-600 hover:text-gray-700 p-1 bg-gray-50 rounded"
+                                    className="flex-1 text-xs text-gray-700 bg-gray-200 hover:bg-gray-300 px-2 py-1.5 rounded flex items-center gap-1 justify-center transition-colors"
                                     title={t('cancel')}
                                 >
-                                    <X size={12} />
+                                    <X size={12} /> {t('cancel')}
                                 </button>
                             </div>
                         </div>

@@ -4,7 +4,7 @@ export interface Media {
     url: string;
     type: "IMAGE" | "VIDEO";
     altText: string;
-    order: number;
+    order?: number;
     caption: string;
     size: number;
     mimeType: string;

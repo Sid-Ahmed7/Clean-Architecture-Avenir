@@ -16,7 +16,7 @@ interface BlockContentProps {
 }
 
 export function BlockContent({block, newsId, onUpdate, onRemove, disabled, dragAndDropHandle}: BlockContentProps) {
-    const t = useTranslations('components.feed.blocks.content');
+    const t = useTranslations('feed.blocks.content');
     return (
     <div className="bg-white border border-gray-200 rounded-lg p-4 flex gap-3 hover:shadow-md transition-shadow">
       <div

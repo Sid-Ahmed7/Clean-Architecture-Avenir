@@ -56,7 +56,7 @@ export function OverdraftRequestsPanel() {
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 space-y-3">
             <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-gray-900">{t("title")}</h3>
-                <span className="text-sm text-gray-500">{data.length} {t("requestsCount")}</span>
+                <span className="text-sm text-gray-500">{t("requestsCount", { count: data.length })}</span>
             </div>
 
             {loading && <p className="text-sm text-gray-500">{t("loading")}</p>}

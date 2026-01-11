@@ -15,7 +15,7 @@ interface MediaUploaderProps {
 }
 
 export function MediaUploader({onFilesSelected, existingFiles = [],maxSize = 10, disabled =false, onCaptionUpdate} : MediaUploaderProps){
-    const t = useTranslations("components.media.uploader");
+    const t = useTranslations("media.uploader");
     const [selectedFiles, setSelectedFiles] = useState<MediaFile[]>([]);
     const [isDragging, setDragging] =  useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -183,14 +183,14 @@ export function MediaUploader({onFilesSelected, existingFiles = [],maxSize = 10,
       )}
 
       <FileGrid
-        title="Fichiers existants"
+        title={t("existingFiles")}
         files={existingFilesForGrid}
         isUploadAlready={true}
         onCaptionChange={handleCaptionChange}
       />
 
       <FileGrid
-        title="Nouveaux fichiers"
+        title={t("newFiles")}
         files={newFilesForGrid}
         onRemove={removeFile}
         onClearAll={clearAll}

@@ -10,7 +10,6 @@ import { useRouter } from "next/navigation";
 import SelectAdvisorsModal from "./SelectAdvisorsModal";
 import { getTimeAgo } from "@/lib/utils/chatUtils";
 import { UserChat } from "@/types/chat/userChat";
-import { notifyClientAssigned } from "@/lib/utils/notificationUtils";
 import { useTranslations } from "next-intl";
 
 export default function AdvisorConversationsDashboard() {
@@ -182,7 +181,13 @@ export default function AdvisorConversationsDashboard() {
             <p className="text-gray-600 font-medium">{search ? t("searchEmpty") : t("assignedEmpty")}</p>
           </div>
         ) : (
-          <div className="grid gap-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <div
+          className={`grid gap-5 ${
+            viewMode === "cards"
+              ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+              : "grid-cols-1"
+          }`}
+        >
             {filteredAssigned.map(conv => (
               <div key={conv.id} className="bg-white rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-200">
                 <div className="p-6">

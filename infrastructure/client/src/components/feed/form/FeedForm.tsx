@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import { AlertCircle, X } from "lucide-react";
 import { useNewsMutation } from "@/hooks/useNews";
 import { getErrorMessage } from "@/lib/utils/error";
-import { useMediaMutations } from "@/hooks/useMedia";
+import { useMediaMutations, useMediaByNewsId } from "@/hooks/useMedia";
 import { useContentMutations } from "@/hooks/useContent";
 import { FeedFormFields } from "./FeedFormFields";
 import { BlockEditor } from "../blocks/BlockEditor";
@@ -35,6 +35,8 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
   const { createNews, updateNews } = useNewsMutation();
   const { uploadMedia, updateMedia } = useMediaMutations();
   const { createContent, updateContent } = useContentMutations();
+
+  const { data: freshMedias } = useMediaByNewsId(newsId || '');
 
   const isEditMode = !!newsId;
 
@@ -184,7 +186,14 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
           }
 
           if (block.existingMedias && block.existingMedias.length > 0) {
-            for (const media of block.existingMedias) {
+            const mediasToUpdate = freshMedias?.filter(m =>
+              block.existingMedias?.some(em => em.id === m.id)
+            ) ?? block.existingMedias;
+
+
+            for (const media of mediasToUpdate) {
+              console.log(`🔄 Updating media ${media.id} - caption: "${media.caption || '(empty)'}"`);
+
               const updatedMedia = await updateMedia.mutateAsync({
                 media: {
                   ...media,
@@ -196,7 +205,7 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
               if (updatedMedia.error) {
                 console.error(` Erreur update media ${media.id}:`, updatedMedia.error);
               } else {
-                console.log(`Media ${media.id} ordre mis à jour`);
+                console.log(`✅ Media ${media.id} ordre mis à jour avec caption: "${media.caption || '(empty)'}"`);
               }
             }
           }

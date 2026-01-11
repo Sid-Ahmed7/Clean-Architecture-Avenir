@@ -14,7 +14,7 @@ interface FileGridProps {
 }
 
 export function FileGrid({title,files,onRemove,onClearAll,isUploadAlready,onCaptionChange}: FileGridProps) {
-  const t = useTranslations('components.media.fileGrid');
+  const t = useTranslations('feed.list.media.fileGrid');
   if (files.length === 0) {
     return null;
   }

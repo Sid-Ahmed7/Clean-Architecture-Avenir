@@ -361,7 +361,9 @@
         "status": "Statut",
         "viewProfile": "Voir le profil",
         "reject": "Rejeter",
-        "approve": "Approuver"
+        "approve": "Approuver",
+        "loading": "Chargement...",
+        "noPendingRequests": "Aucune demande en attente"
       }
     },
     "rib": {
@@ -1514,7 +1516,8 @@
         "deleteBlock": "Supprimer ce bloc",
         "editBlock": "Modifier le bloc",
         "addMedia": "Ajouter un média",
-        "addText": "Ajouter du texte"
+        "addText": "Ajouter du texte",
+        "textPlaceholder": "Votre texte ici..."
       },
       "toolbar": {
         "addBlock": "Ajouter un bloc :",
@@ -1891,96 +1894,6 @@
       "confirmDelete": "Êtes-vous sûr de vouloir supprimer {symbol} ?"
     }
   },
-  "bankAccount": {
-    "transactionHistory": {
-      "noTransactions": "Aucune transaction pour le moment.",
-      "reference": "Ref",
-      "unknownUser": "Utilisateur inconnu",
-      "sender": "Émetteur",
-      "recipient": "Destinataire"
-    },
-    "summaryCard": {
-      "totalBalance": "Solde total de vos comptes"
-    },
-    "subAccountForm": {
-      "title": "Ajouter un sous-compte",
-      "accountNameLabel": "Nom du compte *",
-      "accountNamePlaceholder": "Nom du sous-compte",
-      "accountTypeLabel": "Type de compte *",
-      "currencyLabel": "Devise *",
-      "creating": "Création...",
-      "createButton": "Créer le sous-compte",
-      "success": "Sous-compte créé avec succès !",
-      "accountTypes": {
-        "savings": "Épargne"
-      }
-    },
-    "quickTransfer": {
-      "title": "Transferts rapides",
-      "subtitle": "Réeffectuer un transfert en un clic",
-      "noTransactions": "Aucune transaction récente disponible",
-      "unknownUser": "Utilisateur inconnu",
-      "unknownAccount": "Compte inconnu",
-      "account": "Compte",
-      "repeatButton": "Répéter",
-      "confirmTitle": "Confirmer le transfert rapide",
-      "amountLabel": "Montant",
-      "toLabel": "Vers:",
-      "originalTransaction": "Transaction originale du",
-      "processing": "En cours...",
-      "confirmButton": "Confirmer",
-      "cancelButton": "Annuler"
-    },
-    "overdraftRequests": {
-      "title": "Demandes de découvert",
-      "requestsCount": "demandes",
-      "loading": "Chargement...",
-      "noPendingRequests": "Aucune demande en attente.",
-      "account": "Compte",
-      "current": "Actuel",
-      "requested": "Demande",
-      "client": "Client",
-      "status": "Statut",
-      "viewProfile": "Voir profil client",
-      "loadingProfile": "Chargement...",
-      "reject": "Refuser",
-      "approve": "Approuver",
-      "close": "Fermer",
-      "loadingDetails": "Chargement du profil...",
-      "phoneNA": "N/A",
-      "accounts": "Comptes",
-      "loanRequests": "Demandes de crédit",
-      "noLoanRequests": "Aucune demande",
-      "overdraftRequestLabel": "Demande de découvert",
-      "purpose": "Motif"
-    },
-    "mainAccountCard": {
-      "mainLabel": "Principal",
-      "availableBalance": "Solde disponible",
-      "accountNumber": "Numéro de compte",
-      "ribMessage": "Récupère ton RIB pour partager tes coordonnées bancaires.",
-      "downloadRib": "Télécharger mon RIB",
-      "generatingRib": "Génération...",
-      "limits": "Limites",
-      "overdraftRequest": "Demande de découvert",
-      "currentOverdraft": "Actuel",
-      "increaseTransferLimit": "Augmenter limite de virement",
-      "currentLimit": "Actuelle",
-      "overdraftModalTitle": "Demander une augmentation de découvert",
-      "overdraftModalSubtitle": "Découvert actuel :",
-      "overdraftSuccess": "Demande envoyée à votre conseiller.",
-      "requestButton": "Demander",
-      "sending": "Envoi...",
-      "transferModalTitle": "Augmenter la limite de virement",
-      "transferModalSubtitle": "Limite actuelle :",
-      "transferSuccess": "Limite mise à jour.",
-      "updating": "Mise à jour...",
-      "increaseButton": "Augmenter"
-    },
-    "accountList": {
-      "noAccounts": "Aucun autre compte disponible"
-    }
-  },
   "loan": {
     "form": {
       "clientLabel": "Client",
@@ -2141,7 +2054,10 @@
     },
     "uploader": {
       "errorNotMedia": "{fileName} n'est pas une image ou une vidéo",
-      "errorMaxSize": "{fileName} dépasse la taille maximale de {maxSize}MB"
+      "errorMaxSize": "{fileName} dépasse la taille maximale de {maxSize}MB",
+      "existingFiles": "Fichiers existants",
+      "newFiles": "Nouveaux fichiers",
+      "totalFiles": "Total : {{count}} fichier{{count > 1 ? 's' : ''}}"
     },
     "filePreview": {
       "video": "Vidéo",

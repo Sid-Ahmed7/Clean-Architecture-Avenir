@@ -21,7 +21,7 @@ interface FeedFormFieldsProps {
 
 
 export function FeedFormFields({register,control,errors,existingMedia,disabled,isSubmitting,isEditMode}: FeedFormFieldsProps) {
-  const t = useTranslations('components.feed.form.fields');
+  const t = useTranslations('feed.form.fields');
   const router = useRouter();
 
   return (

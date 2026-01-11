@@ -10,12 +10,7 @@ interface RoleBasedAccessProps {
   fallback?: ReactNode;
 }
 
-/**
- * Component that conditionally renders content based on user roles
- * @param allowedRoles - Array of roles that are allowed to access the content
- * @param children - Content to render if user has the required role
- * @param fallback - Optional content to render if user doesn't have the required role
- */
+
 export const RoleBasedAccess = ({
   allowedRoles,
   children,

@@ -11,12 +11,7 @@ interface WithRoleProtectionProps {
   fallbackComponent?: ReactNode;
 }
 
-/**
- * Higher-order component that protects a page based on user roles
- * @param Component - The component to protect
- * @param options - Configuration options
- * @returns A protected component that checks user roles before rendering
- */
+
 export const withRoleProtection = <P extends object>(
   Component: ComponentType<P>,
   { allowedRoles, redirectPath = "/", fallbackComponent }: WithRoleProtectionProps
