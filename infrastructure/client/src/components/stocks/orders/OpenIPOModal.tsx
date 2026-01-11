@@ -27,23 +27,23 @@ export function OpenIPOModal({isOpen,onClose,stockSymbol,stockName,totalShares,o
     e.preventDefault();
 
     if (sharesToMakeAvailable <= 0) {
-      alert(t('errorMinShares'));
+      addNotification(NotificationEnum.ACTION, t('errorMinShares'));
       return;
     }
 
     if (sharesToMakeAvailable > totalShares) {
-      alert(t('errorMaxShares', { max: totalShares }));
+      addNotification(NotificationEnum.ACTION, t('errorMaxShares', { max: totalShares }));
       return;
     }
 
     try {
       setIsLoading(true);
       await onConfirm(sharesToMakeAvailable, ipoType);
-      alert(t('success', { symbol: stockSymbol }));
+      addNotification(NotificationEnum.INFO, t('success', { symbol: stockSymbol }));
       onClose();
     } catch (error) {
         const message = getErrorMessage(error as Error, t('error'));
-        alert(message);
+        addNotification(NotificationEnum.ALERT, message);
     } finally {
       setIsLoading(false);
     }

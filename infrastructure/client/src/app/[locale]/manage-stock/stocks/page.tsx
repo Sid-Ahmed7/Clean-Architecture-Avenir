@@ -11,6 +11,8 @@ import { EditStockForm } from "@/components/stocks/forms/EditStockForm";
 import { OpenIPOModal } from "@/components/stocks/orders/OpenIPOModal";
 import { useOpenIPO, useCloseIPO } from "@/hooks/useIPO";
 import { BarChart3, Building2, ClipboardList, Factory, Plus, ShieldCheck } from "lucide-react";
+import { useNotification } from "@/hooks/useNotifications";
+import { NotificationEnum } from "@/types/Notification";
 
 export default function ManageStocksPage() {
   const { data: stocksData, isLoading } = useStocks();
@@ -19,6 +21,7 @@ export default function ManageStocksPage() {
   const updateStockMutation = useUpdateStock();
   const openIPOMutation = useOpenIPO();
   const closeIPOMutation = useCloseIPO();
+  const { addNotification } = useNotification();
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [editingStock, setEditingStock] = useState<Stocks | null>(null);
@@ -33,18 +36,18 @@ export default function ManageStocksPage() {
   const handleDelete = async (stockId: string) => {
     try {
       await deleteStockMutation.mutateAsync(stockId);
+      await addNotification(NotificationEnum.SYSTEM, "Action supprimée avec succès");
     } catch (err) {
-      console.error("Failed to delete stock:", err);
-      alert("Erreur lors de la suppression");
+      await addNotification(NotificationEnum.ALERT, "Erreur lors de la suppression de l'action");
     }
   };
 
   const handleToggleAvailability = async (stockId: string, isAvailable: boolean) => {
     try {
       await toggleAvailabilityMutation.mutateAsync({ id: stockId, data: { isActionAvailable: isAvailable } });
+      await addNotification(NotificationEnum.SYSTEM, `Action ${isAvailable ? 'activée' : 'désactivée'} avec succès`);
     } catch (err) {
-      console.error("Failed to toggle availability:", err);
-      alert("Erreur lors du changement de disponibilité");
+      await addNotification(NotificationEnum.ALERT, "Erreur lors du changement de disponibilité");
     }
   };
 
@@ -53,12 +56,17 @@ export default function ManageStocksPage() {
   };
 
 const handleUpdateStock = async (data: { id: string; companyName: string; name: string; currency: string; isActionAvailable: boolean }) => {
-  const updatedStock = {
-    ...editingStock,
-    ...data
-  };
-  await updateStockMutation.mutateAsync(updatedStock);
-  setEditingStock(null);
+  try {
+    const updatedStock = {
+      ...editingStock,
+      ...data
+    };
+    await updateStockMutation.mutateAsync(updatedStock);
+    setEditingStock(null);
+    await addNotification(NotificationEnum.SYSTEM, "Action mise à jour avec succès");
+  } catch (err) {
+    await addNotification(NotificationEnum.ALERT, "Erreur lors de la mise à jour de l'action");
+  }
 };
 
   const handleOpenIPO = (stock: Stocks) => {
@@ -75,8 +83,9 @@ const handleUpdateStock = async (data: { id: string; companyName: string; name: 
         ipoType: ipoType
       });
       setOpeningIPOStock(null);
+      await addNotification(NotificationEnum.SYSTEM, `IPO ${ipoType === 'INITIAL' ? 'initiale' : 'secondaire'} ouverte avec succès`);
     } catch (error) {
-      throw error;
+      await addNotification(NotificationEnum.ALERT, "Erreur lors de l'ouverture de l'IPO");
     }
   };
 
@@ -87,12 +96,18 @@ const handleUpdateStock = async (data: { id: string; companyName: string; name: 
 
     try {
       await closeIPOMutation.mutateAsync(symbol);
+      await addNotification(NotificationEnum.SYSTEM, "IPO fermée avec succès");
     } catch (err) {
-      console.error("Failed to close IPO:", err);
-      alert("Erreur lors de la fermeture de l'IPO");
+      await addNotification(NotificationEnum.ALERT, "Erreur lors de la fermeture de l'IPO");
     }
   };
 
+  const stats = useMemo(() => {
+    const total = stocks?.length ?? 0;
+    const available = stocks?.filter((s) => s.isActionAvailable).length ?? 0;
+    const ipo = stocks?.filter((s) => s.availableSharesForIPO && s.availableSharesForIPO > 0).length ?? 0;
+    return { total, available, ipo };
+  }, [stocks]);
 
   if (isLoading) {
     return (
@@ -114,13 +129,6 @@ const handleUpdateStock = async (data: { id: string; companyName: string; name: 
       </div>
     );
   }
-
-  const stats = useMemo(() => {
-    const total = stocks?.length ?? 0;
-    const available = stocks?.filter((s) => s.isActionAvailable).length ?? 0;
-    const ipo = stocks?.filter((s) => s.availableSharesForIPO && s.availableSharesForIPO > 0).length ?? 0;
-    return { total, available, ipo };
-  }, [stocks]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 p-6">

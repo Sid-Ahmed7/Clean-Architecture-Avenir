@@ -45,6 +45,5 @@ export class EventSubscriberService {
       await handler.handler(eventData);
     });
 
-    console.log("Subscribed to UserConfirmedEvent");
   }
 }

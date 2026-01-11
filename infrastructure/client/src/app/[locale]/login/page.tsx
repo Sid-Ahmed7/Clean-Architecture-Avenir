@@ -54,7 +54,6 @@ export default function LoginPage() {
 
         const rolePrefix = rolePrefixMap[userRole] || 'client';
 
-        // Redirect to role-specific dashboard
         router.push(`/${rolePrefix}/dashboard`);
       } else if (res.status === 401) {
         setMessage(t("messages.login.invalid"));
@@ -62,7 +61,6 @@ export default function LoginPage() {
         setMessage(t("messages.login.failure"));
       }
     } catch (error: any) {
-      console.error("Login error:", error);
       if (error.response?.status === 401) {
         setMessage(t("auth.login.errors.invalidCredentials"));
       } else if (error.response?.status === 404) {

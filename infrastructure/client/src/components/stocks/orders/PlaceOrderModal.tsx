@@ -5,6 +5,8 @@ import { OrderTypeEnum } from "@/types/createOrder";
 import { useState } from "react";
 import { useTranslations } from 'next-intl';
 import { ArrowLeft, ArrowRightLeft, DollarSign, Loader2, X } from "lucide-react";
+import { useNotification } from "@/hooks/useNotifications";
+import { NotificationEnum } from "@/types/Notification";
 
 interface PlaceOrderModalProps {
   isOpen: boolean;
@@ -17,9 +19,10 @@ interface PlaceOrderModalProps {
 
 export function PlaceOrderModal({isOpen,onClose,stockSymbol,stockName,currentPrice,orderType,}: PlaceOrderModalProps) {
   const t = useTranslations('stocks.orders.placeOrder');
+  const { addNotification } = useNotification();
   const placeOrderMutation = usePlaceOrder();
   const matchOrdersMutation = useMatchOrders();
-  
+
   const [quantity, setQuantity] = useState(1);
   const [orderPrice, setOrderPrice] = useState(currentPrice);
   const [status, setStatus] = useState<'idle' | 'placing' | 'matching' | 'success'>('idle');
@@ -56,9 +59,8 @@ export function PlaceOrderModal({isOpen,onClose,stockSymbol,stockName,currentPri
       }, 1500);
 
     } catch (error) {
-      console.error("Error placing order:", error);
       setStatus('idle');
-      alert(t('error'));
+      addNotification(NotificationEnum.ALERT, t('error'));
     }
   };
 

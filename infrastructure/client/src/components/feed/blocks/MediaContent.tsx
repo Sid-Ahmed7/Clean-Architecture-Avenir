@@ -32,7 +32,6 @@ export function MediaContent({files, existingMedias = [], newsId, onChange, disa
       const handleCaptionUpdate = (mediaId: string, caption: string) => {
         const mediaToUpdate = mediasToDisplay.find(m => m.id === mediaId);
         if (mediaToUpdate) {
-            console.log("🔄 Mise à jour du caption:", { mediaId, oldCaption: mediaToUpdate.caption, newCaption: caption, fullMedia: { ...mediaToUpdate, caption } });
             updateMedia.mutate({
                 media: { ...mediaToUpdate, caption },
                 newsId

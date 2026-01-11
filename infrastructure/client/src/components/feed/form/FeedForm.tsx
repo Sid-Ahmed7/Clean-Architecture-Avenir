@@ -126,11 +126,6 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
       for (const block of blocks) {
         if (block.type === TypeBlock.TEXT) {
           if (block.id.startsWith("temp-")) {
-            console.log(`Création content:`, {
-              newsId: targetNewsId,
-              content: block.content.substring(0, 50) + "...",
-              order: block.order
-            });
 
             const contentResult = await createContent.mutateAsync({
               newsId: targetNewsId,
@@ -138,15 +133,13 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
               order: block.order
             });
 
-            if (contentResult.error) {
-              setError("root.serverError", {
-                type: "manual",
-                message: `Erreur bloc texte ${block.order + 1}: ${contentResult.error}`,
-              });
-              return;
-            } else {
-              console.log(`Content créé avec order ${block.order}`);
-            }
+              if (contentResult.error) {
+                setError("root.serverError", {
+                  type: "manual",
+                  message: `Erreur bloc texte ${block.order + 1}: ${contentResult.error}`,
+                });
+                return;
+              } 
           } else {
             const updatedContent = await updateContent.mutateAsync({
               id: block.id,
@@ -154,19 +147,11 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
               content: block.content,
               order: block.order
             });
-
-            if (updatedContent.error) {
-              console.error(`Erreur update content ${block.id}:`, updatedContent.error);
-            } else {
-              console.log(`Content ${block.id} mis à jour`);
-            }
           }
         }
 
         if (block.type === TypeBlock.MEDIA) {
           if (block.files && block.files.length > 0) {
-            console.log(`Upload de ${block.files.length} fichier(s) pour le bloc ${block.id}`);
-
             for (const file of block.files) {
               const mediaResult = await uploadMedia.mutateAsync({
                 file,
@@ -174,14 +159,11 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
               });
 
               if (mediaResult.error) {
-                console.error(`Erreur upload:`, mediaResult.error);
                 setError("root.serverError", {
                   type: "manual",
                   message: `Erreur upload média: ${mediaResult.error}`,
                 });
-              } else {
-                console.log(`Média uploadé:`, mediaResult.data);
-              }
+              } 
             }
           }
 
@@ -192,7 +174,6 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
 
 
             for (const media of mediasToUpdate) {
-              console.log(`🔄 Updating media ${media.id} - caption: "${media.caption || '(empty)'}"`);
 
               const updatedMedia = await updateMedia.mutateAsync({
                 media: {
@@ -201,12 +182,6 @@ export function FeedForm({ newsId, initialValues, initialBlocks }: FeedFormProps
                 },
                 newsId: targetNewsId
               });
-
-              if (updatedMedia.error) {
-                console.error(` Erreur update media ${media.id}:`, updatedMedia.error);
-              } else {
-                console.log(`✅ Media ${media.id} ordre mis à jour avec caption: "${media.caption || '(empty)'}"`);
-              }
             }
           }
         }

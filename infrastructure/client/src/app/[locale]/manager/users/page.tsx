@@ -8,9 +8,12 @@ import { Input } from "@/components/ui/Input";
 import { Users, UserCheck, Briefcase, Trash2, Edit, X } from "lucide-react";
 import { User } from "@/types/user";
 import { useTranslations } from "next-intl";
+import { useNotification } from "@/hooks/useNotifications";
+import { NotificationEnum } from "@/types/Notification";
 
 export default function UsersManagementPage() {
     const t = useTranslations("manager.users");
+    const { addNotification } = useNotification();
     const { user } = useContext(AuthContext);
     const [users, setUsers] = useState<User[]>([]);
     const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
@@ -103,12 +106,10 @@ export default function UsersManagementPage() {
                 throw new Error("Failed to update user");
             }
 
-            console.log("User updated successfully");
             closeEditModal();
             fetchUsers();
         } catch (error) {
-            console.error("Failed to update user:", error);
-            alert("Erreur lors de la mise à jour de l'utilisateur");
+            addNotification(NotificationEnum.ALERT, "Erreur lors de la mise à jour de l'utilisateur");
         }
     };
 
@@ -127,7 +128,6 @@ export default function UsersManagementPage() {
                 throw new Error("Failed to delete user");
             }
 
-            console.log("User deleted successfully");
             fetchUsers();
         } catch (error) {
             console.error("Failed to delete user:", error);

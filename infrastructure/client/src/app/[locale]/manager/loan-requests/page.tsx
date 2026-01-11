@@ -42,7 +42,6 @@ function DirectorLoanRequestsPage() {
         setIndicativeRateState(rate);
       })
       .catch((err) => {
-        console.error("Failed to load loan requests:", err);
         setError(err.response?.data?.error || "Impossible de charger les demandes");
       })
       .finally(() => setLoading(false));
@@ -66,7 +65,6 @@ function DirectorLoanRequestsPage() {
         );
       })
       .catch((err) => {
-        console.error("Rate proposal error:", err);
         setError(err.response?.data?.error || "Impossible d'enregistrer le taux");
       })
       .finally(() => setSubmitting(null));
@@ -81,7 +79,6 @@ function DirectorLoanRequestsPage() {
         );
       })
       .catch((err) => {
-        console.error("Decision error:", err);
         setError(err.response?.data?.error || "Impossible d'enregistrer la décision");
       })
       .finally(() => setSubmitting(null));
@@ -100,7 +97,6 @@ function DirectorLoanRequestsPage() {
         setProfileClientId(clientId);
       })
       .catch((err) => {
-        console.error("Failed to load client info:", err);
         setError(err.response?.data?.error || "Impossible de charger le profil client");
       });
   };
@@ -113,7 +109,6 @@ function DirectorLoanRequestsPage() {
     setSavingRate(true);
     setIndicativeRate(indicativeRate)
       .catch((err) => {
-        console.error("Indicative rate error:", err);
         setError(err.response?.data?.error || "Impossible d'enregistrer le taux indicatif");
       })
       .finally(() => setSavingRate(false));

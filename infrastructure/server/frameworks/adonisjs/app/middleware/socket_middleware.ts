@@ -27,7 +27,7 @@ export default class SocketMiddleware {
               token = parsed.message
             }
           } catch (err) {
-            console.log('Decoding error:', err)
+              return next(new Error('Decoding error', { cause: err }))
           }
         }
       }

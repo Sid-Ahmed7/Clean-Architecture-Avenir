@@ -9,7 +9,7 @@ export const notifyClientAssigned = async (clientId: string, advisorName?: strin
     try {
         await sendNotificationToClient(
             clientId,
-            t('notifications.clientAssigned', { advisorName }),
+            t('notifications.clientAssigned', { advisorName: advisorName ?? "BA" }),
             NotificationEnum.ACTION,
             senderId
         );

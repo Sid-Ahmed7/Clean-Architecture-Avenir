@@ -61,7 +61,6 @@ export const socketSetup = (server: Server) => {
       return socket.disconnect();
     }
 
-    console.log(`Serveur: Client connecté - ${user.userId} (${socket.id})`);
 
     socket.on("identification", async (data: Identification, callback?: (res: { success?: boolean; error?: string }) => void) => {
       try {
@@ -70,14 +69,12 @@ export const socketSetup = (server: Server) => {
         onlineUsers[data.userId] = { isOnline: true, role };
         broadCastToAll(data.userId, true, role);
 
-        console.log(`Identification réussie pour client - ${data.userId}, role: ${role}`);
         
         const clientConversation = await conversationRepository.findByClientId(data.userId);
         if (Array.isArray(clientConversation)) {
           clientConversation.forEach((conv) => {
             const roomName = `conversation_${conv.id}`;
             socket.join(roomName);
-            console.log(`Client ${data.userId} rejoint ${roomName}`);
             socket.emit("conversationAssigned", conv);
             
             if (conv.advisorId && clients[conv.advisorId]) {
@@ -104,7 +101,6 @@ export const socketSetup = (server: Server) => {
       if (conversationId != null) {
         const roomName = `conversation_${conversationId}`;
         socket.join(roomName);
-        console.log(`Client ${user.userId} rejoint ${roomName}`);
       }
     });
 
@@ -115,7 +111,6 @@ export const socketSetup = (server: Server) => {
         const message = await sendMessageUseCase.execute(data.userId, data.role, data.conversationId, data.content);
         
         if (!(message instanceof MessageEntity)) {
-          console.error("Serveur: Message non créé");
           return;
         }
 
@@ -142,7 +137,6 @@ export const socketSetup = (server: Server) => {
           userData.isOnline = false;
         } 
         broadCastToAll(user.userId, false);
-        console.log(`Client déconnecté - ${user.userId}`);
       }
     });
   });
@@ -159,7 +153,6 @@ export const socketSetup = (server: Server) => {
         clients[data.userId] = [...(clients[data.userId] ?? []), socket.id];
         onlineUsers[data.userId] = { isOnline: true, role };
         broadCastToAll(data.userId, true, role);
-        console.log(`Identification réussie pour conseiller - ${data.userId}, role: ${role}`);
 
         const allConversations = await conversationRepository.findAll();
         const pending = allConversations.filter((c) => !c.advisorId);
@@ -169,12 +162,10 @@ export const socketSetup = (server: Server) => {
         assignedConversations.forEach((conversation) => {
           const roomName = `conversation_${conversation.id}`;
           socket.join(roomName);
-          console.log(`Conseiller ${data.userId} rejoint ${roomName}`);
           socket.emit("conversationAssigned", conversation);
         });
         callback?.({ success: true });
       } catch (err) {
-        console.error("Erreur identification conseiller -", err);
         callback?.({ error: err instanceof Error ? err.message : "Unknown error" });
       }
     });
@@ -183,7 +174,6 @@ export const socketSetup = (server: Server) => {
       try {
         const conversation = await conversationRepository.findByConversationId(data.conversationId);
         if(conversation instanceof Error){
-          console.error("Erreur récupération conversation:", conversation);
           return;
         }
 
@@ -200,7 +190,6 @@ export const socketSetup = (server: Server) => {
 
           const roomName = `conversation_${data.conversationId}`;
           socket.join(roomName);
-          console.log(`Conseiller ${data.userId} auto-assigné et rejoint ${roomName}`);
           
           advisorIo.emit("removePendingConversation", { conversationId: data.conversationId });
 
@@ -223,7 +212,6 @@ export const socketSetup = (server: Server) => {
         const message = await sendMessageUseCase.execute(data.userId, data.role, data.conversationId, data.content);
 
         if (!(message instanceof MessageEntity)) {
-          console.error("Message non créé par SendMessageUseCase");
           return;
         }
 
@@ -248,7 +236,6 @@ export const socketSetup = (server: Server) => {
         const userData = onlineUsers[user.userId];
         if (userData) userData.isOnline = false;
         broadCastToAll(user.userId, false);
-        console.log(`Conseiller déconnecté - ${user.userId}`);
       }
     });
   });
@@ -265,10 +252,8 @@ export const socketSetup = (server: Server) => {
       try {
         clients[`${data.userId}_system`] = [...(clients[`${data.userId}_system`] ?? []), socket.id];
         
-        console.log(`Socket system identifié - ${data.userId}`);
         callback?.({ success: true });
       } catch (err) {
-        console.error("Erreur identification system -", err);
         callback?.({ error: err instanceof Error ? err.message : "Unknown error" });
       }
     });
@@ -277,7 +262,6 @@ export const socketSetup = (server: Server) => {
       if (conversationId != null) {
         const roomName = `conversation_${conversationId}`;
         socket.join(roomName);
-        console.log(`System socket rejoint ${roomName}`);
       }
     });
 
@@ -323,7 +307,6 @@ export const socketSetup = (server: Server) => {
 
     socket.on("disconnect", () => {
       clients[`${user.userId}_system`] = (clients[`${user.userId}_system`] ?? []).filter((id) => id !== socket.id);
-      console.log(`Socket system déconnecté - ${user.userId}`);
     });
     
   });

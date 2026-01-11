@@ -67,11 +67,8 @@ export default function SavingsAccountsOverviewPage() {
                 alert(error.error || t("errors.deleteError"));
                 return;
             }
-
-            console.log("Compte épargne supprimé avec succès");
-            fetchSavingsAccounts(); // Rafraîchir la liste
+            fetchSavingsAccounts(); 
         } catch (error) {
-            console.error("Failed to delete savings account:", error);
             alert(t("errors.deleteFailed"));
         }
     };

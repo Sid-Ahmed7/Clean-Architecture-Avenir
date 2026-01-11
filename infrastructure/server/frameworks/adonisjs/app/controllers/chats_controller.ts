@@ -177,8 +177,7 @@ export default class ChatsController {
   }
 
   async getConversationMessages({ params, response, auth }: HttpContext) {
-    console.log(' getConversationMessages called with conversationId:', params.conversationId);
-    console.log(' Auth user:', auth?.userId, 'Role:', auth?.roles);
+  
 
     const getConversationMessagesUseCase = new GetConversationMessagesUseCase(
       this.conversationRepository,
@@ -190,16 +189,13 @@ export default class ChatsController {
     const role = auth?.roles?.[0];
 
     if (!userId || !role) {
-      console.log(' Unauthorized: no userId or role');
       return response.status(401).json({ error: "Unauthorized access" });
     }
 
     if (!conversationId) {
-      console.log(' No conversationId');
       return response.status(404).json({ error: "conversation not found" });
     }
 
-    console.log('Executing usecase for conversation:', conversationId);
     const result = await getConversationMessagesUseCase.execute(conversationId);
 
     if (result instanceof MessageNotFoundError) {

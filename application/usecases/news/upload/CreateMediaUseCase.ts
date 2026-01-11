@@ -47,7 +47,6 @@ export class CreateMediaUseCase {
 
         const savedMedia = await this.mediaRepository.create(mediaEntity);
         if (savedMedia instanceof Error) {
-            console.error(" Save error:", savedMedia.message);
             return savedMedia;
         }
 

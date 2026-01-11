@@ -38,7 +38,6 @@ export default function CreateAdvisorPage() {
                 setMessage(t("manager.createAdvisor.messages.error"));
             }
         } catch (error: any) {
-            console.error("Error creating advisor:", error);
             setMessage(error.response?.data?.error || t("manager.createAdvisor.messages.networkError"));
         }
     };

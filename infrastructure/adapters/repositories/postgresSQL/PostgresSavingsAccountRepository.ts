@@ -11,20 +11,6 @@ export class PostgresSavingsAccountRepository implements SavingsAccountRepositor
 
     public async createSavingsAccount(savingsAccount: SavingsAccountsEntity): Promise<SavingsAccountsEntity | InvalidAccountError> {
         try {
-            console.log(' [PostgresSavingsAccountRepository] Inserting savings account:', {
-                accountNumber: savingsAccount.accountNumber,
-                productId: savingsAccount.productId,
-                userId: savingsAccount.userId,
-                interestRate: savingsAccount.interestRate,
-                maxDepositAmount: savingsAccount.maxDepositAmount,
-                totalInterestEarned: savingsAccount.totalInterestEarned,
-                isActive: savingsAccount.isActive,
-                balance: savingsAccount.balance,
-                lastBalanceUpdate: savingsAccount.lastBalanceUpdate,
-                lastInterestApplied: savingsAccount.lastInterestApplied,
-                maturity: savingsAccount.maturity
-            });
-
             const result = await pgPool.query<PostgresSavingsAccountRow>(
                 `INSERT INTO savings_accounts (
                     account_number, product_id, user_id, interest_rate, max_deposit_amount,
@@ -50,11 +36,9 @@ export class PostgresSavingsAccountRepository implements SavingsAccountRepositor
             const row = result.rows[0];
 
             if (!row) {
-                console.log(' [PostgresSavingsAccountRepository] No row returned after insert');
                 return new InvalidAccountError('Failed to create savings account');
             }
 
-            console.log('[PostgresSavingsAccountRepository] Savings account inserted successfully');
             const created = this.mapRowToEntity(row);
             if (created instanceof Error) {
                 return new InvalidAccountError(`Failed to map savings account: ${created.message}`);
@@ -62,8 +46,6 @@ export class PostgresSavingsAccountRepository implements SavingsAccountRepositor
 
             return created;
         } catch (error: any) {
-            console.log(' [PostgresSavingsAccountRepository] Database error:', error.message);
-            console.log('Error details:', error);
             return new InvalidAccountError(`Failed to create savings account: ${error.message}`);
         }
     }

@@ -21,7 +21,6 @@ export default function ClientConversationList() {
     try {
       const clientConversations = await getClientConversation();
       setConversations(clientConversations);
-      console.log(clientConversations)
     } catch (err) {
         setError(t("errorFetch"));
     }

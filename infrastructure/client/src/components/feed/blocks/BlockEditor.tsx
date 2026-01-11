@@ -33,7 +33,6 @@ export function BlockEditor({ newsId, onChange, initialBlocks, disabled, error }
 
     if (initialBlocks && initialBlocks.length > 0) {
       const ordered = [...initialBlocks].sort((a, b) => a.order - b.order);
-      console.log("BlockEditor: Mise à jour des blocs", ordered);
       setBlocks(ordered);
     } else if (previousBlocksRef.current === '') {
       setBlocks([
@@ -59,7 +58,6 @@ export function BlockEditor({ newsId, onChange, initialBlocks, disabled, error }
       ...(type === TypeBlock.TEXT ? { content: "" } : { files: [], existingMedias: [] })
     } as Block
 
-    console.log(" Nouveau block créé:", newBlock);
 
     setBlocks([...blocks, newBlock]);
   }

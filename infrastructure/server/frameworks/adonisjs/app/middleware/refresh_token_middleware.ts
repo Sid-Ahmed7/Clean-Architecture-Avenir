@@ -35,14 +35,6 @@ export default class RefreshTokenMiddleware {
           }
           return ctx.response.unauthorized({ message: 'Invalid token' })
         }
-    /**
-     * Middleware logic goes here (before the next call)
-     */
-    console.log(ctx)
-
-    /**
-     * Call next method in the pipeline and return its output
-     */
     const output = await next()
     return output
   }

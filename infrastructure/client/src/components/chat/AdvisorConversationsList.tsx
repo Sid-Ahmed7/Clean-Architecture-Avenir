@@ -11,10 +11,13 @@ import SelectAdvisorsModal from "./SelectAdvisorsModal";
 import { getTimeAgo } from "@/lib/utils/chatUtils";
 import { UserChat } from "@/types/chat/userChat";
 import { useTranslations } from "next-intl";
+import { useNotification } from "@/hooks/useNotifications";
+import { NotificationEnum } from "@/types/Notification";
 
 export default function AdvisorConversationsDashboard() {
   const t = useTranslations("components.chat.advisorConversations");
   const tModal = useTranslations("components.chat.selectAdvisorsModal");
+  const { addNotification } = useNotification();
   const { user } = useContext(AuthContext);
   const { locale } = useContext(LocaleContext);
   const router = useRouter();
@@ -36,14 +39,14 @@ export default function AdvisorConversationsDashboard() {
     try {
       await transferConversation(id, newAdvisorId);
       setAssignedConversations(prev => prev.filter(c => c.id !== id));
-      alert(tModal("transferSuccess"));
+      addNotification(NotificationEnum.INFO, tModal("transferSuccess"));
     } catch {
-      alert(tModal("transferError"));
+      addNotification(NotificationEnum.ALERT, tModal("transferError"));
     } finally {
       setModalOpen(false);
       setSelectedConversationId(null);
     }
-  }, [tModal]);
+  }, [tModal, addNotification]);
 
   useEffect(() => {
     if (!user?.userId) return;

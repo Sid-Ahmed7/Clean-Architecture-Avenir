@@ -8,6 +8,8 @@ import { AccountModel } from "@/lib/validation/bankAccount/accountSchema";
 import { BankTransaction } from "@/types/bankTransaction";
 import { quickTransfer } from "@/lib/api/account";
 import { getErrorMessage } from "@/lib/utils/error";
+import { useNotification } from "@/hooks/useNotifications";
+import { NotificationEnum } from "@/types/Notification";
 
 interface QuickTransferCardProps {
     transactions: BankTransaction[];
@@ -18,8 +20,9 @@ interface QuickTransferCardProps {
 export default function QuickTransferCard({ transactions, accounts, onTransferSuccess }: QuickTransferCardProps) {
     const t = useTranslations("components.bankAccount.quickTransfer");
     const format = useFormatter();
+    const { addNotification } = useNotification();
     const { transfer, loading } = useTransferBetweenAccounts();
-        const [selectedTransaction, setSelectedTransaction] = useState<BankTransaction | null>(null);
+    const [selectedTransaction, setSelectedTransaction] = useState<BankTransaction | null>(null);
     const [amount, setAmount] = useState<string>("");
     const [showConfirm, setShowConfirm] = useState(false);
 
@@ -51,7 +54,7 @@ export default function QuickTransferCard({ transactions, accounts, onTransferSu
             setAmount("");
             onTransferSuccess?.();
         } catch (error) {
-            alert(error instanceof Error ? error.message : t("error"));
+            addNotification(NotificationEnum.ALERT, error instanceof Error ? error.message : t("error"));
         }
     };
 

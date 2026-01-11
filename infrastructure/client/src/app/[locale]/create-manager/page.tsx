@@ -39,7 +39,6 @@ export default function CreateManagerPage() {
         setMessage("Une erreur est survenue lors de la création du gestionnaire.");
       }
     } catch (error: any) {
-      console.error("Error creating manager:", error);
       if (error.response?.status === 403) {
         setMessage("Code secret invalide. Vous n'êtes pas autorisé à créer un gestionnaire.");
       } else {

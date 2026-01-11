@@ -5,6 +5,8 @@ import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from 'next-intl';
 import { getErrorMessage } from "@/lib/utils/error";
+import { useNotification } from "@/hooks/useNotifications";
+import { NotificationEnum } from "@/types/Notification";
 
 interface PurchaseIPOModalProps {
   isOpen: boolean;
@@ -18,6 +20,7 @@ interface PurchaseIPOModalProps {
 export function PurchaseIPOModal({isOpen,onClose,stockSymbol,stockName,ipoPrice,availableShares,}: PurchaseIPOModalProps) {
   const t = useTranslations('stocks.orders.purchaseIPO');
   const tf = (key: string, fallback: string) => t(key, { fallback });
+  const { addNotification } = useNotification();
   const queryClient = useQueryClient();
   const [quantity, setQuantity] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -30,7 +33,7 @@ export function PurchaseIPOModal({isOpen,onClose,stockSymbol,stockName,ipoPrice,
     e.preventDefault();
 
     if (quantity > availableShares) {
-      alert(t('errorMaxShares', { available: availableShares }));
+      addNotification(NotificationEnum.ACTION, t('errorMaxShares', { available: availableShares }));
       return;
     }
 
@@ -41,7 +44,7 @@ export function PurchaseIPOModal({isOpen,onClose,stockSymbol,stockName,ipoPrice,
         quantity,
       });
 
-      alert(result.message);
+      addNotification(NotificationEnum.INFO, result.message);
 
       queryClient.invalidateQueries({ queryKey: ["stocks"] });
       queryClient.invalidateQueries({ queryKey: ["positions"] });
@@ -49,7 +52,7 @@ export function PurchaseIPOModal({isOpen,onClose,stockSymbol,stockName,ipoPrice,
       onClose();
     } catch (error) {
       const message = getErrorMessage(error as Error, t('error'));
-      alert(message);
+      addNotification(NotificationEnum.ALERT, message);
     } finally {
       setIsLoading(false);
     }

@@ -51,20 +51,15 @@ export class SubscribeToSavingsProductUseCase {
         // Generate savings account number by modifying last 2 digits
         // Example: 98159411125 -> 98159411101 (first savings), 98159411102 (second savings)
         const baseNumber = Math.floor(mainAccountNumber / 100); // Remove last 2 digits
-        const suffix = (savingsCount + 1) % 100; // Suffix from 01 to 99
+        const suffix = (savingsCount + 1) % 100; 
         const savingsAccountNumber = baseNumber * 100 + suffix;
 
-        console.log(' [SubscribeToSavingsProductUseCase] Generated savings account number:', savingsAccountNumber);
 
-        // Generate proper IBAN
         const iban = await this.ibanGenerator.generateIban(savingsAccountNumber);
         if (iban instanceof Error) {
-            console.log(' [SubscribeToSavingsProductUseCase] Error generating IBAN:', iban.message);
             return iban;
         }
-        console.log(' [SubscribeToSavingsProductUseCase] Generated IBAN:', iban);
 
-        // Create base account entry in accounts table first
         const baseAccount = AccountEntity.from(
             savingsAccountNumber,
             iban,
@@ -85,46 +80,38 @@ export class SubscribeToSavingsProductUseCase {
         );
 
         if (baseAccount instanceof Error) {
-            console.log(' [SubscribeToSavingsProductUseCase] Error creating base account entity:', baseAccount.message);
             return baseAccount;
         }
 
-        console.log(' [SubscribeToSavingsProductUseCase] Creating base account in accounts table...');
         const createdBaseAccount = await this.accountRepository.createOneAccount(baseAccount);
         if (createdBaseAccount instanceof Error) {
-            console.log(' [SubscribeToSavingsProductUseCase] Error creating base account:', createdBaseAccount.message);
             return createdBaseAccount;
         }
-        console.log(' [SubscribeToSavingsProductUseCase] Base account created successfully');
 
-        // Create savings account linked to product
         const savingsAccount = SavingsAccountsEntity.from(
             savingsAccountNumber,
             dto.productId,
             dto.userId,
             product.interestRate,
             product.maxDepositAmount,
-            0, // totalInterestEarned
-            true, // isActive
-            0, // balance (starts at 0)
-            new Date(), // lastBalanceUpdate
-            undefined, // lastInterestApplied
-            undefined // maturity
+            0, 
+            true,
+            0, 
+            new Date(), 
+            undefined,
+            undefined 
         );
 
         if (savingsAccount instanceof Error) {
             return savingsAccount;
         }
 
-        // Save to repository
         const result = await this.savingsAccountRepository.createSavingsAccount(savingsAccount);
         
         if (result instanceof Error) {
             return result;
         }
-        
-        // TODO: If initialDeposit is provided, transfer money from main account to savings
-        
+                
         return result;
     }
 }

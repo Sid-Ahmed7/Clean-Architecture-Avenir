@@ -73,12 +73,8 @@ const symbols = SYMBOLS.join(',');
                 const stock = transformQuoteToStock(quoteData);
                 stocks.push(stock);
             } catch(err) {
-                console.error(` Failed to transform stock ${symbol}:`, err);
-                console.error('Raw data that failed:', JSON.stringify(quoteData, null, 2));
             }
-            } else {
-                console.warn(`No data for ${symbol} in response`);
-            }
+            } 
         }
         cachedStocks = stocks;
         cacheTime = now;

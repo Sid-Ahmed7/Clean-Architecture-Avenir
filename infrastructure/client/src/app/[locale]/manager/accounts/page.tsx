@@ -50,7 +50,6 @@ export default function AccountsOverviewPage() {
     };
 
     const handleDeleteAccount = async (accountNumber: number, accountType: string, userId: string, balance: number) => {
-        // Vérification côté client (optionnel mais améliore UX)
         if (accountType === 'CHECKING') {
             const userCheckingAccounts = accounts.filter(
                 acc => acc.userId === userId && acc.accountType === 'CHECKING'
@@ -64,7 +63,6 @@ export default function AccountsOverviewPage() {
             }
         }
 
-        // Message de confirmation avec info sur le transfert
         const confirmMessage = balance > 0
             ? `Êtes-vous sûr de vouloir supprimer ce compte ?\n\nLe solde de ${formatCurrency(balance)} sera automatiquement transféré vers un autre compte courant de l'utilisateur.`
             : "Êtes-vous sûr de vouloir supprimer ce compte ?";
@@ -83,10 +81,8 @@ export default function AccountsOverviewPage() {
                 return;
             }
 
-            console.log("Compte supprimé avec succès");
-            fetchAccounts(); // Rafraîchir la liste
+            fetchAccounts(); 
         } catch (error) {
-            console.error("Failed to delete account:", error);
             alert(t("errors.deleteFailed"));
         }
     };

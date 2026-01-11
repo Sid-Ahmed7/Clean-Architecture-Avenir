@@ -40,7 +40,6 @@ export default function CreateClientPage() {
                 setMessage(t("auth.createClient.error"));
             }
         } catch (error: any) {
-            console.error("Error creating client:", error);
             if (error.response?.status === 409) {
                 setMessage(t("auth.createClient.userExists"));
             } else {

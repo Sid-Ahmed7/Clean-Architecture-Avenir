@@ -32,15 +32,14 @@ export async function POST(request: Request) {
             { status: 200 }
             );
         } catch (error) {
-            console.error("Erreur dans la route API:", error);
-                if (error instanceof ZodError) {
-      return NextResponse.json(
-        {
-          error: "Données invalides",
-          details: error.issues,
-        },
-        { status: 400 }
-      );
+            if (error instanceof ZodError) {
+            return NextResponse.json(
+                {
+                error: "Données invalides",
+                details: error.issues,
+                },
+                { status: 400 }
+            );
     }
 
     return NextResponse.json(

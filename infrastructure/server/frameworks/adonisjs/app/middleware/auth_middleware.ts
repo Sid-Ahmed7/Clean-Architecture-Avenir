@@ -9,15 +9,9 @@ const JWT_SECRET = env.get('JWT_SECRET')
 
 export default class AuthMiddleware {
   async handle(ctx: HttpContext, next: NextFn) {
-    console.log('All cookies:', ctx.request.header('cookie'))
-    console.log('Cookie:', ctx.request.cookie('accessToken'))
+
 
     const token = ctx.request.plainCookie('accessToken')
-    console.log('Unsigned cookie:', token)
-
-
-    console.log('Cookie header:', ctx.request.header('cookie'))
-    console.log('Auth Middleware - accessToken:', token)
 
     if(!token) {
       return ctx.response.unauthorized({ message: 'Access token is missing' })

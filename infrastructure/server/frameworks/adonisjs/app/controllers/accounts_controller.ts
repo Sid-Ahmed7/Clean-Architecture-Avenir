@@ -277,11 +277,9 @@ export default class AccountsController {
   }
 
   async getUserAccounts({ response, auth }: HttpContext) {
-    console.log('=== getUserAccounts called ===');
     const getUserAccountsUseCase = new GetUserAccountsUseCase(this.accountRepository);
 
     const userId = auth?.userId;
-    console.log('userId:', userId);
 
     if (!userId) {
       return response.status(401).json({ error: "Unauthorized" });
@@ -763,7 +761,6 @@ export default class AccountsController {
   }
 
   async getTransactionHistory({ response, auth }: HttpContext) {
-    console.log('=== getTransactionHistory called ===');
     const getTransactionHistoryUseCase = new GetTransactionHistoryUseCase(
       this.transactionRepository,
       this.accountRepository,
@@ -771,16 +768,12 @@ export default class AccountsController {
     );
 
     const userId = auth?.userId;
-    console.log('userId:', userId);
 
     if (!userId) {
       return response.status(401).json({ error: "User not authenticated" });
     }
 
     const result = await getTransactionHistoryUseCase.execute(userId);
-    console.log('result type:', typeof result);
-    console.log('result instanceof Error:', result instanceof Error);
-    console.log('result:', result);
 
     if (result instanceof Error) {
       if (result instanceof UserNotFoundError) {
@@ -793,7 +786,6 @@ export default class AccountsController {
   }
 
   async getLastTransactions({ request, response, auth }: HttpContext) {
-    console.log('=== getLastTransactions called ===');
     const getLastTransactionsUseCase = new GetLastTransactionsUseCase(
       this.transactionRepository,
       this.accountRepository,
@@ -801,19 +793,14 @@ export default class AccountsController {
     );
 
     const userId = auth?.userId;
-    console.log('userId:', userId);
 
     if (!userId) {
       return response.status(401).json({ error: "User not authenticated" });
     }
 
     const limit = request.qs().limit ? Number.parseInt(request.qs().limit as string, 10) : 10;
-    console.log('limit:', limit);
 
     const result = await getLastTransactionsUseCase.execute(userId, limit);
-    console.log('result type:', typeof result);
-    console.log('result instanceof Error:', result instanceof Error);
-    console.log('result:', result);
 
     if (result instanceof Error) {
       if (result instanceof UserNotFoundError) {

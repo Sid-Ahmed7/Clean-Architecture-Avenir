@@ -86,10 +86,10 @@ function createSymlinks(framework: string): void {
   try {
     if (process.platform === 'win32') {
       fs.copyFileSync(config.env, envLink);
-      console.log(`✅ .env copié depuis ${config.env}`);
+      console.log(`.env copié depuis ${config.env}`);
     } else {
       fs.symlinkSync(config.env, envLink);
-      console.log(`✅ .env lié à ${config.env}`);
+      console.log(`.env lié à ${config.env}`);
     }
   } catch (error) {
     const err = error as Error;
@@ -129,7 +129,7 @@ function updatePackageJsonScripts(framework: string): void {
     }
 
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + '\n');
-    console.log(`✅ Scripts mis à jour pour ${config.name}`);
+    console.log(`Scripts mis à jour pour ${config.name}`);
   } catch (error) {
     const err = error as Error;
     console.error(` Erreur lors de la mise à jour du package.json: ${err.message}`);
@@ -150,9 +150,6 @@ function installDependencies(framework: string): void {
         cwd: frameworkDir,
         stdio: 'inherit'
       });
-      console.log(`✅ Dépendances installées`);
-    } else {
-      console.log(`✅ Dépendances déjà installées`);
     }
   } catch (error) {
     const err = error as Error;

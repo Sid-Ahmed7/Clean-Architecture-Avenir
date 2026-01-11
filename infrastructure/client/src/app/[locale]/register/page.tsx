@@ -39,7 +39,6 @@ export default function RegisterPage() {
         setMessage(t("auth.register.messages.error"));
       }
     } catch (error: any) {
-      console.error("Registration error:", error);
       if (error.response?.status === 409) {
         setMessage(t("auth.register.messages.userExists"));
       } else {

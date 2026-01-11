@@ -26,7 +26,6 @@ function ClientLoanRequestsPage() {
         setRepayments(schedules);
       })
       .catch((err) => {
-        console.error("Failed to load loan requests:", err);
         setError(err.response?.data?.error || "Impossible de charger vos demandes");
       })
       .finally(() => setLoading(false));
@@ -41,7 +40,6 @@ function ClientLoanRequestsPage() {
         );
       })
       .catch((err) => {
-        console.error("Client decision error:", err);
         setError(err.response?.data?.error || "Impossible d'enregistrer la décision");
       })
       .finally(() => setSubmitting(null));

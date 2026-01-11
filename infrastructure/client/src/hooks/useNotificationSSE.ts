@@ -30,12 +30,10 @@ export function useNotificationSSE(
         eventSource.addEventListener("new_notification", handleNewNotification);
 
         eventSource.onerror = (err) => {
-            console.error("SSE Error:", err);
             setError(t('generalErrors.notificationSSE.connect'));
         };
 
         return () => {
-            console.log("Closing SSE connection");
             eventSource.close();
         };
     }, [baseURL, handleNewNotification, setError])

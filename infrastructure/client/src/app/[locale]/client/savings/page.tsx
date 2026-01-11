@@ -22,7 +22,7 @@ interface MySavingsAccount {
     interestRate: number;
     balance: number;
     totalInterestEarned: number;
-    pendingInterest?: number; // From backend
+    pendingInterest?: number; 
     isActive: boolean;
     lastBalanceUpdate: string;
 }
@@ -139,7 +139,6 @@ export default function ClientSavingsPage() {
                     </div>
                 )}
 
-                {/* My Savings Accounts */}
                 {myAccounts.length > 0 && (
                     <div className="mb-12">
                         <h2 className="text-2xl font-bold text-gray-900 mb-4">{t("myAccounts")}</h2>
@@ -151,14 +150,6 @@ export default function ClientSavingsPage() {
                                     );
                                     return (account.balance * account.interestRate * 1000000 * secondsSinceLastUpdate) / (31536000 * 100);
                                 })();
-
-                                console.log(' Account Data:', {
-                                    accountNumber: account.accountNumber,
-                                    balance: account.balance,
-                                    interestRate: account.interestRate,
-                                    pendingInterestFromBackend: account.pendingInterest,
-                                    pendingInterestUsed: pendingInterest
-                                });
 
                                 return (
                                     <div

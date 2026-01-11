@@ -27,9 +27,7 @@ export default function EditFeedPage() {
       return;
     }
 
-    console.log("News", news)
-    console.log("Contents", contents)
-    console.log("medias", medias)
+
 
     const contentsKey = JSON.stringify({
       contents: Array.isArray(contents) ? contents.map(c => c.id).sort() : [],
@@ -57,7 +55,6 @@ export default function EditFeedPage() {
       order: content.order,
       content: content.content,
     }));
-    console.log("Text block créé:", textBlocks);
 
     const mediaBlocks: Block[] = (Array.isArray(medias) ? medias : []).map((media) => ({
       id: media.id,
@@ -66,10 +63,8 @@ export default function EditFeedPage() {
       files: [],
       existingMedias: [media]
     }));
-    console.log("Media block créé:", mediaBlocks);
 
     const allBlocks = [...textBlocks, ...mediaBlocks].sort((a, b) => a.order - b.order);
-    console.log("Blocs combinés et triés:", allBlocks);
     setInitialBlocks(allBlocks);
 }, [news, contents, medias, newsLoading, contentsLoading, mediaLoading]);
 

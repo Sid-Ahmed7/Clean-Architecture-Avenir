@@ -39,10 +39,7 @@ export function FeedDetail({news, contents, medias} : FeedDetailProps) {
         })),
     ];
 
-    console.log("Blocks créés:", blocks);
-
     const orderedContent = sortBlock(blocks);
-
 
     return (
         <main className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 md:py-20">

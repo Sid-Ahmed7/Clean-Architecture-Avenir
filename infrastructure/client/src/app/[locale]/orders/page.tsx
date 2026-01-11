@@ -4,9 +4,12 @@ import { OrderList } from "@/components/stocks/orders/OrderList";
 import { useCancelOrder, useOrderBook } from "@/hooks/useStocksOrder";
 import { useTranslations } from "next-intl";
 import { ClipboardList, Loader2, XCircle } from "lucide-react";
+import { useNotification } from "@/hooks/useNotifications";
+import { NotificationEnum } from "@/types/Notification";
 
 export default function OrdersPage() {
   const t = useTranslations('pages.orders');
+  const { addNotification } = useNotification();
   const { data: orders, isLoading, error } = useOrderBook();
   const cancelOrderMutation = useCancelOrder();
 
@@ -14,8 +17,7 @@ export default function OrdersPage() {
     try {
       await cancelOrderMutation.mutateAsync(orderId);
     } catch (err) {
-      console.error("Failed to cancel order:", err);
-      alert(t('cancelError'));
+      addNotification(NotificationEnum.ALERT, t('cancelError'));
     }
   };
 

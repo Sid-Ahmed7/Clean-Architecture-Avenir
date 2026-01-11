@@ -55,7 +55,6 @@ export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlr
             {type === "IMAGE" ? (
 
   <>
-    {console.log("FilePreview src:", getMediaUrl(preview))}
     <Image
       src={getMediaUrl(preview)}
       alt={fileName}
@@ -133,7 +132,6 @@ export function FilePreview({preview, fileName, size,type, onRemove, isUploadAlr
                                 type="text"
                                 value={captionValue}
                                 onChange={(e) => {
-                                    console.log("Input caption value:", e.target.value);
                                     setCaptionValue(e.target.value);
                                 }}
                                 placeholder={t('addCaption')}
