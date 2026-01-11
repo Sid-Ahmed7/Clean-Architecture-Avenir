@@ -50,8 +50,8 @@ export default function SavingsAccountsOverviewPage() {
 
     const handleDeleteSavingsAccount = async (accountNumber: number, balance: number) => {
         const confirmMessage = balance > 0
-            ? `Êtes-vous sûr de vouloir supprimer ce compte épargne ?\n\nLe solde de ${formatCurrency(balance)} sera automatiquement transféré vers un compte courant de l'utilisateur.`
-            : "Êtes-vous sûr de vouloir supprimer ce compte épargne ?";
+            ? t("deleteConfirm.withBalance", { amount: formatCurrency(balance) })
+            : t("deleteConfirm.withoutBalance");
 
         if (!confirm(confirmMessage)) return;
 

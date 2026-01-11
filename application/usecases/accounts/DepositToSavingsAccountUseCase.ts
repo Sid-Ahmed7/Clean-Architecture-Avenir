@@ -2,7 +2,6 @@ import { SavingsAccountsEntity } from "../../../domain/entities/SavingsAccountEn
 import { SavingsAccountRepositoryInterface } from "../../ports/repositories/SavingsAccountRepositoryInterface";
 import { SavingsProductRepositoryInterface } from "../../ports/repositories/SavingsProductRepositoryInterface";
 import { AccountRepositoryInterface } from "../../ports/repositories/AccountRepositoryInterface";
-import { TransactionRepositoryInterface } from "../../ports/repositories/TransactionRepositoryInterface";
 import { DepositToSavingsAccount } from "../../requests/DepositToSavingsAccount";
 import { SendNotificationToClientUseCase } from "../notification/SendNotificationToClientUseCase";
 import { NotificationTypeEnum } from "../../../domain/enums/NotificationTypeEnum";
@@ -60,7 +59,7 @@ export class DepositToSavingsAccountUseCase {
         const daysSinceLastUpdate = Math.floor(
             (new Date().getTime() - savingsAccount.lastBalanceUpdate.getTime()) / (1000 * 60 * 60 * 24)
         );
-        // DEMO MODE: Calculate per minute instead of per day
+        // Calculate per minute instead of per day
         const minutesSinceLastUpdate = Math.floor(
             (new Date().getTime() - savingsAccount.lastBalanceUpdate.getTime()) / (1000 * 60)
         );
