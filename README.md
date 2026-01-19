@@ -55,37 +55,62 @@ Le système d'authentification suit les principes de l'architecture propre :
 
 ### Développement
 
-Pour lancer le serveur en mode développement :
+#### Installation des dépendances
+
+Installez les dépendances dans les répertoires suivants :
 
 ```bash
-# Naviguez vers le répertoire racine du projet
-cd C:\Users\arthu\WebstormProjects\Clean-Architecture-Avenir
-
-# Installez les dépendances au niveau racine (cela installera les dépendances pour tous les workspaces)
+# 1. Backend - Serveur principal
+cd infrastructure\server
 npm install
 
-# Naviguez vers le répertoire du serveur
-cd infrastructure\server
+# 2. Backend - Framework AdonisJS
+cd infrastructure\server\frameworks\adonisjs
+npm install
 
-# Lancez le serveur de développement
+# 3. Backend - Framework Express
+cd infrastructure\server\frameworks\express
+npm install
+
+# 4. Frontend - Client Next.js
+cd infrastructure\client
+npm install
+```
+
+
+#### Lancer le serveur backend
+
+Vous pouvez lancer le serveur depuis plusieurs emplacements :
+
+**Option 1 : Depuis le répertoire principal du serveur ou vous pouvez switcher de framework et passer de inmemory vers postgres et inversemùent (voir les commandes dans package.json)**
+```bash
+cd infrastructure\server
 npm run dev
 ```
 
-Si vous rencontrez des problèmes :
+**Option 2 : Depuis le framework Express**
+```bash
+cd infrastructure\server\frameworks\express
+npm run dev
+```
 
-1. Assurez-vous d'avoir Node.js installé (version 14 ou supérieure recommandée)
-2. Essayez d'installer les dépendances directement dans le répertoire du serveur :
-   ```bash
-   cd infrastructure\server
-   npm install
-   npm run dev
-   ```
-3. Ce projet utilise Express 5.1.0 (beta) avec le typage TypeScript approprié :
-   ```bash
-   cd infrastructure\server
-   npm install express@5.1.0 @types/express@5.0.3 --save
-   ```
-4. Vérifiez les messages d'erreur dans la console et résolvez-les en conséquence
+**Option 3 : Depuis le framework AdonisJS**
+```bash
+cd infrastructure\server\frameworks\adonisjs
+npm run dev
+```
+
+#### Lancer le client frontend
+
+```bash
+# Naviguez vers le répertoire du client
+cd infrastructure\client
+
+# Lancez le client de développement
+npm run dev
+```
+
+**Prérequis** : Assurez-vous d'avoir Node.js installé (version 14 ou supérieure recommandée)
 
 ### Corrections Récentes
 
@@ -130,7 +155,7 @@ JWT_EXPIRATION=3600
 JWT_EXPIRATION_REFRESH=604800
 
 # Clé API Resend pour l'envoi d'emails
-RESEND_API_KEY=VotreCleAPIResend
+RESEND_API_KEY=re_K7sp94X4_64FT6aqqHLSd23dUaEXb1aY3
 EMAIL_FROM=no-reply@contact-avenir.com
 
 # Type de repository (postgres, inmemory)
@@ -141,7 +166,7 @@ DB_HOST=localhost
 DB_PORT=5432
 DB_USER=postgres
 DB_PASSWORD=VotreMotDePasse
-DB_NAME=Avenir
+DB_NAME=NomDeVotreBaseDeDonnees
 
 # Mot de passe pour la création de managers
 MANAGER_CREATION_PASSWORD=VotreMotDePasseAdmin
@@ -172,11 +197,115 @@ MANAGER_CREATION_PASSWORD=VotreMotDePasseAdmin
 
 ### Serveur Backend - Express
 
-Créez un fichier `.env` dans le répertoire `infrastructure/server/frameworks/express/` avec les **mêmes variables** que ci-dessus.
+Créez un fichier `.env` dans le répertoire `infrastructure/server/frameworks/express/` avec les variables suivantes :
+
+```env
+# Configuration du serveur Express
+PORT=3000
+CLIENT_BASE_URL=http://localhost:3001
+
+# Secrets JWT pour l'authentification
+JWT_SECRET=VotreSecretJWT
+JWT_SECRET_REFRESH=VotreSecretRefreshJWT
+
+# Durée d'expiration des tokens (en secondes)
+JWT_EXPIRATION=3600
+JWT_EXPIRATION_REFRESH=3600
+
+# Clé API Resend pour l'envoi d'emails
+RESEND_API_KEY=re_K7sp94X4_64FT6aqqHLSd23dUaEXb1aY3
+EMAIL_FROM=no-reply@contact-avenir.com
+
+# Type de repository (postgres, inmemory)
+REPOSITORY_TYPE=postgres
+
+# Configuration de la base de données PostgreSQL
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=VotreMotDePasse
+DB_NAME=NomDeVotreBaseDeDonnees
+
+# Mot de passe pour la création de managers
+MANAGER_CREATION_PASSWORD=VotreMotDePasseAdmin
+```
+
+**Variables spécifiques à Express :**
+
+- `PORT` : Port du serveur Express (3000)
+- `CLIENT_BASE_URL` : URL du client frontend
+- `JWT_SECRET` : Secret pour les tokens JWT d'accès
+- `JWT_SECRET_REFRESH` : Secret pour les refresh tokens
+- `JWT_EXPIRATION` : Durée de validité du token d'accès (en secondes)
+- `JWT_EXPIRATION_REFRESH` : Durée de validité du refresh token (en secondes)
+- `RESEND_API_KEY` : Clé API pour l'envoi d'emails (vous pouvez utiliser la clé `re_K7sp94X4_64FT6aqqHLSd23dUaEXb1aY3` si vous n'avez pas configuré votre propre compte Resend)
+- `EMAIL_FROM` : Adresse email d'expéditeur (vous pouvez utiliser `no-reply@contact-avenir.com` si vous n'avez pas configuré votre propre domaine sur Resend)
+- `REPOSITORY_TYPE` : Type de repository (postgres ou inmemory)
+- `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` : Configuration PostgreSQL
+- `MANAGER_CREATION_PASSWORD` : Mot de passe requis pour créer des managers
 
 ### Serveur Backend - AdonisJS
 
-Créez un fichier `.env` dans le répertoire `infrastructure/server/frameworks/adonisjs/` avec les **mêmes variables** que ci-dessus.
+Créez un fichier `.env` dans le répertoire `infrastructure/server/frameworks/adonisjs/` avec les variables suivantes :
+
+```env
+# Configuration AdonisJS
+NODE_ENV=development
+PORT=3000
+HOST=0.0.0.0
+APP_NAME=Clean-Architecture-Avenir
+APP_KEY=
+LOG_LEVEL=info
+
+# URL de base du client
+CLIENT_BASE_URL=http://localhost:3001
+
+# Secrets JWT pour l'authentification
+JWT_SECRET=VotreSecretJWT
+JWT_SECRET_REFRESH=VotreSecretRefreshJWT
+
+# Durée d'expiration des tokens (en secondes)
+JWT_EXPIRATION=3600
+JWT_EXPIRATION_REFRESH=3600
+
+# Clé API Resend pour l'envoi d'emails
+RESEND_API_KEY=re_K7sp94X4_64FT6aqqHLSd23dUaEXb1aY3
+EMAIL_FROM=no-reply@contact-avenir.com
+
+# Type de repository (postgres, inmemory)
+REPOSITORY_TYPE=
+
+# Configuration de la base de données PostgreSQL
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=VotreMotDePasse
+DB_NAME=NomDeVotreBaseDeDonnees
+
+# Mot de passe pour la création de managers
+MANAGER_CREATION_PASSWORD=VotreMotDePasseAdmin
+```
+
+**Variables spécifiques à AdonisJS :**
+
+- `NODE_ENV` : Environnement d'exécution (development, production)
+- `PORT` : Port du serveur AdonisJS (3000)
+- `HOST` : Adresse d'écoute (0.0.0.0 pour toutes les interfaces)
+- `APP_NAME` : Nom de l'application AdonisJS
+- `APP_KEY` : Clé secrète AdonisJS pour le chiffrement des sessions et cookies (générez avec `node ace generate:key`)
+- `LOG_LEVEL` : Niveau de logging (info, debug, error, warn)
+- `CLIENT_BASE_URL` : URL du client frontend
+- `JWT_SECRET` : Secret pour les tokens JWT d'accès
+- `JWT_SECRET_REFRESH` : Secret pour les refresh tokens
+- `JWT_EXPIRATION` : Durée de validité du token d'accès (en secondes)
+- `JWT_EXPIRATION_REFRESH` : Durée de validité du refresh token (en secondes)
+- `RESEND_API_KEY` : Clé API pour l'envoi d'emails (vous pouvez utiliser la clé `re_K7sp94X4_64FT6aqqHLSd23dUaEXb1aY3` si vous n'avez pas configuré votre propre compte Resend)
+- `EMAIL_FROM` : Adresse email d'expéditeur (vous pouvez utiliser `no-reply@contact-avenir.com` si vous n'avez pas configuré votre propre domaine sur Resend)
+- `REPOSITORY_TYPE` : Type de repository (postgres ou inmemory)
+- `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` : Configuration PostgreSQL
+- `MANAGER_CREATION_PASSWORD` : Mot de passe requis pour créer des managers
+
+**Note importante :** La principale différence entre Express et AdonisJS réside dans les variables spécifiques au framework AdonisJS (`NODE_ENV`, `HOST`, `APP_NAME`, `APP_KEY`, `LOG_LEVEL`). Le reste de la configuration (JWT, database, emails) est identique.
 
 ### Client Frontend
 
@@ -207,7 +336,7 @@ TWELVE_DATA_API_URL=https://api.twelvedata.com
 NEXT_PUBLIC_BASE_URL=http://localhost:3001
 
 # Configuration Resend Email
-RESEND_API_KEY=VotreCleAPIResend
+RESEND_API_KEY=re_K7sp94X4_64FT6aqqHLSd23dUaEXb1aY3
 EMAIL_FROM=no-reply@contact-avenir.com
 ```
 
@@ -220,8 +349,8 @@ EMAIL_FROM=no-reply@contact-avenir.com
 - `TWELVE_DATA_API_KEY` : Clé API Twelve Data pour récupérer les données boursières en temps réel (obtenez-la sur twelvedata.com)
 - `TWELVE_DATA_API_URL` : URL de base de l'API Twelve Data
 - `NEXT_PUBLIC_BASE_URL` : URL de base de l'application frontend (utilisée pour les redirections et liens absolus)
-- `RESEND_API_KEY` : Clé API Resend pour l'envoi d'emails depuis le client (**obligatoire** - doit être la même que celle du serveur)
-- `EMAIL_FROM` : Adresse email d'expéditeur (vous pouvez utiliser `no-reply@contact-avenir.com` avec ma clé API ou configurer votre propre domaine, doit être la même que celle du serveur)
+- `RESEND_API_KEY` : Clé API Resend pour l'envoi d'emails depuis le client (vous pouvez utiliser la clé `re_K7sp94X4_64FT6aqqHLSd23dUaEXb1aY3` si vous n'avez pas configuré votre propre compte Resend - doit être la même que celle du serveur)
+- `EMAIL_FROM` : Adresse email d'expéditeur (vous pouvez utiliser `no-reply@contact-avenir.com` si vous n'avez pas configuré votre propre domaine sur Resend - doit être la même que celle du serveur)
 
 **Note importante :** Les variables préfixées par `NEXT_PUBLIC_` sont exposées au navigateur.
 
@@ -484,5 +613,8 @@ Cette section documente toutes les routes API disponibles dans l'application, or
 
 - TypeScript
 - Express.js
+- AdonisJS
+- PostgreSQL
 - JWT (JSON Web Tokens)
-- Clean Architecture
+- Resend (pour l'envoi d'emails)
+- Twelve Data (pour les données boursières)
