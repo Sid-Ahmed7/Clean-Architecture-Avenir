@@ -5,4 +5,5 @@ export interface GroupParticipantRepositoryInterface {
     removeParticipant(groupId: string, userId: string): Promise<void>;
     findByGroupId(groupId: string): Promise<GroupParticipantEntity[]>;
     findByUserId(userId: string): Promise<GroupParticipantEntity[]>;
+    isParticipant(groupId: string, userId: string): Promise<boolean>;
 }
