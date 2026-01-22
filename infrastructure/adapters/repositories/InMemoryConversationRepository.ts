@@ -1,4 +1,3 @@
-import { AdvisorAlreadyAssignedError } from "../../../application/errors/chat/AdvisorAlreadyAssignedError";
 import { ConversationNotFoundError } from "../../../application/errors/chat/ConversationNotFoundError";
 import { UserNotFoundError } from "../../../application/errors/UserNotFoundError";
 import { ConversationRepositoryInterface } from "../../../application/ports/repositories/chat/ConversationRepositoryInterface";
