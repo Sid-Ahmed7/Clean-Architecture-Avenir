@@ -76,6 +76,15 @@ import { PostgresOverdraftRequestRepository } from '../repositories/postgresSQL/
 import { InMemoryLoanRequestRepository } from "../repositories/InMemoryLoanRequestRepository";
 import { InMemoryLoanRepaymentScheduleRepository } from './../repositories/InMemoryLoanRepaymentScheduleRepository';
 import { InMemoryOverdraftRequestRepository } from "../repositories/InMemoryOverdraftRequestRepository";
+import { GroupConversationRepositoryInterface } from "../../../application/ports/repositories/group-chat/GroupConversationRepositoryInterface";
+import { PostgresGroupConversationRepository } from './../repositories/postgresSQL/PostgresGroupConversationRepository';
+import { InMemoryGroupConversationRepository } from './../repositories/InMemoryGroupConversation';
+import { GroupParticipantRepositoryInterface } from "../../../application/ports/repositories/group-chat/GroupParticipantRepositoryInterface";
+import { PostgresGroupParticipantRepository } from './../repositories/postgresSQL/PostgresGroupParticipantRepository';
+import { InMemoryGroupParticipantRepository } from './../repositories/InMemoryGroupParticipant';
+import { GroupMessageRepositoryInterface } from "../../../application/ports/repositories/group-chat/GroupMessageRepositoryInterface";
+import { PostgresGroupMessageRepository } from './../repositories/postgresSQL/PostgresGroupMessageRepository';
+import { InMemoryGroupMessageRepository } from './../repositories/InMemoryGroupMessage';
 
 const repositoryType = process.env.REPOSITORY_TYPE || 'inmemory';
 
@@ -176,3 +185,7 @@ export const loanRepaymentScheduleRepository: LoanRepaymentScheduleRepositoryInt
 export const overdraftRequestRepository: OverdraftRequestRepositoryInterface = repositoryType === 'postgres'
   ? new PostgresOverdraftRequestRepository()
   : new InMemoryOverdraftRequestRepository();
+
+  export const groupConversationRepository: GroupConversationRepositoryInterface = repositoryType === 'postgres' ? new PostgresGroupConversationRepository() : new InMemoryGroupConversationRepository();
+  export const groupParticipantRepository: GroupParticipantRepositoryInterface = repositoryType === 'postgres' ? new PostgresGroupParticipantRepository() : new InMemoryGroupParticipantRepository();
+  export const groupMessageRepository: GroupMessageRepositoryInterface = repositoryType === 'postgres' ? new PostgresGroupMessageRepository() : new InMemoryGroupMessageRepository(); 

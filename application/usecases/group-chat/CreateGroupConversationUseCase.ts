@@ -4,7 +4,7 @@ import { UnauthorizedGroupCreationError } from "../../errors/UnauthorizedGroupCr
 import { GroupConversationRepositoryInterface } from "../../ports/repositories/group-chat/GroupConversationRepositoryInterface";
 import { UuidGeneratorService } from './../../ports/services/UuidGeneratorService';
 
-export class GroupConversationUseCase {
+export class CreateGroupConversationUseCase {
     constructor(
         private readonly groupConversationRepository: GroupConversationRepositoryInterface,
         private readonly uuidGenerator: UuidGeneratorService
