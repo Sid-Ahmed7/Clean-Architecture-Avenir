@@ -134,7 +134,7 @@ export class BeneficiaryController {
         }
 
         const payload: UpdateBeneficiary = {
-            beneficiaryId,
+            beneficiaryId: beneficiaryId as string,
             userId,
             ...(parseResult.data.beneficiaryName && { beneficiaryName: parseResult.data.beneficiaryName }),
             ...(parseResult.data.email && { email: parseResult.data.email }),
@@ -173,7 +173,7 @@ export class BeneficiaryController {
         if (!beneficiaryId) {
             return res.status(400).json({ error: "Beneficiary Id must be provided" });
         }
-        const result = await deleteBeneficiaryUseCase.execute(beneficiaryId, userId);
+        const result = await deleteBeneficiaryUseCase.execute(beneficiaryId as string, userId);
 
         if (result instanceof Error) {
             if (result instanceof BeneficiaryNotFoundError) {

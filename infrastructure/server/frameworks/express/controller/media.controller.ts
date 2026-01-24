@@ -72,7 +72,7 @@ export class MediaController {
         }
 
         const getMediaUseCase = new GetMediaByNewsIdUseCase(this.mediaRepository);
-        const mediaList = await getMediaUseCase.execute(newsId);
+        const mediaList = await getMediaUseCase.execute(newsId as string);
         return res.status(200).json(mediaList);
     }
         async updateMedia(req: Request, res: Response) {
@@ -95,7 +95,7 @@ export class MediaController {
         }
 
         const deleteMediaUseCase = new DeleteMediaUseCase(this.mediaRepository, this.newsRepository, this.fileStorageService);
-        const result = await deleteMediaUseCase.execute(mediaId);
+        const result = await deleteMediaUseCase.execute(mediaId as string);
 
         if (result instanceof Error) {
             return res.status(500).json({ error: result.message });

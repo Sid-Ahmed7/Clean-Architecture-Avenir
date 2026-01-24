@@ -104,7 +104,7 @@ export class LoanController {
     }
 
     const listUseCase = new ListClientLoanRequestsUseCase(this.loanRequestRepository);
-    const requests = await listUseCase.execute(clientId);
+    const requests = await listUseCase.execute(clientId as string);
     return res.status(200).json(requests);
   }
 
@@ -115,7 +115,7 @@ export class LoanController {
     }
 
     const useCase = new ListClientRepaymentsUseCase(this.loanRepaymentScheduleRepository);
-    const schedules = await useCase.execute(clientId);
+    const schedules = await useCase.execute(clientId as string);
     return res.status(200).json(schedules);
   }
 
@@ -141,7 +141,7 @@ export class LoanController {
     }
 
     const useCase = new AdvisorDecideLoanRequestUseCase(this.loanRequestRepository, sendNotificationUseCase);
-    const result = await useCase.execute(advisorId, requestId, parseResult.data.decision);
+    const result = await useCase.execute(advisorId, requestId as string, parseResult.data.decision);
 
     if (result instanceof Error) {
       return res.status(500).json({ error: result.message });
@@ -187,7 +187,7 @@ export class LoanController {
       new CreateRepaymentScheduleUseCase(this.loanRepaymentScheduleRepository, this.uuidService),
       sendNotificationUseCase
     );
-    const result = await useCase.execute(directorId, requestId, parseResult.data.decision, directorName);
+    const result = await useCase.execute(directorId, requestId as string, parseResult.data.decision, directorName);
 
     if (result instanceof Error) {
       return res.status(500).json({ error: result.message });
@@ -237,7 +237,7 @@ export class LoanController {
           director.id;
 
     const useCase = new DirectorProposeRateUseCase(this.loanRequestRepository, sendNotificationUseCase);
-    const result = await useCase.execute(directorId, requestId, parseResult.data.rate, directorName);
+    const result = await useCase.execute(directorId, requestId as string, parseResult.data.rate, directorName);
 
     if (result instanceof Error) {
       return res.status(500).json({ error: result.message });
@@ -275,7 +275,7 @@ export class LoanController {
       new CreateRepaymentScheduleUseCase(this.loanRepaymentScheduleRepository, this.uuidService),
       sendNotificationUseCase
     );
-    const result = await useCase.execute(clientId, requestId, accept);
+    const result = await useCase.execute(clientId, requestId as string, accept);
 
     if (result instanceof Error) {
       return res.status(500).json({ error: result.message });
@@ -320,12 +320,12 @@ export class LoanController {
       return res.status(400).json({ error: "Client id is required" });
     }
 
-    const user = await this.userRepository.findById(clientId);
+    const user = await this.userRepository.findById(clientId as string);
     if (user instanceof UserNotFoundError) {
       return res.status(404).json({ error: user.message });
     }
 
-    const accounts = await this.accountRepository.getAccountsByUserId(clientId);
+    const accounts = await this.accountRepository.getAccountsByUserId(clientId as string);
     return res.status(200).json({
       user,
       accounts,

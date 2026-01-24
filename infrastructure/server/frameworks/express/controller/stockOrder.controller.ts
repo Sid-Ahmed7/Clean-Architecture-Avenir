@@ -158,7 +158,7 @@ export class StockOrderController {
             updateSellerPositionUseCase
         );
 
-        const executedTransactions = await autoMatchOrdersUseCase.execute(symbol);
+        const executedTransactions = await autoMatchOrdersUseCase.execute(symbol as string);
 
         if (executedTransactions instanceof Error) {
             if(executedTransactions instanceof OrderNotFoundError) {
@@ -204,7 +204,7 @@ export class StockOrderController {
         if(!orderId) {
             return res.status(400).json({error: "Order ID is required"});
         }
-        const result = await cancelOrderUseCase.execute(orderId, userId);
+        const result = await cancelOrderUseCase.execute(orderId as string, userId);
         if(result instanceof Error) {
             if(result instanceof OrderNotFoundError) {
                 return res.status(404).json({error: result.message});
@@ -222,7 +222,7 @@ export class StockOrderController {
             return res.status(400).json({ error: "Symbol is required" });
         }
 
-        const result = await getOrderBookBySymbolUseCase.execute(symbol);
+        const result = await getOrderBookBySymbolUseCase.execute(symbol as string);
 
         if (result instanceof Error) {
             return res.status(500).json({ error: result.message });

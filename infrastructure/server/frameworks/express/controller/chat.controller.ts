@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { CreateConversationUseCase } from "../../../../../application/usecases/chat/CreateConversationUseCase";
 import { SendMessageUseCase } from "../../../../../application/usecases/chat/SendMessageUseCase";
-import { GetConversationMessagesUseCase } from "../../../../../application/usecases/chat/GetConversationMessagesUseCase";
+import { GetConversationMessagesUseCase } from "../../../../../application/usecases/chat/GetConversationMessagesUsecase";
 import { GetAdvisorConversationUseCase } from "../../../../../application/usecases/chat/GetAdvisorConversationUseCase";
 import { GetClientConversationUseCase } from "../../../../../application/usecases/chat/GetClientConversationUseCase";
 import { MarkMessageAsReadUseCase } from "../../../../../application/usecases/chat/MarkMessageAsReadUseCase";
@@ -184,7 +184,7 @@ export class ChatController {
             return res.status(404).json({ error: "conversation not found" });
         }
 
-        const result = await getConversationMessagesUseCase.execute(conversationId);
+        const result = await getConversationMessagesUseCase.execute(conversationId as string);
             
             if(result instanceof MessageNotFoundError) {
                 return res.status(404).json({error: result.message});

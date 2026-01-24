@@ -134,7 +134,7 @@ export class NotificationController {
 
         }
 
-        const result = await deleteNotificationUseCase.execute(notificationId);
+        const result = await deleteNotificationUseCase.execute(notificationId as string);
         if(result instanceof Error) {
             if(result instanceof NotificationNotFoundError) {
                 return res.status(404).json({error: result.message});

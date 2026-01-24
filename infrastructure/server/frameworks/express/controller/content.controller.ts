@@ -44,7 +44,7 @@ export class ContentController {
         return res.status(400).json({ error: "Content ID is required" });
         }
 
-        const result = await getContentByIdUseCase.execute(id);
+        const result = await getContentByIdUseCase.execute(id as string);
 
         if (result instanceof Error) {
             if(result instanceof ContentNotFoundError) {
@@ -61,7 +61,7 @@ export class ContentController {
             return res.status(400).json({ error: "News ID is required" });
         }
         
-        const result = await useCase.execute(newsId);
+        const result = await useCase.execute(newsId as string);
         return res.json(result);
     }
 
@@ -86,7 +86,7 @@ export class ContentController {
             return res.status(400).json({ error: "Content ID is required" });
         }
 
-        const result = await deleteContentUseCase.execute(id);
+        const result = await deleteContentUseCase.execute(id as string);
         if (result instanceof Error) {
             if(result instanceof ContentNotFoundError) {
               return res.status(404).json({ error: result.message });  
@@ -108,7 +108,7 @@ export class ContentController {
         return res.status(400).json({ error: "NewsId ID is required" });
     }
 
-        const result = await reorderContentsUseCase.execute(newsId, parseResult.data.newOrder);
+        const result = await reorderContentsUseCase.execute(newsId as string, parseResult.data.newOrder);
 
         if (result instanceof Error) {
             if(result instanceof ContentNotFoundError) {

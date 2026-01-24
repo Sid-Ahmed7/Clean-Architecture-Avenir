@@ -117,8 +117,8 @@ export class StockController {
         if (!id) {
             return res.status(400).json({ error: "Stock ID is required" });
         }
-        const result = await getStockByIdUseCase.execute(id);
-        
+        const result = await getStockByIdUseCase.execute(id as string);
+
         if(result instanceof Error) {
             if (result instanceof StockNotFoundError) {
                 return res.status(404).json({error: result.message});
@@ -137,7 +137,7 @@ export class StockController {
             res.status(400).json({ error: "Missing stock symbol" });
             return;
         }
-        const result =  await getStockBySymbolUseCase.execute(symbol);
+        const result =  await getStockBySymbolUseCase.execute(symbol as string);
 
         if(result instanceof Error) {
             if (result instanceof StockNotFoundError) {
@@ -167,7 +167,7 @@ export class StockController {
         if (!id) {
             return res.status(400).json({ error: "Stock ID is required" });
         }
-        const result = await deleteStockUseCase.execute(id);
+        const result = await deleteStockUseCase.execute(id as string);
 
         if(result instanceof Error) {
             if(result instanceof StockNotFoundError) {
@@ -189,7 +189,7 @@ export class StockController {
             return res.status(400).json({ errors: parseResult.error.message });
         }
 
-        const result = await changeStockAvailabilityUseCase.execute(id, parseResult.data.isActionAvailable);
+        const result = await changeStockAvailabilityUseCase.execute(id as string, parseResult.data.isActionAvailable);
 
         if(result instanceof Error) {
             if(result instanceof StockNotFoundError) {
@@ -219,7 +219,7 @@ export class StockController {
             return res.status(400).json({ error: "Any symbol provided" });
         } 
 
-        const result = await updateStockPriceUseCase.execute(symbol);
+        const result = await updateStockPriceUseCase.execute(symbol as string);
 
         if (result instanceof Error) {
             if(result instanceof StockNotFoundError) {
@@ -287,7 +287,7 @@ export class StockController {
         }
 
         const closeIPOUseCase = new CloseIPOUseCase(this.stockRepository);
-        const result = await closeIPOUseCase.execute(symbol);
+        const result = await closeIPOUseCase.execute(symbol as string);
 
         if (result instanceof Error) {
             if (result instanceof StockNotFoundError) {
@@ -314,7 +314,7 @@ export class StockController {
         }
 
         const openIPOUseCase = new OpenIPOUseCase(this.stockRepository);
-        const result = await openIPOUseCase.execute(symbol, sharesToMakeAvailable, ipoType  );
+        const result = await openIPOUseCase.execute(symbol as string, sharesToMakeAvailable, ipoType  );
 
         if (result instanceof Error) {
             if (result instanceof StockNotFoundError) {

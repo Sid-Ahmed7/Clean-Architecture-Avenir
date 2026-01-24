@@ -69,7 +69,7 @@ export class NewsController {
         if (!newsId) {
             return res.status(400).json({ error: "News ID is required" });
         }
-        const result = await getNewsByIdUseCase.execute(newsId);
+        const result = await getNewsByIdUseCase.execute(newsId as string);
 
         if(result instanceof Error) {
             if(result instanceof NewsNotFoundError) {
@@ -103,7 +103,7 @@ export class NewsController {
         if (!newsId) {
             return res.status(400).json({ error: "News ID is required" });
         }
-        const result = await deleteNewsUseCase.execute(newsId);
+        const result = await deleteNewsUseCase.execute(newsId as string);
 
         if(result instanceof Error) {
             if(result instanceof NewsNotFoundError) {
