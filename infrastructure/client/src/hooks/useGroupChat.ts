@@ -9,6 +9,7 @@ import { Typing } from "@/types/typing";
 type State = {
     messages: GroupMessage[];
     participants: GroupParticipant[];
+    participantsCount: number;
     typingUsers: Typing[];
     onlineUsers: string[];
     connected: boolean;
@@ -26,12 +27,16 @@ type Action =
     | { type: "SET_ONLINE_USERS"; payload: string[] }
     | { type: "ADD_ONLINE_USER"; payload: string }
     | { type: "REMOVE_ONLINE_USER"; payload: string }
+    | { type: "SET_PARTICIPANTS_COUNT"; payload: number }
+    | { type: "INCREMENT_PARTICIPANTS_COUNT" }
+    | { type: "DECREMENT_PARTICIPANTS_COUNT" }
     | { type: "SET_LOADING"; payload: boolean }
     | { type: "SET_ERROR"; payload: string | null };
 
 const initialState: State = {
     messages: [],
     participants: [],
+    participantsCount: 0,
     typingUsers: [],
     onlineUsers: [],
     connected: false,
@@ -64,6 +69,12 @@ function reducer(state: State, action: Action): State {
             return { ...state, onlineUsers: [...state.onlineUsers, action.payload] };
         case "REMOVE_ONLINE_USER":
             return { ...state, onlineUsers: state.onlineUsers.filter(id => id !== action.payload) };
+        case "SET_PARTICIPANTS_COUNT":
+            return { ...state, participantsCount: action.payload };
+        case "INCREMENT_PARTICIPANTS_COUNT":
+            return { ...state, participantsCount: state.participantsCount + 1 };
+        case "DECREMENT_PARTICIPANTS_COUNT":
+            return { ...state, participantsCount: state.participantsCount - 1 };
         case "SET_LOADING":
             return { ...state, isLoading: action.payload };
         case "SET_ERROR":
@@ -78,35 +89,44 @@ export const useGroupChat = (groupId: string, userId: string, role: RoleEnum) =>
 
     useEffect(() => {
         let isMounted = true;
+        let hasInitialized = false;
+
+        const initialize = async () => {
+            if (hasInitialized || !isMounted) return;
+            hasInitialized = true;
+
+            try {
+                await groupChatService.identifyUser(userId, role);
+                groupChatService.joinedGroupChat(groupId);
+
+                dispatch({ type: "SET_CONNECTED", payload: true });
+
+                const [messages, participants] = await Promise.all([
+                    getGroupMessages(groupId),
+                    getGroupParticipants(groupId)
+                ]);
+
+                if (!isMounted) return;
+
+                dispatch({ type: "SET_MESSAGES", payload: messages });
+                dispatch({ type: "SET_PARTICIPANTS", payload: participants });
+                dispatch({ type: "SET_PARTICIPANTS_COUNT", payload: participants.length });
+                dispatch({ type: "SET_LOADING", payload: false });
+            } catch {
+                if (!isMounted) return;
+                dispatch({ type: "SET_ERROR", payload: "Erreur de connexion au chat" });
+                dispatch({ type: "SET_LOADING", payload: false });
+            }
+        };
 
         groupChatService.connectedToGroupChat();
-
         const socket = groupChatService.getGroupSocket();
 
         if (!socket) {
+            dispatch({ type: "SET_ERROR", payload: "Impossible de se connecter au serveur" });
+            dispatch({ type: "SET_LOADING", payload: false });
             return;
         }
-
-        const handleConnect = async () => {
-            if (!isMounted) return;
-
-            await groupChatService.identifyUser(userId, role);
-            groupChatService.joinedGroupChat(groupId);
-
-            dispatch({ type: "SET_CONNECTED", payload: true });
-
-            getGroupMessages(groupId).then(messages => {
-                if (!isMounted) return;
-                dispatch({ type: "SET_MESSAGES", payload: messages });
-            });
-
-            getGroupParticipants(groupId).then(participants => {
-                if (!isMounted) return;
-                dispatch({ type: "SET_PARTICIPANTS", payload: participants });
-            });
-
-            dispatch({ type: "SET_LOADING", payload: false });
-        };
 
         const handleMessage = (msg: GroupMessage) => {
             if (msg.groupId === groupId) {
@@ -127,20 +147,26 @@ export const useGroupChat = (groupId: string, userId: string, role: RoleEnum) =>
 
         const handleUserJoined = (data: { userId: string }) => {
             dispatch({ type: "ADD_ONLINE_USER", payload: data.userId });
+            dispatch({ type: "INCREMENT_PARTICIPANTS_COUNT" });
         };
 
         const handleUserLeft = (data: { userId: string }) => {
             dispatch({ type: "REMOVE_ONLINE_USER", payload: data.userId });
+            dispatch({ type: "DECREMENT_PARTICIPANTS_COUNT" });
         };
 
         const handleOnlineUsers = (users: string[]) => {
             dispatch({ type: "SET_ONLINE_USERS", payload: users });
         };
 
-        socket.on("connect", handleConnect);
+        socket.on("connect", initialize);
         socket.on("disconnect", () => {
             dispatch({ type: "SET_CONNECTED", payload: false });
         });
+
+        if (socket.connected) {
+            initialize();
+        }
 
         const cleanupMessage = groupChatService.onNewGroupMessage(handleMessage);
         const cleanupTyping = groupChatService.onUserTyping(handleTyping);
@@ -151,6 +177,7 @@ export const useGroupChat = (groupId: string, userId: string, role: RoleEnum) =>
 
         return () => {
             isMounted = false;
+            socket.off("connect", initialize);
 
             cleanupMessage?.();
             cleanupTyping?.();

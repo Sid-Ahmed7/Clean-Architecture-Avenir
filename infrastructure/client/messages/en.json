@@ -2380,6 +2380,59 @@
     "persistentProblem": "Problem persists?",
     "contactSupport": "Contact our support"
   },
+  "groupChat": {
+    "page": {
+      "loading": "Loading groups...",
+      "retry": "Retry",
+      "title": "AVENIR Bank Discussion Groups",
+      "groupCount": "{count} group",
+      "groupCountPlural": "{count} groups",
+      "createGroup": "Create a group",
+      "noGroups": "No groups",
+      "noGroupsDescriptionManager": "Create your first discussion group to start exchanging with all advisors.",
+      "noGroupsDescriptionAdvisor": "You are not a member of any group yet."
+    },
+    "createModal": {
+      "title": "Create a new group",
+      "nameLabel": "Group name",
+      "namePlaceholder": "Ex: Customer Support Team",
+      "nameRequired": "Group name is required",
+      "nameMinLength": "Name must be at least 3 characters",
+      "cancel": "Cancel",
+      "create": "Create"
+    },
+    "groupCard": {
+      "participant": "{count} participant",
+      "participantPlural": "{count} participants",
+      "createdAt": "Created {date}",
+      "open": "Open",
+      "join": "Join"
+    },
+    "room": {
+      "loading": "Loading group chat...",
+      "participantsOnline": "{participants} participants • {online} online",
+      "connected": "Connected",
+      "disconnected": "Disconnected",
+      "noMessages": "No messages yet. Start the conversation!",
+      "placeholder": "Write your message...",
+      "groupNotFound": "Group not found",
+      "loadingGroup": "Loading..."
+    },
+    "message": {
+      "director": "Director"
+    },
+    "participants": {
+      "title": "Participants ({count})",
+      "director": "Director",
+      "advisor": "Advisor"
+    },
+    "typing": {
+      "isTyping": "is typing",
+      "and": "and",
+      "areTyping": "are typing",
+      "others": "{count} others"
+    }
+  },
   "manager": {
     "dashboard": {
       "title": "Agency Management",
@@ -2393,6 +2446,11 @@
         "title": "Agency Settings",
         "description": "Configure your agency settings.",
         "button": "Agency settings"
+      },
+      "groupChat": {
+        "title": "Group Chats",
+        "description": "Access group conversations with your team.",
+        "button": "Open chats"
       }
     },
     "users": {
@@ -2758,6 +2816,11 @@
         "title": "Create News",
         "description": "Publish a new news article for your clients.",
         "button": "Create news"
+      },
+      "groupChat": {
+        "title": "Group Chats",
+        "description": "Join group conversations with your team.",
+        "button": "Open chats"
       }
     }
   },

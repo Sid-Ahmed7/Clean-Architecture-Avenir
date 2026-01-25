@@ -78,35 +78,35 @@ export const identifyUser = async (userId: string, role: string):Promise<void> =
 };
 
 export const joinedGroupChat = (groupId: string): void => {
-    if(!groupSocket?.connected) {
+    if(!groupSocket) {
         return;
     }
     groupSocket.emit("joinGroup", groupId);
 }
 
 export const leftGroupChat = (groupId: string): void => {
-    if(!groupSocket?.connected) {
+    if(!groupSocket) {
         return;
     }
     groupSocket.emit("leavingChatGroup", groupId);
 }
 
 export const sendMessagesInGroup = (groupId: string, content: string): void => {
-    if(!groupSocket?.connected) {
+    if(!groupSocket) {
         return;
     }
     groupSocket.emit("sendGroupMessage", {groupId, content});
 };
 
 export const startTyping = (groupId: string, data: Typing) : void => {
-    if(!groupSocket?.connected) {
+    if(!groupSocket) {
         return;
     }
     groupSocket.emit("typing", { groupId, ...data });
 };
 
 export const stopTyping = (groupId: string, userId: string) : void => {
-    if(!groupSocket?.connected) {
+    if(!groupSocket) {
         return;
     }
     groupSocket.emit("stopTyping", { groupId, userId });
@@ -114,7 +114,7 @@ export const stopTyping = (groupId: string, userId: string) : void => {
 
 
 export const onUserGroups =(callback: (groups: GroupConversation[]) => void): (() => void) => {
-    if(!groupSocket?.connected) {
+    if(!groupSocket) {
         return () => {};
     }
     groupSocket.on("userGroups", callback);
@@ -122,7 +122,7 @@ export const onUserGroups =(callback: (groups: GroupConversation[]) => void): ((
 };
 
 export const onNewGroupMessage = (callback: (message: GroupMessage) => void): (() => void) => {
-    if(!groupSocket?.connected) {
+    if(!groupSocket) {
         return () => {};
     }
     groupSocket.on("newGroupMessage", callback);
@@ -130,7 +130,7 @@ export const onNewGroupMessage = (callback: (message: GroupMessage) => void): ((
 };
 
 export const onUserTyping = (callback: (data: Typing) => void): (() => void) => {
-    if(!groupSocket?.connected) {
+    if(!groupSocket) {
         return () => {};
     }
     groupSocket.on("userTyping", callback); 
@@ -138,7 +138,7 @@ export const onUserTyping = (callback: (data: Typing) => void): (() => void) => 
 }
 
 export const onUserStopTyping = (callback: (data: { userId: string }) => void): (() => void) => {
-    if(!groupSocket?.connected) {
+    if(!groupSocket) {
         return () => {};
     }
     groupSocket.on("userStopTyping", callback);
@@ -146,7 +146,7 @@ export const onUserStopTyping = (callback: (data: { userId: string }) => void): 
 };
 
 export const onUserJoinedGroup = (callback: (data: { userId: string; role: string; isManager: boolean }) => void): (() => void) => {
-    if(!groupSocket?.connected) {
+    if(!groupSocket) {
         return () => {};
     }
     groupSocket.on("userJoined", callback);
@@ -154,7 +154,7 @@ export const onUserJoinedGroup = (callback: (data: { userId: string; role: strin
 };
 
 export const onOnlineUsers = (callback: (userIds: string[]) => void): (() => void) => {
-    if(!groupSocket?.connected) {
+    if(!groupSocket) {
         return () => {};
     }   
     groupSocket.on("onlineUsers", callback);
@@ -162,7 +162,7 @@ export const onOnlineUsers = (callback: (userIds: string[]) => void): (() => voi
 };
 
 export const onUserLeftGroup = (callback: (data: { userId: string }) => void): (() => void) => {
-    if(!groupSocket?.connected) {
+    if(!groupSocket) {
         return () => {};
     }
     groupSocket.on("userLeft", callback);

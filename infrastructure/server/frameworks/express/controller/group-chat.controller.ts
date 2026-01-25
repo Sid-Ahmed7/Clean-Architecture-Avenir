@@ -6,6 +6,8 @@ import { SendGroupMessageUseCase } from "../../../../../application/usecases/gro
 import { GetGroupMessagesUseCase } from "../../../../../application/usecases/group-chat/GetGroupMessagesUseCase";
 import { GetGroupParticipantsUseCase } from "../../../../../application/usecases/group-chat/GetGroupParticipantsUseCase";
 import { GetAllGroupsUseCase } from "../../../../../application/usecases/group-chat/GetAllGroupsUseCase";
+import { GetAllGroupsUnreadCountUseCase } from "../../../../../application/usecases/group-chat/GetAllGroupsUnreadCountUseCase";
+import { MarkGroupMessagesAsReadUseCase } from "../../../../../application/usecases/group-chat/MarkGroupMessagesAsReadUseCase";
 import { UserRepositoryInterface } from "../../../../../application/ports/repositories/auth/UserRepositoryInterface";
 import { GroupConversationRepositoryInterface } from "../../../../../application/ports/repositories/group-chat/GroupConversationRepositoryInterface";
 import { GroupMessageRepositoryInterface } from "../../../../../application/ports/repositories/group-chat/GroupMessageRepositoryInterface";
@@ -42,7 +44,7 @@ async createGroup(req: Request, res: Response) {
         return res.status(401).json({ error: "User not authenticated" });
     }    
     
-    const createGroupConversationUseCase = new CreateGroupConversationUseCase(this.groupConversationRepository,this.uuidService);
+    const createGroupConversationUseCase = new CreateGroupConversationUseCase(this.groupConversationRepository,this.groupParticipantRepository,this.uuidService);
 
     const result = await createGroupConversationUseCase.execute(name, userId, roles[0]);
 
@@ -121,13 +123,27 @@ async joinGroup(req: Request, res: Response) {
         const getGroupMessagesUseCase = new GetGroupMessagesUseCase(this.groupParticipantRepository, this.groupMessageRepository);
         const result = await getGroupMessagesUseCase.execute( groupId, userId, limit, offset);
         if (result instanceof Error) {
-            
+
         if (result instanceof NotAGroupParticipantError) {
             return res.status(403).json({ error: result.message });
         }
             return res.status(400).json({ error: result.message });
         }
-        return res.status(200).json(result);
+
+        const messagesWithIsManager = result.map(message => ({
+            id: message.id,
+            groupId: message.groupId,
+            senderId: message.senderId,
+            senderRole: message.senderRole,
+            senderFirstName: message.senderFirstName,
+            senderLastName: message.senderLastName,
+            content: message.content,
+            createdAt: message.createdAt,
+            readBy: message.readBy,
+            isManager: message.isSentByManager()
+        }));
+
+        return res.status(200).json(messagesWithIsManager);
     }
 
     async getParticipants (req: Request, res: Response) {
@@ -141,8 +157,41 @@ async joinGroup(req: Request, res: Response) {
     }
 
     async getAllGroups(req: Request, res: Response) {
-        const getAllGroupsUseCase = new GetAllGroupsUseCase(this.groupConversationRepository);
-        const result = await getAllGroupsUseCase.execute();
+        const userId = req.user?.userId;
+        if (!userId) {
+            return res.status(401).json({ error: "User not authenticated" });
+        }
+
+        const getAllGroupsUseCase = new GetAllGroupsUseCase(this.groupConversationRepository, this.groupParticipantRepository);
+        const result = await getAllGroupsUseCase.execute(userId);
         return res.status(200).json(result);
+    }
+
+    async getUnreadCounts(req: Request, res: Response) {
+        const userId = req.user?.userId;
+        if (!userId) {
+            return res.status(401).json({ error: "User not authenticated" });
+        }
+
+        const getUnreadCountUseCase = new GetAllGroupsUnreadCountUseCase(this.groupMessageRepository, this.groupParticipantRepository);
+        const result = await getUnreadCountUseCase.execute(userId);
+        return res.status(200).json(result);
+    }
+
+    async markMessagesAsRead(req: Request, res: Response) {
+        const groupId = req.params.groupId as string;
+        const userId = req.user?.userId;
+        if (!userId) {
+            return res.status(401).json({ error: "User not authenticated" });
+        }
+
+        const markAsReadUseCase = new MarkGroupMessagesAsReadUseCase(this.groupMessageRepository, this.groupParticipantRepository);
+        const result = await markAsReadUseCase.execute(groupId, userId);
+
+        if (result instanceof NotAGroupParticipantError) {
+            return res.status(403).json({ error: result.message });
+        }
+
+        return res.status(200).json({ success: true });
     }
 }

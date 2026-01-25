@@ -2,12 +2,15 @@ import { GroupMessage } from "@/types/groupMessage";
 import { formatTime } from "@/lib/utils/formatDate";
 import { Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
+
 interface GroupChatMessageProps {
     message: GroupMessage;
     isUserMessage : boolean;
 }
 
 export const GroupChatMessage = ({ message, isUserMessage }: GroupChatMessageProps) => {
+    const t = useTranslations("groupChat.message");
     return (
         <div
             className={cn("flex flex-col mb-4 max-w-[70%]", isUserMessage ? "ml-auto items-end" : "mr-auto items-start")}
@@ -22,7 +25,7 @@ export const GroupChatMessage = ({ message, isUserMessage }: GroupChatMessagePro
                 {message.isManager && (
                     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-700">
                         <Sparkles  className="w-3 h-3" />
-                        Directeur
+                        {t("director")}
                     </span>
                 )}
             </div>

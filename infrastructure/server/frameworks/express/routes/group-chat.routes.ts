@@ -12,9 +12,11 @@ const router = express.Router();
 const groupChatController = new GroupChatController(groupConversationRepository, groupParticipantRepository, groupMessageRepository, userRepository, uuidService);
 
 router.get("/", verifyTokenAccess, authorizeRoles([RoleEnum.BANK_ADVISOR, RoleEnum.BANK_MANAGER]), (req, res) => groupChatController.getAllGroups(req, res));
+router.get("/unread-counts", verifyTokenAccess, authorizeRoles([RoleEnum.BANK_ADVISOR, RoleEnum.BANK_MANAGER]), (req, res) => groupChatController.getUnreadCounts(req, res));
 router.post("/create", verifyTokenAccess, authorizeRoles([RoleEnum.BANK_MANAGER]), (req, res) => groupChatController.createGroup(req, res));
 router.post("/:groupId/join", verifyTokenAccess, authorizeRoles([RoleEnum.BANK_ADVISOR, RoleEnum.BANK_MANAGER]), (req, res) => groupChatController.joinGroup(req, res));
 router.post("/:groupId/message", verifyTokenAccess, authorizeRoles([RoleEnum.BANK_ADVISOR, RoleEnum.BANK_MANAGER]), (req, res) => groupChatController.sendMessage(req, res));
+router.post("/:groupId/mark-read", verifyTokenAccess, authorizeRoles([RoleEnum.BANK_ADVISOR, RoleEnum.BANK_MANAGER]), (req, res) => groupChatController.markMessagesAsRead(req, res));
 router.get("/:groupId/messages", verifyTokenAccess, authorizeRoles([RoleEnum.BANK_ADVISOR, RoleEnum.BANK_MANAGER]), (req, res) => groupChatController.getMessages(req, res));
 router.get("/:groupId/participants", verifyTokenAccess, authorizeRoles([RoleEnum.BANK_ADVISOR, RoleEnum.BANK_MANAGER]), (req, res) => groupChatController.getParticipants(req, res));
 

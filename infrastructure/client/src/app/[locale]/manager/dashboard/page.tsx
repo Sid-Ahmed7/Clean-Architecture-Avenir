@@ -1,6 +1,6 @@
 "use client";
 
-import { UserCog, Settings, Briefcase } from "lucide-react";
+import { UserCog, Settings, Briefcase, Users } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/Button";
 import { useTranslations } from "next-intl";
@@ -54,6 +54,25 @@ export default function ManagerDashboard() {
                             <Link href="/manager/agency-settings">
                                 <Button variant="secondary" fullWidth icon={Settings} size="sm">
                                     {t("agencySettings.button")}
+                                </Button>
+                            </Link>
+                        </div>
+                    </div>
+
+                    <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="p-2 bg-purple-100 rounded-lg">
+                                <Users className="w-5 h-5 text-purple-600" />
+                            </div>
+                            <h3 className="text-lg font-bold text-gray-900">{t("groupChat.title")}</h3>
+                        </div>
+                        <p className="text-sm text-gray-600 mb-4">
+                            {t("groupChat.description")}
+                        </p>
+                        <div className="space-y-2">
+                            <Link href="/group-chat">
+                                <Button variant="secondary" fullWidth icon={Users} size="sm">
+                                    {t("groupChat.button")}
                                 </Button>
                             </Link>
                         </div>

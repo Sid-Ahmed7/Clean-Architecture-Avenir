@@ -62,6 +62,15 @@ export class PostgresGroupMessageRepository implements GroupMessageRepositoryInt
         await pgPool.query(query, [messageId, userId]);
     }
 
+    public async markAllMessagesAsRead(groupId: string, userId: string): Promise<void> {
+        const query = `
+            UPDATE group_messages
+            SET read_by = array_append(read_by, $2)
+            WHERE group_id = $1 AND NOT ($2 = ANY(read_by))
+        `;
+        await pgPool.query(query, [groupId, userId]);
+    }
+
     public async getUnreadCount(groupId: string, userId: string): Promise<number> {
         const query = `
             SELECT COUNT(*) as count

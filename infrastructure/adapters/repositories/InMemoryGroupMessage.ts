@@ -43,6 +43,15 @@ export class InMemoryGroupMessageRepository implements GroupMessageRepositoryInt
         }
     }
 
+    public async markAllMessagesAsRead(groupId: string, userId: string): Promise<void> {
+        for (let i = 0; i < this.messages.length; i++) {
+            const message = this.messages[i];
+            if (message.groupId === groupId && !message.readBy.includes(userId)) {
+                this.messages[i] = message.markAsReadBy(userId);
+            }
+        }
+    }
+
     public async getUnreadCount(groupId: string, userId: string): Promise<number> {
         return this.messages.filter(
             (m) => m.groupId === groupId && !m.readBy.includes(userId)

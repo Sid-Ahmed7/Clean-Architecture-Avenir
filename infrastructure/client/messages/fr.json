@@ -2385,6 +2385,59 @@
     "persistentProblem": "Le problème persiste ?",
     "contactSupport": "Contactez notre support"
   },
+  "groupChat": {
+    "page": {
+      "loading": "Chargement des groupes...",
+      "retry": "Réessayer",
+      "title": "Groupes de discussion de la banque AVENIR",
+      "groupCount": "{count} groupe",
+      "groupCountPlural": "{count} groupes",
+      "createGroup": "Créer un groupe",
+      "noGroups": "Aucun groupe",
+      "noGroupsDescriptionManager": "Créez votre premier groupe de discussion pour commencer à échanger avec l'ensemble des conseillers.",
+      "noGroupsDescriptionAdvisor": "Vous n'êtes membre d'aucun groupe pour le moment."
+    },
+    "createModal": {
+      "title": "Créer un nouveau groupe",
+      "nameLabel": "Nom du groupe",
+      "namePlaceholder": "Ex: Équipe Support Client",
+      "nameRequired": "Le nom du groupe est requis",
+      "nameMinLength": "Le nom doit contenir au moins 3 caractères",
+      "cancel": "Annuler",
+      "create": "Créer"
+    },
+    "groupCard": {
+      "participant": "{count} participant",
+      "participantPlural": "{count} participants",
+      "createdAt": "Créé {date}",
+      "open": "Ouvrir",
+      "join": "Rejoindre"
+    },
+    "room": {
+      "loading": "Chargement du chat de groupe...",
+      "participantsOnline": "{participants} participants • {online} en ligne",
+      "connected": "Connecté",
+      "disconnected": "Déconnecté",
+      "noMessages": "Aucun message. Commencez la conversation !",
+      "placeholder": "Écrivez votre message...",
+      "groupNotFound": "Groupe non trouvé",
+      "loadingGroup": "Chargement..."
+    },
+    "message": {
+      "director": "Directeur"
+    },
+    "participants": {
+      "title": "Participants ({count})",
+      "director": "Directeur",
+      "advisor": "Conseiller"
+    },
+    "typing": {
+      "isTyping": "est en train d'écrire",
+      "and": "et",
+      "areTyping": "sont en train d'écrire",
+      "others": "{count} autres"
+    }
+  },
   "manager": {
     "dashboard": {
       "title": "Gestion de l'Agence",
@@ -2398,6 +2451,11 @@
         "title": "Paramètres de l'Agence",
         "description": "Configurez les paramètres de votre agence.",
         "button": "Paramètres agence"
+      },
+      "groupChat": {
+        "title": "Discussions de groupe",
+        "description": "Accédez aux conversations de groupe avec votre équipe.",
+        "button": "Ouvrir les discussions"
       }
     },
     "users": {
@@ -2763,6 +2821,11 @@
         "title": "Créer une actualité",
         "description": "Publiez un nouvel article pour vos clients.",
         "button": "Créer une actualité"
+      },
+      "groupChat": {
+        "title": "Discussions de groupe",
+        "description": "Participez aux conversations de groupe avec votre équipe.",
+        "button": "Ouvrir les discussions"
       }
     }
   },

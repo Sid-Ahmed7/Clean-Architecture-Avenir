@@ -21,9 +21,7 @@ export class GetGroupMessagesUseCase {
         if(messages instanceof Error) {
             return messages;
         }
-
-        const findMessages = await this.groupMessageRepository.findByGroupId(groupId, limit, offset);
-        return findMessages; 
+        return messages;
         
     }
 

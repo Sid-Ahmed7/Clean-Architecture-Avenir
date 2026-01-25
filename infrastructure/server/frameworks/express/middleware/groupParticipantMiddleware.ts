@@ -1,7 +1,7 @@
 import { Socket } from "socket.io";
 import { groupParticipantRepository } from "../../../../adapters/config/repositories";
 
-const EVENTS_REQUIRING_PARTICIPANT_CHECK = ["joinGroup", "sendMessage", "typing", "stopTyping"];
+const EVENTS_REQUIRING_PARTICIPANT_CHECK = ["sendGroupMessage", "typing", "stopTyping"];
 
 export const groupParticipantMiddleware = (socket: Socket, next: (err?: Error) => void) => {
     socket.use(async ([event, ...args], eventNext) => {

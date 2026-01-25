@@ -1,11 +1,12 @@
-import { getAllGroups, createGroupConversation, joinGroupConversation } from './../lib/api/groupChat';
-import { useState, useEffect } from 'react';
+import { getAllGroups, createGroupConversation, joinGroupConversation, getAllUnreadCounts } from './../lib/api/groupChat';
+import { useState, useEffect, useCallback } from 'react';
 import { GroupConversation } from '@/types/groupConversation';
 
 export function useGroupChatList() {
 
 
   const [groups, setGroups] = useState<GroupConversation[]>([]);
+  const [unreadCounts, setUnreadCounts] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
@@ -15,8 +16,12 @@ export function useGroupChatList() {
     setError(null);
     try {
       const data = await getAllGroups();
-      setGroups(data);
-    } catch (err) {
+      const [groupsData, unreadData] = await Promise.all([
+                getAllGroups(),
+                getAllUnreadCounts()
+            ]);
+            setGroups(groupsData);
+            setUnreadCounts(unreadData);    } catch (err) {
       setError("Failed to fetch group chats.");
     } finally {
       setLoading(false);
@@ -52,6 +57,17 @@ export function useGroupChatList() {
             setLoading(false);
         }
     };
+    
+    const getUnreadCount = useCallback((groupId: string): number => {
+        return unreadCounts[groupId] || 0;
+    }, [unreadCounts]);
+
+    const updateUnreadCount = useCallback((groupId: string, count: number) => {
+        setUnreadCounts(prev => ({
+            ...prev,
+            [groupId]: count
+        }));
+    }, []);
 
     return {
         groups,
@@ -61,5 +77,7 @@ export function useGroupChatList() {
         createGroup,
         joinAGroup,
         refetch: fetchAllGroups,
+        getUnreadCount,
+        updateUnreadCount
     };
 }

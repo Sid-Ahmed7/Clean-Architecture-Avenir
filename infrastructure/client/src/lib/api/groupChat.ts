@@ -34,3 +34,16 @@ export const sendGroupMessage = async (groupId: string, content: string): Promis
     const { data } = await apiClient.post(`/group-chat/${groupId}/message`, { content });
     return data;
 };
+export const getUnreadCount = async (groupId: string): Promise<number> => {
+    const { data } = await apiClient.get(`/group-chat/${groupId}/unread-count`);
+    return data.count;
+};
+
+export const getAllUnreadCounts = async (): Promise<Record<string, number>> => {
+    const { data } = await apiClient.get('/group-chat/unread-counts');
+    return data;
+};
+
+export const markMessagesAsRead = async (groupId: string): Promise<void> => {
+    await apiClient.post(`/group-chat/${groupId}/mark-read`);
+};

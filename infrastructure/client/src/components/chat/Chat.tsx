@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useChat } from "@/hooks/useChat";
-import { Token } from "@/types/Token";
+import { Token } from "@/types/token";
 import { useTranslations } from "next-intl";
 import { Send } from "lucide-react";
 import Button from "../ui/Button";

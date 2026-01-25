@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import { GroupParticipant } from "@/types/groupParticipant";
 import { RoleEnum } from "@/types/RoleEnum";
 import { Circle, Crown } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface GroupChatParticipantsListProps {
     participants: GroupParticipant[];
@@ -9,6 +10,7 @@ interface GroupChatParticipantsListProps {
 }
 
 export const GroupChatParticipantsList = ({ participants, onlineUsers }: GroupChatParticipantsListProps) => {
+    const t = useTranslations("groupChat.participants");
 
     const sortedUsers = [...participants].sort((a, b) => {
         if(a.role === RoleEnum.BANK_MANAGER && b.role !== RoleEnum.BANK_MANAGER) {
@@ -24,7 +26,7 @@ export const GroupChatParticipantsList = ({ participants, onlineUsers }: GroupCh
 return (
     <div className="w-64 border-l border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-4">
             <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                Participants ({participants.length})
+                {t("title", { count: participants.length })}
             </h3>
 
             <ul className="space-y-2">
@@ -59,7 +61,7 @@ return (
                                     )}
                                 </div>
                                 <span className="text-xs text-gray-500 dark:text-gray-400">
-                                    {isManager ? "Directeur" : "Conseiller"}
+                                    {isManager ? t("director") : t("advisor")}
                                 </span>
                             </div>
                         </li>

@@ -70,17 +70,22 @@ export const groupChatSocket = (io: Server) => {
 
             socket.to(roomName).emit("userJoined", {
                 userId: user.userId,
-                role: user.roles[0],
-                isManager: user.roles[0] === RoleEnum.BANK_MANAGER
+                role: user.role,
+                isManager: user.role === RoleEnum.BANK_MANAGER
             });
 
             socket.emit("onlineUsers", Array.from(groupChatUsers.get(groupId) || []));
 
+            socket.to(roomName).emit("userJoined", {
+                groupId: groupId,
+                userId: user.userId,
+                userName: user.firstName + " " + user.lastName
+            })
         });
 
         socket.on("sendGroupMessage", async(data: GroupMessage ) => {
             const sendGroupMessageUseCase = new SendGroupMessageUseCase(groupMessageRepository, groupConversationRepository, groupParticipantRepository, userRepository, cryptoUuidGenerator);
-            const result = await sendGroupMessageUseCase.execute(data.groupId, user.userId, user.roles[0], data.content);
+            const result = await sendGroupMessageUseCase.execute(data.groupId, user.userId, user.role, data.content);
             if (result instanceof Error) {
                 return socket.emit("error", { message: result.message });
             }

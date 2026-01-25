@@ -1,4 +1,4 @@
-import { Token } from "@/types/Token";
+import { Token } from "@/types/token";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 

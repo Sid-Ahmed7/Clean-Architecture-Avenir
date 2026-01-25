@@ -1,11 +1,13 @@
 import { AuthContext } from "@/contexts/AuthProvider";
 import { useGroupChat } from "@/hooks/useGroupChat";
+import { cn } from "@/lib/utils";
 import { RoleEnum } from "@/types/RoleEnum";
+import { Users, Send } from 'lucide-react';
 import { useContext, useEffect, useRef, useState } from "react";
 import { GroupChatMessage } from './GroupChatMessage';
-import { Users, Send } from 'lucide-react';
-import { GroupChatTypingIndicator } from './GroupChatTypingIndicator';
+import { GroupChatTyping } from './GroupChatTyping';
 import { GroupChatParticipantsList } from './GroupChatParticipantsList';
+import { useTranslations } from "next-intl";
 
 interface GroupChatRoomProps {
     groupId: string;
@@ -14,7 +16,7 @@ interface GroupChatRoomProps {
 
 
 export const GroupChatRoom = ({ groupId, groupName }: GroupChatRoomProps) => {
-
+    const t = useTranslations("groupChat.room");
     const { user } = useContext(AuthContext);
     const [inputValue, setInputValue] = useState("");
     const [showUsersList, setShowUsersList] = useState(true);
@@ -51,7 +53,7 @@ export const GroupChatRoom = ({ groupId, groupName }: GroupChatRoomProps) => {
     if (isLoading) {
         return (
             <div className="flex items-center justify-center h-full">
-                Chargement du chat de groupe...
+                {t("loading")}
             </div>
         );
     }
@@ -71,7 +73,7 @@ export const GroupChatRoom = ({ groupId, groupName }: GroupChatRoomProps) => {
                             {groupName}
                         </h2>
                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                            {participants.length} participants • {onlineUsers.length} en ligne
+                            {t("participantsOnline", { participants: participants.length, online: onlineUsers.length })}
                         </p>
                     </div>
                     <div className="flex items-center gap-2">
@@ -89,7 +91,7 @@ export const GroupChatRoom = ({ groupId, groupName }: GroupChatRoomProps) => {
                                     connected ? "bg-green-500" : "bg-red-500"
                                 )}
                             />
-                            {connected ? "Connecté" : "Déconnecté"}
+                            {connected ? t("connected") : t("disconnected")}
                         </span>
                         <button
                             onClick={() => setShowUsersList(!showUsersList)}
@@ -103,22 +105,22 @@ export const GroupChatRoom = ({ groupId, groupName }: GroupChatRoomProps) => {
                 <div className="flex-1 overflow-y-auto p-6">
                     {messages.length === 0 ? (
                         <div className="flex items-center justify-center h-full text-gray-500">
-                            Aucun message. Commencez la conversation !
+                            {t("noMessages")}
                         </div>
                     ) : (
                         messages.map((message) => (
                             <GroupChatMessage
                                 key={message.id}
                                 message={message}
-                                isOwnMessage={message.senderId === user?.userId}
+                                isUserMessage={message.senderId === user?.userId}
                             />
                         ))
                     )}
                     <div ref={messagesEndref} />
                 </div>
 
-                <GroupChatTypingIndicator
-                    typingUsers={typingUsers.filter(u => u.userId !== user?.userId)}
+                <GroupChatTyping
+                    data={typingUsers.filter(u => u.userId !== user?.userId)}
                 />
 
                 <div className="p-4 border-t border-gray-200 dark:border-gray-700">
@@ -126,7 +128,7 @@ export const GroupChatRoom = ({ groupId, groupName }: GroupChatRoomProps) => {
                         <textarea
                             value={inputValue}
                             onChange={handleInputChange}
-                            placeholder="Écrivez votre message..."
+                            placeholder={t("placeholder")}
                             rows={1}
                             className="flex-1 resize-none rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-3 text-gray-900 dark:text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none"
                         />

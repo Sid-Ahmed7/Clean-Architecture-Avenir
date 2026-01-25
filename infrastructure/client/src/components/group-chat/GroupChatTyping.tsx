@@ -1,11 +1,13 @@
 import { Typing } from "@/types/typing";
 import { Sparkles } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface GroupChatTypingProps {
   data: Typing[];
 }
 
 export const GroupChatTyping = ({ data }: GroupChatTypingProps) => {
+    const t = useTranslations("groupChat.typing");
 
     if (data.length === 0) {
         return null;
@@ -24,7 +26,7 @@ export const GroupChatTyping = ({ data }: GroupChatTypingProps) => {
                     <span className="flex items-center gap-1">
                         <span className="font-medium">{user.firstName}</span>
                         {user.isManager && <Sparkles className="w-3 h-3 text-amber-400" />}
-                        <span>est en train d&apos;écrire</span>
+                        <span>{t("isTyping")}</span>
                     </span>
                 );
             })()}
@@ -34,8 +36,8 @@ export const GroupChatTyping = ({ data }: GroupChatTypingProps) => {
                 const user2 = data[1];
                 return (
                     <span>
-                        <span className="font-medium">{user1.firstName}</span> et{" "}
-                        <span className="font-medium">{user2.firstName}</span> sont en train d&apos;écrire
+                        <span className="font-medium">{user1.firstName}</span> {t("and")}{" "}
+                        <span className="font-medium">{user2.firstName}</span> {t("areTyping")}
                     </span>
                 );
             })()}
@@ -45,8 +47,8 @@ export const GroupChatTyping = ({ data }: GroupChatTypingProps) => {
                 const othersCount = data.length - 1;
                 return (
                     <span>
-                        <span className="font-medium">{user1.firstName}</span> et{" "}
-                        <span className="font-medium">{othersCount} autres</span> sont en train d&apos;écrire
+                        <span className="font-medium">{user1.firstName}</span> {t("and")}{" "}
+                        <span className="font-medium">{t("others", { count: othersCount })}</span> {t("areTyping")}
                     </span>
                 );
             })()}

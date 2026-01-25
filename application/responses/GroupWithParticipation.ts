@@ -1,8 +1,8 @@
-export interface GroupConversation {
+export interface GroupWithParticipation {
     id: string;
     name: string;
     createdBy: string;
-    createdAt: string;
-    updatedAt: string;
+    createdAt: Date;
+    updatedAt: Date;
     isParticipant: boolean;
 }
