@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { apiClient } from "@/lib/api/apiClient";
-import { Token } from "@/types/Token";
+import { Token } from "@/types/token";
 import { usePathname } from "next/navigation";
 import { LocaleContext } from "./LocaleProvider";
 import { RoleEnum } from "@/types/RoleEnum";

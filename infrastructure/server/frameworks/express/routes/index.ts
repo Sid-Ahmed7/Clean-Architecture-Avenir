@@ -17,7 +17,7 @@ import directorAccountsRoutes from "./director-accounts.routes";
 import beneficiaryRoutes from "./beneficiary.routes";
 import beneficiaryGroupRoutes from "./beneficiary-group.routes";
 import notificationRoutes from "./notification.routes";
-
+import groupChatRoutes from "./group-chat.routes";
 const router = express.Router();
 
 router.use("/auth", authRoutes);
@@ -38,5 +38,6 @@ router.use("/loan", loanRoutes);
 router.use("/beneficiaries", beneficiaryRoutes);
 router.use("/beneficiary-groups", beneficiaryGroupRoutes);
 router.use("/notification", notificationRoutes)
+router.use("/group-chat", groupChatRoutes); 
 
 export default router;
