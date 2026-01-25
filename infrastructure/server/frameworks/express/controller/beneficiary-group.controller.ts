@@ -104,7 +104,7 @@ export class BeneficiaryGroupController {
             return res.status(400).json({ errors: parseResult.error.message });
         }
 
-        const result = await addBeneficiaryToGroupUseCase.execute(groupId, parseResult.data.beneficiaryId);
+        const result = await addBeneficiaryToGroupUseCase.execute(groupId as string, parseResult.data.beneficiaryId);
 
         if (result instanceof Error) {
             if (result instanceof BeneficiaryGroupNotFoundError) {
@@ -135,7 +135,7 @@ export class BeneficiaryGroupController {
             return res.status(400).json({ error: "Beneficiary Id must be provided" });
         }
 
-        const result = await removeBeneficiaryFromGroupUseCase.execute(groupId, beneficiaryId);
+        const result = await removeBeneficiaryFromGroupUseCase.execute(groupId as string, beneficiaryId as string);
 
         if (result instanceof Error) {
             if (result instanceof BeneficiaryGroupNotFoundError) {
@@ -176,7 +176,7 @@ export class BeneficiaryGroupController {
         }
 
         const updateData: UpdateBeneficiaryGroup = {
-            groupId,
+            groupId: groupId as string,
             userId,
             ...(parseResult.data.groupName !== undefined && { groupName: parseResult.data.groupName }),
             ...(parseResult.data.beneficiaryIds !== undefined && { beneficiaryIds: parseResult.data.beneficiaryIds }),
@@ -210,7 +210,7 @@ export class BeneficiaryGroupController {
             return res.status(400).json({ error: "Beneficiaries Group Id must be provided" });
         }
 
-        const result = await deleteBeneficiaryGroupUseCase.execute(groupId);
+        const result = await deleteBeneficiaryGroupUseCase.execute(groupId as string);
 
         if (result instanceof Error) {
             if (result instanceof BeneficiaryGroupNotFoundError) {

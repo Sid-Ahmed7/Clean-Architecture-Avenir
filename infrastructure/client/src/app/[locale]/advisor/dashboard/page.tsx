@@ -2,7 +2,7 @@
 
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
-import { FileText, Briefcase, MessageCircle, Newspaper, ArrowRight } from "lucide-react";
+import { FileText, Briefcase, MessageCircle, Newspaper, ArrowRight, Users } from "lucide-react";
 
 export default function AdvisorDashboard() {
     const t = useTranslations("advisor.dashboard");
@@ -70,6 +70,14 @@ export default function AdvisorDashboard() {
             variant: "orange" as const,
             href: "/feed/create",
             buttonText: t("createNews.button")
+        },
+        {
+            title: t("groupChat.title"),
+            description: t("groupChat.description"),
+            icon: Users,
+            variant: "blue" as const,
+            href: "/group-chat",
+            buttonText: t("groupChat.button")
         }
     ];
 

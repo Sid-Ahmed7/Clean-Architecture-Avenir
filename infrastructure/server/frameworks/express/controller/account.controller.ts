@@ -273,7 +273,7 @@ async updateAccount(req: Request, res: Response) {
         }
 
 
-        const result = await getAccountByIbanUseCase.execute(iban);
+        const result = await getAccountByIbanUseCase.execute(iban as string);
 
 
         if (result instanceof Error) {
@@ -635,7 +635,7 @@ async updateAccount(req: Request, res: Response) {
         );
 
         const actionEnum = action === "APPROVE" ? OverdraftActionEnum.APPROVE : OverdraftActionEnum.REJECT;
-        const result = await useCase.execute(requestId, actionEnum);
+        const result = await useCase.execute(requestId as string, actionEnum);
 
         if (result instanceof AccountNotFoundError) {
             return res.status(404).json({ error: result.message });
@@ -664,7 +664,7 @@ async updateAccount(req: Request, res: Response) {
             return res.status(400).json({ error: "Request ID is missing" });
         }
 
-        const request = await this.overdraftRequestRepository.findById(requestId);
+        const request = await this.overdraftRequestRepository.findById(requestId as string);
         if (!request) {
             return res.status(404).json({ error: "Request not found" });
         }

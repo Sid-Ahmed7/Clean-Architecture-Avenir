@@ -1,0 +1,8 @@
+export interface GroupConversation {
+    id: string;
+    name: string;
+    createdBy: string;
+    createdAt: string;
+    updatedAt: string;
+    isParticipant: boolean;
+}

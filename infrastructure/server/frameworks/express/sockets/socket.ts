@@ -13,7 +13,6 @@ import { uuidService, notificationService } from "../../../../adapters/config/se
 import { Identification } from "../interfaces/Identification";
 import { Data } from "../interfaces/Data";
 import { SendNotificationToClientUseCase } from "../../../../../application/usecases/notification/SendNotificationToClientUseCase";
-import { sendNotificationToClientSchema } from "../schemas/notifications/sendNotificationToClientSchema";
 
 
 export const clients: Record<string, string[]> = {};
