@@ -269,16 +269,53 @@ npm run fixtures:messaging
 
 ### Fixtures In-Memory
 
-Pour charger des fixtures en mémoire (sans PostgreSQL) :
+Les fixtures in-memory sont **automatiquement chargées au démarrage du serveur** lorsque `REPOSITORY_TYPE=inmemory`.
+
+#### Chargement Automatique (Recommandé)
+
+Lorsque vous démarrez le serveur avec `REPOSITORY_TYPE=inmemory`, les fixtures sont automatiquement chargées :
 
 ```bash
 cd infrastructure/server
 
-# Charger les fixtures in-memory
+# 1. Basculer vers in-memory
+npm run switch:inmemory
+
+# 2. Démarrer le serveur (les fixtures se chargent automatiquement)
+npm run dev
+```
+
+**Sortie attendue au démarrage :**
+```
+Using inmemory repository - loading fixtures...
+🚀 Starting to load in-memory messaging fixtures...
+👥 Creating test users...
+  ✓ Created user: Marie Dupont (CLIENT)
+  ✓ Created user: Pierre Martin (CLIENT)
+  ✓ Created user: Sophie Bernard (BANK_ADVISOR)
+  ✓ Created user: Lucas Petit (BANK_ADVISOR)
+  ✓ Created user: Jean Dubois (BANK_MANAGER)
+✅ Test users created
+💬 Creating individual conversations...
+📨 Creating messages...
+👥 Creating group conversations...
+✅ In-memory fixtures loaded successfully.
+Server started on port 3000
+```
+
+#### Chargement Manuel (Optionnel)
+
+Vous pouvez aussi charger les fixtures manuellement (uniquement si le serveur n'est **pas** en cours d'exécution) :
+
+```bash
+cd infrastructure/server
 npm run fixtures:messaging:inmemory
 ```
 
-**⚠️ Important :** Les données in-memory sont perdues au redémarrage du serveur.
+**⚠️ Important :** 
+- Les données in-memory sont **volatiles** et rechargées à chaque redémarrage du serveur
+- Les fixtures se chargent automatiquement dans les **instances singleton** des repositories utilisées par le serveur
+- Toute modification des données pendant l'exécution sera perdue au prochain redémarrage
 
 ### Identifiants de Test
 
@@ -300,9 +337,9 @@ npm run switch:postgres
 npm run migrate
 npm run fixtures:messaging
 
-# Utiliser In-Memory
+# Utiliser In-Memory (fixtures chargées automatiquement au démarrage)
 npm run switch:inmemory
-npm run fixtures:messaging:inmemory
+npm run dev  # Les fixtures se chargent automatiquement
 ```
 
 
@@ -553,3 +590,14 @@ Cette section documente toutes les routes API disponibles dans l'application, or
 - Express.js
 - JWT (JSON Web Tokens)
 - Clean Architecture
+
+---
+
+## 📝 Copyright & Auteurs
+
+© 2026 Clean-Architecture-Avenir. Tous droits réservés.
+
+**Développé par :**
+- Arthur BROUARD
+- Sofiane Chadili
+- Sid-Ahmed Moussi
