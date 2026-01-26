@@ -240,6 +240,73 @@ openssl rand -hex 32
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
+## 🎯 Fixtures de Données de Test
+
+Le projet inclut des scripts de fixtures pour charger des données de test réalistes dans le système de messagerie. Deux versions sont disponibles selon votre type de repository.
+
+### Fixtures PostgreSQL
+
+Pour charger des fixtures dans PostgreSQL :
+
+```bash
+cd infrastructure/server
+
+# 1. Réinitialiser la base de données (supprime toutes les données)
+npm run db:reset
+
+# 2. Exécuter les migrations
+npm run migrate
+
+# 3. Charger les fixtures de messagerie
+npm run fixtures:messaging
+```
+
+**Données créées :**
+- 5 utilisateurs de test (2 clients, 2 conseillers, 1 manager)
+- 3 conversations individuelles avec 12 messages
+- 2 conversations de groupe avec 5 participants et 7 messages
+- Mots de passe chiffrés avec bcrypt : `Password123!`
+
+### Fixtures In-Memory
+
+Pour charger des fixtures en mémoire (sans PostgreSQL) :
+
+```bash
+cd infrastructure/server
+
+# Charger les fixtures in-memory
+npm run fixtures:messaging:inmemory
+```
+
+**⚠️ Important :** Les données in-memory sont perdues au redémarrage du serveur.
+
+### Identifiants de Test
+
+Tous les utilisateurs utilisent le mot de passe : **`Password123!`**
+
+| Email | Nom | Rôle |
+|---|---|---|
+| client1@test.com | Marie Dupont | CLIENT |
+| client2@test.com | Pierre Martin | CLIENT |
+| advisor1@test.com | Sophie Bernard | BANK_ADVISOR |
+| advisor2@test.com | Lucas Petit | BANK_ADVISOR |
+| manager1@test.com | Jean Dubois | BANK_MANAGER |
+
+### Basculer entre PostgreSQL et In-Memory
+
+```bash
+# Utiliser PostgreSQL
+npm run switch:postgres
+npm run migrate
+npm run fixtures:messaging
+
+# Utiliser In-Memory
+npm run switch:inmemory
+npm run fixtures:messaging:inmemory
+```
+
+
+
 ## Documentation des Routes API
 
 Cette section documente toutes les routes API disponibles dans l'application, organisées par catégorie avec leurs méthodes HTTP et les rôles requis pour y accéder.

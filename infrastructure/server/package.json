@@ -15,6 +15,7 @@
     "migrate": "tsx scripts/run-migrations.ts",
     "db:reset": "tsx scripts/reset-database.ts",
     "fixtures:messaging": "tsx ../adapters/config/database/loadMessagingFixtures.ts",
+    "fixtures:messaging:inmemory": "tsx ../adapters/repositories/loadInMemoryMessagingFixtures.ts",
     "express:dev": "cd frameworks/express && npm run dev",
     "adonisjs:dev": "cd frameworks/adonisjs && npm run dev"
   },
