@@ -1,19 +1,17 @@
 import bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
 
-// Import repository classes directly
-import { InMemoryUserRepository } from './InMemoryUserRepository.js';
-import { InMemoryRoleRepository } from './InMemoryRoleRepository.js';
-import { InMemoryUserRoleRepository } from './InMemoryUserRoleRepository.js';
-import { InMemoryConversationRepository } from './InMemoryConversationRepository.js';
-import { InMemoryMessageRepository } from './InMemoryMessageRepository.js';
-import { InMemoryGroupConversationRepository } from './InMemoryGroupConversation.js';
-import { InMemoryGroupParticipantRepository } from './InMemoryGroupParticipant.js';
-import { InMemoryGroupMessageRepository } from './InMemoryGroupMessage.js';
-
-// Import services
-import { PasswordEncryptionService } from '../services/auth/PasswordEncryptionService.js';
-import { CryptoUuidGenerator } from '../services/CryptoUuidGenerator.js';
+// Import singleton repository instances from config
+import {
+    userRepository,
+    roleRepository,
+    userRoleRepository,
+    conversationRepository,
+    messageRepository,
+    groupConversationRepository,
+    groupParticipantRepository,
+    groupMessageRepository
+} from '../config/repositories.js';
 
 // Import entities and enums
 import { BankUserEntity } from '../../../domain/entities/BankUserEntity.js';
@@ -39,25 +37,10 @@ interface TestUser {
     role: RoleEnum;
 }
 
-async function loadInMemoryMessagingFixtures() {
+export async function loadInMemoryMessagingFixtures() {
     console.log('🚀 Starting to load in-memory messaging fixtures...\n');
 
     try {
-        // Initialize services
-        const passwordService = new PasswordEncryptionService();
-        const uuidGenerator = new CryptoUuidGenerator();
-
-        // Initialize repositories
-        const userRepository = new InMemoryUserRepository(passwordService);
-        const roleRepository = new InMemoryRoleRepository(uuidGenerator);
-        const userRoleRepository = new InMemoryUserRoleRepository(roleRepository, userRepository);
-        const conversationRepository = new InMemoryConversationRepository();
-        const messageRepository = new InMemoryMessageRepository();
-        const groupConversationRepository = new InMemoryGroupConversationRepository();
-        const groupParticipantRepository = new InMemoryGroupParticipantRepository();
-        const groupMessageRepository = new InMemoryGroupMessageRepository();
-
-        console.log('✅ Repositories initialized\n');
 
         // Hash the test password once
         const hashedPassword = await bcrypt.hash(TEST_PASSWORD, SALT_ROUNDS);
@@ -544,13 +527,16 @@ async function loadInMemoryMessagingFixtures() {
     }
 }
 
-// Run the fixtures
-loadInMemoryMessagingFixtures()
-    .then(() => {
-        console.log('✅ Process completed successfully');
-        process.exit(0);
-    })
-    .catch((error) => {
-        console.error('❌ Process failed:', error);
-        process.exit(1);
-    });
+// Export the function for use in server startup or manual execution
+// To run manually: tsx loadInMemoryMessagingFixtures.ts
+if (import.meta.url === `file://${process.argv[1]}`) {
+    loadInMemoryMessagingFixtures()
+        .then(() => {
+            console.log('✅ Process completed successfully');
+            process.exit(0);
+        })
+        .catch((error) => {
+            console.error('❌ Process failed:', error);
+            process.exit(1);
+        });
+}

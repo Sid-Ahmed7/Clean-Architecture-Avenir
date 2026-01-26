@@ -32,8 +32,21 @@ if (process.env.REPOSITORY_TYPE === 'postgres') {
     }).catch(err => {
         console.error('Migration error:', err);
     });
+} else if (process.env.REPOSITORY_TYPE === 'inmemory') {
+    console.log(`Using ${process.env.REPOSITORY_TYPE} repository - loading fixtures...`);
+    // Dynamically import the fixture loading function
+    import('../../../adapters/repositories/loadInMemoryMessagingFixtures.js')
+        .then(({ loadInMemoryMessagingFixtures }) => {
+            return loadInMemoryMessagingFixtures();
+        })
+        .then(() => {
+            console.log('✅ In-memory fixtures loaded successfully.');
+        })
+        .catch(err => {
+            console.error('❌ Error loading in-memory fixtures:', err);
+        });
 } else {
-    console.log(`Using ${process.env.REPOSITORY_TYPE} repository - skipping database migrations.`);
+    console.log(`Using ${process.env.REPOSITORY_TYPE} repository - no initialization needed.`);
 }
 
 export default app;
