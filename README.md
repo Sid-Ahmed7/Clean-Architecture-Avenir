@@ -243,6 +243,7 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ## 🎯 Fixtures de Données de Test
 
 Le projet inclut des scripts de fixtures pour charger des données de test réalistes dans le système de messagerie. Deux versions sont disponibles selon votre type de repository.
+Pour les tests veuillez à utilsier le frameworks Express et vérifier que vous m'utilsier.
 
 ### Fixtures PostgreSQL
 
@@ -251,14 +252,27 @@ Pour charger des fixtures dans PostgreSQL :
 ```bash
 cd infrastructure/server
 
-# 1. Réinitialiser la base de données (supprime toutes les données)
+# 1. Vérifier si tout est configuré sur postgres 
+npm run repo:status
+
+# 2. Vérifier si que vous utilisez bien Express 
+npm run switch
+
+3. Si vous n'utilisez pas Express, basculez vers Express et si vous n'utilisez pas Postgres, basculez vers Postgres
+npm run switch:express
+npm run switch:postgres
+
+# 4.  Réinitialiser la base de données (supprime toutes les données)
 npm run db:reset
 
-# 2. Exécuter les migrations
+# 5. Exécuter les migrations
 npm run migrate
 
-# 3. Charger les fixtures de messagerie
+# 6. Charger les fixtures de messagerie
 npm run fixtures:messaging
+
+# 7. Démarrer le serveur
+npm run dev
 ```
 
 **Données créées :**
@@ -267,23 +281,6 @@ npm run fixtures:messaging
 - 2 conversations de groupe avec 5 participants et 7 messages
 - Mots de passe chiffrés avec bcrypt : `Password123!`
 
-### Fixtures In-Memory
-
-Les fixtures in-memory sont **automatiquement chargées au démarrage du serveur** lorsque `REPOSITORY_TYPE=inmemory`.
-
-#### Chargement Automatique (Recommandé)
-
-Lorsque vous démarrez le serveur avec `REPOSITORY_TYPE=inmemory`, les fixtures sont automatiquement chargées :
-
-```bash
-cd infrastructure/server
-
-# 1. Basculer vers in-memory
-npm run switch:inmemory
-
-# 2. Démarrer le serveur (les fixtures se chargent automatiquement)
-npm run dev
-```
 
 **Sortie attendue au démarrage :**
 ```
