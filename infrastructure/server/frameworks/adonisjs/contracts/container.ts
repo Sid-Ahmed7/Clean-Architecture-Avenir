@@ -21,6 +21,9 @@ import type { StockOrderRepositoryInterface } from '#application/ports/repositor
 import type { StockHoldingRepositoryInterface } from '#application/ports/repositories/stocks/StockHoldingRepositoryInterface.js'
 import type { StockTransactionRepositoryInterface } from '#application/ports/repositories/stocks/StockTransactionRepositoryInterface.js'
 import type { EventBusInterface } from '#application/ports/event/EventBusInterface.js'
+import type { GroupConversationRepositoryInterface } from '#application/ports/repositories/group-chat/GroupConversationRepositoryInterface.js'
+import type { GroupParticipantRepositoryInterface } from '#application/ports/repositories/group-chat/GroupParticipantRepositoryInterface.js'
+import type { GroupMessageRepositoryInterface } from '#application/ports/repositories/group-chat/GroupMessageRepositoryInterface.js'
 
 // Service implementations
 import type { JwtTokenService } from '#infrastructure/adapters/services/auth/JwtTokenService.js'
@@ -79,6 +82,9 @@ declare module '@adonisjs/core/types' {
     holdingRepository: StockHoldingRepositoryInterface
     stockTransactionRepository: StockTransactionRepositoryInterface
     eventBus: EventBusInterface
+    groupConversationRepository: GroupConversationRepositoryInterface
+    groupParticipantRepository: GroupParticipantRepositoryInterface
+    groupMessageRepository: GroupMessageRepositoryInterface
 
     // Services
     tokenService: JwtTokenService

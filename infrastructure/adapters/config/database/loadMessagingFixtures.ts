@@ -9,10 +9,8 @@ import bcrypt from 'bcrypt';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Load environment variables
 dotenv.config({ path: path.resolve(__dirname, '../../../server/.env') });
 
-// Create database pool
 const pool = new Pool({
     host: process.env.DB_HOST || 'localhost',
     port: parseInt(process.env.DB_PORT || '5432'),
@@ -21,9 +19,8 @@ const pool = new Pool({
     database: process.env.DB_NAME || 'postgres',
 });
 
-// Password hashing configuration
 const SALT_ROUNDS = 10;
-const TEST_PASSWORD = 'Password123!'; // Clear password for all test users
+const TEST_PASSWORD = 'Password123!';
 
 interface TestUser {
     id: string;
@@ -38,32 +35,65 @@ async function loadMessagingFixtures() {
     console.log('🚀 Starting to load messaging fixtures...\n');
 
     try {
-        // ============================================
-        // 1. CLEAN EXISTING MESSAGING DATA
-        // ============================================
+
+        // User IDs
+        const clientId1 = randomUUID();
+        const clientId2 = randomUUID();
+        const advisorId1 = randomUUID();
+        const advisorId2 = randomUUID();
+        const managerId1 = randomUUID();
+
+        // Conversation IDs
+        const convId1 = randomUUID();
+        const convId2 = randomUUID();
+        const convId3 = randomUUID();
+
+        // Message IDs
+        const msgId1 = randomUUID();
+        const msgId2 = randomUUID();
+        const msgId3 = randomUUID();
+        const msgId4 = randomUUID();
+        const msgId5 = randomUUID();
+        const msgId6 = randomUUID();
+        const msgId7 = randomUUID();
+        const msgId8 = randomUUID();
+        const msgId9 = randomUUID();
+        const msgId10 = randomUUID();
+        const msgId11 = randomUUID();
+        const msgId12 = randomUUID();
+
+        // Group conversation IDs
+        const groupId1 = randomUUID();
+        const groupId2 = randomUUID();
+
+        console.log('📋 Generated UUIDs:');
+        console.log(`  Client 1: ${clientId1}`);
+        console.log(`  Client 2: ${clientId2}`);
+        console.log(`  Advisor 1: ${advisorId1}`);
+        console.log(`  Advisor 2: ${advisorId2}`);
+        console.log(`  Manager 1: ${managerId1}\n`);
+
         console.log('🧹 Cleaning existing messaging data...');
-        
+
         await pool.query('DELETE FROM group_messages');
         await pool.query('DELETE FROM group_participants');
         await pool.query('DELETE FROM group_conversations');
         await pool.query('DELETE FROM messages');
         await pool.query('DELETE FROM conversations');
-        
+
         console.log('✅ Existing messaging data cleaned\n');
 
-        // ============================================
-        // 2. CREATE TEST USERS
-        // ============================================
+
         console.log('👥 Creating test users...');
-        
+
         // Hash the test password once
         const hashedPassword = await bcrypt.hash(TEST_PASSWORD, SALT_ROUNDS);
         console.log(`  ℹ️  Test password: "${TEST_PASSWORD}" (will be hashed with bcrypt)\n`);
-        
+
         const testUsers: TestUser[] = [
             // Clients
             {
-                id: 'client-001',
+                id: clientId1,
                 email: 'client1@test.com',
                 password: hashedPassword,
                 firstName: 'Marie',
@@ -71,7 +101,7 @@ async function loadMessagingFixtures() {
                 role: 'CLIENT'
             },
             {
-                id: 'client-002',
+                id: clientId2,
                 email: 'client2@test.com',
                 password: hashedPassword,
                 firstName: 'Pierre',
@@ -80,7 +110,7 @@ async function loadMessagingFixtures() {
             },
             // Advisors
             {
-                id: 'advisor-001',
+                id: advisorId1,
                 email: 'advisor1@test.com',
                 password: hashedPassword,
                 firstName: 'Sophie',
@@ -88,7 +118,7 @@ async function loadMessagingFixtures() {
                 role: 'BANK_ADVISOR'
             },
             {
-                id: 'advisor-002',
+                id: advisorId2,
                 email: 'advisor2@test.com',
                 password: hashedPassword,
                 firstName: 'Lucas',
@@ -97,7 +127,7 @@ async function loadMessagingFixtures() {
             },
             // Manager
             {
-                id: 'manager-001',
+                id: managerId1,
                 email: 'manager1@test.com',
                 password: hashedPassword,
                 firstName: 'Jean',
@@ -106,12 +136,15 @@ async function loadMessagingFixtures() {
             }
         ];
 
-        // Insert users if they don't exist
+        const userIdMap: Record<string, string> = {};
+
         for (const user of testUsers) {
             const existingUser = await pool.query(
-                'SELECT id FROM bank_users WHERE id = $1',
-                [user.id]
+                'SELECT id FROM bank_users WHERE email = $1',
+                [user.email]
             );
+
+            let actualUserId: string;
 
             if (existingUser.rows.length === 0) {
                 await pool.query(
@@ -119,13 +152,15 @@ async function loadMessagingFixtures() {
                      VALUES ($1, $2, $3, 'ACTIVE', $4, $5, '+33612345678', '1990-01-01', '123 Rue de Test, Paris', true)`,
                     [user.id, user.email, user.password, user.firstName, user.lastName]
                 );
-                console.log(`  ✓ Created user: ${user.firstName} ${user.lastName} (${user.role})`);
+                actualUserId = user.id;
+                console.log(`  ✓ Created user: ${user.firstName} ${user.lastName} (${user.role}) - ID: ${actualUserId}`);
             } else {
-                console.log(`  ⊙ User already exists: ${user.firstName} ${user.lastName}`);
+                actualUserId = existingUser.rows[0].id;
+                console.log(`  ⊙ User already exists: ${user.firstName} ${user.lastName} - ID: ${actualUserId}`);
             }
 
-            // Assign role
-            // First, get the role_id from the roles table
+            userIdMap[user.email] = actualUserId;
+
             const roleResult = await pool.query(
                 'SELECT id FROM roles WHERE name = $1',
                 [user.role]
@@ -135,43 +170,123 @@ async function loadMessagingFixtures() {
                 const roleId = roleResult.rows[0].id;
                 const roleExists = await pool.query(
                     'SELECT * FROM user_roles WHERE user_id = $1 AND role_id = $2',
-                    [user.id, roleId]
+                    [actualUserId, roleId]
                 );
 
                 if (roleExists.rows.length === 0) {
                     await pool.query(
                         'INSERT INTO user_roles (user_id, role_id) VALUES ($1, $2)',
-                        [user.id, roleId]
+                        [actualUserId, roleId]
                     );
                 }
             }
         }
 
+        const actualClientId1 = userIdMap['client1@test.com'] || clientId1;
+        const actualClientId2 = userIdMap['client2@test.com'] || clientId2;
+        const actualAdvisorId1 = userIdMap['advisor1@test.com'] || advisorId1;
+        const actualAdvisorId2 = userIdMap['advisor2@test.com'] || advisorId2;
+        const actualManagerId1 = userIdMap['manager1@test.com'] || managerId1;
+
         console.log('✅ Test users created\n');
 
-        // ============================================
-        // 3. CREATE INDIVIDUAL CONVERSATIONS
-        // ============================================
+
+        console.log('🏦 Creating bank accounts for clients...');
+
+        const accountNumber1 = Math.floor(10000000 + Math.random() * 90000000);
+        const accountNumber2 = Math.floor(10000000 + Math.random() * 90000000);
+
+        const generateFrenchIban = (accountNum: number) => {
+            const bankCode = '30001';
+            const branchCode = '00001';
+            const accountStr = accountNum.toString().padStart(11, '0');
+            const key = '97';
+            return `FR76${bankCode}${branchCode}${accountStr}${key}`;
+        };
+
+        const accounts = [
+            {
+                accountNumber: accountNumber1,
+                iban: generateFrenchIban(accountNumber1),
+                userId: actualClientId1,
+                accountType: 'CHECKING',
+                currency: 'EUR',
+                accountStatus: 'ACTIVE',
+                isActive: true,
+                currentBalance: 5250.75,
+                withdrawalLimit: 3000,
+                transferLimit: 3000,
+                overdraftLimit: 1000,
+                customAccountName: 'Compte Courant Marie',
+                totalTransfered: 0,
+                createdAt: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000) 
+            },
+            {
+                accountNumber: accountNumber2,
+                iban: generateFrenchIban(accountNumber2),
+                userId: actualClientId2,
+                accountType: 'CHECKING',
+                currency: 'EUR',
+                accountStatus: 'ACTIVE',
+                isActive: true,
+                currentBalance: 12340.50,
+                withdrawalLimit: 3000,
+                transferLimit: 3000,
+                overdraftLimit: 500,
+                customAccountName: 'Compte Courant Pierre',
+                totalTransfered: 0,
+                createdAt: new Date(Date.now() - 180 * 24 * 60 * 60 * 1000) // 6 months ago
+            }
+        ];
+
+        for (const account of accounts) {
+            const existingAccount = await pool.query(
+                'SELECT account_number FROM accounts WHERE user_id = $1 AND account_type = $2',
+                [account.userId, account.accountType]
+            );
+
+            if (existingAccount.rows.length === 0) {
+                await pool.query(
+                    `INSERT INTO accounts (
+                        account_number, iban, user_id, account_type, currency, account_status,
+                        is_active, current_balance, withdrawal_limit, transfer_limit, overdraft_limit,
+                        custom_account_name, total_transfered, last_transfer_reset_date, created_at
+                    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)`,
+                    [
+                        account.accountNumber, account.iban, account.userId, account.accountType,
+                        account.currency, account.accountStatus, account.isActive, account.currentBalance,
+                        account.withdrawalLimit, account.transferLimit, account.overdraftLimit,
+                        account.customAccountName, account.totalTransfered, new Date(), account.createdAt
+                    ]
+                );
+                console.log(`  ✓ Created account: ${account.customAccountName} - IBAN: ${account.iban} - Balance: ${account.currentBalance}€`);
+            } else {
+                console.log(`  ⊙ Account already exists for user: ${account.userId}`);
+            }
+        }
+
+        console.log('✅ Bank accounts created\n');
+
         console.log('💬 Creating individual conversations...');
 
         const conversations = [
             {
-                id: 'conv-001',
-                clientId: 'client-001',
-                advisorId: 'advisor-001',
-                createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) // 7 days ago
+                id: convId1,
+                clientId: actualClientId1,
+                advisorId: actualAdvisorId1,
+                createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) 
             },
             {
-                id: 'conv-002',
-                clientId: 'client-002',
-                advisorId: 'advisor-001',
-                createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000) // 3 days ago
+                id: convId2,
+                clientId: actualClientId2,
+                advisorId: actualAdvisorId1,
+                createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000) 
             },
             {
-                id: 'conv-003',
-                clientId: 'client-001',
-                advisorId: 'advisor-002',
-                createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) // 1 day ago
+                id: convId3,
+                clientId: actualClientId1,
+                advisorId: actualAdvisorId2,
+                createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) 
             }
         ];
 
@@ -185,133 +300,128 @@ async function loadMessagingFixtures() {
 
         console.log('✅ Individual conversations created\n');
 
-        // ============================================
-        // 4. CREATE MESSAGES FOR CONVERSATIONS
-        // ============================================
+
         console.log('📨 Creating messages for conversations...');
 
         const messages = [
-            // Conversation 1 (conv-001)
             {
-                id: 'msg-001',
-                conversationId: 'conv-001',
-                clientId: 'client-001',
-                advisorId: 'advisor-001',
-                authorId: 'client-001',
+                id: msgId1,
+                conversationId: convId1,
+                clientId: actualClientId1,
+                advisorId: actualAdvisorId1,
+                authorId: actualClientId1,
                 content: 'Bonjour, j\'aimerais avoir des informations sur les comptes épargne.',
                 readStatus: 'READ',
                 sentAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
             },
             {
-                id: 'msg-002',
-                conversationId: 'conv-001',
-                clientId: 'client-001',
-                advisorId: 'advisor-001',
-                authorId: 'advisor-001',
+                id: msgId2,
+                conversationId: convId1,
+                clientId: actualClientId1,
+                advisorId: actualAdvisorId1,
+                authorId: actualAdvisorId1,
                 content: 'Bonjour Marie ! Bien sûr, je serais ravie de vous aider. Nous proposons plusieurs types de comptes épargne.',
                 readStatus: 'READ',
                 sentAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000 + 5 * 60 * 1000)
             },
             {
-                id: 'msg-003',
-                conversationId: 'conv-001',
-                clientId: 'client-001',
-                advisorId: 'advisor-001',
-                authorId: 'client-001',
+                id: msgId3,
+                conversationId: convId1,
+                clientId: actualClientId1,
+                advisorId: actualAdvisorId1,
+                authorId: actualClientId1,
                 content: 'Quels sont les taux d\'intérêt actuels ?',
                 readStatus: 'READ',
                 sentAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000 + 10 * 60 * 1000)
             },
             {
-                id: 'msg-004',
-                conversationId: 'conv-001',
-                clientId: 'client-001',
-                advisorId: 'advisor-001',
-                authorId: 'advisor-001',
+                id: msgId4,
+                conversationId: convId1,
+                clientId: actualClientId1,
+                advisorId: actualAdvisorId1,
+                authorId: actualAdvisorId1,
                 content: 'Les taux varient entre 2% et 4% selon le type de compte et la durée d\'engagement.',
                 readStatus: 'UNREAD',
                 sentAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000)
             },
 
-            // Conversation 2 (conv-002)
             {
-                id: 'msg-005',
-                conversationId: 'conv-002',
-                clientId: 'client-002',
-                advisorId: 'advisor-001',
-                authorId: 'client-002',
+                id: msgId5,
+                conversationId: convId2,
+                clientId: actualClientId2,
+                advisorId: actualAdvisorId1,
+                authorId: actualClientId2,
                 content: 'Bonjour, j\'ai un problème avec ma carte bancaire.',
                 readStatus: 'READ',
                 sentAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000)
             },
             {
-                id: 'msg-006',
-                conversationId: 'conv-002',
-                clientId: 'client-002',
-                advisorId: 'advisor-001',
-                authorId: 'advisor-001',
+                id: msgId6,
+                conversationId: convId2,
+                clientId: actualClientId2,
+                advisorId: actualAdvisorId1,
+                authorId: actualAdvisorId1,
                 content: 'Bonjour Pierre, je suis désolée d\'apprendre cela. Pouvez-vous me donner plus de détails ?',
                 readStatus: 'READ',
                 sentAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000 + 15 * 60 * 1000)
             },
             {
-                id: 'msg-007',
-                conversationId: 'conv-002',
-                clientId: 'client-002',
-                advisorId: 'advisor-001',
-                authorId: 'client-002',
+                id: msgId7,
+                conversationId: convId2,
+                clientId: actualClientId2,
+                advisorId: actualAdvisorId1,
+                authorId: actualClientId2,
                 content: 'Ma carte a été refusée ce matin alors que j\'ai des fonds suffisants.',
                 readStatus: 'READ',
                 sentAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000 + 30 * 60 * 1000)
             },
             {
-                id: 'msg-008',
-                conversationId: 'conv-002',
-                clientId: 'client-002',
-                advisorId: 'advisor-001',
-                authorId: 'advisor-001',
+                id: msgId8,
+                conversationId: convId2,
+                clientId: actualClientId2,
+                advisorId: actualAdvisorId1,
+                authorId: actualAdvisorId1,
                 content: 'Je vais vérifier cela immédiatement. Il se peut que votre carte ait été temporairement bloquée pour des raisons de sécurité.',
                 readStatus: 'READ',
                 sentAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)
             },
             {
-                id: 'msg-009',
-                conversationId: 'conv-002',
-                clientId: 'client-002',
-                advisorId: 'advisor-001',
-                authorId: 'advisor-001',
+                id: msgId9,
+                conversationId: convId2,
+                clientId: actualClientId2,
+                advisorId: actualAdvisorId1,
+                authorId: actualAdvisorId1,
                 content: 'Tout est résolu ! Votre carte est de nouveau active.',
                 readStatus: 'UNREAD',
                 sentAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000)
             },
 
-            // Conversation 3 (conv-003)
             {
-                id: 'msg-010',
-                conversationId: 'conv-003',
-                clientId: 'client-001',
-                advisorId: 'advisor-002',
-                authorId: 'client-001',
+                id: msgId10,
+                conversationId: convId3,
+                clientId: actualClientId1,
+                advisorId: actualAdvisorId2,
+                authorId: actualClientId1,
                 content: 'Bonjour, je souhaite faire un virement international.',
                 readStatus: 'READ',
                 sentAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000)
             },
             {
-                id: 'msg-011',
-                conversationId: 'conv-003',
-                clientId: 'client-001',
-                advisorId: 'advisor-002',
-                authorId: 'advisor-002',
+                id: msgId11,
+                conversationId: convId3,
+                clientId: actualClientId1,
+                advisorId: actualAdvisorId2,
+                authorId: actualAdvisorId2,
                 content: 'Bonjour Marie ! Pas de problème. Vers quel pays souhaitez-vous effectuer ce virement ?',
                 readStatus: 'READ',
                 sentAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000 + 20 * 60 * 1000)
             },
             {
-                id: 'msg-012',
-                conversationId: 'conv-003',
-                clientId: 'client-001',
-                advisorId: 'advisor-002',
-                authorId: 'client-001',
+                id: msgId12,
+                conversationId: convId3,
+                clientId: actualClientId1,
+                advisorId: actualAdvisorId2,
+                authorId: actualClientId1,
                 content: 'Vers l\'Espagne, pour un montant de 5000€.',
                 readStatus: 'UNREAD',
                 sentAt: new Date(Date.now() - 2 * 60 * 60 * 1000) // 2 hours ago
@@ -329,23 +439,21 @@ async function loadMessagingFixtures() {
         console.log(`  ✓ Created ${messages.length} messages`);
         console.log('✅ Messages created\n');
 
-        // ============================================
-        // 5. CREATE GROUP CONVERSATIONS
-        // ============================================
+
         console.log('👥 Creating group conversations...');
 
         const groupConversations = [
             {
-                id: randomUUID(),
+                id: groupId1,
                 name: 'Équipe Commerciale',
-                createdBy: 'manager-001',
-                createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000) // 14 days ago
+                createdBy: actualManagerId1,
+                createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000) 
             },
             {
-                id: randomUUID(),
+                id: groupId2,
                 name: 'Support Client',
-                createdBy: 'manager-001',
-                createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000) // 10 days ago
+                createdBy: actualManagerId1,
+                createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000) 
             }
         ];
 
@@ -354,25 +462,23 @@ async function loadMessagingFixtures() {
                 'INSERT INTO group_conversations (id, name, created_by, created_at, updated_at) VALUES ($1, $2, $3, $4, $5)',
                 [group.id, group.name, group.createdBy, group.createdAt, group.createdAt]
             );
-            console.log(`  ✓ Created group: ${group.name}`);
+            console.log(`  ✓ Created group: ${group.name} - ID: ${group.id}`);
         }
 
         console.log('✅ Group conversations created\n');
 
-        // ============================================
-        // 6. ADD GROUP PARTICIPANTS
-        // ============================================
+
         console.log('👤 Adding group participants...');
 
         const groupParticipants = [
-            // Group 1 participants
-            { groupId: groupConversations[0].id, userId: 'manager-001', role: 'BANK_MANAGER' },
-            { groupId: groupConversations[0].id, userId: 'advisor-001', role: 'BANK_ADVISOR' },
-            { groupId: groupConversations[0].id, userId: 'advisor-002', role: 'BANK_ADVISOR' },
-            
-            // Group 2 participants
-            { groupId: groupConversations[1].id, userId: 'manager-001', role: 'BANK_MANAGER' },
-            { groupId: groupConversations[1].id, userId: 'advisor-001', role: 'BANK_ADVISOR' }
+            // Group 1 participants (Équipe Commerciale)
+            { groupId: groupId1, userId: actualManagerId1, role: 'BANK_MANAGER' },
+            { groupId: groupId1, userId: actualAdvisorId1, role: 'BANK_ADVISOR' },
+            { groupId: groupId1, userId: actualAdvisorId2, role: 'BANK_ADVISOR' },
+
+            // Group 2 participants (Support Client)
+            { groupId: groupId2, userId: actualManagerId1, role: 'BANK_MANAGER' },
+            { groupId: groupId2, userId: actualAdvisorId1, role: 'BANK_ADVISOR' }
         ];
 
         for (const participant of groupParticipants) {
@@ -385,84 +491,81 @@ async function loadMessagingFixtures() {
         console.log(`  ✓ Added ${groupParticipants.length} participants`);
         console.log('✅ Group participants added\n');
 
-        // ============================================
-        // 7. CREATE GROUP MESSAGES
-        // ============================================
         console.log('💬 Creating group messages...');
 
         const groupMessages = [
-            // Group 1 messages
+            // Group 1 messages (Équipe Commerciale)
             {
-                groupId: groupConversations[0].id,
-                senderId: 'manager-001',
+                groupId: groupId1,
+                senderId: actualManagerId1,
                 senderRole: 'BANK_MANAGER',
                 senderFirstName: 'Jean',
                 senderLastName: 'Dubois',
                 content: 'Bonjour à tous ! Bienvenue dans le groupe Équipe Commerciale.',
                 createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
-                readBy: ['manager-001', 'advisor-001', 'advisor-002']
+                readBy: [actualManagerId1, actualAdvisorId1, actualAdvisorId2]
             },
             {
-                groupId: groupConversations[0].id,
-                senderId: 'advisor-001',
+                groupId: groupId1,
+                senderId: actualAdvisorId1,
                 senderRole: 'BANK_ADVISOR',
                 senderFirstName: 'Sophie',
                 senderLastName: 'Bernard',
                 content: 'Merci Jean ! Hâte de collaborer avec vous tous.',
                 createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000 + 30 * 60 * 1000),
-                readBy: ['manager-001', 'advisor-001', 'advisor-002']
+                readBy: [actualManagerId1, actualAdvisorId1, actualAdvisorId2]
             },
             {
-                groupId: groupConversations[0].id,
-                senderId: 'advisor-002',
+                groupId: groupId1,
+                senderId: actualAdvisorId2,
                 senderRole: 'BANK_ADVISOR',
                 senderFirstName: 'Lucas',
                 senderLastName: 'Petit',
                 content: 'Bonjour à tous ! Ravi de faire partie de l\'équipe.',
                 createdAt: new Date(Date.now() - 13 * 24 * 60 * 60 * 1000),
-                readBy: ['manager-001', 'advisor-001']
+                readBy: [actualManagerId1, actualAdvisorId1]
             },
             {
-                groupId: groupConversations[0].id,
-                senderId: 'manager-001',
+                groupId: groupId1,
+                senderId: actualManagerId1,
                 senderRole: 'BANK_MANAGER',
                 senderFirstName: 'Jean',
                 senderLastName: 'Dubois',
                 content: 'Nous avons une réunion prévue demain à 10h pour discuter des objectifs du trimestre.',
                 createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-                readBy: ['manager-001']
+                readBy: [actualManagerId1]
             },
 
-            // Group 2 messages
+            // Group 2 messages (Support Client)
             {
-                groupId: groupConversations[1].id,
-                senderId: 'manager-001',
+                groupId: groupId2,
+                senderId: actualManagerId1,
                 senderRole: 'BANK_MANAGER',
                 senderFirstName: 'Jean',
                 senderLastName: 'Dubois',
                 content: 'Groupe Support Client créé pour faciliter la communication.',
                 createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
-                readBy: ['manager-001', 'advisor-001']
+                readBy: [actualManagerId1, actualAdvisorId1]
             },
             {
-                groupId: groupConversations[1].id,
-                senderId: 'advisor-001',
+                groupId: groupId2,
+                senderId: actualAdvisorId1,
                 senderRole: 'BANK_ADVISOR',
                 senderFirstName: 'Sophie',
                 senderLastName: 'Bernard',
                 content: 'Parfait ! J\'ai plusieurs questions de clients à partager.',
                 createdAt: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000),
-                readBy: ['manager-001', 'advisor-001']
+                readBy: [actualManagerId1, actualAdvisorId1]
             },
             {
-                groupId: groupConversations[1].id,
-                senderId: 'advisor-001',
+                groupId: groupId2,
+                senderId: actualAdvisorId1,
                 senderRole: 'BANK_ADVISOR',
                 senderFirstName: 'Sophie',
                 senderLastName: 'Bernard',
                 content: 'Un client demande des informations sur les prêts immobiliers. Quelqu\'un peut m\'aider ?',
                 createdAt: new Date(Date.now() - 5 * 60 * 60 * 1000), // 5 hours ago
-                readBy: ['advisor-001']
+                readBy: [actualAdvisorId1]
             }
         ];
 
@@ -477,12 +580,11 @@ async function loadMessagingFixtures() {
         console.log(`  ✓ Created ${groupMessages.length} group messages`);
         console.log('✅ Group messages created\n');
 
-        // ============================================
-        // SUMMARY
-        // ============================================
+
         console.log('📊 SUMMARY:');
         console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
         console.log(`✓ ${testUsers.length} test users`);
+        console.log(`✓ ${accounts.length} bank accounts (CHECKING)`);
         console.log(`✓ ${conversations.length} individual conversations`);
         console.log(`✓ ${messages.length} individual messages`);
         console.log(`✓ ${groupConversations.length} group conversations`);
@@ -500,7 +602,6 @@ async function loadMessagingFixtures() {
     }
 }
 
-// Run the fixtures
 loadMessagingFixtures()
     .then(() => {
         console.log('✅ Process completed successfully');

@@ -37,6 +37,7 @@ new Ignitor(APP_ROOT, { importer: IMPORTER })
     app.ready(async () => {
       const { Server } = await import('socket.io')
       const { socketSetup } = await import('#start/socket')
+      const { groupChatSocketSetup } = await import('#start/sockets/group-chat.socket')
       const router = await app.container.make('router')
 
       router.commit()
@@ -56,6 +57,7 @@ new Ignitor(APP_ROOT, { importer: IMPORTER })
       })
 
       await socketSetup(io)
+      await groupChatSocketSetup(io)
 
     })
     app.listen('SIGTERM', () => app.terminate())

@@ -1,11 +1,11 @@
 import bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
 
-// Import singleton repository instances from config
 import {
     userRepository,
     roleRepository,
     userRoleRepository,
+    accountRepository,
     conversationRepository,
     messageRepository,
     groupConversationRepository,
@@ -13,7 +13,6 @@ import {
     groupMessageRepository
 } from '../config/repositories.js';
 
-// Import entities and enums
 import { BankUserEntity } from '../../../domain/entities/BankUserEntity.js';
 import { UserStatusEnum } from '../../../domain/enums/UserStatusEnum.js';
 import { RoleEnum } from '../../../domain/enums/RoleEnum.js';
@@ -23,8 +22,10 @@ import { ReadStatusEnum } from '../../../domain/enums/ReadStatusEnum.js';
 import { GroupConversationEntity } from '../../../domain/entities/GroupConversationEntity.js';
 import { GroupParticipantEntity } from '../../../domain/entities/GroupParticipantEntity.js';
 import { GroupMessageEntity } from '../../../domain/entities/GroupMessageEntity.js';
+import { AccountEntity } from '../../../domain/entities/AccountEntity.js';
+import { AccountTypeEnum } from '../../../domain/enums/AccountTypeEnum.js';
+import { AccountStatusEnum } from '../../../domain/enums/AccountStatusEnum.js';
 
-// Password hashing configuration
 const SALT_ROUNDS = 10;
 const TEST_PASSWORD = 'Password123!';
 
@@ -38,17 +39,14 @@ interface TestUser {
 }
 
 export async function loadInMemoryMessagingFixtures() {
-    console.log('🚀 Starting to load in-memory messaging fixtures...\n');
+    console.log('Starting to load in-memory messaging fixtures...\n');
 
     try {
 
-        // Hash the test password once
         const hashedPassword = await bcrypt.hash(TEST_PASSWORD, SALT_ROUNDS);
         console.log(`  ℹ️  Test password: "${TEST_PASSWORD}" (hashed with bcrypt)\n`);
 
-        // ============================================
-        // 1. CREATE TEST USERS
-        // ============================================
+
         console.log('👥 Creating test users...');
 
         const testUsers: TestUser[] = [
@@ -129,7 +127,6 @@ export async function loadInMemoryMessagingFixtures() {
                 console.log(`  ✓ Created user: ${user.firstName} ${user.lastName} (${user.role})`);
             }
 
-            // Assign role
             const roleResult = await roleRepository.findByName(user.role);
             if (!(roleResult instanceof Error)) {
                 await userRoleRepository.addRoleToUser(user.id, roleResult.id);
@@ -138,9 +135,90 @@ export async function loadInMemoryMessagingFixtures() {
 
         console.log('✅ Test users created\n');
 
-        // ============================================
-        // 2. CREATE INDIVIDUAL CONVERSATIONS
-        // ============================================
+        console.log('🏦 Creating bank accounts for clients...');
+
+     
+        const accountNumber1 = Math.floor(10000000 + Math.random() * 90000000);
+        const accountNumber2 = Math.floor(10000000 + Math.random() * 90000000);
+
+        const generateFrenchIban = (accountNum: number) => {
+            const bankCode = '30001';
+            const branchCode = '00001';
+            const accountStr = accountNum.toString().padStart(11, '0');
+            const key = '97';
+            return `FR76${bankCode}${branchCode}${accountStr}${key}`;
+        };
+
+        const accounts = [
+            {
+                accountNumber: accountNumber1,
+                iban: generateFrenchIban(accountNumber1),
+                userId: 'client-001',
+                accountType: AccountTypeEnum.CHECKING,
+                currency: 'EUR',
+                accountStatus: AccountStatusEnum.ACTIVE,
+                isActive: true,
+                currentBalance: 5250.75,
+                withdrawalLimit: 3000,
+                transferLimit: 3000,
+                overdraftLimit: 1000,
+                customAccountName: 'Compte Courant Marie',
+                totalTransfered: 0,
+                createdAt: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000) 
+            },
+            {
+                accountNumber: accountNumber2,
+                iban: generateFrenchIban(accountNumber2),
+                userId: 'client-002',
+                accountType: AccountTypeEnum.CHECKING,
+                currency: 'EUR',
+                accountStatus: AccountStatusEnum.ACTIVE,
+                isActive: true,
+                currentBalance: 12340.50,
+                withdrawalLimit: 3000,
+                transferLimit: 3000,
+                overdraftLimit: 500,
+                customAccountName: 'Compte Courant Pierre',
+                totalTransfered: 0,
+                createdAt: new Date(Date.now() - 180 * 24 * 60 * 60 * 1000) 
+            }
+        ];
+
+        for (const account of accounts) {
+            const accountEntity = AccountEntity.from(
+                account.accountNumber,
+                account.iban,
+                account.userId,
+                account.accountType,
+                account.currency,
+                account.accountStatus,
+                account.isActive,
+                account.currentBalance,
+                account.createdAt,
+                account.withdrawalLimit,
+                account.transferLimit,
+                account.overdraftLimit,
+                account.customAccountName,
+                account.totalTransfered,
+                new Date()
+            );
+
+            if (accountEntity instanceof Error) {
+                console.error(`  ❌ Error creating account for ${account.userId}:`, accountEntity.message);
+                continue;
+            }
+
+            const result = await accountRepository.createOneAccount(accountEntity);
+            if (result instanceof Error) {
+                console.log(`  ⊙ Account already exists for: ${account.userId}`);
+            } else {
+                console.log(`  ✓ Created account: ${account.customAccountName} - IBAN: ${account.iban} - Balance: ${account.currentBalance}€`);
+            }
+        }
+
+        console.log('✅ Bank accounts created\n');
+
+
         console.log('💬 Creating individual conversations...');
 
         const conversations = [
@@ -180,9 +258,7 @@ export async function loadInMemoryMessagingFixtures() {
 
         console.log('✅ Individual conversations created\n');
 
-        // ============================================
-        // 3. CREATE MESSAGES FOR CONVERSATIONS
-        // ============================================
+
         console.log('📨 Creating messages for conversations...');
 
         const messages = [
@@ -333,9 +409,7 @@ export async function loadInMemoryMessagingFixtures() {
         console.log(`  ✓ Created ${messages.length} messages`);
         console.log('✅ Messages created\n');
 
-        // ============================================
-        // 4. CREATE GROUP CONVERSATIONS
-        // ============================================
+
         console.log('👥 Creating group conversations...');
 
         const groupConversations = [
@@ -370,23 +444,26 @@ export async function loadInMemoryMessagingFixtures() {
 
         console.log('✅ Group conversations created\n');
 
-        // ============================================
-        // 5. ADD GROUP PARTICIPANTS
-        // ============================================
+
         console.log('👤 Adding group participants...');
 
         const groupParticipants = [
             // Group 1 participants
-            { groupId: groupConversations[0].id, userId: 'manager-001', role: RoleEnum.BANK_MANAGER },
-            { groupId: groupConversations[0].id, userId: 'advisor-001', role: RoleEnum.BANK_ADVISOR },
-            { groupId: groupConversations[0].id, userId: 'advisor-002', role: RoleEnum.BANK_ADVISOR },
+            { groupId: groupConversations[0]?.id, userId: 'manager-001', role: RoleEnum.BANK_MANAGER },
+            { groupId: groupConversations[0]?.id, userId: 'advisor-001', role: RoleEnum.BANK_ADVISOR },
+            { groupId: groupConversations[0]?.id, userId: 'advisor-002', role: RoleEnum.BANK_ADVISOR },
             
             // Group 2 participants
-            { groupId: groupConversations[1].id, userId: 'manager-001', role: RoleEnum.BANK_MANAGER },
-            { groupId: groupConversations[1].id, userId: 'advisor-001', role: RoleEnum.BANK_ADVISOR }
+            { groupId: groupConversations[1]?.id, userId: 'manager-001', role: RoleEnum.BANK_MANAGER },
+            { groupId: groupConversations[1]?.id, userId: 'advisor-001', role: RoleEnum.BANK_ADVISOR }
         ];
 
+
         for (const participant of groupParticipants) {
+            if (!participant.groupId) {
+                console.error(`  ❌ Error: groupId is undefined for participant with userId ${participant.userId}`);
+                continue;
+            }
             const participantEntity = GroupParticipantEntity.from(
                 randomUUID(),
                 participant.groupId,
@@ -403,15 +480,13 @@ export async function loadInMemoryMessagingFixtures() {
         console.log(`  ✓ Added ${groupParticipants.length} participants`);
         console.log('✅ Group participants added\n');
 
-        // ============================================
-        // 6. CREATE GROUP MESSAGES
-        // ============================================
+     
         console.log('💬 Creating group messages...');
 
         const groupMessages = [
             // Group 1 messages
             {
-                groupId: groupConversations[0].id,
+                groupId: groupConversations[0]?.id,
                 senderId: 'manager-001',
                 senderRole: RoleEnum.BANK_MANAGER,
                 senderFirstName: 'Jean',
@@ -421,7 +496,7 @@ export async function loadInMemoryMessagingFixtures() {
                 readBy: ['manager-001', 'advisor-001', 'advisor-002']
             },
             {
-                groupId: groupConversations[0].id,
+                groupId: groupConversations[0]?.id,
                 senderId: 'advisor-001',
                 senderRole: RoleEnum.BANK_ADVISOR,
                 senderFirstName: 'Sophie',
@@ -431,7 +506,7 @@ export async function loadInMemoryMessagingFixtures() {
                 readBy: ['manager-001', 'advisor-001', 'advisor-002']
             },
             {
-                groupId: groupConversations[0].id,
+                groupId: groupConversations[0]?.id,
                 senderId: 'advisor-002',
                 senderRole: RoleEnum.BANK_ADVISOR,
                 senderFirstName: 'Lucas',
@@ -441,7 +516,7 @@ export async function loadInMemoryMessagingFixtures() {
                 readBy: ['manager-001', 'advisor-001']
             },
             {
-                groupId: groupConversations[0].id,
+                groupId: groupConversations[0]?.id,
                 senderId: 'manager-001',
                 senderRole: RoleEnum.BANK_MANAGER,
                 senderFirstName: 'Jean',
@@ -453,7 +528,7 @@ export async function loadInMemoryMessagingFixtures() {
 
             // Group 2 messages
             {
-                groupId: groupConversations[1].id,
+                groupId: groupConversations[1]?.id,
                 senderId: 'manager-001',
                 senderRole: RoleEnum.BANK_MANAGER,
                 senderFirstName: 'Jean',
@@ -463,7 +538,7 @@ export async function loadInMemoryMessagingFixtures() {
                 readBy: ['manager-001', 'advisor-001']
             },
             {
-                groupId: groupConversations[1].id,
+                groupId: groupConversations[1]?.id,
                 senderId: 'advisor-001',
                 senderRole: RoleEnum.BANK_ADVISOR,
                 senderFirstName: 'Sophie',
@@ -473,7 +548,7 @@ export async function loadInMemoryMessagingFixtures() {
                 readBy: ['manager-001', 'advisor-001']
             },
             {
-                groupId: groupConversations[1].id,
+                groupId: groupConversations[1]?.id,
                 senderId: 'advisor-001',
                 senderRole: RoleEnum.BANK_ADVISOR,
                 senderFirstName: 'Sophie',
@@ -485,6 +560,10 @@ export async function loadInMemoryMessagingFixtures() {
         ];
 
         for (const msg of groupMessages) {
+            if (!msg.groupId) {
+                console.error(`  ❌ Error: groupId is undefined for message`);
+                continue;
+            }
             const messageEntity = GroupMessageEntity.from(
                 randomUUID(),
                 msg.groupId,
@@ -505,12 +584,11 @@ export async function loadInMemoryMessagingFixtures() {
         console.log(`  ✓ Created ${groupMessages.length} group messages`);
         console.log('✅ Group messages created\n');
 
-        // ============================================
-        // SUMMARY
-        // ============================================
-        console.log('📊 SUMMARY:');
+   
+        console.log('SUMMARY:');
         console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
         console.log(`✓ ${testUsers.length} test users`);
+        console.log(`✓ ${accounts.length} bank accounts (CHECKING)`);
         console.log(`✓ ${conversations.length} individual conversations`);
         console.log(`✓ ${messages.length} individual messages`);
         console.log(`✓ ${groupConversations.length} group conversations`);
@@ -527,8 +605,7 @@ export async function loadInMemoryMessagingFixtures() {
     }
 }
 
-// Export the function for use in server startup or manual execution
-// To run manually: tsx loadInMemoryMessagingFixtures.ts
+
 if (import.meta.url === `file://${process.argv[1]}`) {
     loadInMemoryMessagingFixtures()
         .then(() => {

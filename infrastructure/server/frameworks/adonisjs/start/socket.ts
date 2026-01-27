@@ -1,4 +1,4 @@
-import { Server} from 'socket.io'
+import { Server } from 'socket.io'
 import SocketMiddleware from '#middleware/socket_middleware.js'
 import { SendMessageUseCase } from '#application/usecases/chat/SendMessageUseCase.js'
 import { AssignAdvisorToConversationUseCase } from '#application/usecases/chat/AssignAdvisorToConversationUseCase.js'
@@ -7,7 +7,7 @@ import { MarkMessageAsReadUseCase } from '#application/usecases/chat/MarkMessage
 import { SendNotificationToClientUseCase } from '#application/usecases/notification/SendNotificationToClientUseCase.js'
 import { MessageEntity } from '#domain/entities/MessageEntity.js'
 import { ConversationEntity } from '#domain/entities/ConversationEntity.js'
-import {OnlineUser, Message, Identification, Data } from "#types/Socket.js"
+import { OnlineUser, Message, Identification, Data } from '#types/Socket.js'
 import app from '@adonisjs/core/services/app'
 
 export const clients: Record<string, string[]> = {}
@@ -15,7 +15,7 @@ export const onlineUsers: Record<string, OnlineUser> = {}
 export let io: Server
 
 export const socketSetup = async (server: Server) => {
-    const conversationRepository = await app.container.make('conversationRepository')
+  const conversationRepository = await app.container.make('conversationRepository')
   const messageRepository = await app.container.make('messageRepository')
   const uuidService = await app.container.make('uuidService')
   const notificationRepository = await app.container.make('notificationRepository')
@@ -61,7 +61,6 @@ export const socketSetup = async (server: Server) => {
     })
   }
 
-  // ---------------- CLIENT NAMESPACE ----------------
   clientIo.on('connection', (socket) => {
     const user = socket.data.user
     if (!user?.userId) {
@@ -167,7 +166,6 @@ export const socketSetup = async (server: Server) => {
     })
   })
 
-  // ---------------- ADVISOR NAMESPACE ----------------
   advisorIo.on('connection', (socket) => {
     const user = socket.data.user
     if (!user?.userId) return socket.disconnect()
@@ -289,7 +287,6 @@ export const socketSetup = async (server: Server) => {
     })
   })
 
-  // ---------------- SYSTEM NAMESPACE ----------------
   systemIo.on('connection', (socket) => {
     const user = socket.data.user
     if (!user?.userId) {

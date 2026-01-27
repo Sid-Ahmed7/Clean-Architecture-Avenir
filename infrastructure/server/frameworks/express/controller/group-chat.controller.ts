@@ -148,7 +148,7 @@ async joinGroup(req: Request, res: Response) {
 
     async getParticipants (req: Request, res: Response) {
         const groupId = req.params.groupId as string;
-        const getGroupParticipantsUseCase = new GetGroupParticipantsUseCase(this.groupParticipantRepository);
+        const getGroupParticipantsUseCase = new GetGroupParticipantsUseCase(this.groupParticipantRepository, this.userRepository);
         const result = await getGroupParticipantsUseCase.execute(groupId);
         if (result instanceof Error) {
             return res.status(400).json({ error: result.message });

@@ -44,6 +44,9 @@ export default class AppProvider {
     this.app.container.bind('holdingRepository', async () => (await getRepositories()).holdingRepository)
     this.app.container.bind('stockTransactionRepository', async () => (await getRepositories()).stockTransactionRepository)
     this.app.container.bind('eventBus', async () => (await getRepositories()).eventBus)
+    this.app.container.bind('groupConversationRepository', async () => (await getRepositories()).groupConversationRepository)
+    this.app.container.bind('groupParticipantRepository', async () => (await getRepositories()).groupParticipantRepository)
+    this.app.container.bind('groupMessageRepository', async () => (await getRepositories()).groupMessageRepository)
 
     this.app.container.bind('tokenService', async () => (await getServices()).tokenService)
     this.app.container.bind('passwordService', async () => (await getRepositories()).passwordService)

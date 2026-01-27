@@ -28,8 +28,7 @@ export const GroupList = ({
 
     return (
         <div
-            onClick={onClick}
-            className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 hover:shadow-lg transition-shadow cursor-pointer"
+            className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 hover:shadow-lg transition-shadow"
         >
             <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-3">

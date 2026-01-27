@@ -23,8 +23,8 @@ export function FeedDetail({news, contents, medias} : FeedDetailProps) {
     const { data: mediasFromCache } = useMediaByNewsId(news.id);
     const { data: contentsFromCache } = useContentsByNewsId(news.id);
 
-    const currentMedias = mediasFromCache ?? medias;
-    const currentContents = contentsFromCache ?? contents;
+    const currentMedias = Array.isArray(mediasFromCache) ? mediasFromCache : (Array.isArray(medias) ? medias : []);
+    const currentContents = Array.isArray(contentsFromCache) ? contentsFromCache : (Array.isArray(contents) ? contents : []);
 
     const blocks: DisplayBlock[] = [
         ...currentContents.map((content) => ({
