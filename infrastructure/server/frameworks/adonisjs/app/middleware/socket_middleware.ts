@@ -17,19 +17,6 @@ export default class SocketMiddleware {
       if (!token && socket.handshake.headers.cookie) {
         const cookies = parseCookies(socket.handshake.headers.cookie)
         token = cookies.accessToken
-
-        if (token) {
-          try {
-            const decodedBase64 = Buffer.from(token, 'base64').toString('utf-8')
-
-            const parsed = JSON.parse(decodedBase64)
-            if (parsed && parsed.message) {
-              token = parsed.message
-            }
-          } catch (err) {
-              return next(new Error('Decoding error', { cause: err }))
-          }
-        }
       }
 
       if (!token && socket.handshake.query?.token) {

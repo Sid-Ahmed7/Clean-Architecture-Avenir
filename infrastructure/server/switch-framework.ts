@@ -6,8 +6,6 @@
  */
 
 import fs from 'fs';
-import path from 'path';
-import { execSync } from 'child_process';
 
 interface FrameworkConfig {
   name: string;
@@ -136,26 +134,6 @@ function updatePackageJsonScripts(framework: string): void {
   }
 }
 
-function installDependencies(framework: string): void {
-  const config = FRAMEWORKS[framework];
-
-  console.log(`\n📥 Vérification des dépendances pour ${config.name}...`);
-
-  try {
-    const frameworkDir = path.resolve(config.dir);
-
-    if (!fs.existsSync(path.join(frameworkDir, 'node_modules'))) {
-      console.log(`Installation des dépendances dans ${config.dir}...`);
-      execSync('npm install', {
-        cwd: frameworkDir,
-        stdio: 'inherit'
-      });
-    }
-  } catch (error) {
-    const err = error as Error;
-    console.error(` Erreur lors de l'installation des dépendances: ${err.message}`);
-  }
-}
 
 function displayInfo(framework: string): void {
   const config = FRAMEWORKS[framework];
@@ -199,7 +177,6 @@ function switchFramework(targetFramework: string): void {
 
   createSymlinks(targetFramework);
   updatePackageJsonScripts(targetFramework);
-  installDependencies(targetFramework);
   saveCurrentFramework(targetFramework);
 
   console.log(`\n✅ Basculement vers ${FRAMEWORKS[targetFramework].name} terminé avec succès!`);
